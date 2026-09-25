@@ -17,6 +17,8 @@
 | `dedup_events.py` | T5（已落地） | 上述缓存 ＋ T4 的消歧产物 | `去重\merge_log.jsonl`、`去重\events_merged.jsonl`、`去重\merge_summary.json`、`去重\dedup_self_test.json` |
 | `write_graph.py` | T6（已落地） | 缓存（只读） ＋ T4／T5 产物 | 图谱导出物四件套 ＋ `graph_check.json`／`manifest.sha256` |
 | `run_all.py` | T7（已落地） | — | 按 extract → disambiguate → dedup_events → write_graph 串联 |
+| `build_company_aliases.py` | T4 的**离线建档工具**（不属于管线，`run_all.py` 不调用） | 第 5 阶段 `COMPANIES` ＋ 巨潮公司概况接口（`cninfo_company_intro`）／v2.1 公告标题 | `company_registered_names.py`：105 家配置公司的注册全称，逐家带来源与证据 |
+| `company_registered_names.py` | T4 的**冻结别名数据**（由上一行的工具生成，不手改） | — | `REGISTERED_NAMES`：`disambiguate.py` 只读加载，把注册全称并入别名表 |
 
 **四个脚本都已落地**（2026-09-25：`config.py` 追加第 9 节给 T4～T7 的参数，第 1～7 节的既有键
 一个都没改）。接口与试跑实测见第十节。
@@ -37,6 +39,8 @@ python 代码\抽取与图谱\extract.py --profile v21       :: 全量 709 篇�
 
 * `--profile pilot`（默认）：`config.PILOT` 的确定性选样，**12 篇**覆盖 8 种事件类型与 4 个类目。
 * `--profile v21`：全量 709 篇，属 T3 的放量口径；T1 只跑 pilot。
+  全量产物**不与试跑混放**：`--profile v21` 落 `config.FULL_OUTPUT_FILES`＝
+  `代码\抽取与图谱\_全量\v2.1\`（见 3.5 节），`_试跑\` 只留 T1 的 12 篇记录。
 * `--limit N` 与 `--docs <ids>` 可叠加，先按 `--docs` 取子集再截前 N 篇；`--docs` 允许指向
   选样结果之外的 doc_id（会记为「显式指定」）。
 * `--force` 覆盖缓存；缓存命中时**不调用模型**，产物由缓存确定性重算。
@@ -158,6 +162,16 @@ python 代码\抽取与图谱\extract.py --profile v21       :: 全量 709 篇�
 
 `manifest.sha256` **不含**运行日志、`run_history.jsonl` 与 `verify.json`（它们含时间或随运行变化），
 因此「清单哈希在两次运行间一致」就等价于「缓存与解析输出逐字节一致」。
+
+### 3.5 `_全量\<数据集版本>\` —— T3 全量抽取的产物（与 `_试跑\` 物理隔离）
+
+`--profile v21` 的产物落点由 `config.FULL_OUTPUT_FILES` 决定（`config.py` 第 8 节；该节只新增
+键，既有取值未改动）。文件名与 `_试跑\` 完全一致——`selection.json`、`coverage.json`、
+`extracted.jsonl`、`rejected.jsonl`、`run_history.jsonl`、`verify.json`、`manifest.sha256`——
+只是落在 `代码\抽取与图谱\_全量\v2.1\`，逐字冻结的 schema 仍是第三节 的那一套。
+全量运行的完整控制台输出与汇总报告也落该目录（日志由启动命令重定向 stdout／stderr 生成，
+脚本本身不写日志；汇总报告由 `_全量\report_full_run.py` 只读重算）。
+该目录**不是交付物、不入仓库**（`.gitignore` 覆盖 `代码/抽取与图谱/_全量/`）。
 
 ## 四、证据解析规则（模型只给引用，编号由代码定）
 
@@ -285,6 +299,10 @@ T6 另在**工作目录**（不是导出目录）写 `graph_check.json`（第八
 ### 10.2 产物字段
 
 * **T4**：`alias_table.json` 只读第 5 阶段冻结的 105 家公司配置（`code／name／industry／board`）；
+  另只读 `company_registered_names.py` 的注册全称（**数据扩展，规则未改**；2026-09-26 建档：
+  语料写工商登记全称而配置里只有市场简称，简称不是全称的子串 → R2 永不触发；补上注册全称后
+  公司提及消歧率 32.7% → 39.9%、配置公司覆盖 90／105 → 104／105）。每个 code 的
+  `normalized_alias_surfaces` ＝ 归一化简称 ∪ 归一化注册全称，两条规则对其中每个书写面求值；
   `disambiguation.json` 的 `entity_map` 把局部编号映射为身份键 `<标签>:<身份>`
   （公司＝`Company:<stock_code>`，其余＝`<标签>:<归一化名>`，归一化只去空白与最外层包裹字符）；
   `companies` 块用**表 4-8 字段口径**（`company_name` 取语料中出现过的最长书写面、`short_name`／

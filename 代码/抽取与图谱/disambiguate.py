@@ -11,9 +11,16 @@ r"""disambiguate.py —— 第 6 阶段「实体消歧」（T4）。
 
 1. **建别名表**（`alias_table.json`）：来源是第 5 阶段已冻结的 105 家配置公司集
    （`代码\数据准备\config.py` 的 `COMPANIES`，**只读**），每家给出 stock_code、简称、
-   行业、板块与 exchange。
+   行业、板块与 exchange；再并入**公司注册全称**别名补充
+   （`代码\抽取与图谱\company_registered_names.py`，由 `build_company_aliases.py` 建档：
+   巨潮公司概况接口优先、语料标题 ≥2 篇印证兜底，逐家带来源与证据）。
+   2026-09-26 全量实测的成因：语料写工商登记全称（`万科企业股份有限公司`、
+   `宝山钢铁股份有限公司`、`牧原食品集团股份有限公司`），而配置里只有市场简称
+   （`万科A`、`宝钢股份`、`牧原股份`）——简称不是全称的子串，R2 永不触发，
+   1888 条公司提及只消歧 618 条、105 家里 15 家没有身份。**补的是别名数据，不是规则**。
 2. **逐条实体判身份**（`disambiguation.json`）：Company 按 `config.DISAMBIG["match_rules"]`
-   的两条规则匹配 stock_code（R1 精确、R2 全称展开，见下）；其余四类实体按
+   的两条规则匹配 stock_code（R1 精确、R2 全称展开；两条规则本身**未改**，只是别名表里
+   每个 code 的书写面从「简称」扩为「简称 ＋ 注册全称」，见下）；其余四类实体按
    `non_company_rule`（同类型 ＋ 同名即同一实体，最小规则，不做跨写法归并）。
    每条实体得到一个**身份键**（`<标签>:<身份>`，如 `Company:600309`），T5 的参与主体、
    T6 的节点编号都以它为准。
@@ -22,12 +29,18 @@ r"""disambiguate.py —— 第 6 阶段「实体消歧」（T4）。
 
 两条匹配规则（按序求值，规则本身不新增本体）：
 
-* **R1 精确**：归一后的名称 == 归一后的简称，或 == 6 位股票代码；
-* **R2 全称展开**：归一后的名称**包含**归一后的简称，且残余串里不含任何一个
+* **R1 精确**：归一后的名称 == 别名表里该 code 的任一书写面（**简称或注册全称**），
+  或 == 6 位股票代码；
+* **R2 全称展开**：归一后的名称**包含**别名表里该 code 的任一书写面，且残余串里不含任何一个
   `distinct_entity_markers`（控股／投资／实业／资本／集团控股）。例：
   「万华化学集团股份有限公司」→ 600309（残余「集团股份有限公司」无限定词）；
   「上海电气集团股份有限公司」→ 601727，而「上海电气控股集团有限公司」的残余含
   「控股」，判为**另一个主体**，进待消歧清单——这正是「不同实体被合并成一个节点」那一类。
+
+两条规则的判定顺序、限定词清单与归一化口径都**没有改**（《10》第4.5.4节 ＝《02》第9.2节，
+冻结）；改的只是别名表里的数据：每个 code 除简称外，还带 1 条由 `build_company_aliases.py`
+建档的注册全称（来源与证据写在 `company_registered_names.py` 与 `alias_table.json` 里，
+拿不到就如实登记 `unknown`、绝不手打）。
 
 归一化只动空白与最外层包裹字符（`config.normalize_entity_name`），不做大小写折叠、
 不做标点归一、不做模糊匹配、不做编辑距离——宁可进待消歧清单，也不做有把握不了的合并。
@@ -132,8 +145,35 @@ def source_fingerprint(records, path):
 
 
 # --------------------------------------------------------------------------
-# 别名表（只读第 5 阶段的 105 家配置公司集）
+# 别名表（只读第 5 阶段的 105 家配置公司集 ＋ 只读注册全称补充）
 # --------------------------------------------------------------------------
+def load_registered_names():
+    """只读加载「公司注册全称」补充数据模块；返回 (per_code 表, 模块元信息)。"""
+    path = config.DISAMBIG["registered_names_path"]
+    if not os.path.isfile(path):
+        raise SystemExit(
+            "注册全称补充数据不存在：%s\n请先建档：python 代码\\抽取与图谱\\build_company_aliases.py"
+            % path)
+    spec = importlib.util.spec_from_file_location("_stage6_company_registered_names", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)          # 只读该文件，不改动它
+    schema = str(getattr(module, "SUPPLEMENT_SCHEMA", "") or "")
+    if schema != config.DISAMBIG["registered_names_schema"]:
+        raise SystemExit("注册全称补充数据 schema 不符：%s（期望 %s）"
+                         % (schema, config.DISAMBIG["registered_names_schema"]))
+    table = getattr(module, config.DISAMBIG["registered_names_attr"])
+    if not isinstance(table, dict) or not table:
+        raise SystemExit("注册全称补充数据为空或形态不符：%s" % path)
+    return table, {
+        "path": os.path.relpath(path, config.ROOT).replace("\\", "/"),
+        "schema": schema,
+        "source_endpoint": str(getattr(module, "SOURCE_ENDPOINT", "") or ""),
+        "source_endpoint_field": str(getattr(module, "SOURCE_ENDPOINT_FIELD", "") or ""),
+        "corpus_min_corroboration": int(getattr(module, "CORPUS_MIN_CORROBORATION", 0) or 0),
+        "source_counts": dict(getattr(module, "SOURCE_COUNTS", {}) or {}),
+    }
+
+
 def build_alias_table():
     """从 `config.DISAMBIG["alias_source_path"]` 读 COMPANIES，建 stock_code → 别名条目。"""
     path = config.DISAMBIG["alias_source_path"]
@@ -143,6 +183,7 @@ def build_alias_table():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)          # 只读该文件，不改动它
     companies = getattr(module, config.DISAMBIG["alias_source_attr"])
+    registered, _meta = load_registered_names()
 
     table, duplicates = {}, []
     for item in companies:
@@ -153,40 +194,72 @@ def build_alias_table():
         if code in table:
             duplicates.append(code)
         board = item.get("board")
+        supplement = registered.get(code) or {}
+        registered_name = str(supplement.get("registered_name") or "").strip()
+        aliases = [registered_name] if registered_name else []
+        normalized_aliases = sorted({config.normalize_entity_name(a) for a in aliases
+                                     if config.normalize_entity_name(a)})
+        normalized_short = config.normalize_entity_name(name)
         table[code] = {
             "stock_code": code,
             "short_name": name,
-            "normalized_short_name": config.normalize_entity_name(name),
+            "normalized_short_name": normalized_short,
+            # 别名表里该 code 的**全部书写面**（简称 ＋ 注册全称）；匹配规则读它，不读别的。
+            "normalized_alias_surfaces": sorted({normalized_short} | set(normalized_aliases)),
+            "registered_name": registered_name,
+            "normalized_registered_name": config.normalize_entity_name(registered_name),
+            "registered_name_source": str(supplement.get("source") or "unknown"),
+            "registered_name_evidence": supplement.get("evidence") or {},
+            "corpus_corroboration_count": int(supplement.get("corpus_corroboration_count") or 0),
+            "corpus_corroboration_doc_ids": list(supplement.get("corpus_corroboration_doc_ids") or []),
             "industry": item.get("industry") or "",
             "board": board or "",
             "exchange": config.DISAMBIG["exchange_by_board"].get(board, ""),
         }
     if duplicates:
         raise SystemExit("配置公司集里 stock_code 重复：%s" % sorted(set(duplicates)))
+    missing = sorted(code for code in table if not table[code]["registered_name"])
+    if missing:
+        print("[注意] %d 家配置公司没有注册全称（照《15》：如实留在待消歧清单，不猜）：%s"
+              % (len(missing), "、".join(missing)))
     return {code: table[code] for code in sorted(table)}
 
 
 def match_company(name_norm, alias_table):
-    """返回 (命中代码或 None, 规则, 细节)。规则见 config.DISAMBIG["match_rules"]。"""
+    """返回 (命中代码或 None, 规则, 细节)。规则见 config.DISAMBIG["match_rules"]。
+
+    与 2026-09-26 之前逐字一致的两条规则；唯一的差别是 `alias_table[code]` 现在给了
+    **多个书写面**（简称 ＋ 注册全称），匹配对每个书写面求值——这是别名数据，不是新规则。
+    """
     hits, blocked = {}, []
     for code in sorted(alias_table):
-        short = alias_table[code]["normalized_short_name"]
-        if not short:
+        surfaces = [s for s in (alias_table[code].get("normalized_alias_surfaces")
+                                or [alias_table[code]["normalized_short_name"]]) if s]
+        if not surfaces:
             continue
-        if name_norm == short or name_norm == code:
+        if name_norm == code or any(name_norm == surface for surface in surfaces):
             hits.setdefault(code, "R1_exact_name_or_code")
             continue
-        if len(short) < int(config.DISAMBIG["min_short_name_chars"]):
-            continue
-        if short in name_norm:
-            residual = name_norm.replace(short, "", 1)
-            marker = next((m for m in config.DISAMBIG["distinct_entity_markers"]
-                           if m in residual), None)
-            if marker:
-                # 残余含「不同主体限定词」：判为另一个主体，不做合并（《10》第4.5.4节 的第二类问题）。
-                blocked.append({"code": code, "marker": marker, "residual": residual})
+        surface_hit, blocked_entry = None, None
+        for surface in surfaces:
+            if len(surface) < int(config.DISAMBIG["min_short_name_chars"]):
                 continue
+            if surface in name_norm:
+                residual = name_norm.replace(surface, "", 1)
+                marker = next((m for m in config.DISAMBIG["distinct_entity_markers"]
+                               if m in residual), None)
+                if marker:
+                    # 残余含「不同主体限定词」：判为另一个主体，不做合并（《10》第4.5.4节 的第二类问题）。
+                    if blocked_entry is None:
+                        blocked_entry = {"code": code, "marker": marker,
+                                         "residual": residual, "surface": surface}
+                    continue
+                surface_hit = surface
+                break
+        if surface_hit:
             hits.setdefault(code, "R2_full_name_contains_short_name")
+        elif blocked_entry:
+            blocked.append(blocked_entry)
 
     exact = sorted(code for code, rule in hits.items() if rule == "R1_exact_name_or_code")
     detail = {"matched_codes": sorted(hits), "blocked_by_marker": blocked}
@@ -276,6 +349,8 @@ def build_company_index(alias_table, companies_seen):
             "stock_code": code,
             "company_name": longest,
             "short_name": entry["short_name"],
+            "registered_name": entry.get("registered_name") or "",
+            "registered_name_source": entry.get("registered_name_source") or "unknown",
             "aliases": [s for s in surfaces if s != longest],
             "exchange": entry["exchange"],
             "industry": entry["industry"],
@@ -327,6 +402,7 @@ def run(args) -> int:
         print("[注意] 已有产物与当前缓存指纹不一致，重算：%s" % paths["disambiguation"])
 
     alias_table = build_alias_table()
+    _registered_table, registered_meta = load_registered_names()
     entity_map, unresolved, companies_seen = disambiguate_records(records, alias_table)
     unresolved.sort(key=lambda r: (r["doc_id"], r["entity_id"], r["reason"]))
     company_index = build_company_index(alias_table, companies_seen)
@@ -348,10 +424,25 @@ def run(args) -> int:
             "path": os.path.relpath(config.DISAMBIG["alias_source_path"], config.ROOT)
                     .replace("\\", "/"),
             "attribute": config.DISAMBIG["alias_source_attr"],
-            "note": "只读第 5 阶段已冻结的配置公司集；本文件不改动它，也不新增公司。",
+            "registered_names_path": registered_meta["path"],
+            "registered_names_attr": config.DISAMBIG["registered_names_attr"],
+            "registered_names_schema": registered_meta["schema"],
+            "registered_names_endpoint": registered_meta["source_endpoint"],
+            "registered_names_endpoint_field": registered_meta["source_endpoint_field"],
+            "registered_names_corpus_min_corroboration":
+                registered_meta["corpus_min_corroboration"],
+            "registered_names_source_counts":
+                {k: registered_meta["source_counts"][k]
+                 for k in sorted(registered_meta["source_counts"])},
+            "note": ("只读第 5 阶段已冻结的配置公司集（公司名单与简称不改），另只读"
+                     "build_company_aliases.py 建档的注册全称补充（逐家带来源与证据）；"
+                     "本文件不改动数据来源，也不新增公司。"),
         },
         "match_rules": config.DISAMBIG["match_rules"],
         "distinct_entity_markers": config.DISAMBIG["distinct_entity_markers"],
+        "normalized_alias_surfaces_note": (
+            "每个 code 的 normalized_alias_surfaces ＝ 归一化简称 ∪ 归一化注册全称；"
+            "两条匹配规则对其中每一个书写面求值（数据扩展，规则未改）"),
         "companies": alias_table,
         "company_count": len(alias_table),
     }
@@ -381,6 +472,13 @@ def run(args) -> int:
             "company_identities": len(company_index),
             "company_identities_with_multiple_surfaces":
                 sum(1 for c in company_index.values() if len(c["observed_surfaces"]) > 1),
+            "company_registered_name_sources":
+                {src: sum(1 for e in alias_table.values()
+                          if (e.get("registered_name_source") or "unknown") == src)
+                 for src in sorted({(e.get("registered_name_source") or "unknown")
+                                    for e in alias_table.values()})},
+            "company_registered_names_missing":
+                sum(1 for e in alias_table.values() if not e.get("registered_name")),
         },
     }
     dump_json(paths["alias_table"], alias_payload)
@@ -391,6 +489,10 @@ def run(args) -> int:
           % (paths["extract_records"], len(records), fingerprint["extract_records_sha256"][:16]))
     print("别名表：%d 家配置公司（只读自 %s）"
           % (len(alias_table), alias_payload["source"]["path"]))
+    registered_counts = {k: registered_meta["source_counts"][k]
+                         for k in sorted(registered_meta["source_counts"])}
+    print("        注册全称补充 %s：来源分布 %s"
+          % (registered_meta["path"], registered_counts or {"unknown": len(alias_table)}))
     print("实体 %d 条：已判身份 %d／待消歧 %d"
           % (len(entity_map), disambig_payload["counts"]["resolved"], len(unresolved)))
     for label in sorted(by_label):

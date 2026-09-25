@@ -21,6 +21,8 @@ r"""《16-事件抽取与知识图谱（第六阶段）》与第 6 阶段交付�
     python 工具\验收第6阶段.py --profile v21        # 核验全量产物（图谱导出\v2.1\）
     python 工具\验收第6阶段.py --work-root <目录> --export-dir <目录>
                                                     # 覆盖管线工作目录与导出目录（负向自测用）
+    python 工具\验收第6阶段.py --eval-dir <目录> --doc16 <《16》>
+                                                    # B10 按 <目录> 的 dev.jsonl／test.jsonl 现场重算（负向自测用）
     python 工具\验收第6阶段.py --no-replay          # 只做静态检查，跳过镜像重跑（记 SKIP）
     python 工具\验收第6阶段.py --keep-tmp           # 保留镜像重跑用的临时目录，便于事后复核
 
@@ -33,12 +35,13 @@ r"""《16-事件抽取与知识图谱（第六阶段）》与第 6 阶段交付�
   两个 profile 的目录一律经 `代码\抽取与图谱\config.pipeline_paths()` 解析，不在本脚本里写死。
 
 **降级口径（不把「试跑不覆盖」当成缺陷，也不把真缺陷降级掉）**：
-  * 只有真的「全量才可能成立」的检查才降级：8 种事件类型／9 条核心关系在**导出物中全覆盖**
-    （12 篇试点必然覆盖不到），以及数据集指纹基线缺失时的比对。它们在 pilot 模式下输出
+  * 只有真的「全量才可能成立」的检查才降级：数据集指纹基线缺失时的比对——pilot 模式下输出
     `[SKIP]` 并写明原因、**不计入失败**，在 v21 模式下是硬检查。
-  * 与 profile 无关的检查（260 条评测集、《16》必备小节、证据可回溯、配置四要素、《02》TBD、
+  * 与 profile 无关的检查（260 条评测集、B10「Dev＋Test 有标注条目或在《16》登记证据不足」、
+    B11「导出物覆盖 ↔ 《16》登记的已知限制」、《16》必备小节、证据可回溯、配置四要素、《02》TBD、
     数据集只读等）**不做任何降级**：试跑期间它们该失败就失败（例如《16》尚未落盘），如实记入
-    失败项，不用 SKIP 掩盖。
+    失败项，不用 SKIP 掩盖。B11 固定核**交付物导出**（v21 落点）：pilot 的 12 篇导出是试跑留痕，
+    不是《16》「已知限制与证据不足清单」登记的对象。
 
 退出码：0 = 全部检查通过（SKIP 不影响退出码）；1 = 存在失败项或输入缺失。
 
@@ -131,6 +134,9 @@ _ap.add_argument("--keep-tmp", action="store_true", help="保留镜像重跑用�
 _ap.add_argument("--doc16", default=None,
                  help="覆盖《16》路径（默认 阶段06-…\\16-事件抽取与知识图谱（第六阶段）.md）；"
                       "供负向自测与 T9 前演练用")
+_ap.add_argument("--eval-dir", default=None,
+                 help="覆盖抽取评测集目录（默认 阶段05-…\\抽取评测集\\<数据集版本>）；"
+                      "B10 按它现场重算 dev.jsonl／test.jsonl，供负向自测用")
 _ap.add_argument("--p00", default=None, help="覆盖《00》索引路径（同上，供自测用）")
 ARGS = _ap.parse_args()
 
@@ -140,6 +146,12 @@ if ARGS.doc16:
     P16 = os.path.abspath(ARGS.doc16)
 if ARGS.p00:
     P00 = os.path.abspath(ARGS.p00)
+if ARGS.eval_dir:
+    EVAL_DIR = os.path.abspath(ARGS.eval_dir)
+    EVAL_DEV = os.path.join(EVAL_DIR, "dev.jsonl")
+    EVAL_TEST = os.path.join(EVAL_DIR, "test.jsonl")
+    EVAL_NOTE = os.path.join(EVAL_DIR, "标注说明.md")
+    EVAL_STATS = os.path.join(EVAL_DIR, "分层统计.json")
 
 
 def pipeline_paths(profile, work_root=None, export_dir=None):
@@ -169,6 +181,12 @@ def pipeline_paths(profile, work_root=None, export_dir=None):
 
 
 PATHS = pipeline_paths(PROFILE, ARGS.work_root, ARGS.export_dir)
+
+# B11 的核验对象固定是**交付物导出**（《15》第4.3节 的落点：阶段06-…\图谱导出\<数据集版本>\）：
+# 《16》的「已知限制与证据不足清单」登记的是交付物，pilot 的 12 篇导出是试跑留痕、不是它的对象，
+# 故 B11 与 profile 无关；`--export-dir` 是本脚本既有的负向自测入口，给了就以它为准。
+B11_EXPORT_DIR = (os.path.abspath(ARGS.export_dir) if ARGS.export_dir
+                  else pipeline_paths("v21")["export_dir"])
 
 
 # --------------------------------------------------------------------------
@@ -590,7 +608,9 @@ else:
 # ==========================================================================
 print(); print("=" * 78)
 print("B、《15》第八节 第 2 行：本体一致性（6 类实体／8 种事件类型／9 条核心关系不多不少，"
-      "无 Product／Location、无 INVOLVES）")
+      "无 Product／Location、无 INVOLVES）；另含两条跨行守卫——B10＝第 18 行（Dev＋Test "
+      "有标注条目或在《16》登记证据不足，评测集口径，与导出物无关）、B11＝第 19 行"
+      "（导出物覆盖 ↔ 《16》登记的已知限制，双向一致）")
 print("=" * 78)
 
 B_ENT = list(P10_ONT["entities"])
@@ -656,19 +676,198 @@ chk(not bad_endpoint,
     "实测 检查 %d 条边；违例 %d 条%s"
     % (len(edge_at), len(bad_endpoint), "：" + br(bad_endpoint) if bad_endpoint else ""))
 
-miss_rel = [r for r in config.RELATIONS if r not in rel_used]
-miss_evt = [e for e in config.EVENT_TYPES if e not in evt_used]
-if PROFILE == "v21":
-    chk(not miss_rel and not miss_evt,
-        "B10 全量：9 条关系与 8 种事件类型在导出物中都有条目（不少）",
-        "实测 关系 %d/9（缺 %s）；事件类型 %d/8（缺 %s）"
-        % (len(rel_used), "、".join(miss_rel) or "无", len(evt_used), "、".join(miss_evt) or "无"))
+# B10 的判据照《15》第八节 第 18 行：**Dev＋Test 评测集**里 8 种事件类型与 9 条核心关系
+# 「要么有标注条目、要么在《16》中显式登记为证据不足」。它**不**要求图谱导出物全覆盖——
+# 导出物的覆盖一致性由 B11 按《16》的已知限制登记单独核验（《15》第八节 第 19 行）。
+# 数据源：dev.jsonl／test.jsonl（现场重算标注条目数）、分层统计.json（逐类登记 ＋
+# coverage_tags 现场复核）、《16》（证据不足登记的判据与 N9 相同，同为评测集口径）。
+b10_dev = read_jsonl(EVAL_DEV) if os.path.isfile(EVAL_DEV) else []
+b10_test = read_jsonl(EVAL_TEST) if os.path.isfile(EVAL_TEST) else []
+b10_stats = read_json(EVAL_STATS, default=None) or {}
+b10_evt_ann, b10_rel_ann = Counter(), Counter()
+for _ln, _r in b10_dev + b10_test:
+    _ann = _r.get("annotation") or {}
+    for _e in (_ann.get("events") or []):
+        _et = str(_e.get("event_type") or "") if isinstance(_e, dict) else ""
+        if _et:
+            b10_evt_ann[_et] += 1
+    for _x in (_ann.get("relations") or []):
+        _rn = str(_x.get("relation") or "") if isinstance(_x, dict) else str(_x or "")
+        if _rn:
+            b10_rel_ann[_rn] += 1
+b10_miss = [x for x in config.EVENT_TYPES if not b10_evt_ann.get(x)] + \
+           [x for x in config.RELATIONS if not b10_rel_ann.get(x)]
+
+# 分层统计.json 侧：8＋9 个类都要在 coverage 段里登记，planned_items_dev＋test == total；
+# coverage_tags 一律按 dev.jsonl／test.jsonl 现场重算后与文件登记的 coverage_tag_counts 比对。
+b10_cov = b10_stats.get("coverage") or {}
+b10_stat_bad = []
+for _key, _name_key, _names in (("event_types", "event_type", config.EVENT_TYPES),
+                                ("relations", "relation", config.RELATIONS)):
+    _decl = {str(x.get(_name_key) or ""): x for x in (b10_cov.get(_key) or [])
+             if isinstance(x, dict)}
+    for _n in _names:
+        _d = _decl.get(_n)
+        if _d is None:
+            b10_stat_bad.append("%s 未在 分层统计.json 的 coverage.%s 登记" % (_n, _key))
+            continue
+        _dv, _ts, _tt = (to_int(_d.get("planned_items_dev")),
+                         to_int(_d.get("planned_items_test")),
+                         to_int(_d.get("planned_items_total")))
+        if None in (_dv, _ts, _tt) or _dv + _ts != _tt:
+            b10_stat_bad.append("%s 的 planned_items_dev／test／total 不自洽（%s＋%s≠%s）"
+                                % (_n, _dv, _ts, _tt))
+b10_tag_decl = {}
+for _k, _v in (b10_stats.get("coverage_tag_counts") or {}).items():
+    if isinstance(_v, dict):
+        b10_tag_decl[str(_k)] = (to_int(_v.get("dev")), to_int(_v.get("test")),
+                                 to_int(_v.get("total")))
+    else:
+        b10_tag_decl[str(_k)] = (None, None, to_int(_v))
+b10_tag_bad = []
+for _t in sorted(set(b10_tag_decl) | {
+        str(_tag) for _rows in (b10_dev, b10_test) for _ln, _r in _rows
+        for _tag in ((_r.get("sampling") or {}).get("coverage_tags") or [])}):
+    _dd, _dt, _dall = b10_tag_decl.get(_t, (None, None, None))
+    _gd = sum(1 for _ln, _r in b10_dev
+              if _t in ((_r.get("sampling") or {}).get("coverage_tags") or []))
+    _gt = sum(1 for _ln, _r in b10_test
+              if _t in ((_r.get("sampling") or {}).get("coverage_tags") or []))
+    if (_dd, _dt, _dall) != (_gd, _gt, _gd + _gt):
+        b10_tag_bad.append("%s 登记 %s／%s／%s vs 现场重算 %d／%d／%d"
+                           % (_t, _dd, _dt, _dall, _gd, _gt, _gd + _gt))
+
+
+def absence_word(line):
+    """同一行里的「缺失」词表（与 N9 的 thin_registration 同一口径）。
+
+    唯一收紧处：「0 条」必须是独立的 0——否则「抽取 10 条」会被当成 0 条登记。
+    """
+    return bool(re.search(r"(?<!\d)0\s*条", line)) or any(
+        k in line for k in ("证据不足", "无标注条目", "无条目", "未取得", "零条",
+                            "条目为 0", "条目数 0"))
+
+
+def b10_registration(text, name):
+    """在《16》里找「<name> … 证据不足／无标注条目／0 条」的**同一行**登记（不许只看全文共现）。"""
+    if not text:
+        return None, None
+    for _ln, _line in enumerate(str(text).split("\n"), 1):
+        if name in _line and absence_word(_line):
+            return _ln, _line.strip()
+    return None, None
+
+
+b10_unreg = []
+for _x in b10_miss:
+    if b10_registration(t16, _x)[0] is None:
+        b10_unreg.append(_x)
+chk(not b10_unreg and not b10_stat_bad and not b10_tag_bad,
+    "B10 第 18 行：8 种事件类型与 9 条核心关系在 Dev＋Test 中有标注条目或在《16》登记证据不足"
+    "（评测集口径，与导出物无关）",
+    "实测 dev %d 条＋test %d 条；有标注条目的 事件类型 %d/8、关系 %d/9；分层统计.json 逐类登记问题 "
+    "%d 项%s；coverage_tags 重算不一致 %d 项%s；既无条目又未在《16》登记的 %d 个%s"
+    % (len(b10_dev), len(b10_test),
+       len([x for x in config.EVENT_TYPES if b10_evt_ann.get(x)]),
+       len([x for x in config.RELATIONS if b10_rel_ann.get(x)]),
+       len(b10_stat_bad), "：" + br(b10_stat_bad, 3) if b10_stat_bad else "",
+       len(b10_tag_bad), "：" + br(b10_tag_bad, 3) if b10_tag_bad else "",
+       len(b10_unreg), "：" + br(b10_unreg, 6) if b10_unreg else ""))
+
+# B11（《15》第八节 第 19 行 的收口守卫，硬检查、不降级）：**交付物导出**里每种关系与事件类型的
+# 覆盖必须与《16》「已知限制与证据不足清单」的登记一致——
+#   ① 导出物里 0 条的关系／事件类型 → 《16》必须登记该缺失并写出数字（量化）；
+#   ② 导出物里有条目的关系／事件类型 → 《16》不得把它登记为「证据不足／0 条／未写入图谱」，
+#      （即「《16》说某类有，导出物就必须有；导出物没有，《16》就必须量化登记这次缺失」）。
+# 登记的判据：**该行以类名起头**（表格行、`- 名称：…` 都算），同行含**导出物语境**（导出物／
+# edges.csv／nodes.csv／图谱／入图）、缺失标记与数字。两个限定都是防误报：多类同行的汇总句不算
+# 登记（免得把 A 类的缺失算到 B 类头上），只有评测集口径（如「评测集 0 条标注条目」）的登记
+# 也不算导出物口径的登记。核的是交付物导出（v21 落点），与 profile 无关。
+B11_LABEL = ("B11 第 19 行：导出物的关系／事件类型覆盖 == 《16》登记的已知限制"
+             "（缺则按导出物口径量化登记、有则不得登记为缺失）")
+b11_edges_h, b11_edges = read_csv_rows(
+    os.path.join(B11_EXPORT_DIR, config.GRAPH_PIPELINE["files"]["edges"]))
+b11_nodes_h, b11_nodes = read_csv_rows(
+    os.path.join(B11_EXPORT_DIR, config.GRAPH_PIPELINE["files"]["nodes"]))
+b11_missing = [rel_to_root(x) for x in
+               (os.path.join(B11_EXPORT_DIR, config.GRAPH_PIPELINE["files"]["edges"]),
+                os.path.join(B11_EXPORT_DIR, config.GRAPH_PIPELINE["files"]["nodes"]))
+               if not os.path.isfile(x)]
+B11_ABSENT = ("证据不足", "无标注条目", "无条目", "未写入图谱", "未进入图谱", "不写入图谱",
+              "未进图谱", "零条", "全部被排除", "全部排除", "未取得", "无法写入", "缺失")
+B11_CTX = ("导出物", "edges.csv", "nodes.csv", "图谱", "入图")
+B11_HINT = ("登记行须以类名起头、含导出物语境（导出物／edges.csv／图谱）＋缺失标记＋数字，例："
+            "`CUSTOMER_OF：导出物 0 条（抽取 10 条，端点全部未消歧，未写入图谱）`")
+
+
+def b11_registration(text, name):
+    """同一行里以 <name> 起头、带导出物语境的缺失登记（含表格行）；要求带数字（量化）。"""
+    if not text:
+        return None, None
+    head = re.compile(r"^[\s\|\-*>·•#]*\*{0,2}" + re.escape(name)
+                      + r"\*{0,2}\s*(?:[:：=,，、|（(]|\d|$)")
+    for _ln, _line in enumerate(str(text).split("\n"), 1):
+        _s = _line.strip()
+        _probe = re.sub(r"[无未不]\s*缺失", "", _s)      # 「无缺失／未缺失」不算缺失登记
+        if (head.match(_s) and any(k in _s for k in B11_CTX)
+                and (any(k in _probe for k in B11_ABSENT) or absence_word(_probe))
+                and re.search(r"\d", _s)):
+            return _ln, _s
+    return None, None
+
+
+def b11_zero_claim(text, name):
+    """以 <name> 起头、带导出物语境、且紧跟其后 12 个字符内就写「0／证据不足／无条目」的行。
+
+    只用于反向核验（导出物**有**条目时）：把「本类缺失」的登记**贴在本类名后**才算矛盾；既要求
+    导出物语境、又只看名字后 12 个字符，免得「SUPPLIES：3 条（CUSTOMER_OF 0 条）」这类汇总句
+    或评测集口径的「投资并购：证据不足（评测集 0 条标注条目）」被算成导出物缺失。
+    """
+    if not text:
+        return None, None
+    head = re.compile(r"^[\s\|\-*>·•#]*\*{0,2}" + re.escape(name) + r"\*{0,2}(.{0,12})")
+    for _ln, _line in enumerate(str(text).split("\n"), 1):
+        _s = _line.strip()
+        _m = head.match(_s)
+        if not _m or not any(k in _s for k in B11_CTX):
+            continue
+        _tail = re.sub(r"[无未不]\s*缺失", "", _m.group(1))
+        if re.search(r"(?<![0-9])0\s*条?", _tail) or any(
+                k in _tail for k in ("证据不足", "无条目", "无标注条目", "未写入图谱",
+                                     "未进入图谱", "不写入图谱", "全部排除", "全部被排除")):
+            return _ln, _s
+    return None, None
+
+
+if b11_missing:
+    chk(False, B11_LABEL,
+        "实测 交付物导出缺失：%s；B11 固定核交付物导出（--export-dir 可覆盖）；%s"
+        % ("、".join(b11_missing), B11_HINT))
 else:
-    skip("B10 全量：9 条关系与 8 种事件类型在导出物中都有条目（不少）",
-         "pilot 模式：12 篇试点实测覆盖 关系 %d/9（缺 %s）、事件类型 %d/8（缺 %s）；"
-         "「不少」只在全量模式（--profile v21）下判定，试跑用 N 组的评测集条目检查兜底"
-         % (len(rel_used), "、".join(miss_rel) or "无",
-            len(evt_used), "、".join(miss_evt) or "无"))
+    b11_rel_n = Counter(cell(_r, "relation") for _ln, _r in b11_edges)
+    b11_evt_n = Counter(cell(_r, "event_type") for _ln, _r in b11_nodes
+                        if cell(_r, "label") == "Event")
+    b11_unreg, b11_contradict, b11_cover = [], [], []
+    for _kind, _names, _counts in (("关系", config.RELATIONS, b11_rel_n),
+                                   ("事件类型", config.EVENT_TYPES, b11_evt_n)):
+        for _n in _names:
+            _num = _counts.get(_n, 0)
+            b11_cover.append("%s=%d" % (_n, _num))
+            _ln, _line = b11_registration(t16, _n)
+            if _num == 0 and _ln is None:
+                b11_unreg.append("%s %s" % (_kind, _n))
+            _cln, _cline = b11_zero_claim(t16, _n)
+            if _num > 0 and _cln is not None:
+                b11_contradict.append("%s %s（导出物 %d 条，而《16》第%d行登记为缺失：「%s」）"
+                                      % (_kind, _n, _num, _cln, _cline[:60]))
+    chk(not b11_unreg and not b11_contradict, B11_LABEL,
+        "实测 交付物导出 %s：关系 %d 条、节点 %d 个（其中 Event %d 个）；逐类覆盖 %s；"
+        "导出物 0 条却未在《16》量化登记的 %d 项%s；导出物有条目却被《16》登记为缺失的 %d 项%s%s"
+        % (rel_to_root(B11_EXPORT_DIR), len(b11_edges), len(b11_nodes), sum(b11_evt_n.values()),
+           "、".join(b11_cover),
+           len(b11_unreg), "：" + br(b11_unreg, 6) if b11_unreg else "",
+           len(b11_contradict), "：" + br(b11_contradict, 3) if b11_contradict else "",
+           ("；" + B11_HINT) if (b11_unreg or b11_contradict) else ""))
 
 # ==========================================================================
 print(); print("=" * 78)

@@ -271,7 +271,7 @@ PLANNED = {
     # 带路径这一类是 2026-09-25 加的：`代码\抽取与图谱\README.md` 若按裸名 `README.md`
     # 登记，会连带跳过全项目所有 README.md 的悬空判定，副作用大于收益。
     '16-事件抽取与知识图谱（第六阶段）.md',
-    'nodes.csv', 'edges.csv',                       # 图谱导出物（通用名，建出后立即删）
+    # 'nodes.csv'／'edges.csv' 已于 2026-09-26 落盘（图谱导出\v2.1\），按编写约定 5 移除
     'extract.py', 'disambiguate.py', 'dedup_events.py', 'write_graph.py',
     '标注说明.md',
     # '验收第6阶段.py' 已于 2026-09-25 落盘，按编写约定 5 从 PLANNED 移除
@@ -299,6 +299,8 @@ SEARCH += [d for d in glob.glob(os.path.join(ROOT, '代码', '*')) if os.path.is
 # `_试跑\` 同理（《12》第九节 要求的小规模验证目录）。
 SEARCH += [d for d in glob.glob(os.path.join(ROOT, '阶段05-数据准备', '数据集', '*')) if os.path.isdir(d)]
 SEARCH += [os.path.join(ROOT, '阶段05-数据准备', '_试跑')]
+# 第 6 阶段的图谱导出物（`图谱导出\v2.1\`）：《16》与《00》里既有带路径的写法、也有裸文件名（`nodes.csv`、`edges.csv`），把每个导出版本目录也列入查找位置。
+SEARCH += [d for d in glob.glob(os.path.join(ROOT, '阶段06-事件抽取与知识图谱', '图谱导出', '*')) if os.path.isdir(d)]
 # 旧路径别名：2026-09-25 目录重组前的写法。记录类文档（《05》《06》《08》）会逐字保留当时的路径，
 # 那是留痕不是缺陷，因此旧前缀在这里映射到新位置再判定存在性，而不是去改写历史记录。
 LEGACY = {'文献调研': LITDIR, '10-系统总体设计（第四阶段）': SECDIR}

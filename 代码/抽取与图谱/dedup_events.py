@@ -440,7 +440,18 @@ def self_test(records, entity_map, paths):
     if not multi:
         result["reason"] = "合成文档与源文档没有合并成组（见九项条件的逐条判据）"
         return result
-    members = multi[0]
+    # 选中**同时含合成文档与源文档**的那一组，而不是 multi[0]：
+    # 12 篇试跑里真实语料没有任何合并组，multi[0] 恰好就是夹具组；2026-09-26 全量放量
+    # （709 篇、19 组真实合并）暴露了这一取法的失真——multi[0] 会取到与夹具无关的真实组
+    # （实测取到 doc 1001 的同篇合并组，证据文档只有 1001，故 len(evidence) > 1 不成立）。
+    # 夹具组的选取必须显式锚定 synthetic_doc_id；锚不到即判自检不通过，不退回 multi[0]。
+    members = next((g for g in multi
+                    if any(e["doc_id"] == synthetic_doc_id for e in g)
+                    and any(e["doc_id"] == int(source_doc) for e in g)), None)
+    if members is None:
+        result["reason"] = ("合成文档（doc_id=%d）与源文档（doc_id=%d）没有并进同一组，"
+                            "夹具校验不成立" % (synthetic_doc_id, int(source_doc)))
+        return result
     merged = build_merged_event(members, 1, publish_time_by_doc)
     evidence = set(merged["evidence_doc_ids"])
     expected = {e["doc_id"] for e in members}
