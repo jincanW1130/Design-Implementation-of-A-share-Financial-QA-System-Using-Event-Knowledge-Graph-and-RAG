@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """fetch.py —— 第 5 阶段（数据准备）采集层：T1 / T2 / T3。
 
-职责（《代码\\数据准备\\README.md》§一、§三、§四）：
+职责（《代码\\数据准备\\README.md》第一节、第三节、第四节）：
   T1 数据源确认与合规核查 → meta\\sources.csv
   T2 公司与时间窗确定     → 直接读 config.py（本阶段已冻结，脚本不重新选取）
   T3 采集与原始数据落盘   → raw\\{doc_id}.json、raw\\_fetch_log.jsonl
 
 本脚本的四条纪律：
-  1. 参数一律来自 config.py；README §四 只记接口形状，端点按其冻结的 URL 形状拼装。
+  1. 参数一律来自 config.py；README 第四节 只记接口形状，端点按其冻结的 URL 形状拼装。
   2. 真实数据：标题／时间／URL／正文全部来自来源站点，抓不到就记 ok:false 跳过并计数。
   3. 只写 dataset_dir(profile) 下的 meta\\sources.csv 与 raw\\*（不写 clean\\chunks\\index\\reports\\）。
   4. 幂等 + 可续跑：raw\\{doc_id}.json 已存在则默认跳过（--force 才重取）；
@@ -34,7 +34,7 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 
-# 控制台为 GBK，中文输出必须先切到 UTF-8（README §六）
+# 控制台为 GBK，中文输出必须先切到 UTF-8（README 第六节）
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
@@ -45,36 +45,36 @@ import config  # noqa: E402  （本文件与 config.py 同目录）
 # 0. 接口常量
 # --------------------------------------------------------------------------
 # config.py 冻结了来源站点（SOURCES）、公司、时间窗、配额、编号方案与已实测端点
-# （ENDPOINTS）；接口路径形状由 README.md §四 冻结。端点一律取 config.ENDPOINTS，
-# 本文件不再重复写 URL 字面量（各键含意见 README §四）。
+# （ENDPOINTS）；接口路径形状由 README.md 第四节 冻结。端点一律取 config.ENDPOINTS，
+# 本文件不再重复写 URL 字面量（各键含意见 README 第四节）。
 # ==========================================================================
 CNINFO_HOME = config.SOURCES["公告"]["home"]
 CNINFO_TOPSEARCH_URL = config.ENDPOINTS["cninfo_topsearch"]
 CNINFO_QUERY_URL = config.ENDPOINTS["cninfo_query"]
 CNINFO_DETAIL_URL = CNINFO_HOME + "/new/disclosure/detail"
-CNINFO_STATIC_HOST = config.ENDPOINTS["cninfo_static"]      # README §4.1 第 3 条
+CNINFO_STATIC_HOST = config.ENDPOINTS["cninfo_static"]      # README 第4.1节 第 3 条
 # 列表接口单次条数（非配额）。2026-09-25 实测：该接口**每页最多只回 30 条**，
 # pageSize 传 50/100/200 同样只回 30，因此整个时间窗必须靠翻页取（见 cninfo_announcements）。
 CNINFO_PAGE_SIZE = 30
 
 # 公告标题排除审计（config.EXCLUDE_ANNOUNCEMENT_TITLE_PATTERNS_* 的落点）：
-# 每个模式最多记几条示例标题，示例标题截断到约 40 字符（见 README §4.1）。
+# 每个模式最多记几条示例标题，示例标题截断到约 40 字符（见 README 第4.1节）。
 EXCLUDE_TITLE_EXAMPLE_MAX = 3
 EXCLUDE_TITLE_EXAMPLE_CHARS = 40
 
 # 正文长度上限过滤审计（config.MAX_DOC_CHARS_FOR_INCLUSION 的落点）：
-# 每类别最多记几条示例标题，标题截断口径与标题排除审计一致（见 README §4.5）。
+# 每类别最多记几条示例标题，标题截断口径与标题排除审计一致（见 README 第4.5节）。
 LENGTH_EXAMPLE_MAX = EXCLUDE_TITLE_EXAMPLE_MAX
 
 CSRC_HOME = config.SOURCES["监管公开信息"]["home"]
-CSRC_SEARCH_URL = config.ENDPOINTS["csrc_search"]           # README §4.2；形如 .../searchList/{channel}
+CSRC_SEARCH_URL = config.ENDPOINTS["csrc_search"]           # README 第4.2节；形如 .../searchList/{channel}
 CSRC_PAGE_SIZE = 20                                         # 实测上限（_pageSize 更大仍返回 20）
 # 已实测 channelGuid（config.ENDPOINTS["csrc_channels"]）：主来源行政处罚，备用来源市场禁入
 CSRC_CHANNELS = [{"name": name, "guid": guid}
                  for name, guid in config.ENDPOINTS["csrc_channels"].items()]
 
 GOV_HOME = config.SOURCES["政策文件"]["home"]
-GOV_SEARCH_URL = config.ENDPOINTS["gov_policy_search"]      # README §4.3
+GOV_SEARCH_URL = config.ENDPOINTS["gov_policy_search"]      # README 第4.3节
 GOV_LIB_TYPES = list(config.ENDPOINTS["gov_policy_types"])   # 国务院文件 / 部门文件
 GOV_PAGE_SIZE = 20
 
@@ -254,7 +254,7 @@ def match_companies(text: str, companies) -> list:
 
 
 # ==========================================================================
-# 2. HTTP 客户端：限流 + 重试（README §五 第 4 条）
+# 2. HTTP 客户端：限流 + 重试（README 第五节 第 4 条）
 # ==========================================================================
 class FetchError(Exception):
     pass
@@ -390,7 +390,7 @@ class Context:
         self.ann_per_company = self.settings["announcement_per_company"]
         self.ann_strata = self.settings["announcement_strata"]   # 公告时段分层（config 唯一来源）
         # 公告标题排除模式（config.profile_settings 唯一来源）：在候选收集阶段生效，
-        # 先于 level 1 配额与 level 2 铺开，保证分层只从存活候选里抽（README §4.1）。
+        # 先于 level 1 配额与 level 2 铺开，保证分层只从存活候选里抽（README 第4.1节）。
         self.exclude_patterns = [str(p) for p in
                                  (self.settings.get("exclude_announcement_title_patterns") or [])]
         self.out_dir = os.path.abspath(out_dir)
@@ -415,7 +415,7 @@ class Context:
         #   text_cache  : 内容 URL -> 正文条目（候选阶段探测到的正文，正式落盘时直接复用，
         #                 因此同一篇候选在一次运行里最多下载一次）；
         #   length_audit: category -> {阈值, 已探测正文的候选数, 超长丢弃数, 示例标题,
-        #                 内部去重集合}，落点是 raw\_fetch_log.jsonl 的类别审计行（README §4.5）。
+        #                 内部去重集合}，落点是 raw\_fetch_log.jsonl 的类别审计行（README 第4.5节）。
         self.text_cache = {}
         self.length_audit = {c: new_length_audit() for c in config.CATEGORIES}
 
@@ -447,7 +447,7 @@ class Context:
         """候选（已按 publish_time 降序、url 升序排好）→ doc_id。
 
         同一 URL 复用既有 doc_id（编号不漂移）；新候选按顺序领取块内最小空闲序号。
-        干净目录下第一轮即 1..N，满足 config.DOC_ID_BLOCK 与 README §二 的编号口径。
+        干净目录下第一轮即 1..N，满足 config.DOC_ID_BLOCK 与 README 第二节 的编号口径。
         """
         block = config.DOC_ID_BLOCK[category]
         used = self.used_ids(category)
@@ -687,10 +687,10 @@ def log_exclusion_summary(ctx: Context) -> None:
 # --------------------------------------------------------------------------
 # 4.7 正文长度上限过滤（config.MAX_DOC_CHARS_FOR_INCLUSION，四类来源统一口径）
 # --------------------------------------------------------------------------
-# 口径（README §4.5）：候选的正文一经抽取，即与 config.MAX_DOC_CHARS_FOR_INCLUSION 比对；
+# 口径（README 第4.5节）：候选的正文一经抽取，即与 config.MAX_DOC_CHARS_FOR_INCLUSION 比对；
 # 超过上限的候选**整篇丢弃**，且必须发生在 level 1（时段分层／配额）与 level 2（时间铺开）
 # 之前——被丢弃者由次优候选顶替，因此每公司／每类别配额不会被抽空。一律**不截断**正文
-# （截断等于改写证据，《10》§4.4.6；《12》§七）。丢弃明细（条数 + 最多 3 条示例标题与实测
+# （截断等于改写证据，《10》第4.4.6节；《12》第七节）。丢弃明细（条数 + 最多 3 条示例标题与实测
 # 字符数）登记在 raw\_fetch_log.jsonl 的类别审计行里。
 # 实现要点：探测与正式落盘共用 ctx.text_cache，同一篇候选一次运行只下载一次正文；
 # 已有 raw\<doc_id>.json 的候选直接复用其正文长度（--force 时除外）。
@@ -887,7 +887,7 @@ def pick_stratified(cands, strata: dict, category: str = "", subject: str = ""):
 # 5. 采集器一：公告（巨潮资讯网）
 # ==========================================================================
 def cninfo_org_id(ctx: Context, company: dict):
-    """代码 → orgId（README §4.1 第 1 条）。返回 (orgId, zwjc) 或 (None, None)。"""
+    """代码 → orgId（README 第4.1节 第 1 条）。返回 (orgId, zwjc) 或 (None, None)。"""
     resp = ctx.http.post(
         CNINFO_TOPSEARCH_URL,
         data={"keyWord": company["code"], "maxNum": 10},
@@ -1047,7 +1047,7 @@ def fetch_sub_candidates(ctx: Context, company: dict):
 def fetch_announcement_text(ctx: Context, cand: Cand):
     """下载 PDF 并用 PyMuPDF 抽取正文（必须带浏览器 UA 与 cninfo Referer），按内容 URL 缓存。
 
-    缓存使"候选阶段的长度探测"与"正式落盘"共用同一次下载（README §4.5），
+    缓存使"候选阶段的长度探测"与"正式落盘"共用同一次下载（README 第4.5节），
     ctx.force 时仍走缓存（--force 的语义是忽略已存在的 raw 文件，不是重复下载同一篇）。
     """
     key = cand.content_url or cand.page_url
@@ -1196,7 +1196,7 @@ def scan_csrc_channel(ctx: Context, channel: dict, quota: int, max_pages: int):
 
 
 def discover_csrc(ctx: Context):
-    """主来源行政处罚；不足时启用市场禁入（README §4.2）。"""
+    """主来源行政处罚；不足时启用市场禁入（README 第4.2节）。"""
     quota = ctx.quota["监管公开信息"]
     notes = []
     primary_channel, secondary_channel = CSRC_CHANNELS[0], CSRC_CHANNELS[1]
@@ -1622,7 +1622,7 @@ def news_search_candidates(ctx: Context, site: str, name: str, page: int):
 
 
 def discover_news(ctx: Context):
-    """按 README §4.4 抓栏目页，再用同一站点的站内检索补充公司相关文章（见交付说明）。"""
+    """按 README 第4.4节 抓栏目页，再用同一站点的站内检索补充公司相关文章（见交付说明）。"""
     quota = ctx.quota["财经新闻"]
     n_sites = max(1, len(config.NEWS_SITES))
     page_budget = min(8, 2 + max(1, quota // n_sites))
@@ -1768,7 +1768,7 @@ def materialize_news(ctx: Context, cand: Cand, doc_id=None):
         return None
     # 正文长度上限（config.MAX_DOC_CHARS_FOR_INCLUSION）：整篇丢弃、绝不截断；对本类别而言
     # 这一步发生在 pick_balanced（level 1 分桶 + level 2 时间铺开）之前，因此被丢弃者不计入
-    # 配额，抓取循环会继续取后续候选顶替（README §4.5）。
+    # 配额，抓取循环会继续取后续候选顶替（README 第4.5节）。
     if len(body) > length_cap():
         note_length_drop(ctx, cand.category, cand.page_url,
                          news_title(soup) or cand.title_hint, len(body))
@@ -1853,7 +1853,7 @@ def plan_announcements(ctx: Context):
 def select_announcements_for_company(ctx: Context, company: dict, cands):
     """公司内候选 → 公告选择（level 1 时段分层 + level 2 时间铺开），并在**选入之前**过滤超长。
 
-    过滤口径（README §4.5）：每一轮先按既有口径选一轮，逐篇探测正文长度；正文超过
+    过滤口径（README 第4.5节）：每一轮先按既有口径选一轮，逐篇探测正文长度；正文超过
     config.MAX_DOC_CHARS_FOR_INCLUSION 的候选**整篇丢弃**（绝不截断），从候选池剔除后按同一
     口径重选——被丢弃者由次优候选顶替，每公司配额不会因过滤而被抽空。
     返回 (picked, drawn, notes, dropped)。
@@ -2010,7 +2010,7 @@ def run_news_category(ctx: Context):
         ctx.flush_deferred({})
         return 0
     # 新闻正文在抓取时就已抽取，长度上限过滤因此在 materialize_news 内完成（超长整篇丢弃、
-    # 不计入配额，抓取循环会继续取后续候选顶替，见 README §4.5）；此处按既有口径
+    # 不计入配额，抓取循环会继续取后续候选顶替，见 README 第4.5节）；此处按既有口径
     # （level 1 分桶 + level 2 时间铺开）只在**已通过长度上限**的文档上选择。
     picked, spread_notes = pick_balanced(docs, quota, category="财经新闻")
     log_spread_notes(ctx, "财经新闻", spread_notes)
@@ -2058,7 +2058,7 @@ def source_rows() -> list:
             "rate_limit_seconds": config.SOURCES["监管公开信息"]["rate_limit_seconds"],
             "notes": "主来源行政处罚 17d5ff2fe43e488dba825807ae40d63f；备用来源市场禁入 "
                      "3795869930ca4b70bf55469270a6e641（实测窗口内无发文）。"
-                     "标题按《12》§八 修订口径构造成 原标题（当事人），冲突时用索引号消歧。",
+                     "标题按《12》第八节 修订口径构造成 原标题（当事人），冲突时用索引号消歧。",
         },
         {
             "name": config.SOURCES["政策文件"]["source"],

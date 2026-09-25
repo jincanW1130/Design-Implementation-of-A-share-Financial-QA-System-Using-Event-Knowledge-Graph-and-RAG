@@ -2,10 +2,10 @@
 """第 5 阶段（数据准备）的唯一参数来源。
 
 本文件是第 5 阶段全部**已冻结决策**的落点：来源、公司、时间窗、编号方案、切分参数、
-Embedding 模型、配额、路径。按《12-第5阶段任务书（数据准备）》§2.3 的 TBD 归属表，
+Embedding 模型、配额、路径。按《12-第5阶段任务书（数据准备）》第2.3节 的 TBD 归属表，
 本阶段必须固化的是 Embedding 模型与版本、切分参数、dataset_version／data_cutoff_time 三项。
 
-纪律（《12》§5 硬约束 5／7、§4.2）：
+纪律（《12》第5节 硬约束 5／7、第4.2节）：
   * 切分参数一经封版不得更改，改参数等于换数据集版本；
   * doc_id 与 chunk_id 由本文件显式分配，不依赖数据库自增；
   * 任何脚本都不得绕过本文件写死参数；需要改参数时改本文件并升 dataset_version。
@@ -30,21 +30,21 @@ PILOT_ROOT = os.path.join(STAGE_DIR, "_试跑")          # 小规模试跑，不
 TOOL_DIR = os.path.join(ROOT, "工具")
 
 # --------------------------------------------------------------------------
-# 1. 数据集版本级元信息（《12》§2.3：本阶段必须固化）
+# 1. 数据集版本级元信息（《12》第2.3节：本阶段必须固化）
 # --------------------------------------------------------------------------
-# v1.1：v1.0 封版后只**新增**一个数据集内部字段 subject_companies（见 §8），
-# 规模、编号、切分、向量与 v1.0 完全一致；v1.0 目录保持不可变（《12》§4.2）。
-DATASET_VERSION = "v1.1"
+# v1.1：v1.0 封版后只**新增**一个数据集内部字段 subject_companies（见 第8节），
+# 规模、编号、切分、向量与 v1.0 完全一致；v1.0 目录保持不可变（《12》第4.2节）。
+DATASET_VERSION = "v2.0"
 PIPELINE_VERSION = "pipeline-1.0"
 
-# 数据截止时间：数据集版本级属性，不属于任何表（《02》§10.1、§10.3；《12》§5 硬约束 2）。
+# 数据截止时间：数据集版本级属性，不属于任何表（《02》第10.1节、第10.3节；《12》第5节 硬约束 2）。
 # 口径：收录 publish_time 的日期部分 ≤ DATA_CUTOFF_DATE 的文档。
 DATA_CUTOFF_DATE = "2026-09-25"
 DATA_CUTOFF_TIME = "2026-09-25T23:59:59+08:00"
 TIMEZONE = "+08:00"
 
 # 数据集的采集时间窗：下界 = cutoff − 100 天 = 2026-06-17。
-# 为什么不是正好 90 天：《12》§5 硬约束 13 要求覆盖"data_cutoff_time 前**至少** 90 天"。
+# 为什么不是正好 90 天：《12》第5节 硬约束 13 要求覆盖"data_cutoff_time 前**至少** 90 天"。
 # 若把下界定在正好 cutoff−90，验收就要求"最早一篇恰好落在 2026-06-27 当天"才算通过，
 # 而各来源那一天有没有文完全取决于抓取运气，验收会退化成掷骰子（2026-09-25 实测：
 # 分时段铺开后最早一篇落到 2026-07-01，cutoff−earliest＝86 天，卡在 90 天门槛外）。
@@ -54,18 +54,18 @@ WINDOW_START = "2026-06-17"
 WINDOW_END = DATA_CUTOFF_DATE
 WINDOW_DAYS = 100
 
-# 相对时间区间（《02》§10.3；《12》§5 硬约束 13 要求两段都非空）
+# 相对时间区间（《02》第10.3节；《12》第5节 硬约束 13 要求两段都非空）
 BUCKET_RECENT = ("2026-08-27", "2026-09-25")   # [cutoff-30d, cutoff]
 BUCKET_EARLIER = ("2026-06-17", "2026-08-26")  # [cutoff-100d, cutoff-30d)
-# 《02》§10.3 的"近期"区间 [cutoff-90d, cutoff]，用于回报覆盖情况与验收
+# 《02》第10.3节 的"近期"区间 [cutoff-90d, cutoff]，用于回报覆盖情况与验收
 ANALYSIS_90_RANGE = ("2026-06-27", "2026-09-25")
 
 # --------------------------------------------------------------------------
-# 2. 四类来源（《12》§5 硬约束 12：只允许这四类，股吧不进入数据集）
+# 2. 四类来源（《12》第5节 硬约束 12：只允许这四类，股吧不进入数据集）
 # --------------------------------------------------------------------------
 CATEGORIES = ["公告", "监管公开信息", "政策文件", "财经新闻"]
 
-# company_list 必须非空的类别（《12》§八 开工前修订后的口径）。
+# company_list 必须非空的类别（《12》第八节 开工前修订后的口径）。
 # 政策文件与监管公开信息多数不涉及特定上市公司，允许 company_list 为空数组，
 # 但**不得为 null**，且必须在《13》说明。clean.py 与 check.py 都必须读这一项，
 # 不得各自复制一份字面量。
@@ -124,12 +124,12 @@ HTTP = {
     "timeout_seconds": 30,
     "max_retries": 3,
     "backoff_seconds": 2.0,
-    # 全局抓取上限：控制频率、遵守来源网站访问规范（《12》§5 硬约束 12、§十 风险 2）
+    # 全局抓取上限：控制频率、遵守来源网站访问规范（《12》第5节 硬约束 12、第十节 风险 2）
     "min_interval_seconds": 1.2,
 }
 
-# 已实测可用的取数端点（2026-09-25 实测）。原先只写在 README §四，现收进 config，
-# 避免脚本里散落常量。参数含义见 README §四。
+# 已实测可用的取数端点（2026-09-25 实测）。原先只写在 README 第四节，现收进 config，
+# 避免脚本里散落常量。参数含义见 README 第四节。
 ENDPOINTS = {
     "cninfo_topsearch": "https://www.cninfo.com.cn/new/information/topSearch/query",
     "cninfo_query": "https://www.cninfo.com.cn/new/hisAnnouncement/query",
@@ -146,22 +146,72 @@ ENDPOINTS = {
 }
 
 # --------------------------------------------------------------------------
-# 3. 第一版规模：10 家公司（《02》§17"先小后大"，第一版 10 家／100 篇）
+# 3. 第一版规模：10 家公司（《02》第17节"先小后大"，第一版 10 家／100 篇）
 # --------------------------------------------------------------------------
 # board 用于覆盖不同板块；cninfo_column 是巨潮公告查询接口的 column 取值。
 # subs 是**预先批准的同行业替代公司**：仅当主选公司在时间窗内公告数不足时启用，
 # 且必须登记到 reports\skipped.jsonl 与《13》。不得自行另选公司。
 COMPANIES = [
-    {"code": "000001", "name": "平安银行", "industry": "银行",        "board": "深市主板", "cninfo_column": "szse", "subs": [("600036", "招商银行")]},
-    {"code": "000002", "name": "万科A",   "industry": "房地产",      "board": "深市主板", "cninfo_column": "szse", "subs": [("600048", "保利发展")]},
-    {"code": "600519", "name": "贵州茅台", "industry": "食品饮料",    "board": "沪市主板", "cninfo_column": "sse",  "subs": [("000858", "五粮液")]},
-    {"code": "600028", "name": "中国石化", "industry": "石油化工",    "board": "沪市主板", "cninfo_column": "sse",  "subs": [("601857", "中国石油")]},
-    {"code": "600276", "name": "恒瑞医药", "industry": "医药生物",    "board": "沪市主板", "cninfo_column": "sse",  "subs": [("600196", "复星医药")]},
-    {"code": "002594", "name": "比亚迪",   "industry": "汽车",        "board": "深市主板", "cninfo_column": "szse", "subs": [("601633", "长城汽车")]},
-    {"code": "300750", "name": "宁德时代", "industry": "电力设备",    "board": "创业板",   "cninfo_column": "szse", "subs": [("300014", "亿纬锂能")]},
-    {"code": "002475", "name": "立讯精密", "industry": "电子制造",    "board": "深市主板", "cninfo_column": "szse", "subs": [("002241", "歌尔股份")]},
-    {"code": "688981", "name": "中芯国际", "industry": "半导体",      "board": "科创板",   "cninfo_column": "sse",  "subs": [("603501", "韦尔股份")]},
-    {"code": "601012", "name": "隆基绿能", "industry": "光伏",        "board": "沪市主板", "cninfo_column": "sse",  "subs": [("600438", "通威股份")]},
+    # —— 第一版已用的 10 家（保留，保证版本间连续性）——
+    {"code": "000001", "name": "平安银行", "industry": "银行",        "board": "深市主板", "cninfo_column": "szse", "subs": []},
+    {"code": "000002", "name": "万科A",   "industry": "房地产",      "board": "深市主板", "cninfo_column": "szse", "subs": []},
+    {"code": "600519", "name": "贵州茅台", "industry": "食品饮料",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "600028", "name": "中国石化", "industry": "石油化工",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "600276", "name": "恒瑞医药", "industry": "医药生物",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "002594", "name": "比亚迪",   "industry": "汽车",        "board": "深市主板", "cninfo_column": "szse", "subs": []},
+    {"code": "300750", "name": "宁德时代", "industry": "电力设备",    "board": "创业板",   "cninfo_column": "szse", "subs": []},
+    {"code": "002475", "name": "立讯精密", "industry": "电子制造",    "board": "深市主板", "cninfo_column": "szse", "subs": []},
+    {"code": "688981", "name": "中芯国际", "industry": "半导体",      "board": "科创板",   "cninfo_column": "sse",  "subs": []},
+    {"code": "601012", "name": "隆基绿能", "industry": "光伏",        "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    # —— 第二版增补 40 家 ——
+    # 建筑与工程（重大合同/中标类披露的主要来源，第一版全库 0 篇正缺这一类）
+    {"code": "601668", "name": "中国建筑", "industry": "建筑工程",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "601390", "name": "中国中铁", "industry": "建筑工程",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "601186", "name": "中国铁建", "industry": "建筑工程",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "600970", "name": "中材国际", "industry": "建筑工程",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "002051", "name": "中工国际", "industry": "建筑工程",    "board": "深市主板", "cninfo_column": "szse", "subs": []},
+    # 电力设备与机械
+    {"code": "600089", "name": "特变电工", "industry": "电力设备",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "600875", "name": "东方电气", "industry": "电力设备",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "601727", "name": "上海电气", "industry": "电力设备",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "600406", "name": "国电南瑞", "industry": "电力设备",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "600031", "name": "三一重工", "industry": "工程机械",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "000338", "name": "潍柴动力", "industry": "工程机械",    "board": "深市主板", "cninfo_column": "szse", "subs": []},
+    # 通信设备与电子
+    {"code": "000063", "name": "中兴通讯", "industry": "通信设备",    "board": "深市主板", "cninfo_column": "szse", "subs": []},
+    {"code": "600522", "name": "中天科技", "industry": "通信设备",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "601138", "name": "工业富联", "industry": "电子制造",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "002241", "name": "歌尔股份", "industry": "电子制造",    "board": "深市主板", "cninfo_column": "szse", "subs": []},
+    {"code": "000725", "name": "京东方A",  "industry": "面板显示",    "board": "深市主板", "cninfo_column": "szse", "subs": []},
+    # 半导体
+    {"code": "603501", "name": "韦尔股份", "industry": "半导体",      "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "002371", "name": "北方华创", "industry": "半导体设备",  "board": "深市主板", "cninfo_column": "szse", "subs": []},
+    # 金融
+    {"code": "600036", "name": "招商银行", "industry": "银行",        "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "601398", "name": "工商银行", "industry": "银行",        "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "601318", "name": "中国平安", "industry": "保险",        "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "600030", "name": "中信证券", "industry": "证券",        "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "300059", "name": "东方财富", "industry": "证券",        "board": "创业板",   "cninfo_column": "szse", "subs": []},
+    # 房地产与消费
+    {"code": "600048", "name": "保利发展", "industry": "房地产",      "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "600887", "name": "伊利股份", "industry": "食品饮料",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "000858", "name": "五粮液",   "industry": "食品饮料",    "board": "深市主板", "cninfo_column": "szse", "subs": []},
+    {"code": "603288", "name": "海天味业", "industry": "食品饮料",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "002714", "name": "牧原股份", "industry": "农业养殖",    "board": "深市主板", "cninfo_column": "szse", "subs": []},
+    {"code": "000333", "name": "美的集团", "industry": "家用电器",    "board": "深市主板", "cninfo_column": "szse", "subs": []},
+    {"code": "000651", "name": "格力电器", "industry": "家用电器",    "board": "深市主板", "cninfo_column": "szse", "subs": []},
+    # 汽车与新能源
+    {"code": "601633", "name": "长城汽车", "industry": "汽车",        "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "600104", "name": "上汽集团", "industry": "汽车",        "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "300274", "name": "阳光电源", "industry": "光伏",        "board": "创业板",   "cninfo_column": "szse", "subs": []},
+    {"code": "600438", "name": "通威股份", "industry": "光伏",        "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    # 资源与材料
+    {"code": "601088", "name": "中国神华", "industry": "煤炭",        "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "601899", "name": "紫金矿业", "industry": "有色金属",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "600019", "name": "宝钢股份", "industry": "钢铁",        "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "600309", "name": "万华化学", "industry": "基础化工",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    {"code": "000792", "name": "盐湖股份", "industry": "基础化工",    "board": "深市主板", "cninfo_column": "szse", "subs": []},
+    {"code": "600900", "name": "长江电力", "industry": "电力",        "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
 ]
 
 # --------------------------------------------------------------------------
@@ -171,21 +221,21 @@ COMPANIES = [
 # 其余三类为全局配额。
 QUOTA_V1 = {
     "公告": None,                # 由 ANNOUNCEMENT_PER_COMPANY × 公司数决定
-    "财经新闻": 25,
-    "政策文件": 15,
-    "监管公开信息": 10,
+    "财经新闻": 50,
+    "政策文件": 30,
+    "监管公开信息": 20,
 }
-ANNOUNCEMENT_PER_COMPANY = 5     # 5 × 10 家 = 50
-TARGET_DOC_COUNT_V1 = 100
+ANNOUNCEMENT_PER_COMPANY = 8     # 8 × 50 家 = 400（第二版）
+TARGET_DOC_COUNT_V1 = 500
 
 # 公告的**时段分层抽取**（2026-09-25 增设，开工前修正）。
 # 起因：若按 publish_time 降序取前 N 篇，公告会全部挤在窗口右端——实测 10 家公司的
 # 近 30 天公告量远大于其余 60 天（如恒瑞医药 30/0、贵州茅台 0/7），数据集的
-# [cutoff-90d, cutoff-30d) 一段会被抽空，而《02》§12.2 的"时间约束＝有"题目
+# [cutoff-90d, cutoff-30d) 一段会被抽空，而《02》第12.2节 的"时间约束＝有"题目
 # 正需要这一段的 gold 证据。
 # 规则：每家公司先从 BUCKET_RECENT 取 recent 篇、再从 BUCKET_EARLIER 取 earlier 篇；
 # 某一时段不足时由另一时段补足，补足情况必须登记到 reports\ 与《13》。
-ANNOUNCEMENT_STRATA_V1 = {"recent": 3, "earlier": 2}
+ANNOUNCEMENT_STRATA_V1 = {"recent": 4, "earlier": 4}
 ANNOUNCEMENT_STRATA_PILOT = {"recent": 2, "earlier": 1}
 
 QUOTA_PILOT = {
@@ -199,11 +249,11 @@ PILOT_COMPANIES = ["000001", "000002", "600519"]
 ANNOUNCEMENT_PER_COMPANY_PILOT = 3
 TARGET_DOC_COUNT_PILOT = 20
 
-# 每个相对时间桶的最低文档数（《12》§5 硬约束 13：两段都必须非空）
+# 每个相对时间桶的最低文档数（《12》第5节 硬约束 13：两段都必须非空）
 MIN_DOCS_PER_TIME_BUCKET = 5
 
 # --------------------------------------------------------------------------
-# 5. 编号方案（《12》§5 硬约束 7：显式分配、稳定、不依赖自增）
+# 5. 编号方案（《12》第5节 硬约束 7：显式分配、稳定、不依赖自增）
 # --------------------------------------------------------------------------
 # doc_id 按类别分块，便于人工识别与后续扩充：
 #   公告 1001+ ／ 财经新闻 2001+ ／ 政策文件 3001+ ／ 监管公开信息 4001+
@@ -241,12 +291,12 @@ def split_chunk_id(chunk_id: int):
 
 
 # --------------------------------------------------------------------------
-# 6. 切分参数（《12》§2.3：本阶段必须固化；§5 硬约束 5：封版后不得更改）
+# 6. 切分参数（《12》第2.3节：本阶段必须固化；第5节 硬约束 5：封版后不得更改）
 # --------------------------------------------------------------------------
 # 单位一律为**字符数**（中文按字符计，不按词计）。
 # 目标 400 ／ 上限 512 ／ 下限 128 ／ 重叠 50。
 # 重叠 50/400 = 12.5%，只用于衔接上下文，不足以让同一段内容在两个文本块里
-# 都构成完整证据（《12》§5 硬约束 5、《02》§12.7 第二步"一个文本块只算一个证据"）。
+# 都构成完整证据（《12》第5节 硬约束 5、《02》第12.7节 第二步"一个文本块只算一个证据"）。
 CHUNK = {
     "target_chars": 400,
     "max_chars": 512,
@@ -265,10 +315,10 @@ MIN_DOC_CHARS = 80
 # --------------------------------------------------------------------------
 # 起因：试跑数据集 521 个文本块里有 364 个来自**同一篇**《贵州茅台2026年半年度报告》
 # （正文 11.8 万字符，占 70%）。这会让 Recall@K／Precision@K 退化成
-# "有没有命中那篇定期报告"，检索指标失去区分度；而《02》§9.2 的 8 种事件类型里
+# "有没有命中那篇定期报告"，检索指标失去区分度；而《02》第9.2节 的 8 种事件类型里
 # 并没有"发布定期报告"这一类，业绩信息由**业绩预告／业绩快报**类公告承载。
 # 处理口径：在**候选阶段排除标题命中下列模式的公告**，不是按长度截断——
-# 截断等于改写证据，违反《10》§4.4.6 的"证据按原文展示"。
+# 截断等于改写证据，违反《10》第4.4.6节 的"证据按原文展示"。
 EXCLUDE_ANNOUNCEMENT_TITLE_PATTERNS_V1 = [
     r"年度报告", r"半年度报告", r"季度报告", r"[一二三四]季报",
     r"审计报告", r"内部控制(评价|自我评价|审计)报告",
@@ -290,7 +340,7 @@ EXCLUDE_ANNOUNCEMENT_TITLE_PATTERNS_PILOT = EXCLUDE_ANNOUNCEMENT_TITLE_PATTERNS_
 # 长文档——v1 实测一篇 39.7 万字符的可持续发展报告就占了全库 51.7% 的字符、并直接撑爆了
 # 编号步长（单篇超过 1000 个文本块，chunk.py 报错中止）。超过上限的候选在**选入之前**丢弃，
 # 由后续候选顶替，因此配额不会被抽空；丢弃明细登记在 raw\_fetch_log.jsonl。
-# 一律**排除整篇**，绝不截断——截断等于改写证据（《10》§4.4.6）。
+# 一律**排除整篇**，绝不截断——截断等于改写证据（《10》第4.4.6节）。
 MAX_DOC_CHARS_FOR_INCLUSION = 60000
 
 # 巨潮公告查询接口**每页最多返回 30 条**（2026-09-25 实测：pageSize 传 50/100/200 均只回 30），
@@ -303,7 +353,7 @@ CNINFO_MAX_PAGES = 4             # 每家最多翻 4 页 = 120 篇候选
 MAX_CHUNKS_PER_DOC_WARN = 120
 
 # --------------------------------------------------------------------------
-# 7. Embedding 模型（《12》§2.3：本阶段必须固化并写入元信息）
+# 7. Embedding 模型（《12》第2.3节：本阶段必须固化并写入元信息）
 # --------------------------------------------------------------------------
 # 选型理由见《13》：中文检索的常用基线、CPU 可跑、维度小、索引可全量重建。
 EMBEDDING = {
@@ -335,7 +385,7 @@ CLEAN = {
     # 全角/半角统一：**只做定向归一，不做整段 NFKC**（2026-09-25 开工前修正）。
     # 原口径 normalize_unicode=True（NFKC）会把中文全角标点 ，；：！？（） 折成 ASCII 的
     # ",;:!?()"，而 。 、 属 CJK 标点不受影响，结果同一句话里出现 "," 与 "。" 混排；
-    # 更关键的是《10》§4.4.6 要求证据按原文展示、权威文本不被改写，折标点等于改写证据。
+    # 更关键的是《10》第4.4.6节 要求证据按原文展示、权威文本不被改写，折标点等于改写证据。
     # 因此只把**全角 ASCII 区**（ＦＦ１０–ＦＦ１９ 数字、ＦＦ２１–ＦＦ５Ａ 与 ＦＦ４１–ＦＦ５Ａ
     # 字母、Ｕ＋３０００ 表意空格）折成半角，中文标点一律保持原样。
     "normalize_fullwidth_ascii": True,
@@ -365,7 +415,7 @@ CLEAN = {
 # 判定规则（clean.py 实现）：公司在 company_list 内，且满足**其一**即计入 subject_companies——
 #   ① 其名称或 6 位代码出现在文档 title 中；
 #   ② 其名称出现次数 ＋ 代码出现次数在 content 中 ≥ 本值。
-# 实测动机（《14-前五阶段审核报告》§3.4，2026-09-25）：company_list 对财经新闻采用
+# 实测动机（《14-前五阶段审核报告》第3.4节，2026-09-25）：company_list 对财经新闻采用
 # "正文提及即关联"，25 篇新闻里约 12 篇被标注了并非文章主题的公司（doc_id 2009 标比亚迪而
 # 正文主角是山东朗进科技、2016 标平安银行而正文主角是民生银行、2021 标宁德时代＋中芯国际
 # 而正文主角是招商证券）；第 6 阶段若直接按 company_list 建"公司参与事件"的边会张冠李戴。
@@ -374,7 +424,7 @@ CLEAN = {
 # 16 篇 company_list 非空但收紧为空；全库 company_list 非空的 74 篇里 42 篇有 subject。
 SUBJECT_MENTION_MIN = 3
 
-# 去重口径（《12》§5 硬约束 3、§八 修订后的验收项）
+# 去重口径（《12》第5节 硬约束 3、第八节 修订后的验收项）
 DEDUP = {
     "url_unique": True,
     "title_normalize": ["去除首尾空白", "去除全角空格", "合并连续空白"],
@@ -386,7 +436,7 @@ DEDUP = {
 }
 
 # --------------------------------------------------------------------------
-# 9. 数据集目录结构（《12》§4.2）
+# 9. 数据集目录结构（《12》第4.2节）
 # --------------------------------------------------------------------------
 SUBDIRS = ["meta", "raw", "clean", "chunks", "index", "reports"]
 

@@ -15,10 +15,10 @@
 检查项：
     A 文档规模（行数按文本行计，不含文件末尾换行产生的空行）
     B 表格列数一致性（跳过 ``` 代码块）
-    C 跨文档节号引用可解析性（《0N》§x.y 是否真的存在于被引文档中）
+    C 跨文档节号引用可解析性（《0N》第x.y节 是否真的存在于被引文档中）
     D 《07》来源清单覆盖（按文档分别归属节号）
     E 需求追溯矩阵来源 ⊆ 条目"来源追溯"
-    F §3.8 汇总表 与 §7.2 矩阵 的 FR 来源逐字一致
+    F 第3.8节 汇总表 与 第7.2节 矩阵 的 FR 来源逐字一致
     G 需求编号覆盖（FR/UC/NFR）
     H 作废术语残留（裸 Evidence Recall 等）
     I 未限定范围的证据属性表述（H1 类）
@@ -26,7 +26,7 @@
     K 文档内提到的文件路径是否存在
     L 工作区内的 0N- 文档是否都登记在《00》索引里
     M 目录结构（阶段目录齐全、根目录只留入口与基线）
-    N1 《02》自身三处版本号一致（标题末尾／版本字段／§1.2 修订记录末行）
+    N1 《02》自身三处版本号一致（标题末尾／版本字段／第1.2节 修订记录末行）
     N2 其余文档引用《02》的版本是否等于当前基线（默认只报告；--strict-citations 门禁）
 """
 import os, re, sys, glob, io
@@ -141,16 +141,16 @@ for name in D:
     if m: bynum[m.group(1)] = name
 unres = []
 for name in D:
-    for mm in re.finditer(r'《(\d\d)》§(\d+(?:\.\d+)*)', D[name]):
+    for mm in re.finditer(r'《(\d\d)》第(\d+(?:\.\d+)*)节', D[name]):
         doc, sec = mm.group(1), mm.group(2)
         if doc not in bynum: continue
         keys = SEC[bynum[doc]]
         if not any(sec == k or sec.startswith(k + '.') or k.startswith(sec + '.') for k in keys):
-            unres.append('%s -> 《%s》§%s' % (name, doc, sec))
+            unres.append('%s -> 《%s》第%s节' % (name, doc, sec))
 print('  被引文档：%s' % ', '.join(sorted(bynum)))
 if unres:
     for u in sorted(set(unres)): print('    !! %s' % u)
-report(not unres, '所有《0N》§x.y 引用均可解析', '%d 处无法解析' % len(set(unres)))
+report(not unres, '所有《0N》第x.y节 引用均可解析', '%d 处无法解析' % len(set(unres)))
 
 # ---- D 《07》来源清单覆盖 ----------------------------------------------
 print(); print('=' * 78); print('D 《07》来源清单覆盖'); print('=' * 78)
@@ -161,19 +161,19 @@ if n7:
     if m:
         seg, body = m.group(1), t7.replace(m.group(1), '')
         rows = [r for r in seg.strip().split('\n') if r.strip().startswith('|')]
-        keys = {(d, s) for d, s in re.findall(r'《(0[24])》§([0-9]+(?:\.[0-9]+)*)', seg)}
+        keys = {(d, s) for d, s in re.findall(r'《(0[24])》第([0-9]+(?:\.[0-9]+)*)节', seg)}
         cited = set()
-        for mm in re.finditer(r'《(0[24])》§([0-9]+(?:\.[0-9]+)*)((?:[、，]§[0-9]+(?:\.[0-9]+)*|[～~-]§?[0-9]+(?:\.[0-9]+)*)*)', body):
+        for mm in re.finditer(r'《(0[24])》第([0-9]+(?:\.[0-9]+)*)节((?:[、，]第[0-9]+(?:\.[0-9]+)*节|[～~-]第?[0-9]+(?:\.[0-9]+)*节)*)', body):
             cited.add((mm.group(1), mm.group(2)))
-            for num in re.findall(r'§([0-9]+(?:\.[0-9]+)*)', mm.group(3)): cited.add((mm.group(1), num))
-            for num in re.findall(r'[～~-]([0-9]+(?:\.[0-9]+)*)', mm.group(3)): cited.add((mm.group(1), num))
-        miss = sorted('《%s》§%s' % (d, s) for d, s in cited
+            for num in re.findall(r'第([0-9]+(?:\.[0-9]+)*)节', mm.group(3)): cited.add((mm.group(1), num))
+            for num in re.findall(r'[～~-]第?([0-9]+(?:\.[0-9]+)*)节', mm.group(3)): cited.add((mm.group(1), num))
+        miss = sorted('《%s》第%s节' % (d, s) for d, s in cited
                       if not any(d == kd and (s == k or s.startswith(k + '.') or k.startswith(s + '.')) for kd, k in keys))
         print('  来源清单 %d 行；一级来源 %d 个节号；正文引用 %d 个（文档, 节号）对' % (len(rows) - 2, len(keys), len(cited)))
         for x in miss: print('    !! 未覆盖 %s' % x)
         report(not miss, '正文引用的节都在来源清单中', '%d 处未覆盖' % len(miss))
     else:
-        report(False, '未找到 §1.3 需求来源清单')
+        report(False, '未找到 第1.3节 需求来源清单')
 
     # ---- E 矩阵 ⊆ 条目追溯 ----
     print(); print('=' * 78); print('E 追溯矩阵来源 ⊆ 条目"来源追溯"'); print('=' * 78)
@@ -189,15 +189,15 @@ if n7:
     for row in mat.strip().split('\n'):
         c = [x.strip() for x in row.strip('|').split('|')]
         if len(c) >= 3 and re.fullmatch(r'FR-0\d', c[0]) and c[0] in frs:
-            trk = set(re.findall(r'§([0-9]+(?:\.[0-9]+)*)', frs[c[0]]))
-            for s in re.findall(r'《0[24]》§([0-9]+(?:\.[0-9]+)*)', c[2]):
+            trk = set(re.findall(r'第([0-9]+(?:\.[0-9]+)*)节', frs[c[0]]))
+            for s in re.findall(r'《0[24]》第([0-9]+(?:\.[0-9]+)*)节', c[2]):
                 if not any(s == x or s.startswith(x + '.') or x.startswith(s + '.') for x in trk):
-                    prob.append('%s 矩阵 §%s' % (c[0], s))
+                    prob.append('%s 矩阵 第%s节' % (c[0], s))
     for p in prob: print('    !! %s' % p)
     report(not prob, '矩阵来源均在条目追溯范围内', '%d 处越界' % len(prob))
 
-    # ---- F §3.8 vs §7.2 ----
-    print(); print('=' * 78); print('F §3.8 汇总表 与 §7.2 矩阵 的 FR 来源一致'); print('=' * 78)
+    # ---- F 第3.8节 vs 第7.2节 ----
+    print(); print('=' * 78); print('F 第3.8节 汇总表 与 第7.2节 矩阵 的 FR 来源一致'); print('=' * 78)
     s38 = re.search(r'### 3\.8 功能需求汇总表(.*?)\n---', t7, re.S)
     s38 = s38.group(1) if s38 else ''
     a, b2 = {}, {}
@@ -273,7 +273,7 @@ SEARCH = [ROOT, LITDIR, os.path.join(LITDIR, '文献PDF'), os.path.join(LITDIR, 
 SEARCH += [d for d in glob.glob(os.path.join(ROOT, '代码', '*')) if os.path.isdir(d)]
 # 数据集（第 5 阶段起存在）：文档里按**数据集内的相对路径**写（`meta\sources.csv`、
 # `reports\consistency_report.md` 等），所以把每个版本目录也列入查找位置；
-# `_试跑\` 同理（《12》§九 要求的小规模验证目录）。
+# `_试跑\` 同理（《12》第九节 要求的小规模验证目录）。
 SEARCH += [d for d in glob.glob(os.path.join(ROOT, '阶段05-数据准备', '数据集', '*')) if os.path.isdir(d)]
 SEARCH += [os.path.join(ROOT, '阶段05-数据准备', '_试跑')]
 # 旧路径别名：2026-09-25 目录重组前的写法。记录类文档（《05》《06》《08》）会逐字保留当时的路径，
@@ -345,9 +345,9 @@ report(not os.path.isdir(os.path.join(ROOT, '文献调研')),
 
 # ---- N 《02》版本号一致性 与 引用版本审计 ---------------------------------
 print(); print('=' * 78); print('N 《02》的版本号在标题、版本字段与修订记录三处是否一致'); print('=' * 78)
-# 起因（2026-09-25 实测）：§1.2 修订记录一路记到 v2.5，而标题与文档信息表的版本字段
-# 仍停在 v2.3——v2.4／v2.5 两次登记只改了 §1.2，没有回改表头，漂移了两个版本且无人发现。
-# N1 把三处对齐：标题末尾的版本、`| 版本 |` 字段、§1.2 修订记录里最后一行版本（门禁项）。
+# 起因（2026-09-25 实测）：第1.2节 修订记录一路记到 v2.5，而标题与文档信息表的版本字段
+# 仍停在 v2.3——v2.4／v2.5 两次登记只改了 第1.2节，没有回改表头，漂移了两个版本且无人发现。
+# N1 把三处对齐：标题末尾的版本、`| 版本 |` 字段、第1.2节 修订记录里最后一行版本（门禁项）。
 # N2 顺着 N1 得到的当前版本审计其余文档的引用：默认只报告，--strict-citations 时转为门禁。
 n2 = next((n for n in D if n.startswith('02-')), None)
 if n2:

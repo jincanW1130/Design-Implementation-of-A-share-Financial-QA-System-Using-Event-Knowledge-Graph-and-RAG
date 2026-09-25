@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 """T8 数据一致性检查（第 5 阶段数据准备）。
 
-依据：《02-项目执行总控文档》§9.3、《12-第 5 阶段任务书》§五 硬约束 4/6/7/8/9/11/12/13 与 §八
-验收标准、`代码\\数据准备\\README.md` §3。
+依据：《02-项目执行总控文档》第9.3节、《12-第 5 阶段任务书》第五节 硬约束 4/6/7/8/9/11/12/13 与 第八节
+验收标准、`代码\\数据准备\\README.md` 第3节。
 
 读入：clean\\documents.jsonl、chunks\\chunks.jsonl、index\\vector_map.jsonl、
       index\\build_meta.json、index\\faiss.index
 写出：reports\\consistency_report.json、reports\\consistency_report.md、
       reports\\time_coverage.json、reports\\company_coverage.json、
-      meta\\dataset.json（《12》§八 第 3 行要求的版本级元信息，由实测数据与 config 生成）
+      meta\\dataset.json（《12》第八节 第 3 行要求的版本级元信息，由实测数据与 config 生成）
 
 纪律：
   * 每一项检查都记录**实测数值**（条数、编号区间、重复组数……），不得只写"检查通过"
-    （《12》§五 硬约束 9）；
-  * 术语纪律：FAISS 一律称"向量索引"或"向量检索组件"（《12》§五 硬约束 11）；
+    （《12》第五节 硬约束 9）；
+  * 术语纪律：FAISS 一律称"向量索引"或"向量检索组件"（《12》第五节 硬约束 11）；
   * 本脚本**只做条数与编号一致性核验**，不做检索、排序、相似度查询或任何指标评估
-    （《12》§七 非目标 7；任务约定 "check.py only verifies counts and ID consistency"）。
+    （《12》第七节 非目标 7；任务约定 "check.py only verifies counts and ID consistency"）。
 
 退出码：全部检查通过 -> 0；任一检查不通过 -> 1；输入缺失／不可读 -> 2。
 """
@@ -45,7 +45,7 @@ import config  # noqa: E402  唯一参数来源
 
 CST = timezone(timedelta(hours=8))
 
-# 文档侧必需字段（《12》§八 第 4 行）
+# 文档侧必需字段（《12》第八节 第 4 行）
 REQUIRED_DOC_FIELDS = ("title", "content", "source", "category", "publish_time", "ingest_time")
 
 
@@ -234,7 +234,7 @@ class Report:
 def build_dataset_meta(*, profile, root, docs, chunks, index_meta, covered_codes,
                        configured_codes, date_list, month_hist, recent_docs, earlier_docs,
                        analysis_docs, summary, generated_at):
-    """汇总 meta\\dataset.json 的内容（《12》§八 第 3 行）。
+    """汇总 meta\\dataset.json 的内容（《12》第八节 第 3 行）。
 
     全部数值都来自**实测的数据集内容**（documents.jsonl／chunks.jsonl／
     index\\build_meta.json）与 config.py，不在本函数里写死任何规模、时间或模型参数：
@@ -424,7 +424,7 @@ def main(argv=None) -> int:
         and meta.get("vector_count") == n_chunks
     )
     rep.add(1, "vector_count_equals_chunk_count",
-            "《12》§五 硬约束 9、§八；《02》§9.3（向量条数 = 文本块条数，无空 vector_id）",
+            "《12》第五节 硬约束 9、第八节；《02》第9.3节（向量条数 = 文本块条数，无空 vector_id）",
             pass_1, measured_1,
             "向量索引 faiss.index 的 ntotal、vector_map.jsonl 行数、chunks.jsonl 条数三者必须都为 %d，"
             "且 vector_id 恰为 0..%d-1" % (n_chunks, n_chunks - 1))
@@ -446,7 +446,7 @@ def main(argv=None) -> int:
     }
     pass_2 = len(unknown) == 0 and len(dup_doc_ids) == 0
     rep.add(2, "chunk_doc_id_exists_in_documents",
-            "《10》§4.4 外键 document_chunk.doc_id -> document.doc_id；三级映射链路",
+            "《10》第4.4节 外键 document_chunk.doc_id -> document.doc_id；三级映射链路",
             pass_2, measured_2,
             "chunks 里每个 doc_id 必须是 documents.jsonl 中存在的 doc_id；documents 内 doc_id 不得重复")
 
@@ -481,7 +481,7 @@ def main(argv=None) -> int:
     }
     pass_3 = not zero_chunk_docs and not gap_docs and not dup_index_docs
     rep.add(3, "document_chunk_index_contiguous",
-            "《12》§五 硬约束 8、§八；uk_chunk_doc_index（文档内 chunk_index 从 0 连续无重复）",
+            "《12》第五节 硬约束 8、第八节；uk_chunk_doc_index（文档内 chunk_index 从 0 连续无重复）",
             pass_3, measured_3,
             "每篇文档至少 1 个文本块；同一文档内 chunk_index 必须恰好是 0..k-1")
 
@@ -509,7 +509,7 @@ def main(argv=None) -> int:
         "split_chunk_id_roundtrip_ok": n_chunks - len(bad_formula),
     }
     rep.add(4, "chunk_id_formula",
-            "《12》§五 硬约束 7；config.chunk_id_for / split_chunk_id（双射可反查）",
+            "《12》第五节 硬约束 7；config.chunk_id_for / split_chunk_id（双射可反查）",
             len(bad_formula) == 0, measured_4,
             "每个 chunk 的 chunk_id 必须能由 config.split_chunk_id 反查出 (doc_id, chunk_index) 且与行内字段一致")
 
@@ -558,7 +558,7 @@ def main(argv=None) -> int:
     pass_5 = (not dup_map_vid and not resolve_fail and not chunk_without_entry
               and not map_chunk_mismatch and not map_doc_mismatch and len(vmap) == n_chunks)
     rep.add(5, "mapping_bidirectional",
-            "《12》§五 硬约束 6；《02》§9.3；README §3.5（vector_id -> chunk_id -> doc_id 双向可查）",
+            "《12》第五节 硬约束 6；《02》第9.3节；README 第3.5节（vector_id -> chunk_id -> doc_id 双向可查）",
             pass_5, measured_5,
             "vector_map 的每个 vector_id 都要解到 chunk_id，且该 chunk 在 chunks.jsonl 中回指的 vector_id 相同；反向亦须成立")
 
@@ -596,7 +596,7 @@ def main(argv=None) -> int:
     }
     pass_6 = not (after_cutoff or before_start or after_end or unparsable)
     rep.add(6, "publish_time_within_window",
-            "《12》§五 硬约束 4、§八；《02》§10.1（publish_time <= data_cutoff_time，且落在数据时间窗内）",
+            "《12》第五节 硬约束 4、第八节；《02》第10.1节（publish_time <= data_cutoff_time，且落在数据时间窗内）",
             pass_6, measured_6,
             "全部 publish_time 必须 <= %s 且落在 [%s, %s] 内"
             % (config.DATA_CUTOFF_DATE, config.WINDOW_START, config.WINDOW_END))
@@ -635,9 +635,9 @@ def main(argv=None) -> int:
     }
     pass_7 = (not url_dups and not title_dups and not fp_dups)
     rep.add(7, "dedup_keys_unique",
-            "《12》§八（url 唯一；title 规范化后唯一；正文 SHA-256 前 16 位唯一）",
+            "《12》第八节（url 唯一；title 规范化后唯一；正文 SHA-256 前 16 位唯一）",
             pass_7, measured_7,
-            "url 唯一（空 url 按《12》§五 硬约束 3 允许存在、不计入重复）；title 规范化后唯一；"
+            "url 唯一（空 url 按《12》第五节 硬约束 3 允许存在、不计入重复）；title 规范化后唯一；"
             "content_sha256_16 唯一。监管公开信息同题标题按'原标题（当事人）'构造后再判重（构造在 clean.py）")
 
     # ---- 检查 8：company_list 取值规范 ----
@@ -670,7 +670,7 @@ def main(argv=None) -> int:
     }
     pass_8 = not null_cl and not non_list_cl and not empty_required
     rep.add(8, "company_list_presence",
-            "《12》§八 修订后验收项（公告与财经新闻 company_list 非空；政策文件与监管公开信息允许空数组但不得为 null）",
+            "《12》第八节 修订后验收项（公告与财经新闻 company_list 非空；政策文件与监管公开信息允许空数组但不得为 null）",
             pass_8, measured_8,
             "任何文档的 company_list 都不得为 null；%s 的 company_list 必须非空（允许空数组的是政策文件与监管公开信息）"
             % "/".join(config.CATEGORIES_REQUIRING_COMPANY))
@@ -690,7 +690,7 @@ def main(argv=None) -> int:
     }
     pass_9 = not invalid_cats and len(category_counts) > 0
     rep.add(9, "category_values",
-            "《12》§五 硬约束 12、§八（来源只出现四类 category；无股吧来源）",
+            "《12》第五节 硬约束 12、第八节（来源只出现四类 category；无股吧来源）",
             pass_9, measured_9,
             "category 只能取 %s" % "/".join(config.CATEGORIES))
 
@@ -716,7 +716,7 @@ def main(argv=None) -> int:
     }
     pass_10 = not docs_with_missing
     rep.add(10, "required_fields_present",
-            "《12》§八 第 4 行、§五 硬约束 3（title/content/source/category/publish_time/ingest_time 无空值）",
+            "《12》第八节 第 4 行、第五节 硬约束 3（title/content/source/category/publish_time/ingest_time 无空值）",
             pass_10, measured_10,
             "逐行检查 %s 六个字段均非空" % "/".join(REQUIRED_DOC_FIELDS))
 
@@ -766,7 +766,7 @@ def main(argv=None) -> int:
     }
     pass_11 = not out_of_block and not dup_doc_ids and not dup_seq
     rep.add(11, "doc_id_block_matches",
-            "《12》§五 硬约束 7；config.DOC_ID_BLOCK / doc_id_for（编号显式分配、稳定、不依赖自增）",
+            "《12》第五节 硬约束 7；config.DOC_ID_BLOCK / doc_id_for（编号显式分配、稳定、不依赖自增）",
             pass_11, measured_11,
             "每篇文档的 doc_id 必须落在其 category 对应的块内（块号 < doc_id <= 块号+%d），块内序号唯一"
             % (config.DOC_ID_STRIDE - 1))
@@ -794,9 +794,9 @@ def main(argv=None) -> int:
     }
     pass_12 = not empty_content and not bad_tok
     rep.add(12, "chunk_content_and_token_count",
-            "《12》§九 T5（chunks 含 token_count）；README §3.4（token_count 由 Embedding tokenizer 统计）",
+            "《12》第九节 T5（chunks 含 token_count）；README 第3.4节（token_count 由 Embedding tokenizer 统计）",
             pass_12, measured_12,
-            "每个文本块 content 非空、token_count 为正整数（附加检查，非 §八 明列项）")
+            "每个文本块 content 非空、token_count 为正整数（附加检查，非 第八节 明列项）")
 
     # ---- 检查 13（附加）：时间覆盖——两个相对时间桶都非空且各 >= MIN_DOCS_PER_TIME_BUCKET，
     #      且 cutoff − publish_time_min >= 90 天；另**报告**（不判定）90 天区间与 earlier 桶两半
@@ -844,7 +844,7 @@ def main(argv=None) -> int:
                and len(earlier_docs) >= config.MIN_DOCS_PER_TIME_BUCKET
                and cutoff_span_days >= coverage_required_days)
     rep.add(13, "time_coverage",
-            "《12》§五 硬约束 13、§八（≥90 天，且两个相对时间区间内内容非空）；《12》v1.2 报告要求",
+            "《12》第五节 硬约束 13、第八节（≥90 天，且两个相对时间区间内内容非空）；《12》v1.2 报告要求",
             pass_13, measured_13,
             "两个时间桶都必须非空且各至少 %d 篇；最早 publish_time 距 data_cutoff 至少 %d 天"
             % (config.MIN_DOCS_PER_TIME_BUCKET, coverage_required_days))
@@ -871,7 +871,7 @@ def main(argv=None) -> int:
     }
     pass_14 = not missing_codes and not extra_codes
     rep.add(14, "company_set_equals_configured",
-            "《12》§八（数据集覆盖的公司集合恰好等于 T2 选定的 10 家）、config.COMPANIES",
+            "《12》第八节（数据集覆盖的公司集合恰好等于 T2 选定的 10 家）、config.COMPANIES",
             pass_14, measured_14,
             "全部文档 company_list 的并集必须恰好等于 profile=%s 选定的 %d 家公司代码"
             % (args.profile, len(cfg_codes)))
@@ -913,7 +913,7 @@ def main(argv=None) -> int:
                             "vector_count", "index_type", "metric", "normalize_embeddings",
                             "build_time")} if meta else None,
             "index_dir": index_dir,
-            "note": "本报告只核验条数与编号一致性，不含任何检索或效果评估（《12》§七 非目标 7）",
+            "note": "本报告只核验条数与编号一致性，不含任何检索或效果评估（《12》第七节 非目标 7）",
         },
     }
     write_json_atomic(os.path.join(reports_dir, "consistency_report.json"), report)
@@ -985,7 +985,7 @@ def main(argv=None) -> int:
                      % (config.MIN_DOCS_PER_TIME_BUCKET, coverage_required_days)),
         "note": ("时间桶口径来自 config.BUCKET_RECENT / config.BUCKET_EARLIER；"
                  "采集窗口下界为 config.WINDOW_START（cutoff − %d 天），覆盖门槛为 %d 天；"
-                 "不得用'至今''实时'一类表述（《12》§五 硬约束 4）"
+                 "不得用'至今''实时'一类表述（《12》第五节 硬约束 4）"
                  % (config.WINDOW_DAYS, coverage_required_days)),
     }
     write_json_atomic(os.path.join(reports_dir, "time_coverage.json"), time_cov)
@@ -1001,7 +1001,7 @@ def main(argv=None) -> int:
               % (n_docs, n_chunks, idx_ntotal, len(vmap)))
     md.append("- 元信息（随本报告一并重建）：`meta\\dataset.json`——dataset_version、"
               "data_cutoff_time、规模、时间范围、Embedding 模型与版本、切分参数、生成时间"
-              "（《12》§八 第 3 行）")
+              "（《12》第八节 第 3 行）")
     md.append("- 结论：**%s**（%d/%d 项检查通过）"
               % ("全部通过" if rep.ok else "存在不通过项",
                  summary["checks_passed"], summary["checks_total"]))
@@ -1014,7 +1014,7 @@ def main(argv=None) -> int:
                      "通过" if c["pass"] else "**不通过**"))
     md.append("")
     if rep.ok:
-        md.append("未发现不一致：上述各项的实测数值均满足《12》§五 硬约束与 §八 验收标准。")
+        md.append("未发现不一致：上述各项的实测数值均满足《12》第五节 硬约束与 第八节 验收标准。")
     else:
         md.append("## 不通过的检查项")
         md.append("")
@@ -1057,7 +1057,7 @@ def main(argv=None) -> int:
               "通过判定，只用于把\"窗口正中间整月没有文档\"这类问题直接显示出来"
               "（这一轮实测出现过 7 月整月为空）。")
     md.append("")
-    md.append("> 本报告只核验条数与编号一致性，不做检索、排序与任何指标评估（《12》§七 非目标 7）。")
+    md.append("> 本报告只核验条数与编号一致性，不做检索、排序与任何指标评估（《12》第七节 非目标 7）。")
     md.append("> FAISS 在本项目中称“向量索引／向量检索组件”。")
     md.append("")
     write_text_atomic(os.path.join(reports_dir, "consistency_report.md"), "\n".join(md))
@@ -1103,11 +1103,11 @@ def main(argv=None) -> int:
         },
         "pass": pass_14,
         "note": ("公司集合口径为全部文档 company_list 的并集；"
-                 "公告与财经新闻必须非空，政策文件与监管公开信息允许空数组（《12》§八）"),
+                 "公告与财经新闻必须非空，政策文件与监管公开信息允许空数组（《12》第八节）"),
     }
     write_json_atomic(os.path.join(reports_dir, "company_coverage.json"), company_cov)
 
-    # ---- meta\dataset.json（《12》§八 第 3 行：数据集版本级元信息）----
+    # ---- meta\dataset.json（《12》第八节 第 3 行：数据集版本级元信息）----
     # 与 reports\ 同级、写在**本脚本检查的同一个根目录**下；数值全部来自实测数据与 config。
     meta_dir = os.path.join(root, "meta")
     os.makedirs(meta_dir, exist_ok=True)

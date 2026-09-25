@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 r"""T5 切分与 token 统计（第 5 阶段数据准备管线）。
 
-契约（`代码\数据准备\README.md` 一、二、三.3.4／三.3.7；《12-第5阶段任务书》§五 硬约束 5／7／8、§八）：
+契约（`代码\数据准备\README.md` 一、二、三.3.4／三.3.7；《12-第5阶段任务书》第五节 硬约束 5／7／8、第八节）：
 
     输入  clean\documents.jsonl
     输出  chunks\chunks.jsonl        每行一个文本块：chunk_id、doc_id、chunk_index、content、
@@ -14,18 +14,18 @@ chunk_id 由 config.chunk_id_for 生成（= doc_id * DOC_ID_STRIDE + chunk_index
 另按要求输出单文档文本块数告警清单 chunk_stats.json["over_long_documents"]（阈值
 config.MAX_CHUNKS_PER_DOC_WARN）：列出超阈值文档的 doc_id／title／chunk_count／doc_chars／
 share_of_chunks，并在 stdout 打印一行点名最严重者。**只报告，绝不截断、绝不丢弃文档**
-（截断等于改写证据，违反《10》§4.4.6）。
+（截断等于改写证据，违反《10》第4.4.6节）。
 
-另有一条**切分前的编号步长预检**（README §3.4）：逐篇计算投影文本块数，只要有一篇超过
+另有一条**切分前的编号步长预检**（README 第3.4节）：逐篇计算投影文本块数，只要有一篇超过
 config.DOC_ID_STRIDE，就打印点名 doc_id／标题／字符数／投影块数的可行动错误（并指出该文档
 本应被 config.MAX_DOC_CHARS_FOR_INCLUSION 在采集候选阶段排除）后**以非零码退出**，
 不再进入切分与落盘。这样同类问题不会再以 config.chunk_id_for 的裸 ValueError 形式出现。
 
-三条硬约束（《12》§五 硬约束 8、§八）：
+三条硬约束（《12》第五节 硬约束 8、第八节）：
     1) 每篇文档至少 1 个文本块；chunk_index 在文档内从 0 连续递增、无缺口、无重复；
     2) 任何文本块不超过 max_chars；除"整篇正文短于 target_chars"的文档外，任何文本块不低于 min_chars；
     3) 重叠只用于衔接上下文：overlap_chars(50) < min_chars(128)，重叠区永远不足以在相邻文本块里
-       各自构成一个完整证据（《12》§五 硬约束 5、《02》§12.7 第二步"一个文本块只算一个证据"）。
+       各自构成一个完整证据（《12》第五节 硬约束 5、《02》第12.7节 第二步"一个文本块只算一个证据"）。
 
 token_count 用 Embedding 模型自带 tokenizer 统计（transformers.AutoTokenizer，不含特殊标记）；
 tokenizer 无法加载时回退为"非空白字符数"，并在 reports\chunk_stats.json 与终端明确标注，
@@ -264,7 +264,7 @@ def main(argv=None) -> int:
     id_stride = int(config.DOC_ID_STRIDE)
     max_doc_chars = int(config.MAX_DOC_CHARS_FOR_INCLUSION)
 
-    # ---- 切分前的编号步长预检（README §3.4）：投影文本块数必须装得进 chunk_id 的步长 ----
+    # ---- 切分前的编号步长预检（README 第3.4节）：投影文本块数必须装得进 chunk_id 的步长 ----
     # 目的：让"某一篇文档大到 chunk_id = doc_id * DOC_ID_STRIDE + chunk_index 越界"这件事
     # 以**点名到具体文档、并给出处置线索**的错误暴露出来，而不是 config.chunk_id_for 的裸
     # ValueError。预检只读、只报告：既不改写正文，也不截断、不丢弃文档——命中即整轮中止
@@ -355,7 +355,7 @@ def main(argv=None) -> int:
     over_seq = [r["chunk_id"] for r in records
                 if int(r["token_count"]) > int(config.EMBEDDING["max_seq_length"])]
 
-    # 单文档文本块数告警清单（只报告，绝不截断、绝不丢弃；《10》§4.4.6 证据按原文展示）。
+    # 单文档文本块数告警清单（只报告，绝不截断、绝不丢弃；《10》第4.4.6节 证据按原文展示）。
     # 阈值来自 config.MAX_CHUNKS_PER_DOC_WARN，本文件不写死。
     warn_threshold = int(config.MAX_CHUNKS_PER_DOC_WARN)
     total_chunks = len(records)
@@ -439,7 +439,7 @@ def main(argv=None) -> int:
         worst = over_long_documents[0]
         print("[chunk] 警告：chunk_count 超过 max_chunks_per_doc_warn=%d 的文档 %d 篇；"
               "最严重 doc_id=%d《%s》%d 块，占全部 %d 个文本块的 %.1f%%——"
-              "只报告，绝不截断、绝不丢弃（《10》§4.4.6 证据按原文展示）"
+              "只报告，绝不截断、绝不丢弃（《10》第4.4.6节 证据按原文展示）"
               % (warn_threshold, len(over_long_documents), worst["doc_id"], worst["title"],
                  worst["chunk_count"], total_chunks, worst["share_of_chunks"] * 100))
     else:

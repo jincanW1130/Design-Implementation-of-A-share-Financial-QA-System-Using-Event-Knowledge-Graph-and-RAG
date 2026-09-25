@@ -7,15 +7,15 @@
       <root>\\index\\build_meta.json    —— 模型名与 revision、维度、条数、索引类型、度量、归一化标志、构建时间
       <root>\\chunks\\chunks.jsonl      —— 原地回填 vector_id（原子替换：先写 .tmp 再 replace）
 
-口径（《12》§2.3、§5 硬约束 6/9/10/11；《代码\\数据准备\\README.md》§3.4、§3.5）：
+口径（《12》第2.3节、第5节 硬约束 6/9/10/11；《代码\\数据准备\\README.md》第3.4节、第3.5节）：
   * Embedding 模型由 config.EMBEDDING 固化，本脚本不写死任何模型名／路径／批大小；
   * vector_id 等于**向量索引中的行号**，行号按 chunk_id 升序分配，因此 vector_id→chunk_id
     与 chunk_id→vector_id 双向可查（三级映射链路：vector_id → chunk_id → doc_id）；
   * 向量条数必须等于文本块条数，且不允许存在 vector_id 为空的文本块；
-  * 术语纪律：FAISS 一律称"向量索引"或"向量检索组件"（《12》§五 硬约束 11），
+  * 术语纪律：FAISS 一律称"向量索引"或"向量检索组件"（《12》第五节 硬约束 11），
     不用任何其它称呼；本文件全文遵守该口径。
 
-本脚本只做编码与落盘，**不做任何检索、排序、相似度查询或指标评估**（《12》§七 非目标 7）。
+本脚本只做编码与落盘，**不做任何检索、排序、相似度查询或指标评估**（《12》第七节 非目标 7）。
 """
 
 from __future__ import annotations
@@ -40,7 +40,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import config  # noqa: E402  唯一参数来源，不得绕过
 
-# 模型已在本机 HuggingFace 缓存中离线可用，禁止联网下载（《12》§五 硬约束 10）。
+# 模型已在本机 HuggingFace 缓存中离线可用，禁止联网下载（《12》第五节 硬约束 10）。
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
 os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
 os.environ.setdefault("HF_HUB_DISABLE_SYMLINKS_WARNING", "1")
@@ -288,7 +288,7 @@ def main(argv=None) -> int:
         return 3
     print("[embed] 模型就绪  维度=%d  载入耗时=%.2fs" % (dim, load_seconds))
 
-    # 核对"实际加载的快照"是否就是 config 固化的 revision（《12》§五 硬约束 10）
+    # 核对"实际加载的快照"是否就是 config 固化的 revision（《12》第五节 硬约束 10）
     resolved = resolve_cache_snapshot(config.EMBEDDING["model_name"])
     pinned_cached = pinned_revision_is_cached(
         config.EMBEDDING["model_name"], config.EMBEDDING["revision"])
@@ -381,7 +381,7 @@ def main(argv=None) -> int:
              (resolved == config.EMBEDDING["revision"]) if resolved else "未知"))
     if resolved and resolved != config.EMBEDDING["revision"]:
         print("[embed] 警告：实际加载的模型快照 %r 与 config.EMBEDDING['revision']=%r 不一致，"
-              "已如实记入 build_meta.json（未改 config；按《12》§五 硬约束 10 报告，不静默）"
+              "已如实记入 build_meta.json（未改 config；按《12》第五节 硬约束 10 报告，不静默）"
               % (resolved, config.EMBEDDING["revision"]))
     if pinned_cached == "no":
         print("[embed] 警告：config 固化的 revision %s 不在本机缓存中，实际加载的可能不是该版本"
@@ -409,7 +409,7 @@ def main(argv=None) -> int:
     chunks_after, _ = read_jsonl(chunks_p)
     mapped_after, _ = read_jsonl(map_p)
 
-    # --- 7) 收尾断言（《12》§五 硬约束 9） ---
+    # --- 7) 收尾断言（《12》第五节 硬约束 9） ---
     problems = []
     if back.ntotal != len(chunks_after):
         problems.append("向量条数 %d != 文本块条数 %d" % (back.ntotal, len(chunks_after)))

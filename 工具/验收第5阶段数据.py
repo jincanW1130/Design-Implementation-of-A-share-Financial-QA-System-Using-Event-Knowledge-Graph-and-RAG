@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-r"""《13-数据准备（第五阶段）》与数据集 v1.0 的阶段级验收（《12》§八 验收标准逐行落地）。
+r"""《13-数据准备（第五阶段）》与数据集 v1.0 的阶段级验收（《12》第八节 验收标准逐行落地）。
 
 与另外两个脚本的分工（不重复实现）：
   * `工具\跨文档核验.py` —— 全工作区 Markdown 的通用一致性（检查 A～N，含索引登记、禁用词与《02》引用版本审计）；
   * `代码\数据准备\check.py` —— 数据集自身的条数与编号一致性（管线内部一致性，14 项）；
-  * 本脚本 —— 第 5 阶段的**验收闸门**：把《12》§八 的 19 行验收标准逐行实现为 A～S 共 19 组
+  * 本脚本 —— 第 5 阶段的**验收闸门**：把《12》第八节 的 19 行验收标准逐行实现为 A～S 共 19 组
     检查（S 组是索引集中度与跨公司同名标题两条守卫），全部数值从数据集文件与《13》重新推导，
     再与 `代码\数据准备\config.py` 的冻结参数比对。
 
@@ -19,7 +19,7 @@ r"""《13-数据准备（第五阶段）》与数据集 v1.0 的阶段级验收�
 
 纪律：
   * 本脚本对封版数据集**只读**；唯一的写动作在 `--with-idempotence` 下发生——把 `raw\` 复制到
-    系统临时目录里复跑 T4a→T5，**绝不写入 `--dataset` 指向的目录**（《12》§4.2 版本目录不可变）；
+    系统临时目录里复跑 T4a→T5，**绝不写入 `--dataset` 指向的目录**（《12》第4.2节 版本目录不可变）；
   * 阈值一律来自 `代码\数据准备\config.py`（日期、条数、模型名、切分参数都不在脚本里写死）；唯一例外是
     S 组的两条集中度守卫阈值：它们是本验收工具自带的模块级常量，刻意不读已冻结的 config（理由见该组注释）；
   * 术语：FAISS 一律称“向量索引／向量检索组件”；本脚本源码内不出现「向量」与「数据库」的连写
@@ -64,7 +64,7 @@ P10 = os.path.join(ROOT, '阶段04-系统总体设计', '10-系统总体设计�
 P00 = os.path.join(ROOT, '00-项目总览与索引.md')
 CROSS_DOC = os.path.join(ROOT, '工具', '跨文档核验.py')
 
-_ap = argparse.ArgumentParser(description='第 5 阶段数据准备：阶段级验收（《12》§八 逐行）')
+_ap = argparse.ArgumentParser(description='第 5 阶段数据准备：阶段级验收（《12》第八节 逐行）')
 _ap.add_argument('--dataset', default=None, help='数据集根目录（默认 %s）' % DEFAULT_DATASET)
 _ap.add_argument('--doc', default=None, help='《13》路径（默认 %s）' % DEFAULT_DOC)
 _ap.add_argument('--with-idempotence', action='store_true',
@@ -299,7 +299,7 @@ def scan_term(term, targets, neg_markers=None):
 # 输入
 # --------------------------------------------------------------------------
 print('=' * 78)
-print('第 5 阶段（数据准备）阶段级验收：《13》与数据集（《12》§八 逐行）')
+print('第 5 阶段（数据准备）阶段级验收：《13》与数据集（《12》第八节 逐行）')
 print('=' * 78)
 print('  数据集根目录：%s%s' % (DATASET, '（--dataset 覆盖）' if ARGS.dataset else '（默认 v1.0）'))
 print('  说明文档：    %s%s' % (DOC, '（--doc 覆盖）' if ARGS.doc else '（默认《13》）'))
@@ -370,7 +370,7 @@ for _, d in doc_rows:
 
 # ==========================================================================
 print(); print('=' * 78)
-print('A、《13》文档结构（《12》§八 第 1 行：7 个必备小节 + 2 个附加小节）')
+print('A、《13》文档结构（《12》第八节 第 1 行：7 个必备小节 + 2 个附加小节）')
 print('=' * 78)
 
 h2 = [(i, L[3:].strip()) for i, L in enumerate(t13.split('\n'), 1) if L.startswith('## ')]
@@ -386,11 +386,11 @@ def find_h2(name):
 m_req = re.search(r'(\d+)\s*个必备小节[^：:]*[：:]([^|\n]+)', t12)
 req_sections = [s.strip() for s in m_req.group(2).split('／') if s.strip()] if m_req else []
 chk(m_req is not None and len(req_sections) > 0,
-    'A1 从《12》§八 解析出必备小节清单（不写死小节名）',
+    'A1 从《12》第八节 解析出必备小节清单（不写死小节名）',
     '实测 解析 %d 个：%s' % (len(req_sections), '／'.join(req_sections) or '无'))
 if m_req:
     chk(len(req_sections) == int(m_req.group(1)),
-        'A2 必备小节数与《12》§八 声明的数量一致',
+        'A2 必备小节数与《12》第八节 声明的数量一致',
         '《12》声明 %s 个、解析得 %d 个' % (m_req.group(1), len(req_sections)))
 sec_pos, sec_miss = [], []
 for name in req_sections:
@@ -405,7 +405,7 @@ chk(not sec_miss, 'A3 7 个必备小节按小节名齐全（二级标题逐名�
 
 row41 = next((L for L in t12.split('\n') if '13-数据准备（第五阶段）.md' in L and '数据字典' in L), '')
 extra_sections = [s for s in ('失败与跳过记录', '对下游阶段的使用说明') if s in row41]
-chk(len(extra_sections) == 2, 'A4 从《12》§4.1 产出清单解析两个附加小节',
+chk(len(extra_sections) == 2, 'A4 从《12》第4.1节 产出清单解析两个附加小节',
     '实测 解析 %d/2：%s' % (len(extra_sections), '、'.join(extra_sections) or '无'))
 extra_miss = []
 for name in extra_sections:
@@ -427,7 +427,7 @@ chk(len(h2) >= exp_n, 'A7 《13》二级标题数与结构相称',
 
 # ==========================================================================
 print(); print('=' * 78)
-print('B、数据集目录结构（《12》§八 第 2 行／§4.2：6 个一级子目录、自包含）')
+print('B、数据集目录结构（《12》第八节 第 2 行／第4.2节：6 个一级子目录、自包含）')
 print('=' * 78)
 
 miss_dirs = [d for d in config.SUBDIRS if not os.path.isdir(os.path.join(DATASET, d))]
@@ -461,7 +461,7 @@ chk(not extra_top, 'B4 一级条目均属于六个子目录（自包含，不外
 
 # ==========================================================================
 print(); print('=' * 78)
-print('C、meta\\dataset.json 的字段与取值（《12》§八 第 3 行；逐项由数据集文件重新推导后比对）')
+print('C、meta\\dataset.json 的字段与取值（《12》第八节 第 3 行；逐项由数据集文件重新推导后比对）')
 print('=' * 78)
 
 META_P = os.path.join(DATASET, 'meta', 'dataset.json')
@@ -572,7 +572,7 @@ chk(ga is not None and bdt is not None and ga >= bdt,
 
 # ==========================================================================
 print(); print('=' * 78)
-print('D、document 必需字段无空值（《12》§八 第 4 行；逐行检查）')
+print('D、document 必需字段无空值（《12》第八节 第 4 行；逐行检查）')
 print('=' * 78)
 
 REQUIRED_DOC_FIELDS = ('title', 'content', 'source', 'category', 'publish_time', 'ingest_time')
@@ -593,7 +593,7 @@ chk(not d_offenders, 'D1 六个必需字段逐行非空（%s）' % '／'.join(RE
 
 # ==========================================================================
 print(); print('=' * 78)
-print('E、三个判重键唯一（《12》§八 第 5 行；url／规范化 title／正文 SHA-256 前 16 位）')
+print('E、三个判重键唯一（《12》第八节 第 5 行；url／规范化 title／正文 SHA-256 前 16 位）')
 print('=' * 78)
 
 url_vals = [(d.get('url') or '').strip() for _, d in doc_rows if isinstance(d.get('url'), str)]
@@ -632,7 +632,7 @@ chk((not blank_urls) or ('为空' in t13 and 'url' in t13),
 
 # ==========================================================================
 print(); print('=' * 78)
-print('F、监管公开信息标题规则（《12》§八 第 6 行 + v1.1 修订：原标题（当事人）、不臆造、不机器生成）')
+print('F、监管公开信息标题规则（《12》第八节 第 6 行 + v1.1 修订：原标题（当事人）、不臆造、不机器生成）')
 print('=' * 78)
 
 reg_rows = [(ln, d) for ln, d in doc_rows if d.get('category') == '监管公开信息']
@@ -702,7 +702,7 @@ chk(not machine_hits, 'F6 全库标题无机器生成痕迹（占位词／doc_id
 
 # ==========================================================================
 print(); print('=' * 78)
-print('G、company_list 取值规则（《12》§八 第 7 行 + v1.1 修订：公告／财经新闻非空；其余允许空数组但不得 null）')
+print('G、company_list 取值规则（《12》第八节 第 7 行 + v1.1 修订：公告／财经新闻非空；其余允许空数组但不得 null）')
 print('=' * 78)
 
 null_cl, nonlist_cl, empty_required = [], [], []
@@ -736,7 +736,7 @@ chk(all(c in allow_empty for c in empty_by_cat),
 
 # ==========================================================================
 print(); print('=' * 78)
-print('H、覆盖公司集合（《12》§八 第 8 行：恰好等于 T2 选定的公司，取自 config.COMPANIES）')
+print('H、覆盖公司集合（《12》第八节 第 8 行：恰好等于 T2 选定的公司，取自 config.COMPANIES）')
 print('=' * 78)
 
 cfg_codes = sorted(c['code'] for c in config.COMPANIES)
@@ -751,7 +751,7 @@ chk(not missing_codes and not extra_codes,
 
 # ==========================================================================
 print(); print('=' * 78)
-print('I、切分编号规则（《12》§八 第 9 行：每篇 ≥1 块、chunk_index 从 0 连续无重复、chunk_id 公式）')
+print('I、切分编号规则（《12》第八节 第 9 行：每篇 ≥1 块、chunk_index 从 0 连续无重复、chunk_id 公式）')
 print('=' * 78)
 
 by_doc = defaultdict(list)
@@ -799,7 +799,7 @@ note('I5 每篇块数分布（证据项，不计入判定）',
 
 # ==========================================================================
 print(); print('=' * 78)
-print('J、文本块长度与重叠（《12》§八 第 10 行：落在《13》固定区间内、重叠不超过声明上限）')
+print('J、文本块长度与重叠（《12》第八节 第 10 行：落在《13》固定区间内、重叠不超过声明上限）')
 print('=' * 78)
 
 
@@ -809,7 +809,7 @@ def declared_param(key):
 
 
 declared = {k: declared_param(k) for k in ('target_chars', 'max_chars', 'min_chars', 'overlap_chars')}
-chk(all(v is not None for v in declared.values()), 'J1 《13》§3.1 声明了四个切分参数（不写死数值）',
+chk(all(v is not None for v in declared.values()), 'J1 《13》第3.1节 声明了四个切分参数（不写死数值）',
     '实测 解析 %s' % declared)
 chk(all(declared[k] == config.CHUNK[k] for k in declared if declared[k] is not None),
     'J2 《13》声明的切分参数 == config.CHUNK（封版后不得更改）',
@@ -860,7 +860,7 @@ chk(max_ov <= config.CHUNK['overlap_chars'] and max_ov <= (declared['overlap_cha
 
 # ==========================================================================
 print(); print('=' * 78)
-print('K、向量条数与编号（《12》§八 第 11 行：向量条数 = 文本块条数、无空 vector_id、取值 0..N-1）')
+print('K、向量条数与编号（《12》第八节 第 11 行：向量条数 = 文本块条数、无空 vector_id、取值 0..N-1）')
 print('=' * 78)
 
 vids = [c.get('vector_id') for _, c in chunk_rows]
@@ -910,7 +910,7 @@ else:
 
 # ==========================================================================
 print(); print('=' * 78)
-print('L、时间口径（《12》§八 第 12、13 行：≤ cutoff、覆盖 ≥90 天、两个时间桶均非空）')
+print('L、时间口径（《12》第八节 第 12、13 行：≤ cutoff、覆盖 ≥90 天、两个时间桶均非空）')
 print('=' * 78)
 
 unparsable = ['doc_id=%s（第%d行）' % (d.get('doc_id'), ln)
@@ -948,7 +948,7 @@ chk(outside == 0, 'L5 全部文档落在两个相对时间桶内（两桶合起�
 
 # ==========================================================================
 print(); print('=' * 78)
-print('M、类目与来源（《12》§八 第 14 行：只用四类 category、无股吧来源；§五 硬约束 12）')
+print('M、类目与来源（《12》第八节 第 14 行：只用四类 category、无股吧来源；第五节 硬约束 12）')
 print('=' * 78)
 
 cats = [d.get('category') for d in docs]
@@ -976,7 +976,7 @@ chk(not guba_bad, 'M3 《13》与数据集内无股吧来源（排除“不进�
 
 # ==========================================================================
 print(); print('=' * 78)
-print('N、幂等（《12》§八 第 15 行：重复执行不产生重复 doc_id）')
+print('N、幂等（《12》第八节 第 15 行：重复执行不产生重复 doc_id）')
 print('=' * 78)
 
 note('N0 幂等检查模式',
@@ -1087,12 +1087,12 @@ else:
 
 # ==========================================================================
 print(); print('=' * 78)
-print('O、越界排除（《12》§八 第 16 行：不引入六张表以外的表、不写死大语言模型型号）')
+print('O、越界排除（《12》第八节 第 16 行：不引入六张表以外的表、不写死大语言模型型号）')
 print('=' * 78)
 
 m6 = re.search(r'恒为六张\**——\s*([^，。；]+)', t10)
 six_tables = [s.strip() for s in m6.group(1).split('、')] if m6 else []
-chk(len(six_tables) == 6, 'O1 从《10》§4.4 解析六张表清单（不写死表名）',
+chk(len(six_tables) == 6, 'O1 从《10》第4.4节 解析六张表清单（不写死表名）',
     '实测 %d 张：%s（来源：%s）' % (len(six_tables), '、'.join(six_tables), os.path.basename(P10)))
 cand_tables = defaultdict(list)
 ddl_hits = []
@@ -1180,7 +1180,7 @@ chk(not suspect, 'O5 结构化文本中的“含字母且含数字”标识符�
 
 # ==========================================================================
 print(); print('=' * 78)
-print('P、禁用术语（《12》§八 第 17 行：不出现「向量」与「数据库」的连写，否定语境除外）')
+print('P、禁用术语（《12》第八节 第 17 行：不出现「向量」与「数据库」的连写，否定语境除外）')
 print('=' * 78)
 
 BANNED = '向量' + '数据库'      # 拼接构造：本脚本源码内不出现该连写，供 grep 复核
@@ -1200,7 +1200,7 @@ chk(BANNED not in self_src, 'P2 本脚本源码内不出现该连写（以拼接
 
 # ==========================================================================
 print(); print('=' * 78)
-print('Q、《13》在《00-项目总览与索引》中的登记（《12》§八 第 18 行）')
+print('Q、《13》在《00-项目总览与索引》中的登记（《12》第八节 第 18 行）')
 print('=' * 78)
 
 DOC_NAME = '13-数据准备（第五阶段）'
@@ -1295,7 +1295,7 @@ else:
 
 # ==========================================================================
 print(); print('=' * 78)
-print('R、汇总与收口（《12》§八 末行：全套检查通过才放行）')
+print('R、汇总与收口（《12》第八节 末行：全套检查通过才放行）')
 print('=' * 78)
 
 _passed_before = sum(1 for ok, _, _ in results if ok)

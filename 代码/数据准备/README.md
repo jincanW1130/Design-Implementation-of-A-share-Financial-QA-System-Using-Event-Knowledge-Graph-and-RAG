@@ -15,7 +15,7 @@
 | `clean.py` | T4b | `raw\` + 去重结论 | `clean\documents.jsonl`、`reports\clean_stats.json`、`reports\skipped.jsonl` |
 | `chunk.py` | T5 | `clean\documents.jsonl` | `chunks\chunks.jsonl`、`reports\chunk_stats.json` |
 | `embed.py` | T6 | `chunks\chunks.jsonl` | `index\faiss.index`、`index\vector_map.jsonl`、`index\build_meta.json`；回填 `chunks\chunks.jsonl` 的 `vector_id` |
-| `check.py` | T8 | 上述全部 | `reports\consistency_report.json`、`reports\consistency_report.md`、`reports\time_coverage.json`、`reports\company_coverage.json`，并写出 `meta\dataset.json`（《12》§八 第 3 行要求的版本级元信息，由实测数据与 config 生成） |
+| `check.py` | T8 | 上述全部 | `reports\consistency_report.json`、`reports\consistency_report.md`、`reports\time_coverage.json`、`reports\company_coverage.json`，并写出 `meta\dataset.json`（《12》第八节 第 3 行要求的版本级元信息，由实测数据与 config 生成） |
 | `run_all.py` | 入口 | — | 按顺序串起 fetch → dedup → clean → chunk → embed → check |
 
 ## 二、命令行契约
@@ -34,11 +34,11 @@ python 代码\数据准备\run_all.py --profile v1
 
 * `--profile v1`（默认）：写入 `阶段05-数据准备\数据集\v1.1\`。
 * `--profile pilot`：写入 `阶段05-数据准备\_试跑\`，用 3 家公司／20 篇做小规模验证
-  （《12》§九"小规模先行的纪律"）。**试跑目录不是交付物，不得与 v1.1 混用。**
+  （《12》第九节"小规模先行的纪律"）。**试跑目录不是交付物，不得与 v1.1 混用。**
 * `--dir <路径>`：**仅供自测**，把输出根目录改到任意临时目录。正式封版一律用
   `--profile v1`，不得用 `--dir` 指向正式数据集以外的位置产出交付物。
 * `--force`：忽略已完成标记，强制重跑本环节。
-* **幂等**（《12》§5、§八）：同一输入重复运行不得产生重复 `doc_id`；已存在的
+* **幂等**（《12》第5节、第八节）：同一输入重复运行不得产生重复 `doc_id`；已存在的
   `raw\{doc_id}.json` 默认跳过，除非 `--force`。中断后可从任意环节续跑。
 
 所有脚本：`sys.stdout.reconfigure(encoding="utf-8")`，退出码 0 表示成功。
@@ -93,7 +93,7 @@ python 代码\数据准备\run_all.py --profile v1
  "subject_companies": ["000001"]}
 ```
 
-字段名与《10》§4.4.1 的 document 表一致。`content_sha256_16` 与 `subject_companies`
+字段名与《10》第4.4.1节 的 document 表一致。`content_sha256_16` 与 `subject_companies`
 都是**数据集内部字段**，不入库（《10》规定 document 表不新增字段，六张表的规则是绝对的）：
 
 * `content_sha256_16`：正文指纹（sha256 前 16 位），用于去重核验。
@@ -105,7 +105,7 @@ python 代码\数据准备\run_all.py --profile v1
   中 ≥ `SUBJECT_MENTION_MIN`。名称与 6 位代码以 `config.COMPANIES` 为准，计数按字面出现次数。
   与 `company_list` 的分工：`company_list` 是"**文档涉及**的公司"（口径不变，检索仍用它），
   `subject_companies` 是"**文档关于**的公司"，供第 6 阶段建"公司参与事件"的边时使用，避免把
-  别的公司的事件挂到本公司名下（起因与实测见《14-前五阶段审核报告》§3.4：财经新闻按
+  别的公司的事件挂到本公司名下（起因与实测见《14-前五阶段审核报告》第3.4节：财经新闻按
   "正文提及即关联"会把并非文章主题的公司一并标上）。
 
 ### 3.4 `chunks\chunks.jsonl` —— 一行一个文本块（对应 document_chunk 表）
@@ -136,7 +136,7 @@ python 代码\数据准备\run_all.py --profile v1
 
 ### 3.6 `meta\`
 
-* `dataset.json`：见《12》§八第 3 行要求的全部字段。
+* `dataset.json`：见《12》第八节第 3 行要求的全部字段。
 * `sources.csv`：`name,category,home,url_template,access_note,rate_limit_seconds,notes`。
 
 ### 3.7 `reports\`
@@ -150,7 +150,7 @@ python 代码\数据准备\run_all.py --profile v1
 
 * **`too_long`**：清洗后正文**超过** `config.MAX_DOC_CHARS_FOR_INCLUSION`（默认 60000 字符）
   的文档整篇跳过，行内另带实测长度 `chars` 与说明 `detail`。这是**兜底守卫**——正文长度上限
-  的正常落点是 §4.5 的采集候选阶段过滤（在选入之前整篇丢弃、绝不截断），因此**正常一轮运行
+  的正常落点是 第4.5节 的采集候选阶段过滤（在选入之前整篇丢弃、绝不截断），因此**正常一轮运行
   里 `too_long` 应当始终为 0 条**；它存在的意义是：即便未来来源形态变化、或 `raw\` 里残留了
   旧构建写入的超长文档，`clean.py` 也会把它挡在 `chunk.py` 之外，避免单篇正文撑爆
   `chunk_id = doc_id * 1000 + chunk_index` 的编号步长。命中条数同样计入
@@ -163,7 +163,7 @@ python 代码\数据准备\run_all.py --profile v1
 `chunk_count`、`doc_chars`（切分输入正文的字符数）、`share_of_chunks`
 （该文档文本块数 ÷ 全部文本块数，四舍五入到 4 位小数），按块数降序排列；
 `chunk.py` 另在 stdout 打印一行告警点名最严重的一篇。截断正文等于改写证据
-（《10》§4.4.6 要求证据按原文展示），故本项只让"某一篇把索引吃掉"这类问题在报告里显形。
+（《10》第4.4.6节 要求证据按原文展示），故本项只让"某一篇把索引吃掉"这类问题在报告里显形。
 
 `time_coverage.json`（连同 `consistency_report.md` 的"时间覆盖明细"一节、`meta\dataset.json`
 的 `time_range`）必须带齐以下实测字段，供《12》v1.2 的"逐月可见"要求核对：
@@ -208,9 +208,9 @@ python 代码\数据准备\run_all.py --profile v1
    每次运行按类别向 `raw\_fetch_log.jsonl` 追加一行 `ok:true` 审计行，逐模式给出
    排除条数与被截断到约 40 字符的示例标题；某类别零排除也照写，作为"过滤已执行"的凭据。
    理由见 `config.py`：定期报告正文极大（试跑实测《贵州茅台2026年半年度报告》
-   11.8 万字符／364 个文本块＝521 块的 70%，会让单篇吃掉索引），且《02》§9.2 的
+   11.8 万字符／364 个文本块＝521 块的 70%，会让单篇吃掉索引），且《02》第9.2节 的
    8 种事件类型不含"发布定期报告"，业绩信息由业绩预告／业绩快报类公告承载。
-   **只排除整篇、不截断正文**：截断等于改写证据（《10》§4.4.6）。
+   **只排除整篇、不截断正文**：截断等于改写证据（《10》第4.4.6节）。
 5. **列表接口翻页**（2026-09-25 增设；参数唯一来源仍是 `config.py`）：
    `cninfo_announcements()` 从 `pageNum=1` 起，按 `config.CNINFO_MAX_PAGES`
    （v1＝4 页＝每家公司最多 120 条候选）逐页请求 `hisAnnouncement/query`，再把各页合并成
@@ -242,7 +242,7 @@ publishedTime, publishedTimeStr, content, contentHtml, domainMetaList`。
 `domainMetaList` 里有 **索引号**（`key:"syh"`）与 **发文日期**（`key:"fwrq"`）。
 
 > **同题标题问题**：行政处罚决定书在列表中标题完全相同（均为"中国证券监督管理委员会
-> 行政处罚决定书"）。标题必须按 `《12》§八 修订后` 的口径构造为
+> 行政处罚决定书"）。标题必须按 `《12》第八节 修订后` 的口径构造为
 > `原标题（当事人）`，当事人取自**来源文档自身正文**（正文首行／首位当事人），
 > 不得臆造。若仍冲突，用 `索引号` 消歧，并登记到 `reports\dedup_log.jsonl`。
 
@@ -263,25 +263,25 @@ puborg, wenhao, summary`。正文抓 `url` 对应页面（静态 HTML，`div#UCA
 ### 4.5 正文长度上限（四类来源统一口径，2026-09-25 增设）
 
 参数唯一来源：`config.MAX_DOC_CHARS_FOR_INCLUSION`（默认 60000 字符）。口径是**整篇排除**，
-**不是截断**——截断等于改写证据（《10》§4.4.6 要求证据按原文展示，《12》§七 非目标）。
+**不是截断**——截断等于改写证据（《10》第4.4.6节 要求证据按原文展示，《12》第七节 非目标）。
 
 * **作用位置**：候选的正文**一经抽取**就与上限比对，且必须发生在 level 1（时段分层／配额）
   与 level 2（时间铺开）**之前**。因此被丢弃的候选会由下一条合规候选顶替，
   每公司／每类别配额不会被抽空；若过滤后窗口内**确实**凑不够，沿用既有短缺口径
   （取现有篇数并登记到 `raw\_fetch_log.jsonl`），不臆造文档。
-* **公告**（§4.1）：`select_announcements_for_company()` 每轮先按既有口径选一轮，逐篇探测
+* **公告**（第4.1节）：`select_announcements_for_company()` 每轮先按既有口径选一轮，逐篇探测
   正文长度；超长候选整篇丢弃并从候选池剔除后重选，直到选出的候选全部合规。探测与正式落盘
   共用同一次下载（缓存按内容 URL），故同一篇公告一轮运行最多下载一次。
-* **监管公开信息／政策文件**（§4.2／§4.3）：`pick_balanced_with_length_cap()` 在
+* **监管公开信息／政策文件**（第4.2节／第4.3节）：`pick_balanced_with_length_cap()` 在
   `pick_balanced` 选入之前做同一件事（监管正文页不可用时按既有口径退回同源接口正文后测长度）。
-* **财经新闻**（§4.4）：正文在抓取时就已抽取，过滤在 `materialize_news()` 内完成——超长文章
+* **财经新闻**（第4.4节）：正文在抓取时就已抽取，过滤在 `materialize_news()` 内完成——超长文章
   整篇丢弃、不计入配额，抓取循环继续取后续候选顶替，随后才做 level 1 + level 2 选择。
 * **审计**：每个类别向 `raw\_fetch_log.jsonl` 追加的 `ok:true` 审计行里增加
   `正文长度上限过滤审计：上限 config.MAX_DOC_CHARS_FOR_INCLUSION=… 字符；本轮已探测正文的
   候选 N 篇，其中超过上限、整篇丢弃 M 篇；示例：《标题》（字符数）…`（最多 3 条示例），
   零丢弃也照写，作为"过滤已执行"的凭据。
-* **兜底**：`clean.py` 另有 `too_long` 跳过守卫（§3.7），`chunk.py` 另有切分前的编号步长
-  预检（§3.4）；三者是同一口径在采集、清洗、切分三处的落点。
+* **兜底**：`clean.py` 另有 `too_long` 跳过守卫（第3.7节），`chunk.py` 另有切分前的编号步长
+  预检（第3.4节）；三者是同一口径在采集、清洗、切分三处的落点。
 * **起因**：v1 实测一篇 397454 字符的《2025年可持续发展报告（英文版）》占全库 51.72%
   的字符、单篇约 1135 个文本块，直接撑爆 `DOC_ID_STRIDE=1000` 的编号步长并让 `chunk.py`
   中止；另有两篇 81880／81448 字符的长文各占 10% 以上。
@@ -290,12 +290,12 @@ puborg, wenhao, summary`。正文抓 `url` 对应页面（静态 HTML，`div#UCA
 
 1. **只写 `dataset_dir(profile)` 之下**：不得写 `阶段05-数据准备\数据集\v1.1\` 以外的
    正式数据集路径；试跑只写 `_试跑\`。
-2. **不越界**（《12》§五 硬约束 14、§七）：不写抽取规则、不做实体消歧、不写 Cypher、
+2. **不越界**（《12》第五节 硬约束 14、第七节）：不写抽取规则、不做实体消歧、不写 Cypher、
    不做标注、不建测试集、不写 DDL、不接大模型。只做采集→去重→清洗→切分→向量化→检查。
-3. **不引入**（《02》§8.4）：LangChain、LlamaIndex、独立向量数据库、Elasticsearch、
+3. **不引入**（《02》第8.4节）：LangChain、LlamaIndex、独立向量数据库、Elasticsearch、
    Kafka、微服务、K8s。FAISS 一律称"向量索引／向量检索组件"，**不得写"向量数据库"**。
 4. **控制抓取频率**：每次 HTTP 请求之间至少 `HTTP.min_interval_seconds` 秒，
-   失败重试按 `max_retries` 指数退避。这是来源网站访问规范的要求（《12》§五 硬约束 12）。
+   失败重试按 `max_retries` 指数退避。这是来源网站访问规范的要求（《12》第五节 硬约束 12）。
 5. **真实数据，不得编造**：标题、时间、URL、正文全部来自来源网站；抓不到就登记跳过，
    **绝不允许用生成文本、占位文本或改写的文本充数**。
 6. **不做"取所有文档最晚时间"的推导**：`data_cutoff_time` 只来自 `config`。

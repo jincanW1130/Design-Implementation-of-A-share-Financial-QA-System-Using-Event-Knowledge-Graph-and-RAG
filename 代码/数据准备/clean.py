@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 r"""T4b 清洗与结构化落盘（第 5 阶段数据准备管线）。
 
-契约（`代码\数据准备\README.md` 一、二、三.3.3／三.3.7；《12-第5阶段任务书》§五、§八）：
+契约（`代码\数据准备\README.md` 一、二、三.3.3／三.3.7；《12-第5阶段任务书》第五节、第八节）：
 
     输入  raw\{doc_id}.json          只读
           reports\dedup_log.jsonl    T4a 的去重结论（被淘汰的 doc_id 在此排除）
-    输出  clean\documents.jsonl      每行一篇，字段逐字对齐 README §3.3（=《10》§4.4.1 document 表）；
+    输出  clean\documents.jsonl      每行一篇，字段逐字对齐 README 第3.3节（=《10》第4.4.1节 document 表）；
                                      subject_companies 与 content_sha256_16 是**数据集内部字段**（不入库）
           reports\clean_stats.json   分类别 before/after 计数、删除字符数、跳过原因
           reports\skipped.jsonl      每条跳过一行（含原因）
@@ -19,7 +19,7 @@ r"""T4b 清洗与结构化落盘（第 5 阶段数据准备管线）。
     3) 清洗后正文**超过** config.MAX_DOC_CHARS_FOR_INCLUSION（reason=too_long）
     4) category 属公告/财经新闻但 company_list 为空
 
-第 3 条是**兜底守卫**（README §3.7）：正文长度上限在正常流程里由 fetch.py 的候选阶段过滤
+第 3 条是**兜底守卫**（README 第3.7节）：正文长度上限在正常流程里由 fetch.py 的候选阶段过滤
 （整篇丢弃、绝不截断）保证，clean.py 这一步只是"未来来源变化／旧构建遗留 raw 文件"的防线——
 正常一轮运行里它应当始终为 0 条。命中即整篇跳过并登记实测字符数，绝不放行到 chunk.py
 （单篇超过 DOC_ID_STRIDE 个文本块会让 chunk_id = doc_id * DOC_ID_STRIDE + chunk_index 越界）。
@@ -31,12 +31,12 @@ r"""T4b 清洗与结构化落盘（第 5 阶段数据准备管线）。
 因为 dedup.py 的正文判重键由 clean_body + content_fingerprint 生成，
 clean\documents.jsonl 中 content_sha256_16 的唯一性由构造保证。
 
-另有两条 §八 修订后的取值口径：
+另有两条 第八节 修订后的取值口径：
     * 公告与财经新闻的 company_list 必须非空；政策文件与监管公开信息允许空数组（不得为 null）；
     * 监管公开信息的同题文档只在"原标题（当事人）"构造后判重，仍冲突时只允许用来源自带的
       文号／索引号消歧（source_disambiguator / disambiguated_title，绝不臆造当事人）。
 
-另有一个**只增不改**的严格口径（README §3.3、§5.3；《14-前五阶段审核报告》§3.4）：
+另有一个**只增不改**的严格口径（README 第3.3节、第5.3节；《14-前五阶段审核报告》第3.4节）：
     * subject_companies：从 company_list 里再筛一层"文档**关于**的公司"（阈值取自
       config.SUBJECT_MENTION_MIN，不写死）。company_list 的口径（"文档涉及的公司"，
       检索仍用它）**一个字都不改**；本字段只是新增，且必须落在 company_list 之内。
@@ -84,7 +84,7 @@ _FULLWIDTH_ASCII_MAP = dict(
 _FP_ALGO, _, _FP_HEX_LEN = str(config.DEDUP["content_fingerprint"]).partition("_")
 _FP_HEX_LEN = int(_FP_HEX_LEN)
 
-# 《12》§八 修订后：监管公开信息（行政处罚决定书等）同题文档天然存在多条，标题须先按
+# 《12》第八节 修订后：监管公开信息（行政处罚决定书等）同题文档天然存在多条，标题须先按
 # "原标题（当事人）"构造后才允许判重；若仍冲突，只允许用来源文档自身已有的文号／索引号消歧，
 # 不得臆造标题。本脚本只做后一半：用来源自带的文号／索引号消歧，绝不生成当事人名。
 REGULATOR_CATEGORY = "监管公开信息"
@@ -131,7 +131,7 @@ def resolve_root(args) -> str:
 # 纯函数：正文清洗 / 标题规范化 / 正文指纹（dedup.py 复用）
 # --------------------------------------------------------------------------
 def clean_body(raw_text) -> str:
-    """按 config.CLEAN 清洗正文；只做文本规范化，不做分词与抽取（《12》§七）。"""
+    """按 config.CLEAN 清洗正文；只做文本规范化，不做分词与抽取（《12》第七节）。"""
     text = "" if raw_text is None else str(raw_text)
 
     if config.CLEAN.get("normalize_unicode_nfkc"):
@@ -189,7 +189,7 @@ def content_fingerprint(text: str) -> str:
 def source_disambiguator(raw_doc) -> str:
     """取来源文档自身已有的文号／索引号（用于监管公开信息的同题消歧）；没有则返回空串。
 
-    只读来源字段，不从正文推断、不臆造（《12》§八）。dedup.py 复用同一实现作为判重键的扩展。
+    只读来源字段，不从正文推断、不臆造（《12》第八节）。dedup.py 复用同一实现作为判重键的扩展。
     """
     if not config.DEDUP.get("regulator_title_disambiguation"):
         return ""
@@ -251,7 +251,7 @@ def mention_count(text: str, needle: str) -> int:
 def subject_companies_of(title, content, company_list, category="") -> list:
     """按 config.SUBJECT_MENTION_MIN 从 company_list 中筛出文档主题公司（保序、去重）。
 
-    两条例外（v1.1 首轮实测后补，见《14-前五阶段审核报告》§9.3）：
+    两条例外（v1.1 首轮实测后补，见《14-前五阶段审核报告》第9.3节）：
 
     ① **公告不做文本判定**。公告的主体就是发布它的公司——`company_list` 取自交易所接口的
        `secCode`，整篇公告天然是关于这家公司的。首轮实测的假阴性正出在这里：万科A 的 5 篇
@@ -452,7 +452,7 @@ def main(argv=None) -> int:
             })
             continue
 
-        # 3) 正文超长兜底守卫（README §3.7）：长度上限的**正常**落点是 fetch.py 的候选阶段
+        # 3) 正文超长兜底守卫（README 第3.7节）：长度上限的**正常**落点是 fetch.py 的候选阶段
         #    过滤（整篇丢弃，绝不截断），本步只为"未来来源变化／旧构建遗留 raw 文件"兜底。
         #    正常一轮运行里这里应当始终为 0 条；命中即整篇跳过并登记实测字符数，绝不放行到
         #    chunk.py（单篇超过 DOC_ID_STRIDE 个文本块会让 chunk_id 越界）。
@@ -482,7 +482,7 @@ def main(argv=None) -> int:
                 "category": category,
                 "source": str(doc.get("source") or ""),
                 "reason": SKIP_EMPTY_COMPANY,
-                "detail": "%s 的 company_list 为空（《12》§八 修订后要求非空）" % category,
+                "detail": "%s 的 company_list 为空（《12》第八节 修订后要求非空）" % category,
             })
             continue
 
@@ -517,7 +517,7 @@ def main(argv=None) -> int:
     documents.sort(key=lambda d: d["doc_id"])
     skipped.sort(key=lambda s: s["doc_id"])
 
-    # 监管公开信息同题标题：用来源自带的文号／索引号消歧（《12》§八 修订后；不臆造当事人）。
+    # 监管公开信息同题标题：用来源自带的文号／索引号消歧（《12》第八节 修订后；不臆造当事人）。
     # 消歧键与 dedup.py 的 title 判重键一致，因此 dedup 保留的同题文档在这里一定拿到不同标题。
     title_groups = {}
     for rec in documents:
@@ -544,7 +544,7 @@ def main(argv=None) -> int:
 
     # subject_companies（数据集内部字段，不入库）：在标题消歧**之后**计算，保证与落盘的
     # title／content 逐字一致；只在 company_list 内部筛（阈值 config.SUBJECT_MENTION_MIN），
-    # company_list 本身不动（README §3.3、§5.3；《14》§3.4）。
+    # company_list 本身不动（README 第3.3节、第5.3节；《14》第3.4节）。
     for rec in documents:
         rec["subject_companies"] = subject_companies_of(rec["title"], rec["content"], rec["company_list"],
                                                           rec.get("category", ""))
