@@ -264,14 +264,28 @@ print(); print('=' * 78); print('K 文档内提到的文件路径是否存在');
 WHITE = re.compile(r'(输入|输出|模板)\.|^\{|^\d+_\d+_|^[A-Z]+-\d+_[A-Za-z]+\d+_|\.\.\.$|…|^X\.md$|_译文\.docx$|方向X_|^[^\\/]*\{[^}]*\}')
 # 已在文档中声明、但尚未创建的产出（计划产出）。新增计划产出时在此登记，创建后请立即删除对应条目。
 PLANNED = {
-    # 第 6 阶段的计划产出（《15-第6阶段任务书》点名要在本阶段创建）。按**文件名**匹配，
-    # 所以文件一旦创建就立刻从这里删掉，否则会掩盖真正的悬空路径。
+    # 第 6 阶段的计划产出（《15-第6阶段任务书》点名要在本阶段创建）。文件一旦创建就
+    # 立刻从这里删掉，否则会掩盖真正的悬空路径。分两类：
+    #   * 裸文件名 —— 在任意位置都算已登记；
+    #   * 带路径 —— 只匹配该路径。
+    # 带路径这一类是 2026-09-25 加的：`代码\抽取与图谱\README.md` 若按裸名 `README.md`
+    # 登记，会连带跳过全项目所有 README.md 的悬空判定，副作用大于收益。
     '16-事件抽取与知识图谱（第六阶段）.md',
-    'nodes.csv', 'edges.csv',                       # 图谱导出物
+    'nodes.csv', 'edges.csv',                       # 图谱导出物（通用名，建出后立即删）
     'extract.py', 'disambiguate.py', 'dedup_events.py', 'write_graph.py',
     '验收第6阶段.py', '标注说明.md',
-}   # 注意：nodes.csv／edges.csv 是通用名，登记期间会连带跳过全项目所有同名引用；
-# 它们是临时项，第 6 阶段建出 图谱导出\ 后必须删除。
+    '代码\\抽取与图谱\\README.md',                # 带路径：只匹配这个路径
+    '代码\\抽取与图谱\\config.py',
+    '代码\\抽取与图谱\\run_all.py',
+}
+PLANNED_BARE = {p for p in PLANNED if '\\' not in p and '/' not in p}
+PLANNED_PATH = {p.replace('/', '\\').lower() for p in PLANNED if ('\\' in p or '/' in p)}
+def is_planned(tok):
+    """裸文件名按文件名匹配；带路径的 token 按路径后缀匹配（见 PLANNED 的说明）。"""
+    if os.path.basename(tok) in PLANNED_BARE:
+        return True
+    t = tok.replace('/', '\\').lower()
+    return any(t == p or t.endswith('\\' + p) or p.endswith('\\' + t) for p in PLANNED_PATH)
 # 归档目录（含其下一层子目录）
 ARCH = glob.glob(os.path.join(LITDIR, '_归档_*'))
 ARCH += [d for d in glob.glob(os.path.join(LITDIR, '_归档_*', '*')) if os.path.isdir(d)]
@@ -296,7 +310,11 @@ def legacy_paths(tok):
         for sep in ('\\', '/'):
             if tok.startswith(old + sep):
                 rest = tok[len(old) + 1:]
-                out += [os.path.join(new, rest), os.path.join(new, os.path.basename(rest))]
+                # 别名目标既可能在阶段目录下，也可能在后来的归档目录下：2026-09-25 重组时
+                # `文献调研\方向X_*.md` 全部迁进了 `_归档_*`，只查 new 会漏。
+                for base in [new] + ARCH:
+                    out += [os.path.join(base, rest),
+                            os.path.join(base, os.path.basename(rest))]
     alt = RENAMED.get(os.path.basename(tok))
     if alt:
         for d in SEARCH + ARCH: out.append(os.path.join(d, alt))
@@ -305,10 +323,16 @@ miss = set()
 for name in D:
     for tok in re.findall(r'`([^`\n]+\.(?:md|py|html|csv|docx|pdf|png|svg))`', D[name]):
         if tok.startswith('http') or WHITE.search(tok) or ' ' in tok: continue
-        if os.path.basename(tok) in PLANNED: continue
+        if is_planned(tok): continue
         cands = []
         for d in SEARCH: cands.append(os.path.join(d, tok))
-        for d in SEARCH + ARCH: cands.append(os.path.join(d, os.path.basename(tok)))
+        # 退路：按**文件名**在全部搜索目录里找——只对**不含目录成分**的裸引用开放。
+        # 文档里常有「见 03-精选文献库（22篇）.md」这种不带路径的写法，需要这条退路。
+        # 但带路径的 token 必须按路径解析：否则 `代码\抽取与图谱\README.md` 会因为
+        # `代码\README.md` 存在而被判为「已存在」，把真正的悬空路径吃掉（假阴性）。
+        # 2026-09-25 修：新目录下的 README.md／config.py／run_all.py 曾整类被吃掉。
+        if '\\' not in tok and '/' not in tok:
+            for d in SEARCH + ARCH: cands.append(os.path.join(d, os.path.basename(tok)))
         cands += legacy_paths(tok)
         if not any(os.path.exists(c) for c in cands):
             miss.add('%s  提到  %s' % (name, tok))
