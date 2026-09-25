@@ -1,0 +1,13 @@
+# 文本文件统一按 LF 存储，避免 Windows 与其它平台之间产生整文件行的差异
+* text=auto
+
+*.md   text eol=lf
+*.py   text eol=lf
+*.html text eol=lf
+*.csv  text eol=lf
+*.json text eol=lf
+
+# 二进制文件不做行尾与编码转换
+*.pdf  -text
+*.docx -text
+*.png  -text

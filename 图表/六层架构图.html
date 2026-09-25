@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>基于事件知识图谱与RAG的A股财经信息智能问答系统 —— 六层总体架构</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:linear-gradient(180deg,#f5f8fc 0%,#e9eff7 100%);
+  color:#1f2b3d;
+  font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.65;padding:26px 16px 36px;
+}
+.page{max-width:1180px;margin:0 auto}
+
+/* ---------- 顶部标题区 ---------- */
+.masthead{background:#fff;border:1px solid #e2e8f2;border-radius:16px;padding:22px 24px;box-shadow:0 6px 20px rgba(23,43,77,.06)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.kicker{background:#eef3fb;color:#33445c;border:1px solid #dde6f3;border-radius:999px;font-size:12.5px;font-weight:700;padding:3px 12px;letter-spacing:.4px}
+.kicker.solid{background:#1d4ed8;border-color:#1d4ed8;color:#fff}
+.masthead h1{font-size:23px;line-height:1.4;color:#16233a;letter-spacing:.3px}
+.masthead .sub{margin-top:9px;font-size:14px;color:#42536b;line-height:1.7}
+.masthead .sub b{color:#1d4ed8}
+.masthead .src{margin-top:11px;padding-top:10px;border-top:1px dashed #e2e8f2;font-size:12.5px;color:#78859a;line-height:1.7}
+
+/* ---------- 架构图主干 ---------- */
+.diagram{margin-top:16px;display:flex;flex-direction:column}
+.layer{background:#fff;border:1px solid #e2e8f2;border-left:5px solid var(--c);border-radius:14px;padding:13px 16px 14px;box-shadow:0 4px 14px rgba(23,43,77,.055)}
+.l1{--c:#2563eb;--c-soft:#ecf2ff;--c-line:#c9dafb}
+.l2{--c:#0d9488;--c-soft:#e8f7f5;--c-line:#bde5e0}
+.l3{--c:#d97706;--c-soft:#fdf3e5;--c-line:#f3dcb4}
+.l4{--c:#7c3aed;--c-soft:#f2ecfe;--c-line:#dccdfb}
+.l5{--c:#0891b2;--c-soft:#e7f6fa;--c-line:#bfe4ef}
+.l6{--c:#475569;--c-soft:#eef2f7;--c-line:#d5dde7}
+.layer-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.layer-title{display:flex;align-items:center;gap:9px;font-size:16.5px;font-weight:800;color:#16233a;letter-spacing:.3px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--c);color:#fff;font-size:14px;font-weight:800;flex:0 0 auto;line-height:1}
+.tech{margin-left:auto;background:var(--c-soft);border:1px solid var(--c-line);color:var(--c);border-radius:999px;font-size:12.5px;font-weight:700;padding:3px 11px;white-space:nowrap}
+.blocks{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.block{background:var(--c-soft);border:1px solid var(--c-line);color:#16233a;border-radius:9px;font-size:14.5px;font-weight:700;padding:6px 12px}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px}
+.step{background:var(--c-soft);border:1px solid var(--c-line);color:#16233a;border-radius:9px;font-size:14.5px;font-weight:700;padding:6px 11px}
+.arw{color:#a9b6c8;font-weight:800;font-size:15px}
+.duty{margin-top:10px;font-size:13px;line-height:1.72;color:#63718a}
+
+/* ---------- 层间连接与汇入关系 ---------- */
+.conn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:7px 0}
+.conn-row{display:flex;align-items:center;justify-content:center;gap:8px;font-size:12.5px;color:#5b6a80;text-align:center;line-height:1.6}
+.down{color:#8fa2bb;font-weight:800;font-size:15px;line-height:1}
+.up{color:#1d4ed8;font-weight:800;font-size:15px;line-height:1}
+.conn-split{display:flex;gap:14px;width:100%;padding:0 4px}
+.arm{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12.5px;color:#5b6a80;text-align:center;line-height:1.55}
+.merge{margin-top:2px;background:#f3f7fd;border:1px dashed #c4d5ec;border-radius:999px;padding:5px 15px;font-size:12.5px;font-weight:700;color:#26456e;text-align:center;line-height:1.6}
+
+/* ---------- 并列层 ---------- */
+.dual{display:flex;gap:14px;align-items:stretch}
+.dual > .layer{flex:1 1 0;min-width:0;display:flex;flex-direction:column}
+
+/* ---------- 数据知识层内的三存储分工 ---------- */
+.stores{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.store{flex:1 1 250px;min-width:220px;background:#fbfcfe;border:1px solid #e2e8f2;border-top:3px solid var(--sc);border-radius:11px;padding:10px 12px}
+.store h3{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:14px;font-weight:800;color:#16233a}
+.store h3 em{font-style:normal;background:var(--sc-soft);border:1px solid var(--sc-line);color:var(--sc);border-radius:999px;font-size:11.5px;font-weight:700;padding:1px 9px}
+.store p{margin-top:6px;font-size:12.5px;line-height:1.65;color:#63718a}
+.s-mysql{--sc:#0d9488;--sc-soft:#e8f7f5;--sc-line:#bde5e0}
+.s-neo4j{--sc:#0891b2;--sc-soft:#e7f6fa;--sc-line:#bfe4ef}
+.s-faiss{--sc:#7c3aed;--sc-soft:#f2ecfe;--sc-line:#dccdfb}
+
+/* ---------- 在线问答链路 ---------- */
+.chain{margin-top:16px;background:#fff;border:1px solid #e2e8f2;border-radius:14px;padding:14px 16px;box-shadow:0 4px 14px rgba(23,43,77,.055)}
+.chain h2{font-size:15.5px;font-weight:800;color:#16233a}
+.chain h2 span{font-weight:600;font-size:12.5px;color:#78859a;margin-left:8px}
+.chain-flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:11px}
+.cchip{background:#f5f8fc;border:1px solid #e0e8f3;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700;color:#2b3c55}
+.cchip.blue{background:#ecf2ff;border-color:#c9dafb;color:#1d4ed8}
+.cchip.violet{background:#f2ecfe;border-color:#dccdfb;color:#6d28d9}
+.cchip.cyan{background:#e7f6fa;border-color:#bfe4ef;color:#0e7490}
+.cchip.green{background:#eaf7f0;border-color:#c8e7d6;color:#15803d}
+.chain-note{margin-top:9px;font-size:12.5px;line-height:1.7;color:#78859a}
+
+/* ---------- 页脚：技术栈与边界 ---------- */
+.footer{margin-top:16px;background:#fff;border:1px solid #e2e8f2;border-radius:14px;padding:14px 16px;box-shadow:0 4px 14px rgba(23,43,77,.055)}
+.stack{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.stack-title{font-size:13px;font-weight:800;color:#16233a;margin-right:2px}
+.chip{background:#f5f8fc;border:1px solid #e0e8f3;border-radius:999px;padding:4px 12px;font-size:12.5px;font-weight:600;color:#33445c}
+.boundary{margin-top:12px;background:#fffaf0;border:1px solid #f0e0b8;border-radius:11px;padding:10px 13px;font-size:12.5px;line-height:1.75;color:#5f4b1c}
+.boundary b{color:#8a5a08}
+
+/* ---------- 窄屏适配 ---------- */
+@media (max-width:760px){
+  body{padding:16px 10px 26px}
+  .masthead{padding:16px 15px}
+  .masthead h1{font-size:19px}
+  .dual{flex-direction:column}
+  .tech{margin-left:0}
+  .layer{padding:12px 13px}
+  .arm{font-size:11.5px}
+  .conn-split{gap:8px;padding:0}
+}
+
+/* ---------- 打印样式 ---------- */
+@media print{
+  @page{size:A4 portrait;margin:11mm}
+  body{background:#fff;padding:0;font-size:11.5px;line-height:1.5}
+  .page{max-width:none}
+  .masthead,.layer,.chain,.footer{box-shadow:none}
+  .masthead,.chain,.footer{background:#fff}
+  .kicker,.kicker.solid,.num,.tech,.block,.step,.merge,.cchip,.chip,.store{background:#fff}
+  .kicker.solid{color:#1d4ed8}
+  .num{color:#16233a}
+  .masthead,.chain,.footer,.layer,.dual,.store,.conn,.conn-split{break-inside:avoid;page-break-inside:avoid}
+  .masthead{padding:14px 16px}
+  .layer{padding:10px 13px 11px}
+  .stores{gap:8px;margin-top:9px}
+  .store{padding:8px 10px}
+  .chain,.footer{margin-top:10px;padding:11px 13px}
+  .conn{padding:5px 0}
+  .masthead h1{font-size:18px}
+  .layer-title{font-size:14.5px}
+  .block,.step{font-size:13px}
+  .duty{font-size:11px}
+  .cchip{font-size:12px;padding:4px 10px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ============ 顶部标题区 ============ -->
+  <header class="masthead">
+    <div class="tags">
+      <span class="kicker solid">六层逻辑架构</span>
+      <span class="kicker">系统总体架构图</span>
+      <span class="kicker">A 股财经信息智能问答</span>
+    </div>
+    <h1>基于事件知识图谱与 RAG 的 A 股财经信息智能问答系统</h1>
+    <p class="sub">六层逻辑架构：<b>用户交互层 → 业务服务层 → 智能问答层 →（向量检索模块 ∥ 图谱检索模块）→ 数据知识层</b></p>
+    <p class="src">内容依据：《项目执行总控文档 v2.0》第 8 章“系统总体架构”，即 8.1 六层架构图、8.2 各层职责、8.3 技术栈、8.4 明确不引入的技术；三存储分工依据第 9 章 9.1 MySQL 核心表、9.2 Neo4j 本体设计、9.3 向量索引；在线问答链路依据 11.3 一次用户提问的完整执行流程。</p>
+  </header>
+
+  <!-- ============ 六层逻辑架构图 ============ -->
+  <main class="diagram">
+
+    <!-- ① 用户交互层 -->
+    <section class="layer l1">
+      <div class="layer-head">
+        <h2 class="layer-title"><span class="num">①</span>用户交互层</h2>
+        <span class="tech">Vue 3</span>
+      </div>
+      <div class="blocks">
+        <span class="block">Web前端 / 智能问答界面</span>
+      </div>
+      <p class="duty">负责与用户直接交互，提供问答输入、答案展示、证据查看、图谱可视化、数据查询与历史记录等页面；该层只负责界面与交互逻辑，不直接访问数据库与模型。</p>
+    </section>
+
+    <div class="conn">
+      <div class="conn-row"><span class="down">↓</span><span>前端请求下发：提问、财经数据查询、图谱可视化与历史记录查看</span></div>
+    </div>
+
+    <!-- ② 业务服务层 -->
+    <section class="layer l2">
+      <div class="layer-head">
+        <h2 class="layer-title"><span class="num">②</span>业务服务层</h2>
+        <span class="tech">Python + FastAPI</span>
+      </div>
+      <div class="blocks">
+        <span class="block">用户管理 / 问答管理</span>
+        <span class="block">查询管理 / 历史记录</span>
+      </div>
+      <p class="duty">接收前端请求、校验参数、组织业务流程并返回结果；用户的每一次提问、回答与引用证据都由该层落库。</p>
+    </section>
+
+    <div class="conn">
+      <div class="conn-row"><span class="down">↓</span><span>进入智能问答流程：问题分析 → 检索 → 证据融合 → Prompt 构建 → 大模型生成</span></div>
+    </div>
+
+    <!-- ③ 智能问答层 -->
+    <section class="layer l3">
+      <div class="layer-head">
+        <h2 class="layer-title"><span class="num">③</span>智能问答层</h2>
+        <span class="tech">Embedding 模型 + 大语言模型 API</span>
+      </div>
+      <div class="flow">
+        <span class="step">问题分析</span><span class="arw">→</span>
+        <span class="step">检索</span><span class="arw">→</span>
+        <span class="step">证据融合</span><span class="arw">→</span>
+        <span class="step">Prompt构建</span><span class="arw">→</span>
+        <span class="step">LLM生成</span>
+      </div>
+      <p class="duty">系统的核心处理单元；问题分析负责判定问题类型与是否需要图谱扩展，证据融合负责把向量检索结果与图谱检索结果合并排序。</p>
+    </section>
+
+    <!-- ③ 与 ④⑤ 之间的分流与汇入 -->
+    <div class="conn">
+      <div class="conn-split">
+        <div class="arm"><span class="down">↓</span><span>向量检索请求：问题向量 → FAISS</span></div>
+        <div class="arm"><span class="down">↓</span><span>图谱检索请求：实体与关系 → Neo4j</span></div>
+      </div>
+      <div class="merge"><span class="up">↑</span> 检索结果汇入证据融合：候选文本块 + 图谱路径合并排序</div>
+    </div>
+
+    <!-- ④ 向量检索模块 与 ⑤ 图谱检索模块（并列） -->
+    <div class="dual">
+      <section class="layer l4">
+        <div class="layer-head">
+          <h2 class="layer-title"><span class="num">④</span>向量检索模块</h2>
+          <span class="tech">FAISS 向量索引</span>
+        </div>
+        <div class="blocks">
+          <span class="block">FAISS</span>
+        </div>
+        <p class="duty">基于 FAISS 完成文本语义检索，输入是问题的向量表示，输出是候选文本块及其对应文档编号，用于提供原始文本证据。</p>
+      </section>
+
+      <section class="layer l5">
+        <div class="layer-head">
+          <h2 class="layer-title"><span class="num">⑤</span>图谱检索模块</h2>
+          <span class="tech">Neo4j</span>
+        </div>
+        <div class="blocks">
+          <span class="block">Neo4j</span>
+        </div>
+        <p class="duty">基于 Neo4j 完成实体、事件与关系的多跳查询，输出实体路径、事件属性与关联关系，用于补充文本检索难以覆盖的关系信息与时间信息。</p>
+      </section>
+    </div>
+
+    <!-- ④⑤ 与 ⑥ 之间 -->
+    <div class="conn">
+      <div class="conn-split">
+        <div class="arm"><span class="down">↓</span><span>读取文本块向量与索引结构</span></div>
+        <div class="arm"><span class="down">↓</span><span>查询实体、事件与关系及其证据文档</span></div>
+      </div>
+      <div class="conn-row"><span>文本内容与结构化知识是向量检索与图谱检索共同的数据来源</span></div>
+    </div>
+
+    <!-- ⑥ 数据知识层 -->
+    <section class="layer l6">
+      <div class="layer-head">
+        <h2 class="layer-title"><span class="num">⑥</span>数据知识层</h2>
+        <span class="tech">MySQL + Neo4j + FAISS 向量索引</span>
+      </div>
+      <div class="blocks">
+        <span class="block">新闻 / 公告 / 政策 / 财经信息</span>
+        <span class="block">事件 / 公司 / 行业 / 人物 / 时间</span>
+      </div>
+      <p class="duty">统一管理新闻、公告、政策等原始财经信息，以及从文本中抽取的事件、公司、行业、人物、时间等结构化知识，是向量检索与图谱检索共同的数据来源。</p>
+      <div class="stores">
+        <div class="store s-mysql">
+          <h3>MySQL<em>关系数据库</em></h3>
+          <p>负责业务数据与文档元数据，是文本内容的唯一权威来源；用户的提问、回答与引用证据均由此留存。</p>
+        </div>
+        <div class="store s-neo4j">
+          <h3>Neo4j<em>图数据库</em></h3>
+          <p>负责实体、事件与关系，支撑多跳路径与时间查询。</p>
+        </div>
+        <div class="store s-faiss">
+          <h3>FAISS<em>向量索引</em></h3>
+          <p>只负责文本语义相似度检索，不保存权威文本，只保存向量与索引结构；FAISS 是向量相似度检索库（向量索引库），与独立的向量数据库系统定位不同。</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ 在线问答链路（11.3） ============ -->
+  <section class="chain">
+    <h2>在线问答链路<span>一次用户提问的完整执行流程</span></h2>
+    <div class="chain-flow">
+      <span class="cchip blue">用户问题</span><span class="arw">→</span>
+      <span class="cchip blue">问题分类</span><span class="arw">→</span>
+      <span class="cchip blue">实体识别</span><span class="arw">→</span>
+      <span class="cchip blue">判断是否需要图谱</span><span class="arw">→</span>
+      <span class="cchip violet">向量检索</span>
+      <span class="cchip">∥</span>
+      <span class="cchip cyan">Neo4j 图谱检索</span><span class="arw">→</span>
+      <span class="cchip violet">文本证据</span>
+      <span class="cchip">+</span>
+      <span class="cchip cyan">图谱路径</span><span class="arw">→</span>
+      <span class="cchip">时间过滤</span><span class="arw">→</span>
+      <span class="cchip">证据排序</span><span class="arw">→</span>
+      <span class="cchip">Prompt 构建</span><span class="arw">→</span>
+      <span class="cchip green">LLM</span><span class="arw">→</span>
+      <span class="cchip green">答案 + 来源 + 图谱路径</span>
+    </div>
+    <p class="chain-note">“∥”表示向量检索与图谱检索两条路径并行或先后执行，两者结果统一经过时间过滤与证据排序后进入 Prompt 构建，最终输出答案、来源与图谱路径。</p>
+  </section>
+
+  <!-- ============ 页脚：技术栈与边界 ============ -->
+  <footer class="footer">
+    <div class="stack">
+      <span class="stack-title">技术栈（8.3）</span>
+      <span class="chip">前端 Vue 3</span>
+      <span class="chip">后端 Python + FastAPI</span>
+      <span class="chip">关系数据库 MySQL</span>
+      <span class="chip">图数据库 Neo4j</span>
+      <span class="chip">向量索引 FAISS</span>
+      <span class="chip">模型 Embedding 模型 + 大语言模型 API</span>
+      <span class="chip">数据处理 Python</span>
+      <span class="chip">部署 Docker</span>
+    </div>
+    <div class="boundary">
+      <b>明确不引入（8.4）：</b>不同时使用 LangChain 与 LlamaIndex，不引入多个向量数据库，也不引入多个图数据库；检索、图谱扩展、时间过滤与证据排序流程由后端代码直接实现，便于在消融实验中逐项控制变量。
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

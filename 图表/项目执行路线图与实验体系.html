@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>软件工程本科毕业设计项目执行路线图</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#eef2f7;font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;color:#23324a}
+.wrap{max-width:1180px;margin:0 auto;background:#f4f7fb;border:1px solid #e3e9f2;border-radius:16px;padding:22px 20px}
+.hd{margin-bottom:16px}
+.hd-title{font-size:20px;font-weight:800;color:#16305a;letter-spacing:.5px}
+.hd-sub{font-size:14px;color:#5a6a80;margin-top:6px;line-height:1.6}
+.sec-t{font-size:15px;font-weight:700;color:#33445c;margin:4px 0 10px;display:flex;align-items:center;gap:8px}
+.sec-t .bar{width:4px;height:16px;border-radius:2px;background:#2563eb;display:inline-block}
+.phase{border:1px solid #e2e8f0;border-left:6px solid var(--c,#2563eb);background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.ph-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.ph-name{font-size:15px;font-weight:700;color:#23324a}
+.ph-name .num{color:#fff;border-radius:8px;padding:2px 8px;font-size:12.5px;margin-right:6px;font-weight:800}
+.ph-dur{font-size:12.5px;color:#5a6a80;background:#f1f5f9;border-radius:999px;padding:3px 10px}
+.row{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px}
+.step{flex:1 1 200px;min-width:190px;background:#f8fafc;border:1px solid #dde4ee;border-radius:10px;padding:10px 12px;position:relative}
+.step .n{font-size:12px;font-weight:800;color:#fff;border-radius:6px;padding:1px 7px;display:inline-block;margin-bottom:5px}
+.step .t{font-size:14.5px;font-weight:700;line-height:1.4;padding-right:46px}
+.step .s{font-size:12px;color:#5b6a7e;margin-top:3px;line-height:1.5}
+.step .w{position:absolute;top:10px;right:10px;font-size:11.5px;font-weight:700;color:#5a6a80;background:#eef2f7;border-radius:999px;padding:2px 8px}
+.step .m{margin-top:7px;font-size:11.5px;font-weight:700;color:#fff;background:#334155;border-radius:6px;padding:2px 8px;display:inline-block;line-height:1.5}
+.arr{display:flex;align-items:center;font-size:22px;color:#94a3b8;font-weight:700;flex:0 0 auto}
+.arr.warn{color:#c43d3d}
+.next{display:flex;justify-content:center;margin:4px 0;font-size:18px;color:#94a3b8;font-weight:700}
+.mrow{display:flex;gap:8px;margin-top:8px}
+.mrow .slot{flex:1 1 200px;min-width:190px;font-size:12px;color:#475569;padding-left:4px;border-top:2px solid #cbd5e1;padding-top:5px;line-height:1.5}
+.mrow .slot b{color:#334155}
+.dep{margin:12px 0 4px;background:#fff1f0;border:1px solid #f0c4c2;border-radius:10px;padding:9px 12px;font-size:13.5px;color:#8c2f2b;line-height:1.6}
+.dep b{color:#a3302a}
+.exp{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px;margin-top:14px}
+.exp-cols{display:flex;gap:12px;flex-wrap:wrap}
+.exp-col{flex:1 1 300px;min-width:270px;border:1px solid #dde4ee;border-radius:10px;padding:10px 12px;background:#fbfcfe}
+.exp-col h4{font-size:14px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:6px;color:#23324a}
+.exp-col .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.cnode{border:1px solid #cfd8e2;background:#eef2f6;border-radius:8px;padding:5px 8px;font-size:12.5px;font-weight:600;color:#3d4c60;text-align:center}
+.cnode.hl{border-color:#0e9f6e;background:#e8f7f0;color:#0a6b4a}
+.carrow{font-size:16px;color:#94a3b8;font-weight:700;flex:0 0 auto}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.vs{display:flex;flex-direction:column;gap:6px}
+.vsrow{display:flex;align-items:center;gap:6px}
+.vsrow .cnode{flex:1}
+.vl{font-size:12px;font-weight:800;color:#c97b2c;flex:0 0 auto}
+.exp-cap{font-size:12.5px;color:#5b6a7e;margin-top:8px;line-height:1.55}
+.items{display:flex;flex-direction:column;gap:6px}
+.item{display:flex;gap:8px;align-items:baseline;font-size:13.5px;color:#33445c;line-height:1.5}
+.item .ck{color:#0e9f6e;font-weight:800}
+.bars{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;font-size:13.5px;color:#44536b;line-height:1.6}
+.bar .bt{font-weight:800;color:#16305a;flex:0 0 auto}
+.chip{background:#eef2f6;border:1px solid #d7dde5;border-radius:999px;font-size:13px;padding:3px 10px;font-weight:600;color:#3d4c60}
+@media (max-width:760px){
+  .mrow{flex-direction:column;gap:6px}
+  .mrow .slot{border-top:0;border-left:2px solid #cbd5e1;padding-left:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hd">
+    <div class="hd-title">软件工程本科毕业设计 · 项目执行路线图（12 阶段 / 4 大阶段 / 4 里程碑）</div>
+    <div class="hd-sub">总周期 4～5 个月，先确定“做什么”→ 设计“怎么做”→ 把“它做出来”→ 用实验“证明做得怎么样”。关键纪律：<b>普通 RAG 必须先跑通，再接入知识图谱</b>。</div>
+  </div>
+
+  <!-- 主模块：12 阶段路线图 -->
+  <div class="sec-t"><span class="bar"></span>主路线：12 个阶段按 4 大阶段推进（每阶段标注建议时长）</div>
+
+  <div class="phase" style="--c:#2563eb">
+    <div class="ph-h">
+      <span class="ph-name"><span class="num" style="background:#2563eb">第一部分</span>确定“做什么” —— 选题 · 开题 · 需求（约 4 周）</span>
+      <span class="ph-dur">S1–S3</span>
+    </div>
+    <div class="row">
+      <div class="step"><span class="n" style="background:#2563eb">S1</span><span class="w">1 周</span><div class="t">选题与项目规划</div><div class="s">锁定最终题目 · 研究目标 · 项目边界 · 初步技术路线</div></div>
+      <div class="arr">→</div>
+      <div class="step"><span class="n" style="background:#2563eb">S2</span><span class="w">2 周</span><div class="t">文献调研与开题</div><div class="s">知识图谱 / RAG / 金融问答 / 软件系统四方向调研 + 开题报告</div></div>
+      <div class="arr">→</div>
+      <div class="step"><span class="n" style="background:#2563eb">S3</span><span class="w">1 周</span><div class="t">需求分析</div><div class="s">用户角色 · 功能/非功能需求 · 用例图 · 需求规格说明</div></div>
+    </div>
+  </div>
+  <div class="next">↓</div>
+
+  <div class="phase" style="--c:#0e9f6e">
+    <div class="ph-h">
+      <span class="ph-name"><span class="num" style="background:#0e9f6e">第二部分</span>确定“怎么做” —— 设计 · 数据 · 图谱（约 6～9 周）</span>
+      <span class="ph-dur">S4–S6</span>
+    </div>
+    <div class="row">
+      <div class="step"><span class="n" style="background:#0e9f6e">S4</span><span class="w">1～2 周</span><div class="t">系统总体设计</div><div class="s">技术栈 · 系统架构 · 数据库 ER · 知识图谱本体设计</div></div>
+      <div class="arr">→</div>
+      <div class="step"><span class="n" style="background:#0e9f6e">S5</span><span class="w">2～3 周</span><div class="t">数据准备</div><div class="s">公告 + 新闻 + 政策：采集 · 去重 · 清洗 · 建数据集</div></div>
+      <div class="arr">→</div>
+      <div class="step"><span class="n" style="background:#0e9f6e">S6</span><span class="w">3～4 周</span><div class="t">事件抽取与知识图谱</div><div class="s">实体/事件/关系识别 → 写入 Neo4j，6 类实体</div></div>
+    </div>
+  </div>
+  <div class="next">↓</div>
+
+  <div class="phase" style="--c:#ea7a15">
+    <div class="ph-h">
+      <span class="ph-name"><span class="num" style="background:#ea7a15">第三部分</span>真正“做出来” —— 普通RAG · KG-RAG · 前后端（约 7～9 周）</span>
+      <span class="ph-dur">S7–S9</span>
+    </div>
+    <div class="row">
+      <div class="step"><span class="n" style="background:#ea7a15">S7</span><span class="w">2 周</span><div class="t">普通 RAG 检索系统</div><div class="s">文本切分 → Embedding → FAISS → LLM，先不碰知识图谱</div></div>
+      <div class="arr warn">⚠→</div>
+      <div class="step"><span class="n" style="background:#ea7a15">S8</span><span class="w">2～3 周</span><div class="t">知识图谱增强问答（KG-RAG）</div><div class="s">图谱扩展 · 时间过滤 · 证据融合 → LLM</div></div>
+      <div class="arr">→</div>
+      <div class="step"><span class="n" style="background:#ea7a15">S9</span><span class="w">3～4 周</span><div class="t">前后端系统集成</div><div class="s">Vue 3 + FastAPI，问答 / 图谱 / 历史等页面联通</div></div>
+    </div>
+    <div class="mrow">
+      <div class="slot"><b>◆ 里程碑一 · 能跑</b>：架构 + 数据 + 普通 RAG，能提问并返回答案</div>
+      <div class="slot"><b>◆ 里程碑二 · 核心技术完成</b>：事件抽取 + 知识图谱 + KG-RAG</div>
+      <div class="slot"><b>◆ 里程碑三 · 软件完成</b>：Vue / FastAPI / MySQL / Neo4j / FAISS / LLM 全联通</div>
+    </div>
+  </div>
+  <div class="next">↓</div>
+
+  <div class="phase" style="--c:#c43d3d">
+    <div class="ph-h">
+      <span class="ph-name"><span class="num" style="background:#c43d3d">第四部分</span>证明“做得怎么样” —— 测试实验 · 论文 · 答辩（约 4～6 周）</span>
+      <span class="ph-dur">S10–S12</span>
+    </div>
+    <div class="row">
+      <div class="step"><span class="n" style="background:#c43d3d">S10</span><span class="w">2～3 周</span><div class="t">系统测试 + 对比实验</div><div class="s">功能测试 · 性能测试 · RAG 对比 · 消融实验</div></div>
+      <div class="arr">→</div>
+      <div class="step"><span class="n" style="background:#c43d3d">S11</span><span class="w">持续</span><div class="t">论文撰写与材料整理</div><div class="s">边做边写：前 3 章前期完成，4/5/6/7 章随阶段推进</div></div>
+      <div class="arr">→</div>
+      <div class="step"><span class="n" style="background:#c43d3d">S12</span><span class="w">最后 1～2 周</span><div class="t">答辩准备</div><div class="s">PPT · 现场 Demo · 备问（为什么需要图谱 / 创新点等）</div></div>
+    </div>
+    <div class="mrow">
+      <div class="slot"></div>
+      <div class="slot"></div>
+      <div class="slot"><b>◆ 里程碑四 · 论文完成</b>：测试 + 实验 + 论文 + PPT + Demo 齐备，可答辩</div>
+    </div>
+  </div>
+
+  <div class="dep">
+    <b>关键开发纪律：</b>S7 的普通 RAG 必须先跑通，再在 S8 接入知识图谱。否则结果异常时无法判断问题出在 <b>检索 / 图谱 / 前端 / 大模型</b> 的哪一环，排查成本成倍增加。
+  </div>
+
+  <!-- 第二模块：实验体系 -->
+  <div class="exp">
+    <div class="sec-t"><span class="bar" style="background:#c43d3d"></span>实验体系：证明系统为什么有效（功能测试之外的三类实验）</div>
+    <div class="exp-cols">
+
+      <div class="exp-col">
+        <h4><span class="dot" style="background:#2563eb"></span>对比实验</h4>
+        <div class="chain"><div class="cnode">同一组测试问题：单跳 · 事件 · 关系 · 多跳 · 时序</div></div>
+        <div class="vs">
+          <div class="vsrow"><div class="cnode">LLM 直接回答</div><span class="vl">VS</span><div class="cnode">普通向量 RAG</div></div>
+          <div class="vsrow"><div class="cnode">普通向量 RAG</div><span class="vl">VS</span><div class="cnode hl">知识图谱增强 RAG</div></div>
+        </div>
+        <div class="exp-cap">指标：证据召回 + 回答正确性；验证图谱增强 RAG 相对普通 RAG 的增益（假设 H1）。</div>
+      </div>
+
+      <div class="exp-col">
+        <h4><span class="dot" style="background:#0e9f6e"></span>消融实验</h4>
+        <div class="chain">
+          <div class="cnode">Vector RAG</div><span class="carrow">→</span>
+          <div class="cnode">+1 跳图谱</div><span class="carrow">→</span>
+          <div class="cnode">+2 跳图谱</div><span class="carrow">→</span>
+          <div class="cnode hl">+时间过滤</div>
+        </div>
+        <div class="exp-cap">每增加一个模块，观察证据覆盖与无关证据的变化：路径深度（H2）· 时间约束（H3）。</div>
+      </div>
+
+      <div class="exp-col">
+        <h4><span class="dot" style="background:#ea7a15"></span>性能测试</h4>
+        <div class="items">
+          <div class="item"><span class="ck">✓</span>平均回答耗时（秒级指标）</div>
+          <div class="item"><span class="ck">✓</span>10 个用户同时访问是否正常</div>
+          <div class="item"><span class="ck">✓</span>连续请求 100 次的成功率</div>
+        </div>
+        <div class="exp-cap">体现“软件工程实现”，而非简单调用 AI API。</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 信息条 -->
+  <div class="bars">
+    <div class="bar">
+      <span class="bt">技术栈</span>
+      <span class="chip">Vue 3</span>
+      <span class="chip">FastAPI</span>
+      <span class="chip">MySQL</span>
+      <span class="chip">Neo4j</span>
+      <span class="chip">FAISS</span>
+      <span class="chip">大模型 API</span>
+      <span class="chip">Embedding 模型</span>
+    </div>
+    <div class="bar">
+      <span class="bt">数据策略</span>
+      先小后大：10 家 / 100 篇 → 50 家 / 500 篇 → 100+ 家 / 1000+ 篇，逐版跑通再扩规模
+    </div>
+    <div class="bar">
+      <span class="bt">交付成果</span>
+      ①开题报告 ②软件系统 ③数据集 / 知识图谱 ④实验结果 ⑤毕业论文 ⑥答辩 PPT ⑦演示 Demo —— 核心三项：<b>软件系统 + 论文 + 实验结果</b>
+    </div>
+  </div>
+</div>
+</body>
+</html>
