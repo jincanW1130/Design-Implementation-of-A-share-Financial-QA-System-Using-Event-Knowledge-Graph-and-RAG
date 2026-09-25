@@ -327,6 +327,32 @@ report(not os.path.isdir(os.path.join(ROOT, '10-系统总体设计（第四阶�
 report(not os.path.isdir(os.path.join(ROOT, '文献调研')),
        '旧的 文献调研\\ 目录已迁入阶段目录')
 
+# ---- N 《02》版本号一致性 -------------------------------------------------
+print(); print('=' * 78); print('N 《02》的版本号在标题、版本字段与修订记录三处是否一致'); print('=' * 78)
+# 起因（2026-09-25 实测）：§1.2 修订记录一路记到 v2.5，而标题与文档信息表的版本字段
+# 仍停在 v2.3——v2.4／v2.5 两次登记只改了 §1.2，没有回改表头，漂移了两个版本且无人发现。
+# 本项把三处对齐：标题末尾的版本、`| 版本 |` 字段、§1.2 修订记录里最后一行版本。
+n2 = next((n for n in D if n.startswith('02-')), None)
+if n2:
+    t2 = D[n2]
+    lines2 = t2.splitlines()
+    m_title = re.search(r'项目执行总控文档\s*(v\d+\.\d+)\s*$', lines2[0]) if lines2 else None
+    m_field = re.search(r'\|\s*版本\s*\|\s*(v\d+\.\d+)', t2)
+    m_last = None
+    for ln in lines2:
+        mm = re.match(r'\|\s*(v\d+\.\d+)\s*\|\s*\d{4}-\d{2}-\d{2}\s*\|', ln)
+        if mm: m_last = mm
+    got = [('标题', m_title.group(1) if m_title else None),
+           ('版本字段', m_field.group(1) if m_field else None),
+           ('修订记录末行', m_last.group(1) if m_last else None)]
+    for label, v in got:
+        print('    %-12s %s' % (label, v or '<未解析到>'))
+    vals = {v for _, v in got}
+    ok_n = (None not in vals) and len(vals) == 1
+    if not ok_n:
+        print('    !! 三处版本号不一致：%s' % sorted(str(v) for v in vals))
+    report(ok_n, '《02》标题／版本字段／修订记录末行的版本号一致', '%s' % (sorted(vals)[0] if ok_n else '不一致'))
+
 print(); print('=' * 78)
 print('结论：%s' % ('全部通过' if not fails else '存在 %d 项失败：%s' % (len(fails), '；'.join(fails))))
 print('=' * 78)
