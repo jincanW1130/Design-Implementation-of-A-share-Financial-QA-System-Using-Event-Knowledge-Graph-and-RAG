@@ -263,7 +263,15 @@ print('  （? 行需人工确认语境；出现"不引入/不研究"等否定语
 print(); print('=' * 78); print('K 文档内提到的文件路径是否存在'); print('=' * 78)
 WHITE = re.compile(r'(输入|输出|模板)\.|^\{|^\d+_\d+_|^[A-Z]+-\d+_[A-Za-z]+\d+_|\.\.\.$|…|^X\.md$|_译文\.docx$|方向X_|^[^\\/]*\{[^}]*\}')
 # 已在文档中声明、但尚未创建的产出（计划产出）。新增计划产出时在此登记，创建后请立即删除对应条目。
-PLANNED = set()   # 第 5 阶段的 13- 与 验收第5阶段数据.py 均已产出，无待产出项
+PLANNED = {
+    # 第 6 阶段的计划产出（《15-第6阶段任务书》点名要在本阶段创建）。按**文件名**匹配，
+    # 所以文件一旦创建就立刻从这里删掉，否则会掩盖真正的悬空路径。
+    '16-事件抽取与知识图谱（第六阶段）.md',
+    'nodes.csv', 'edges.csv',                       # 图谱导出物
+    'extract.py', 'disambiguate.py', 'dedup_events.py', 'write_graph.py',
+    '验收第6阶段.py', '标注说明.md',
+}   # 注意：nodes.csv／edges.csv 是通用名，登记期间会连带跳过全项目所有同名引用；
+# 它们是临时项，第 6 阶段建出 图谱导出\ 后必须删除。
 # 归档目录（含其下一层子目录）
 ARCH = glob.glob(os.path.join(LITDIR, '_归档_*'))
 ARCH += [d for d in glob.glob(os.path.join(LITDIR, '_归档_*', '*')) if os.path.isdir(d)]
