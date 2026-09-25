@@ -32,9 +32,9 @@ python 代码\数据准备\check.py   --profile v1
 python 代码\数据准备\run_all.py --profile v1
 ```
 
-* `--profile v1`（默认）：写入 `阶段05-数据准备\数据集\v1.0\`。
+* `--profile v1`（默认）：写入 `阶段05-数据准备\数据集\v1.1\`。
 * `--profile pilot`：写入 `阶段05-数据准备\_试跑\`，用 3 家公司／20 篇做小规模验证
-  （《12》§九"小规模先行的纪律"）。**试跑目录不是交付物，不得与 v1.0 混用。**
+  （《12》§九"小规模先行的纪律"）。**试跑目录不是交付物，不得与 v1.1 混用。**
 * `--dir <路径>`：**仅供自测**，把输出根目录改到任意临时目录。正式封版一律用
   `--profile v1`，不得用 `--dir` 指向正式数据集以外的位置产出交付物。
 * `--force`：忽略已完成标记，强制重跑本环节。
@@ -89,11 +89,24 @@ python 代码\数据准备\run_all.py --profile v1
 {"doc_id": 1001, "title": "...", "content": "...", "source": "巨潮资讯网",
  "category": "公告", "url": "https://static.cninfo.com.cn/...",
  "publish_time": "2026-09-22", "ingest_time": "2026-09-25T14:00:00+08:00",
- "company_list": ["000001"], "content_sha256_16": "a1b2c3d4e5f60718"}
+ "company_list": ["000001"], "content_sha256_16": "a1b2c3d4e5f60718",
+ "subject_companies": ["000001"]}
 ```
 
-字段名与《10》§4.4.1 的 document 表一致。`content_sha256_16` 是数据集内部字段，
-用于去重核验（不入库；《10》规定 document 表不新增字段）。
+字段名与《10》§4.4.1 的 document 表一致。`content_sha256_16` 与 `subject_companies`
+都是**数据集内部字段**，不入库（《10》规定 document 表不新增字段，六张表的规则是绝对的）：
+
+* `content_sha256_16`：正文指纹（sha256 前 16 位），用于去重核验。
+* `subject_companies`：**文档主题公司**，股票代码字符串数组；它是 `company_list` 的**子集**，
+  只在 `company_list` 内部筛选，**绝不引入 `company_list` 之外的公司**；可以为 `[]`
+  （表示没有任何一家公司构成该文档的主题），**不得为 `null`**。判定规则**只用**一个阈值
+  `config.SUBJECT_MENTION_MIN`（默认 3）：某公司在 `company_list` 内，且满足**其一**即计入——
+  ① 其名称或 6 位代码出现在文档 `title` 中；② 其名称出现次数 ＋ 代码出现次数在 `content`
+  中 ≥ `SUBJECT_MENTION_MIN`。名称与 6 位代码以 `config.COMPANIES` 为准，计数按字面出现次数。
+  与 `company_list` 的分工：`company_list` 是"**文档涉及**的公司"（口径不变，检索仍用它），
+  `subject_companies` 是"**文档关于**的公司"，供第 6 阶段建"公司参与事件"的边时使用，避免把
+  别的公司的事件挂到本公司名下（起因与实测见《14-前五阶段审核报告》§3.4：财经新闻按
+  "正文提及即关联"会把并非文章主题的公司一并标上）。
 
 ### 3.4 `chunks\chunks.jsonl` —— 一行一个文本块（对应 document_chunk 表）
 
@@ -275,7 +288,7 @@ puborg, wenhao, summary`。正文抓 `url` 对应页面（静态 HTML，`div#UCA
 
 ## 五、必须遵守的纪律
 
-1. **只写 `dataset_dir(profile)` 之下**：不得写 `阶段05-数据准备\数据集\v1.0\` 以外的
+1. **只写 `dataset_dir(profile)` 之下**：不得写 `阶段05-数据准备\数据集\v1.1\` 以外的
    正式数据集路径；试跑只写 `_试跑\`。
 2. **不越界**（《12》§五 硬约束 14、§七）：不写抽取规则、不做实体消歧、不写 Cypher、
    不做标注、不建测试集、不写 DDL、不接大模型。只做采集→去重→清洗→切分→向量化→检查。

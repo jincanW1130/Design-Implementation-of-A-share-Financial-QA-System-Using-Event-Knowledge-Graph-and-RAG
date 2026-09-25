@@ -5,7 +5,8 @@ r"""T4b 清洗与结构化落盘（第 5 阶段数据准备管线）。
 
     输入  raw\{doc_id}.json          只读
           reports\dedup_log.jsonl    T4a 的去重结论（被淘汰的 doc_id 在此排除）
-    输出  clean\documents.jsonl      每行一篇，字段逐字对齐 README §3.3（=《10》§4.4.1 document 表）
+    输出  clean\documents.jsonl      每行一篇，字段逐字对齐 README §3.3（=《10》§4.4.1 document 表）；
+                                     subject_companies 与 content_sha256_16 是**数据集内部字段**（不入库）
           reports\clean_stats.json   分类别 before/after 计数、删除字符数、跳过原因
           reports\skipped.jsonl      每条跳过一行（含原因）
 
@@ -34,6 +35,11 @@ clean\documents.jsonl 中 content_sha256_16 的唯一性由构造保证。
     * 公告与财经新闻的 company_list 必须非空；政策文件与监管公开信息允许空数组（不得为 null）；
     * 监管公开信息的同题文档只在"原标题（当事人）"构造后判重，仍冲突时只允许用来源自带的
       文号／索引号消歧（source_disambiguator / disambiguated_title，绝不臆造当事人）。
+
+另有一个**只增不改**的严格口径（README §3.3、§5.3；《14-前五阶段审核报告》§3.4）：
+    * subject_companies：从 company_list 里再筛一层"文档**关于**的公司"（阈值取自
+      config.SUBJECT_MENTION_MIN，不写死）。company_list 的口径（"文档涉及的公司"，
+      检索仍用它）**一个字都不改**；本字段只是新增，且必须落在 company_list 之内。
 """
 
 from __future__ import annotations
@@ -221,6 +227,57 @@ def normalize_company_list(value):
     else:
         parts = [str(value)]
     return list(dict.fromkeys(p.strip() for p in parts if p and p.strip()))
+
+
+# --------------------------------------------------------------------------
+# subject_companies（数据集内部字段，不入库）：文档**关于**的公司
+# --------------------------------------------------------------------------
+# 规则（阈值唯一来源 config.SUBJECT_MENTION_MIN，脚本内不写死）：公司在 company_list 内，
+# 且满足其一即计入——① 其名称或 6 位代码出现在 title 中；② 其名称出现次数 ＋ 代码出现次数
+# 在 content 中 ≥ SUBJECT_MENTION_MIN。只在 company_list 内部判定，绝不引入 company_list
+# 之外的公司；company_list 本身保持"文档涉及的公司"口径不变（它是检索用的字段）。
+# 名称与代码以 config.COMPANIES 为准（代码→名称；company_list 里的代码不在 config 时
+# 只按代码本身计数，不臆造名称）。
+_COMPANY_NAME_BY_CODE = {str(c["code"]): str(c["name"]) for c in config.COMPANIES}
+
+
+def mention_count(text: str, needle: str) -> int:
+    """needle 在 text 中的出现次数（按字面计数；needle 为空串时记 0）。"""
+    if not needle:
+        return 0
+    return str(text).count(str(needle))
+
+
+def subject_companies_of(title, content, company_list, category="") -> list:
+    """按 config.SUBJECT_MENTION_MIN 从 company_list 中筛出文档主题公司（保序、去重）。
+
+    两条例外（v1.1 首轮实测后补，见《14-前五阶段审核报告》§9.3）：
+
+    ① **公告不做文本判定**。公告的主体就是发布它的公司——`company_list` 取自交易所接口的
+       `secCode`，整篇公告天然是关于这家公司的。首轮实测的假阴性正出在这里：万科A 的 5 篇
+       自家公告因标题写"万科"而非"万科A"被判为空，那是规则错，不是数据错。
+    ② **名称补 A／B 别名**。配置里的名称可能带 A／B 后缀（如"万科A"），而正文通常只写
+       "万科"；去掉尾部单个 A／B 后一并计数，避免同一家公司被自己的简称判掉。
+    """
+    minimum = int(config.SUBJECT_MENTION_MIN)
+    title = "" if title is None else str(title)
+    content = "" if content is None else str(content)
+    codes = normalize_company_list(company_list)
+    if category == "公告":
+        return list(dict.fromkeys(codes))
+    subjects = []
+    for code in codes:
+        name = _COMPANY_NAME_BY_CODE.get(code, "")
+        alias = re.sub(r"[ABab]$", "", name) if name else ""
+        if (name and name in title) or (alias and alias in title) or code in title:
+            subjects.append(code)
+            continue
+        hits = mention_count(content, name) + mention_count(content, code)
+        if alias and alias != name:
+            hits += mention_count(content, alias)
+        if hits >= minimum:
+            subjects.append(code)
+    return list(dict.fromkeys(subjects))
 
 
 def run_timestamp() -> str:
@@ -484,6 +541,13 @@ def main(argv=None) -> int:
     for rec in documents:
         final_titles.setdefault(rec["title"], []).append(rec["doc_id"])
     residual_duplicate_titles = {t: ids for t, ids in final_titles.items() if len(ids) > 1}
+
+    # subject_companies（数据集内部字段，不入库）：在标题消歧**之后**计算，保证与落盘的
+    # title／content 逐字一致；只在 company_list 内部筛（阈值 config.SUBJECT_MENTION_MIN），
+    # company_list 本身不动（README §3.3、§5.3；《14》§3.4）。
+    for rec in documents:
+        rec["subject_companies"] = subject_companies_of(rec["title"], rec["content"], rec["company_list"],
+                                                          rec.get("category", ""))
 
     totals = {
         "raw_docs": sum(s["raw_docs"] for s in per_category.values()),
