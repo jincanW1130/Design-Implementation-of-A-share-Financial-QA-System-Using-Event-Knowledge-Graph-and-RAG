@@ -1,0 +1,97 @@
+﻿==============================================================================
+[run_all] 第 5 阶段数据管线  profile=v1
+[run_all] 数据集根目录：C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1
+[run_all] 环节：fetch -> dedup -> clean -> chunk -> embed -> check
+==============================================================================
+
+------------------------------------------------------------------------------
+[run_all] >>> fetch（T1-T3 采集与原始数据落盘）
+[run_all]     C:\Users\15129\AppData\Local\Programs\Python\Python312\python.exe C:\Users\15129\Desktop\毕业设计\代码\数据准备\fetch.py --profile v1
+------------------------------------------------------------------------------
+=== fetch.py profile=v1 force=False ===
+输出目录：C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1
+公司 105 家；时间窗 2026-06-17 ~ 2026-09-25；配额 {'公告': None, '财经新闻': 50, '政策文件': 30, '监管公开信息': 20}；公告每公司 8 篇
+sources.csv → C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1\meta\sources.csv
+采样模式：v2.1 定向补样（事件类型优先）——基座 v2.0 的 raw 文档 491 个（本次带入 0、已有 491），新增公司 55 家（事件组 重大合同≥35 家、产品≥20 家）
+[公告] v2.1 定向补样：市场级检索事件组 重大合同、产品（19 个关键词；column=szse、不给 stock）
+[公告] raw 文件 591（本轮新增 0 / 复用 200） 跳过 2 失败 0 预过滤 0 超长丢弃 0（上限 60000 字符，已探测 200 篇） 公告列表页请求 0 次 用时 131.0s
+[监管公开信息] raw 文件 20（本轮新增 0 / 复用 0） 跳过 0 失败 0 预过滤 0 超长丢弃 0（上限 60000 字符，已探测 0 篇） 用时 0.0s
+[政策文件] raw 文件 30（本轮新增 0 / 复用 0） 跳过 0 失败 0 预过滤 0 超长丢弃 0（上限 60000 字符，已探测 0 篇） 用时 0.0s
+[财经新闻] raw 文件 106（本轮新增 0 / 复用 56） 跳过 0 失败 0 预过滤 0 超长丢弃 0（上限 60000 字符，已探测 0 篇） 用时 0.0s
+[合计] raw 文件 747 个；HTTP 请求 94 次（含重试/异常 0 次）；输出目录 C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1
+[总用时] 131.0s
+[run_all] <<< fetch 完成，退出码 0，耗时 131.38s
+
+------------------------------------------------------------------------------
+[run_all] >>> dedup（T4a 文本级去重）
+[run_all]     C:\Users\15129\AppData\Local\Programs\Python\Python312\python.exe C:\Users\15129\Desktop\毕业设计\代码\数据准备\dedup.py --profile v1
+------------------------------------------------------------------------------
+[dedup] 已完成，跳过（--force 可强制重跑）：C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1\reports\dedup_log.jsonl
+[run_all] <<< dedup 完成，退出码 0，耗时 0.13s
+
+------------------------------------------------------------------------------
+[run_all] >>> clean（T4b 清洗与结构化）
+[run_all]     C:\Users\15129\AppData\Local\Programs\Python\Python312\python.exe C:\Users\15129\Desktop\毕业设计\代码\数据准备\clean.py --profile v1
+------------------------------------------------------------------------------
+[clean] 已完成，跳过（--force 可强制重跑）：C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1\clean\documents.jsonl
+[run_all] <<< clean 完成，退出码 0，耗时 0.14s
+
+------------------------------------------------------------------------------
+[run_all] >>> chunk（T5 切分）
+[run_all]     C:\Users\15129\AppData\Local\Programs\Python\Python312\python.exe C:\Users\15129\Desktop\毕业设计\代码\数据准备\chunk.py --profile v1
+------------------------------------------------------------------------------
+[chunk] 已完成，跳过（--force 可强制重跑）：C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1\chunks\chunks.jsonl
+[run_all] <<< chunk 完成，退出码 0，耗时 0.07s
+
+------------------------------------------------------------------------------
+[run_all] >>> embed（T6 向量化与三级映射）
+[run_all]     C:\Users\15129\AppData\Local\Programs\Python\Python312\python.exe C:\Users\15129\Desktop\毕业设计\代码\数据准备\embed.py --profile v1
+------------------------------------------------------------------------------
+[embed] profile=v1  root=C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1
+[embed] 跳过：已完成（加 --force 可强制重建）
+[embed] 完成（跳过）  文本块=5018  耗时=0.04s
+[run_all] <<< embed 完成，退出码 0，耗时 0.09s
+
+------------------------------------------------------------------------------
+[run_all] >>> check（T8 一致性检查）
+[run_all]     C:\Users\15129\AppData\Local\Programs\Python\Python312\python.exe C:\Users\15129\Desktop\毕业设计\代码\数据准备\check.py --profile v1
+------------------------------------------------------------------------------
+[check] profile=v1  root=C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1
+[check] 文档=709  文本块=5018  向量索引条数=5018  映射=5018
+[check] 分类计数：{'公告': 556, '财经新闻': 103, '政策文件': 30, '监管公开信息': 20}
+[check] 时间覆盖：桶 recent=275 篇 / 桶 earlier=434 篇（下限 5）
+[check] 时间覆盖明细：cutoff − publish_time_min=100 天（门槛 90）；ANALYSIS_90_RANGE 2026-06-27~2026-09-25=629 篇；earlier 两半=219/215 篇；逐月=2026-06:104、2026-07:157、2026-08:254、2026-09:194
+[check] 公司覆盖：105/105 家，缺失 无，多出 无
+[check]  1. vector_count_equals_chunk_count        通过
+[check]  2. chunk_doc_id_exists_in_documents       通过
+[check]  3. document_chunk_index_contiguous        通过
+[check]  4. chunk_id_formula                       通过
+[check]  5. mapping_bidirectional                  通过
+[check]  6. publish_time_within_window             通过
+[check]  7. dedup_keys_unique                      通过
+[check]  8. company_list_presence                  通过
+[check]  9. category_values                        通过
+[check] 10. required_fields_present                通过
+[check] 11. doc_id_block_matches                   通过
+[check] 12. chunk_content_and_token_count          通过
+[check] 13. time_coverage                          通过
+[check] 14. company_set_equals_configured          通过
+[check] 报告已写入：C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1\reports
+[check] 元信息已写入：C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1\meta\dataset.json（公司 105 家／文档 709 篇／文本块 5018 个；dataset_version=v2.1）
+[check] 全部通过  14/14  耗时=0.58s
+[run_all] <<< check 完成，退出码 0，耗时 0.69s
+
+==============================================================================
+[run_all] 各环节汇总（profile=v1）
+==============================================================================
+环节       脚本           说明                            退出码      耗时(秒)  状态
+------------------------------------------------------------------------------
+fetch    fetch.py     T1-T3 采集与原始数据落盘                 0     131.38  成功
+dedup    dedup.py     T4a 文本级去重                       0       0.13  成功
+clean    clean.py     T4b 清洗与结构化                      0       0.14  成功
+chunk    chunk.py     T5 切分                           0       0.07  成功
+embed    embed.py     T6 向量化与三级映射                     0       0.09  成功
+check    check.py     T8 一致性检查                        0       0.69  成功
+------------------------------------------------------------------------------
+[run_all] 全部 6 个环节成功，管线总耗时 132.50s
+[run_all] 回收：数据集目录 C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1

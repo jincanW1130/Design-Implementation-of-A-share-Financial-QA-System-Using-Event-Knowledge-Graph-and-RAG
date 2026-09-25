@@ -34,7 +34,11 @@ TOOL_DIR = os.path.join(ROOT, "工具")
 # --------------------------------------------------------------------------
 # v1.1：v1.0 封版后只**新增**一个数据集内部字段 subject_companies（见 第8节），
 # 规模、编号、切分、向量与 v1.0 完全一致；v1.0 目录保持不可变（《12》第4.2节）。
-DATASET_VERSION = "v2.0"
+# v2.0：第二版（10 家 → 50 家、99 篇 → 456 篇），已封版、目录不可变。
+# v2.1：**v2.0 + 定向补样**（2026-09-25）——保留 v2.0 的 50 家与其分时段抽取结果，
+#       另按"事件类型优先"的市场级检索新增一批公司（见 第4节 EVENT_FIRST）；
+#       v2.0 目录只读，v2.1 不修改它一个字节（《12》第4.2节 版本目录不可变）。
+DATASET_VERSION = "v2.1"
 PIPELINE_VERSION = "pipeline-1.0"
 
 # 数据截止时间：数据集版本级属性，不属于任何表（《02》第10.1节、第10.3节；《12》第5节 硬约束 2）。
@@ -134,6 +138,10 @@ ENDPOINTS = {
     "cninfo_topsearch": "https://www.cninfo.com.cn/new/information/topSearch/query",
     "cninfo_query": "https://www.cninfo.com.cn/new/hisAnnouncement/query",
     "cninfo_static": "https://static.cninfo.com.cn/",
+    # 公司概况（同一站点巨潮资讯网）：给新增公司取"证监会行业分类"与"板块"，
+    # 行业字段原文照录，不自行归类（v2.1 定向补样的公司名单要写进行业一栏）。
+    "cninfo_company_intro":
+        "https://www.cninfo.com.cn/data20/companyOverview/getCompanyIntroduction",
     "gov_policy_search": "https://sousuo.www.gov.cn/search-gov/data",
     "gov_policy_types": ["zhengcelibrary_gw", "zhengcelibrary_bm"],
     "csrc_search": "https://www.csrc.gov.cn/searchList/{channel}",
@@ -212,6 +220,76 @@ COMPANIES = [
     {"code": "600309", "name": "万华化学", "industry": "基础化工",    "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
     {"code": "000792", "name": "盐湖股份", "industry": "基础化工",    "board": "深市主板", "cninfo_column": "szse", "subs": []},
     {"code": "600900", "name": "长江电力", "industry": "电力",        "board": "沪市主板", "cninfo_column": "sse",  "subs": []},
+    # —— 第三版增补（v2.1）：事件类型优先的定向补样 ——
+    # 产生方式（可复现）：`python 代码\数据准备\event_first.py --probe` 跑市场级检索（不给 stock、
+    # 只给 searchkey、seDate 固定为采集窗），去 <em> 标签、按事件组 title_pattern 过滤标题
+    # （产品组另按 exclude_pattern 剔除再融资污染），再按"该窗口内命中该组的不重复公告数"
+    # 降序排名（并列时按命中关键词种数、再按代码升序）。下面就是两个事件组各自的前 N 名
+    # （重大合同组前 35 家、产品组前 20 家，剔除已在册的 50 家后无交集）。
+    # 实测证据（2026-09-25）：重大合同组合并命中 903 条 → 过组正则 521 条 → 命中公司 324 家
+    # （新增候选 322 家）；产品组合并命中 857 条 → 过组正则 716 条（污染排除 1 条）→
+    # 命中公司 246 家（新增候选 245 家）。逐词 totalRecordNum 与逐家命中数见
+    # `代码\数据准备\勘察\event_first_probe.json`（勘察证据刻意放在数据集目录之外，
+    # 见该脚本说明）。
+    # industry 一列取自巨潮公司概况接口的证监会行业分类（原文照录，未自行归类）；
+    # source_matched_announcements 是该家在窗口内命中该事件组的公告数（排名依据）。
+    # 注：920019 为北交所公司，cninfo_column 留 None——补样路径的候选池来自市场级检索命中
+    # （不经过"按公司列公告"的接口），故不需要 column；它已实测在检索结果里正常返回。
+    {"code": "300209", "name": "行云科技", "industry": "零售业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 12},
+    {"code": "301235", "name": "华康洁净", "industry": "建筑安装业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 12},
+    {"code": "301085", "name": "亚康股份", "industry": "软件和信息技术服务业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 7},
+    {"code": "603856", "name": "东宏股份", "industry": "橡胶和塑料制品业", "board": "沪市主板", "cninfo_column": "sse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 7},
+    {"code": "300351", "name": "永贵电器", "industry": "计算机、通信和其他电子设备制造业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 6},
+    {"code": "300355", "name": "蒙草生态", "industry": "生态保护和环境治理业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 6},
+    {"code": "300265", "name": "通光线缆", "industry": "电气机械和器材制造业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 6},
+    {"code": "002457", "name": "青龙管业", "industry": "非金属矿物制品业", "board": "深市主板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 5},
+    {"code": "002350", "name": "北京科锐", "industry": "电气机械和器材制造业", "board": "深市主板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 5},
+    {"code": "002323", "name": "*ST雅博", "industry": "建筑装饰、装修和其他建筑业", "board": "深市主板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 4},
+    {"code": "002586", "name": "ST围海", "industry": "土木工程建筑业", "board": "深市主板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 4},
+    {"code": "300571", "name": "平治信息", "industry": "计算机、通信和其他电子设备制造业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 4},
+    {"code": "601567", "name": "三星电气", "industry": "仪器仪表制造业", "board": "沪市主板", "cninfo_column": "sse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 4},
+    {"code": "300191", "name": "潜能恒信", "industry": "石油和天然气开采业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 4},
+    {"code": "300757", "name": "罗博特科", "industry": "专用设备制造业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 4},
+    {"code": "603163", "name": "圣晖集成", "industry": "建筑安装业", "board": "沪市主板", "cninfo_column": "sse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 4},
+    {"code": "688485", "name": "九州一轨", "industry": "生态保护和环境治理业", "board": "科创板", "cninfo_column": "sse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 4},
+    {"code": "002531", "name": "天顺风能", "industry": "电气机械和器材制造业", "board": "深市主板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "002200", "name": "交投生态", "industry": "土木工程建筑业", "board": "深市主板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "002541", "name": "鸿路钢构", "industry": "金属制品业", "board": "深市主板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "300022", "name": "吉峰科技", "industry": "批发业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "300393", "name": "中来股份", "industry": "电气机械和器材制造业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "300854", "name": "中兰环保", "industry": "生态保护和环境治理业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "300900", "name": "广联航空", "industry": "铁路、船舶、航空航天和其他运输设备制造业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "605287", "name": "德才股份", "industry": "建筑装饰、装修和其他建筑业", "board": "沪市主板", "cninfo_column": "sse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "920019", "name": "铜冠矿建", "industry": "开采专业及辅助性活动", "board": "北交所", "cninfo_column": None, "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "000034", "name": "神州数码", "industry": "批发业", "board": "深市主板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "002090", "name": "金智科技", "industry": "电气机械和器材制造业", "board": "深市主板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "002128", "name": "电投能源", "industry": "煤炭开采和洗选业", "board": "深市主板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "002307", "name": "北新路桥", "industry": "土木工程建筑业", "board": "深市主板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "002376", "name": "新北洋", "industry": "计算机、通信和其他电子设备制造业", "board": "深市主板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "300021", "name": "大禹节水", "industry": "水利管理业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "300436", "name": "广生堂", "industry": "医药制造业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "300504", "name": "天邑股份", "industry": "计算机、通信和其他电子设备制造业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "300510", "name": "金冠股份", "industry": "电气机械和器材制造业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["重大合同"], "source_matched_announcements": 3},
+    {"code": "600079", "name": "ST人福", "industry": "医药制造业", "board": "沪市主板", "cninfo_column": "sse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 17},
+    {"code": "600789", "name": "鲁抗医药", "industry": "医药制造业", "board": "沪市主板", "cninfo_column": "sse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 13},
+    {"code": "601089", "name": "福元医药", "industry": "医药制造业", "board": "沪市主板", "cninfo_column": "sse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 13},
+    {"code": "600420", "name": "国药现代", "industry": "医药制造业", "board": "沪市主板", "cninfo_column": "sse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 12},
+    {"code": "000661", "name": "长春高新", "industry": "医药制造业", "board": "深市主板", "cninfo_column": "szse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 12},
+    {"code": "600062", "name": "华润双鹤", "industry": "医药制造业", "board": "沪市主板", "cninfo_column": "sse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 12},
+    {"code": "688506", "name": "百利天恒", "industry": "医药制造业", "board": "科创板", "cninfo_column": "sse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 12},
+    {"code": "600521", "name": "华海药业", "industry": "医药制造业", "board": "沪市主板", "cninfo_column": "sse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 10},
+    {"code": "300765", "name": "石药创新", "industry": "食品制造业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 10},
+    {"code": "300642", "name": "透景生命", "industry": "医药制造业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 9},
+    {"code": "600196", "name": "复星医药", "industry": "医药制造业", "board": "沪市主板", "cninfo_column": "sse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 8},
+    {"code": "603087", "name": "甘李药业", "industry": "医药制造业", "board": "沪市主板", "cninfo_column": "sse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 8},
+    {"code": "002022", "name": "科华生物", "industry": "医药制造业", "board": "深市主板", "cninfo_column": "szse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 8},
+    {"code": "300562", "name": "乐心股份", "industry": "专用设备制造业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 8},
+    {"code": "300869", "name": "康泰医学", "industry": "专用设备制造业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 8},
+    {"code": "600587", "name": "新华医疗", "industry": "专用设备制造业", "board": "沪市主板", "cninfo_column": "sse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 8},
+    {"code": "000963", "name": "华东医药", "industry": "零售业", "board": "深市主板", "cninfo_column": "szse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 7},
+    {"code": "300723", "name": "一品红", "industry": "医药制造业", "board": "创业板", "cninfo_column": "szse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 7},
+    {"code": "600488", "name": "津药药业", "industry": "医药制造业", "board": "沪市主板", "cninfo_column": "sse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 7},
+    {"code": "600267", "name": "海正药业", "industry": "医药制造业", "board": "沪市主板", "cninfo_column": "sse", "subs": [], "event_groups": ["产品"], "source_matched_announcements": 6},
 ]
 
 # --------------------------------------------------------------------------
@@ -227,6 +305,81 @@ QUOTA_V1 = {
 }
 ANNOUNCEMENT_PER_COMPANY = 8     # 8 × 50 家 = 400（第二版）
 TARGET_DOC_COUNT_V1 = 500
+
+# --------------------------------------------------------------------------
+# 第二版补样（v2.1）：**事件类型优先**的市场级定向补样（2026-09-25 增设）
+# --------------------------------------------------------------------------
+# 起因（《14》第3.6节 路线 A 只执行了一半、《15》第2.5节 的已知限制）：
+# v2.0 的 50 家以大盘股为主，公告采样只按**时间**分层（ANNOUNCEMENT_STRATA_V1），
+# 实测全库只有 6 篇标题命中"重大合同"族、3 篇命中"产品"族，公司间关系的证据也薄。
+# 市场级检索（不给 stock、只给 searchkey）证明这不是市场没有这类披露，而是选样口径
+# 让它们抽不到：同一窗口内"中标"215 条、"重大合同"115 条，"订单"9 条，分布在数百家
+# 公司上。因此 v2.1 在 v2.0 之上追加一轮**按事件类型选公司、再按公司选公告**的补样。
+#
+# v2.1 = v2.0 + 定向补样（v2.0 目录只读、一个字节都不改；见 carry_over_version）。
+# 除本块新增的补样参数外，v2.1 的字段集、subject_companies 判定、编号方案、
+# 切分参数、Embedding 模型、data_cutoff_time 与全部排除规则**与 v2.0 完全一致**。
+EVENT_FIRST = {
+    # 补样的基座版本：fetch.py 先把该版本 raw\ 下已有文档原样带过来（只读，不修改来源目录），
+    # 保证 v2.1 ⊇ v2.0——50 家既有公司保持各自的分时段抽取结果与既有 doc_id。
+    "carry_over_version": "v2.0",
+    # 市场级检索固定 column（2026-09-25 实测：column="szse" 与 column="sse" 返回**同一页、
+    # 同一 totalRecordNum**，市场级检索与 column 无关，故只查一遍、绝不重复计数；
+    # 不传 column 会混入港股代码，故显式固定一个值）。
+    "market_column": "szse",
+    "search_page_size": 30,          # 该接口每页最多回 30 条（2026-09-25 实测）
+    "max_pages_per_keyword": 20,     # 每个关键词最多翻 20 页＝600 条候选
+    # 每个新增公司最多选入的公告数，以及 6 篇在两个时间桶之间的分层（6 = 3 + 3，
+    # 与既有公司 8 = 4 + 4 同构；某桶候选不足时按既有口径由另一桶补足）。
+    "per_company_docs": 6,
+    "strata": {"recent": 3, "earlier": 3},
+    # 事件组：keywords 是市场级检索的 searchkey 清单（覆盖 title_pattern 的每一支），
+    # title_pattern 是选公司／选公告时的标题级判定（re.search），
+    # min_new_companies 是该组要新增的公司家数下限，exclude_pattern 是"污染排除"。
+    "groups": {
+        "重大合同": {
+            "title_pattern": r"中标|重大合同|订单|框架协议|供货|签约|签订.*合同",
+            # searchkey 覆盖 title_pattern 的每一支：⚠"签订.*合同"在检索里用"签订"覆盖，
+            # 因为检索是子串匹配、不接受正则（最终判定仍由 title_pattern 完成）。
+            "keywords": ["中标", "重大合同", "订单", "框架协议", "供货", "签约", "签订"],
+            "exclude_pattern": None,
+            "min_new_companies": 35,
+        },
+        "产品": {
+            "title_pattern": (r"临床试验|注册证|医疗器械注册|药品注册|上市许可|获批上市|"
+                              r"新产品|首台|投产|量产|取得.*批件|获得.*批准"),
+            # searchkey 覆盖 title_pattern 的每一支："取得.*批件"由"批件"覆盖、"获得.*批准"由
+            # "批准"覆盖（检索是子串匹配，标题命中这两支就必然含"批件"／"批准"，故不必再单查
+            # "取得"／"获得"——2026-09-25 实测这两支分别有 750／1255 条，会白翻 20 页上限）；
+            # 最终判定仍由 title_pattern 完成。
+            "keywords": ["临床试验", "注册证", "医疗器械注册", "药品注册", "上市许可",
+                         "获批上市", "新产品", "首台", "投产", "量产", "批件", "批准"],
+            # 产品组的**再融资污染排除**（2026-09-25 实测）：标题"向特定对象发行股票申请获得
+            # 中国证监会同意注册批复"会经"注册／获批"命中产品族，但它属于股权再融资事件，
+            # 不是产品事件。候选标题命中下列任一支即整条剔除。
+            "exclude_pattern": r"发行|股票|债券|募集|上市公告书|可转换",
+            "min_new_companies": 20,
+        },
+    },
+    # 公司间关系的补充证据：财经新闻里"同一篇提到 ≥2 家**本数据集配置的公司**"的文章
+    # （用既有站内检索路径）。公司间关系建在数据集内任意两家公司之间，计量口径因此是
+    # config.COMPANIES 全量（v2.1 为 105 家 = v2.0 的 50 家 + 定向补样的 55 家）；
+    # 2026-09-25 修正前只与"新增公司"求交，把"1 家新增 + 1 家既有"的供应链报道全数漏掉。
+    # 同一批 578 篇已抓正文（按 URL 去重）实测：窄口径 12 篇、全量口径 55 篇。
+    "news_min_docs": 25,                 # 补充证据篇数的**下限**；达线后符合口径的候选全部保留
+    "news_min_target_companies": 2,
+    # new_companies=只数新增公司（2026-09-25 修正前的窄口径）／
+    # all_companies=按 config.COMPANIES 全量计（现行口径）
+    "news_target_scope": "all_companies",
+    # 补样新闻的站内检索：每个站点每家新增公司只翻 1 页（既有路径的 NEWS_SEARCH_PAGES 是
+    # 2／2／1 页）；正文抓取仍保留条数与秒数两个预算上限——**穷尽候选池**才算"试过"，
+    # 超预算即停，缺口按实际数目登记（见 fetch.py 的新闻补样审计行）。
+    # 上一轮抓过的正文按 URL 在 raw\_fetch_log.jsonl 里留有 company_list，可据此复用判定：
+    # 已知达线的文章才重取正文落盘，已知不达线的候选不再发起 HTTP（见 fetch.py）。
+    "news_search_pages": 1,
+    "news_fetch_budget": 700,
+    "news_fetch_seconds_budget": 1800,
+}
 
 # 公告的**时段分层抽取**（2026-09-25 增设，开工前修正）。
 # 起因：若按 publish_time 降序取前 N 篇，公告会全部挤在窗口右端——实测 10 家公司的
@@ -446,6 +599,11 @@ def dataset_dir(profile: str = "v1") -> str:
     if profile == "pilot":
         return PILOT_ROOT
     return os.path.join(DATASET_ROOT, DATASET_VERSION)
+
+
+def dataset_dir_for_version(version: str) -> str:
+    """按**版本号**返回数据集目录（只读用途：v2.1 带过 v2.0 的既有产物）。"""
+    return os.path.join(DATASET_ROOT, str(version))
 
 
 def profile_settings(profile: str) -> dict:

@@ -39,6 +39,9 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 import config  # noqa: E402  （本文件与 config.py 同目录）
+# 标题判重键（规范化标题）复用 clean.py 的同一实现，避免"同一口径两处实现"漂移
+# （dedup.py 也走这条路径）。clean.py 不反向依赖本文件，故无循环导入。
+from clean import normalize_title  # noqa: E402
 
 
 # ==========================================================================
@@ -2033,7 +2036,574 @@ def run_news_category(ctx: Context):
 
 
 # ==========================================================================
-# 10. meta\sources.csv（T1 来源清单）
+# 10. v2.1 事件类型优先补样（在 v2.0 的既有产物之上"定向补样"）
+# --------------------------------------------------------------------------
+# 设计（用户 2026-09-25 定下的口径，参数唯一来源仍是 config.EVENT_FIRST）：
+#   1) v2.1 = v2.0 + 定向补样：先把基座版本（config.EVENT_FIRST["carry_over_version"]）
+#      raw\ 下的文档**原样**带过来（只读来源目录、一个字节都不改），50 家既有公司与它们的
+#      分时段抽取结果、既有 doc_id 因此完整保留；
+#   2) 新增公司按"事件类型优先"选出（冻结在 config.COMPANIES 的 event_groups 字段上），
+#      候选池取自 `event_first.scan_groups()` 的**市场级**检索命中——即排名所用的同一份数据；
+#   3) 每个新增公司最多选 config.EVENT_FIRST["per_company_docs"] 篇，只保留标题命中该组
+#      title_pattern 的公告，按 config.EVENT_FIRST["strata"] 做 level 1 分层 + level 2
+#      等间距铺开；标题排除模式、正文长度上限、编号方案与其它类别口径一致；
+#   4) 公司间关系的补充证据：用既有站内检索路径找"同一篇提到 ≥2 家**本数据集配置的公司**"
+#      的财经新闻（口径由 config.EVENT_FIRST["news_target_scope"] 决定：关系边建在任意两家
+#      公司之间，故现行口径是全量公司，而不是只数新增公司）；config.EVENT_FIRST
+#      ["news_min_docs"] 是**下限**，达线后符合口径的候选全部保留，达不到就按实际数目登记、
+#      不臆造；上一轮抓过的正文按 URL 的 company_list 复用判定，已知不达线的不再发 HTTP。
+# 幂等：raw\ 已存在的 URL 复用既有 doc_id（沿用 Context.assign_ids），重跑不产生新编号。
+# ==========================================================================
+EVENT_FIRST_AUDIT_TAG = "v2.1 定向补样审计"
+# 新闻补样的"已完成标记"（写进 raw\_fetch_log.jsonl 的审计行；见 README 第二节 对
+# "--force：忽略已完成标记"的口径）：一旦上一轮已把候选池遍历完，重跑时只复用已选入的
+# 文章、不再重复站内检索与抓正文；--force 仍会重抓。
+# 2026-09-25 修正：计量口径由"仅新增公司"改为"配置全量公司"（config.EVENT_FIRST
+# ["news_target_scope"]），标记随之带上口径后缀——旧口径的标记行留在日志里作为历史，
+# 但不再被认作"本轮已完成"，因此改口径后必须重新走一遍候选池（这是必须的，不是重复劳动）。
+EVENT_FIRST_NEWS_DONE_MARK = "补样新闻候选池已遍历完（口径=配置全量公司）"
+
+
+def news_supplement_done(ctx: Context) -> bool:
+    """读 raw\\_fetch_log.jsonl 判断补样新闻上一轮是否已遍历完候选池。"""
+    path = os.path.join(ctx.raw_dir, "_fetch_log.jsonl")
+    if not os.path.isfile(path):
+        return False
+    try:
+        with open(path, "r", encoding="utf-8") as fh:
+            for line in fh:
+                if EVENT_FIRST_NEWS_DONE_MARK in line:
+                    return True
+    except OSError:
+        return False
+    return False
+
+
+def event_first_enabled(profile: str) -> bool:
+    """v2.1 的补样模式是否生效（试跑 profile 不参与；基座版本未配置时也不生效）。"""
+    return profile != "pilot" and bool(config.EVENT_FIRST.get("carry_over_version"))
+
+
+def carry_over_seed(out_dir: str, force: bool = False) -> dict:
+    """把基座版本的 raw\\{doc_id}.json 原样带进目标目录（来源目录只读）。
+
+    在构造 Context 之前调用，因此带过来的文档随后会被 `Context._load_existing()` 收录，
+    既复用了既有 doc_id，也让新增候选的编号从"块内最小空闲序号"接着走。
+    """
+    version = str(config.EVENT_FIRST.get("carry_over_version") or "")
+    src_dir = config.dataset_dir_for_version(version)
+    src_raw = os.path.join(src_dir, "raw")
+    dst_raw = os.path.join(out_dir, "raw")
+    os.makedirs(dst_raw, exist_ok=True)
+    info = {"version": version, "source_dir": src_dir, "source_raw": src_raw,
+            "copied": 0, "kept": 0, "total": 0}
+    if not os.path.isdir(src_raw):
+        raise SystemExit("[fetch] 找不到基座版本的 raw\\ 目录，无法构建 v2.1：%s" % src_raw)
+    for name in sorted(os.listdir(src_raw)):
+        if not re.fullmatch(r"\d+\.json", name):
+            continue
+        info["total"] += 1
+        src = os.path.join(src_raw, name)
+        dst = os.path.join(dst_raw, name)
+        if os.path.exists(dst) and not force:
+            info["kept"] += 1
+            continue
+        with open(src, "rb") as fh:
+            blob = fh.read()
+        tmp = dst + ".tmp"
+        with open(tmp, "wb") as fh:
+            fh.write(blob)
+        os.replace(tmp, dst)
+        # 字节级校验：带过来的文档必须与基座版本逐字节一致（不放行任何改写）
+        with open(dst, "rb") as fh:
+            if fh.read() != blob:
+                raise SystemExit("[fetch] 带过来的文档与基座版本不一致：%s" % dst)
+        info["copied"] += 1
+    return info
+
+
+def event_first_companies(ctx: Context) -> list:
+    """config.COMPANIES 里带 event_groups 的新增公司（顺序即 config 的声明顺序＝排名顺序）。"""
+    return [c for c in ctx.companies if c.get("event_groups")]
+
+
+def _base_keys(ctx: Context):
+    """**基座版本**（carry-over 来源，v2.0）raw\\ 的（规范化标题集合, 链接集合）。
+
+    口径与 dedup.py 的两条判重键一致（url 用 content_url 优先、标题走 normalize_title）：
+    新增候选若与基座文档同题／同链接，就在**候选阶段**让位给基座文档，从而不会把 v2.0
+    的既有文档挤掉（v2.1 ⊇ v2.0），也不会让 dedup 淘汰掉某家新公司唯一的一篇。
+
+    为什么只取**基座版本**、而不是目标目录里的全部既有 raw：目标目录里已经写着上一轮
+    补样选入的文档，它们是**同一套选择规则的产物**；若把它们也算作"既有文档"，重跑时
+    自己的产出会把自己判成重复，选择结果与首轮不一致（首轮实测：44 家新增公司被判成
+    "无可入池公告"）。因此"既有"只指基座版本，补样自身的产出照常参与重选，编号由
+    `Context.assign_ids` 按 URL 复用，重跑不产生新编号。
+    """
+    version = str(config.EVENT_FIRST.get("carry_over_version") or "")
+    src_raw = os.path.join(config.dataset_dir_for_version(version), "raw")
+    titles, urls = set(), set()
+    sources = []
+    if version and os.path.isdir(src_raw):
+        sources = [os.path.join(src_raw, n) for n in os.listdir(src_raw)
+                   if re.fullmatch(r"\d+\.json", n)]
+    else:                                   # 基座目录不可用时退回目标目录（只作兜底）
+        sources = [os.path.join(ctx.raw_dir, n) for n in os.listdir(ctx.raw_dir)
+                   if re.fullmatch(r"\d+\.json", n)]
+    for path in sorted(sources):
+        try:
+            with open(path, "r", encoding="utf-8") as fh:
+                rec = json.load(fh)
+        except (OSError, ValueError):
+            continue
+        title = normalize_title(rec.get("title"))
+        if title:
+            titles.add(title)
+        for key in (rec.get("content_url"), rec.get("page_url")):
+            if key:
+                urls.add(str(key).strip())
+    return titles, urls
+
+
+def _news_prior_company_lists(ctx: Context) -> dict:
+    """URL → 上一轮抓取该新闻正文时留下的 company_list（读 raw\\_fetch_log.jsonl）。
+
+    2026-09-25 的 v2.1 首轮把窗内候选池逐条抓过（607 次正文抓取，按 URL 去重 578 篇），
+    但正文只在**选入**时落盘；未选入的文章正文没有留盘（Context.text_cache 是单次运行的
+    内存缓存）。能复用的持久证据是日志里每条新闻行的 `company_list=...`——它由同一套
+    config.COMPANIES 与 match_companies 在抓取当时算出，可用于按 URL 复用"是否达线"的判定：
+    已知不达线的候选不再发起 HTTP；已知达线的候选只需重取正文一次以写入 raw\\（正文本身
+    无法从日志复原，这一步如实登记在类别审计行）。
+    """
+    path = os.path.join(ctx.raw_dir, "_fetch_log.jsonl")
+    out: dict = {}
+    if not os.path.isfile(path):
+        return out
+    pat = re.compile(r"company_list=([0-9,]*)")
+    try:
+        with open(path, "r", encoding="utf-8") as fh:
+            for line in fh:
+                if '"财经新闻"' not in line:
+                    continue
+                try:
+                    rec = json.loads(line)
+                except ValueError:
+                    continue
+                note = rec.get("note") or ""
+                m = pat.search(note)
+                if not m:
+                    continue
+                url = str(rec.get("url") or "").strip()
+                codes = {c for c in m.group(1).split(",") if c}
+                if url and codes:
+                    out.setdefault(url, set()).update(codes)
+    except OSError:
+        return {}
+    return out
+
+
+def select_event_first_for_company(ctx: Context, company: dict, cands):
+    """新增公司的选篇：只从该公司命中事件组关键词的公告里选，level 2 等间距铺开。
+
+    返回 (picked, drawn, notes, dropped)：口径与 `select_announcements_for_company` 相同，
+    只是分层配额取 config.EVENT_FIRST["strata"]、篇数上限取 per_company_docs。
+    """
+    strata = dict(config.EVENT_FIRST.get("strata") or {})
+    cap = int(config.EVENT_FIRST.get("per_company_docs") or 0)
+    pool = list(cands)
+    dropped = []
+    while True:
+        picked, drawn, notes = pick_stratified(pool, strata, category="公告",
+                                               subject=company["code"])
+        if cap > 0:
+            picked = picked[:cap]
+        over = probe_overlong_candidates(ctx, "公告", picked)
+        if not over:
+            return picked, drawn, notes, dropped
+        dropped.extend(over)
+        over_ids = {id(c) for c in over}
+        pool = [c for c in pool if id(c) not in over_ids]
+
+
+def plan_event_first_announcements(ctx: Context):
+    """新增公司的公告选择：市场级检索命中 → 组正则 → 逐公司等间距铺开（≤6 篇）。"""
+    import event_first  # 延迟导入：event_first.py 顶层 import fetch，避免循环导入
+
+    companies = event_first_companies(ctx)
+    if not companies:
+        return [], materialize_announcement
+    groups = []
+    for comp in companies:
+        for group in comp.get("event_groups") or []:
+            if group not in groups:
+                groups.append(group)
+
+    print("[公告] v2.1 定向补样：市场级检索事件组 %s（%d 个关键词；column=%s、不给 stock）"
+          % ("、".join(groups),
+             sum(len(event_first.group_cfg(g).get("keywords") or []) for g in groups),
+             config.EVENT_FIRST["market_column"]))
+    scanned = event_first.scan_groups(ctx.http, groups=groups)
+    for group in groups:
+        data = scanned[group]
+        stats = data["keyword_stats"]
+        detail = "；".join(
+            "%s=totalRecordNum %s／收集 %s 条／命中公司 %s 家"
+            % (kw, (stats.get(kw) or {}).get("total_record_num"),
+               (stats.get(kw) or {}).get("collected"),
+               (stats.get(kw) or {}).get("distinct_companies"))
+            for kw in (event_first.group_cfg(group).get("keywords") or []))
+        ctx.log(doc_id=None, category="公告", source=config.SOURCES["公告"]["source"],
+                url=CNINFO_QUERY_URL, http_status=200, ok=True, chars=None, byte_size=None,
+                elapsed_ms=0,
+                note=("%s：事件组=%s（市场级检索，searchkey 逐词、seDate=%s~%s、"
+                      "column=%s、不给 stock；跨关键词按 announcementId 去重）"
+                      "｜合并命中 %d 条 → 标题过组正则且未被污染排除 %d 条"
+                      "（污染排除 %d 条）→ 命中公司 %d 家；逐词：%s"
+                      % (EVENT_FIRST_AUDIT_TAG, group, config.WINDOW_START, config.WINDOW_END,
+                         config.EVENT_FIRST["market_column"], data["collected_before_regex"],
+                         len(data["hits"]), data["dropped_by_pollution"],
+                         len(event_first.company_ranking(data["hits"])), detail)))
+    hits_by_group = {g: scanned[g]["hits"] for g in groups}
+    taken_titles, taken_urls = _base_keys(ctx)
+    known_titles = set(taken_titles)
+    selected, shortfall = [], []
+    for comp in companies:
+        code = str(comp["code"])
+        cands, seen_urls = [], set()
+        for group in comp.get("event_groups") or []:
+            for hit in hits_by_group.get(group) or []:
+                if hit.get("code") != code or not hit.get("content_url"):
+                    continue
+                content_url = (hit["content_url"] if str(hit["content_url"]).startswith("http")
+                               else CNINFO_STATIC_HOST + str(hit["content_url"]).lstrip("/"))
+                if content_url in seen_urls:
+                    continue
+                seen_urls.add(content_url)
+                cands.append(Cand(
+                    category="公告", source=config.SOURCES["公告"]["source"],
+                    page_url="%s?stockCode=%s&announcementId=%s&orgId=%s&announcementTime=%s" % (
+                        CNINFO_DETAIL_URL, code, hit.get("announcement_id"),
+                        hit.get("org_id"), hit.get("announcement_time_ms")),
+                    content_url=content_url,
+                    title_hint=hit.get("title") or "",
+                    publish_time=hit.get("publish_time"),
+                    company_list=[code],
+                    meta={"announcementId": hit.get("announcement_id"),
+                          "orgId": hit.get("org_id"),
+                          "secCode": code, "secName": hit.get("name"),
+                          "discovery": "market_search:%s" % group,
+                          "event_group": group,
+                          "market_search_keyword": hit.get("keyword")},
+                    kind="cninfo_pdf"))
+        # 既有过滤一：标题排除模式（定期报告等，config 唯一来源）
+        after_pattern, excluded_pattern = [], 0
+        for cand in cands:
+            if excluded_by_title_pattern(ctx, cand.title_hint, "公告"):
+                excluded_pattern += 1
+                continue
+            after_pattern.append(cand)
+        # 既有过滤二：与既有 raw（v2.0 带过来的文档＋本轮更早的选篇）的判重键预筛。
+        # 目的：标题／链接层面的冲突在**候选阶段**就让位给既有文档，既保住 v2.0 不被挤掉，
+        # 也避免 dedup 把某家公司唯一的一篇淘汰掉（某公司因此选不出时登记，不臆造）。
+        kept, dup_title, dup_url = [], 0, 0
+        for cand in after_pattern:
+            title_key = normalize_title(cand.title_hint)
+            if title_key and title_key in known_titles:
+                dup_title += 1
+                continue
+            if cand.content_url in taken_urls or cand.page_url in taken_urls:
+                dup_url += 1
+                continue
+            if title_key:
+                known_titles.add(title_key)
+            taken_urls.add(cand.content_url)
+            taken_urls.add(cand.page_url)
+            kept.append(cand)
+        picked, drawn, notes, dropped = select_event_first_for_company(ctx, comp, kept)
+        log_spread_notes(ctx, "公告", notes)
+        if not picked:
+            shortfall.append(code)
+            ctx.log(doc_id=None, category="公告", source=config.SOURCES["公告"]["source"],
+                    url=CNINFO_QUERY_URL, http_status=None, ok=False, chars=None,
+                    byte_size=None, elapsed_ms=0,
+                    note=("%s：%s %s 在该窗口内没有可入池的公告（候选 %d 条；标题排除模式剔除 %d；"
+                          "与既有文档标题重复 %d、链接重复 %d；正文长度上限过滤 %d）"
+                          % (EVENT_FIRST_AUDIT_TAG, code, comp.get("name"),
+                             len(cands), excluded_pattern, dup_title, dup_url, len(dropped))))
+            continue
+        ctx.log(doc_id=None, category="公告", source=config.SOURCES["公告"]["source"],
+                url=CNINFO_QUERY_URL, http_status=None, ok=True, chars=None, byte_size=None,
+                elapsed_ms=0,
+                note=("%s：新增公司 %s %s（事件组 %s）选入 %d 篇；候选 %d 条"
+                      "（标题排除模式剔除 %d、与既有文档标题重复 %d、链接重复 %d、"
+                      "正文超长丢弃 %d）；分时段 recent %d／earlier %d"
+                      % (EVENT_FIRST_AUDIT_TAG, code, comp.get("name"),
+                         "、".join(comp.get("event_groups") or []), len(picked), len(cands),
+                         excluded_pattern, dup_title, dup_url, len(dropped),
+                         drawn.get("recent", 0), drawn.get("earlier", 0))))
+        selected.extend(picked)
+    selected.sort(key=lambda c: (c.publish_time or "", c.page_url), reverse=True)
+    if shortfall:
+        print("[公告] v2.1 定向补样：以下新增公司本轮未选出公告（须登记，不得静默缩减）：%s"
+              % "、".join(shortfall))
+    return selected, materialize_announcement
+
+
+def run_event_first_announcements(ctx: Context) -> int:
+    """新增公司的公告：分配编号 → 下载 PDF（既有抽取路径）→ 落盘 raw\\。"""
+    started = time.monotonic()
+    selected, materialize = plan_event_first_announcements(ctx)
+    mapping = ctx.assign_ids("公告", selected)
+    written = 0
+    for cand in selected:
+        doc_id = mapping[cand.page_url]
+        existing = ctx.existing_doc(cand.page_url)
+        if existing is not None and existing.get("category") == "公告" and not ctx.force:
+            ctx.stats["公告"]["reused"] += 1
+            continue
+        doc = materialize(ctx, cand, doc_id)
+        if doc is None:
+            ctx.stats["公告"]["skipped"] += 1
+            continue
+        ctx.write_raw(doc)
+        ctx.stats["公告"]["new"] += 1
+        written += 1
+    ctx.stats["公告"]["elapsed"] += time.monotonic() - started
+    return written
+
+
+def plan_event_first_news(ctx: Context):
+    """公司间关系的补充证据：站内检索"同一篇提到 ≥2 家配置公司"的财经新闻。
+
+    计量口径（config.EVENT_FIRST["news_target_scope"]）：
+      all_companies（现行）＝ config.COMPANIES 全量（v2.1 为 105 家）——关系边建在数据集内
+      任意两家公司之间，"1 家新增 + 1 家既有"的供应链报道同样构成证据；
+      new_companies ＝ 只数与定向补样的新增公司求交（2026-09-25 修正前的窄口径，保留可比对）。
+    发现路径不变：仍按新增公司的名称／简称走既有站内检索。news_min_docs 是**下限**，
+    达线后符合口径的候选全部保留（不再按下限截断）。
+    """
+    companies = event_first_companies(ctx)
+    min_docs = int(config.EVENT_FIRST.get("news_min_docs") or 0)
+    min_targets = int(config.EVENT_FIRST.get("news_min_target_companies") or 2)
+    scope = str(config.EVENT_FIRST.get("news_target_scope") or "new_companies")
+    new_codes = {str(c["code"]) for c in companies}
+    all_codes = {str(c["code"]) for c in ctx.companies}
+    target_codes = all_codes if scope == "all_companies" else new_codes
+    scope_label = ("配置全量公司 %d 家" % len(all_codes) if scope == "all_companies"
+                   else "新增公司 %d 家" % len(new_codes))
+    search_pages = int(config.EVENT_FIRST.get("news_search_pages") or 1)
+    budget = int(config.EVENT_FIRST.get("news_fetch_budget") or 0)
+    seconds_budget = float(config.EVENT_FIRST.get("news_fetch_seconds_budget") or 0)
+    if not companies or min_docs <= 0:
+        return [], {}
+
+    def is_supplement(rec) -> bool:
+        """该 raw 文档是否由补样新闻路径选入（基座 v2.0 的 50 篇新闻没有这个标记）。"""
+        return bool((rec.get("meta") or {}).get("relation_discovery"))
+
+    done_before = news_supplement_done(ctx) and not ctx.force
+    if done_before:
+        # 已完成标记：上一轮已把候选池遍历完，本轮不再重复站内检索与抓正文，只复用已选入的
+        # 补样文章——结果与上一轮逐篇一致，编号由 assign_ids 按 URL 复用
+        # （README 第二节："--force：忽略已完成标记，强制重跑本环节"）。
+        have = [
+            rec for rec in ctx.existing.values()
+            if rec.get("category") == "财经新闻" and is_supplement(rec)
+            and len(set(str(x) for x in (rec.get("company_list") or [])) & target_codes)
+            >= min_targets
+        ]
+        have.sort(key=lambda d: (doc_pub(d) or "", doc_url(d)), reverse=True)
+        picked, spread_notes = (pick_balanced(have, len(have), category="财经新闻")
+                                if have else ([], []))
+        log_spread_notes(ctx, "财经新闻", spread_notes)
+        return picked, {"search_requests": 0, "candidates": 0, "dup_title": 0, "dup_url": 0,
+                        "fetched": 0, "skipped_one_company": 0, "skipped_by_cache": 0,
+                        "outside_window": 0, "scope": scope, "scope_label": scope_label,
+                        "accepted_fresh": 0, "reused": len(have), "picked": len(picked),
+                        "target": min_docs, "exhausted": True, "done_before": True,
+                        "stop_reason": "上一轮已遍历完候选池（本轮只复用，--force 可重抓）",
+                        "seconds_used": 0}
+
+    # 1) 既有站内检索路径：按新增公司的名称（含去 A/B 股后缀的简称）逐站检索
+    cands, seen = [], set()
+    search_requests = 0
+    for comp in companies:
+        for site in config.NEWS_SITES:
+            for name in company_aliases(comp):
+                for page in range(1, search_pages + 1):
+                    search_requests += 1
+                    for cand in news_search_candidates(ctx, site, name, page):
+                        if cand.page_url in seen:
+                            continue
+                        seen.add(cand.page_url)
+                        cands.append(cand)
+
+    # 2) 与**基座版本**（v2.0）的判重键预筛：同公告口径。上一轮补样自己选入的文章走
+    #    `have`（按 raw 里的 relation_discovery 标记认出来），不当作"既有"重复。
+    #    另外读上一轮日志里每条新闻的 company_list，作为"该 URL 是否达线"的复用判定。
+    taken_titles, taken_urls = _base_keys(ctx)
+    known_titles = set(taken_titles)
+    priors = _news_prior_company_lists(ctx)
+    have = []
+    for rec in ctx.existing.values():
+        if rec.get("category") != "财经新闻" or not is_supplement(rec):
+            continue
+        hits = sorted(set(str(x) for x in (rec.get("company_list") or [])) & target_codes)
+        if len(hits) >= min_targets:
+            have.append(rec)
+            url = doc_url(rec)
+            if url:
+                taken_urls.add(url)
+            title_key = normalize_title(rec.get("title"))
+            if title_key:
+                known_titles.add(title_key)
+    have.sort(key=lambda d: (doc_pub(d) or "", doc_url(d)), reverse=True)
+    fresh_candidates = []
+    dup_title, dup_url, outside_window = 0, 0, 0
+    for cand in cands:
+        title_key = normalize_title(cand.title_hint)
+        if title_key and title_key in known_titles:
+            dup_title += 1
+            continue
+        if cand.page_url in taken_urls or cand.content_url in taken_urls:
+            dup_url += 1
+            continue
+        if cand.publish_time and not in_window(cand.publish_time):
+            outside_window += 1
+            continue
+        if title_key:
+            known_titles.add(title_key)
+        taken_urls.add(cand.page_url)
+        fresh_candidates.append(cand)
+
+    # 3) 上一轮补样已选入的文章先复用（见上面 have：重跑不重复抓正文、结果一致）；其余候选
+    #    按上一轮日志里的 company_list 判定：已知不达线的 URL 不再发起 HTTP（正文不重复下载），
+    #    已知达线或没有日志证据的才抓正文（既有 materialize_news 路径：发布时间、company_list、
+    #    长度上限都在这里过滤），只保留"正文提到的配置公司 ≥ news_min_target_companies 家"的文章。
+    fresh_candidates.sort(key=lambda c: (0 if bucket_of(c.publish_time) else 1,
+                                         c.publish_time or "", c.page_url))
+    accepted, fetched, skipped_one, skipped_by_cache, fetched_urls = [], 0, 0, 0, set()
+    fetch_started = time.monotonic()
+    exhausted = True          # 候选池是否被遍历完（预算耗尽时为 False）
+    stop_reason = "候选池已遍历完"
+    if done_before:
+        exhausted, stop_reason = True, "上一轮已遍历完候选池（本轮只复用，--force 可重抓）"
+    for cand in ([] if done_before else fresh_candidates):
+        if budget and fetched >= budget:
+            exhausted, stop_reason = False, "正文抓取条数预算 %d 已用尽" % budget
+            break
+        if seconds_budget and (time.monotonic() - fetch_started) >= seconds_budget:
+            exhausted, stop_reason = False, ("正文抓取时间预算 %d 秒已用尽"
+                                             % int(seconds_budget))
+            break
+        if cand.page_url in fetched_urls:
+            continue
+        prior = priors.get(cand.page_url)
+        if prior is not None and len(prior & target_codes) < min_targets:
+            skipped_by_cache += 1
+            continue
+        fetched_urls.add(cand.page_url)
+        fetched += 1
+        doc = materialize_news(ctx, cand)
+        if doc is None:
+            continue
+        hits = sorted(set(doc.company_list or []) & target_codes)
+        if len(hits) >= min_targets:
+            doc.meta["relation_targets"] = hits
+            doc.meta["relation_discovery"] = "site_search:补样新增公司"
+            accepted.append(doc)
+        else:
+            skipped_one += 1
+    pool = list(have) + accepted
+    if not pool:
+        return [], {"search_requests": search_requests, "candidates": len(cands),
+                    "dup_title": dup_title, "dup_url": dup_url, "fetched": fetched,
+                    "skipped_one_company": skipped_one, "skipped_by_cache": skipped_by_cache,
+                    "outside_window": outside_window, "scope": scope, "scope_label": scope_label}
+    # 达线候选**全部保留**：news_min_docs 是下限，不是上限（口径修正的目的就是让关系证据
+    # 充分进入数据集；截断到 25 篇会把实测的 ~55 篇可用证据又丢掉一半）。
+    picked, spread_notes = pick_balanced(pool, len(pool), category="财经新闻")
+    log_spread_notes(ctx, "财经新闻", spread_notes)
+    info = {"search_requests": search_requests, "candidates": len(cands),
+            "dup_title": dup_title, "dup_url": dup_url, "fetched": fetched,
+            "skipped_one_company": skipped_one, "skipped_by_cache": skipped_by_cache,
+            "outside_window": outside_window, "scope": scope, "scope_label": scope_label,
+            "accepted_fresh": len(accepted), "reused": len(have),
+            "picked": len(picked), "target": min_docs, "exhausted": exhausted,
+            "stop_reason": stop_reason, "done_before": done_before,
+            "seconds_used": round(time.monotonic() - fetch_started, 1)}
+    if len(picked) < min_docs:
+        ctx.log(doc_id=None, category="财经新闻",
+                source=config.SOURCES["财经新闻"]["source"], url=config.NEWS_SITES[
+                    "人民网财经"]["entry"], http_status=None, ok=False, chars=None,
+                byte_size=None, elapsed_ms=0,
+                note=("%s：财经新闻补充证据低于下限 %d 篇（实际 %d 篇）——计量口径＝%s；"
+                      "站内检索候选 %d 条、抓取正文 %d 篇、其中提到 ≥%d 家的 %d 篇"
+                      "（另有上一轮已选入 %d 篇）；缺口如实登记，不臆造、不扩大来源清单"
+                      % (EVENT_FIRST_AUDIT_TAG, min_docs, len(picked), scope_label,
+                         len(cands), fetched, min_targets, len(accepted), len(have))))
+    return picked, info
+
+
+def run_event_first_news(ctx: Context) -> int:
+    """补样新闻：分配编号 → 落盘 raw\\（编号仍走公告／新闻各自的块内最小空闲序号）。"""
+    started = time.monotonic()
+    picked, info = plan_event_first_news(ctx)
+    done_note = ("；%s：%s" % (EVENT_FIRST_NEWS_DONE_MARK, info.get("stop_reason"))
+                 if info.get("exhausted") else "；候选池未遍历完（%s）" % info.get("stop_reason"))
+    ctx.log(doc_id=None, category="财经新闻",
+            source=config.SOURCES["财经新闻"]["source"],
+            url=config.NEWS_SITES["人民网财经"]["entry"], http_status=None, ok=True,
+            chars=None, byte_size=None, elapsed_ms=0,
+            note=("%s：财经新闻补充证据（同一篇提到 ≥%d 家%s的文章；下限 ≥%d 篇，"
+                  "达线候选全部保留）——"
+                  "站内检索请求 %d 次、候选 %d 条（标题重复 %d、链接重复 %d、窗外 %d）；"
+                  "按上一轮日志的 company_list 复用判定：已知不达线、未发 HTTP %d 条；"
+                  "抓取正文 %d 篇（用时 %ss），其中提到 ≥%d 家的 %d 篇；复用上一轮已选入 %d 篇；"
+                  "最终选入 %d 篇%s"
+                  % (EVENT_FIRST_AUDIT_TAG,
+                     config.EVENT_FIRST.get("news_min_target_companies"),
+                     info.get("scope_label") or "新增公司",
+                     config.EVENT_FIRST.get("news_min_docs"),
+                     info.get("search_requests", 0), info.get("candidates", 0),
+                     info.get("dup_title", 0), info.get("dup_url", 0),
+                     info.get("outside_window", 0), info.get("skipped_by_cache", 0),
+                     info.get("fetched", 0), info.get("seconds_used", 0),
+                     config.EVENT_FIRST.get("news_min_target_companies"),
+                     info.get("accepted_fresh", 0), info.get("reused", 0),
+                     info.get("picked", 0), done_note)))
+    if not picked:
+        ctx.stats["财经新闻"]["elapsed"] += time.monotonic() - started
+        ctx.flush_deferred({})
+        return 0
+    ordered = sorted(picked, key=lambda d: (doc_pub(d) or "", doc_url(d)), reverse=True)
+    id_cands = [Cand(category="财经新闻",
+                     source=(d.get("source") if isinstance(d, dict) else d.source),
+                     page_url=doc_url(d), publish_time=doc_pub(d))
+                for d in ordered]
+    mapping = ctx.assign_ids("财经新闻", id_cands)
+    written = 0
+    for doc in ordered:
+        if isinstance(doc, dict):
+            ctx.stats["财经新闻"]["reused"] += 1
+            continue
+        doc.doc_id = mapping[doc.page_url]
+        ctx.write_raw(doc)
+        ctx.stats["财经新闻"]["new"] += 1
+        written += 1
+    ctx.flush_deferred(mapping)
+    ctx.stats["财经新闻"]["elapsed"] += time.monotonic() - started
+    return written
+
+
+def run_event_first(ctx: Context):
+    """v2.1 的全部补样动作：新增公司的公告 + 公司间关系的财经新闻。"""
+    run_event_first_announcements(ctx)
+    run_event_first_news(ctx)
+
+
+# ==========================================================================
+# 11. meta\sources.csv（T1 来源清单）
 # ==========================================================================
 def source_rows() -> list:
     rows = [
@@ -2042,11 +2612,18 @@ def source_rows() -> list:
             "category": "公告",
             "home": config.SOURCES["公告"]["home"],
             "url_template": "POST /new/information/topSearch/query + POST /new/hisAnnouncement/query"
-                            " + GET https://static.cninfo.com.cn/{adjunctUrl}",
+                            " + GET https://static.cninfo.com.cn/{adjunctUrl}"
+                            " + POST /new/hisAnnouncement/query（市场级：searchkey 逐词、不给 stock）"
+                            " + GET /data20/companyOverview/getCompanyIntroduction?scode={code}",
             "access_note": config.SOURCES["公告"]["access_note"],
             "rate_limit_seconds": config.SOURCES["公告"]["rate_limit_seconds"],
             "notes": "已实测可用（2026-09-25）。PDF 下载必须带浏览器 UA 与 "
-                     "Referer: https://www.cninfo.com.cn/；正文用 PyMuPDF 抽取。",
+                     "Referer: https://www.cninfo.com.cn/；正文用 PyMuPDF 抽取。"
+                     "v2.1 的事件类型优先补样另用同一站点的市场级检索（同端点、只给 searchkey、"
+                     "seDate 固定为采集窗）与公司概况接口（取证监会行业分类与板块，原文照录）；"
+                     "市场级检索固定 column=%s（实测与 column=sse 返回同一页、同一总数，"
+                     "故不重复查询）"
+                     % config.EVENT_FIRST["market_column"],
         },
         {
             "name": config.SOURCES["监管公开信息"]["source"],
@@ -2104,7 +2681,7 @@ def write_sources_csv(ctx: Context) -> str:
 
 
 # ==========================================================================
-# 11. 主流程
+# 12. 主流程
 # ==========================================================================
 def summarize(ctx: Context):
     lines = []
@@ -2135,6 +2712,12 @@ def main(argv=None) -> int:
 
     settings = config.profile_settings(args.profile)
     out_dir = args.dir if args.dir else settings["dir"]
+    # v2.1 的"定向补样"模式：先把基座版本（v2.0）的 raw\ 原样带过来，再只补新增公司。
+    # 带过来这一步必须在构造 Context 之前完成，否则 Context 的既有产物索引看不到它们。
+    event_first_mode = event_first_enabled(args.profile)
+    carry_info = None
+    if event_first_mode:
+        carry_info = carry_over_seed(out_dir, args.force)
     ctx = Context(args.profile, out_dir, args.force)
     started = time.monotonic()
     print("=== fetch.py profile=%s force=%s ===" % (args.profile, args.force))
@@ -2144,10 +2727,34 @@ def main(argv=None) -> int:
              ctx.quota, ctx.ann_per_company))
     try:
         print("sources.csv → %s" % write_sources_csv(ctx))
-        run_simple_category(ctx, "公告", plan_announcements)
-        run_simple_category(ctx, "监管公开信息", plan_csrc)
-        run_simple_category(ctx, "政策文件", plan_gov)
-        run_news_category(ctx)
+        if event_first_mode:
+            params = config.EVENT_FIRST
+            print("采样模式：v2.1 定向补样（事件类型优先）——基座 %s 的 raw 文档 %d 个"
+                  "（本次带入 %d、已有 %d），新增公司 %d 家（事件组 %s）"
+                  % (carry_info["version"], carry_info["total"], carry_info["copied"],
+                     carry_info["kept"], len(event_first_companies(ctx)),
+                     "、".join("%s≥%d 家" % (g, (params["groups"][g] or {}).get(
+                         "min_new_companies", 0)) for g in params["groups"])))
+            ctx.log(doc_id=None, category="公告", source=config.SOURCES["公告"]["source"],
+                    url=config.SOURCES["公告"]["home"], http_status=None, ok=True,
+                    chars=None, byte_size=None, elapsed_ms=0,
+                    note=("%s：v2.1 = 基座 %s + 定向补样。本次把基座 raw\\ 的 %d 个文档**原样**"
+                          "带入（来源目录只读、逐字节校验；本次新带入 %d、已存在 %d），"
+                          "50 家既有公司保持各自的分时段抽取结果与既有 doc_id；"
+                          "本轮只补：新增公司的公告（每家 ≤%d 篇、只保留标题命中事件组关键词的"
+                          "那部分）与公司间关系的财经新闻（目标 ≥%d 篇）。"
+                          "财经新闻、政策文件、监管公开信息三类保持基座的选择结果不变"
+                          "（本轮未重采；其标题排除与正文长度上限过滤的留痕见基座目录的 "
+                          "raw\\_fetch_log.jsonl）。"
+                          % (EVENT_FIRST_AUDIT_TAG, carry_info["version"], carry_info["total"],
+                             carry_info["copied"], carry_info["kept"],
+                             params["per_company_docs"], params["news_min_docs"])))
+            run_event_first(ctx)
+        else:
+            run_simple_category(ctx, "公告", plan_announcements)
+            run_simple_category(ctx, "监管公开信息", plan_csrc)
+            run_simple_category(ctx, "政策文件", plan_gov)
+            run_news_category(ctx)
         log_exclusion_summary(ctx)      # 每个类别一行 ok=true 的排除审计（零排除也写）
         lines, _total = summarize(ctx)
         for line in lines:

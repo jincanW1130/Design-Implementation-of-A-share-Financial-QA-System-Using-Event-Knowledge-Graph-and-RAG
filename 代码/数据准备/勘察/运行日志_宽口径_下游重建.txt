@@ -1,0 +1,93 @@
+﻿==============================================================================
+[run_all] 第 5 阶段数据管线  profile=v1
+[run_all] 数据集根目录：C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1
+[run_all] 环节：dedup -> clean -> chunk -> embed -> check
+==============================================================================
+
+------------------------------------------------------------------------------
+[run_all] >>> dedup（T4a 文本级去重）
+[run_all]     C:\Users\15129\AppData\Local\Programs\Python\Python312\python.exe C:\Users\15129\Desktop\毕业设计\代码\数据准备\dedup.py --profile v1 --force
+------------------------------------------------------------------------------
+[dedup] profile=v1 dir=C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1 输入=747 条，冲突组=25（url:0，title:25，content_sha256_16:0），淘汰=38，保留=709，耗时=0.44s
+[run_all] <<< dedup 完成，退出码 0，耗时 0.48s
+
+------------------------------------------------------------------------------
+[run_all] >>> clean（T4b 清洗与结构化）
+[run_all]     C:\Users\15129\AppData\Local\Programs\Python\Python312\python.exe C:\Users\15129\Desktop\毕业设计\代码\数据准备\clean.py --profile v1 --force
+------------------------------------------------------------------------------
+[clean] profile=v1 dir=C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1 输入=747 条，输出=709 条，跳过=38 条（dedup_dropped:38），删字符=31442，ingest_time=2026-09-25T21:19:14+08:00，耗时=0.46s
+[run_all] <<< clean 完成，退出码 0，耗时 0.51s
+
+------------------------------------------------------------------------------
+[run_all] >>> chunk（T5 切分）
+[run_all]     C:\Users\15129\AppData\Local\Programs\Python\Python312\python.exe C:\Users\15129\Desktop\毕业设计\代码\数据准备\chunk.py --profile v1 --force
+------------------------------------------------------------------------------
+[chunk] profile=v1 dir=C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1 文档=709，文本块=5018，单块文档=68，chars=83/357.7/512，token=64/317.48/500，tokenizer=transformers.AutoTokenizer(add_special_tokens=False)，耗时=6.42s
+[chunk] 警告：chunk_count 超过 max_chunks_per_doc_warn=120 的文档 3 篇；最严重 doc_id=1377《中国中铁2025年年度股东会会议资料》151 块，占全部 5018 个文本块的 3.0%——只报告，绝不截断、绝不丢弃（《10》第4.4.6节 证据按原文展示）
+[run_all] <<< chunk 完成，退出码 0，耗时 7.15s
+
+------------------------------------------------------------------------------
+[run_all] >>> embed（T6 向量化与三级映射）
+[run_all]     C:\Users\15129\AppData\Local\Programs\Python\Python312\python.exe C:\Users\15129\Desktop\毕业设计\代码\数据准备\embed.py --profile v1 --force
+------------------------------------------------------------------------------
+[embed] profile=v1  root=C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1
+[embed] 载入 Embedding 模型 BAAI/bge-small-zh-v1.5（device=cpu，离线）...
+python : 
+At line:2 char:32
++ ... NG="utf-8"; python -u "代码\数据准备\run_all.py" --profile v1 --only dedup  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Loading weights:   0%|          | 0/71 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 71/71 [00:00<00:00, 8759.47it/s]
+[embed] 模型就绪  维度=512  载入耗时=7.25s
+[embed] 编码 5018 个文本块（batch_size=32，normalize=True）...
+[embed] 向量索引 IndexFlatIP 已建立  条数=5018  维度=512  度量=inner_product
+[embed] 模型版本核对：缓存 refs/main=7999e1d3359715c523056ef9478215996d62a620  config.EMBEDDING['revision']=7999e1d3359715c523056ef9478215996d62a620  一致=True
+[embed] 完成  文本块=5018  向量=5018  文档=709  耗时=98.64s（模型载入 7.25s + 编码 91.11s）
+[embed] 写出：C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1\index\faiss.index / C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1\index\vector_map.jsonl / C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1\index\build_meta.json
+[run_all] <<< embed 完成，退出码 0，耗时 99.56s
+
+------------------------------------------------------------------------------
+[run_all] >>> check（T8 一致性检查）
+[run_all]     C:\Users\15129\AppData\Local\Programs\Python\Python312\python.exe C:\Users\15129\Desktop\毕业设计\代码\数据准备\check.py --profile v1 --force
+------------------------------------------------------------------------------
+[check] profile=v1  root=C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1
+[check] 文档=709  文本块=5018  向量索引条数=5018  映射=5018
+[check] 分类计数：{'公告': 556, '财经新闻': 103, '政策文件': 30, '监管公开信息': 20}
+[check] 时间覆盖：桶 recent=275 篇 / 桶 earlier=434 篇（下限 5）
+[check] 时间覆盖明细：cutoff − publish_time_min=100 天（门槛 90）；ANALYSIS_90_RANGE 2026-06-27~2026-09-25=629 篇；earlier 两半=219/215 篇；逐月=2026-06:104、2026-07:157、2026-08:254、2026-09:194
+[check] 公司覆盖：105/105 家，缺失 无，多出 无
+[check]  1. vector_count_equals_chunk_count        通过
+[check]  2. chunk_doc_id_exists_in_documents       通过
+[check]  3. document_chunk_index_contiguous        通过
+[check]  4. chunk_id_formula                       通过
+[check]  5. mapping_bidirectional                  通过
+[check]  6. publish_time_within_window             通过
+[check]  7. dedup_keys_unique                      通过
+[check]  8. company_list_presence                  通过
+[check]  9. category_values                        通过
+[check] 10. required_fields_present                通过
+[check] 11. doc_id_block_matches                   通过
+[check] 12. chunk_content_and_token_count          通过
+[check] 13. time_coverage                          通过
+[check] 14. company_set_equals_configured          通过
+[check] 报告已写入：C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1\reports
+[check] 元信息已写入：C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1\meta\dataset.json（公司 105 家／文档 709 篇／文本块 5018 个；dataset_version=v2.1）
+[check] 全部通过  14/14  耗时=0.54s
+[run_all] <<< check 完成，退出码 0，耗时 0.64s
+
+==============================================================================
+[run_all] 各环节汇总（profile=v1）
+==============================================================================
+环节       脚本           说明                            退出码      耗时(秒)  状态
+------------------------------------------------------------------------------
+dedup    dedup.py     T4a 文本级去重                       0       0.48  成功
+clean    clean.py     T4b 清洗与结构化                      0       0.51  成功
+chunk    chunk.py     T5 切分                           0       7.15  成功
+embed    embed.py     T6 向量化与三级映射                     0      99.56  成功
+check    check.py     T8 一致性检查                        0       0.64  成功
+------------------------------------------------------------------------------
+[run_all] 全部 5 个环节成功，管线总耗时 108.34s
+[run_all] 回收：数据集目录 C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\v2.1

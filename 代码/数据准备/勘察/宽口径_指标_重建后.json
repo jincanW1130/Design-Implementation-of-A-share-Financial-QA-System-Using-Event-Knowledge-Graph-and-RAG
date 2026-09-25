@@ -1,0 +1,25 @@
+{
+  "root": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段05-数据准备\\数据集\\v2.1",
+  "doc_count": 709,
+  "chunk_count": 5018,
+  "company_count": 105,
+  "category_counts": {
+    "公告": 556,
+    "财经新闻": 103,
+    "政策文件": 30,
+    "监管公开信息": 20
+  },
+  "per_month": {
+    "2026-06": 104,
+    "2026-07": 157,
+    "2026-08": 254,
+    "2026-09": 194
+  },
+  "buckets": {
+    "recent": 275,
+    "earlier": 434,
+    "outside": 0
+  },
+  "company_list_ge2": 66,
+  "subject_companies_ge2": 9
+}
