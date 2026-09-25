@@ -20,6 +20,8 @@
 
 目录**按需创建**：到哪个阶段才建哪个目录，不预先铺空壳。
 
+**当前进度**：`数据准备\` 已落地（2026-09-25）——`config.py` 是全部冻结参数的唯一来源，另按《12》§4.3 的"每个环节一个可单独执行的脚本加一个入口脚本"拆成 `fetch.py`／`dedup.py`／`clean.py`／`chunk.py`／`embed.py`／`check.py`／`run_all.py`。**接口约定（模块契约、JSONL 字段、命令行参数、已实测的取数端点）冻结在 [数据准备/README.md](数据准备/README.md)，改动前先读它。** 其余六个目录待第 6 阶段起按需创建。
+
 ## 三、编写纪律
 
 1. **技术栈不得越界**：Vue 3 ＋ FastAPI ＋ MySQL ＋ Neo4j ＋ FAISS ＋ 大模型 API ＋ Docker。《02》§8.4 明确不引入的技术（LangChain、LlamaIndex、独立向量数据库、Elasticsearch、Kafka、微服务、K8s、Agent 自主编排、多模态与语音、实时行情）一律不得出现在依赖里。

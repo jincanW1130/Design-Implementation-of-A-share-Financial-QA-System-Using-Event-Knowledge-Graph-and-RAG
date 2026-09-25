@@ -245,9 +245,9 @@ print('  （? 行需人工确认语境；出现"不引入/不研究"等否定语
 
 # ---- K 路径存在性 -------------------------------------------------------
 print(); print('=' * 78); print('K 文档内提到的文件路径是否存在'); print('=' * 78)
-WHITE = re.compile(r'(输入|输出|模板)\.|^\{|^\d+_\d+_|^[A-Z]+-\d+_[A-Za-z]+\d+_|\.\.\.$|^X\.md$|_译文\.docx$|方向X_|^[^\\/]*\{[^}]*\}')
+WHITE = re.compile(r'(输入|输出|模板)\.|^\{|^\d+_\d+_|^[A-Z]+-\d+_[A-Za-z]+\d+_|\.\.\.$|…|^X\.md$|_译文\.docx$|方向X_|^[^\\/]*\{[^}]*\}')
 # 已在文档中声明、但尚未创建的产出（计划产出）。新增计划产出时在此登记，创建后请立即删除对应条目。
-PLANNED = {'13-数据准备（第五阶段）.md', '验收第5阶段数据.py'}
+PLANNED = set()   # 第 5 阶段的 13- 与 验收第5阶段数据.py 均已产出，无待产出项
 # 归档目录（含其下一层子目录）
 ARCH = glob.glob(os.path.join(LITDIR, '_归档_*'))
 ARCH += [d for d in glob.glob(os.path.join(LITDIR, '_归档_*', '*')) if os.path.isdir(d)]
@@ -255,6 +255,11 @@ ARCH += [d for d in glob.glob(os.path.join(LITDIR, '_归档_*', '*')) if os.path
 SEARCH = [ROOT, LITDIR, os.path.join(LITDIR, '文献PDF'), os.path.join(LITDIR, '文献翻译'),
           os.path.join(ROOT, '工具'), os.path.join(ROOT, '图表'), os.path.join(ROOT, '代码'), SECDIR] + STAGES
 SEARCH += [d for d in glob.glob(os.path.join(ROOT, '代码', '*')) if os.path.isdir(d)]
+# 数据集（第 5 阶段起存在）：文档里按**数据集内的相对路径**写（`meta\sources.csv`、
+# `reports\consistency_report.md` 等），所以把每个版本目录也列入查找位置；
+# `_试跑\` 同理（《12》§九 要求的小规模验证目录）。
+SEARCH += [d for d in glob.glob(os.path.join(ROOT, '阶段05-数据准备', '数据集', '*')) if os.path.isdir(d)]
+SEARCH += [os.path.join(ROOT, '阶段05-数据准备', '_试跑')]
 # 旧路径别名：2026-09-25 目录重组前的写法。记录类文档（《05》《06》《08》）会逐字保留当时的路径，
 # 那是留痕不是缺陷，因此旧前缀在这里映射到新位置再判定存在性，而不是去改写历史记录。
 LEGACY = {'文献调研': LITDIR, '10-系统总体设计（第四阶段）': SECDIR}
