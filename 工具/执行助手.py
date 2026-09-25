@@ -42,6 +42,7 @@ import time
 __all__ = [
     "setup", "run", "read_text", "write_text", "read_jsonl", "write_jsonl",
     "git", "git_commit", "git_push", "scan", "sha16", "ControlFailed",
+    "patch", "tmp", "log_run",
 ]
 
 ROOT_DEFAULT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
@@ -256,6 +257,65 @@ scan.control_hits = 0
 
 
 # --------------------------------------------------------------------------
+# 原子补丁 / 临时文件 / 带日志的执行
+# --------------------------------------------------------------------------
+def patch(path, pairs, expect=1):
+    """读—改—写：对一份文本做 N 处字面替换，**每一处都必须命中 ``expect`` 次**，
+    否则整体放弃、一个字节都不落盘。
+
+    为什么要它——`edit` 工具逐处改有两个坑：
+      1. 前面几处已经写进去、后面某处锚点命中 0 次或 2 次才失败，文件**停在半改状态**；
+      2. 该工具要求"改之前必须在本会话读过这个文件"，而文件**刚被脚本重写过**
+         （拼装脚本重写《10》、补丁脚本重写《02》）时那条读记录会失效，
+         再改就报 ``file has not been read — read the file, then retry``。
+    本函数把 N 处替换合成**一次原子落盘**，并对每个锚点做"命中次数"断言。
+
+    用法：先 ``read_text`` 拿到精确锚点，再 ``patch(p, [(旧, 新), …])``。
+    返回 ``(替换处数, 改前 sha256 前 16 位, 改后 sha256 前 16 位)``。
+    """
+    src = read_text(path)
+    before = sha16(src)
+    for old, new in pairs:
+        c = src.count(old)
+        if c != expect:
+            raise ValueError(
+                "锚点在 %s 里命中 %d 次（要求 %d 次）——本次补丁整体放弃，文件未改动：\n  %r"
+                % (path, c, expect, old[:100]))
+        src = src.replace(old, new, expect)
+    write_text(path, src)
+    return len(pairs) * expect, before, sha16(src)
+
+
+def tmp(prefix="exec_", suffix=".txt", dirpath=None):
+    """生成一个**唯一**的临时文件路径（文件已建好、为空）并返回。
+
+    起因：把提交信息写到固定路径（如 ``%TEMP%\\dsh_commit_msg.txt``）时，第二次运行
+    该文件已存在，"覆盖已存在文件必须先读"的守卫就会拦住写入，报
+    ``file has not been read — read the file, then retry``。改用唯一名后每次都是新建。
+    """
+    fd, p = tempfile.mkstemp(prefix=prefix, suffix=suffix, dir=dirpath)
+    os.close(fd)
+    return p
+
+
+def log_run(cmd, log_path, cwd=None, timeout=3600, tail=40):
+    """跑命令，把**完整输出**写进 ``log_path``，返回 ``(退出码, 尾部文本)``。
+
+    起因：后台任务的输出只存在于会话的 job 注册表里，注册表一旦回收，再查就只剩
+    ``Error: unknown job <id>``，那次运行的证据**永久丢失**。把输出落到文件后，
+    job 记不记得住都不影响回溯——**不要依赖 job 注册表保存证据**。
+    """
+    code, out = run(cmd, cwd=cwd, tail=0, timeout=timeout)
+    write_text(log_path, out if out.endswith("\n") else out + "\n")
+    lines = out.splitlines()
+    if tail and len(lines) > tail:
+        body = "\n".join(lines[-tail:]) + "\n…（共 %d 行；完整输出：%s）" % (len(lines), log_path)
+    else:
+        body = out
+    return code, body
+
+
+# --------------------------------------------------------------------------
 # 自检
 # --------------------------------------------------------------------------
 def selftest():
@@ -266,8 +326,8 @@ def selftest():
     ok = True
 
     # 1 UTF-8 往返
-    tmp = tempfile.mkdtemp(prefix="exec_helper_")
-    p = os.path.join(tmp, "中文目录", "示例.jsonl")
+    work = tempfile.mkdtemp(prefix="exec_helper_")
+    p = os.path.join(work, "中文目录", "示例.jsonl")
     rows = [{"doc_id": 1001, "标题": "平安银行关于…的公告"}, {"doc_id": 1002, "标题": "含全角标点，与｜竖线"}]
     write_jsonl(p, rows)
     back = read_jsonl(p)
@@ -284,8 +344,8 @@ def selftest():
     print("  2) run() 输出收口：%s（%d 行，末尾 5 行 + 落盘提示）" % ("通过" if capped else "失败", len(lines)))
 
     # 3 正对照
-    write_text(os.path.join(tmp, "语料.md"), "向量索引与向量检索组件\nFORSETCONTROL 标记\n")
-    hits = scan("向量索引", [tmp], control="FORSETCONTROL")
+    write_text(os.path.join(work, "语料.md"), "向量索引与向量检索组件\nFORSETCONTROL 标记\n")
+    hits = scan("向量索引", [work], control="FORSETCONTROL")
     c_ok = len(hits) == 1 and scan.control_hits == 1
     ok &= c_ok
     print("  3) scan() 正对照命中：%s（命中 %d 处，对照 %d 次）"
@@ -294,7 +354,7 @@ def selftest():
     # 4 正对照失效时必须抛异常（模拟"扫描器坏了"）
     raised = False
     try:
-        scan("向量索引", [tmp], control="这个串一定不存在_zzz")
+        scan("向量索引", [work], control="这个串一定不存在_zzz")
     except ControlFailed:
         raised = True
     ok &= raised
@@ -304,6 +364,38 @@ def selftest():
     s = sha16("abc") == sha16("abc".encode("utf-8")) and len(sha16("abc")) == 16
     ok &= s
     print("  5) sha16() 稳定且 16 位：%s" % ("通过" if s else "失败"))
+
+    # 6 patch()：正常替换 + 锚点不匹配时原子放弃
+    p6 = os.path.join(work, "补丁.txt")
+    write_text(p6, "甲\n乙\n丙\n")
+    n6, b6, a6 = patch(p6, [("乙", "乙改"), ("丙", "丙改")])
+    done6 = (n6 == 2 and read_text(p6) == "甲\n乙改\n丙改\n" and b6 != a6)
+    raised6 = False
+    try:
+        patch(p6, [("甲", "甲改"), ("绝不存在的锚点_zzz", "x")])
+    except ValueError:
+        raised6 = True
+    untouched = read_text(p6) == "甲\n乙改\n丙改\n"
+    ok6 = done6 and raised6 and untouched
+    ok &= ok6
+    print("  6) patch() 替换 %d 处；锚点失败时原子放弃且文件未变：%s"
+          % (n6, "通过" if ok6 else "失败"))
+
+    # 7 tmp() 唯一
+    t7 = [tmp("exec_selftest_"), tmp("exec_selftest_")]
+    ok7 = t7[0] != t7[1] and all(os.path.exists(x) for x in t7)
+    ok &= ok7
+    print("  7) tmp() 返回唯一且已建好的空文件：%s" % ("通过" if ok7 else "失败"))
+
+    # 8 log_run() 完整落盘（"不依赖 job 注册表"的兜底）
+    lg = os.path.join(work, "运行日志.txt")
+    code8, _ = log_run([sys.executable, "-c",
+                        "import sys\nfor i in range(50): print('L%d' % i)"], lg, tail=3)
+    body8 = read_text(lg)
+    ok8 = code8 == 0 and "L49" in body8 and len(body8.splitlines()) >= 50
+    ok &= ok8
+    print("  8) log_run() 完整输出落盘：%s（日志 %d 行）"
+          % ("通过" if ok8 else "失败", len(body8.splitlines())))
 
     print()
     print("结论：%s" % ("全部通过" if ok else "存在失败项"))
