@@ -401,7 +401,16 @@ if n2:
                 if not CITE_DECL.search(L): continue
                 for ver in dict.fromkeys(CITE_REF.findall(L)):
                     cites.append((name, i, ver, L))
-        stale = [c for c in cites if c[2] != cur_ver and not any(m in c[3] for m in CITE_MARKS)]
+        # 判定口径（2026-09-25 校准过一次）：被引版本非当前版本时，**只有同一行既没提到当前
+        # 版本、也没带版本链标记**才算过期。
+        # 加"提到当前版本"这一条，是因为实际修法常常写成
+        # 「（编制时为 v2.5，第 5 阶段完成后已登记为 v2.6）」——那种写法已经把版本链讲清楚了，
+        # 却因为不含 版本链／未改变 这些字样被上一版误报。**守卫的假阳性与假阴性一样要修，
+        # 但修的是守卫，不是文档。**
+        stale = [c for c in cites
+                 if c[2] != cur_ver
+                 and cur_ver not in c[3]
+                 and not any(m in c[3] for m in CITE_MARKS)]
         for name, i, ver, _L in stale:
             print('    !! %s L%d  依据《02》%s（当前 %s）' % (name, i, ver, cur_ver))
         print('    扫描到依据声明 %d 处（已排除《02》自身与 05／06／08／11 记录类文件）；其中过期 %d 处'
