@@ -273,7 +273,8 @@ PLANNED = {
     '16-事件抽取与知识图谱（第六阶段）.md',
     'nodes.csv', 'edges.csv',                       # 图谱导出物（通用名，建出后立即删）
     'extract.py', 'disambiguate.py', 'dedup_events.py', 'write_graph.py',
-    '验收第6阶段.py', '标注说明.md',
+    '标注说明.md',
+    # '验收第6阶段.py' 已于 2026-09-25 落盘，按编写约定 5 从 PLANNED 移除
     '代码\\抽取与图谱\\README.md',                # 带路径：只匹配这个路径
     '代码\\抽取与图谱\\config.py',
     '代码\\抽取与图谱\\run_all.py',
