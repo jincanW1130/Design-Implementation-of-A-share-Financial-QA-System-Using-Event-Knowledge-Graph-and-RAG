@@ -21,6 +21,7 @@ r"""extract.py —— 第 6 阶段「实体与事件抽取」的可执行脚本�
     python 代码\抽取与图谱\extract.py --force           # 忽略已有缓存，重新调用并重写缓存
     python 代码\抽取与图谱\extract.py --verify          # 独立核对既有产物（不调用模型）
     python 代码\抽取与图谱\extract.py --profile v21     # 全量 709 篇（T3 的口径，T1 不执行）
+                                                       # 全量产物落 `_全量\v2.1\`，与 T1 的 `_试跑\` 物理隔离
 
 退出码 0 表示成功；密钥未就位、选样断言不成立、缓存与当前输入不一致（且未 `--force`）
 等情形一律非零退出（《15》第十一节 的阻断项不得静默降级）。
@@ -45,6 +46,19 @@ if _HERE not in sys.path:
     sys.path.insert(0, _HERE)
 
 import config  # noqa: E402
+
+# --------------------------------------------------------------------------
+# 产物落点（T3 全量运行与 T1 试跑记录物理隔离）
+# --------------------------------------------------------------------------
+# `--profile pilot`（T1）用 config.OUTPUT_FILES（`_试跑\`），`--profile v21`（T3 全量）
+# 用 config.FULL_OUTPUT_FILES（`_全量\<dataset_version>\`）；取值全部来自 config.py
+# 第 8 节，脚本内不写死路径。这样《15》第4.2节 要求的「小规模先行」留痕不会被全量运行覆盖。
+OUT = dict(config.OUTPUT_FILES)
+
+
+def output_files_for(profile: str) -> dict:
+    """按 profile 取产物落点：pilot → `_试跑`；v21 → `_全量/<dataset_version>`。"""
+    return dict(config.FULL_OUTPUT_FILES if profile == "v21" else config.OUTPUT_FILES)
 
 # --------------------------------------------------------------------------
 # 提示词（与 `LLM.prompt_version` 绑定：改这里的任何一个字，必须同步升版本号）
@@ -1073,8 +1087,7 @@ def build_selection_payload(selection, problems):
 def write_manifest(selection):
     """把确定性产物写成 `sha256  <路径>` 的清单（缓存 + 解析输出 + 选样 + 覆盖性）。"""
     paths = [os.path.join(config.CACHE_DIR, "%s.json" % d["doc_id"]) for d, _ in selection]
-    paths += [config.OUTPUT_FILES["selection"], config.OUTPUT_FILES["coverage"],
-              config.OUTPUT_FILES["extracted"], config.OUTPUT_FILES["rejected"]]
+    paths += [OUT["selection"], OUT["coverage"], OUT["extracted"], OUT["rejected"]]
     entries = []
     for path in sorted(paths):
         if not os.path.isfile(path):
@@ -1082,14 +1095,14 @@ def write_manifest(selection):
         rel = os.path.relpath(path, config.ROOT).replace("\\", "/")
         entries.append("%s  %s" % (sha256_file(path), rel))
     text = "\n".join(entries) + "\n"
-    with open(config.OUTPUT_FILES["manifest"], "w", encoding="utf-8", newline="\n") as fh:
+    with open(OUT["manifest"], "w", encoding="utf-8", newline="\n") as fh:
         fh.write(text)
     return {"manifest_sha256": config.sha256_hex(text), "file_count": len(entries),
             "text": text}
 
 
 def append_run_history(stats):
-    path = config.OUTPUT_FILES["run_history"]
+    path = OUT["run_history"]
     index = len(read_jsonl(path)) if os.path.isfile(path) else 0
     line = dict(stats)
     line["run_index"] = index + 1
@@ -1099,14 +1112,14 @@ def append_run_history(stats):
 
 
 def run_extraction(args, docs, chunks, by_doc, selection, stats):
-    os.makedirs(config.PILOT_DIR, exist_ok=True)
+    os.makedirs(os.path.dirname(os.path.abspath(OUT["selection"])), exist_ok=True)
     os.makedirs(config.CACHE_DIR, exist_ok=True)
     problems = check_selection(selection) if (args.profile == "pilot"
                                               and not args.docs) else []
     selection_payload = build_selection_payload(selection, problems)
-    dump_json(config.OUTPUT_FILES["selection"], selection_payload)
+    dump_json(OUT["selection"], selection_payload)
     coverage = compute_coverage(docs, chunks)
-    dump_json(config.OUTPUT_FILES["coverage"], coverage)
+    dump_json(OUT["coverage"], coverage)
 
     records, rejects_all, failures = [], [], []
     for index, (doc, _) in enumerate(selection, 1):
@@ -1155,9 +1168,9 @@ def run_extraction(args, docs, chunks, by_doc, selection, stats):
 
     records.sort(key=lambda r: r["doc_id"])
     rejects_all.sort(key=lambda r: (r["doc_id"], r["kind"], r.get("item_index") or 0, r["reason"]))
-    dump_jsonl(config.OUTPUT_FILES["extracted"], records)
-    dump_jsonl(config.OUTPUT_FILES["rejected"], rejects_all)
-    dump_json(config.OUTPUT_FILES["verify"],
+    dump_jsonl(OUT["extracted"], records)
+    dump_jsonl(OUT["rejected"], rejects_all)
+    dump_json(OUT["verify"],
               build_verify_payload(docs, chunks, records, rejects_all, selection))
     manifest = write_manifest(selection)
     stats["manifest_sha256"] = manifest["manifest_sha256"]
@@ -1386,7 +1399,7 @@ def _tally(ok, why, item, kind, evidence_ok, evidence_bad):
 
 def reproducibility_check():
     """读 run_history.jsonl：产物清单哈希在两次运行间一致即成可重放证据。"""
-    path = config.OUTPUT_FILES["run_history"]
+    path = OUT["run_history"]
     if not os.path.isfile(path):
         return {"runs": 0}
     runs = read_jsonl(path)
@@ -1453,6 +1466,8 @@ def main(argv=None) -> int:
                         help="只算选样与覆盖性重算，不调模型")
     parser.add_argument("--verify", action="store_true", help="只核对既有产物，不调模型")
     args = parser.parse_args(argv)
+    global OUT
+    OUT = output_files_for(args.profile)
 
     docs, chunks, by_doc = load_docs_and_chunks()
     print("输入：%s（%d 篇文档／%d 个文本块）" % (config.DOCS_PATH, len(docs), len(chunks)))
@@ -1461,11 +1476,11 @@ def main(argv=None) -> int:
         selection = pick_docs(args, docs)
         problems = check_selection(selection) if args.profile == "pilot" else []
         if args.select_only:
-            os.makedirs(config.PILOT_DIR, exist_ok=True)
+            os.makedirs(os.path.dirname(os.path.abspath(OUT["selection"])), exist_ok=True)
             payload = build_selection_payload(selection, problems)
-            dump_json(config.OUTPUT_FILES["selection"], payload)
+            dump_json(OUT["selection"], payload)
             coverage = compute_coverage(docs, chunks)
-            dump_json(config.OUTPUT_FILES["coverage"], coverage)
+            dump_json(OUT["coverage"], coverage)
             print("选样 %d 篇；类目=%s" % (len(selection), payload["category_counts"]))
             print("覆盖性重算与《15》声明值一致：%s" % coverage["matches_declared"])
             for diff in coverage["differs_from_declared"]:
@@ -1473,12 +1488,10 @@ def main(argv=None) -> int:
             for problem in problems:
                 print("  [选样断言未通过] %s" % problem)
             return 0 if not problems else 1
-        records = read_jsonl(config.OUTPUT_FILES["extracted"]) \
-            if os.path.isfile(config.OUTPUT_FILES["extracted"]) else []
-        rejects = read_jsonl(config.OUTPUT_FILES["rejected"]) \
-            if os.path.isfile(config.OUTPUT_FILES["rejected"]) else []
+        records = read_jsonl(OUT["extracted"]) if os.path.isfile(OUT["extracted"]) else []
+        rejects = read_jsonl(OUT["rejected"]) if os.path.isfile(OUT["rejected"]) else []
         payload = build_verify_payload(docs, chunks, records, rejects, selection)
-        dump_json(config.OUTPUT_FILES["verify"], payload)
+        dump_json(OUT["verify"], payload)
         print_verify_summary(payload)
         return 0
 
@@ -1515,7 +1528,7 @@ def main(argv=None) -> int:
           % (stats["wall_clock_seconds"], manifest["file_count"],
              manifest["manifest_sha256"][:16]))
     print("覆盖性重算与《15》声明值一致：%s" % coverage["matches_declared"])
-    print("证据与本体核对见 %s" % config.OUTPUT_FILES["verify"])
+    print("证据与本体核对见 %s" % OUT["verify"])
     return 0 if not failures else 2
 
 

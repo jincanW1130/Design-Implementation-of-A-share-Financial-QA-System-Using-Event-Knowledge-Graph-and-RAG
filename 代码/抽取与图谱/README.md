@@ -13,13 +13,13 @@
 | --- | --- | --- | --- |
 | `config.py` | — | — | 全部冻结参数：模型与版本、Prompt 版本、temperature、路径、节奏与重试、本体枚举、试跑选样规则、覆盖性重算的对照值 |
 | `extract.py` | T1／T3 | v2.1 的 `clean\documents.jsonl` 与 `chunks\chunks.jsonl` | `阶段05-数据准备\数据集\_抽取缓存\v2.1\{doc_id}.json`；试跑产物落 `_试跑\` |
-| `disambiguate.py` | T4（未落地） | 上述缓存 | 消歧映射与待消歧清单 |
-| `dedup_events.py` | T5（未落地） | 上述缓存 | 合并日志与合并后的事件集合 |
-| `write_graph.py` | T6（未落地） | 缓存（只读） | 图谱导出物四件套 |
-| `run_all.py` | T7（未落地） | — | 按 extract → disambiguate → dedup_events → write_graph 串联 |
+| `disambiguate.py` | T4（已落地） | 上述缓存 | `消歧\alias_table.json`、`消歧\disambiguation.json`、`消歧\unresolved.jsonl` |
+| `dedup_events.py` | T5（已落地） | 上述缓存 ＋ T4 的消歧产物 | `去重\merge_log.jsonl`、`去重\events_merged.jsonl`、`去重\merge_summary.json`、`去重\dedup_self_test.json` |
+| `write_graph.py` | T6（已落地） | 缓存（只读） ＋ T4／T5 产物 | 图谱导出物四件套 ＋ `graph_check.json`／`manifest.sha256` |
+| `run_all.py` | T7（已落地） | — | 按 extract → disambiguate → dedup_events → write_graph 串联 |
 
-**已落地的是 T1 的两个文件**（`config.py`、`extract.py`）。T4～T7 的四个脚本尚未编写，
-本文件先冻结它们的输入输出方向，避免下游自行发明路径与字段。
+**四个脚本都已落地**（2026-09-25：`config.py` 追加第 9 节给 T4～T7 的参数，第 1～7 节的既有键
+一个都没改）。接口与试跑实测见第十节。
 本阶段的两个全局约束在这里重申：**六张表恒为六张**（本目录不写 DDL、不新增表）；
 FAISS 一律写「向量索引」或「向量检索组件」。
 
@@ -224,13 +224,14 @@ JSON 序列化固定 `ensure_ascii=False + sort_keys=True`。
 
 ## 七、与下游的接口与待办
 
-* **T4（`disambiguate.py`）**：以 `extracted.jsonl` 的 `entities[]` 为输入，按 `stock_code`
-  锚点做消歧；`subject_companies` 只作候选池，不作为「公司参与该事件」的依据
+* **T4（`disambiguate.py`，已落地，见第十节）**：以 `extracted.jsonl` 的 `entities[]` 为输入，
+  按 `stock_code` 锚点做消歧；`subject_companies` 只作候选池，不作为「公司参与该事件」的依据
   （《13》第9.1.1节 末段、《15》硬约束 16）。试跑局部编号需在 T4 之前映射为全局编号，
   或在 T4／T6 里保留 `doc_id` 溯源列。
-* **T5（`dedup_events.py`）**：按 event_type ＋ 参与主体 ＋ 时间窗口 ＋ 触发词相似度四条件合并；
-  本组件已把 `event_time`、参与主体与 `confidence` 落齐，触发词只作调试字段。
-* **T6（`write_graph.py`）**：只读缓存；导出物按《15》第4.3节 的四件套落
+* **T5（`dedup_events.py`，已落地，见第十节）**：按 event_type ＋ 参与主体 ＋ 时间窗口 ＋
+  触发词相似度四条件合并；本组件已把 `event_time`、参与主体与 `confidence` 落齐，
+  触发词只作调试字段。
+* **T6（`write_graph.py`，已落地，见第十节）**：只读缓存；导出物按《15》第4.3节 的四件套落
   `阶段06-事件抽取与知识图谱\图谱导出\v2.1\`，**只含编号、类型、名称、证据编号与置信度，
   不复制正文**；Event 节点的 `source_chunk_id` 不写进节点（事件级证据由 EVIDENCED_BY 承担）。
 * **T3 放量前的待办**：`--profile v21` 未执行过；放量前先用 `--limit`／`--docs` 抽查，
@@ -261,3 +262,73 @@ JSON 序列化固定 `ensure_ascii=False + sort_keys=True`。
   completion ≈ 3.05 M）；墙钟 ≈ 17.6 秒／篇 ≈ **3.5 小时**。按正文长度加权的线性拟合给出
   5.24 M token，与篇均外推相差约 5%。
 * 可重放：复跑 0 次调用、12 篇全部命中缓存、清单哈希与首跑一致（`291e361c596f3772…`）。
+
+## 十、T4～T7 落地接口与试跑实测（2026-09-25）
+
+四个脚本已落地；参数全部来自 `config.py` **第 9 节**（该节是追加，第 1～7 节的既有键未改动，
+第 8 节是并行会话同日追加的 T3 全量产物落点）。四者统一 `--profile pilot|v21` 与 `--force`，
+一律 `sys.stdout.reconfigure(encoding="utf-8")`；**T4～T6 不调用模型**，T7 只在缓存不齐时经
+`extract.py` 调用（复跑上限 `config.RUN_ALL["max_api_calls_on_replay"]=0`）。
+退出码：`0` 成功；`1` 前置／参数问题（未跑上游、指纹不一致）；`2` 数据异常或机检不通过。
+
+### 10.1 落点（`config.GRAPH_PIPELINE`）
+
+| 阶段 | pilot（试跑留痕） | v21（交付物） |
+| --- | --- | --- |
+| T4 消歧 | `阶段06-事件抽取与知识图谱\_试跑_图谱管线\消歧\` | `阶段05-数据准备\数据集\_抽取缓存\v2.1\图谱管线\消歧\` |
+| T5 去重 | `阶段06-事件抽取与知识图谱\_试跑_图谱管线\去重\` | `…\_抽取缓存\v2.1\图谱管线\去重\` |
+| T6 导出 | `阶段06-事件抽取与知识图谱\_试跑_图谱管线\图谱导出\` | `阶段06-事件抽取与知识图谱\图谱导出\v2.1\` |
+
+T6 另在**工作目录**（不是导出目录）写 `graph_check.json`（第八节逐行机检）与
+`manifest.sha256`（校验和索引，含 `graph_stats.json` 一行，故它本身随运行变化）。
+
+### 10.2 产物字段
+
+* **T4**：`alias_table.json` 只读第 5 阶段冻结的 105 家公司配置（`code／name／industry／board`）；
+  `disambiguation.json` 的 `entity_map` 把局部编号映射为身份键 `<标签>:<身份>`
+  （公司＝`Company:<stock_code>`，其余＝`<标签>:<归一化名>`，归一化只去空白与最外层包裹字符）；
+  `companies` 块用**表 4-8 字段口径**（`company_name` 取语料中出现过的最长书写面、`short_name`／
+  `exchange`／`industry` 取自冻结配置、`aliases` 取其余书写面、另留 `observed_surfaces` 溯源）；
+  `unresolved.jsonl` 是待消歧清单（含 `reason`、`matched_codes`、`blocked_by_marker`）。未消歧公司的
+  `identity_key` 为 `null`。
+* **T5**：`merge_log.jsonl` 逐对候选给**四条件逐条读数 ＋ 判定**（`merged`／`not_merged` 与
+  `first_failed_condition`）；`events_merged.jsonl` 是合并后的事件集合（`merged_event_key`、
+  `members`、`evidence_doc_ids` 并集、`participants`／`issued_by`／`related_to` 的全部证据行）；
+  `merge_summary.json` 汇总计数；`dedup_self_test.json` 是自检（见 10.4），不是交付物。
+* **T6**：四件套按《15》第4.3节。`nodes.csv` 33 列（`config.GRAPH["node_columns"]`，逐字取自表 4-8）、
+  `edges.csv` 9 列（含 `role`／`valid_from`／`valid_to`）。编号显式分配：Company＝`stock_code`、
+  Document＝`doc_id`，其余按确定性排序分配 `PER／INST／POL／IND／EVT-####`（宽度 4），
+  不使用自增。`replay.cypher` 含《10》第4.5.3节 的 7 条唯一性约束 ＋ 3 条索引与逐节点、逐边重放语句。
+* **T7**：`--only <阶段>`／`--from <阶段>` 支持续跑；`--force` 只重算 T4～T6，**不会**让 extract
+  重新调用模型（要重跑抽取用 `--force-extract --allow-api-calls`）；日志写
+  `运行日志_首跑.txt`／`运行日志_复跑.txt`，含每阶段命令行、退出码、耗时、关键读数与产物 sha256。
+
+### 10.3 口径补充（本文件第三节 未覆盖的）
+
+* `Event.event_time` 允许为空且**计数上报**（`graph_stats.json` 的
+  `event_core_attributes.event_time_null_count`）：T3 的口径是「不能确定到日写 null，绝不猜测」，
+  与《15》第八节「六项核心属性齐全且非空」的差异如实上报，不编日期凑齐。
+* `BELONGS_TO.valid_from／valid_to` **不用发布时间兜底**（本文件第五节的悬置项在这里定为「留空」），
+  空值条数计入机检读数。
+* 未消歧实体**不写进图谱**（`config.GRAPH["include_unresolved_entities"]=False`：人工确认后再写入），
+  引用它们的关系边跳过并逐条计数（`graph_stats.json.unresolved`）。
+* T5 的「参与主体」＝`PARTICIPATES_IN` 起点 ∪ `ISSUED_BY` 终点（身份键**集合相等**）；任一端点
+  未消歧即本条件不成立。「触发词相似度」取 `event_name` 的字符二元组 Jaccard（T3 未产出 trigger）。
+* 逐字节可复现：`nodes.csv`／`edges.csv`／`replay.cypher`／`graph_check.json` 两次运行完全一致；
+  `graph_stats.json` 只有 `generated_at`（与缓存指纹字段）每次不同，两者单独成行，比对时排除。
+
+### 10.4 T4～T7 试跑实测（12 篇，`extracted.jsonl` sha256 `0df3bc008b6495c5…`）
+
+* **T4**：实体 55 → 已消歧 34／待消歧 21（`no_alias_match` 20、`distinct_entity_marker` 1）；
+  公司身份 8 个（002051、600048、600089、600276、600309、600406、601727、603288）。
+  `万华化学集团股份有限公司` 等全称经 R2 归并；`上海电气控股集团有限公司` 因残余含「控股」
+  判为另一主体，进待消歧清单。
+* **T5**：事件 32，类型相同的候选对 57，四条件同时满足 **0** 对 → **无合并**；首个不成立条件的
+  分布 `{participants: 47, time_window: 9, trigger_similarity: 1}`。自检 `passed=true`：
+  把 doc 1018 原样复制成合成文档后合并成组，合并后事件的证据文档为 `[1018, 901018]`（并集）。
+* **T6**：节点 76（Event 32／Document 12／Person 9／Company 8／Institution 7／Policy 6／
+  Industry 2），边 74（EVIDENCED_BY 32／PARTICIPATES_IN 27／RELATED_TO 5／ISSUED_BY 5／
+  HAS_EXECUTIVE 4／BELONGS_TO 1）；未消歧端点跳过 15 条边，无边节点 8 个；机检 17 项通过 15，
+  两项已知缺口即 `event_time` 空值 19 条与 `BELONGS_TO` 有效期留空。
+* **T7**：整链复跑 2 次，`extract.py` 12 篇全部命中缓存、**模型调用 0 次**，各产物逐字节一致
+  （`graph_stats.json` 剔除上述两个字段后一致）。

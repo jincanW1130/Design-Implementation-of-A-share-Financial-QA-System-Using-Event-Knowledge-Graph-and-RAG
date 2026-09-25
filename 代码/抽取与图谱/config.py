@@ -362,3 +362,318 @@ def load_dataset():
             if line:
                 chunks.append(json.loads(line))
     return docs, chunks
+
+
+# ==========================================================================
+# 9. T4～T7：实体消歧／事件去重／图谱写入与导出（2026-09-25 追加）
+# ==========================================================================
+# 本节编号为 **9**（第 8 节是同日在文件末尾追加的「T3 全量运行的产物落点」，
+# 由并行会话追加；两节都只是**追加**，第 1～7 节的既有键一个都没有改动
+# ——另有进程在读它们）。写作顺序不影响 Python 的求值，但读的时候按编号找。
+# 本节只放 T4～T7 的参数与 schema 常量，取值依据如下，不新增本体、不新增字段：
+#
+# * 消歧规则与事件去重四条件：《10-系统总体设计（第四阶段）》第4.5.4节（＝《02》第9.2节）。
+#   实体对齐**以 stock_code 为锚**：先与别名表匹配，匹配成功归并到对应的 stock_code 节点，
+#   匹配失败进入待消歧列表；事件去重按 event_type＋参与主体＋时间窗口＋触发词相似度四条件
+#   同时满足时合并，合并后保留全部证据文档。
+# * 证据属性口径与 9 条关系的端点／额外属性：第4.5.2节 的表 4-9（已在第 3 节 RELATION_SCHEMA）。
+# * 导出物四件套的落点与排序：《15》第4.3节；逐字节一致与「不含正文」：《15》第五节 硬约束 8、11。
+# * 编号显式分配：《15》第五节 硬约束 9（event_id／policy_id／institution_id／person_id 由本阶段
+#   一次性分配并固化，不依赖数据库自增）——按 `代码\\抽取与图谱\\README.md` 第七节，由
+#   `write_graph.py`（T6）分配。
+#
+# 目录口径：《15》第4.2节 要求 T4／T5 的产物「落缓存目录」、第4.3节 要求 T6 的导出物落
+# `阶段06-事件抽取与知识图谱\\图谱导出\\v2.1\\`。试跑（pilot）不改交付物目录，全部产物落
+# `阶段06-事件抽取与知识图谱\\_试跑_图谱管线\\`（与 `代码\\抽取与图谱\\_试跑\\` 那份 T1 记录分开）。
+
+GRAPH_PIPELINE = {
+    "profile_roots": {
+        # pilot：试跑专用目录，不是交付物；v21：按《15》第4.2／4.3节 落缓存目录与导出目录。
+        "pilot": os.path.join(STAGE_DIR, "_试跑_图谱管线"),
+        "v21": os.path.join(CACHE_DIR, "图谱管线"),
+    },
+    "export_roots": {
+        "pilot": os.path.join(STAGE_DIR, "_试跑_图谱管线", "图谱导出"),
+        "v21": GRAPH_EXPORT_DIR,
+    },
+    # T4～T7 的**唯一输入**是 extract.py（T3）解析后的抽取结果（一行一篇）；
+    # pilot 落 `OUTPUT_FILES["extracted"]`、v21 落 `FULL_OUTPUT_FILES["extracted"]`
+    # （第 8 节，T3 全量产物与试跑留痕物理隔离）。用函数取值而不是在定义处取，
+    # 这样本节的求值顺序与第 8 节的先后无关。
+    "extract_records_profiles": {"pilot": "OUTPUT_FILES", "v21": "FULL_OUTPUT_FILES"},
+    "extract_records_key": "extracted",
+    "subdirs": {"disambig": "消歧", "dedup": "去重"},
+    # 文件名（机器可读产物一律 ASCII 名，与第 7 节 OUTPUT_FILES 同风格）。
+    "files": {
+        "alias_table": "alias_table.json",
+        "disambiguation": "disambiguation.json",
+        "unresolved": "unresolved.jsonl",
+        "merge_log": "merge_log.jsonl",
+        "events_merged": "events_merged.jsonl",
+        "merge_summary": "merge_summary.json",
+        "dedup_self_test": "dedup_self_test.json",
+        "nodes": "nodes.csv",
+        "edges": "edges.csv",
+        "graph_stats": "graph_stats.json",
+        "replay_cypher": "replay.cypher",
+        "graph_check": "graph_check.json",
+        "manifest": "manifest.sha256",
+    },
+    # 逐字节比对时**排除**的字段（《15》第八节：`generated_at` 与缓存指纹字段单独成行）。
+    "excluded_from_byte_compare": ["generated_at", "cache_fingerprint"],
+}
+
+# 三个产物 schema 版本（改字段名必须同步改这里，否则复跑对不上）。
+DISAMBIG_SCHEMA = "stage6-disambiguation-1.0"
+DEDUP_SCHEMA = "stage6-dedup-1.0"
+GRAPH_SCHEMA = "stage6-graph-1.0"
+
+# --------------------------------------------------------------------------
+# 9.1 T4 实体消歧
+# --------------------------------------------------------------------------
+DISAMBIG = {
+    # 别名表（＝本阶段固化的 105 家配置公司集）的**只读**来源：第 5 阶段已冻结的配置，
+    # 只读它的 COMPANIES（code／name／industry／board）。不复制、不改动该文件。
+    "alias_source_path": os.path.join(ROOT, "代码", "数据准备", "config.py"),
+    "alias_source_attr": "COMPANIES",
+    # 匹配规则（按序求值；规则本身照《10》第4.5.4节「先与别名表匹配…匹配失败进入待消歧列表」）：
+    #   R1 精确：归一后的名称 == 归一后的简称，或 == 6 位股票代码；
+    #   R2 全称展开：归一后的名称**包含**归一后的简称，且残余串（去掉该次出现后的前后缀）
+    #      不含任何一个「不同主体限定词」——「上海电气集团股份有限公司」命中 601727，
+    #      而「上海电气控股集团有限公司」因残余含「控股」判为**另一个主体**，进待消歧清单。
+    #   命中多个不同代码 → 待消歧（ambiguous_alias）。
+    #   归一化只动空白与最外层包裹字符，不做大小写折叠、不做模糊匹配、不做编辑距离。
+    "match_rules": ["R1_exact_name_or_code", "R2_full_name_contains_short_name"],
+    "distinct_entity_markers": ["控股", "投资", "实业", "资本", "集团控股"],
+    "min_short_name_chars": 2,          # 防止过短简称把无关名称吞进来
+    "strip_outer_chars": "《》〈〉<>【】〔〕“”‘’\"'（）()",
+    # Company 节点的 exchange 属性：表 4-8 要求，配置里只有 board（板块），按板块映射（可复核）。
+    "exchange_by_board": {
+        "沪市主板": "上交所", "科创板": "上交所",
+        "深市主板": "深交所", "创业板": "深交所",
+        "北交所": "北交所",
+    },
+    # 未命中的公司（不在这 105 家里）按《10》第4.5.4节 进待消歧清单，**暂不写入图谱**；
+    # 引用它们的关系边一并跳过并计数（本键只登记口径，不改本体）。
+    "unresolved_company_policy": "pending_confirmation_exclude_from_graph",
+    # Company 之外的四类实体没有 stock_code 锚点：《10》第4.5.1节 只给了 stock_code 的锚法，
+    # 这里取**同类型 + 同名（归一化后）即同一实体**的最小规则，不做跨写法归并（不猜）。
+    "non_company_rule": "same_type_same_normalized_name",
+    "identity_key_separator": ":",
+}
+
+# --------------------------------------------------------------------------
+# 9.2 T5 事件去重（四项条件同时满足才合并）
+# --------------------------------------------------------------------------
+DEDUP = {
+    "conditions": ["event_type", "participants", "time_window", "trigger_similarity"],
+    # 条件 2 参与主体：按《10》第4.5.2节「事件参与主体统一由 PARTICIPATES_IN 关系与 ISSUED_BY
+    # 关系表达」，参与主体集合 = PARTICIPATES_IN 的起点 ∪ ISSUED_BY 的终点（规范化后的身份键）。
+    # 取**集合相等**（最保守）；任一端点的身份未消歧 → 本条件不成立（不在未消歧的实体上做去重）。
+    "participants_rule": "set_equality_of_participates_in_heads_and_issued_by_tails",
+    "participants_relations": ["PARTICIPATES_IN", "ISSUED_BY"],
+    # 条件 3 时间窗口：|event_time 差| ≤ 本值（天）。两侧都必须有日期；缺失即不成立——
+    # T3 的固定口径是「不能确定到日时写 null，绝不猜测」，故不用发布时间顶替。
+    "time_window_days": 7,
+    "time_window_requires_both_dates": True,
+    # 条件 4 触发词相似度：T3 未产出 trigger（README 第 5 节：trigger 只作调试字段），
+    # 故取 event_name 的**字符二元组 Jaccard**（确定性、无随机、无外部依赖），阈值见下。
+    "similarity_field": "event_name",
+    "similarity_metric": "char_bigram_jaccard",
+    "similarity_min": 0.5,
+    "similarity_round": 3,
+    # 合并后：代表成员取**发布时间最早的证据文档**所在成员（并列按 doc_id、再按局部 event_id），
+    # event_time 取成员中最早的非空日期（全空则 null），confidence 取成员最大值，
+    # 证据文档取全部成员证据文档的**并集**（《10》第4.5.4节：合并后保留全部证据文档）。
+    "representative_rule": "earliest_publish_time_then_doc_id_then_local_event_id",
+    "event_time_rule": "earliest_non_null_among_members",
+    "confidence_rule": "max_rounded_3",
+    "evidence_rule": "union_of_member_evidence_docs",
+    "linkage": "union_find_single_linkage",
+    # 自检（不是交付物）：用真实缓存里的一条事件复制成第二篇文档，验证「合并后保留全部证据文档」。
+    "self_test": {
+        "enabled": True,
+        "doc_id_offset": 900000,        # 合成文档的 doc_id（偏移量确定性、不与真实 doc_id 冲突）
+        "note": "合成夹具只用于自检；不进导出物、不进合并日志，只写 dedup_self_test.json。",
+    },
+}
+
+# --------------------------------------------------------------------------
+# 9.3 T6 图谱写入与导出
+# --------------------------------------------------------------------------
+GRAPH = {
+    # 编号显式分配（硬约束 9）：Company／Document 直接用本体标识，其余四类按确定性顺序编号。
+    "id_rule": ("Company=stock_code；Document=doc_id；Person／Institution／Policy／Industry／Event "
+                "按（类型, 归一化名称）或事件的确定性排序一次性分配 PER／INST／POL／IND／EVT 编号"),
+    "id_prefixes": {
+        "Person": "PER", "Institution": "INST", "Policy": "POL",
+        "Industry": "IND", "Event": "EVT",
+    },
+    "id_width": 4,                      # PER-0001、EVT-0001（《10》第4.5.1节 的示例即 EVT-0001）
+    "list_separator": "|",              # aliases 这类数组属性在 CSV 里的连接符
+    # 表 4-8／表 4-9 的属性名，逐字取自《10》第4.5.1／4.5.2节（不新增字段、不改名）。
+    "node_columns": [
+        "node_id", "label", "name",
+        # Company（表 4-8 实体类型 1）
+        "stock_code", "company_name", "short_name", "aliases", "exchange",
+        # Person（实体类型 2）
+        "person_id", "person_name", "role_title",
+        # Industry（实体类型 3）
+        "industry_code", "industry_name", "level",
+        # Institution（实体类型 4）
+        "institution_id", "institution_name", "institution_type",
+        # Event（实体类型 5：六项核心属性）
+        "event_id", "event_type", "event_name", "event_time", "description", "confidence",
+        # Policy（实体类型 6）
+        "policy_id", "policy_name", "issuer", "publish_date",
+        # Document（证据文档标签，不是第七类实体）
+        "doc_id", "title", "source", "url", "publish_time", "category",
+    ],
+    "edge_columns": [
+        "head_id", "relation", "tail_id",
+        "source_doc_id", "source_chunk_id", "confidence",
+        "role", "valid_from", "valid_to",
+    ],
+    # BELONGS_TO 的 valid_from／valid_to：正文没给日期时留空。**不用发布时间兜底**
+    # （兜底等于替正文编一个有效期起点，与 T3「绝不猜测」同源）。
+    "belongs_to_validity_fallback": None,
+    # 未消歧的公司不写进图谱（《10》第4.5.4节：人工确认后再写入图谱）。
+    "include_unresolved_entities": False,
+    # 导出物**只含编号、类型、名称、证据编号与置信度，不复制正文**（《15》第4.3节）：
+    # 本清单里的字段一律不写进导出物；`quote`／`note` 是正文或调试信息，明确排除。
+    "forbidden_export_fields": ["quote", "quote_match_count", "note", "content", "response_text"],
+    # 正文不外泄的机器核验口径：任取 v2.1 文本块 content 的一个该长度的子串，
+    # 都不得出现在导出物文件里（《15》第八节「导出物不复制正文」）。
+    "body_text_check": {"probe_substring_chars": 100, "probe_chunks": 200, "seed": 20260925},
+    # SELECT/约束与索引照抄《10》第4.5.3节（7 条唯一性约束 ＋ 3 条索引），逐条写进 replay.cypher。
+    "constraints": [
+        "CREATE CONSTRAINT uk_company_stock FOR (c:Company) REQUIRE c.stock_code IS UNIQUE",
+        "CREATE CONSTRAINT uk_person FOR (p:Person) REQUIRE p.person_id IS UNIQUE",
+        "CREATE CONSTRAINT uk_industry FOR (i:Industry) REQUIRE i.industry_code IS UNIQUE",
+        "CREATE CONSTRAINT uk_institution FOR (n:Institution) REQUIRE n.institution_id IS UNIQUE",
+        "CREATE CONSTRAINT uk_event FOR (e:Event) REQUIRE e.event_id IS UNIQUE",
+        "CREATE CONSTRAINT uk_policy FOR (p:Policy) REQUIRE p.policy_id IS UNIQUE",
+        "CREATE CONSTRAINT uk_document FOR (d:Document) REQUIRE d.doc_id IS UNIQUE",
+        "CREATE INDEX idx_event_time FOR (e:Event) ON (e.event_time)",
+        "CREATE INDEX idx_event_type FOR (e:Event) ON (e.event_type)",
+        "CREATE INDEX idx_doc_publish FOR (d:Document) ON (d.publish_time)",
+    ],
+}
+
+# --------------------------------------------------------------------------
+# 9.4 T7 入口
+# --------------------------------------------------------------------------
+RUN_ALL = {
+    # 阶段顺序照《15》第4.2节：extract → disambiguate → dedup_events → write_graph。
+    "stages": [
+        {"name": "extract", "script": "extract.py", "label": "实体与事件抽取（T3）"},
+        {"name": "disambiguate", "script": "disambiguate.py", "label": "实体消歧（T4）"},
+        {"name": "dedup_events", "script": "dedup_events.py", "label": "事件去重（T5）"},
+        {"name": "write_graph", "script": "write_graph.py", "label": "图谱写入与导出（T6）"},
+    ],
+    # 缓存齐全时入口脚本**不得**调用模型：extract 全命中缓存时 api_calls_total 必须为 0。
+    "max_api_calls_on_replay": 0,
+    "log_first": "运行日志_首跑.txt",
+    "log_second": "运行日志_复跑.txt",
+}
+
+# --------------------------------------------------------------------------
+# 9.5 T4～T7 共用的取值函数（只做路径解析与归一化，不放参数逻辑）
+# --------------------------------------------------------------------------
+def extract_records_path(profile: str) -> str:
+    """T4～T7 的唯一输入：extract.py 解析后的抽取结果（一行一篇）。
+
+    pilot 取 `OUTPUT_FILES["extracted"]`，v21 取 `FULL_OUTPUT_FILES["extracted"]`
+    （第 8 节：T3 的全量产物与 T1 的试跑留痕物理隔离）。
+    """
+    table_name = GRAPH_PIPELINE["extract_records_profiles"].get(profile)
+    table = globals().get(table_name) if table_name else None
+    if not isinstance(table, dict) or GRAPH_PIPELINE["extract_records_key"] not in table:
+        raise KeyError("profile=%s 的抽取结果落点未在 config 中登记" % profile)
+    return table[GRAPH_PIPELINE["extract_records_key"]]
+
+
+def pipeline_paths(profile: str) -> dict:
+    """按 profile 解析 T4～T7 的目录与文件落点（不建目录，只给路径）。"""
+    work_root = GRAPH_PIPELINE["profile_roots"][profile]
+    export_dir = GRAPH_PIPELINE["export_roots"][profile]
+    names = GRAPH_PIPELINE["files"]
+    disambig_dir = os.path.join(work_root, GRAPH_PIPELINE["subdirs"]["disambig"])
+    dedup_dir = os.path.join(work_root, GRAPH_PIPELINE["subdirs"]["dedup"])
+    return {
+        "profile": profile,
+        "work_root": work_root,
+        "disambig_dir": disambig_dir,
+        "dedup_dir": dedup_dir,
+        "export_dir": export_dir,
+        "extract_records": extract_records_path(profile),
+        "alias_table": os.path.join(disambig_dir, names["alias_table"]),
+        "disambiguation": os.path.join(disambig_dir, names["disambiguation"]),
+        "unresolved": os.path.join(disambig_dir, names["unresolved"]),
+        "merge_log": os.path.join(dedup_dir, names["merge_log"]),
+        "events_merged": os.path.join(dedup_dir, names["events_merged"]),
+        "merge_summary": os.path.join(dedup_dir, names["merge_summary"]),
+        "dedup_self_test": os.path.join(dedup_dir, names["dedup_self_test"]),
+        "nodes": os.path.join(export_dir, names["nodes"]),
+        "edges": os.path.join(export_dir, names["edges"]),
+        "graph_stats": os.path.join(export_dir, names["graph_stats"]),
+        "replay_cypher": os.path.join(export_dir, names["replay_cypher"]),
+        "graph_check": os.path.join(work_root, names["graph_check"]),
+        "manifest": os.path.join(work_root, names["manifest"]),
+        "log_first": os.path.join(work_root, RUN_ALL["log_first"]),
+        "log_second": os.path.join(work_root, RUN_ALL["log_second"]),
+    }
+
+
+def normalize_entity_name(name) -> str:
+    """实体身份比对用的归一化：只动空白与**最外层包裹字符**。
+
+    去掉全部空白（含全角空格）后，反复剥掉最外层的书名号／引号／括号，
+    其余字符一律照原样（不做大小写折叠、不做标点归一、不做模糊匹配）。
+    比 T3 的证据定位（`evidence_key`，只去空白）多一步剥壳，是为了让
+    「《证券法》」与「证券法」这类**同一条政策的两种书写**在身份层对齐。
+    """
+    import re as _re
+    text = _re.sub(r"[\s　]+", "", str(name or ""))
+    outer = DISAMBIG["strip_outer_chars"]
+    pairs = [(outer[i], outer[i + 1]) for i in range(0, len(outer) - 1, 2)]
+    changed = True
+    while changed and len(text) >= 2:
+        changed = False
+        for left, right in pairs:
+            if text.startswith(left) and text.endswith(right):
+                text = text[1:-1]
+                changed = True
+                break
+    return text
+
+
+def round_confidence(value):
+    """置信度统一四舍五入到 3 位小数（与 T3 的可重放口径一致）。"""
+    try:
+        return round(float(value), 3)
+    except (TypeError, ValueError):
+        return None
+
+
+# --------------------------------------------------------------------------
+# 8. T3 全量运行的产物落点（2026-09-25 追加，仅新增键；上面任何既有取值未改动）
+# --------------------------------------------------------------------------
+# 依据：《15-第6阶段任务书》第4.2节 的「小规模先行」纪律——`PILOT_DIR`（`_试跑\`）是
+# T1 小规模验证的**留痕**，T3 的全量产物必须与它物理隔离，否则一次全量运行就会覆盖掉
+# 试跑记录。故 `--profile pilot` 仍落 `OUTPUT_FILES`（取值与行为不变），
+# `--profile v21` 落 `FULL_OUTPUT_FILES`（`_全量\<dataset_version>\`）。
+# 两处与缓存一样**都不是交付物、不入仓库**（`.gitignore` 应覆盖 `代码/抽取与图谱/_全量/`）。
+FULL_RUN_DIR = os.path.join(_THIS_DIR, "_全量", DATASET_VERSION)
+FULL_OUTPUT_FILES = {
+    "selection": os.path.join(FULL_RUN_DIR, "selection.json"),
+    "coverage": os.path.join(FULL_RUN_DIR, "coverage.json"),
+    "extracted": os.path.join(FULL_RUN_DIR, "extracted.jsonl"),
+    "rejected": os.path.join(FULL_RUN_DIR, "rejected.jsonl"),
+    "run_history": os.path.join(FULL_RUN_DIR, "run_history.jsonl"),
+    "verify": os.path.join(FULL_RUN_DIR, "verify.json"),
+    "manifest": os.path.join(FULL_RUN_DIR, "manifest.sha256"),
+}
+# 全量运行的完整控制台输出**不由脚本写**，而是由启动命令把 stdout／stderr 重定向到这里
+# （脚本内不写日志文件，避免与「产物确定性」混在一起）；此键只登记落点。
+FULL_RUN_LOG = os.path.join(FULL_RUN_DIR, "运行日志_全量.txt")
