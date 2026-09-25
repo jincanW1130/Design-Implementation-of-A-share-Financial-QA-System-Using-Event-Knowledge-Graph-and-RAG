@@ -3,10 +3,11 @@
 r"""《13-数据准备（第五阶段）》与数据集 v1.0 的阶段级验收（《12》§八 验收标准逐行落地）。
 
 与另外两个脚本的分工（不重复实现）：
-  * `工具\跨文档核验.py` —— 全工作区 Markdown 的通用一致性（检查 A～M，含索引登记与禁用词）；
+  * `工具\跨文档核验.py` —— 全工作区 Markdown 的通用一致性（检查 A～N，含索引登记、禁用词与《02》引用版本审计）；
   * `代码\数据准备\check.py` —— 数据集自身的条数与编号一致性（管线内部一致性，14 项）；
-  * 本脚本 —— 第 5 阶段的**验收闸门**：把《12》§八 的 19 行验收标准逐行实现为 A～R 共 18 组
-    检查，全部数值从数据集文件与《13》重新推导，再与 `代码\数据准备\config.py` 的冻结参数比对。
+  * 本脚本 —— 第 5 阶段的**验收闸门**：把《12》§八 的 19 行验收标准逐行实现为 A～S 共 19 组
+    检查（S 组是索引集中度与跨公司同名标题两条守卫），全部数值从数据集文件与《13》重新推导，
+    再与 `代码\数据准备\config.py` 的冻结参数比对。
 
 用法：
 
@@ -19,7 +20,8 @@ r"""《13-数据准备（第五阶段）》与数据集 v1.0 的阶段级验收�
 纪律：
   * 本脚本对封版数据集**只读**；唯一的写动作在 `--with-idempotence` 下发生——把 `raw\` 复制到
     系统临时目录里复跑 T4a→T5，**绝不写入 `--dataset` 指向的目录**（《12》§4.2 版本目录不可变）；
-  * 阈值一律来自 `代码\数据准备\config.py`（日期、条数、模型名、切分参数都不在脚本里写死）；
+  * 阈值一律来自 `代码\数据准备\config.py`（日期、条数、模型名、切分参数都不在脚本里写死）；唯一例外是
+    S 组的两条集中度守卫阈值：它们是本验收工具自带的模块级常量，刻意不读已冻结的 config（理由见该组注释）；
   * 术语：FAISS 一律称“向量索引／向量检索组件”；本脚本源码内不出现「向量」与「数据库」的连写
     （禁用词按 P 组以拼接方式构造，免得本脚本自己被术语检查命中）；
   * 不 import pandas；只用标准库 + 已安装的 faiss／numpy（读索引条数，读不到则退回文件头部解析）。
@@ -33,6 +35,7 @@ import json
 import os
 import re
 import shutil
+import statistics
 import struct
 import subprocess
 import sys
@@ -70,6 +73,16 @@ ARGS = _ap.parse_args()
 
 DATASET = os.path.abspath(ARGS.dataset) if ARGS.dataset else DEFAULT_DATASET
 DOC = os.path.abspath(ARGS.doc) if ARGS.doc else DEFAULT_DOC
+
+
+# --------------------------------------------------------------------------
+# S 组守卫阈值（本验收工具自带，刻意不从 `代码\数据准备\config.py` 读取——那个文件已冻结）
+# --------------------------------------------------------------------------
+# 理由：config 管的是管线参数，「合法的均值／上限块长」这类取值天然属于管线；而「一篇文档吞掉
+# 整个索引」是数据集缺陷，不是可调参数——将来数据集若再出现一篇文档占据索引大部分，本验收必须
+# 失败。所以集中度阈值属于本验收闸门自身，而不是冻结的 config。
+MAX_TOP1_CHUNK_SHARE = 0.25     # 守卫阈值：单篇文档块数占全库块数的上限（超过即 S1 失败）
+MAX_TOP5_CHUNK_SHARE = 0.60     # 守卫阈值：前 5 篇文档块数合计占比的上限（超过即 S1 失败）
 
 
 # --------------------------------------------------------------------------
@@ -1203,11 +1216,90 @@ chk(bool(q_status), 'Q2 登记行带状态（已产出／已完成／第 5 阶�
 
 # ==========================================================================
 print(); print('=' * 78)
+print('S、索引集中度与跨公司同名标题（守卫项：单篇不得独占索引、同一标题不得跨公司复用）')
+print('=' * 78)
+
+chunks_per_doc = Counter(c.get('doc_id') for _, c in chunk_rows)
+doc_by_id = {d.get('doc_id'): d for _, d in doc_rows}
+ranked_docs = chunks_per_doc.most_common()          # [(doc_id, 块数)]，按块数降序
+
+
+def doc_title(doc_id):
+    return str((doc_by_id.get(doc_id) or {}).get('title') or '')
+
+
+if not ranked_docs or not n_chunks:
+    chk(False, 'S1 索引集中度：单篇 ≤ %.0f%%、前 5 篇合计 ≤ %.0f%%'
+        % (100 * MAX_TOP1_CHUNK_SHARE, 100 * MAX_TOP5_CHUNK_SHARE),
+        '实测 chunks\\chunks.jsonl 无文本块，集中度无法计算')
+else:
+    top1_id, top1_n = ranked_docs[0]
+    top1_share = top1_n / n_chunks
+    top5 = ranked_docs[:5]
+    top5_share = sum(k for _, k in top5) / n_chunks
+    offenders = []
+    if top1_share > MAX_TOP1_CHUNK_SHARE:
+        offenders.append('单篇占比超限：doc_id=%s《%s》%d 块（%.2f%% > %.0f%%）'
+                         % (top1_id, doc_title(top1_id), top1_n, 100 * top1_share,
+                            100 * MAX_TOP1_CHUNK_SHARE))
+    if top5_share > MAX_TOP5_CHUNK_SHARE:
+        offenders.append('前 5 篇合计超限：%.2f%% > %.0f%%；明细 %s'
+                         % (100 * top5_share, 100 * MAX_TOP5_CHUNK_SHARE,
+                            '、'.join('doc_id=%s《%s》%d 块' % (did, doc_title(did), k)
+                                      for did, k in top5)))
+    for _x in offenders:
+        print('    !! %s' % _x)
+    chk(not offenders,
+        'S1 索引集中度：单篇 ≤ %.0f%%、前 5 篇合计 ≤ %.0f%%（守卫阈值，非 config）'
+        % (100 * MAX_TOP1_CHUNK_SHARE, 100 * MAX_TOP5_CHUNK_SHARE),
+        '实测 单篇最大 %.2f%%（doc_id=%s《%s》%d/%d 块）、前 5 篇合计 %.2f%%；超限 %d 项'
+        % (100 * top1_share, top1_id, doc_title(top1_id), top1_n, n_chunks,
+           100 * top5_share, len(offenders)))
+
+by_title = defaultdict(list)
+for _, d in doc_rows:
+    t = normalize_title(d.get('title'))
+    if t:
+        by_title[t].append(d)
+name_groups = {t: ds for t, ds in by_title.items() if len(ds) > 1}
+collisions = []
+for t, ds in name_groups.items():
+    comp_sets = {frozenset(str(x) for x in (d.get('company_list') or [])) for d in ds}
+    if len(comp_sets) > 1:
+        collisions.append((t, ds))
+collisions.sort(key=lambda item: item[0])
+for t, ds in collisions:
+    print('    !! 标题《%s》被不同公司集合的文档共用：%s'
+          % (t, '、'.join('doc_id=%s（公司 %s）'
+                          % (d.get('doc_id'),
+                             '／'.join(sorted(str(x) for x in (d.get('company_list') or []))) or '空')
+                          for d in sorted(ds, key=lambda x: str(x.get('doc_id'))))))
+chk(not collisions, 'S2 同一规范化标题不跨公司复用（company_list 集合相同才允许同名）',
+    '实测 非空标题 %d 个、同名组 %d 组、跨公司同名 %d 组%s'
+    % (len(by_title), len(name_groups), len(collisions),
+       '：' + br([t for t, _ in collisions]) if collisions else ''))
+
+per_doc_counts = [chunks_per_doc.get(d.get('doc_id'), 0) for _, d in doc_rows]
+median_chunks = statistics.median(per_doc_counts) if per_doc_counts else 0
+if ranked_docs:
+    top1_id, top1_n = ranked_docs[0]
+    top1_chars = len(str((doc_by_id.get(top1_id) or {}).get('content') or ''))
+    note('S3 集中度证据（只报告，不计入判定）',
+         '实测 top-1 占比 %.2f%%、top-5 合计占比 %.2f%%；最大文档 doc_id=%s《%s》%d 块／%d 字符；'
+         '每篇块数中位数 %.1f 块（文档 %d 篇、文本块 %d 个）'
+         % (100 * top1_share, 100 * top5_share, top1_id, doc_title(top1_id), top1_n, top1_chars,
+            median_chunks, n_docs, n_chunks))
+else:
+    note('S3 集中度证据（只报告，不计入判定）', '实测无文本块记录，集中度证据不可用')
+
+
+# ==========================================================================
+print(); print('=' * 78)
 print('R、汇总与收口（《12》§八 末行：全套检查通过才放行）')
 print('=' * 78)
 
 _passed_before = sum(1 for ok, _, _ in results if ok)
-print('  检查项合计（A～Q）：%d 项，其中通过 %d、失败 %d'
+print('  检查项合计（A～S）：%d 项，其中通过 %d、失败 %d'
       % (len(results), _passed_before, len(fails)))
 chk(not fails, 'R1 全部检查项通过（任一失败即非零退出）',
     '实测 失败 %d 项：%s' % (len(fails), br(fails, limit=30) if fails else '无'))

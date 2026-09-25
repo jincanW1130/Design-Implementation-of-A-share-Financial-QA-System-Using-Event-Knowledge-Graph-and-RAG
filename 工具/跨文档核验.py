@@ -6,10 +6,11 @@
       第 3 阶段产出后首次编写（v2.2 修订），第 4 阶段及以后每次产出新文档后都应重跑。
 
 用法：
-    python 工具\跨文档核验.py                # 默认工作区 = 本脚本所在目录的上一级
-    python 工具\跨文档核验.py <工作区路径>   # 指定其它路径
+    python 工具\跨文档核验.py                     # 默认工作区 = 本脚本所在目录的上一级
+    python 工具\跨文档核验.py <工作区路径>        # 指定其它路径
+    python 工具\跨文档核验.py --strict-citations  # N2 的过期引用按失败处理（默认只报告）
 
-退出码：0 = 全部通过；1 = 存在失败项（明细在输出里）。
+退出码：0 = 全部通过；1 = 存在失败项（明细在输出里；--strict-citations 下含 N2 的过期引用）。
 
 检查项：
     A 文档规模（行数按文本行计，不含文件末尾换行产生的空行）
@@ -25,6 +26,8 @@
     K 文档内提到的文件路径是否存在
     L 工作区内的 0N- 文档是否都登记在《00》索引里
     M 目录结构（阶段目录齐全、根目录只留入口与基线）
+    N1 《02》自身三处版本号一致（标题末尾／版本字段／§1.2 修订记录末行）
+    N2 其余文档引用《02》的版本是否等于当前基线（默认只报告；--strict-citations 门禁）
 """
 import os, re, sys, glob, io
 
@@ -33,7 +36,16 @@ try:
 except Exception:
     pass
 
-ROOT = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# 参数：第一个非 `--` 参数 = 工作区根目录；--strict-citations 把 N2 的过期引用转为门禁（默认只报告）。
+FLAGS = {a for a in sys.argv[1:] if a.startswith('--')}
+UNKNOWN = sorted(FLAGS - {'--strict-citations'})
+if UNKNOWN:
+    print('未知参数：%s' % '、'.join(UNKNOWN))
+    print('用法：python 工具\\跨文档核验.py [工作区路径] [--strict-citations]')
+    sys.exit(2)
+STRICT_CITATIONS = '--strict-citations' in FLAGS
+POSITIONAL = [a for a in sys.argv[1:] if not a.startswith('--')]
+ROOT = os.path.abspath(POSITIONAL[0]) if POSITIONAL else os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # 2026-09-25 起工作区按阶段分目录：入口《00》与基线《02》留在根目录，其余带号文档进 阶段NN-* 子目录。
 STAGE_GLOB = os.path.join(ROOT, '阶段*')
@@ -60,9 +72,11 @@ def nlines(t):
     return n - 1 if t.endswith('\n') else n
 
 fails = []
-def report(ok, label, detail=''):
-    print('  [%s] %s%s' % ('OK ' if ok else 'FAIL', label, ('  ' + detail) if detail else ''))
-    if not ok:
+def report(ok, label, detail='', gating=True):
+    """gating=False 的项（如 N2 的默认模式）只打印结果，不写入 fails，因而不影响退出码。"""
+    print('  [%s] %s%s' % ('OK ' if ok else ('FAIL' if gating else 'WARN'), label,
+                           ('  ' + detail) if detail else ''))
+    if not ok and gating:
         fails.append(label)
 
 _PATHS = docs()
@@ -70,6 +84,8 @@ _NAMES = [os.path.basename(p) for p in _PATHS]
 DUP = sorted({n for n in _NAMES if _NAMES.count(n) > 1})
 D = {os.path.basename(p): load(p) for p in _PATHS}
 print('  参与核验的文档 %d 份：%s' % (len(D), '、'.join(sorted(D))))
+print('  引用版本审计：%s' % ('门禁（--strict-citations：N2 的过期引用计入退出码）' if STRICT_CITATIONS
+                              else '只报告（默认：N2 的过期引用不改变退出码，加 --strict-citations 转为门禁）'))
 report(not DUP, '文档文件名互不重名（否则会互相覆盖）', '重名 %s' % DUP)
 
 # ---- A 规模 -------------------------------------------------------------
@@ -327,11 +343,12 @@ report(not os.path.isdir(os.path.join(ROOT, '10-系统总体设计（第四阶�
 report(not os.path.isdir(os.path.join(ROOT, '文献调研')),
        '旧的 文献调研\\ 目录已迁入阶段目录')
 
-# ---- N 《02》版本号一致性 -------------------------------------------------
+# ---- N 《02》版本号一致性 与 引用版本审计 ---------------------------------
 print(); print('=' * 78); print('N 《02》的版本号在标题、版本字段与修订记录三处是否一致'); print('=' * 78)
 # 起因（2026-09-25 实测）：§1.2 修订记录一路记到 v2.5，而标题与文档信息表的版本字段
 # 仍停在 v2.3——v2.4／v2.5 两次登记只改了 §1.2，没有回改表头，漂移了两个版本且无人发现。
-# 本项把三处对齐：标题末尾的版本、`| 版本 |` 字段、§1.2 修订记录里最后一行版本。
+# N1 把三处对齐：标题末尾的版本、`| 版本 |` 字段、§1.2 修订记录里最后一行版本（门禁项）。
+# N2 顺着 N1 得到的当前版本审计其余文档的引用：默认只报告，--strict-citations 时转为门禁。
 n2 = next((n for n in D if n.startswith('02-')), None)
 if n2:
     t2 = D[n2]
@@ -345,6 +362,7 @@ if n2:
     got = [('标题', m_title.group(1) if m_title else None),
            ('版本字段', m_field.group(1) if m_field else None),
            ('修订记录末行', m_last.group(1) if m_last else None)]
+    print('  N1 三处版本号一致（门禁项：任一不一致即非零退出）')
     for label, v in got:
         print('    %-12s %s' % (label, v or '<未解析到>'))
     vals = {v for _, v in got}
@@ -352,6 +370,49 @@ if n2:
     if not ok_n:
         print('    !! 三处版本号不一致：%s' % sorted(str(v) for v in vals))
     report(ok_n, '《02》标题／版本字段／修订记录末行的版本号一致', '%s' % (sorted(vals)[0] if ok_n else '不一致'))
+
+    # ---- N2 引用的《02》版本审计（默认只报告；--strict-citations 时门禁）----
+    # 口径：逐行扫描参与核验的文档，排除《02》自身与 05／06／08／11 记录类文件（它们按职责逐字保留
+    # 历史措辞）；行内出现《02 且含 vX.Y 版本号即算引用，同一行重复出现同一版本只算一处。
+    # 被引版本不等于当前版本时，只有同一行带「版本链／未改变／不影响／历史／留痕」之一才可接受。
+    cur_ver = next((v for _, v in got if v), None)     # N1 解析出的当前基线版本（三处一致时唯一）
+    print('  N2 引用《02》的版本审计（当前基线 %s；模式：%s）'
+          % (cur_ver or '<未解析到>',
+             '门禁（--strict-citations：过期引用计入退出码）' if STRICT_CITATIONS
+             else '只报告（默认：过期引用不影响退出码，加 --strict-citations 转为门禁）'))
+    if cur_ver is None:
+        print('    （N1 未解析出当前版本，N2 跳过：没有可比对的当前基线版本；N1 已按失败处理）')
+    else:
+        CITE_SKIP = re.compile(r'^(?:02|05|06|08|11)-')
+        CITE_MARKS = ('版本链', '未改变', '不影响', '历史', '留痕')
+        # 只审计**依据声明行**：只有文档在头部声明"依据／上游／需求来源"时，才会写出它所依据的
+        # 《02》版本。正文里的旧版本叙述（如《00》"《02》由 v2.1 → v2.2 → v2.3"）是历史陈述，
+        # 不是依据声明，纳入只会制造噪声。
+        CITE_DECL = re.compile(r'依据|上游|需求来源')
+        # 版本号必须**紧跟在《02…》之后**，且中间不再出现另一处《》引用——否则同一行里其他文档
+        # 或数据集的版本号（如"…与数据集 v1.0"）会被误算成《02》的版本。
+        CITE_REF = re.compile(r'《02[^》]*》[^《]{0,30}?(v\d+\.\d+)')
+        print('    口径：只审计**依据声明行**（含"依据／上游／需求来源"）；版本号须紧跟在《02…》'
+              '之后且中间无其他《》引用；被引版本非当前时需同行带 %s 之一' % '／'.join(CITE_MARKS))
+        cites = []          # [(文件名, 行号, 被引版本, 行内容)]
+        for name in sorted(D):
+            if CITE_SKIP.match(name): continue
+            for i, L in enumerate(D[name].split('\n'), 1):
+                if not CITE_DECL.search(L): continue
+                for ver in dict.fromkeys(CITE_REF.findall(L)):
+                    cites.append((name, i, ver, L))
+        stale = [c for c in cites if c[2] != cur_ver and not any(m in c[3] for m in CITE_MARKS)]
+        for name, i, ver, _L in stale:
+            print('    !! %s L%d  依据《02》%s（当前 %s）' % (name, i, ver, cur_ver))
+        print('    扫描到依据声明 %d 处（已排除《02》自身与 05／06／08／11 记录类文件）；其中过期 %d 处'
+              % (len(cites), len(stale)))
+        if stale and not STRICT_CITATIONS:
+            print('    （只报告：以上过期引用不影响本次退出码；加 --strict-citations 可转为门禁）')
+        report(not stale, 'N2 引用的《02》版本等于当前基线或同行带版本链说明',
+               '引用 %d 处、过期 %d 处%s'
+               % (len(cites), len(stale),
+                  '（--strict-citations 计入门禁）' if STRICT_CITATIONS else '（只报告）'),
+               gating=STRICT_CITATIONS)
 
 print(); print('=' * 78)
 print('结论：%s' % ('全部通过' if not fails else '存在 %d 项失败：%s' % (len(fails), '；'.join(fails))))
