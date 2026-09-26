@@ -146,11 +146,40 @@ def load_disambiguation(paths, fingerprint):
     return payload
 
 
+def load_time_backfill(paths, fingerprint):
+    """读 T3.5「定向时间补抽」的覆盖层（**只读**；缺失即按「没有补抽」处理）。
+
+    覆盖层把「T3 没给出日期、第二级补抽给出且有窗口证据」的事件日期补上：本阶段把补抽结果
+    应用在**事件视图**上，因此四项条件里的时间窗条件对补出来的日期同样求值（同一份证据，
+    同一套条件，不做特殊照顾）；合并后事件的 `event_time_basis` 记**最早非空日期**的来源。
+    覆盖层与当前抽取结果不是同一份缓存时**阻断**（不静默用错版本的时间）。
+    """
+    path = config.time_backfill_paths(paths["profile"])["overlay"]
+    if not os.path.isfile(path):
+        return {}, None, path
+    with open(path, encoding="utf-8") as fh:
+        payload = json.load(fh)
+    source = payload.get("source") or {}
+    if source.get("extract_records_sha256") != fingerprint.get("extract_records_sha256"):
+        raise SystemExit("时间补抽覆盖层与当前抽取结果不是同一份缓存（指纹不一致）：%s\n"
+                         "覆盖层记的是 %s，当前是 %s；请重跑 extract_event_time.py。"
+                         % (path, source.get("extract_records_sha256"),
+                            fingerprint.get("extract_records_sha256")))
+    rows = {}
+    for row in payload.get("results") or []:
+        rows[(int(row["doc_id"]), str(row["event_id"]))] = row
+    return rows, payload, path
+
+
 # --------------------------------------------------------------------------
 # 事件视图
 # --------------------------------------------------------------------------
-def build_events(records, entity_map):
-    """把缓存里的事件与其关系摊平成去重用的视图（全部按确定性顺序）。"""
+def build_events(records, entity_map, time_backfill=None):
+    """把缓存里的事件与其关系摊平成去重用的视图（全部按确定性顺序）。
+
+    `time_backfill` 是 T3.5 覆盖层（键＝(doc_id, event_id)）：**只**补 T3 给出 null 的事件，
+    并带上 `event_time_basis`；非空事件一字不改。
+    """
     events, skipped_relations = [], []
     for record in sorted(records, key=lambda r: int(r["doc_id"])):
         doc_id = int(record["doc_id"])
@@ -158,12 +187,20 @@ def build_events(records, entity_map):
         by_event = {}
         for event in local_events:
             local_id = str(event["event_id"])
+            patch = (time_backfill or {}).get((doc_id, local_id)) or {}
+            backfilled = None
+            if not event.get("event_time") and patch.get("event_time"):
+                backfilled = str(patch["event_time"])
             by_event[local_id] = {
                 "doc_id": doc_id,
                 "local_event_id": local_id,
                 "event_type": str(event["event_type"]),
                 "event_name": str(event["event_name"]),
-                "event_time": event.get("event_time"),
+                "event_time": event.get("event_time") or backfilled,
+                # 依据标记：T3 原值一律 stated（T3 已核验日期在正文里真实出现）；
+                # 补抽值取覆盖层里的 basis（stated／year_from_publish）。
+                "event_time_basis": ("stated" if event.get("event_time")
+                                     else (patch.get("event_time_basis") if backfilled else None)),
                 "description": str(event.get("description") or ""),
                 "confidence": config.round_confidence(event.get("confidence")),
                 "publish_time": str(record.get("publish_time") or ""),
@@ -324,6 +361,14 @@ def build_merged_event(members, index, publish_time_by_doc):
     times = [parse_date(e["event_time"]) for e in members_sorted]
     times = [t for t in times if t is not None]
     event_time = min(times).isoformat() if times else None
+    # event_time_basis：取**提供最早非空日期**的那一位成员（并列时按 members_sorted 顺序取第一）
+    # ——T3 原值记 stated，补抽值记它自己的 basis（year_from_publish 不会被写成 stated）。
+    basis = None
+    if event_time:
+        for member in members_sorted:
+            if parse_date(member["event_time"]) == parse_date(event_time):
+                basis = member.get("event_time_basis") or "stated"
+                break
     confidences = [e["confidence"] for e in members_sorted if e["confidence"] is not None]
     evidence_docs = sorted({doc for e in members_sorted for doc in e["evidence_doc_ids"]})
 
@@ -347,11 +392,13 @@ def build_merged_event(members, index, publish_time_by_doc):
         "is_merged": len(members_sorted) > 1,
         "member_count": len(members_sorted),
         "members": [{"doc_id": e["doc_id"], "local_event_id": e["local_event_id"],
-                     "event_time": e["event_time"], "confidence": e["confidence"]}
+                     "event_time": e["event_time"], "confidence": e["confidence"],
+                     "event_time_basis": e.get("event_time_basis")}
                     for e in members_sorted],
         "event_type": representative["event_type"],
         "event_name": representative["event_name"],
         "event_time": event_time,
+        "event_time_basis": basis,
         "description": representative["description"],
         "confidence": max(confidences) if confidences else None,
         "representative_doc_id": representative["doc_id"],
@@ -361,7 +408,8 @@ def build_merged_event(members, index, publish_time_by_doc):
         "related_to": collect("related_to", ()),
         "rule": {
             "representative": config.DEDUP["representative_rule"],
-            "event_time": config.DEDUP["event_time_rule"],
+            "event_time": config.DEDUP["event_time_rule"]
+                          + "；basis 取提供该日期的成员（T3 原值＝stated、补抽值＝覆盖层的 basis）",
             "confidence": config.DEDUP["confidence_rule"],
             "evidence": config.DEDUP["evidence_rule"],
         },
@@ -371,7 +419,7 @@ def build_merged_event(members, index, publish_time_by_doc):
 # --------------------------------------------------------------------------
 # 自检：合并后必须保留**全部**证据文档（用真实缓存复制成第二篇，不编造内容）
 # --------------------------------------------------------------------------
-def self_test(records, entity_map, paths):
+def self_test(records, entity_map, paths, time_backfill=None):
     """把真实缓存里事件最多的一篇复制成一篇合成文档，验证合并组的证据文档并集。"""
     spec = config.DEDUP["self_test"]
     if not spec.get("enabled"):
@@ -413,7 +461,16 @@ def self_test(records, entity_map, paths):
     entity_map2 = dict(entity_map)
     entity_map2.update(synthetic_map)
 
-    events, _ = build_events(records2, entity_map2)
+    # 夹具是「同一篇文档原样复制」：T3.5 覆盖层里属于源文档的补抽结论对合成文档同样成立，
+    # 因此按 (源 doc_id, 源 event_id) → (合成 doc_id, 合成 event_id) 平移，
+    # 否则时间窗条件会因为合成文档「没有补抽记录」而失真，自检会误报不通过。
+    time_backfill2 = dict(time_backfill or {})
+    for old, new in id_map.items():
+        patch = (time_backfill or {}).get((int(source_doc), old))
+        if patch is not None and old.startswith("EVT-"):
+            time_backfill2[(synthetic_doc_id, new)] = patch
+
+    events, _ = build_events(records2, entity_map2, time_backfill2)
     publish_time_by_doc = {int(r["doc_id"]): str(r.get("publish_time") or "") for r in records2}
     pairs = []
     for i in range(len(events)):
@@ -479,9 +536,11 @@ def run(args) -> int:
     fingerprint = source_fingerprint(records, records_path)
     disambig = load_disambiguation(paths, fingerprint)
     entity_map = disambig["entity_map"]
+    time_backfill, backfill_payload, backfill_path = load_time_backfill(paths, fingerprint)
+    backfill_sha = sha256_file(backfill_path) if backfill_payload is not None else ""
 
     if args.self_test_only:
-        result = self_test(records, entity_map, paths)
+        result = self_test(records, entity_map, paths, time_backfill)
         dump_json(paths["dedup_self_test"], result)
         print("自检结果：passed=%s（%s）" % (result.get("passed"), result.get("note", "")))
         return 0 if result.get("passed") else 2
@@ -492,13 +551,14 @@ def run(args) -> int:
             first = fh.readline()
         if first:
             previous = json.loads(first)
-            if previous.get("cache_fingerprint") == fingerprint:
+            if previous.get("cache_fingerprint") == fingerprint \
+                    and previous.get("time_backfill_sha256", "") == backfill_sha:
                 print("[跳过] 去重产物已是最新（缓存指纹一致）：%s" % paths["merge_log"])
                 print("       删掉产物或用 --force 可重算。")
                 return 0
 
     publish_time_by_doc = {int(r["doc_id"]): str(r.get("publish_time") or "") for r in records}
-    events, skipped_relations = build_events(records, entity_map)
+    events, skipped_relations = build_events(records, entity_map, time_backfill)
     if not events:
         print("输入里没有事件：%s" % records_path)
         return 1
@@ -531,8 +591,12 @@ def run(args) -> int:
                      for index, g in enumerate(groups)]
     for row in merged_events:
         row["cache_fingerprint"] = fingerprint
+        row["time_backfill_sha256"] = backfill_sha
 
     merged_groups = [m for m in merged_events if m["is_merged"]]
+    applied_events = [e for e in events if e.get("event_time_basis") == "year_from_publish"] + \
+        [e for e in events if e.get("event_time_basis") == "stated"
+         and (time_backfill or {}).get((e["doc_id"], e["local_event_id"]))]
     summary = {
         "schema": config.DEDUP_SCHEMA,
         "dataset_version": config.DATASET_VERSION,
@@ -566,6 +630,18 @@ def run(args) -> int:
                                             if not m["event_time"]),
             "relations_skipped": len(skipped_relations),
         },
+        # T3.5 定向时间补抽的应用情况（只读覆盖层；缺失时 applied=0、按 T3 原口径重算）
+        "time_backfill": {
+            "overlay": os.path.relpath(backfill_path, config.ROOT).replace("\\", "/"),
+            "overlay_sha256": backfill_sha,
+            "overlay_missing": backfill_payload is None,
+            "applied_events": len(applied_events),
+            "applied_by_basis": _counts([e["event_time_basis"] for e in applied_events]),
+            "merged_events_by_basis": _counts([m["event_time_basis"] or "null"
+                                               for m in merged_events]),
+            "note": "补抽值只在时间窗条件与合并后 event_time／basis 上生效；"
+                    "T3 主缓存与 extract.py 未改动。",
+        },
         "first_failed_condition_histogram": _histogram(log_rows),
         "merged_groups_detail": [{
             "merged_event_key": m["merged_event_key"],
@@ -579,11 +655,17 @@ def run(args) -> int:
     dump_jsonl(paths["merge_log"], log_rows)
     dump_jsonl(paths["events_merged"], merged_events)
     dump_json(paths["merge_summary"], summary)
-    result = self_test(records, entity_map, paths)
+    result = self_test(records, entity_map, paths, time_backfill)
     dump_json(paths["dedup_self_test"], result)
 
     print("输入：%s（%d 篇，指纹 %s…）；消歧产物指纹一致 ✓"
           % (records_path, len(records), fingerprint["extract_records_sha256"][:16]))
+    print("时间补抽覆盖层：%s（%s；应用 %d 条事件，依据 %s）"
+          % (summary["time_backfill"]["overlay"],
+             "缺失，按 T3 原口径" if summary["time_backfill"]["overlay_missing"]
+             else "sha256 %s…" % backfill_sha[:16],
+             summary["time_backfill"]["applied_events"],
+             summary["time_backfill"]["applied_by_basis"]))
     print("事件 %d 条；类型相同因而进入逐条判据的候选对 %d 对；四条件同时满足 %d 对；"
           "合并成组 %d 组，事件数 %d → %d"
           % (len(events), len(log_rows), len(merged_pairs), len(merged_groups),
@@ -612,6 +694,14 @@ def _histogram(log_rows):
     for row in log_rows:
         key = row["first_failed_condition"] or "all_satisfied"
         counts[key] = counts.get(key, 0) + 1
+    return {k: counts[k] for k in sorted(counts)}
+
+
+def _counts(values):
+    """通用计数（按取值排序输出）；与 `_histogram` 的区别是它收的是取值序列，不是判据行。"""
+    counts = {}
+    for value in values:
+        counts[value] = counts.get(value, 0) + 1
     return {k: counts[k] for k in sorted(counts)}
 
 

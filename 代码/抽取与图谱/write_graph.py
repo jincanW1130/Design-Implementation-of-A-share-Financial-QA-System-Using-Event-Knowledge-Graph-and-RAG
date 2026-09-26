@@ -38,8 +38,12 @@ r"""write_graph.py —— 第 6 阶段「图谱写入与导出」（T6）。
 9. 导出物**只含编号、类型、名称、证据编号与置信度，不复制正文**（硬约束 8、11）：
    `quote`／`note`／`content` 等正文或调试字段一律不进导出物，并用「正文 100 字子串回查」
    机器核验。
-10. 未消歧的实体**不写进图谱**（《10》第4.5.4节：人工确认后再写入图谱），引用它们的边
-    一并跳过并逐条计数（`config.GRAPH["include_unresolved_entities"]=False`）。
+10. 未消歧的实体**默认不写进图谱**（《10》第4.5.4节：先匹配别名表，匹配失败进待消歧列表，
+    **人工确认后再写入图谱**）：`config.GRAPH["include_unresolved_entities"]=False` 仍是默认
+    口径；唯一例外是**人可编辑的确认文件**（`config.human_confirmation_path()`，由
+    `待人工确认清单.md` 播种）里标了 `confirmed: true` 的条目——它们各建**一个**自己的节点
+    （节点名＝书写面、**无 stock_code**、编号 `HCONF-####`），从不并进配置公司；未确认条目
+    继续排除，被跳过的边逐条计数。确认贡献的节点数／边数写进 `graph_stats.json`，可审计。
 11. `replay.cypher` 的 DDL 是《10》第4.5.3节 的 **7 条唯一性约束 ＋ 3 条索引**，逐字照抄；
     本阶段**不写关系库 DDL、不新增表**（六张表仍是六张）。
 
@@ -119,6 +123,8 @@ def sha256_text(text) -> str:
 
 
 def sha256_file(path) -> str:
+    if not path or not os.path.isfile(path):
+        return ""                      # 文件不存在（如未跑 T3.5 的 profile）＝没有该版内容
     digest = hashlib.sha256()
     with open(path, "rb") as fh:
         for block in iter(lambda: fh.read(65536), b""):
@@ -200,6 +206,15 @@ def load_previous(paths, fingerprint):
     if not merged or merged[0].get("cache_fingerprint") != fingerprint:
         raise SystemExit("去重产物与当前抽取结果不是同一份缓存（指纹不一致）：%s"
                          % paths["events_merged"])
+    # T3.5 定向时间补抽的覆盖层也要对得上：否则 event_time／basis 会与盘上覆盖层不是同一版。
+    current_backfill = sha256_file(config.time_backfill_paths(paths["profile"])["overlay"])
+    recorded_backfill = str(merged[0].get("time_backfill_sha256") or "")
+    if recorded_backfill != current_backfill:
+        raise SystemExit(
+            "去重产物与当前时间补抽覆盖层不是同一版：events_merged 记 %s，当前覆盖层 %s。\n"
+            "请先重跑：python 代码\\抽取与图谱\\extract_event_time.py --profile %s，"
+            "再重跑 dedup_events.py（必要时加 --force）。"
+            % (recorded_backfill or "（无）", current_backfill or "（无）", paths["profile"]))
     return disambig, merged
 
 
@@ -228,6 +243,80 @@ def load_doc_meta(doc_ids):
 
 
 # --------------------------------------------------------------------------
+# 人工确认的实体（《10》第4.5.4节：匹配失败进待消歧列表，人工确认后再写入图谱）
+# --------------------------------------------------------------------------
+def load_confirmation(profile):
+    """读**人可编辑**的确认文件（只读；文件缺失＝没有任何人工确认，按默认口径排除）。
+
+    确认是**数据**：文件由 `阶段06-事件抽取与知识图谱\图谱导出\v2.1\待人工确认清单.md` 播种，
+    人工把条目改成 `confirmed: true` 即视为「已确认」。本函数只做读取与归一化，不做判定，
+    也不设默认值（缺少 `confirmed` 字段＝未确认）。
+
+    落点：**交付物导出目录是唯一的人编入口**（与四件套同目录）；`write_graph.py` 每次把它的
+    字节级副本放到管线工作目录（`config.pipeline_paths()["work_root"]`），供「删掉导出物、
+    只读缓存重跑」这类镜像重跑复现。若导出目录的确认文件缺失而工作目录有副本，先按字节
+    恢复再读——因此两处内容逐字节一致，`graph_stats.json` 里登记的路径恒为导出目录那一个。
+    """
+    path = config.human_confirmation_path(profile)
+    work_root = config.pipeline_paths(profile)["work_root"]
+    copy_path = os.path.join(work_root, config.HUMAN_CONFIRMATION["filename"])
+    info = {"path": path, "copy_path": copy_path, "sha256": "", "payload": None,
+            "entries": {}, "order": [], "confirmed_names": [], "unconfirmed_names": [],
+            "rejected": [], "resolved_from": "export_dir", "copy_state": "absent"}
+    if not os.path.isfile(path) and os.path.isfile(copy_path):
+        os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+        with open(copy_path, "rb") as src, open(path, "wb") as dst:
+            dst.write(src.read())
+        info["resolved_from"] = "restored_from_work_root_copy"
+    if not os.path.isfile(path):
+        return info
+    with open(path, encoding="utf-8") as fh:
+        payload = json.load(fh)
+    # 运行副本：与导出目录逐字节一致；不一致时刷新并提示（导出目录那一份才是权威）。
+    with open(path, "rb") as fh:
+        raw = fh.read()
+    current = None
+    if os.path.isfile(copy_path):
+        with open(copy_path, "rb") as fh:
+            current = fh.read()
+    if current != raw:
+        os.makedirs(os.path.dirname(os.path.abspath(copy_path)), exist_ok=True)
+        with open(copy_path, "wb") as fh:
+            fh.write(raw)
+        info["copy_state"] = "refreshed" if current is not None else "created"
+        if current is not None:
+            print("[注意] 管线工作目录里的确认文件副本与导出目录不一致，已按导出目录刷新：%s"
+                  % rel(copy_path))
+    else:
+        info["copy_state"] = "in_sync"
+    if payload.get("schema") != config.HUMAN_CONFIRMATION["schema"]:
+        raise SystemExit("确认文件的 schema 不是 %s：%s"
+                         % (config.HUMAN_CONFIRMATION["schema"], path))
+    field = config.HUMAN_CONFIRMATION["field"]
+    for entry in payload.get("entries") or []:
+        name = str(entry.get("name") or "").strip()
+        norm = config.normalize_entity_name(name)
+        if not norm:
+            raise SystemExit("确认文件里有空名称条目：%s" % path)
+        record = dict(entry)
+        record["name"] = name
+        record["normalized_name"] = norm
+        record["label"] = str(entry.get("label") or "Company")
+        record["confirmed"] = bool(entry.get(field))
+        if norm not in info["entries"]:
+            info["order"].append(norm)
+        # 同一个归一化名称只保留一条（确认优先；重复条目按 name 排序取第一个）
+        previous = info["entries"].get(norm)
+        if previous is None or (record["confirmed"] and not previous["confirmed"]):
+            info["entries"][norm] = record
+    info["sha256"] = sha256_file(path)
+    info["confirmed_names"] = sorted(n for n in info["entries"] if info["entries"][n]["confirmed"])
+    info["unconfirmed_names"] = sorted(n for n in info["entries"]
+                                       if not info["entries"][n]["confirmed"])
+    return info
+
+
+# --------------------------------------------------------------------------
 # 编号分配（显式、确定性、可复现）
 # --------------------------------------------------------------------------
 def label_rank(label):
@@ -235,8 +324,8 @@ def label_rank(label):
     return order.index(label) if label in order else len(order)
 
 
-def assign_nodes(disambig, merged, meta, alias_table_path=None):
-    """返回 (节点行列表, 身份键→节点号, 事件键→节点号)。"""
+def assign_nodes(disambig, merged, meta, alias_table_path=None, confirmation=None):
+    """返回 (节点行列表, 身份键→节点号, 事件键→节点号, 人工确认读数)。"""
     entity_rows, by_identity = {}, {}
     # 1) 实体节点：只取**已消歧**的（未消歧的按《10》第4.5.4节 不写进图谱）。
     for item in disambig["entity_map"].values():
@@ -306,6 +395,64 @@ def assign_nodes(disambig, merged, meta, alias_table_path=None):
             row[id_attr] = row["node_id"]
             row[name_attr] = row["name"]
 
+    # 3.5 人工确认的实体：只对**确认文件里 confirmed=true** 的名称建节点（其余继续排除）。
+    #     节点名＝书写面（确认文件里登记的名字），**不填 stock_code**（没有解析出代码）；
+    #     编号按（归一化名称）确定性分配 HCONF-####，因此同名只产生一个节点，也不与
+    #     Company（stock_code）编号冲突。确认名称若命中配置公司的书写面 → 拒绝写入并计数上报
+    #     （绝不把确认名称并进配置公司）。
+    confirmation = confirmation or {"entries": {}, "sha256": "", "path": ""}
+    configured_surfaces = set()
+    for code, entry in (alias_table or {}).items():
+        configured_surfaces.add(str(code))
+        surfaces = entry.get("normalized_alias_surfaces") or [entry.get("normalized_short_name")]
+        for surface in surfaces:
+            if surface:
+                configured_surfaces.add(str(surface))
+    confirmed_rows, rejected = [], []
+    endpoint_map, label_map = {}, {}
+    for norm in sorted(confirmation["entries"]):
+        entry = confirmation["entries"][norm]
+        if not entry["confirmed"]:
+            continue
+        if norm in configured_surfaces:
+            rejected.append({"name": entry["name"], "normalized_name": norm,
+                             "reason": "confirmed_name_matches_configured_company",
+                             "note": "该名称命中配置公司（105 家）的书写面：按冻结口径由消歧"
+                                     "规则归并到 stock_code 节点，本机制不得再建第二个节点"})
+            continue
+        label = entry["label"]
+        key = "%s%s%s%s%s" % (label, config.DISAMBIG["identity_key_separator"],
+                              config.HUMAN_CONFIRMATION["identity_key_prefix"],
+                              config.DISAMBIG["identity_key_separator"], norm)
+        row = by_identity.get(key)
+        if row is None:
+            row = {"label": label, "name": entry["name"], "_surfaces": {entry["name"]},
+                   "_identity_key": key, "_nodes": [], "_confirmed": True,
+                   "_confirmation_entry": entry}
+            for attr in ("stock_code", "company_name", "short_name", "aliases", "exchange",
+                         "person_id", "person_name", "role_title", "industry_code",
+                         "industry_name", "level", "institution_id", "institution_name",
+                         "institution_type", "policy_id", "policy_name", "issuer",
+                         "publish_date"):
+                row[attr] = ""
+            by_identity[key] = row
+            confirmed_rows.append(row)
+        endpoint_map[norm] = key
+        label_map[norm] = label
+    for index, row in enumerate(sorted(confirmed_rows,
+                                       key=lambda r: (r["label"], r["_identity_key"]))):
+        row["node_id"] = "%s-%0*d" % (config.HUMAN_CONFIRMATION["node_id_prefix"],
+                                      int(config.GRAPH["id_width"]), index + 1)
+        # 类型属性：Company 只落 name（无 stock_code）；其余四类按本体的编号／名称属性落值。
+        id_attr = {"Person": "person_id", "Institution": "institution_id",
+                   "Policy": "policy_id", "Industry": "industry_code"}.get(row["label"])
+        name_attr = {"Person": "person_name", "Institution": "institution_name",
+                     "Policy": "policy_name", "Industry": "industry_name"}.get(row["label"])
+        if id_attr:
+            row[id_attr] = row["node_id"]
+        if name_attr:
+            row[name_attr] = row["name"]
+
     # 4) 事件节点：合并后的事件；编号按（代表文档, 代表事件号）确定性排序。
     event_rows, event_by_key = [], {}
     ordered = sorted(merged, key=lambda m: (m["representative_doc_id"],
@@ -340,11 +487,33 @@ def assign_nodes(disambig, merged, meta, alias_table_path=None):
 
     nodes = list(by_identity.values()) + event_rows + doc_rows
     nodes.sort(key=lambda r: (label_rank(r["label"]), str(r["node_id"])))
-    return nodes, by_identity, event_by_key
+    confirmation_info = {
+        "source_file": rel(confirmation.get("path") or ""),
+        "work_root_copy": rel(confirmation.get("copy_path") or ""),
+        "sha256": confirmation.get("sha256") or "",
+        "entries_total": len(confirmation["entries"]),
+        "entries_confirmed": len([n for n in confirmation["entries"]
+                                  if confirmation["entries"][n]["confirmed"]]),
+        "entries_unconfirmed": len([n for n in confirmation["entries"]
+                                    if not confirmation["entries"][n]["confirmed"]]),
+        "confirmed_names": sorted(r["name"] for r in confirmed_rows),
+        "unconfirmed_names": sorted(confirmation["entries"][n]["name"]
+                                    for n in confirmation["entries"]
+                                    if not confirmation["entries"][n]["confirmed"]),
+        "node_ids": sorted(r["node_id"] for r in confirmed_rows),
+        "nodes_by_label": _counts(r["label"] for r in confirmed_rows),
+        "rejected_not_merged_into_configured_company": rejected,
+    }
+    return nodes, by_identity, event_by_key, confirmation_info, (endpoint_map, label_map)
 
 
-def node_id_of_endpoint(local_id, by_identity, event_by_key, disambig, doc_id=None):
-    """把一个缓存里的局部编号解析成节点号；返回 (节点号 或 None, 未消歧原因 或 None)。"""
+def node_id_of_endpoint(local_id, by_identity, event_by_key, disambig, doc_id=None,
+                        confirmed_by_name=None):
+    """把一个缓存里的局部编号解析成节点号；返回 (节点号 或 None, 未消歧原因 或 None)。
+
+    未消歧的实体若在**人工确认文件**里被标为 `confirmed: true`，按其归一化名称解析到
+    HCONF 节点（《10》第4.5.4节：人工确认后再写入图谱）；未确认的仍返回 `unresolved_entity`。
+    """
     for key in ((doc_id, local_id), local_id):
         if key in event_by_key:
             return event_by_key[key]["node_id"], None
@@ -352,6 +521,15 @@ def node_id_of_endpoint(local_id, by_identity, event_by_key, disambig, doc_id=No
     if item is None:
         return None, "endpoint_not_in_cache"
     if item.get("status") != "resolved" or not item.get("identity_key"):
+        norm = item.get("normalized_name") or config.normalize_entity_name(item.get("name"))
+        endpoints, labels = (confirmed_by_name or ({}, {}))
+        key = endpoints.get(norm)
+        if key is not None:
+            if str(labels.get(norm)) != str(item.get("label")):
+                return None, "confirmed_label_mismatch"
+            row = by_identity.get(key)
+            if row is not None:
+                return row["node_id"], None
         return None, "unresolved_entity"
     row = by_identity.get(item["identity_key"])
     if row is None:
@@ -359,7 +537,7 @@ def node_id_of_endpoint(local_id, by_identity, event_by_key, disambig, doc_id=No
     return row["node_id"], None
 
 
-def build_edges(records, disambig, merged, by_identity, event_by_key):
+def build_edges(records, disambig, merged, by_identity, event_by_key, confirmed_by_name=None):
     """关系边：先把事件端点重定向到合并后的事件，再补 EVIDENCED_BY。"""
     edges, skipped, seen = [], [], set()
     duplicates = 0
@@ -378,9 +556,11 @@ def build_edges(records, disambig, merged, by_identity, event_by_key):
                                 "relation": kind, "reason": "regenerated_from_merged_event"})
                 continue
             head_id, why_head = node_id_of_endpoint(
-                str(relation["head_id"]), by_identity, event_by_key, disambig, doc_id)
+                str(relation["head_id"]), by_identity, event_by_key, disambig, doc_id,
+                confirmed_by_name)
             tail_id, why_tail = node_id_of_endpoint(
-                str(relation["tail_id"]), by_identity, event_by_key, disambig, doc_id)
+                str(relation["tail_id"]), by_identity, event_by_key, disambig, doc_id,
+                confirmed_by_name)
             if head_id is None or tail_id is None:
                 skipped.append({
                     "doc_id": doc_id, "relation_id": relation["relation_id"], "relation": kind,
@@ -664,6 +844,26 @@ def check_export(paths, nodes, edges, fingerprint, profile, extra_text=""):
         {"entity_labels": list(config.ENTITY_TYPES), "document_label": config.DOCUMENT_LABEL,
          "document_nodes": len(by_label.get(config.DOCUMENT_LABEL, []))})
 
+    # 11 人工确认的实体（《10》第4.5.4节：人工确认后再写入图谱；确认是数据，不是代码）
+    prefix = config.HUMAN_CONFIRMATION["node_id_prefix"] + "-"
+    confirmed_nodes = [n for n in nodes if str(n.get("node_id") or "").startswith(prefix)]
+    confirmed_names = [config.normalize_entity_name(n.get("name")) for n in confirmed_nodes]
+    duplicate_names = sorted({x for x in confirmed_names if confirmed_names.count(x) > 1})
+    with_stock_code = [n["node_id"] for n in confirmed_nodes if (n.get("stock_code") or "")]
+    add("human_confirmed_nodes_no_stock_code", not with_stock_code,
+        {"nodes": len(confirmed_nodes), "with_stock_code": with_stock_code[:5],
+         "note": "确认的是名单外主体，没有解析出 stock_code，因此不填该列（不猜代码）"})
+    add("human_confirmed_nodes_unique_one_per_name", not duplicate_names,
+        {"nodes": len(confirmed_nodes), "duplicate_names": duplicate_names[:5],
+         "names": sorted(confirmed_names)[:12],
+         "note": "同名只产生一个节点；编号按归一化名称确定性分配 %s-####"
+                 % config.HUMAN_CONFIRMATION["node_id_prefix"]})
+    expected, rejected_names = _confirmation_expectation(paths)
+    add("human_confirmed_entries_match_export", len(confirmed_nodes) == expected,
+        {"confirmed_entries_in_file": expected, "human_confirmed_nodes_in_export":
+         len(confirmed_nodes), "rejected_configured_company_matches": rejected_names[:5],
+         "source_file": rel(config.human_confirmation_path(profile))})
+
     result = {
         "schema": config.GRAPH_SCHEMA,
         "dataset_version": config.DATASET_VERSION,
@@ -690,6 +890,40 @@ def _counts(values):
     for value in values:
         out[value] = out.get(value, 0) + 1
     return {k: out[k] for k in sorted(out)}
+
+
+def _confirmation_expectation(paths):
+    """确认文件里**应当**被写进图谱的条目数（＝ confirmed=true 且未命中配置公司书写面）。
+
+    与 `assign_nodes` 用同一套判定，避免「机检自己说自己」：两边都只做同一件事——
+    读确认文件 ＋ 读别名表，然后数「该建几个节点」。
+    """
+    path = config.human_confirmation_path(paths["profile"])
+    if not os.path.isfile(path):
+        return 0, []
+    with open(path, encoding="utf-8") as fh:
+        payload = json.load(fh)
+    configured = set()
+    if os.path.isfile(paths.get("alias_table") or ""):
+        with open(paths["alias_table"], encoding="utf-8") as fh:
+            table = json.load(fh).get("companies") or {}
+        for code, entry in table.items():
+            configured.add(str(code))
+            for surface in (entry.get("normalized_alias_surfaces")
+                            or [entry.get("normalized_short_name")]):
+                if surface:
+                    configured.add(str(surface))
+    field = config.HUMAN_CONFIRMATION["field"]
+    expected, rejected = 0, []
+    for entry in payload.get("entries") or []:
+        if not entry.get(field):
+            continue
+        norm = config.normalize_entity_name(entry.get("name"))
+        if norm in configured:
+            rejected.append(entry.get("name"))
+        else:
+            expected += 1
+    return expected, rejected
 
 
 def _body_check(paths, text):
@@ -724,19 +958,33 @@ def _body_check(paths, text):
 # 主流程
 # --------------------------------------------------------------------------
 def build_all(paths, records, disambig, merged, meta):
-    nodes, by_identity, event_by_key = assign_nodes(disambig, merged, meta,
-                                                    paths["alias_table"])
+    confirmation = load_confirmation(paths["profile"])
+    nodes, by_identity, event_by_key, confirmation_info, endpoint_index = assign_nodes(
+        disambig, merged, meta, paths["alias_table"], confirmation)
     edges, skipped, duplicates = build_edges(records, disambig, merged, by_identity,
-                                             event_by_key)
+                                             event_by_key, endpoint_index)
     # 边的端点标签：重放脚本与机检都要用
     label_of = {str(n["node_id"]): n["label"] for n in nodes}
     for edge in edges:
         edge["head_label"] = label_of.get(str(edge["head_id"]), "")
         edge["tail_label"] = label_of.get(str(edge["tail_id"]), "")
-    return nodes, edges, skipped, duplicates
+    # 人工确认的贡献：确认节点本身，以及「至少一个端点是确认节点」的边。
+    confirmed_ids = set(confirmation_info["node_ids"])
+    attributed = [e for e in edges
+                  if str(e["head_id"]) in confirmed_ids or str(e["tail_id"]) in confirmed_ids]
+    confirmation_info["nodes_added"] = len(confirmed_ids)
+    confirmation_info["edges_added"] = len(attributed)
+    confirmation_info["edges_added_by_relation"] = _counts(e["relation"] for e in attributed)
+    confirmation_info["policy"] = config.DISAMBIG["unresolved_company_policy"]
+    confirmation_info["note"] = (
+        "《10》第4.5.4节：匹配失败进待消歧列表，**人工确认后再写入图谱**。确认是数据"
+        "（确认文件的 confirmed 字段），不是代码；未确认条目继续排除，确认名称只建一个节点、"
+        "不并进配置公司。")
+    return nodes, edges, skipped, duplicates, confirmation_info
 
 
-def write_products(paths, nodes, edges, skipped, duplicates, merged, fingerprint, stats_extra):
+def write_products(paths, nodes, edges, skipped, duplicates, merged, fingerprint, stats_extra,
+                   confirmation_info=None):
     columns_n, columns_e = config.GRAPH["node_columns"], config.GRAPH["edge_columns"]
     nodes_csv = to_csv(columns_n, nodes)
     edges_csv = to_csv(columns_e, edges)
@@ -772,7 +1020,21 @@ def write_products(paths, nodes, edges, skipped, duplicates, merged, fingerprint
             "relations_skipped_by_relation": _counts(s["relation"] for s in skipped),
             "sample": skipped[:5],
         },
+        # 人工确认的实体写入图谱：逐项可审计（《10》第4.5.4节）
+        "human_confirmation": confirmation_info or {},
         "edge_dedup": {"duplicate_rows_removed": duplicates},
+        # Event 节点的 event_time 依据分布（T3.5 定向时间补抽的审计读数）：
+        # stated＝正文明确写出年月日（T3 原值与补抽的 stated 都算）；year_from_publish＝窗口
+        # 只给月日、年份由文档 publish_time 按确定性规则锚定；null＝确实没有可归属的日期。
+        "event_time_basis": {
+            "events_total": sum(1 for n in nodes if n["label"] == "Event"),
+            "by_basis": _counts(m.get("event_time_basis") or "null" for m in merged),
+            "source": os.path.relpath(config.time_backfill_paths(paths["profile"])["overlay"],
+                                      config.ROOT).replace("\\", "/"),
+            "source_sha256": merged[0].get("time_backfill_sha256") if merged else "",
+            "note": "basis 只作为审计读数落在 graph_stats.json；Event 节点列仍严格照"
+                    "《10》第4.5.1节 表 4-8 的六项核心属性，不新增字段。",
+        },
         "isolated_nodes": {
             "count": _isolated(nodes, edges),
             "note": "无边节点：实体抽到了但语料没给出关系；如实保留，不删（不是遗漏）",
@@ -822,9 +1084,16 @@ def write_products(paths, nodes, edges, skipped, duplicates, merged, fingerprint
     for path in (paths["graph_check"],):
         manifest_lines.append("%s  %s  %d bytes" % (sha256_file(path), rel(path),
                                                     os.path.getsize(path)))
+    confirmation_path = config.human_confirmation_path(paths["profile"])
+    if os.path.isfile(confirmation_path):
+        manifest_lines.append("%s  %s  %d bytes"
+                              % (sha256_file(confirmation_path), rel(confirmation_path),
+                                 os.path.getsize(confirmation_path)))
     manifest_lines.append("# 说明：graph_stats.json 每次运行的 generated_at 不同，其校验和随之变化；"
                           "四件套的逐字节稳定性以 nodes.csv／edges.csv／replay.cypher 为准，"
                           "graph_stats.json 排除 generated_at 与缓存指纹字段后一致。")
+    manifest_lines.append("# 说明：末行（若存在）是人工确认文件——确认是数据，不是代码；"
+                          "改它只需重跑 write_graph.py。")
     write_text(paths["manifest"], "\n".join(manifest_lines) + "\n")
     return stats, checks
 
@@ -868,11 +1137,13 @@ def run(args) -> int:
     doc_ids = {d for m in merged for d in m["evidence_doc_ids"]}
     meta = load_doc_meta(doc_ids)
     missing_meta = sorted(doc_ids - set(meta))
-    nodes, edges, skipped, duplicates = build_all(paths, records, disambig, merged, meta)
+    nodes, edges, skipped, duplicates, confirmation_info = build_all(paths, records, disambig,
+                                                                    merged, meta)
 
     stats, checks = write_products(paths, nodes, edges, skipped, duplicates, merged,
                                    fingerprint,
-                                   {"document_meta_missing": missing_meta})
+                                   {"document_meta_missing": missing_meta},
+                                   confirmation_info)
 
     print("输入（只读）：%s（%d 篇，sha256 %s…）"
           % (rel(records_path), len(records), fingerprint["extract_records_sha256"][:16]))
@@ -883,6 +1154,17 @@ def run(args) -> int:
     print("未消歧端点跳过的关系 %d 条（按原因 %s）；重复边去掉 %d 条；无边节点 %s 个"
           % (len(skipped), stats["unresolved"]["relations_skipped_by_reason"], duplicates,
              stats["isolated_nodes"]["count"]))
+    print("人工确认：确认文件 %s（sha256 %s…）；确认条目 %d／未确认 %d；"
+          "新增节点 %d 个、据此写入边 %d 条（%s）"
+          % (confirmation_info["source_file"], (confirmation_info["sha256"] or "-")[:16],
+             confirmation_info["entries_confirmed"], confirmation_info["entries_unconfirmed"],
+             confirmation_info["nodes_added"], confirmation_info["edges_added"],
+             confirmation_info["edges_added_by_relation"]))
+    print("          运行副本：%s（导出目录那一份是唯一人编入口；缺失时按副本恢复）"
+          % confirmation_info["work_root_copy"])
+    for item in confirmation_info["rejected_not_merged_into_configured_company"]:
+        print("[注意] 确认条目命中配置公司书写面、拒绝建节点：%s（%s）"
+              % (item["name"], item["reason"]))
     if missing_meta:
         print("[注意] 数据集里查不到文档元数据的证据文档：%s" % missing_meta)
     _print_checks(checks)

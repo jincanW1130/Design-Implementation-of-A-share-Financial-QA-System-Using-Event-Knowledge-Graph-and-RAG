@@ -13,9 +13,10 @@
 | --- | --- | --- | --- |
 | `config.py` | — | — | 全部冻结参数：模型与版本、Prompt 版本、temperature、路径、节奏与重试、本体枚举、试跑选样规则、覆盖性重算的对照值 |
 | `extract.py` | T1／T3 | v2.1 的 `clean\documents.jsonl` 与 `chunks\chunks.jsonl` | `阶段05-数据准备\数据集\_抽取缓存\v2.1\{doc_id}.json`；试跑产物落 `_试跑\` |
+| `extract_event_time.py` | T3.5（2026-09-26 追加） | 上述缓存（只读）＋ v2.1 的 `chunks\chunks.jsonl` | `_抽取缓存\v2.1\时间补抽\{event_id}.json`（**独立缓存**）＋ 覆盖层 `_全量\v2.1\event_time_backfill.json`／报告／度量（见第十一节） |
 | `disambiguate.py` | T4（已落地） | 上述缓存 | `消歧\alias_table.json`、`消歧\disambiguation.json`、`消歧\unresolved.jsonl` |
-| `dedup_events.py` | T5（已落地） | 上述缓存 ＋ T4 的消歧产物 | `去重\merge_log.jsonl`、`去重\events_merged.jsonl`、`去重\merge_summary.json`、`去重\dedup_self_test.json` |
-| `write_graph.py` | T6（已落地） | 缓存（只读） ＋ T4／T5 产物 | 图谱导出物四件套 ＋ `graph_check.json`／`manifest.sha256` |
+| `dedup_events.py` | T5（已落地） | 上述缓存 ＋ T4 的消歧产物 ＋ T3.5 覆盖层（只读） | `去重\merge_log.jsonl`、`去重\events_merged.jsonl`、`去重\merge_summary.json`、`去重\dedup_self_test.json` |
+| `write_graph.py` | T6（已落地） | 缓存（只读） ＋ T4／T5 产物 ＋ **人工确认文件**（只读） | 图谱导出物四件套 ＋ `graph_check.json`／`manifest.sha256` |
 | `run_all.py` | T7（已落地） | — | 按 extract → disambiguate → dedup_events → write_graph 串联 |
 | `build_company_aliases.py` | T4 的**离线建档工具**（不属于管线，`run_all.py` 不调用） | 第 5 阶段 `COMPANIES` ＋ 巨潮公司概况接口（`cninfo_company_intro`）／v2.1 公告标题 | `company_registered_names.py`：105 家配置公司的注册全称，逐家带来源与证据 |
 | `company_registered_names.py` | T4 的**冻结别名数据**（由上一行的工具生成，不手改） | — | `REGISTERED_NAMES`：`disambiguate.py` 只读加载，把注册全称并入别名表 |
@@ -35,6 +36,12 @@ python 代码\抽取与图谱\extract.py --docs 1026,1018    :: 只跑指定 doc
 python 代码\抽取与图谱\extract.py --force             :: 忽略已有缓存，重新调用并重写缓存
 python 代码\抽取与图谱\extract.py --verify            :: 独立核对既有产物，不调模型
 python 代码\抽取与图谱\extract.py --profile v21       :: 全量 709 篇（T3 的口径，T1 不执行）
+
+python 代码\抽取与图谱\extract_event_time.py --profile v21             :: T3.5 定向时间补抽（只补 event_time 为 null 的事件）
+python 代码\抽取与图谱\extract_event_time.py --profile v21 --limit 3   :: 联机自检：只跑前 3 条
+python 代码\抽取与图谱\extract_event_time.py --profile v21 --verify    :: 按缓存重算复核并与覆盖层逐字节比对（零调用、零写入）
+python 代码\抽取与图谱\extract_event_time.py --profile v21 --measure   :: 时间覆盖／可过滤性指标（补抽前／后，零调用）
+python 代码\抽取与图谱\extract_event_time.py --profile v21 --force     :: 忽略补抽缓存重调（会花钱）
 ```
 
 * `--profile pilot`（默认）：`config.PILOT` 的确定性选样，**12 篇**覆盖 8 种事件类型与 4 个类目。
@@ -350,3 +357,56 @@ T6 另在**工作目录**（不是导出目录）写 `graph_check.json`（第八
   两项已知缺口即 `event_time` 空值 19 条与 `BELONGS_TO` 有效期留空。
 * **T7**：整链复跑 2 次，`extract.py` 12 篇全部命中缓存、**模型调用 0 次**，各产物逐字节一致
   （`graph_stats.json` 剔除上述两个字段后一致）。
+
+## 十一、T3.5 定向时间补抽 与 人工确认的实体写入图谱（2026-09-26 追加）
+
+本节是 2026-09-26 两项修复的接口口径：**只新增**（新脚本、新缓存目录、新覆盖层、新确认文件），
+`extract.py`、主抽取缓存 `_抽取缓存\v2.1\{doc_id}.json`、第 1～9 节既有参数取值一律未改。
+
+### 11.1 T3.5 定向时间补抽（`extract_event_time.py`）
+
+* **只处理 null 事件**：T3 实测 989／1649 条事件的 `event_time` 为 null；补抽只为这些事件建
+  一个小提示词（事件类型／事件名称／证据引文／引文周围的**有界窗口**／文档 `publish_time`），
+  非空事件一个字节都不改。
+* **窗口大小（本节定义，脚本与 config 同步登记）**：以证据引文在**证据块**里的匹配位置为中心，
+  前后各取 `EVENT_TIME_BACKFILL["window_chars"]=500` 个字符；窗口贴到该证据块边界时，允许把
+  同文档前／后各一块最多 `neighbor_chars=300` 个字符补进来。窗口因此**有界**：
+  ≤ 2×500 ＋ 引文长度 ＋ 2×300（实测典型 700～1900 字符，约合全量的 1/4 文档长度）。
+  选择 500／300 的理由（实测）：把它放大到 900／600 只多出 59 条「窗口里有完整日期」的候选，
+  而「≥2 条带日期事件」的可过滤性指标在两种窗口下的上界完全相同（163 篇），故取更小更便宜的一档。
+* **日期书写形式**：`2026 年8 月27 日`（数字与 CJK 之间夹空格，语料实测写法）与
+  `2026年8月27日`／`2026-08-27`／`2026/8/27`／`2026.8.27` 等价；提示词里写明，复核在**去掉
+  全部空白**的窗口副本上比对。**日期可以出现在窗口的任何位置**（不必落在证据引文内），
+  但模型必须把承载日期的那一句逐字抄进 `evidence_quote`（≤200 字）。
+* **年份锚定规则（确定性、不猜）**：窗口只给「月日」时，年份由 `publish_time` 锚定——
+  **月 ≤ 发布月 → 发布年；否则 发布年 − 1**；记 `event_time_basis="year_from_publish"`
+  （**绝不**记成 `stated`），且月日必须在窗口里**独立出现**（前不带年份、后不带数字）才认定。
+* **`event_time_basis` 三值**：`stated`（正文明确写出年月日，且复核得到）／`year_from_publish`
+  （月日 ＋ 锚定年份）／`null`（窗口内确实没有可归属的日期）。复核不过一律回到 `null`，
+  并在结果里写 `reject_reason`（如 `stated_date_not_in_window`／`anchored_year_mismatch`），
+  **绝不编日期**。
+* **缓存（独立，与主抽取缓存物理分开）**：`_抽取缓存\v2.1\时间补抽\{event_id}.json`，只存
+  **原始返回 ＋ 模型 ＋ prompt 版本 ＋ 输入 sha256 ＋ 窗口 sha256**；解析与复核每次重算，
+  所以改复核规则不需要重调模型。缓存命中即**零模型调用**（不需要密钥、不需要网络）；
+  缓存与当前输入不一致且未 `--force` 时阻断。
+* **覆盖层（`dedup_events.py` 的唯一新增输入）**：`_全量\v2.1\event_time_backfill.json`
+  （pilot 落 `_试跑\`），**不含任何时间戳**，逐字节可重放；`dedup_events.py` 把它应用在事件
+  视图上——补出来的日期**同样参与**时间窗条件，合并后事件的 `event_time_basis` 取提供最早
+  非空日期的那位成员。产物里记 `time_backfill_sha256`，`write_graph.py` 校验它与盘上覆盖层一致。
+* **审计产物**：`event_time_backfill_report.json`（调用次数／token／墙钟／依据分布／复核拒绝
+  原因／抽样）、`时间覆盖_度量.json`（`--measure`：抽取层与图谱层的覆盖与可过滤性读数）。
+
+### 11.2 人工确认的实体写入图谱（`write_graph.py`）
+
+* **确认是数据**：人可编辑的 `阶段06-事件抽取与知识图谱\图谱导出\v2.1\人工确认清单.json`
+  （`config.HUMAN_CONFIRMATION`、`config.human_confirmation_path()`），由
+  `待人工确认清单.md` 播种；每条带 `confirmed` 字段，`true` 即确认。脚本只读它，不做判定、
+  不设默认值。
+* **写入口径**：`confirmed: true` 的条目各建**一个**自己的节点（节点名＝`name` 书写面，
+  **不填 stock_code**——没有解析出代码，也不猜），编号按归一化名称确定性分配 `HCONF-####`；
+  同名只产生一个节点。**确认名称命中配置公司书写面时拒绝建节点并计数上报**（绝不把确认名称
+  并进配置公司）。`confirmed: false` 或缺失的条目继续按原口径排除。
+* **可审计**：`graph_stats.json` 的 `human_confirmation` 段记确认文件路径／sha256／确认与未确认
+  条目数／新增节点数与编号／据此写入的边数与按关系分布／被拒绝的条；`graph_check.json` 另加
+  三条机检（无 stock_code、同名唯一、与确认文件的条目数一致）。`manifest.sha256` 追加一行
+  确认文件的校验和。

@@ -689,3 +689,170 @@ FULL_OUTPUT_FILES = {
 # 全量运行的完整控制台输出**不由脚本写**，而是由启动命令把 stdout／stderr 重定向到这里
 # （脚本内不写日志文件，避免与「产物确定性」混在一起）；此键只登记落点。
 FULL_RUN_LOG = os.path.join(FULL_RUN_DIR, "运行日志_全量.txt")
+
+# ==========================================================================
+# 10. 定向时间补抽（2026-09-26 追加；**只新增键**，第 1～9 节的既有取值一个都没有改动）
+# ==========================================================================
+# 依据与口径（两级抽取的第二级）：
+# * 第一级（T3，`extract.py`）的固定口径是「正文不能确定到日时写 null，绝不猜测」；全量实测
+#   989／1649 条事件的 `event_time` 为 null。主抽取缓存（`_抽取缓存\<version>\<doc_id>.json`）
+#   与 `extract.py` 因此**一字不动**（重放逐字节不变）。
+# * 第二级只对 `event_time` 为 null 的事件做一次**定向补抽**：把事件类型／名称／证据引文／
+#   引文周围的**有界窗口**／文档发布时间给模型，只问「这个事件的日期 ＋ 依据标记」。
+# * 结果一律带 `event_time_basis`，取值只能是 `stated`（正文明确写出年月日）／
+#   `year_from_publish`（只给月日，按发布时间锚定年份）／`null`（窗口里确实没有可归属的日期）。
+#   日期先在**窗口原文**上复核（含「数字与汉字之间被空格切开」的写法），复核不过一律记 `null`，
+#   绝不猜测、绝不编日期。
+# * 缓存独立：`_抽取缓存\<version>\时间补抽\{event_id}.json`（存原始返回、模型、prompt 版本与
+#   输入 sha256）；复跑全部命中缓存时**零模型调用**，不需要密钥也不需要网络。
+EVENT_TIME_BACKFILL = {
+    "schema": "stage6-time-backfill-1.0",
+    "cache_schema": "stage6-time-backfill-cache-1.0",
+    # 端点与模型：与第 2 节 `LLM` 同一套环境变量与缺省值（这里只登记读取方式，不含密钥）。
+    "provider_note": "与 config.LLM 同端点、同模型（OpenAI 兼容对话补全）",
+    "base_url_env": LLM["base_url_env"],
+    "base_url_default": LLM["base_url_default"],
+    "model_env": LLM["model_env"],
+    "model_default": LLM["model_default"],
+    "model_pinned": LLM["model_pinned"],
+    "api_key_env": LLM["api_key_env"],
+    "temperature": 0,
+    "max_tokens": 512,
+    "response_format": "json_object",
+    "timeout_seconds": 180.0,
+    "prompt_version": "stage6-time-backfill-v1.0",
+    # 压缩重试：**只在主尝试被输出上限截断（finish_reason == "length"）时**触发一次。
+    # 2026-09-26 实测：本端点把 `deepseek-v4-flash` 解析为推理型模型，max_tokens=512 时
+    # 部分请求把 512 个完成 token 全用在思考上、正文为空（finish_reason="length"）；
+    # 与 2.2 节 `LLM["fallback"]` 同一套路：关掉思考（reasoning_effort="none"）再问一次，
+    # 两次原始返回都进缓存；被截断的缓存条目视为**未收敛**，下次运行自动补齐。
+    "fallback": {
+        "trigger_reason": "length",
+        "max_attempts": 2,
+        "max_tokens": 1024,
+        "reasoning_effort": "none",
+    },
+    # 窗口定义（README 第十一节 同步登记）：以证据引文在**证据块**里的匹配位置为中心，左右
+    # 各取 window_chars 个字符；窗口贴到该证据块边界时，允许向同文档的相邻块扩展，每侧最多
+    # neighbor_chars 个字符。窗口因此是**有界**的（≤ 2×window_chars ＋ 引文长度 ＋ 2×neighbor_chars）。
+    "window_chars": 500,
+    "neighbor_chars": 300,
+    "quote_max_chars": 200,
+    "window_rule_note": (
+        "窗口＝证据块内以引文为中心的前后各 window_chars 个字符；贴边时同文档前／后各一块最多 "
+        "neighbor_chars 个字符补进来。窗口写进缓存条目的 window_sha256，便于逐条复核。"
+    ),
+    # 日期书写形式：接受 4 种（与 TIME.accepted_income_forms 同一套），并额外接受
+    # 「数字与汉字之间被空格切开」的语料写法（实测 `司2026 年8 月27 日至28 日召开的…`）。
+    "spaced_form_note": (
+        "`2026 年8 月27 日`（数字与 CJK 之间夹空格）与 `2026年8月27日`／`2026-08-27`／"
+        "`2026/8/27`／`2026.8.27` 等价；复核在**去掉全部空白**的窗口副本上比对，"
+        "但**不做**大小写折叠、标点归一、模糊匹配或编辑距离。"
+    ),
+    # 年份锚定规则（确定性、文档化、不猜）：窗口只给月日时，年份取发布时间锚定值。
+    "year_from_publish_rule": "月日 ＋ 发布时间锚定：月 ≤ 发布月 → 发布年；否则 发布年 − 1",
+    "year_from_publish_note": (
+        "锚定年份是**推断值**，因此 `event_time_basis` 记 `year_from_publish` 而不是 `stated`；"
+        "月日必须在窗口里**独立出现**（前面不带 4 位年份、后面不带数字），否则不认定。"
+    ),
+    "basis_values": ["stated", "year_from_publish", "null"],
+    "basis_definitions": {
+        "stated": "正文（窗口）明确写出年月日，且日期在窗口里复核得到",
+        "year_from_publish": "窗口只给月日，年份按第 10 节的锚定规则从 publish_time 推出",
+        "null": "窗口内确实没有可归属到该事件的日期；事件保持 event_time=null",
+    },
+    # 缓存：与主抽取缓存同一个 work root（`_抽取缓存\<version>\`）下的**独立子目录**。
+    "cache_dir": os.path.join(CACHE_DIR, "时间补抽"),
+    "cache_file_pattern": "{event_id}.json",
+    "pacing": {
+        "min_interval_seconds": PACING["min_interval_seconds"],
+        "max_retries": PACING["max_retries"],
+        "backoff_base_seconds": PACING["backoff_base_seconds"],
+        "backoff_max_seconds": PACING["backoff_max_seconds"],
+    },
+    # 产物落点：与 T3 的全量产物同层（不是交付物、不入仓库），逐字节可重放。
+    "outputs": {
+        "pilot": {
+            "overlay": os.path.join(PILOT_DIR, "event_time_backfill.json"),
+            "report": os.path.join(PILOT_DIR, "event_time_backfill_report.json"),
+            "measure": os.path.join(PILOT_DIR, "时间覆盖_度量.json"),
+        },
+        "v21": {
+            "overlay": os.path.join(FULL_RUN_DIR, "event_time_backfill.json"),
+            "report": os.path.join(FULL_RUN_DIR, "event_time_backfill_report.json"),
+            "measure": os.path.join(FULL_RUN_DIR, "时间覆盖_度量.json"),
+        },
+    },
+}
+
+
+def time_backfill_paths(profile: str) -> dict:
+    r"""定向时间补抽（T3.5）的落点：pilot 落 `_试跑\`、v21 落 `_全量\<version>\`（与 T3 同层）。"""
+    table = EVENT_TIME_BACKFILL["outputs"].get(profile)
+    if not table:
+        raise KeyError("profile=%s 的时间补抽落点未在 config 中登记" % profile)
+    return {
+        "profile": profile,
+        "cache_dir": EVENT_TIME_BACKFILL["cache_dir"],
+        "overlay": table["overlay"],
+        "report": table["report"],
+        "measure": table["measure"],
+        "extract_records": extract_records_path(profile),
+    }
+
+
+def time_backfill_base_url() -> str:
+    """补抽端点：优先环境变量，缺省用本节固化的取值（端点不是密钥，可以写进配置）。"""
+    return (os.environ.get(EVENT_TIME_BACKFILL["base_url_env"])
+            or EVENT_TIME_BACKFILL["base_url_default"]).strip()
+
+
+def time_backfill_model() -> str:
+    """补抽请求的模型 id：优先环境变量 `LLM_MODEL`，缺省用本节固化的取值。"""
+    return (os.environ.get(EVENT_TIME_BACKFILL["model_env"])
+            or EVENT_TIME_BACKFILL["model_default"]).strip()
+
+
+def time_backfill_api_key() -> str:
+    """只写**读取方式**：密钥只来自环境变量，不入仓库、不落盘、不进日志。"""
+    name = EVENT_TIME_BACKFILL["api_key_env"]
+    value = (os.environ.get(name) or "").strip()
+    if not value:
+        raise RuntimeError(
+            "环境变量 %s 未就位：定向时间补抽需要调用模型接口，按《15》第十一节 阻断，"
+            "不得用占位文本或编造日期充数（缓存全部命中时本函数不会被调用）。" % name
+        )
+    return value
+
+
+# ==========================================================================
+# 11. 人工确认的实体写入图谱（2026-09-26 追加；**只新增键**，第 1～10 节取值未改）
+# ==========================================================================
+# 依据：《10-系统总体设计（第四阶段）》第4.5.4节「匹配失败进入待消歧列表，**人工确认后再写入
+# 图谱**」。确认结果是**数据，不是代码**：人可编辑的确认文件由 `待人工确认清单.md` 播种，
+# `write_graph.py` 只读它，把 `confirmed: true` 的条目写成**自己的节点**（节点名＝书写面；
+# 因为没有解析出 stock_code，所以不填 stock_code），从而让以它们为端点的边得以写入。
+# * 未确认条目（`confirmed: false` 或缺少该字段）一律继续排除，与
+#   `DISAMBIG["unresolved_company_policy"]` 的既有口径一致。
+# * 同一个确认名称只产生一个节点（按归一化名称去重）；确认名称**不得**并进配置公司
+#   （命中别名表书写面时拒绝写入并计数上报，绝不做「名字合并」）。
+# * 落点与命名：确认文件放交付物导出目录（与四件套同目录）；`write_graph.py` 在
+#   `graph_stats.json` 里登记「人工确认贡献」的节点数／边数与文件 sha256，效果可审计。
+HUMAN_CONFIRMATION = {
+    "schema": "stage6-human-confirmation-1.0",
+    "filename": "人工确认清单.json",
+    "field": "confirmed",
+    "node_id_prefix": "HCONF",
+    "seeded_from": "阶段06-事件抽取与知识图谱\\图谱导出\\v2.1\\待人工确认清单.md",
+    "identity_key_prefix": "human_confirmed",
+    "note": (
+        "确认条目＝《10》第4.5.4节 的待消歧主体经人工确认后的最终判定；节点编号按归一化名称"
+        "确定性排序分配 HCONF-####，不依赖数据库自增，也不与 Company（stock_code）编号冲突。"
+    ),
+}
+
+
+def human_confirmation_path(profile: str) -> str:
+    """确认文件的落点：与图谱导出物同目录（pilot 落试跑导出目录，v21 落交付物导出目录）。"""
+    export_dir = GRAPH_PIPELINE["export_roots"][profile]
+    return os.path.join(export_dir, HUMAN_CONFIRMATION["filename"])

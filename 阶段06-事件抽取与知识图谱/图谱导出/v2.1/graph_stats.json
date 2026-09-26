@@ -736,57 +736,69 @@
     "edges_by_relation": {
       "BELONGS_TO": 15,
       "COMPETES_WITH": 1,
-      "EVIDENCED_BY": 1644,
-      "HAS_EXECUTIVE": 159,
+      "CUSTOMER_OF": 10,
+      "EVIDENCED_BY": 1642,
+      "HAS_EXECUTIVE": 167,
       "ISSUED_BY": 172,
-      "PARTICIPATES_IN": 1592,
+      "PARTICIPATES_IN": 1609,
       "RELATED_TO": 147,
-      "SUPPLIES": 3
+      "SUPPLIES": 4
     },
-    "edges_total": 3733,
-    "events": 1623,
-    "merged_events": 24,
+    "edges_total": 3767,
+    "events": 1616,
+    "merged_events": 30,
     "nodes_by_label": {
-      "Company": 104,
+      "Company": 116,
       "Document": 705,
-      "Event": 1623,
+      "Event": 1616,
       "Industry": 97,
       "Institution": 371,
       "Person": 454,
       "Policy": 153
     },
-    "nodes_total": 3507,
-    "singleton_events": 1599
+    "nodes_total": 3512,
+    "singleton_events": 1586
   },
   "dataset_version": "v2.1",
   "edge_dedup": {
-    "duplicate_rows_removed": 4
+    "duplicate_rows_removed": 5
   },
   "event_core_attributes": {
-    "event_time_null_count": 989,
-    "events": 1623,
+    "event_time_null_count": 739,
+    "events": 1616,
     "note": "event_time 空值条数与《15》第八节「六项核心属性非空」的差异，见机检读数"
+  },
+  "event_time_basis": {
+    "by_basis": {
+      "null": 739,
+      "stated": 805,
+      "year_from_publish": 72
+    },
+    "events_total": 1616,
+    "note": "basis 只作为审计读数落在 graph_stats.json；Event 节点列仍严格照《10》第4.5.1节 表 4-8 的六项核心属性，不新增字段。",
+    "source": "代码/抽取与图谱/_全量/v2.1/event_time_backfill.json",
+    "source_sha256": "52c308a06da0c7075688c4366a64580bb5cdd61bb9dcae4625e074113f3e7460"
   },
   "files": {
     "edges.csv": {
-      "bytes": 174477,
-      "rows": 3733,
-      "sha256": "695c21c6e73f7c001d2bfd1fec6c6deb46fd42831689fb1bca29558b4a3ddba2"
+      "bytes": 176506,
+      "rows": 3767,
+      "sha256": "590ba206a8007e6b1f07dca5f95d9e1b824d9065b356c71b93631a1143c82b22"
     },
     "nodes.csv": {
-      "bytes": 891394,
-      "rows": 3507,
-      "sha256": "b9cdb0a230b79be9546564182eba9003bb301c69ae693ee43b3962d818d7d2cc"
+      "bytes": 892740,
+      "rows": 3512,
+      "sha256": "71da0bb3f7f0cee9a34cff7f95a719588ce1640d2a62099333615635129e4968"
     },
     "replay.cypher": {
-      "bytes": 897076,
+      "bytes": 904225,
       "rows": null,
-      "sha256": "5748520744c9ba1d02f3501f8382d842fe99c857e5ed25c6341aba38a6b2d45b"
+      "sha256": "7bd0fd9a2247a4fa513c3b5a4ccd62e40f40728c53c3b52103a919ec0ad065a1"
     }
   },
-  "generated_at": "2026-09-26T02:06:55+08:00",
+  "generated_at": "2026-09-26T22:52:09+08:00",
   "graph_check": {
-    "checks": 17,
+    "checks": 20,
     "failed": [
       "belongs_to_carries_validity_columns",
       "event_time_nonempty"
@@ -796,7 +808,60 @@
       "belongs_to_carries_validity_columns",
       "event_time_nonempty"
     ],
-    "passed": 15
+    "passed": 18
+  },
+  "human_confirmation": {
+    "confirmed_names": [
+      "PT.ACTER INTEGRATION TECHNOLOGY INDONESIA",
+      "PT.Hardases Abadi Indonesia",
+      "中国中元国际工程有限公司",
+      "中国电信股份有限公司",
+      "中国电信集团有限公司",
+      "中国移动通信有限公司",
+      "中国邮政速递物流股份有限公司",
+      "安徽元控储充新能源科技有限公司",
+      "川环科技",
+      "浪潮",
+      "芜湖联飞",
+      "贵州时代矿业有限公司"
+    ],
+    "edges_added": 37,
+    "edges_added_by_relation": {
+      "CUSTOMER_OF": 10,
+      "HAS_EXECUTIVE": 8,
+      "PARTICIPATES_IN": 18,
+      "SUPPLIES": 1
+    },
+    "entries_confirmed": 12,
+    "entries_total": 13,
+    "entries_unconfirmed": 1,
+    "node_ids": [
+      "HCONF-0001",
+      "HCONF-0002",
+      "HCONF-0003",
+      "HCONF-0004",
+      "HCONF-0005",
+      "HCONF-0006",
+      "HCONF-0007",
+      "HCONF-0008",
+      "HCONF-0009",
+      "HCONF-0010",
+      "HCONF-0011",
+      "HCONF-0012"
+    ],
+    "nodes_added": 12,
+    "nodes_by_label": {
+      "Company": 12
+    },
+    "note": "《10》第4.5.4节：匹配失败进待消歧列表，**人工确认后再写入图谱**。确认是数据（确认文件的 confirmed 字段），不是代码；未确认条目继续排除，确认名称只建一个节点、不并进配置公司。",
+    "policy": "pending_confirmation_exclude_from_graph",
+    "rejected_not_merged_into_configured_company": [],
+    "sha256": "a17268f8c0694e6b9b38c0c1db1ba89eb6a637b6f3674dd39f3d35ef380f6083",
+    "source_file": "阶段06-事件抽取与知识图谱/图谱导出/v2.1/人工确认清单.json",
+    "unconfirmed_names": [
+      "豪威集成电路（集团）股份有限公司"
+    ],
+    "work_root_copy": "阶段05-数据准备/数据集/_抽取缓存/v2.1/图谱管线/人工确认清单.json"
   },
   "id_rule": "Company=stock_code；Document=doc_id；Person／Institution／Policy／Industry／Event 按（类型, 归一化名称）或事件的确定性排序一次性分配 PER／INST／POL／IND／EVT 编号",
   "isolated_nodes": {
@@ -887,7 +952,6 @@
       "PER-0149",
       "PER-0150",
       "PER-0151",
-      "PER-0153",
       "PER-0154",
       "PER-0155",
       "PER-0157",
@@ -933,7 +997,6 @@
       "PER-0235",
       "PER-0236",
       "PER-0239",
-      "PER-0240",
       "PER-0243",
       "PER-0246",
       "PER-0247",
@@ -1015,7 +1078,6 @@
       "PER-0395",
       "PER-0402",
       "PER-0403",
-      "PER-0405",
       "PER-0407",
       "PER-0408",
       "PER-0410",
@@ -1359,17 +1421,16 @@
   "schema": "stage6-graph-1.0",
   "unresolved": {
     "policy": "pending_confirmation_exclude_from_graph",
-    "relations_skipped": 973,
+    "relations_skipped": 936,
     "relations_skipped_by_reason": {
-      "unresolved_entity": 973
+      "unresolved_entity": 936
     },
     "relations_skipped_by_relation": {
       "BELONGS_TO": 27,
       "COMPETES_WITH": 6,
-      "CUSTOMER_OF": 10,
-      "HAS_EXECUTIVE": 148,
-      "PARTICIPATES_IN": 747,
-      "SUPPLIES": 35
+      "HAS_EXECUTIVE": 140,
+      "PARTICIPATES_IN": 729,
+      "SUPPLIES": 34
     },
     "sample": [
       {
