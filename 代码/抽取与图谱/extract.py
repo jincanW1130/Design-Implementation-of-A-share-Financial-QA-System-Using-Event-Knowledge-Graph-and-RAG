@@ -22,9 +22,16 @@ r"""extract.py —— 第 6 阶段「实体与事件抽取」的可执行脚本�
     python 代码\抽取与图谱\extract.py --verify          # 独立核对既有产物（不调用模型）
     python 代码\抽取与图谱\extract.py --profile v21     # 全量 709 篇（T3 的口径，T1 不执行）
                                                        # 全量产物落 `_全量\v2.1\`，与 T1 的 `_试跑\` 物理隔离
+    python 代码\抽取与图谱\extract.py --profile pilot --ontology-defs
+                                                       # 打开 v1.2 提示词变体（8 类事件定义进提示词；
+                                                       # 默认关闭）。有效版本＝stage6-extract-v1.2，
+                                                       # 缓存落 `_抽取缓存\v2.1_v1_2\`、产物落
+                                                       # `_试跑\v1_2\定向\`；与 v1.1 缓存／产物隔离。
+    python 代码\抽取与图谱\extract.py --no-ontology-defs  # 显式关闭（与环境变量冲突时报错）
 
 退出码 0 表示成功；密钥未就位、选样断言不成立、缓存与当前输入不一致（且未 `--force`）
 等情形一律非零退出（《15》第十一节 的阻断项不得静默降级）。
+开关也可用环境变量 `STAGE6_ONTOLOGY_DEFS=1`（关：`=0`）；命令行与环境变量冲突时报错退出。
 """
 
 from __future__ import annotations
@@ -57,8 +64,17 @@ OUT = dict(config.OUTPUT_FILES)
 
 
 def output_files_for(profile: str) -> dict:
-    """按 profile 取产物落点：pilot → `_试跑`；v21 → `_全量/<dataset_version>`。"""
-    return dict(config.FULL_OUTPUT_FILES if profile == "v21" else config.OUTPUT_FILES)
+    r"""按 profile 与**有效 Prompt 变体**取产物落点（v1.2 的产物与 v1.1 物理隔离）。
+
+    * 关闭 v1.2 变体（默认）：pilot → `_试跑\`；v21 → `_全量\<dataset_version>\`；
+    * 开启 v1.2 变体：pilot → `_试跑\v1_2\定向\`；v21 → `_全量\<dataset_version>_v1_2\`。
+    """
+    if ontology_defs_enabled():
+        table = (config.FULL_OUTPUT_FILES_V1_2 if profile == "v21"
+                 else config.OUTPUT_FILES_V1_2)
+    else:
+        table = config.FULL_OUTPUT_FILES if profile == "v21" else config.OUTPUT_FILES
+    return dict(table)
 
 # --------------------------------------------------------------------------
 # 提示词（与 `LLM.prompt_version` 绑定：改这里的任何一个字，必须同步升版本号）
@@ -140,7 +156,83 @@ COMPACT_INSTRUCTION = """
 （最多 <<COMPACT_ENTITIES>> 条）与关系（最多 <<COMPACT_RELATIONS>> 条）；每条 quote 控制在
 12～<<COMPACT_QUOTE_MAX>> 字以内；不确定的一律不输出。字段名与枚举同上，仍然只输出一个 JSON 对象。"""
 
-PROMPT_TEMPLATE_SHA256 = config.sha256_hex(SYSTEM_PROMPT + "\n===USER===\n" + USER_TEMPLATE)
+# --------------------------------------------------------------------------
+# v1.2 变体（8 类事件定义进提示词）：**显式开关、默认关闭**；有效版本与缓存目录随之派生
+# --------------------------------------------------------------------------
+# v1.2 ＝ v1.1 的 `USER_TEMPLATE` 原文 ＋ 本体定义块（`<<ONTOLOGY_DEFS>>` 在渲染时注入）
+# ＋ 扩写后的规则第 2 条。两处改动都用**字符串替换**从 v1.1 原文派生（不是复制一段新模板），
+# 这样「原文」那一半永远逐字节相同，人工改动 v1.1 时不可能只改一份、漏改另一份。
+_USER_RULE2_V1_1 = ("   最多 <<MAX_EVENTS>> 条。event_type 只能取 <<EVENT_TYPES>>。")
+_USER_RULE2_V1_2 = (
+    "   最多 <<MAX_EVENTS>> 条。event_type 只能取 <<EVENT_TYPES>>：必须按下面给出的定义与"
+    "判定优先级\n"
+    "   选择 event_type，判定优先级自上而下、命中即止；属于「不构成事件的情形」的内容不要输出"
+    "为事件；\n"
+    "   同一件事只写一条；每个事件至少一条 PARTICIPATES_IN（role=主体）。"
+)
+USER_TEMPLATE_V1_2 = (
+    USER_TEMPLATE
+    .replace("\n\n【规则】", "\n\n<<ONTOLOGY_DEFS>>\n\n【规则】")
+    .replace(_USER_RULE2_V1_1, _USER_RULE2_V1_2)
+)
+
+# 运行期状态：默认关闭（模块导入后不调 set_ontology_defs() 时，渲染结果＝v1.1）。
+# 只改内存状态：`config.py` 文件与 `config.LLM["prompt_version"]` 一个字都不动。
+_ONTOLOGY_DEFS_ENABLED = False
+
+
+def ontology_defs_enabled() -> bool:
+    """当前是否启用 v1.2 变体（默认 False）。"""
+    return bool(_ONTOLOGY_DEFS_ENABLED)
+
+
+def set_ontology_defs(enabled) -> None:
+    """按开关设置有效变体（由 `main()` 在解析命令行／环境变量后调用）。"""
+    global _ONTOLOGY_DEFS_ENABLED
+    _ONTOLOGY_DEFS_ENABLED = bool(enabled)
+
+
+def effective_prompt_version() -> str:
+    """有效 Prompt 版本：关闭 → `LLM["prompt_version"]`（v1.1）；开启 → v1.2。"""
+    if ontology_defs_enabled():
+        return config.LLM["ontology_defs"]["prompt_version"]
+    return config.LLM["prompt_version"]
+
+
+def active_user_template() -> str:
+    """当前有效版本的 `USER_TEMPLATE`（关闭 → v1.1 原文；开启 → v1.2 变体）。"""
+    return USER_TEMPLATE_V1_2 if ontology_defs_enabled() else USER_TEMPLATE
+
+
+def prompt_template_sha256() -> str:
+    """`SYSTEM_PROMPT ＋ "\\n===USER===\\n" ＋ 有效 USER_TEMPLATE` 的 sha256。
+
+    关闭时该值与 v1.1 的 `PROMPT_TEMPLATE_SHA256`（`13b4522b7d4a17…`）逐字节一致。
+    """
+    return config.sha256_hex(SYSTEM_PROMPT + "\n===USER===\n" + active_user_template())
+
+
+def effective_cache_dir() -> str:
+    """按有效版本派生缓存目录，并加「开启模式下不得解析成 v1.1 目录」的守卫。
+
+    关闭 → `_抽取缓存\\v2.1\\`；开启 → `_抽取缓存\\v2.1_v1_2\\`（由 config 按 `cache_suffix`
+    派生）。守卫不通过时**立即中止**：v1.2 的原始返回一旦写进 v1.1 主缓存，709 篇的可重放
+    与逐字节复现就同时被破坏。
+    """
+    version = effective_prompt_version()
+    target = config.cache_dir_for_prompt_version(version)
+    if ontology_defs_enabled():
+        v1_1_dir = os.path.normcase(os.path.abspath(config.CACHE_DIR))
+        if os.path.normcase(os.path.abspath(target)) == v1_1_dir:
+            raise SystemExit(
+                "[阻断] 开启 v1.2 变体（有效版本 %s）时缓存目录解析成了 v1.1 主缓存：%s。"
+                "v1.2 的原始返回绝不能写进 v1.1 缓存，立即中止。" % (version, config.CACHE_DIR))
+    return target
+
+
+# 兼容名：等于**默认（关闭）**口径的 v1.1 模板摘要；参与动态计算的一律用
+# `prompt_template_sha256()`（否则开关打开后会读到过期的 v1.1 摘要）。
+PROMPT_TEMPLATE_SHA256 = prompt_template_sha256()
 
 
 # --------------------------------------------------------------------------
@@ -406,7 +498,7 @@ def relation_schema_note() -> str:
 
 def render_user_prompt(doc, compact=False) -> str:
     limits = config.LLM["fallback"]["compact_limits"] if compact else config.EXTRACT_LIMITS
-    text = USER_TEMPLATE
+    text = active_user_template()
     for key, value in (
         ("<<DOC_ID>>", str(doc.get("doc_id"))),
         ("<<CATEGORY>>", str(doc.get("category") or "")),
@@ -425,6 +517,10 @@ def render_user_prompt(doc, compact=False) -> str:
         ("<<MAX_RELATIONS>>", str(limits["relations"])),
     ):
         text = text.replace(key, value)
+    if ontology_defs_enabled():
+        # 只有 v1.2 变体的模板里才有这个占位符；关闭时连这一步都不执行，
+        # 保证 v1.1 的渲染路径与改动前逐字节一致。
+        text = text.replace("<<ONTOLOGY_DEFS>>", config.ontology_definitions_text())
     if compact:
         compact_limits = config.LLM["fallback"]["compact_limits"]
         text += (COMPACT_INSTRUCTION
@@ -451,8 +547,8 @@ def input_sha256(doc, compact=False) -> str:
         "publish_time": doc.get("publish_time"),
         "category": doc.get("category"),
         "source": doc.get("source"),
-        "prompt_version": config.LLM["prompt_version"],
-        "prompt_template_sha256": PROMPT_TEMPLATE_SHA256,
+        "prompt_version": effective_prompt_version(),
+        "prompt_template_sha256": prompt_template_sha256(),
         "model_requested": config.model_requested(),
         "temperature": config.LLM["temperature"],
         "max_tokens": (config.LLM["fallback"]["max_tokens"] if compact
@@ -466,11 +562,19 @@ def input_sha256(doc, compact=False) -> str:
         "relations_from_model": config.RELATIONS_FROM_MODEL,
         "extract_limits": limits,
     }
+    # v1.2 变体（`--ontology-defs`）：本体定义文本是在**渲染时**注入的、不在模板里，
+    # 所以 `prompt_template_sha256()` 不随定义文本变化。若不把定义摘要显式进哈希，
+    # 改了口径仍会命中旧缓存、静默复用旧结果（2026-09-26 定向对照时实测踩到过：
+    # 16/16 篇缓存键与改口径前相同，产物逐字节不变，验证会假通过）。
+    # **只在开启时追加这个键**——关闭时必须与 v1.1 的载荷逐字节一致，
+    # 否则 709 篇 v1.1 缓存会整批失配、第 6 阶段验收的镜像重放会连锁变红。
+    if ontology_defs_enabled():
+        payload["ontology_definitions_digest"] = config.ontology_definitions_digest()
     return config.sha256_hex(config.stable_json(payload))
 
 
 def cache_path(doc_id) -> str:
-    return os.path.join(config.CACHE_DIR, "%s.json" % doc_id)
+    return os.path.join(effective_cache_dir(), "%s.json" % doc_id)
 
 
 # --------------------------------------------------------------------------
@@ -570,8 +674,8 @@ def call_model(doc, stats):
         "model_pinning_state": config.model_pinning_state(final["model_resolved"]),
         "model_version": config.LLM["model_version"],
         "model_version_note": config.LLM["model_version_note"],
-        "prompt_version": config.LLM["prompt_version"],
-        "prompt_template_sha256": PROMPT_TEMPLATE_SHA256,
+        "prompt_version": effective_prompt_version(),
+        "prompt_template_sha256": prompt_template_sha256(),
         "input_sha256": input_sha256(doc),
         "temperature": config.LLM["temperature"],
         "max_tokens": config.LLM["max_tokens"],
@@ -1086,7 +1190,7 @@ def build_selection_payload(selection, problems):
 
 def write_manifest(selection):
     """把确定性产物写成 `sha256  <路径>` 的清单（缓存 + 解析输出 + 选样 + 覆盖性）。"""
-    paths = [os.path.join(config.CACHE_DIR, "%s.json" % d["doc_id"]) for d, _ in selection]
+    paths = [os.path.join(effective_cache_dir(), "%s.json" % d["doc_id"]) for d, _ in selection]
     paths += [OUT["selection"], OUT["coverage"], OUT["extracted"], OUT["rejected"]]
     entries = []
     for path in sorted(paths):
@@ -1113,7 +1217,7 @@ def append_run_history(stats):
 
 def run_extraction(args, docs, chunks, by_doc, selection, stats):
     os.makedirs(os.path.dirname(os.path.abspath(OUT["selection"])), exist_ok=True)
-    os.makedirs(config.CACHE_DIR, exist_ok=True)
+    os.makedirs(effective_cache_dir(), exist_ok=True)
     problems = check_selection(selection) if (args.profile == "pilot"
                                               and not args.docs) else []
     selection_payload = build_selection_payload(selection, problems)
@@ -1452,6 +1556,52 @@ def print_verify_summary(payload):
 
 
 # --------------------------------------------------------------------------
+# v1.2 开关解析（命令行 与 环境变量 两个来源；冲突时报错，不静默取其一）
+# --------------------------------------------------------------------------
+_SWITCH_TRUE = ("1", "true", "yes", "on")
+_SWITCH_FALSE = ("0", "false", "no", "off")
+
+
+def resolve_ontology_defs(args) -> bool:
+    """解析是否启用 v1.2 变体，返回有效开关值。
+
+    来源只有两条（取值口径一致）：
+      * 命令行 `--ontology-defs`（开）／`--no-ontology-defs`（关）；
+      * 环境变量 `config.LLM["ontology_defs"]["env"]`（默认 `STAGE6_ONTOLOGY_DEFS`），
+        开＝1/true/yes/on，关＝0/false/no/off。
+
+    两条都给出且**冲突**（一个开一个关）时抛 `SystemExit` 非零退出；两条都没给出时
+    取 config 的默认值（`LLM["ontology_defs"]["enabled"]`，当前为 False）。
+    ``--ontology-defs`` 与 ``--no-ontology-defs`` 同时出现在命令行时，由 argparse 的
+    互斥组直接报错（同样是非零退出）。
+    """
+    cli = getattr(args, "ontology_defs", None)
+    env_name = (config.LLM.get("ontology_defs") or {}).get("env") or "STAGE6_ONTOLOGY_DEFS"
+    raw = (os.environ.get(env_name) or "").strip().lower()
+    env = None
+    if raw:
+        if raw in _SWITCH_TRUE:
+            env = True
+        elif raw in _SWITCH_FALSE:
+            env = False
+        else:
+            raise SystemExit(
+                "[阻断] 环境变量 %s 的取值无法识别：%r（只接受 1/0、true/false、yes/no、on/off）"
+                % (env_name, os.environ.get(env_name)))
+    if cli is not None and env is not None and bool(cli) != bool(env):
+        raise SystemExit(
+            "[阻断] v1.2 开关来源冲突：命令行=%s，环境变量 %s=%s（一个开一个关）。"
+            "请只保留一个来源，或让两者一致；不静默取其一。"
+            % ("--ontology-defs" if cli else "--no-ontology-defs", env_name,
+               os.environ.get(env_name)))
+    if cli is not None:
+        return bool(cli)
+    if env is not None:
+        return bool(env)
+    return bool((config.LLM.get("ontology_defs") or {}).get("enabled"))
+
+
+# --------------------------------------------------------------------------
 # 主流程
 # --------------------------------------------------------------------------
 def main(argv=None) -> int:
@@ -1465,9 +1615,21 @@ def main(argv=None) -> int:
     parser.add_argument("--select-only", action="store_true",
                         help="只算选样与覆盖性重算，不调模型")
     parser.add_argument("--verify", action="store_true", help="只核对既有产物，不调模型")
+    _switch = parser.add_mutually_exclusive_group()
+    _switch.add_argument(
+        "--ontology-defs", dest="ontology_defs", action="store_const", const=True,
+        default=None, help="启用 v1.2 变体（8 类事件定义进提示词；默认关闭）")
+    _switch.add_argument(
+        "--no-ontology-defs", dest="ontology_defs", action="store_const", const=False,
+        help="显式关闭 v1.2 变体（与 STAGE6_ONTOLOGY_DEFS 冲突时报错）")
     args = parser.parse_args(argv)
+    enabled = resolve_ontology_defs(args)
+    set_ontology_defs(enabled)
     global OUT
     OUT = output_files_for(args.profile)
+    print("提示词变体：%s；有效 Prompt 版本=%s；模板 sha256=%s；缓存目录=%s"
+          % ("v1.2（本体定义进提示词）" if enabled else "v1.1（默认）",
+             effective_prompt_version(), prompt_template_sha256(), effective_cache_dir()))
 
     docs, chunks, by_doc = load_docs_and_chunks()
     print("输入：%s（%d 篇文档／%d 个文本块）" % (config.DOCS_PATH, len(docs), len(chunks)))

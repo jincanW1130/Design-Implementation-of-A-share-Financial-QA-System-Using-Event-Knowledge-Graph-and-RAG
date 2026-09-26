@@ -57,6 +57,11 @@ python 代码\抽取与图谱\extract_event_time.py --profile v21 --force     ::
   （且未 `--force`）一律非零退出，不静默降级（《15-第6阶段任务书》第十一节 的阻断项）。
 * 全部脚本 `sys.stdout.reconfigure(encoding="utf-8")`。
 
+**v1.2 提示词变体（8 类事件定义进提示词）默认关闭**：关闭时有效版本＝`stage6-extract-v1.1`，提示词与 709 篇主缓存逐字节一致。
+打开用 `--ontology-defs`（或环境变量 `STAGE6_ONTOLOGY_DEFS=1`），关用 `--no-ontology-defs`／`=0`；两个来源同时给出且冲突时报错退出，不静默取其一。
+打开后有效版本＝`stage6-extract-v1.2`，缓存目录按有效版本派生：关闭 → `_抽取缓存\v2.1\`，开启 → `_抽取缓存\v2.1_v1_2\`。
+**开启后的缓存与产物必须与 v1.1 分开存放**：pilot → `_试跑\v1_2\定向\`，v21 → `_全量\v2.1_v1_2\`。
+
 ## 三、数据格式（逐字冻结，下游按此消费）
 
 ### 3.1 `阶段05-数据准备\数据集\_抽取缓存\v2.1\{doc_id}.json` —— 一篇一个文件
@@ -234,7 +239,7 @@ python 代码\抽取与图谱\extract_event_time.py --profile v21 --force     ::
 | max_tokens | 8192 | 实测 4096 会把长文档返回截断，端点接受 8192 与 16384 |
 | 输出格式 | `json_object` | 端点要求提示词里出现 `json` 字样，提示词已满足 |
 | 压缩重试 | 仅当 `finish_reason == "length"` | 同文档重试一次：收紧输出契约（≤2 事件／≤8 实体／≤6 关系、引用 12～60 字）并设 `reasoning_effort="none"`；两次原始返回都进缓存 |
-| Prompt 版本 | `stage6-extract-v1.1` | v1.0 → v1.1：新增压缩重试变体（仅截断时使用）；提示词模板另以 `prompt_template_sha256` 逐篇留痕，改了模板必须升版本 |
+| Prompt 版本 | `stage6-extract-v1.1` | v1.0 → v1.1：新增压缩重试变体（仅截断时使用）；提示词模板另以 `prompt_template_sha256` 逐篇留痕，改了模板必须升版本。可选变体 `stage6-extract-v1.2`（本体定义进提示词）由 `LLM["ontology_defs"]` 控制，**默认关闭**（见第二节） |
 | 节奏 | 两次调用至少间隔 1 秒 | 传输层失败按 2、4、8……秒指数退避，最多 4 次；4xx（除 429）不重试 |
 
 **可重放的定义**：给定同一份缓存，`extract.py` 重跑必须产出逐字节一致的
@@ -273,7 +278,7 @@ JSON 序列化固定 `ensure_ascii=False + sort_keys=True`。
 ## 九、T1 试跑实测（2026-09-25，12 篇／30,396 字符／98 个文本块）
 
 * 规模：实体 55（Company 29／Person 9／Institution 9／Industry 2／Policy 6）、事件 32（8 类全覆盖）、
-  语义关系 57（7 类有值，`SUPPLIES` 与 `COMPETES_WITH` 为 0）、`EVIDENCED_BY` 32。
+  语义关系 57（**6** 类有值：`BELONGS_TO`／`CUSTOMER_OF`／`HAS_EXECUTIVE`／`ISSUED_BY`／`PARTICIPATES_IN`／`RELATED_TO`；`SUPPLIES` 与 `COMPETES_WITH` 为 0）、`EVIDENCED_BY` 32。
 * 证据：144 条带块级证据的条目**全部**通过「块存在 ＋ 同文档 ＋ 引用在该块内」；
   被拒条目 0 条；负对照 4 例全部被正确拒绝。
 * 成本：prompt 41,479 ＋ completion 51,591 ＝ **93,070 token**（其中推理 42,411 token，
@@ -344,19 +349,20 @@ T6 另在**工作目录**（不是导出目录）写 `graph_check.json`（第八
 
 ### 10.4 T4～T7 试跑实测（12 篇，`extracted.jsonl` sha256 `0df3bc008b6495c5…`）
 
-* **T4**：实体 55 → 已消歧 34／待消歧 21（`no_alias_match` 20、`distinct_entity_marker` 1）；
-  公司身份 8 个（002051、600048、600089、600276、600309、600406、601727、603288）。
+* **T4**：实体 55 → 已消歧 35／待消歧 20（`no_alias_match` 19、`distinct_entity_marker` 1）；
+  公司身份 9 个（002051、600048、600089、600276、600309、600406、601567、601727、603288）。
   `万华化学集团股份有限公司` 等全称经 R2 归并；`上海电气控股集团有限公司` 因残余含「控股」
   判为另一主体，进待消歧清单。
 * **T5**：事件 32，类型相同的候选对 57，四条件同时满足 **0** 对 → **无合并**；首个不成立条件的
   分布 `{participants: 47, time_window: 9, trigger_similarity: 1}`。自检 `passed=true`：
   把 doc 1018 原样复制成合成文档后合并成组，合并后事件的证据文档为 `[1018, 901018]`（并集）。
-* **T6**：节点 76（Event 32／Document 12／Person 9／Company 8／Institution 7／Policy 6／
-  Industry 2），边 74（EVIDENCED_BY 32／PARTICIPATES_IN 27／RELATED_TO 5／ISSUED_BY 5／
-  HAS_EXECUTIVE 4／BELONGS_TO 1）；未消歧端点跳过 15 条边，无边节点 8 个；机检 17 项通过 15，
+* **T6**：节点 77（Event 32／Document 12／Person 9／Company 9／Institution 7／Policy 6／
+  Industry 2），边 75（EVIDENCED_BY 32／PARTICIPATES_IN 28／RELATED_TO 5／ISSUED_BY 5／
+  HAS_EXECUTIVE 4／BELONGS_TO 1）；未消歧端点跳过 14 条边，无边节点 8 个；机检 20 项通过 18，
   两项已知缺口即 `event_time` 空值 19 条与 `BELONGS_TO` 有效期留空。
 * **T7**：整链复跑 2 次，`extract.py` 12 篇全部命中缓存、**模型调用 0 次**，各产物逐字节一致
   （`graph_stats.json` 剔除上述两个字段后一致）。
+* **读数留痕（2026-09-26 重跑）**：以上 T4／T6 的读数是**别名表修复后重跑**的产物读数；别名表修复前的旧读数（已消歧 34／待消歧 21、公司身份 8、节点 76、边 74、未消歧端点跳过 15、机检 17 项通过 15）保留为对照，**不再作为当前值引用**。
 
 ## 十一、T3.5 定向时间补抽 与 人工确认的实体写入图谱（2026-09-26 追加）
 

@@ -70,22 +70,45 @@ python 工具\\标注助手.py selftest
 
 1. 空 `item_id`／工作区内 `item_id` 重复／文件名与 `item_id` 不一致／`item_id` 不在 jsonl 里。
 2. `status` 仍为 `pending_human_annotation` 但槽位非空；或反之（标为完成却四个列表槽位全空、
-   `notes` 也没有 `empty_but_checked: true`）。
+   `notes` 也没有 `empty_but_checked: true`）。`status` 只认三个值：
+   `pending_human_annotation`（未标注）／`human_annotated`（人工标注完成）／
+   `auto_annotated`（**模型自动标注**，第 10 阶段的模型参照集）。**`status = auto_annotated`
+   时必须带 `provenance`**：缺 `model`／`prompt_version`／`temperature` 任一项即报
+   `auto_provenance_missing`——这条守卫的目的是**防止自动标注被当成人工标注**。
 3. `entity_type` 不在 5 类里（`Event` 写进 `entities[]` 单独报，见 `标注说明.md` 第3.1节）。
 4. `event_type` 不在 8 种里；`relation` 不在 9 条里；`role` 不在 5 个里。
-5. 关系（除 `EVIDENCED_BY` 外）缺 `source_doc_id`／`source_chunk_id`／`confidence` 任一；
-   且 `source_chunk_id` 必须等于本条自己的 `chunk_id`（一条 = 一个文本块）。
+5. 关系（除 `EVIDENCED_BY` 外）缺 `source_doc_id`／`source_chunk_id`／`confidence` 任一
+   （键缺失／值为空报 `relation_evidence_missing`，只报这一条）；且 `source_chunk_id`
+   必须等于本条自己的 `chunk_id`（一条 = 一个文本块）、`source_doc_id` 必须等于本条
+   自己的 `doc_id`（不符报 `relation_doc_mismatch`）。`confidence` 的**取值**与
+   `events[].confidence` 复用同一个 `_check_confidence`（单一口径，不再各判一套）：
+   `float()` 能解析且在 0.0～1.0 内即通过（`"0.9"` 这类数字字符串照样通过）、非数值或
+   越界报 `confidence_range`；`events[].confidence` 的键缺失／空值报 `confidence_empty`。
 6. `quote` 去空白后必须是本条 `text` 的**精确子串**（不做模糊匹配、不做编辑距离），
    长度 12～200 字符（`config.EVIDENCE`）。
-7. `ontology_boundary_log` 里**像在「解决」而不是「记录」**的条目（自造关系名／自造实体类型／
-   写「已新增」这类生效口径／复活 `INVOLVES`）——协议要求这类情形**只登记、不新增本体**。
+7. `ontology_boundary_log` 里**把新本体当成「已生效」**的条目（自造关系名／自造实体类型／
+   断言「已新增……关系（或实体类型／事件类型／属性）」／复活 `INVOLVES`）——协议要求这类情形
+   **只登记、不新增本体**。**只在断言已生效时拒绝**：出现「建议／疑似／待／拟／希望／考虑／
+   提请／是否」这类建议或未定语境的同形句一律放行（第八节 允许在 `suggested_handling` 里
+   提建议）；「记录／备注」**不算**建议语境——它们只说明「把这个动作登记下来」，
+   不能把「已新增……关系，并写入图谱」这类**已生效**断言变成建议。
 8. 协议附加：条目必填字段缺失（`annotation_schema` 的字段清单）；`chunk_id` 字段与本条不一致；
-   `confidence` 越界；`event_time`／`times[].value` 不是 `YYYY-MM-DD` 或 `null`；
-   `entity_ref`／`event_ref` 重复或 `participants[].entity_ref` 悬空；关系端点类型不符合
-   `RELATION_SCHEMA` 的 domain／range；`ISSUED_BY` 出现在非政策／监管事件上；
+   `META` 里的 `text_digest` 与工作区文本块重算的摘要不符（`text_digest_mismatch`；与
+   `sampled_field_changed`／`text_changed` 分开：那两条管「文本或抽样字段被改」，这条专管
+   「META 摘要被改」）；`confidence` 越界；`event_time`／`times[].value` 不是 `YYYY-MM-DD`
+   或 `null`；`entity_ref`／`event_ref` 重复或 `participants[].entity_ref` 悬空；关系端点类型
+   不符合 `RELATION_SCHEMA` 的 domain／range；关系端点声明的 `from_label`／`to_label` 必须等于
+   该端点实际类型（指向 `entities[]` 时等于该实体的 `entity_type`、指向 `events[]` 时等于
+   `Event`，不符报 `relation_label_mismatch`）；`BELONGS_TO` 的 `valid_from`／`valid_to` 允许
+   `null`／省略（正文没有日期时视为未知、不许编日期），给了值就必须是 `YYYY-MM-DD`
+   （格式非法报 `relation_validity_format`）；`ISSUED_BY` 出现在非政策／监管事件上；
    标注里出现 `data_cutoff_time`（版本级属性，不落任何节点与关系）。
 
 `merge` 会先跑一遍 `check`：有问题就拒绝写盘（`--force` 可越过，但会把问题一并打印）。
+**`merge` 拒绝把 `auto_annotated` 写回 `dev.jsonl`／`test.jsonl`**（`merge_refuses_auto`）：
+第 6 阶段交付文件的槽位必须保持为空（《15》第八节 的冻结契约），自动标注落在独立产物里
+（`阶段05-数据准备\数据集\抽取评测集\v2.1\自动标注\`）。这一条是**硬守卫，`--force` 不放行**，
+且不影响 `merge` 的其它行为。
 """
 
 from __future__ import annotations
@@ -123,6 +146,13 @@ PENDING_STATUS = "pending_human_annotation"
 # 「恒为 pending」）都不会因它而误判；`sample_eval_set.py --verify-only` 会因此失败——那是**标注已
 # 开始的正常后果**，其第五节 第 4 项检查本就只适用于「标注尚未开始」的状态。
 COMPLETED_STATUS = "human_annotated"
+# 第三个合法 status：**模型自动标注**（第 10 阶段的模型参照集，不是人工金标准）。
+# 它与 COMPLETED_STATUS 的区别就是「谁产的」——因此**必须**带 provenance 块；
+# `check` 的 `_check_auto_provenance` 就是防「自动标注被当成人工标注」的那道守卫。
+# `merge` 另有一条守卫：**拒绝**把 auto_annotated 写回 dev.jsonl／test.jsonl
+# （第 6 阶段交付文件的槽位必须保持为空，《15》第八节 的冻结契约）。
+AUTO_STATUS = "auto_annotated"
+AUTO_PROVENANCE_REQUIRED = ("model", "prompt_version", "temperature")
 
 # `ontology_boundary_log[].case_type` 的建议取值：**config.py 里没有这个枚举**，
 # 只有 `标注说明.md` 第八节 给了这一串，故在此处登记来源、不当作本体常量使用。
@@ -681,8 +711,8 @@ def kind_of_missing(field: str) -> str:
     return "%s_chunk_id_mismatch" % field.split("[")[0].split(".")[0]
 
 
-def _check_evidence_attrs(problems, kind, path, item_id, idx, rel, chunk_id):
-    """除 EVIDENCED_BY 外，三项证据属性必需，且 source_chunk_id == 本条 chunk_id。"""
+def _check_evidence_attrs(problems, kind, path, item_id, idx, rel, chunk_id, doc_id, cfg):
+    """除 EVIDENCED_BY 外，三项证据属性必需，且 source_doc_id／source_chunk_id 必须等于本条。"""
     for attr in ("source_doc_id", "source_chunk_id", "confidence"):
         if attr not in rel:
             problems.add(kind, path, item_id, "relations[%d].%s" % (idx, attr), "（缺该键）",
@@ -693,6 +723,53 @@ def _check_evidence_attrs(problems, kind, path, item_id, idx, rel, chunk_id):
     if rel.get("source_chunk_id") not in (None, "") and rel.get("source_chunk_id") != chunk_id:
         problems.add(kind, path, item_id, "relations[%d].source_chunk_id" % idx, rel.get("source_chunk_id"),
                      "source_chunk_id 必须等于本条 chunk_id=%s" % chunk_id)
+    if rel.get("source_doc_id") not in (None, "") and rel.get("source_doc_id") != doc_id:
+        problems.add("relation_doc_mismatch", path, item_id, "relations[%d].source_doc_id" % idx,
+                     rel.get("source_doc_id"),
+                     "source_doc_id 必须等于本条 doc_id=%s（不许指向别的文档）" % doc_id)
+    # confidence 的**取值**复用与 events[].confidence 同一个 `_check_confidence`（单一口径）；
+    # 键缺失／值为空已由上面的三项检查报成 `relation_evidence_missing`，这里跳过、不重复报。
+    if rel.get("confidence") not in (None, ""):
+        _check_confidence(problems, path, item_id, "relations[%d].confidence" % idx,
+                          rel.get("confidence"), cfg)
+
+
+# 本体边界登记的「生效口径」判据（协议第八节：只登记、不新增）：
+# 建议／未定语境的同形句必须放行（如 suggested_handling 写「建议新增第 10 条关系：……」），
+# 只有**断言已生效**才拒绝。动词在前（新增第 10 条关系）与名词在前（关系已新增）两种语序都要看。
+_INVENT_VERBS = "新增|加入|采用|启用|写入|并入|扩展|复活|增加|引入"
+_INVENT_NOUNS = "关系|实体类型|事件类型|属性"
+_INVENT_FWD_RE = re.compile(
+    r"(?P<verb>%s)(?P<tail>了)?(第)?\s*\d*\s*条?\s*(?P<noun>%s)" % (_INVENT_VERBS, _INVENT_NOUNS))
+_INVENT_REV_RE = re.compile(
+    r"(?P<noun>%s)\s*(?P<mark>已|已经|业已|现已|了)\s*(?P<verb>%s)" % (_INVENT_NOUNS, _INVENT_VERBS))
+# 建议／未定语境提示词：出现在生效动词附近（前后各 12 字）时放过。
+# 「记录」「备注」**不在**此列：它们说的是「把这个动作登记下来」，不是「还没做」——
+# 放进来的话，「记录：已新增第 10 条关系，并写入图谱。」这种已生效断言会被误放行。
+_SUGGESTION_CUES = ("建议", "疑似", "待", "拟", "希望", "考虑", "提请",
+                    "尚未", "未定", "是否", "可否", "可能", "需要")
+# 断言已生效的提示词：附近必须有其中一个（「已新增第 10 条关系」「并写入图谱」……）。
+_EFFECTIVE_CUES = ("已", "了", "写入", "落库", "生效", "上线", "执行")
+# 这些动词本身就读作「已经做了」（不是「建议做」），单独出现即可判生效；
+# 提案型动词（新增／增加／引入……）则必须另有上表的生效提示词才判生效。
+_COMPLETIVE_VERBS = ("采用", "启用", "写入", "并入", "复活")
+_EFFECTIVE_WINDOW = 12
+
+
+def _effective_claims(blob: str) -> list:
+    """返回 blob 里「把新本体当成已生效」的断言片段；建议／未定语境的同形句不算。"""
+    found = []
+    for m in list(_INVENT_FWD_RE.finditer(blob)) + list(_INVENT_REV_RE.finditer(blob)):
+        pre = blob[max(0, m.start() - _EFFECTIVE_WINDOW):m.start()]
+        post = blob[m.end():m.end() + _EFFECTIVE_WINDOW]
+        near = pre + post
+        if any(cue in near for cue in _SUGGESTION_CUES):
+            continue                      # 「建议新增……」「疑似……」「待……」：允许
+        if (m.re is _INVENT_REV_RE or m.group("verb") in _COMPLETIVE_VERBS
+                or m.groupdict().get("tail") == "了"
+                or any(cue in near for cue in _EFFECTIVE_CUES)):
+            found.append(m.group(0))      # 只有断言已生效才记
+    return found
 
 
 def _looks_like_inventing(entry) -> list:
@@ -705,16 +782,14 @@ def _looks_like_inventing(entry) -> list:
                 "event_type", "new_event_type", "adopted_relation", "resolved_as"):
         if key in entry and entry[key]:
             hits.append("带生效口径的键 `%s`=%s" % (key, brief(entry[key], 60)))
-    # 2) 声明性生效词（「记录」允许，「把新本体当成已生效」不允许）
+    # 2) 声明性生效词（「建议／记录」允许，「把新本体当成已生效」不允许）
     blob = json.dumps(entry, ensure_ascii=False)
-    for pat, why in (
-        (r"(已|了)?(新增|加入|加入第|采用|启用|写入|并入|扩展|复活)(第)?\s*\d*\s*条?(关系|实体类型|事件类型|属性)",
-         "文本里出现「已新增／采用／写入…关系（或实体类型／事件类型／属性）」这类**生效**口径；"
-         "协议第八节 允许在 suggested_handling 里提**建议**，但不允许把新本体当已生效"),
-        (r"\bINVOLVES\b", "出现已删除的关系 `INVOLVES`（协议第六节：不得复活）"),
-    ):
-        if re.search(pat, blob):
-            hits.append(why)
+    claims = _effective_claims(blob)
+    if claims:
+        hits.append("文本断言「%s」这类**已生效**口径（协议第八节：只在 suggested_handling 里提"
+                    "**建议**，不许把新本体当已生效）" % brief(claims[0], 60))
+    if re.search(r"\bINVOLVES\b", blob):
+        hits.append("出现已删除的关系 `INVOLVES`（协议第六节：不得复活）")
     # 3) 自造实体类型：Product／Location（协议第八节：禁止引入）
     m = re.search(r"\b(Product|Location)\b", blob)
     if m and re.search(r"新增|引入|加入|增加|扩展|类型", blob):
@@ -790,58 +865,33 @@ def run_check(ws: str, eval_dir: str, splits, cfg, verbose: bool = True):
                     problems.add("text_changed", path, iid, "text", text_digest(text or ""),
                                  "工作区里的文本块与 jsonl 里的不是同一段（抽样字段不许改）")
 
+            # META 里的 text_digest 必须与工作区文本块**重算**的摘要一致：抽样字段被改由
+            # text_changed／sampled_field_changed 报，这条专管「META 摘要本身被改」。
+            if text is not None:
+                recomputed = text_digest(text)
+                if meta.get("text_digest") != recomputed:
+                    problems.add("text_digest_mismatch", path, iid, "meta.text_digest",
+                                 meta.get("text_digest"),
+                                 "META 里的 text_digest 与本条文本块重算的摘要不符"
+                                 "（按本条 text 重算应为 %s…）——META 摘要与抽样字段一样不许改"
+                                 % recomputed[:16])
+
             if annotation is None:
                 continue
 
-            empty = is_untouched(annotation)
-            status = annotation.get("status")
-            slots = ["entities", "events", "relations", "times", "ontology_boundary_log"]
-            notes = annotation.get("notes")
-            notes_str = notes if isinstance(notes, str) else ""
-            non_empty = any(isinstance(annotation.get(s), list) and annotation.get(s) for s in slots)
-            has_note = bool(notes_str.strip())
-
-            if status == PENDING_STATUS:
+            # 状态计数（与判据共用 `_annotation_status`，不另写一套；逐槽位校验走公开入口）。
+            info = _annotation_status(annotation)
+            if info["status"] == PENDING_STATUS:
                 pending += 1
-                if non_empty or has_note:
-                    problems.add("status_pending_but_filled", path, iid, "status", status,
-                                 "status 仍是 %s，但槽位已有内容（%s）——填完了就把 status 改成 %s"
-                                 % (PENDING_STATUS,
-                                    "、".join(s for s in slots if annotation.get(s)) or "notes",
-                                    COMPLETED_STATUS))
-            elif status == COMPLETED_STATUS:
+            elif info["status"] in (COMPLETED_STATUS, AUTO_STATUS):
                 filled += 1
-                empty_ok = "empty_but_checked" in notes_str
-                if not non_empty and not has_note:
-                    problems.add("status_completed_but_empty", path, iid, "status", status,
-                                 "status 说已完成，但 entities／events／relations／times／"
-                                 "ontology_boundary_log 全空、notes 也空；本块确实没有可标事实时，"
-                                 "四个槽位留空并在 notes 写 `empty_but_checked: true` 加理由")
-                elif not non_empty and empty_ok:
+                if not info["non_empty"] and info["has_note"] and info["empty_checked"]:
                     empty_checked += 1
-            else:
-                problems.add("status_unknown", path, iid, "status", status,
-                             "status 只能是 %s 或 %s" % (PENDING_STATUS, COMPLETED_STATUS))
 
-            # 版本级属性不得出现在标注里
-            if "data_cutoff_time" in json.dumps(annotation, ensure_ascii=False):
-                problems.add("data_cutoff_time_present", path, iid, "annotation", "data_cutoff_time",
-                             "data_cutoff_time 是数据集版本级属性，不落任何节点或关系，标注里不得出现")
-
-            if empty and not non_empty:
-                continue
-
-            # ---------------- 逐槽位 ----------------
-            text_norm = norm_ws(text or "")
-            chunk_id = (rec or meta).get("chunk_id")
-            qmin, qmax = cfg.EVIDENCE["quote_min_chars"], cfg.EVIDENCE["quote_max_chars"]
-
-            _check_entities(problems, path, iid, annotation, text_norm, chunk_id, cfg, qmin, qmax)
-            refs = _collect_refs(problems, path, iid, annotation, cfg)
-            _check_events(problems, path, iid, annotation, text_norm, chunk_id, cfg, refs, qmin, qmax)
-            _check_relations(problems, path, iid, annotation, text_norm, chunk_id, cfg, refs, qmin, qmax)
-            _check_times(problems, path, iid, annotation, text_norm, qmin, qmax, cfg)
-            _check_oblog(problems, path, iid, annotation, text_norm, chunk_id, qmin, qmax)
+            for p in validate_annotation({"item_id": iid, "chunk_id": (rec or meta).get("chunk_id"),
+                                          "doc_id": (rec or meta).get("doc_id"),
+                                          "text": text, "annotation": annotation}, cfg, path):
+                problems.append(p)
 
         summary[split] = {
             "files": len(files), "items": len([r for r in item_order.values()
@@ -871,10 +921,11 @@ def run_check(ws: str, eval_dir: str, splits, cfg, verbose: bool = True):
 
 
 def _collect_refs(problems, path, iid, annotation, cfg):
-    refs = {"entities": set(), "events": set()}
+    refs = {"entities": set(), "events": set(), "entity_type_by_ref": {}}
     for i, ent in enumerate(annotation.get("entities") or []):
         if isinstance(ent, dict) and ent.get("entity_ref"):
             refs["entities"].add(ent["entity_ref"])
+            refs["entity_type_by_ref"][ent["entity_ref"]] = ent.get("entity_type")
     for i, ev in enumerate(annotation.get("events") or []):
         if isinstance(ev, dict) and ev.get("event_ref"):
             refs["events"].add(ev["event_ref"])
@@ -961,8 +1012,9 @@ def _check_events(problems, path, iid, annotation, text_norm, chunk_id, cfg, ref
         if "event_time" in ev and etime not in (None, "") and not TIME_RE.match(str(etime)):
             problems.add("event_time_format", path, iid, f + ".event_time", etime,
                          "event_time 须为 YYYY-MM-DD；正文不能确定到日时写 null，绝不猜测")
-        if "confidence" in ev:
-            _check_confidence(problems, path, iid, f + ".confidence", ev.get("confidence"), cfg)
+        # confidence 是事件必填属性（config.EVENT_CORE_ATTRS）：键缺失／值为空同样交给
+        # `_check_confidence` 判（报 `confidence_empty`），与 relations 路径是同一个口径。
+        _check_confidence(problems, path, iid, f + ".confidence", ev.get("confidence"), cfg)
         parts = ev.get("participants")
         if parts is not None and not isinstance(parts, list):
             problems.add("participants_type", path, iid, f + ".participants", parts, "participants 必须是数组")
@@ -1004,7 +1056,7 @@ def _check_confidence(problems, path, iid, field, value, cfg):
                      % (cfg.CONFIDENCE_MIN, cfg.CONFIDENCE_MAX))
 
 
-def _check_relations(problems, path, iid, annotation, text_norm, chunk_id, cfg, refs, qmin, qmax):
+def _check_relations(problems, path, iid, annotation, text_norm, chunk_id, doc_id, cfg, refs, qmin, qmax):
     relations = annotation.get("relations")
     if not isinstance(relations, list):
         problems.add("slot_type_error", path, iid, "relations", relations, "relations 必须是数组")
@@ -1047,7 +1099,26 @@ def _check_relations(problems, path, iid, annotation, text_norm, chunk_id, cfg, 
                 problems.add("relation_ref_dangling", path, iid, "%s.%s_ref" % (f, side), ref,
                              "%s_ref=%s 在 %s[] 里不存在（悬空引用；端点须是本条标注过的实体／事件）"
                              % (side, brief(ref, 30), "events" if label == "Event" else "entities"))
+                continue
+            # 端点实际类型必须与声明的 label 一致（指向 events[] 即 Event；指向 entities[] 取该实体类型）
+            actual = "Event" if label == "Event" else refs["entity_type_by_ref"].get(ref)
+            if actual not in (None, "") and label != actual:
+                problems.add("relation_label_mismatch", path, iid, "%s.%s_label" % (f, side), label,
+                             "%s_label 写的是 %s，但 %s_ref=%s 的实际类型是 %s（声明必须等于端点实际类型）"
+                             % (side, brief(label, 30), side, brief(ref, 30), actual))
         for extra in schema.get("extra_attrs") or []:
+            if extra in ("valid_from", "valid_to"):
+                # BELONGS_TO 的有效期：正文没给日期时写 null 或省略，都视为「未知」——
+                # config.GRAPH.belongs_to_validity_fallback=None（不用发布时间兜底），
+                # 也不许为了过 check 编一个日期；给了值就必须是 YYYY-MM-DD，格式非法照样报。
+                val = rel.get(extra)
+                if val in (None, ""):
+                    continue
+                if not isinstance(val, str) or not TIME_RE.match(val):
+                    problems.add("relation_validity_format", path, iid, f + "." + extra, val,
+                                 "%s 的 `%s` 只能是 YYYY-MM-DD；正文没有日期时写 null 或省略"
+                                 "（视为未知，不许编日期）" % (name, extra))
+                continue
             if extra not in rel or rel.get(extra) in (None, ""):
                 problems.add("relation_extra_missing", path, iid, f + "." + extra, rel.get(extra),
                              "%s 另需 `%s`（config.RELATION_SCHEMA.extra_attrs）" % (name, extra))
@@ -1063,7 +1134,8 @@ def _check_relations(problems, path, iid, annotation, text_norm, chunk_id, cfg, 
         if name == "RELATED_TO" and "因果关系" in json.dumps(rel, ensure_ascii=False):
             problems.add("related_to_causal", path, iid, f, rel.get("quote"),
                          "RELATED_TO 只表公开信息中出现的关联，不得表述为因果关系")
-        _check_evidence_attrs(problems, "relation_evidence_missing", path, iid, i, rel, chunk_id)
+        _check_evidence_attrs(problems, "relation_evidence_missing", path, iid, i, rel,
+                              chunk_id, doc_id, cfg)
         _check_quote(problems, "quote_not_in_text", path, iid, f + ".quote", rel.get("quote"),
                      text_norm, qmin, qmax)
 
@@ -1116,6 +1188,124 @@ def _check_oblog(problems, path, iid, annotation, text_norm, chunk_id, qmin, qma
                      text_norm, qmin, qmax)
 
 
+def _annotation_status(annotation) -> dict:
+    """一条标注的**事实分类**（不含任何问题）：`check` 的计数与 `validate_annotation` 的判据共用这一份。
+
+    把「status 与槽位是否自洽」所需的原始事实算一次、用两处，避免计数与判据各写一套而漂移。
+    """
+    slots = ["entities", "events", "relations", "times", "ontology_boundary_log"]
+    notes = annotation.get("notes")
+    notes_str = notes if isinstance(notes, str) else ""
+    return {
+        "status": annotation.get("status"),
+        "slots": slots,
+        "empty": is_untouched(annotation),
+        "non_empty": any(isinstance(annotation.get(s), list) and annotation.get(s) for s in slots),
+        "has_note": bool(notes_str.strip()),
+        "notes_str": notes_str,
+        "empty_checked": "empty_but_checked" in notes_str,
+    }
+
+
+def _check_auto_provenance(problems, path, item_id, annotation):
+    """`status = auto_annotated` 必须带 provenance：缺 `model`／`prompt_version`／`temperature` 即报。
+
+    这条守卫的唯一目的是**防止自动标注被当成人工标注**：自动标注与人工标注在结构上无法区分，
+    只能靠「有没有如实登记谁产的、用什么产的」。`temperature = 0` 是合法取值（0 不是「空」），
+    因此这里判的是「键缺失／是 None／是空串」，不是真值。
+    """
+    prov = annotation.get("provenance")
+    if not isinstance(prov, dict):
+        problems.add("auto_provenance_missing", path, item_id, "provenance", prov,
+                     "status=%s 必须带 provenance（%s）——缺了它，自动标注就可能被当成人工标注"
+                     % (AUTO_STATUS, "／".join(AUTO_PROVENANCE_REQUIRED)))
+        return
+    for name in AUTO_PROVENANCE_REQUIRED:
+        value = prov.get(name)
+        if name not in prov or value is None or value == "":
+            problems.add("auto_provenance_missing", path, item_id, "provenance.%s" % name, value,
+                         "status=%s 的 provenance 缺必填项 `%s`（%s 三项都必须有；"
+                         "temperature=0 是合法取值，不允许用空值代替）"
+                         % (AUTO_STATUS, name, "／".join(AUTO_PROVENANCE_REQUIRED)))
+
+
+def _check_status(problems, path, item_id, annotation, info):
+    """`status` 与槽位的一致性；`auto_annotated` 另加 provenance 守卫。"""
+    status = info["status"]
+    if status == PENDING_STATUS:
+        if info["non_empty"] or info["has_note"]:
+            problems.add("status_pending_but_filled", path, item_id, "status", status,
+                         "status 仍是 %s，但槽位已有内容（%s）——填完了就把 status 改成 %s 或 %s"
+                         % (PENDING_STATUS,
+                            "、".join(s for s in info["slots"] if annotation.get(s)) or "notes",
+                            COMPLETED_STATUS, AUTO_STATUS))
+    elif status == AUTO_STATUS:
+        _check_auto_provenance(problems, path, item_id, annotation)
+        if not info["non_empty"] and not info["has_note"]:
+            problems.add("status_completed_but_empty", path, item_id, "status", status,
+                         "status=%s 说已完成，但 entities／events／relations／times／"
+                         "ontology_boundary_log 全空、notes 也空；本块确实没有可标事实时，"
+                         "四个槽位留空并在 notes 写 `empty_but_checked: true` 加理由" % AUTO_STATUS)
+    elif status == COMPLETED_STATUS:
+        if not info["non_empty"] and not info["has_note"]:
+            problems.add("status_completed_but_empty", path, item_id, "status", status,
+                         "status 说已完成，但 entities／events／relations／times／"
+                         "ontology_boundary_log 全空、notes 也空；本块确实没有可标事实时，"
+                         "四个槽位留空并在 notes 写 `empty_but_checked: true` 加理由")
+    else:
+        problems.add("status_unknown", path, item_id, "status", status,
+                     "status 只能是 %s／%s／%s"
+                     % (PENDING_STATUS, COMPLETED_STATUS, AUTO_STATUS))
+
+
+def validate_annotation(record, cfg=None, path=None):
+    """**公开校验入口**：对一条**内存里**的标注记录跑与 `check` 完全相同的槽位校验。
+
+    `record` 需要：`item_id`、`chunk_id`、`doc_id`、`text`、`annotation`（`annotation` 必须是 dict）。
+    返回问题列表（每项含 `kind`／`file`／`item_id`／`field`／`value`／`message`），空列表即通过。
+
+    **边界**：只判「标注本身」是否合口径。文件级的问题（文件名与 `item_id` 不一致、split 不符、
+    `item_id` 重复或不在 jsonl 里、抽样字段被改、META 的 `text_digest` 不符）属于**工作区文件**，
+    由 `run_check` 负责——`check` 与 `代码\\抽取与图谱\\auto_annotate.py` 共用本函数这一份校验源，
+    所以不存在「第二套校验」。
+    """
+    if cfg is None:
+        cfg = _load_config()
+    problems = Problems()
+    item_id = record.get("item_id")
+    annotation = record.get("annotation")
+    if not isinstance(annotation, dict):
+        problems.add("slot_type_error", path, item_id, "annotation", annotation,
+                     "annotation 必须是 JSON 对象")
+        return problems
+
+    info = _annotation_status(annotation)
+    _check_status(problems, path, item_id, annotation, info)
+
+    # 版本级属性不得出现在标注里
+    if "data_cutoff_time" in json.dumps(annotation, ensure_ascii=False):
+        problems.add("data_cutoff_time_present", path, item_id, "annotation", "data_cutoff_time",
+                     "data_cutoff_time 是数据集版本级属性，不落任何节点或关系，标注里不得出现")
+
+    if info["empty"] and not info["non_empty"]:
+        return problems
+
+    # ---------------- 逐槽位 ----------------
+    text_norm = norm_ws(record.get("text") or "")
+    chunk_id = record.get("chunk_id")
+    doc_id = record.get("doc_id")
+    qmin, qmax = cfg.EVIDENCE["quote_min_chars"], cfg.EVIDENCE["quote_max_chars"]
+
+    _check_entities(problems, path, item_id, annotation, text_norm, chunk_id, cfg, qmin, qmax)
+    refs = _collect_refs(problems, path, item_id, annotation, cfg)
+    _check_events(problems, path, item_id, annotation, text_norm, chunk_id, cfg, refs, qmin, qmax)
+    _check_relations(problems, path, item_id, annotation, text_norm, chunk_id, doc_id, cfg, refs,
+                     qmin, qmax)
+    _check_times(problems, path, item_id, annotation, text_norm, qmin, qmax, cfg)
+    _check_oblog(problems, path, item_id, annotation, text_norm, chunk_id, qmin, qmax)
+    return problems
+
+
 def cmd_check(args) -> int:
     cfg = _load_config()
     eval_dir = os.path.abspath(args.eval_dir or default_eval_dir(cfg))
@@ -1131,11 +1321,52 @@ def cmd_check(args) -> int:
 # ==========================================================================
 # 7. merge
 # ==========================================================================
+MERGE_REFUSES_AUTO_MSG = (
+    "第 6 阶段交付文件的槽位必须保持为空（《15》第八节 的冻结契约），自动标注落在独立产物里"
+    "（`阶段05-数据准备\\数据集\\抽取评测集\\v2.1\\自动标注\\`）。本守卫为硬守卫，`--force` 不放行。"
+)
+
+
+def scan_auto_annotated(ws: str, splits) -> list:
+    """扫出工作区里 `status = auto_annotated` 的条目，返回 [(路径, item_id), …]。
+
+    `merge` 用它决定是否拒绝写盘；`check` 不看它（`check` 的职责是判「标注本身合不合口径」，
+    自动标注在它眼里是**合法**的第三个状态）。
+    """
+    hits = []
+    for split in splits:
+        out_dir = os.path.join(ws, split)
+        for fname in sorted(os.listdir(out_dir)) if os.path.isdir(out_dir) else []:
+            if not fname.endswith(".md"):
+                continue
+            path = os.path.join(out_dir, fname)
+            _, _, annotation, errs = parse_item_file(path)
+            if annotation is None or errs:
+                continue
+            if annotation.get("status") == AUTO_STATUS:
+                hits.append((path, fname[:-3]))
+    return hits
+
+
 def cmd_merge(args) -> int:
     cfg = _load_config()
     eval_dir = os.path.abspath(args.eval_dir or default_eval_dir(cfg))
     ws = os.path.abspath(args.workspace or default_workspace(eval_dir))
     splits = pick_splits(args.split)
+
+    # 守卫（先于 check，且不受 --force 影响）：`auto_annotated` 一律不许写回交付文件。
+    # 理由：第 6 阶段交付文件的槽位必须保持为空（《15》第八节 的冻结契约），
+    # 自动标注是**另一件产物**（模型参照集），写回会把「交付文件没有标签」这条契约破坏掉。
+    auto_hits = scan_auto_annotated(ws, splits)
+    if auto_hits:
+        print("merge 拒绝写盘：发现 %d 条 `%s`（merge_refuses_auto）。" % (len(auto_hits), AUTO_STATUS))
+        for path, iid in auto_hits[:10]:
+            print("    [merge_refuses_auto] 文件=%s | item_id=%s | 字段=status | 值=%s | %s"
+                  % (show_path(path), iid, AUTO_STATUS, MERGE_REFUSES_AUTO_MSG))
+        if len(auto_hits) > 10:
+            print("    （另有 %d 条同类，不逐一列出）" % (len(auto_hits) - 10))
+        return 1
+
     problems, _ = run_check(ws, eval_dir, splits, cfg)
     if problems and not args.force:
         print("merge 拒绝写盘：check 报了 %d 个问题（先修，或用 --force 越过）。" % len(problems))
@@ -1389,7 +1620,201 @@ def cmd_selftest(args) -> int:
             _write_annotation(p, empty_annotation())
 
         print("-" * 72)
-        print("[6] 空槽位但 status 说完成 → check 必须拒绝")
+        print("[6] F1～F6 回归：六项「修前会误判」的缺陷，逐条断言（含「仍须拒绝」的对照）")
+        dev_rows = {r["item_id"]: r for r in read_jsonl(os.path.join(eval_dir, "dev.jsonl"))}
+        _OMIT = object()
+
+        def _case(iid, mutate):
+            """在 DEV-0NN 上写入变异后的**合成**标注并跑 check，返回 (路径, 该条问题)；跑完复位。"""
+            p = os.path.join(ws, "dev", "%s.md" % iid)
+            rr = dev_rows[iid]
+            a = _fake_annotation(iid, rr["chunk_id"], rr["doc_id"], _fake_quote(rr["text"]))
+            mutate(a, rr)
+            _write_annotation(p, a)
+            probs, _ = run_check(ws, eval_dir, ["dev"], cfg, verbose=False)
+            hit = [x for x in probs if x["item_id"] == iid]
+            _write_annotation(p, empty_annotation())
+            return p, hit
+
+        def _expect_kind(label, iid, mutate, kind):
+            p, hit = _case(iid, mutate)
+            kinds = sorted({x["kind"] for x in hit})
+            good = _assert(kind in kinds, "%s：check 报出 `%s`" % (label, kind),
+                           "实测 %s" % (kinds or "无"))
+            for x in hit:
+                if x["kind"] == kind:
+                    print("        证据行 → 文件=%s | item_id=%s | 字段=%s | 值=%s"
+                          % (os.path.relpath(x["file"], tmp), x["item_id"], x["field"], x["value"]))
+                    break
+            return good
+
+        def _expect_pass(label, iid, mutate):
+            p, hit = _case(iid, mutate)
+            kinds = sorted({x["kind"] for x in hit})
+            return _assert(not hit, "%s：check 必须通过（不许误拒）" % label,
+                           "实测 %s" % (kinds or "0 个问题"))
+
+        def _belongs_to(a, r, valid_from=_OMIT, valid_to=_OMIT):
+            a["entities"].append({"entity_type": "Industry", "entity_ref": "E2",
+                                  "industry_code": "", "industry_name": "【合成行业】", "level": 1,
+                                  "quote": _fake_quote(r["text"]), "chunk_id": r["chunk_id"]})
+            rel = {"relation": "BELONGS_TO", "from_label": "Company", "from_ref": "E1",
+                   "to_label": "Industry", "to_ref": "E2", "quote": _fake_quote(r["text"]),
+                   "source_doc_id": r["doc_id"], "source_chunk_id": r["chunk_id"],
+                   "confidence": 0.5}
+            if valid_from is not _OMIT:
+                rel["valid_from"] = valid_from
+            if valid_to is not _OMIT:
+                rel["valid_to"] = valid_to
+            a["relations"] = [rel]
+
+        # 修前：F1～F4 漏检（check 放行）、F5～F6 误拒（check 拒绝合法写法）。
+        ok &= _expect_kind("F1a 关系 confidence=1.5 越界", "DEV-009",
+                           lambda a, r: a["relations"][0].update(confidence=1.5), "confidence_range")
+        ok &= _expect_kind("F1b 关系 confidence=\"abc\" 非数值（与 events 同码 confidence_range）",
+                           "DEV-010",
+                           lambda a, r: a["relations"][0].update(confidence="abc"),
+                           "confidence_range")
+        ok &= _expect_kind("F2 source_doc_id 与本条 doc_id 不符", "DEV-011",
+                           lambda a, r: a["relations"][0].update(source_doc_id="999999"),
+                           "relation_doc_mismatch")
+        ok &= _expect_kind("F3 from_label 与端点实际类型不符", "DEV-012",
+                           lambda a, r: a["relations"][0].update(from_label="Person"),
+                           "relation_label_mismatch")
+        ok &= _expect_kind("F5b BELONGS_TO 有效期格式非法（乱填照样报）", "DEV-015",
+                           lambda a, r: _belongs_to(a, r, valid_from="2020-11-03",
+                                                    valid_to="2020年1月"),
+                           "relation_validity_format")
+        ok &= _expect_kind("F6b 本体边界写「已新增……关系」（生效口径）", "DEV-017",
+                           lambda a, r: a["ontology_boundary_log"].append(
+                               {"case_id": "OB-DEV-017-1", "case_type": "relation_boundary",
+                                "summary": "已新增第 10 条关系：委托关系，并写入图谱。",
+                                "quote": _fake_quote(r["text"]), "chunk_id": r["chunk_id"],
+                                "suggested_handling": "无"}),
+                           "ontology_invention")
+        ok &= _expect_pass("F5a BELONGS_TO 有效期写 null（正文无日期，视为未知）", "DEV-014",
+                           lambda a, r: _belongs_to(a, r, valid_from=None, valid_to=None))
+        ok &= _expect_pass("F5a2 BELONGS_TO 省略 valid_from／valid_to（同上）", "DEV-020",
+                           _belongs_to)
+        ok &= _expect_pass("F6a 本体边界写「建议新增……」（建议口径）", "DEV-016",
+                           lambda a, r: a["ontology_boundary_log"].append(
+                               {"case_id": "OB-DEV-016-1", "case_type": "relation_boundary",
+                                "summary": "正文出现代销安排，9 条关系里没有对应项。",
+                                "quote": _fake_quote(r["text"]), "chunk_id": r["chunk_id"],
+                                "suggested_handling":
+                                    "建议新增第 10 条关系：公司与代销机构之间的委托关系。"}))
+        ok &= _expect_pass("F6c 本体边界写「待／记录」未定语境（同上放行）", "DEV-021",
+                           lambda a, r: a["ontology_boundary_log"].append(
+                               {"case_id": "OB-DEV-021-1", "case_type": "relation_boundary",
+                                "summary": "待确认的事项。", "quote": _fake_quote(r["text"]),
+                                "chunk_id": r["chunk_id"],
+                                "suggested_handling": "记录：待确认是否新增第 10 条关系。"}))
+        # F4 走 META 文本篡改（不走 json 槽位），单独一条路径。
+        p = os.path.join(ws, "dev", "DEV-013.md")
+        rr = dev_rows["DEV-013"]
+        _write_annotation(p, _fake_annotation("DEV-013", rr["chunk_id"], rr["doc_id"],
+                                              _fake_quote(rr["text"])))
+        raw013 = open(p, encoding="utf-8").read()
+        tampered = raw013.replace('"text_digest": "', '"text_digest": "0', 1)
+        assert tampered != raw013, "META text_digest 替换失败"
+        write_text_atomic(p, tampered)
+        probs, _ = run_check(ws, eval_dir, ["dev"], cfg, verbose=False)
+        hit = [x for x in probs if x["item_id"] == "DEV-013" and x["kind"] == "text_digest_mismatch"]
+        ok &= _assert(bool(hit), "F4 META 的 text_digest 被改：check 报出 `text_digest_mismatch`",
+                      hit[0]["field"] + "=" + hit[0]["value"] if hit else "未报出")
+        write_text_atomic(p, raw013)
+        _write_annotation(p, empty_annotation())
+        # 对照组：这三条修前就拒、修后仍必须拒（防止改出新的漏检）。
+        ok &= _expect_kind("对照 T8 to_ref 悬空仍拒", "DEV-018",
+                           lambda a, r: a["relations"][0].update(to_ref="V9"),
+                           "relation_ref_dangling")
+        ok &= _expect_kind("对照 T9 quote 取自别块仍拒", "DEV-019",
+                           lambda a, r: [d.update(quote="别块原文示例：这段文字不在本条目文本块里出现")
+                                         for d in (a["entities"][0], a["events"][0],
+                                                   a["relations"][0], a["times"][0])],
+                           "quote_not_in_text")
+        ok &= _expect_kind("对照 T10 事件 confidence=2.0 仍拒", "DEV-022",
+                           lambda a, r: a["events"][0].update(confidence=2.0),
+                           "confidence_range")
+
+        print("-" * 72)
+        print("[7] G1 一致性对照：同一个 confidence 取值，events[]／relations[] 必须同一口径")
+
+        def _conf_case(slot, value):
+            """把同一个 confidence 取值放进 events[]／relations[]，返回该条的问题列表。"""
+            def mutate(a, r, slot=slot, value=value):
+                if value is _OMIT:
+                    a[slot][0].pop("confidence")
+                else:
+                    a[slot][0]["confidence"] = value
+            return _case("DEV-024", mutate)[1]
+
+        # 两条路径共用 `_check_confidence`：数值／数字字符串通过，非数值／越界都报 `confidence_range`。
+        for _label, _value, _want in (("0.9（数值）", 0.9, []),
+                                      ("\"0.9\"（数字字符串）", "0.9", []),
+                                      ("\"abc\"（非数值）", "abc", ["confidence_range"]),
+                                      ("2.0（越界）", 2.0, ["confidence_range"])):
+            _ev = sorted({x["kind"] for x in _conf_case("events", _value)})
+            _rel = sorted({x["kind"] for x in _conf_case("relations", _value)})
+            ok &= _assert(_ev == _rel == _want,
+                          "G1 confidence=%s → 两条路径错误码完全相同（%s）"
+                          % (_label, "、".join(_want) if _want else "都通过"),
+                          "events=%s；relations=%s" % (_ev or "[]", _rel or "[]"))
+        # 「缺失」一档：relations 侧由证据三项检查报 `relation_evidence_missing`（只报这一条，
+        # 不再补一条 confidence_*）；events 侧没有「证据三项」这一层，由 `_check_confidence`
+        # 报 `confidence_empty`。两条路径都必须拒绝。
+        _ev = sorted({x["kind"] for x in _conf_case("events", _OMIT)})
+        _rel = sorted({x["kind"] for x in _conf_case("relations", _OMIT)})
+        ok &= _assert(_ev == ["confidence_empty"] and _rel == ["relation_evidence_missing"],
+                      "G1 confidence 键缺失 → 两条路径都拒绝，各报一条、不重复",
+                      "events=%s；relations=%s" % (_ev or "[]（放行）", _rel or "[]（放行）"))
+
+        print("-" * 72)
+        print("[8] G2 本体边界「建议语境」：记录／备注不再是免罪符（只有真没断言已生效才放行）")
+
+        def _oblog(text):
+            def mutate(a, r, text=text):
+                a["ontology_boundary_log"].append(
+                    {"case_id": "OB-DEV-025-1", "case_type": "relation_boundary",
+                     "summary": "合成：本体边界语境对照。", "quote": _fake_quote(r["text"]),
+                     "chunk_id": r["chunk_id"], "suggested_handling": text})
+            return mutate
+
+        for _label, _text, _allow in (
+                ("G2a「建议新增第 10 条关系：公司与代销机构之间的委托关系。」",
+                 "建议新增第 10 条关系：公司与代销机构之间的委托关系。", True),
+                ("G2b「疑似需要第 10 条关系。」", "疑似需要第 10 条关系。", True),
+                ("G2c「记录：疑似需要第 10 条关系。」", "记录：疑似需要第 10 条关系。", True),
+                ("G2d「记录：已新增第 10 条关系，并写入图谱。」",
+                 "记录：已新增第 10 条关系，并写入图谱。", False),
+                ("G2e「已新增第 10 条关系：委托关系，并写入图谱。」",
+                 "已新增第 10 条关系：委托关系，并写入图谱。", False)):
+            if _allow:
+                ok &= _expect_pass(_label + "：建议／疑似语境，必须通过", "DEV-025", _oblog(_text))
+            else:
+                ok &= _expect_kind(_label + "：已生效口径，必须拒绝", "DEV-025", _oblog(_text),
+                                   "ontology_invention")
+
+        print("-" * 72)
+        print("[9] G3 to_label 与端点实际类型不符 → `relation_label_mismatch`（补上 to 侧缺口）")
+
+        def _to_label_bad(a, r):
+            _belongs_to(a, r)                       # 端点 E2 的实际类型是 Industry
+            a["relations"][0]["to_label"] = "Company"
+
+        _p, _hit = _case("DEV-023", _to_label_bad)
+        _lm = [x for x in _hit if x["kind"] == "relation_label_mismatch"]
+        ok &= _assert(bool(_lm),
+                      "G3 to_label=\"Company\" 而 to_ref=E2 实际是 Industry：报出 `relation_label_mismatch`",
+                      "实测 %s" % (sorted({x["kind"] for x in _hit}) or "无"))
+        ok &= _assert(bool(_lm) and _lm[0]["field"] == "relations[0].to_label",
+                      "G3 这条问题落在 `relations[0].to_label`（确实是 to 侧被判定）",
+                      ("证据行 → 文件=%s | item_id=%s | 字段=%s | 值=%s"
+                       % (os.path.relpath(_lm[0]["file"], tmp), _lm[0]["item_id"],
+                          _lm[0]["field"], _lm[0]["value"])) if _lm else "未报出")
+
+        print("-" * 72)
+        print("[10] 空槽位但 status 说完成 → check 必须拒绝")
         p = os.path.join(ws, "dev", "DEV-008.md")
         _write_annotation(p, _with_status(empty_annotation(), COMPLETED_STATUS))
         probs, _ = run_check(ws, eval_dir, ["dev"], cfg, verbose=False)
@@ -1399,7 +1824,80 @@ def cmd_selftest(args) -> int:
         _write_annotation(p, empty_annotation())
 
         print("-" * 72)
-        print("[7] 真实 dev.jsonl／test.jsonl 全程未被触碰")
+        print("[11] H1 status=auto_annotated 必须带 provenance（防「自动标注被当成人工标注」）")
+
+        def _auto_prov(prov=_OMIT):
+            def mutate(a, r, prov=prov):
+                a["status"] = AUTO_STATUS
+                a["notes"] = "自检用的合成自动标注，不是真实标注。"
+                if prov is not _OMIT:
+                    a["provenance"] = prov
+            return mutate
+
+        _FULL_PROV = {"annotator": "llm", "model": "合成模型",
+                      "prompt_version": "stage6-auto-annotate-v1.0", "temperature": 0}
+        ok &= _expect_pass("H1a 带齐 model／prompt_version／temperature（temperature=0 合法）",
+                           "DEV-026", _auto_prov(dict(_FULL_PROV)))
+        ok &= _expect_kind("H1b 整个 provenance 缺失", "DEV-027", _auto_prov(),
+                           "auto_provenance_missing")
+        ok &= _expect_kind("H1c provenance 缺 temperature", "DEV-028",
+                           _auto_prov({"annotator": "llm", "model": "合成模型",
+                                       "prompt_version": "stage6-auto-annotate-v1.0"}),
+                           "auto_provenance_missing")
+        ok &= _expect_kind("H1d provenance 缺 prompt_version", "DEV-029",
+                           _auto_prov({"annotator": "llm", "model": "合成模型", "temperature": 0}),
+                           "auto_provenance_missing")
+        ok &= _expect_kind("H1e provenance 缺 model", "DEV-030",
+                           _auto_prov({"annotator": "llm",
+                                       "prompt_version": "stage6-auto-annotate-v1.0",
+                                       "temperature": 0}),
+                           "auto_provenance_missing")
+        # 对照：同一条内容换成 human_annotated 且不带 provenance —— 正是「人工标注」的合法写法，
+        # 不许报 auto_provenance_missing（守卫只盯 auto_annotated，不能误伤人工标注）。
+        ok &= _expect_pass("H1f 对照：human_annotated 不带 provenance 照样通过（守卫不误伤人工）",
+                           "DEV-032", lambda a, r: None)
+        # 对照：status 仍是三个合法值之外 → 必须仍报 status_unknown
+        ok &= _expect_kind("H1g 对照：status=\"machine_annotated\" 仍报 status_unknown", "DEV-033",
+                           lambda a, r: a.update(status="machine_annotated"), "status_unknown")
+
+        print("-" * 72)
+        print("[12] H2 merge 拒绝把 auto_annotated 写回交付文件（`merge_refuses_auto`）")
+        _ap = os.path.join(ws, "dev", "DEV-031.md")
+        _arr = dev_rows["DEV-031"]
+        _aann = _fake_annotation("DEV-031", _arr["chunk_id"], _arr["doc_id"],
+                                 _fake_quote(_arr["text"]))
+        _aann["status"] = AUTO_STATUS
+        _aann["provenance"] = dict(_FULL_PROV)
+        _write_annotation(_ap, _aann)
+        _before_auto = open(os.path.join(eval_dir, "dev.jsonl"), encoding="utf-8").read()
+        _rc_auto = cmd_merge(argparse.Namespace(eval_dir=eval_dir, workspace=ws, split="dev",
+                                                force=False))
+        _after_auto = open(os.path.join(eval_dir, "dev.jsonl"), encoding="utf-8").read()
+        ok &= _assert(_rc_auto != 0, "merge 返回非零（拒绝写盘）", "退出码 %s" % _rc_auto)
+        ok &= _assert(_before_auto == _after_auto,
+                      "dev.jsonl 逐字节未动（交付文件槽位冻结契约）", "写盘前后 SHA-256 一致")
+        _rc_auto_f = cmd_merge(argparse.Namespace(eval_dir=eval_dir, workspace=ws, split="dev",
+                                                  force=True))
+        ok &= _assert(_rc_auto_f != 0
+                      and open(os.path.join(eval_dir, "dev.jsonl"), encoding="utf-8").read()
+                      == _before_auto,
+                      "`--force` 也不放行（冻结契约是硬守卫，不是可越过的 check 问题）",
+                      "退出码 %s" % _rc_auto_f)
+        # 对照：把同一条改成 human_annotated 后 merge 必须正常写盘（守卫不误伤人工标注路径）。
+        _aann["status"] = COMPLETED_STATUS
+        _aann.pop("provenance")
+        _write_annotation(_ap, _aann)
+        _rc_human = cmd_merge(argparse.Namespace(eval_dir=eval_dir, workspace=ws, split="dev",
+                                                 force=False))
+        ok &= _assert(_rc_human == 0
+                      and json.loads(_line_of(eval_dir, "dev.jsonl", "DEV-031"))["annotation"]["status"]
+                      == COMPLETED_STATUS,
+                      "对照：同一条改成 human_annotated 后 merge 正常写回（守卫不误伤）",
+                      "退出码 %s" % _rc_human)
+        _write_annotation(_ap, empty_annotation())
+
+        print("-" * 72)
+        print("[13] 真实 dev.jsonl／test.jsonl 全程未被触碰")
         after = {n: sha256_hex(open(os.path.join(real_eval, n), "rb").read().decode("utf-8"))
                  for n in ("dev.jsonl", "test.jsonl")}
         ok &= _assert(before == after, "真实 jsonl 字节未变（SHA-256）",

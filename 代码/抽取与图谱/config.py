@@ -27,6 +27,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 
 # --------------------------------------------------------------------------
 # 1. 路径
@@ -44,6 +45,26 @@ CHUNKS_PATH = os.path.join(DATASET_DIR, "chunks", "chunks.jsonl")
 # 原始返回缓存：与数据集版本目录同级，一版一个子目录；下划线前缀表示它不是数据集内容。
 CACHE_ROOT = os.path.join(DATASET_ROOT, "_抽取缓存")
 CACHE_DIR = os.path.join(CACHE_ROOT, DATASET_VERSION)
+
+
+def cache_dir_for_prompt_version(prompt_version: str) -> str:
+    """按**有效 Prompt 版本**派生 T3 抽取缓存目录（缓存条目按有效的那个版本落盘）。
+
+    * 关闭 v1.2 变体（默认）时有效版本＝`LLM["prompt_version"]`（v1.1）
+      → 主缓存 `_抽取缓存\\v2.1\\`（709 篇 v1.1 原始返回，只读复用）；
+    * 开启 v1.2 变体时有效版本＝`LLM["ontology_defs"]["prompt_version"]`（v1.2）
+      → `_抽取缓存\\v2.1_v1_2\\`（`cache_suffix` 派生），与 v1.1 主缓存物理隔离。
+
+    未登记的版本一律抛错，绝不回落到 v1.1 目录——回落的后果是把 v1.2 的返回写进
+    v1.1 主缓存（破坏可重放）；extract.py 侧还有一道同向守卫。
+    """
+    variant = LLM.get("ontology_defs") or {}
+    if variant.get("prompt_version") and prompt_version == variant["prompt_version"]:
+        return CACHE_DIR + str(variant.get("cache_suffix") or "")
+    if prompt_version != LLM["prompt_version"]:
+        raise ValueError("未知的 Prompt 版本：%r" % (prompt_version,))
+    return CACHE_DIR
+
 
 # 试跑产物目录：不是交付物、不入仓库（`.gitignore` 已含 `代码/抽取与图谱/_试跑/`）。
 PILOT_DIR = os.path.join(_THIS_DIR, "_试跑")
@@ -100,6 +121,22 @@ LLM = {
     "response_format": "json_object",
     "timeout_seconds": 180.0,
     "prompt_version": "stage6-extract-v1.1",
+    # ------------------------------------------------------------------
+    # v1.2 提示词变体（8 类事件定义进提示词的显式开关，**默认关闭**）
+    # ------------------------------------------------------------------
+    # 口径（2026-09-27 定）：`prompt_version` 上面这一行是**仓库默认口径**，一个字都不改；
+    # v1.2 只在显式打开开关时生效，有效 Prompt 版本随之派生：
+    #   关闭（默认）→ 有效版本 `stage6-extract-v1.1`，提示词与 709 篇主缓存逐字节一致；
+    #   开启        → 有效版本 `ontology_defs.prompt_version`，缓存目录按 `cache_suffix` 派生。
+    # 开关来源只有两条：`extract.py --ontology-defs`（关：`--no-ontology-defs`）或
+    # 环境变量 `STAGE6_ONTOLOGY_DEFS=1`（关：`=0`）；两者同时给出且**冲突**时报错退出，
+    # 不静默取其一。默认关闭保证「仓库默认口径＝v1.1」不被误改。
+    "ontology_defs": {
+        "enabled": False,                     # 默认关闭：不改变 v1.1 的提示词与缓存键
+        "prompt_version": "stage6-extract-v1.2",
+        "cache_suffix": "_v1_2",              # 派生缓存目录用（见 cache_dir_for_prompt_version）
+        "env": "STAGE6_ONTOLOGY_DEFS",        # 开关的环境变量名（读取方式，不含取值）
+    },
     # 压缩重试：**只在主尝试被输出上限截断（finish_reason == "length"）时**触发一次。
     # 依据（2026-09-25 实测）：10,304 字符的 doc_id 1381 在主尝试下打满 8192 完成 token
     # 仍未输出完 JSON；同一端点 `reasoning_effort="none"` 可把完成 token 压到约 1/4
@@ -179,6 +216,163 @@ ENTITY_TYPES_FROM_MODEL = ["Company", "Person", "Industry", "Institution", "Poli
 
 EVENT_TYPES = ["业绩", "监管", "股权", "投资并购", "重大合同", "产品", "政策", "重大经营"]
 EVENT_CORE_ATTRS = ["event_id", "event_type", "event_name", "event_time", "description", "confidence"]
+
+# --------------------------------------------------------------------------
+# 3.1 8 种事件类型的**定义与判据**（抽取提示词与标注口径的**共同来源**，只此一处，不得复制）
+# --------------------------------------------------------------------------
+# 依据：《10》第4.5节 只给出 8 个**类型名**，没有给定义；本表是第 6 阶段对类型名的
+# **定义细化**——不新增、不改名、不合并类型（《15》第五节 硬约束 1）。
+# 为什么必须细化：`stage6-extract-v1.1` 的提示词只注入了类型名，模型只能自行理解，
+# 实测把大量行政许可／审批类事件记成「监管」、把程序性步骤记成「重大经营」
+# （见《16》第2.6节 的实测与对照）。定义进提示词后升 Prompt 版本为 v1.2。
+# 修改本表必须同步三处并回归：① 升 `LLM["prompt_version"]`；② 更新
+# `阶段05-数据准备\数据集\抽取评测集\v2.1\标注说明.md` 第5节 与其 `<!-- ONTOLOGY-DIGEST -->`；
+# ③ 跑 `python 工具\跨文档核验.py`。
+EVENT_TYPE_DEFS = [
+    {
+        "type": "业绩",
+        "定义": "经营成果数据的披露与变动。",
+        "算": ["业绩预告、业绩快报", "预增、预减、扭亏为盈", "净利润及其同比变化",
+               "营业收入与利润的重大变动", "定期报告披露的业绩结论"],
+        "不含": ["分红派息与利润分配方案（判为「股权」）",
+                 "只描述经营计划或订单、没有成果数据的（判为「重大经营」或「重大合同」）"],
+    },
+    {
+        "type": "监管",
+        "定义": "监管机构（证监会及其派出机构、证券交易所、国家金融监督管理总局、"
+                "国家药品监督管理局、中国人民银行等）**作出或发出**的行政与自律管理行为，含两类。",
+        "算": ["处罚与监督类：行政处罚、立案调查、问询、警示、监管函、通报批评、公开谴责、"
+               "纪律处分、市场禁入、责令改正",
+               "许可与审批类：核准、同意注册、批复、受理、备案、无异议、业务牌照与资质的授予或撤销"],
+        "不含": ["监管机构**发布规则、办法、通知**（判为「政策」）",
+                 "第三方机构（信用评级机构、会计师事务所、评估机构）的意见或结论（判为「重大经营」）",
+                 "按判定优先级第 1～4 项已能归类的审批环节（例：再融资的注册核准判为「股权」、"
+                 "药品注册的受理与批准判为「产品」）"],
+    },
+    {
+        "type": "股权",
+        "定义": "**本公司自身**股本与股东权益的变动。",
+        "算": ["股权激励、限制性股票", "回购、增持、减持、质押", "权益变动、要约收购、股权转让",
+               "定向增发、非公开发行、发行股票、可转换公司债券、配股",
+               "为完成上述事项而取得的发行／注册核准"],
+        "不含": ["标的为他人公司或资产的（判为「投资并购」）"],
+    },
+    {
+        "type": "投资并购",
+        "定义": "对外投资与并购重组。",
+        "算": ["收购、并购、重大资产重组、资产购买", "对外投资、增资扩股", "设立公司（含设立子公司）"],
+        "不含": ["只签意向性框架协议、尚未形成投资安排的（优先判为「重大合同」）"],
+    },
+    {
+        "type": "重大合同",
+        "定义": "以合同／订单为核心的事件。",
+        "算": ["中标", "重大合同、订单、供货、签约、签订合同", "框架协议"],
+        "不含": ["核心是产能、停产复产、经营计划或重大事项的（判为「重大经营」）"],
+    },
+    {
+        "type": "产品",
+        "定义": "产品、技术、资质的取得与落地；判据是**是否出现新的产品或技术状态**。",
+        "算": ["临床试验（获批或获受理）", "注册证、药品与医疗器械注册、上市许可、获批上市",
+               "新产品、首台（套）、投产、量产", "取得批件、获得批准"],
+        "不含": ["再融资类「发行获证监会同意注册」（判为「股权」）",
+                 "采购或销售某产品的（判为「重大合同」）",
+                 "监管机构的**行为**本身——受理、核准、批复、备案、无异议、牌照与资质的授予或撤销"
+                 "（判为「监管」）；而「临床试验获批或获受理、取得注册证、获得批准、获批上市」"
+                 "这类**公司取得的产品／技术状态**仍判「产品」"],
+    },
+    {
+        "type": "政策",
+        "定义": "政策文件的发布、修订或官方落实。",
+        "算": ["政策、办法、规划、指导意见、实施方案、通知、条例的出台／修订／实施",
+               "官方对某项政策的落实部署、专项整治部署"],
+        "不含": ["监管机构的处罚与许可（判为「监管」）",
+                 "公司只是**引用**政策作为自身依据的：不另立政策事件，改写 RELATED_TO 关系"],
+    },
+    {
+        "type": "重大经营",
+        "定义": "前 7 类之外、构成重大经营影响的事件（**兜底类，不是「其他」垃圾桶**）。",
+        "算": ["重大经营事项、经营计划、重大事项", "停产、复产",
+               "第三方评级或审计结论", "公司自主作出的重大经营性举措"],
+        "不含": ["能归前 7 类的一律归前 7 类",
+                 "程序性步骤与元事件（见 `EVENT_NOT_EVENT_RULES`）"],
+    },
+]
+
+# 交叉情形的判定优先级：**自上而下，命中即止**（先判事件的实质，再看作出方是谁）。
+# 这一张表是为了消掉「同一件事既可以算监管、又可以算股权／产品」的歧义；
+# 实测的歧义集中在「行政许可／审批」这一类（见《16》第2.6节）。
+EVENT_TYPE_PRIORITY = [
+    "1. 实质是**本公司自身**的股本或股东权益变动（含其为完成该变动而取得的发行／注册核准）→ 「股权」",
+    "2. 实质是**投资他人公司或资产**（含其为完成该投资而取得的核准）→ 「投资并购」",
+    "3. 实质是**产品／技术状态的取得或落地**（含监管机构对该注册、许可的受理与批准）→ 「产品」",
+    "4. 实质是**以合同／订单为核心** → 「重大合同」",
+    "5. 实质是**监管机构的处罚与监督行为** → 「监管」",
+    "6. 实质是**政策文件的出台、修订或实施** → 「政策」",
+    "7. 实质是**经营成果数据的披露与变动** → 「业绩」",
+    "8. 实质是**监管机构的许可与审批，且不落入第 1～4 项**（业务牌照、资质许可、"
+    "赎回无异议、备案等）→ 「监管」",
+    "9. 其余构成重大经营影响的事件 → 「重大经营」",
+]
+
+# 不构成事件（不产生事件节点）的四类情形。这是「事件应当稀疏」的硬边界：
+# 实测「重大经营」里混进了大量程序性步骤与元事件（见《16》第2.6节）。
+EVENT_NOT_EVENT_RULES = [
+    "程序性步骤：董事会／股东会／监事会的召开、审议、议案通过、决议公告。该文档只讲程序时，"
+    "把它指向的**实体事项**作为事件（例：「审议通过发行可转债议案」→「股权」）；"
+    "确实没有实体事项时，该文档可以不产生任何事件。",
+    "元事件：「披露／发布／刊登……公告」「提示投资者注意」「敬请投资者注意投资风险」"
+    "这类只讲信息发布的表述。",
+    "自评与状态陈述：公司自称某项指标符合监管要求、公司对子公司开展风险评估等"
+    "没有对外行为结果的表述。",
+    "找不到任何参与主体的句子：**每个事件至少要有一个参与主体**，找不到就不输出。",
+]
+
+# 事件粒度与参与主体的口径（抽取与标注共用）。
+EVENT_GRANULARITY_RULES = [
+    "同一件事只写一条，不要把同一事项的「申请—受理—批准」拆成多条；"
+    "选其中**已落地或最核心**的一条。",
+    "同一份文档里若确有两个互不隶属的事项，各写一条。",
+    "同一个主体在同一个事件里**只写一条** PARTICIPATES_IN；可归多个角色时按"
+    " 主体 ＞ 合作方 ＞ 涉及方 ＞ 监管方 ＞ 受影响方 取最贴切的一个。",
+    "监管机构是该事件的**作出方**时只写 ISSUED_BY，不再写 PARTICIPATES_IN；"
+    "「监管方」只给「参与了但不是作出方」的机构。",
+    "**类型改变后必须重新检查关系编码，不许丢边**：某个机构原本靠 ISSUED_BY 挂在该事件上"
+    "（监管机构的受理、核准、批复、备案、无异议、牌照与资质的授予或撤销等），"
+    "而该事件被判成了「产品」等非政策／监管类型时，ISSUED_BY 已不适用——此时必须改用"
+    " PARTICIPATES_IN ＋ role=涉及方（作出许可／提供服务的第三方机构）把它保留下来，"
+    "**不得因为改了事件类型就把这条边丢掉**。",
+]
+
+
+def ontology_definitions_text() -> str:
+    """把 8 类定义、判定优先级与边界规则渲染成**提示词与标注文档共用**的纯文本。
+
+    说明：数据里的 `**…**` 只是源码可读性用的强调记号，渲染时一律去掉——
+    提示词不该出现 Markdown 记号，标注文档里的强调由表格自己给。
+    因此**渲染结果是唯一权威文本**，`ontology_definitions_digest()` 也是对渲染结果取摘要。
+    顺序固定、无随机量，同一份数据永远渲染出同一段文字。
+    """
+    lines = ["【8 种事件类型的定义】"]
+    for i, row in enumerate(EVENT_TYPE_DEFS, 1):
+        lines.append("%d. %s：%s" % (i, row["type"], row["定义"]))
+        lines.append("   算：%s" % "；".join(row["算"]))
+        lines.append("   不含：%s" % "；".join(row["不含"]))
+    lines.append("【判定优先级（自上而下，命中即止）】")
+    lines.extend(EVENT_TYPE_PRIORITY)
+    lines.append("【不构成事件的情形（不产生事件节点）】")
+    lines.extend(EVENT_NOT_EVENT_RULES)
+    lines.append("【事件粒度与参与主体】")
+    lines.extend(EVENT_GRANULARITY_RULES)
+    return re.sub(r"\*\*", "", "\n".join(lines))
+
+
+def ontology_definitions_digest() -> str:
+    """`ontology_definitions_text()` 去空白后的 sha256（前 16 位用于跨文档比对）。
+
+    `工具\\跨文档核验.py` 用它校验 `标注说明.md` 第5节 没有与本体定义漂移。
+    """
+    canonical = re.sub(r"[\s\u3000]+", "", ontology_definitions_text())
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 RELATIONS = [
     "BELONGS_TO", "SUPPLIES", "CUSTOMER_OF", "COMPETES_WITH", "HAS_EXECUTIVE",
@@ -716,6 +910,36 @@ FULL_OUTPUT_FILES = {
 # 全量运行的完整控制台输出**不由脚本写**，而是由启动命令把 stdout／stderr 重定向到这里
 # （脚本内不写日志文件，避免与「产物确定性」混在一起）；此键只登记落点。
 FULL_RUN_LOG = os.path.join(FULL_RUN_DIR, "运行日志_全量.txt")
+
+# --------------------------------------------------------------------------
+# v1.2 变体（8 类事件定义进提示词）的产物落点：与 v1.1 的 `_试跑\`／`_全量\v2.1\`
+# **物理隔离**，只在开关打开时使用；默认口径永远走上面的 OUTPUT_FILES／FULL_OUTPUT_FILES。
+# `--profile pilot --ontology-defs`（定向对照试跑）落 `_试跑\v1_2\定向\`，
+# `--profile v21 --ontology-defs` 落 `_全量\v2.1_v1_2\`（同名键，便于下游按表取路径）。
+# --------------------------------------------------------------------------
+PILOT_V1_2_DIR = os.path.join(PILOT_DIR, "v1_2", "定向")
+OUTPUT_FILES_V1_2 = {
+    "selection": os.path.join(PILOT_V1_2_DIR, "selection.json"),
+    "coverage": os.path.join(PILOT_V1_2_DIR, "coverage.json"),
+    "extracted": os.path.join(PILOT_V1_2_DIR, "extracted.jsonl"),
+    "rejected": os.path.join(PILOT_V1_2_DIR, "rejected.jsonl"),
+    "run_history": os.path.join(PILOT_V1_2_DIR, "run_history.jsonl"),
+    "verify": os.path.join(PILOT_V1_2_DIR, "verify.json"),
+    "manifest": os.path.join(PILOT_V1_2_DIR, "manifest.sha256"),
+    "log_first": os.path.join(PILOT_V1_2_DIR, "运行日志_首跑.txt"),
+    "log_second": os.path.join(PILOT_V1_2_DIR, "运行日志_复跑.txt"),
+}
+FULL_RUN_DIR_V1_2 = os.path.join(_THIS_DIR, "_全量",
+                                 DATASET_VERSION + LLM["ontology_defs"]["cache_suffix"])
+FULL_OUTPUT_FILES_V1_2 = {
+    "selection": os.path.join(FULL_RUN_DIR_V1_2, "selection.json"),
+    "coverage": os.path.join(FULL_RUN_DIR_V1_2, "coverage.json"),
+    "extracted": os.path.join(FULL_RUN_DIR_V1_2, "extracted.jsonl"),
+    "rejected": os.path.join(FULL_RUN_DIR_V1_2, "rejected.jsonl"),
+    "run_history": os.path.join(FULL_RUN_DIR_V1_2, "run_history.jsonl"),
+    "verify": os.path.join(FULL_RUN_DIR_V1_2, "verify.json"),
+    "manifest": os.path.join(FULL_RUN_DIR_V1_2, "manifest.sha256"),
+}
 
 # ==========================================================================
 # 10. 定向时间补抽（2026-09-26 追加；**只新增键**，第 1～9 节的既有取值一个都没有改动）
