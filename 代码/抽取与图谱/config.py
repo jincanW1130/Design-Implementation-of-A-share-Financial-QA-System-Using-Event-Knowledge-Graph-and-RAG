@@ -69,7 +69,7 @@ OUTPUT_FILES = {
 # --------------------------------------------------------------------------
 # 2026-09-25 实测（只写读取方式，不写任何密钥）：
 #   端点 `https://api.deepseek.com/v1` 的 `/models` 只列出 `deepseek-flash` 与
-#   `deepseek-v4-pro`；环境变量 `LLM_MODEL` 的取值 `deepseek-v4-flash` **不在列表里**，
+#   `deepseek-v4-pro`；环境变量 `STAGE6_EXTRACT_MODEL` 的取值 `deepseek-v4-flash` **不在列表里**，
 #   但可作为对话补全的请求模型使用，**响应体的 `model` 字段解析为 `deepseek-flash`**
 #   ——即端点把别名静默解析到了 `deepseek-flash`。这一条必须如实登记：
 #   `model_default` 是请求值，`model_pinned` 是实测被解析到的模型 id，
@@ -79,7 +79,10 @@ LLM = {
     "provider": "OpenAI 兼容的对话补全端点（openai 2.44.0 客户端）",
     "base_url_env": "LLM_BASE_URL",
     "base_url_default": "https://api.deepseek.com/v1",
-    "model_env": "LLM_MODEL",
+    # 只认项目自己的变量名，**不回退到通用名 `LLM_MODEL`**：运行环境（DSH）会用
+    # `LLM_MODEL` 做自己的模型路由，一旦撞名就让 709 篇主抽取缓存的键全部失配
+    # （2026-09-26 实测过一次：镜像重跑抽出空集、12 项验收连锁变红）。
+    "model_env": "STAGE6_EXTRACT_MODEL",
     "api_key_env": "LLM_API_KEY",
     "model_default": "deepseek-v4-flash",     # 环境变量缺省时的请求模型（别名）
     "model_pinned": "deepseek-flash",         # 2026-09-25 实测解析到的模型 id
@@ -112,17 +115,37 @@ LLM = {
 
 
 def api_key() -> str:
-    """只写**读取方式**：密钥只来自环境变量，不入仓库、不落盘、不进日志。
+    """只写**读取方式**：密钥按以下顺序取，取值不进仓库、不写日志、不进导出物。
 
-    密钥未就位时按《15》第十一节 阻断（抛异常并非零退出），
+    1. 环境变量 `LLM_API_KEY`；
+    2. 与 config.py 同目录的 `config.local.json` 的 `api_key` 字段
+       —— 该文件名已被 `.gitignore` 的 `config.local.*` 覆盖，不入公开仓库。
+
+    之所以要有第二条：运行环境（DSH）自带一份 Process 级环境，**它启动的子进程继承的是
+    那份环境而不是用户级环境**，因此只设用户级变量时脚本侧读不到（2026-09-26 实测）。
+    两条都不就位时按《15》第十一节 阻断（抛异常并非零退出），
     绝不用占位文本或模型编造的文本冒充实测抽取结果。
     """
+    # 哨兵：验收脚本的镜像重跑会设它，**先于任何密钥来源**拒绝——
+    # 否则「有本地配置文件」时摘掉环境变量也拦不住调用，重放可能偷偷打接口。
+    if (os.environ.get("STAGE6_FORBID_MODEL_CALLS") or "").strip() == "1":
+        raise RuntimeError(
+            "STAGE6_FORBID_MODEL_CALLS=1：本次为**重放**，禁止调用模型。"
+            "缓存未命中即视为失败，不得回退到接口。"
+        )
     name = LLM["api_key_env"]
     value = (os.environ.get(name) or "").strip()
     if not value:
+        local = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.local.json")
+        try:
+            with open(local, encoding="utf-8") as fh:
+                value = str((json.load(fh) or {}).get("api_key") or "").strip()
+        except (OSError, ValueError):
+            value = ""
+    if not value:
         raise RuntimeError(
-            "环境变量 %s 未就位：抽取必须调用模型接口，按《15》第十一节 阻断，"
-            "不得用占位文本或编造文本充数。" % name
+            "密钥未就位（环境变量 %s 与同目录 config.local.json 都没有）：抽取必须调用模型接口，"
+            "按《15》第十一节 阻断，不得用占位文本或编造文本充数。" % name
         )
     return value
 
@@ -133,7 +156,11 @@ def base_url() -> str:
 
 
 def model_requested() -> str:
-    """请求用的模型 id：优先环境变量 `LLM_MODEL`，缺省用本文件固化的取值。"""
+    """请求用的模型 id：只认项目自己的环境变量 `STAGE6_EXTRACT_MODEL`，缺省用本文件固化的取值。
+
+    刻意**不**回退到通用名 `LLM_MODEL`——运行环境会设置同名变量做自己的模型路由，
+    回退等于把缓存键交给外部环境，撞名就全库失配。
+    """
     return (os.environ.get(LLM["model_env"]) or LLM["model_default"]).strip()
 
 
@@ -808,7 +835,7 @@ def time_backfill_base_url() -> str:
 
 
 def time_backfill_model() -> str:
-    """补抽请求的模型 id：优先环境变量 `LLM_MODEL`，缺省用本节固化的取值。"""
+    """补抽请求的模型 id：只认项目自己的环境变量 `STAGE6_EXTRACT_MODEL`，缺省用本节固化的取值。"""
     return (os.environ.get(EVENT_TIME_BACKFILL["model_env"])
             or EVENT_TIME_BACKFILL["model_default"]).strip()
 

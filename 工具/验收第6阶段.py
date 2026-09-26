@@ -1250,10 +1250,16 @@ def build_mirror():
 
 
 def run_cmd(cmd, cwd, timeout=1800):
-    """在镜像里跑一条命令；子进程环境里**摘掉 LLM_API_KEY**——重放不得调用模型（密钥不打印）。"""
+    """在镜像里跑一条命令；子进程环境里**摘掉 LLM_API_KEY 并置哨兵**——重放不得调用模型（密钥不打印）。
+
+    只摘环境变量不够：`config.api_key()` 还有一条「同目录 config.local.json」的回退，
+    缓存未命中时仍可能偷偷打接口。`STAGE6_FORBID_MODEL_CALLS=1` 让它在取密钥前就抛错，
+    从而把「重放必须零调用」变成硬保证而不是期望。
+    """
     env = dict(os.environ)
     env["PYTHONIOENCODING"] = "utf-8"
     env.pop(config.LLM["api_key_env"], None)
+    env["STAGE6_FORBID_MODEL_CALLS"] = "1"
     t0 = time.time()
     proc = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, encoding="utf-8",
                           errors="replace", timeout=timeout, env=env)
@@ -2316,7 +2322,8 @@ chk(not profile_bad and profile_ok,
 
 # ==========================================================================
 print(); print("=" * 78)
-print("U、《15》第八节 第 26 行：密钥不入仓库（仓库内无密钥取值；脚本只写读取方式）")
+print("U、《15》第八节 第 26 行：密钥不入仓库（U1 按 git 的真值把「可提交文件」与"
+      "「被 .gitignore 排除的本地配置」分开：前者判失败、后者只列信息行；脚本只写读取方式）")
 print("=" * 78)
 
 KEY_RE = re.compile(r"(?:sk-[A-Za-z0-9_\-]{16,}|"
@@ -2324,13 +2331,44 @@ KEY_RE = re.compile(r"(?:sk-[A-Za-z0-9_\-]{16,}|"
 # 正对照样本用拼接构造：本文件源码里不能出现「真能命中」的密钥形态字面量，否则 U1 会自己命中自己。
 control_ok = bool(KEY_RE.search("sk-" + "A" * 24)) and bool(
     KEY_RE.search("api_key" + ' = "' + "B" * 24 + '"'))
-repo_targets = []
 scan_exts = (".md", ".py", ".json", ".csv", ".txt", ".jsonl", ".html", ".yml", ".yaml")
+size_cap = 8 * 1024 * 1024
 skip_dirs = {".git", ".idea", "__pycache__", ".venv", "venv"}
 skip_prefixes = (os.path.join(ROOT, "阶段05-数据准备", "数据集"),
                  os.path.join(ROOT, "阶段06-事件抽取与知识图谱", "_试跑"),
                  os.path.join(ROOT, "代码", "抽取与图谱", "_试跑"),
                  os.path.join(ROOT, "代码", "抽取与图谱", "_全量"))
+
+
+def git_readonly(*args):
+    """跑一条**只读** git 查询（cwd=仓库根；`-c core.quotepath=false` 防非 ASCII 路径被转义）。
+
+    git 不可用／非仓库／退出码非 0 一律返回 None，由调用方走降级口径；本函数不写仓库一个字节。
+    """
+    try:
+        proc = subprocess.run(["git", "-c", "core.quotepath=false"] + list(args),
+                              cwd=ROOT, capture_output=True, text=True,
+                              encoding="utf-8", errors="replace", timeout=180)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return proc.stdout if proc.returncode == 0 else None
+
+
+def scan_key_hits(targets):
+    """逐行扫密钥形态；只记「文件名 第N行」，取值一个字符都不打印。"""
+    hits = []
+    for label, text in targets:
+        for i, line in enumerate(text.split("\n"), 1):
+            if KEY_RE.search(line):
+                hits.append("%s 第%d行" % (label, i))
+    return hits
+
+
+# 旧口径的扫描清单（目录排除启发式）现在只干两件事：
+#   ① 作 git 不可用时的降级口径——判定照旧，但在证据行明说「不含 .gitignore 真值」；
+#   ② 发现**被 .gitignore 排除的本地文件**（例如 config.local.json）——手写的目录清单对
+#      `config.local.*`／`*.local.json` 这类**文件级**忽略规则天生失明，只有 git 的真话看得见。
+walk_targets = []
 for base, dirs, files in os.walk(ROOT):
     dirs[:] = [d for d in dirs if d not in skip_dirs]
     if any(os.path.abspath(base).startswith(os.path.abspath(p)) for p in skip_prefixes):
@@ -2340,27 +2378,84 @@ for base, dirs, files in os.walk(ROOT):
         if not name.lower().endswith(scan_exts):
             continue
         p = os.path.join(base, name)
-        if os.path.getsize(p) > 8 * 1024 * 1024:
+        if os.path.getsize(p) > size_cap:
             continue
-        repo_targets.append((rel_to_root(p), read_text(p, default="") or ""))
-key_hits = []
-for label, text in repo_targets:
-    for i, line in enumerate(text.split("\n"), 1):
-        if KEY_RE.search(line):
-            key_hits.append("%s 第%d行" % (label, i))
-chk(control_ok and not key_hits,
-    "U1 仓库内无密钥取值（正对照：密钥形态扫描必须先命中合成样本）",
-    "实测 扫描 %d 个可提交文件（排除 .git／数据集／_试跑／_全量 这些不入仓库的目录）；命中 %d 处%s；"
-    "正对照 %s" % (len(repo_targets), len(key_hits),
-                 "：" + br(key_hits) if key_hits else "", "通过" if control_ok else "失败"))
+        walk_targets.append((rel_to_root(p), read_text(p, default="") or ""))
+
+# 可提交文件集取 **git 自己的真话**：已跟踪 ＋ 未跟踪但未被 .gitignore 排除
+# （`git ls-files -co --exclude-standard`，只读查询）。HARD 要求是「**git 会提交的**文件里没有
+# 密钥取值」，所以判定集不能是手写目录清单——清单对文件级忽略规则失明，上一版 U1 正是这样把
+# `代码\抽取与图谱\config.local.json`（git 永不提交，`config.api_key()` 的合法回退落点）判成了失败。
+_git_list = git_readonly("ls-files", "-co", "--exclude-standard")
+committable = None if _git_list is None else [l.strip() for l in _git_list.split("\n") if l.strip()]
+committable_set = None if committable is None else set(committable)
+_unread = []
+if committable_set is None:
+    # 降级：git 不可用 → 沿用旧口径（目录排除启发式），并在证据行把降级说出来，不静默改行为。
+    repo_targets, info_targets = list(walk_targets), []
+    git_note = "git 不可用——回退到旧口径的目录排除启发式（本次判定不含 .gitignore 真值，与旧行为一致）"
+else:
+    repo_targets = []
+    for rel in committable:
+        p = os.path.join(ROOT, rel.replace("/", os.sep))
+        if not os.path.isfile(p):
+            _unread.append("%s（索引里有、工作区没有）" % rel)
+            continue
+        if os.path.getsize(p) > size_cap:
+            _unread.append("%s（%.1f MB，超 %d MB 未读）"
+                           % (rel, os.path.getsize(p) / 1048576.0, size_cap // 1048576))
+            continue
+        repo_targets.append((rel, read_text(p, default="") or ""))
+    info_targets = [t for t in walk_targets if t[0] not in committable_set]
+    git_note = "git ls-files -co --exclude-standard 的真值"
+
+repo_hits = scan_key_hits(repo_targets)
+hard_hits = list(repo_hits)
+info_notes, info_count = [], 0
+for label, text in info_targets:
+    hits_here = ["%s 第%d行" % (label, i)
+                 for i, line in enumerate(text.split("\n"), 1) if KEY_RE.search(line)]
+    if not hits_here:
+        continue
+    info_count += len(hits_here)
+    out = git_readonly("check-ignore", "-v", "--", label)
+    rule = ""
+    if out:
+        meta = out.split("\n")[0].split("\t")[0]        # 形如 `.gitignore:47:config.local.*`
+        parts = meta.split(":", 2)
+        if len(parts) == 3 and parts[1].isdigit():
+            rule = "%s:%s:%s" % (parts[0], parts[1], parts[2])
+    if rule:
+        info_notes.append("%s（%s；属受认可的 gitignored 本地配置路径——config.api_key() 的 "
+                          "LLM_API_KEY → config.local.json 回退，不入公开仓库，故只列信息行、不判失败）"
+                          % (br(hits_here, 3), rule))
+    else:
+        # 既不在 git 的可提交集合、又拿不到忽略规则：不放过（按失败记账）。
+        hard_hits.extend(hits_here)
+        info_notes.append("%s（拿不到 .gitignore 规则，不放过、按失败记账）" % br(hits_here, 3))
+
+if committable_set is None:
+    _info_clause = "被 .gitignore 排除的本地配置本次未单独判定（git 不可用，拿不到忽略真值）"
+else:
+    _info_clause = ("另有 %d 处命中位于被 .gitignore 排除的本地文件，只列信息行、不判失败：%s"
+                    % (info_count, "、".join(info_notes) if info_notes else "无"))
+_ev = ["实测 扫描 %d 个可提交文件（%s）" % (len(repo_targets), git_note),
+       "命中 %d 处%s" % (len(hard_hits), "：" + br(hard_hits) if hard_hits else ""),
+       _info_clause,
+       "正对照 %s" % ("通过" if control_ok else "失败")]
+if _unread:
+    _ev.insert(2, "未读 %d 个%s" % (len(_unread), "：" + br(_unread)))
+chk(control_ok and not hard_hits,
+    "U1 可提交文件内无密钥取值；被 .gitignore 排除的本地配置只列信息行、不判失败"
+    "（正对照：密钥形态扫描必须先命中合成样本）",
+    "；".join(_ev))
 env_read = "os.environ.get" in CFG_SRC and config.LLM["api_key_env"] in CFG_SRC
 key_assign = re.findall(r"api_key\s*=\s*[\"'][^\"']+[\"']", CFG_SRC)
 chk(env_read and not key_assign,
     "U2 config.py 只写密钥读取方式（环境变量 %s），不写取值" % config.LLM["api_key_env"],
     "实测 config.py 含 os.environ.get=%s、含 api_key 字面量赋值 %d 处；"
-    "密钥形态命中 %d 处（config.py 不豁免扫描）"
-    % (env_read, len(key_assign), sum(1 for l, t in repo_targets
-                                      for line in t.split("\n") if KEY_RE.search(line))))
+    "密钥形态命中 %d 处（在 %d 个可提交文件里逐行扫；config.py 不豁免扫描）"
+    % (env_read, len(key_assign), len(repo_hits), len(repo_targets)))
 
 
 # ==========================================================================
