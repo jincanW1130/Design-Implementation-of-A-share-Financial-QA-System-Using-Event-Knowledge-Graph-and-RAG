@@ -17,8 +17,10 @@ r"""《16-事件抽取与知识图谱（第六阶段）》与第 6 阶段交付�
 
 用法：
 
-    python 工具\验收第6阶段.py                      # 默认 --profile pilot：核验试跑产物
-    python 工具\验收第6阶段.py --profile v21        # 核验全量产物（图谱导出\v2.1\）
+    python 工具\验收第6阶段.py                      # 默认 --profile v21_v1_2：核验现行交付 v1.2
+                                                    # （图谱导出\v2.1_v1_2\）
+    python 工具\验收第6阶段.py --profile v21        # 归档：核验 v1.1 全量产物（图谱导出\v2.1\）
+    python 工具\验收第6阶段.py --profile pilot      # 归档：核验 v1.1 的 12 篇试跑产物
     python 工具\验收第6阶段.py --work-root <目录> --export-dir <目录>
                                                     # 覆盖管线工作目录与导出目录（负向自测用）
     python 工具\验收第6阶段.py --eval-dir <目录> --doc16 <《16》>
@@ -27,21 +29,30 @@ r"""《16-事件抽取与知识图谱（第六阶段）》与第 6 阶段交付�
     python 工具\验收第6阶段.py --keep-tmp           # 保留镜像重跑用的临时目录，便于事后复核
 
 **profile 口径（本脚本的路径开关）**：
-  * `pilot`（默认）—— 核验 `阶段06-事件抽取与知识图谱\_试跑_图谱管线\` 与
-    `代码\抽取与图谱\_试跑\extracted.jsonl`（12 篇试点缓存）。默认取 pilot 是因为全量产物由
-    并行会话产出、当前尚未落盘；全量跑完后按 `--profile v21` 即可，**脚本不需要改一个字**。
-  * `v21` —— 核验 `阶段05-数据准备\数据集\_抽取缓存\v2.1\图谱管线\` 与
+  * `v21_v1_2`（**默认，2026-09-27 起**）—— 核验**现行交付 v1.2**：
+    `阶段05-数据准备\数据集\_抽取缓存\v2.1_v1_2\图谱管线\` 与
+    `阶段06-事件抽取与知识图谱\图谱导出\v2.1_v1_2\`；默认 profile 与
+    `config.GRAPH_PIPELINE["default_profile"]` 对齐（不写死在本脚本里）。
+  * `v21` —— 归档：核验 **v1.1 全量产物** `阶段05-数据准备\数据集\_抽取缓存\v2.1\图谱管线\` 与
     `阶段06-事件抽取与知识图谱\图谱导出\v2.1\`。
-  两个 profile 的目录一律经 `代码\抽取与图谱\config.pipeline_paths()` 解析，不在本脚本里写死。
+  * `pilot` —— 归档：核验 v1.1 的 `阶段06-事件抽取与知识图谱\_试跑_图谱管线\` 与
+    `代码\抽取与图谱\_试跑\extracted.jsonl`（12 篇试点缓存）。
+  三个 profile 的目录一律经 `代码\抽取与图谱\config.pipeline_paths()` 解析，不在本脚本里写死。
+
+**版本口径（2026-09-27 第二步「验收重锚」）**：默认核验对象从 v1.1 切到 **v1.2**——镜像重跑的
+输入缓存、逐字节比对基准、路径判据、T5 的 `choices=[...]` 逐字子串与 L1 的缓存目录判据全部跟着
+切到 v1.2 口径；`--profile pilot`／`--profile v21` 原样保留，**v1.1 归档仍须经显式 profile
+校验通过**。本次只改「v1.1 时代的旧期望值」，未删检查项、未加 SKIP、未放宽任何比较强度
+（逐条留痕见本轮任务报告的「期望值改动留痕清单」）。
 
 **降级口径（不把「试跑不覆盖」当成缺陷，也不把真缺陷降级掉）**：
   * 只有真的「全量才可能成立」的检查才降级：数据集指纹基线缺失时的比对——pilot 模式下输出
-    `[SKIP]` 并写明原因、**不计入失败**，在 v21 模式下是硬检查。
+    `[SKIP]` 并写明原因、**不计入失败**，在全量 profile（v21／v21_v1_2）下是硬检查。
   * 与 profile 无关的检查（260 条评测集、B10「Dev＋Test 有标注条目或在《16》登记证据不足」、
     B11「导出物覆盖 ↔ 《16》登记的已知限制」、《16》必备小节、证据可回溯、配置四要素、《02》TBD、
     数据集只读等）**不做任何降级**：试跑期间它们该失败就失败（例如《16》尚未落盘），如实记入
-    失败项，不用 SKIP 掩盖。B11 固定核**交付物导出**（v21 落点）：pilot 的 12 篇导出是试跑留痕，
-    不是《16》「已知限制与证据不足清单」登记的对象。
+    失败项，不用 SKIP 掩盖。B11 固定核**交付物导出**（默认 profile v21_v1_2 落点）：pilot 的
+    12 篇导出与 v1.1 归档导出都不是《16》「已知限制与证据不足清单」登记的对象。
 
 退出码：0 = 全部检查通过（SKIP 不影响退出码）；1 = 存在失败项或输入缺失。
 
@@ -124,8 +135,12 @@ BANNED_VDB = "向量" + "数据库"        # 拼接构造：本文件源码内�
 
 _ap = argparse.ArgumentParser(
     description="第 6 阶段（事件抽取与知识图谱）：阶段级验收（《15》第八节 逐行）")
-_ap.add_argument("--profile", default="pilot", choices=["pilot", "v21"],
-                 help="pilot＝试跑产物（默认）；v21＝全量产物（图谱导出\\v2.1\\）")
+# 默认 profile 一律取 config 的登记值（2026-09-27 起＝v21_v1_2，即现行交付 v1.2）；
+# pilot／v21 是 v1.1 归档口径，保留用于原样复现。
+_ap.add_argument("--profile", default=config.GRAPH_PIPELINE["default_profile"],
+                 choices=["pilot", "v21", "v21_v1_2"],
+                 help="v21_v1_2＝现行交付 v1.2（默认，落 图谱导出\\v2.1_v1_2\\）；"
+                      "v21／pilot＝v1.1 归档口径")
 _ap.add_argument("--work-root", default=None, help="覆盖管线工作目录（负向自测用）")
 _ap.add_argument("--export-dir", default=None, help="覆盖图谱导出目录（负向自测用）")
 _ap.add_argument("--no-replay", action="store_true",
@@ -182,11 +197,13 @@ def pipeline_paths(profile, work_root=None, export_dir=None):
 
 PATHS = pipeline_paths(PROFILE, ARGS.work_root, ARGS.export_dir)
 
-# B11 的核验对象固定是**交付物导出**（《15》第4.3节 的落点：阶段06-…\图谱导出\<数据集版本>\）：
-# 《16》的「已知限制与证据不足清单」登记的是交付物，pilot 的 12 篇导出是试跑留痕、不是它的对象，
-# 故 B11 与 profile 无关；`--export-dir` 是本脚本既有的负向自测入口，给了就以它为准。
+# B11 的核验对象固定是**交付物导出**（《15》第4.3节 的落点：阶段06-…\图谱导出\<版本>\）：
+# 《16》的「已知限制与证据不足清单」登记的是交付物，pilot 的 12 篇导出与 v1.1 归档导出都不是
+# 它的对象，故 B11 与 profile 无关。2026-09-27 起交付物＝默认 profile v21_v1_2 的导出，
+# 所以这里按 `config.GRAPH_PIPELINE["default_profile"]` 解析（与选哪个 profile 验收无关）；
+# `--export-dir` 是本脚本既有的负向自测入口，给了就以它为准。
 B11_EXPORT_DIR = (os.path.abspath(ARGS.export_dir) if ARGS.export_dir
-                  else pipeline_paths("v21")["export_dir"])
+                  else pipeline_paths(config.GRAPH_PIPELINE["default_profile"])["export_dir"])
 
 
 # --------------------------------------------------------------------------
@@ -458,8 +475,11 @@ print("=" * 78)
 print("第 6 阶段（事件抽取与知识图谱）阶段级验收：《16》、缓存管线、图谱导出物、评测集与代码")
 print("=" * 78)
 print("  工作区根目录：  %s" % ROOT)
+_PROFILE_DESC = {"pilot": "v1.1 归档的 12 篇试跑产物",
+                 "v21": "v1.1 归档全量产物（图谱导出\\v2.1\\）",
+                 "v21_v1_2": "现行交付 v1.2（图谱导出\\v2.1_v1_2\\）"}
 print("  profile：       %s（%s）"
-      % (PROFILE, "试跑产物：12 篇试点缓存" if PROFILE == "pilot" else "全量产物：v2.1 全量缓存"))
+      % (PROFILE, _PROFILE_DESC.get(PROFILE, PROFILE)))
 print("  管线工作目录：  %s" % PATHS["work_root"])
 print("  图谱导出目录：  %s" % PATHS["export_dir"])
 print("  抽取结果：      %s" % PATHS["extract_records"])
@@ -782,7 +802,7 @@ chk(not b10_unreg and not b10_stat_bad and not b10_tag_bad,
 # 登记的判据：**该行以类名起头**（表格行、`- 名称：…` 都算），同行含**导出物语境**（导出物／
 # edges.csv／nodes.csv／图谱／入图）、缺失标记与数字。两个限定都是防误报：多类同行的汇总句不算
 # 登记（免得把 A 类的缺失算到 B 类头上），只有评测集口径（如「评测集 0 条标注条目」）的登记
-# 也不算导出物口径的登记。核的是交付物导出（v21 落点），与 profile 无关。
+# 也不算导出物口径的登记。核的是交付物导出（默认 profile v21_v1_2 落点），与 profile 无关。
 B11_LABEL = ("B11 第 19 行：导出物的关系／事件类型覆盖 == 《16》登记的已知限制"
              "（缺则按导出物口径量化登记、有则不得登记为缺失）")
 b11_edges_h, b11_edges = read_csv_rows(
@@ -1213,6 +1233,20 @@ def extract_table(profile):
     return getattr(config, config.GRAPH_PIPELINE["extract_records_profiles"][profile])
 
 
+def cache_dir_for_profile(profile):
+    """profile 的 T3 抽取缓存落点（与 extract.py 的有效缓存解析同一口径）。
+
+    2026-09-27 起默认口径＝v1.2：`v21_v1_2` → `config.CACHE_DIR`（＝`CACHE_DIR_V1_2`）；
+    `pilot`／`v21` 是 v1.1 归档口径 → `config.CACHE_DIR_V1_1`。取值经
+    `config.cache_dir_for_prompt_version(有效版本)` 派生，不在本脚本里写死版本→目录的映射。
+    """
+    variant_enabled = (config.GRAPH_PIPELINE.get("profile_prompt_variants") or {}).get(
+        profile, bool((config.LLM.get("ontology_defs") or {}).get("enabled")))
+    version = ((config.LLM.get("ontology_defs") or {}).get("prompt_version")
+               if variant_enabled else config.LLM["prompt_version"])
+    return config.cache_dir_for_prompt_version(version)
+
+
 def mirror_items():
     """返回 [(源文件, 临时根下的相对路径)]：只镜像重跑必需的输入与产物。"""
     items = []
@@ -1222,7 +1256,9 @@ def mirror_items():
     items.append((os.path.join(CODE_PREP, "config.py"), os.path.join("代码", "数据准备", "config.py")))
     for p in (config.DOCS_PATH, config.CHUNKS_PATH):
         items.append((p, os.path.relpath(p, config.ROOT)))
-    for p in iter_files(config.CACHE_DIR):
+    # 缓存按 profile 取：默认口径 v1.2 取 config.CACHE_DIR，归档 pilot／v21 取 v1.1 主缓存；
+    # 镜像的是「被验收 profile 实际会读的那个缓存」，不是恒定的某一个。
+    for p in iter_files(cache_dir_for_profile(PROFILE)):
         items.append((p, os.path.relpath(p, config.ROOT)))
     rec = PATHS["extract_records"]
     items.append((rec, os.path.relpath(rec, config.ROOT)))
@@ -1562,22 +1598,28 @@ print("L、《15》第八节 第 13 行：缓存目录位于数据集版本的�
       "（.gitignore 覆盖，导出物不含正文）")
 print("=" * 78)
 
-# 「与数据集版本目录同级」＝ `_抽取缓存\` 与 `v2.1\` 同级（都挂在数据集根之下）、且缓存目录按版本分子目录：
-#   数据集\v2.1\         ← 版本目录
-#   数据集\_抽取缓存\v2.1\ ← 缓存目录（每版一个子目录，下划线前缀表示不是数据集内容）
+# 「与数据集版本目录同级」＝ `_抽取缓存\` 与 `v2.1\` 同级（都挂在数据集根之下）、且缓存目录按版本分子目录。
+# 2026-09-27 起默认口径＝v1.2，`config.CACHE_DIR` 指向默认口径的缓存目录：
+#   数据集\v2.1\              ← 数据集版本目录
+#   数据集\_抽取缓存\v2.1_v1_2\ ← 默认口径（v1.2）缓存目录（每版一个子目录，下划线前缀
+#                                表示不是数据集内容；v1.1 归档缓存另在 `_抽取缓存\v2.1\`）
+# L1 的版本判据随之从 v1.1 时代的 `basename(CACHE_DIR) == DATASET_VERSION` 改为
+# `== DATASET_VERSION + V1_2_SUFFIX`（同一判据、只换口径；未放宽其余条件）。
 cache_root_parent = os.path.dirname(os.path.abspath(config.CACHE_ROOT).rstrip("\\/"))
 version_dir_parent = os.path.dirname(os.path.abspath(config.DATASET_DIR).rstrip("\\/"))
 cache_dir_ok = (os.path.normcase(cache_root_parent) == os.path.normcase(version_dir_parent)
-                and os.path.basename(os.path.abspath(config.CACHE_DIR)) == config.DATASET_VERSION)
+                and os.path.basename(os.path.abspath(config.CACHE_DIR))
+                == config.DATASET_VERSION + config.V1_2_SUFFIX)
 chk(cache_dir_ok and os.path.isdir(config.CACHE_DIR),
-    "L1 缓存根目录与数据集版本目录同级、且按版本分子目录（<数据集根>\\_抽取缓存\\<版本>\\）且存在",
+    "L1 缓存根目录与数据集版本目录同级、且按版本分子目录（默认口径 <数据集根>\\_抽取缓存\\<数据集版本＋v1.2 后缀>\\）且存在",
     "实测 config.CACHE_ROOT=%s（父=%s）、config.DATASET_DIR=%s（父=%s）；同级=%s；"
-    "缓存子目录名=%s（期望 %s）；目录存在=%s"
+    "缓存子目录名=%s（期望 %s）；目录存在=%s；v1.1 归档缓存 %s（存在=%s）"
     % (rel_to_root(config.CACHE_ROOT), os.path.basename(cache_root_parent),
        rel_to_root(config.DATASET_DIR), os.path.basename(version_dir_parent),
        os.path.normcase(cache_root_parent) == os.path.normcase(version_dir_parent),
-       os.path.basename(os.path.abspath(config.CACHE_DIR)), config.DATASET_VERSION,
-       os.path.isdir(config.CACHE_DIR)))
+       os.path.basename(os.path.abspath(config.CACHE_DIR)),
+       config.DATASET_VERSION + config.V1_2_SUFFIX, os.path.isdir(config.CACHE_DIR),
+       rel_to_root(config.CACHE_DIR_V1_1), os.path.isdir(config.CACHE_DIR_V1_1)))
 
 rules = gitignore_rules(GITIGNORE)
 cache_rel = rel_to_root(config.CACHE_DIR) + "/probe.json"
@@ -1985,15 +2027,28 @@ if t16 is not None:
         "实测 抽取口径与配置小节：%s；缺 %s；含 TBD %s；逐要素：%s"
         % (sec_at, "、".join(elem_miss) or "无", "、".join(elem_tbd) or "无",
            br(["%s→第%d行「%s」" % (k, v[0], v[1][:60]) for k, v in elem_line.items()], 4) or "无"))
-    cfg_ok = (config.LLM["model_default"] in section or config.LLM["model_pinned"] in section) \
+    # Prompt 版本的期望值随口径切换更新（2026-09-27）：v1.1 时代的旧期望是
+    # `config.LLM["prompt_version"]`（v1.1 归档版本）；默认口径＝v1.2 后，判据改查
+    # **默认 profile 的有效 Prompt 版本**（由 config 的 `profile_prompt_variants` ＋
+    # `ontology_defs` 派生，不写死版本号），并且**同时**要求 v1.1 归档版本仍写在本节
+    # （《16》第1节 保留归档口径说明）——两条都查，比较强度只增不减。
+    _variant_default = bool((config.GRAPH_PIPELINE.get("profile_prompt_variants") or {}).get(
+        config.GRAPH_PIPELINE["default_profile"], False))
+    effective_prompt = (config.LLM["ontology_defs"]["prompt_version"] if _variant_default
+                        else config.LLM["prompt_version"])
+    cfg_model_ok = (config.LLM["model_default"] in section
+                    or config.LLM["model_pinned"] in section)
+    cfg_ok = cfg_model_ok and effective_prompt in section \
         and config.LLM["prompt_version"] in section
-    chk(cfg_ok, "P2 《16》写明的模型与 Prompt 版本 == config.LLM（不写死在本脚本里）",
-        "实测 config：model_default=%s、model_pinned=%s、prompt_version=%s、temperature=%s；"
-        "《16》命中模型 %s、Prompt 版本 %s"
-        % (config.LLM["model_default"], config.LLM["model_pinned"], config.LLM["prompt_version"],
-           config.LLM["temperature"],
-           "是" if (config.LLM["model_default"] in section
-                    or config.LLM["model_pinned"] in section) else "否",
+    chk(cfg_ok, "P2 《16》写明的模型与默认口径 Prompt 版本 == config.LLM（v1.1 归档版本同时保留；"
+                "不写死在本脚本里）",
+        "实测 config：model_default=%s、model_pinned=%s、默认口径 Prompt 版本=%s、"
+        "v1.1 归档版本=%s、temperature=%s；《16》命中模型 %s、默认口径 Prompt 版本 %s、"
+        "v1.1 归档版本 %s"
+        % (config.LLM["model_default"], config.LLM["model_pinned"], effective_prompt,
+           config.LLM["prompt_version"], config.LLM["temperature"],
+           "是" if cfg_model_ok else "否",
+           "是" if effective_prompt in section else "否",
            "是" if config.LLM["prompt_version"] in section else "否"))
 else:
     chk(False, "P1 抽取配置四要素齐备且非 TBD（《16》缺失，无法核验）",
@@ -2125,7 +2180,8 @@ print("R、《15》第八节 第 23 行：数据集只读（T9 结束时的 v2.1
 print("=" * 78)
 
 # 基线发现（本工具的例外常量，见文件头说明）：优先本阶段自行固定的 dataset_fingerprint.json，
-# 否则回退第 5 阶段封版后的目录清单；两者都没有时，pilot 记 SKIP、v21 记 FAIL。
+# 否则回退第 5 阶段封版后的目录清单；两者都没有时，pilot（试跑）记 SKIP、
+# 全量 profile（v21＝v1.1 归档、v21_v1_2＝现行交付）记 FAIL。
 baseline, baseline_src = None, None
 local_base = os.path.join(PATHS["work_root"], BASELINE_LOCAL)
 if os.path.isfile(local_base):
@@ -2157,12 +2213,12 @@ if baseline is None:
            "（候选：%s；第 5 阶段清单：%s）"
            % (len(cur_files), combined[:16], rel_to_root(local_base),
               "、".join(os.path.basename(x) for x in BASELINE_STAGE5)))
-    if PROFILE == "v21":
+    if PROFILE != "pilot":
         chk(False, "R1 v2.1 目录指纹与开工基线一致（找不到基线，无法比对）",
             msg + "；全量模式下这是硬检查：须先固定基线（如写 <工作目录>\\%s）" % BASELINE_LOCAL)
     else:
         skip("R1 v2.1 目录指纹与开工基线一致（找不到基线，无法比对）",
-             msg + "；pilot 模式记 SKIP（全量模式 --profile v21 下为硬检查）")
+             msg + "；pilot 模式记 SKIP（全量 profile v21／v21_v1_2 下为硬检查）")
 else:
     diff = sorted(k for k in baseline if k in cur_files and cur_files[k] != baseline[k])
     missing = sorted(k for k in baseline if k not in cur_files)
@@ -2310,13 +2366,16 @@ chk(not thresh_hits,
     "实测 阈值赋值命中 %d 处%s；五个脚本引用 config. 共 %d 处（参数一律经 config 取值）"
     % (len(thresh_hits), "：" + br(thresh_hits) if thresh_hits else "", cfg_ref))
 
+# 逐字子串判据随口径切换更新：v1.1 时代是 `choices=["pilot", "v21"]`（旧期望值），
+# 2026-09-27 起 v1.2 为默认口径，五个脚本的实际 choices 都是三取值，判据同步改为
+# `choices=["pilot", "v21", "v21_v1_2"]`；判据仍是「源码里的逐字子串」，未放宽。
 profile_bad = [name for name, src in scripts_src.items()
                if name not in ("config.py",) and "add_argument(\"--profile\"" not in src]
-profile_ok = all('choices=["pilot", "v21"]' in scripts_src.get(n, "")
+profile_ok = all('choices=["pilot", "v21", "v21_v1_2"]' in scripts_src.get(n, "")
                  for n in STAGE_SCRIPTS if n.endswith(".py") and n != "config.py")
 chk(not profile_bad and profile_ok,
-    "T5 五个脚本都接受 --profile（pilot／v21 两个取值，与 config.pipeline_paths 对齐）",
-    "实测 未声明 --profile 的脚本 %s；choices 均为 pilot／v21：%s"
+    "T5 五个脚本都接受 --profile（pilot／v21／v21_v1_2 三个取值，与 config.pipeline_paths 对齐）",
+    "实测 未声明 --profile 的脚本 %s；choices 均为 pilot／v21／v21_v1_2：%s"
     % ("、".join(profile_bad) or "无", profile_ok))
 
 

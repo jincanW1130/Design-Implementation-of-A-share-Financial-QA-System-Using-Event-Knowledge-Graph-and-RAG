@@ -21,7 +21,8 @@ r"""run_all.py —— 第 6 阶段图谱管线的入口（T7）。
 
 用法：
 
-    python 代码\抽取与图谱\run_all.py                       # 默认 --profile pilot
+    python 代码\抽取与图谱\run_all.py                       # **默认口径 v1.2**（默认 --profile v21_v1_2）
+    python 代码\抽取与图谱\run_all.py --profile v21          # v1.1 归档口径（原样复现，不重跑抽取）
     python 代码\抽取与图谱\run_all.py --profile v21 --allow-api-calls
     python 代码\抽取与图谱\run_all.py --from dedup_events    # 从 T5 起往后跑
     python 代码\抽取与图谱\run_all.py --only write_graph     # 只跑 T6
@@ -94,7 +95,8 @@ def rel(path):
 
 
 def extract_output_table(profile):
-    """extract.py 的产物落点表（pilot → OUTPUT_FILES、v21 → FULL_OUTPUT_FILES）。"""
+    """extract.py 的产物落点表（pilot → OUTPUT_FILES；v21 → FULL_OUTPUT_FILES_V1_1（v1.1 归档）；
+    v21_v1_2 → FULL_OUTPUT_FILES（**默认口径** v1.2））。"""
     name = config.GRAPH_PIPELINE["extract_records_profiles"][profile]
     return getattr(config, name)
 
@@ -302,7 +304,12 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
         description="第 6 阶段图谱管线入口（T7：extract → disambiguate → dedup_events → "
                     "write_graph；复跑零模型调用；幂等可续跑）")
-    parser.add_argument("--profile", default="pilot", choices=["pilot", "v21"])
+    # 既有 v1.1 口径：choices=["pilot", "v21"]；2026-09-27 起 v1.2 为**默认口径**，
+    # 在同一参数上追加 v21_v1_2（＝默认 profile，落 图谱导出\v2.1_v1_2\ 与
+    # _抽取缓存\v2.1_v1_2\图谱管线\）；v1.1 归档仍用 --profile v21 显式复现。
+    parser.add_argument("--profile", default=config.GRAPH_PIPELINE["default_profile"],
+                        choices=["pilot", "v21", "v21_v1_2"],
+                        help="默认 v21_v1_2＝v1.2 口径；v21／pilot＝v1.1 归档口径")
     parser.add_argument("--force", action="store_true",
                         help="重算 T4／T5／T6 的产物（**不会**让 extract 重新调用模型）")
     parser.add_argument("--force-extract", action="store_true",

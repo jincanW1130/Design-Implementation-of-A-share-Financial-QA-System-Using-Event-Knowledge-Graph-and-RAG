@@ -40,6 +40,8 @@ r"""extract_event_time.py —— 定向时间补抽（T3.5，两级抽取的第�
     python 代码\抽取与图谱\extract_event_time.py --profile v21 --verify     # 只重算复核、写零字节、零调用
     python 代码\抽取与图谱\extract_event_time.py --profile v21 --measure    # 只算时间覆盖／可过滤性指标
     python 代码\抽取与图谱\extract_event_time.py --profile v21 --force      # 忽略缓存重调（会花钱）
+    python 代码\抽取与图谱\extract_event_time.py --profile v21_v1_2         # v1.2 候选版本：
+                                                                             # 独立缓存与独立产物，不动 v2.1
 
 退出码：`0` 成功；`1` 阻断（缓存与当前输入不一致且未 `--force`／需要密钥但未就位）；
 `2` 复核不通过（`--verify` 与磁盘产物不一致，或缓存缺条）。
@@ -370,8 +372,11 @@ def input_sha256(case) -> str:
     }))
 
 
-def cache_path(event_id) -> str:
-    return os.path.join(SPEC["cache_dir"], SPEC["cache_file_pattern"].format(event_id=event_id))
+def cache_path(event_id, cache_dir=None) -> str:
+    """补抽缓存路径：默认 profile 的 cache_dir 由 config.time_backfill_paths() 给出，
+    未显式给定时才回落到 SPEC 的既有值（v1.1 口径，行为不变）。"""
+    directory = cache_dir or SPEC["cache_dir"]
+    return os.path.join(directory, SPEC["cache_file_pattern"].format(event_id=event_id))
 
 
 # --------------------------------------------------------------------------
@@ -470,7 +475,7 @@ def call_model(client, openai_mod, case, stats, skip_primary=False):
     }
 
 
-def write_cache(case, detail, stats):
+def write_cache(case, detail, stats, cache_dir=None):
     record = {
         "cache_schema": SPEC["cache_schema"],
         "dataset_version": config.DATASET_VERSION,
@@ -499,7 +504,7 @@ def write_cache(case, detail, stats):
         "finish_reason": detail["finish_reason"],
         "response_text": detail["response_text"],
     }
-    target = cache_path(case["event_id"])
+    target = cache_path(case["event_id"], cache_dir)
     os.makedirs(os.path.dirname(target), exist_ok=True)
     with open(target, "w", encoding="utf-8", newline="\n") as fh:
         json.dump(record, fh, ensure_ascii=False, sort_keys=True, indent=2)
@@ -508,9 +513,9 @@ def write_cache(case, detail, stats):
     return record
 
 
-def load_or_call(case, client, openai_mod, stats, force):
+def load_or_call(case, client, openai_mod, stats, force, cache_dir=None):
     """缓存命中则只读缓存（不调模型、不需要密钥）；缺失或 --force 才调用并写缓存。"""
-    path = cache_path(case["event_id"])
+    path = cache_path(case["event_id"], cache_dir)
     want = input_sha256(case)
     if os.path.isfile(path) and not force:
         try:
@@ -522,7 +527,8 @@ def load_or_call(case, client, openai_mod, stats, force):
             if client is None:
                 raise RuntimeError("补抽缓存读不出来且不允许调用模型：%s" % rel(path))
             print("[重写] %s 的缓存条目不可读，重问一次" % case["event_id"])
-            return write_cache(case, call_model(client, openai_mod, case, stats), stats), False
+            return write_cache(case, call_model(client, openai_mod, case, stats), stats,
+                               cache_dir), False
         if str(record.get("doc_id")) != str(case["doc_id"]):
             raise RuntimeError("补抽缓存与事件不是同一篇文档：%s 记的是 doc_id=%s，当前是 %s"
                                % (rel(path), record.get("doc_id"), case["doc_id"]))
@@ -539,14 +545,14 @@ def load_or_call(case, client, openai_mod, stats, force):
             print("[缓存] %s 上一次返回被截断，本次按压缩重试补齐（跳过注定被截断的主尝试）"
                   % case["event_id"])
             detail = call_model(client, openai_mod, case, stats, skip_primary=True)
-            return write_cache(case, detail, stats), False
+            return write_cache(case, detail, stats, cache_dir), False
         stats["cache_hits"] += 1
         return record, True
     if client is None:
         raise RuntimeError("需要调用模型但客户端未构造（--verify 模式下不允许调用）：%s"
                            % rel(path))
     detail = call_model(client, openai_mod, case, stats)
-    record = write_cache(case, detail, stats)
+    record = write_cache(case, detail, stats, cache_dir)
     stats["fetched"] += 1
     return record, False
 
@@ -849,7 +855,7 @@ def build_overlay(paths, records_path, extract_sha, docs_total, events_total,
             "null_events_in_scope": len(cases),
         },
         "cache": {
-            "dir": rel(SPEC["cache_dir"]),
+            "dir": rel(paths["cache_dir"]),
             "schema": SPEC["cache_schema"],
             "entries_used": len(cache_records),
             "results": [{"event_id": r["event_id"], "cache_input_sha256": r["cache_input_sha256"],
@@ -976,6 +982,7 @@ def finish(args, paths, overlay, report, results, stats, cases):
 
 def run_backfill(args) -> int:
     paths = config.time_backfill_paths(args.profile)
+    cache_dir = paths["cache_dir"]
     records_path = paths["extract_records"]
     if not os.path.isfile(records_path):
         raise SystemExit("输入不存在：%s（请先跑 extract.py --profile %s）"
@@ -997,18 +1004,18 @@ def run_backfill(args) -> int:
     force = bool(args.force)
     results, cache_records = [], {}
     for index, case in enumerate(cases, start=1):
-        need_call = force or not os.path.isfile(cache_path(case["event_id"]))
+        need_call = force or not os.path.isfile(cache_path(case["event_id"], cache_dir))
         if not need_call:
-            cached = load_json(cache_path(case["event_id"]))
+            cached = load_json(cache_path(case["event_id"], cache_dir))
             if record_unstable(cached):
                 need_call = True        # 半截写入／截断且不可解析：本次补齐（要客户端）
         if need_call and client is None:
             client, openai_mod = get_client(stats)
-        record, _from_cache = load_or_call(case, client, openai_mod, stats, force)
+        record, _from_cache = load_or_call(case, client, openai_mod, stats, force, cache_dir)
         cache_records[case["event_id"]] = record
         payload, parse_reason = parse_json_object(record.get("response_text"))
         result = verify_result(case, payload or {})
-        result["cache_path"] = rel(cache_path(case["event_id"]))
+        result["cache_path"] = rel(cache_path(case["event_id"], cache_dir))
         result["cache_input_sha256"] = record.get("input_sha256")
         result["parse_reason"] = parse_reason
         result["model_resolved"] = record.get("model_resolved")
@@ -1033,6 +1040,7 @@ def run_backfill(args) -> int:
 def run_verify(args) -> int:
     """只重算复核：零写入、零调用；与磁盘覆盖层逐字节比对（要求完全一致）。"""
     paths = config.time_backfill_paths(args.profile)
+    cache_dir = paths["cache_dir"]
     if not os.path.isfile(paths["overlay"]):
         print("[阻断] 覆盖层不存在：%s" % rel(paths["overlay"]))
         return 1
@@ -1048,7 +1056,7 @@ def run_verify(args) -> int:
              "base_url": config.time_backfill_base_url()}
     results, cache_records, missing = [], {}, []
     for case in cases:
-        path = cache_path(case["event_id"])
+        path = cache_path(case["event_id"], cache_dir)
         if not os.path.isfile(path):
             missing.append(rel(path))
             continue
@@ -1123,7 +1131,13 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
         description="第 6 阶段 定向时间补抽（T3.5；只处理 event_time 为 null 的事件；"
                     "参数取自 config.EVENT_TIME_BACKFILL；缓存命中零调用）")
-    parser.add_argument("--profile", default="v21", choices=["pilot", "v21"])
+    # 既有 v1.1 口径：choices=["pilot", "v21"]；2026-09-27 起 v1.2 为**默认口径**，
+    # 默认 profile 取 config.GRAPH_PIPELINE["default_profile"]（v21_v1_2）；
+    # v1.1 归档的补抽缓存／覆盖层仍用 --profile v21 显式复现。
+    parser.add_argument("--profile", default=config.GRAPH_PIPELINE["default_profile"],
+                        choices=["pilot", "v21", "v21_v1_2"],
+                        help="默认 v21_v1_2＝v1.2 口径（缓存／覆盖层落 v2.1_v1_2）；"
+                             "v21／pilot＝v1.1 归档口径")
     parser.add_argument("--limit", type=int, default=None, help="只处理前 N 条 null 事件（联机自检）")
     parser.add_argument("--docs", default=None, help="只处理指定 doc_id（逗号或空格分隔）")
     parser.add_argument("--force", action="store_true", help="忽略已有缓存，重新调用并重写缓存")

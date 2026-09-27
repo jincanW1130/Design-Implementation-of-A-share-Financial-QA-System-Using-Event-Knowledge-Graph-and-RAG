@@ -12,8 +12,8 @@
 | 模块 | 子任务 | 输入 | 输出 |
 | --- | --- | --- | --- |
 | `config.py` | — | — | 全部冻结参数：模型与版本、Prompt 版本、temperature、路径、节奏与重试、本体枚举、试跑选样规则、覆盖性重算的对照值 |
-| `extract.py` | T1／T3 | v2.1 的 `clean\documents.jsonl` 与 `chunks\chunks.jsonl` | `阶段05-数据准备\数据集\_抽取缓存\v2.1\{doc_id}.json`；试跑产物落 `_试跑\` |
-| `extract_event_time.py` | T3.5（2026-09-26 追加） | 上述缓存（只读）＋ v2.1 的 `chunks\chunks.jsonl` | `_抽取缓存\v2.1\时间补抽\{event_id}.json`（**独立缓存**）＋ 覆盖层 `_全量\v2.1\event_time_backfill.json`／报告／度量（见第十一节） |
+| `extract.py` | T1／T3 | v2.1 的 `clean\documents.jsonl` 与 `chunks\chunks.jsonl` | 默认口径 v1.2：`阶段05-数据准备\数据集\_抽取缓存\v2.1_v1_2\{doc_id}.json`、产物落 `_全量\v2.1_v1_2\`；v1.1 归档（`--profile pilot`／`v21`）：`_抽取缓存\v2.1\{doc_id}.json`、试跑／全量产物落 `_试跑\`／`_全量\v2.1\` |
+| `extract_event_time.py` | T3.5（2026-09-26 追加） | 上述缓存（只读）＋ v2.1 的 `chunks\chunks.jsonl` | 默认口径 v1.2：`_抽取缓存\v2.1_v1_2\时间补抽\{event_id}.json`（**独立缓存**）＋ 覆盖层 `_全量\v2.1_v1_2\event_time_backfill.json`／报告／度量；v1.1 归档仍落 `_抽取缓存\v2.1\时间补抽\` 与 `_全量\v2.1\`（见第十一节） |
 | `disambiguate.py` | T4（已落地） | 上述缓存 | `消歧\alias_table.json`、`消歧\disambiguation.json`、`消歧\unresolved.jsonl` |
 | `dedup_events.py` | T5（已落地） | 上述缓存 ＋ T4 的消歧产物 ＋ T3.5 覆盖层（只读） | `去重\merge_log.jsonl`、`去重\events_merged.jsonl`、`去重\merge_summary.json`、`去重\dedup_self_test.json` |
 | `write_graph.py` | T6（已落地） | 缓存（只读） ＋ T4／T5 产物 ＋ **人工确认文件**（只读） | 图谱导出物四件套 ＋ `graph_check.json`／`manifest.sha256` |
@@ -30,23 +30,25 @@ FAISS 一律写「向量索引」或「向量检索组件」。
 
 ```bat
 python 代码\抽取与图谱\extract.py --select-only        :: 只算选样与覆盖性重算，不调模型
-python 代码\抽取与图谱\extract.py                     :: T1：试跑 12 篇（默认 --profile pilot）
+python 代码\抽取与图谱\extract.py                     :: 默认口径 v1.2：全量 709 篇（缓存齐全时零调用）
 python 代码\抽取与图谱\extract.py --limit 3           :: 只跑选样结果的前 3 篇
 python 代码\抽取与图谱\extract.py --docs 1026,1018    :: 只跑指定 doc_id（逗号或空格分隔）
 python 代码\抽取与图谱\extract.py --force             :: 忽略已有缓存，重新调用并重写缓存
 python 代码\抽取与图谱\extract.py --verify            :: 独立核对既有产物，不调模型
-python 代码\抽取与图谱\extract.py --profile v21       :: 全量 709 篇（T3 的口径，T1 不执行）
+python 代码\抽取与图谱\extract.py --profile v21       :: v1.1 归档：全量 709 篇（原样复现）
+python 代码\抽取与图谱\extract.py --profile pilot     :: v1.1 归档：T1 的 12 篇试跑
 
-python 代码\抽取与图谱\extract_event_time.py --profile v21             :: T3.5 定向时间补抽（只补 event_time 为 null 的事件）
+python 代码\抽取与图谱\extract_event_time.py                           :: T3.5 定向时间补抽（默认 v21_v1_2，只补 event_time 为 null 的事件）
+python 代码\抽取与图谱\extract_event_time.py --profile v21             :: v1.1 归档的定向时间补抽（缓存／覆盖层落 v2.1 那一套）
 python 代码\抽取与图谱\extract_event_time.py --profile v21 --limit 3   :: 联机自检：只跑前 3 条
 python 代码\抽取与图谱\extract_event_time.py --profile v21 --verify    :: 按缓存重算复核并与覆盖层逐字节比对（零调用、零写入）
 python 代码\抽取与图谱\extract_event_time.py --profile v21 --measure   :: 时间覆盖／可过滤性指标（补抽前／后，零调用）
 python 代码\抽取与图谱\extract_event_time.py --profile v21 --force     :: 忽略补抽缓存重调（会花钱）
 ```
 
-* `--profile pilot`（默认）：`config.PILOT` 的确定性选样，**12 篇**覆盖 8 种事件类型与 4 个类目。
-* `--profile v21`：全量 709 篇，属 T3 的放量口径；T1 只跑 pilot。
-  全量产物**不与试跑混放**：`--profile v21` 落 `config.FULL_OUTPUT_FILES`＝
+* **默认口径＝v1.2**（2026-09-27 作者裁定）：`--profile` 的默认值是 `v21_v1_2`（`config.GRAPH_PIPELINE["default_profile"]`），全量 709 篇，产物落 `config.FULL_OUTPUT_FILES`＝`_全量\v2.1_v1_2\`，缓存落 `_抽取缓存\v2.1_v1_2\`。
+* `--profile pilot`：**v1.1 归档**口径的 `config.PILOT` 确定性选样，**12 篇**覆盖 8 种事件类型与 4 个类目；`--profile v21`：**v1.1 归档**的全量 709 篇（原样复现，不重跑抽取）。两者落点与缓存与裁定前逐字一致。
+  全量产物**不与试跑混放**：`--profile v21` 落 `config.FULL_OUTPUT_FILES_V1_1`＝
   `代码\抽取与图谱\_全量\v2.1\`（见 3.5 节），`_试跑\` 只留 T1 的 12 篇记录。
 * `--limit N` 与 `--docs <ids>` 可叠加，先按 `--docs` 取子集再截前 N 篇；`--docs` 允许指向
   选样结果之外的 doc_id（会记为「显式指定」）。
@@ -57,10 +59,10 @@ python 代码\抽取与图谱\extract_event_time.py --profile v21 --force     ::
   （且未 `--force`）一律非零退出，不静默降级（《15-第6阶段任务书》第十一节 的阻断项）。
 * 全部脚本 `sys.stdout.reconfigure(encoding="utf-8")`。
 
-**v1.2 提示词变体（8 类事件定义进提示词）默认关闭**：关闭时有效版本＝`stage6-extract-v1.1`，提示词与 709 篇主缓存逐字节一致。
-打开用 `--ontology-defs`（或环境变量 `STAGE6_ONTOLOGY_DEFS=1`），关用 `--no-ontology-defs`／`=0`；两个来源同时给出且冲突时报错退出，不静默取其一。
-打开后有效版本＝`stage6-extract-v1.2`，缓存目录按有效版本派生：关闭 → `_抽取缓存\v2.1\`，开启 → `_抽取缓存\v2.1_v1_2\`。
-**开启后的缓存与产物必须与 v1.1 分开存放**：pilot → `_试跑\v1_2\定向\`，v21 → `_全量\v2.1_v1_2\`。
+**v1.2 提示词变体（8 类事件定义进提示词）＝默认口径**（`config.LLM["ontology_defs"]["enabled"]=True`）：默认 profile `v21_v1_2` 的有效版本＝`stage6-extract-v1.2`，缓存落 `_抽取缓存\v2.1_v1_2\`、产物落 `_全量\v2.1_v1_2\`。
+复现 **v1.1 归档版本**用 `--profile v21`（或 `pilot`）：有效版本＝`stage6-extract-v1.1`，提示词与 709 篇主缓存逐字节一致，缓存落 `_抽取缓存\v2.1\`、产物落 `_全量\v2.1\`；这两个归档 profile 下也可用 `--no-ontology-defs`／环境变量 `STAGE6_ONTOLOGY_DEFS=0` 显式退回 v1.1 提示词（`v21_v1_2` 与关闭开关互斥——那会把 v1.1 提示词的产物写进 v1.2 的目录，脚本按阻断非零退出）。
+显式打开用 `--ontology-defs`／`STAGE6_ONTOLOGY_DEFS=1`；命令行与环境变量两个来源同时给出且冲突时报错退出，不静默取其一（两条都不给出时按 profile 的默认口径取，见 `config.GRAPH_PIPELINE["profile_prompt_variants"]`）。
+**开启后的缓存与产物必须与 v1.1 分开存放**：pilot → `_试跑\v1_2\定向\`，v21／v21_v1_2 → `_全量\v2.1_v1_2\`。
 
 ## 三、数据格式（逐字冻结，下游按此消费）
 
@@ -177,10 +179,12 @@ python 代码\抽取与图谱\extract_event_time.py --profile v21 --force     ::
 
 ### 3.5 `_全量\<数据集版本>\` —— T3 全量抽取的产物（与 `_试跑\` 物理隔离）
 
-`--profile v21` 的产物落点由 `config.FULL_OUTPUT_FILES` 决定（`config.py` 第 8 节；该节只新增
-键，既有取值未改动）。文件名与 `_试跑\` 完全一致——`selection.json`、`coverage.json`、
+全量产物的落点由 `config.py` 第 8 节的落点表决定：**默认口径 v1.2**（`--profile v21_v1_2`）
+落 `config.FULL_OUTPUT_FILES`＝`_全量\v2.1_v1_2\`；**v1.1 归档**（`--profile v21`）落
+`config.FULL_OUTPUT_FILES_V1_1`＝`_全量\v2.1\`。文件名与 `_试跑\` 完全一致——
+`selection.json`、`coverage.json`、
 `extracted.jsonl`、`rejected.jsonl`、`run_history.jsonl`、`verify.json`、`manifest.sha256`——
-只是落在 `代码\抽取与图谱\_全量\v2.1\`，逐字冻结的 schema 仍是第三节 的那一套。
+只是落在 `代码\抽取与图谱\_全量\<对应版本目录>\`，逐字冻结的 schema 仍是第三节 的那一套。
 全量运行的完整控制台输出与汇总报告也落该目录（日志由启动命令重定向 stdout／stderr 生成，
 脚本本身不写日志；汇总报告由 `_全量\report_full_run.py` 只读重算）。
 该目录**不是交付物、不入仓库**（`.gitignore` 覆盖 `代码/抽取与图谱/_全量/`）。
@@ -239,7 +243,7 @@ python 代码\抽取与图谱\extract_event_time.py --profile v21 --force     ::
 | max_tokens | 8192 | 实测 4096 会把长文档返回截断，端点接受 8192 与 16384 |
 | 输出格式 | `json_object` | 端点要求提示词里出现 `json` 字样，提示词已满足 |
 | 压缩重试 | 仅当 `finish_reason == "length"` | 同文档重试一次：收紧输出契约（≤2 事件／≤8 实体／≤6 关系、引用 12～60 字）并设 `reasoning_effort="none"`；两次原始返回都进缓存 |
-| Prompt 版本 | `stage6-extract-v1.1` | v1.0 → v1.1：新增压缩重试变体（仅截断时使用）；提示词模板另以 `prompt_template_sha256` 逐篇留痕，改了模板必须升版本。可选变体 `stage6-extract-v1.2`（本体定义进提示词）由 `LLM["ontology_defs"]` 控制，**默认关闭**（见第二节） |
+| Prompt 版本 | 默认 `stage6-extract-v1.2`；归档 `stage6-extract-v1.1` | 2026-09-27 作者裁定：**默认口径＝v1.2**（`LLM["ontology_defs"]["enabled"]=True`，默认 profile `v21_v1_2`）；v1.1 转归档，用 `--profile v21`／`pilot` 原样复现，`config.LLM["prompt_version"]` 与《16》仍按 v1.1 登记（第二步「验收重锚」再改）。v1.0 → v1.1：新增压缩重试变体（仅截断时使用）；v1.1 → v1.2：8 类事件定义进提示词。提示词模板另以 `prompt_template_sha256` 逐篇留痕，改了模板必须升版本 |
 | 节奏 | 两次调用至少间隔 1 秒 | 传输层失败按 2、4、8……秒指数退避，最多 4 次；4xx（除 429）不重试 |
 
 **可重放的定义**：给定同一份缓存，`extract.py` 重跑必须产出逐字节一致的
@@ -258,7 +262,8 @@ JSON 序列化固定 `ensure_ascii=False + sort_keys=True`。
   触发词相似度四条件合并；本组件已把 `event_time`、参与主体与 `confidence` 落齐，
   触发词只作调试字段。
 * **T6（`write_graph.py`，已落地，见第十节）**：只读缓存；导出物按《15》第4.3节 的四件套落
-  `阶段06-事件抽取与知识图谱\图谱导出\v2.1\`，**只含编号、类型、名称、证据编号与置信度，
+  **默认口径 v1.2** 的 `阶段06-事件抽取与知识图谱\图谱导出\v2.1_v1_2\`（v1.1 归档仍是
+  `…\图谱导出\v2.1\`，见第十节 10.1），**只含编号、类型、名称、证据编号与置信度，
   不复制正文**；Event 节点的 `source_chunk_id` 不写进节点（事件级证据由 EVIDENCED_BY 承担）。
 * **T3 放量前的待办**：`--profile v21` 未执行过；放量前先用 `--limit`／`--docs` 抽查，
   并据 `run_history.jsonl` 的实测均值外推成本（试跑实测见下）。
@@ -292,18 +297,19 @@ JSON 序列化固定 `ensure_ascii=False + sort_keys=True`。
 ## 十、T4～T7 落地接口与试跑实测（2026-09-25）
 
 四个脚本已落地；参数全部来自 `config.py` **第 9 节**（该节是追加，第 1～7 节的既有键未改动，
-第 8 节是并行会话同日追加的 T3 全量产物落点）。四者统一 `--profile pilot|v21` 与 `--force`，
+第 8 节是并行会话同日追加的 T3 全量产物落点）。四者统一 `--profile pilot|v21|v21_v1_2` 与 `--force`，
+**默认 profile＝`v21_v1_2`（默认口径 v1.2）**，`pilot`／`v21` 为 v1.1 归档口径；
 一律 `sys.stdout.reconfigure(encoding="utf-8")`；**T4～T6 不调用模型**，T7 只在缓存不齐时经
 `extract.py` 调用（复跑上限 `config.RUN_ALL["max_api_calls_on_replay"]=0`）。
 退出码：`0` 成功；`1` 前置／参数问题（未跑上游、指纹不一致）；`2` 数据异常或机检不通过。
 
 ### 10.1 落点（`config.GRAPH_PIPELINE`）
 
-| 阶段 | pilot（试跑留痕） | v21（交付物） |
-| --- | --- | --- |
-| T4 消歧 | `阶段06-事件抽取与知识图谱\_试跑_图谱管线\消歧\` | `阶段05-数据准备\数据集\_抽取缓存\v2.1\图谱管线\消歧\` |
-| T5 去重 | `阶段06-事件抽取与知识图谱\_试跑_图谱管线\去重\` | `…\_抽取缓存\v2.1\图谱管线\去重\` |
-| T6 导出 | `阶段06-事件抽取与知识图谱\_试跑_图谱管线\图谱导出\` | `阶段06-事件抽取与知识图谱\图谱导出\v2.1\` |
+| 阶段 | pilot（v1.1 归档试跑留痕） | v21（v1.1 归档交付物） | v21_v1_2（**默认口径 v1.2**） |
+| --- | --- | --- | --- |
+| T4 消歧 | `阶段06-事件抽取与知识图谱\_试跑_图谱管线\消歧\` | `阶段05-数据准备\数据集\_抽取缓存\v2.1\图谱管线\消歧\` | `…\_抽取缓存\v2.1_v1_2\图谱管线\消歧\` |
+| T5 去重 | `阶段06-事件抽取与知识图谱\_试跑_图谱管线\去重\` | `…\_抽取缓存\v2.1\图谱管线\去重\` | `…\_抽取缓存\v2.1_v1_2\图谱管线\去重\` |
+| T6 导出 | `阶段06-事件抽取与知识图谱\_试跑_图谱管线\图谱导出\` | `阶段06-事件抽取与知识图谱\图谱导出\v2.1\` | `阶段06-事件抽取与知识图谱\图谱导出\v2.1_v1_2\` |
 
 T6 另在**工作目录**（不是导出目录）写 `graph_check.json`（第八节逐行机检）与
 `manifest.sha256`（校验和索引，含 `graph_stats.json` 一行，故它本身随运行变化）。
@@ -391,23 +397,28 @@ T6 另在**工作目录**（不是导出目录）写 `graph_check.json`（第八
   （月日 ＋ 锚定年份）／`null`（窗口内确实没有可归属的日期）。复核不过一律回到 `null`，
   并在结果里写 `reject_reason`（如 `stated_date_not_in_window`／`anchored_year_mismatch`），
   **绝不编日期**。
-* **缓存（独立，与主抽取缓存物理分开）**：`_抽取缓存\v2.1\时间补抽\{event_id}.json`，只存
+* **缓存（独立，与主抽取缓存物理分开）**：默认口径 v1.2 落
+  `_抽取缓存\v2.1_v1_2\时间补抽\{event_id}.json`（`--profile v21_v1_2`）；v1.1 归档落
+  `_抽取缓存\v2.1\时间补抽\{event_id}.json`（`--profile v21`／`pilot`）。只存
   **原始返回 ＋ 模型 ＋ prompt 版本 ＋ 输入 sha256 ＋ 窗口 sha256**；解析与复核每次重算，
   所以改复核规则不需要重调模型。缓存命中即**零模型调用**（不需要密钥、不需要网络）；
   缓存与当前输入不一致且未 `--force` 时阻断。
-* **覆盖层（`dedup_events.py` 的唯一新增输入）**：`_全量\v2.1\event_time_backfill.json`
-  （pilot 落 `_试跑\`），**不含任何时间戳**，逐字节可重放；`dedup_events.py` 把它应用在事件
-  视图上——补出来的日期**同样参与**时间窗条件，合并后事件的 `event_time_basis` 取提供最早
+* **覆盖层（`dedup_events.py` 的唯一新增输入）**：默认口径 v1.2 落
+  `_全量\v2.1_v1_2\event_time_backfill.json`；v1.1 归档落 `_全量\v2.1\event_time_backfill.json`
+  （pilot 落 `_试跑\`）。**不含任何时间戳**，逐字节可重放；`dedup_events.py` 把它应用在事件
+ 视图上——补出来的日期**同样参与**时间窗条件，合并后事件的 `event_time_basis` 取提供最早
   非空日期的那位成员。产物里记 `time_backfill_sha256`，`write_graph.py` 校验它与盘上覆盖层一致。
 * **审计产物**：`event_time_backfill_report.json`（调用次数／token／墙钟／依据分布／复核拒绝
   原因／抽样）、`时间覆盖_度量.json`（`--measure`：抽取层与图谱层的覆盖与可过滤性读数）。
 
 ### 11.2 人工确认的实体写入图谱（`write_graph.py`）
 
-* **确认是数据**：人可编辑的 `阶段06-事件抽取与知识图谱\图谱导出\v2.1\人工确认清单.json`
-  （`config.HUMAN_CONFIRMATION`、`config.human_confirmation_path()`），由
-  `待人工确认清单.md` 播种；每条带 `confirmed` 字段，`true` 即确认。脚本只读它，不做判定、
-  不设默认值。
+* **确认是数据**：人可编辑的确认文件按 profile 与导出目录同层
+  （`config.HUMAN_CONFIRMATION`、`config.human_confirmation_path()`）：**默认口径 v1.2** 落
+  `阶段06-事件抽取与知识图谱\图谱导出\v2.1_v1_2\人工确认清单.json`（`config.HUMAN_CONFIRMATION["seeded_from"]`
+  指向这一份），v1.1 归档落 `…\图谱导出\v2.1\人工确认清单.json`，其播种清单为
+  `…\图谱导出\v2.1\待人工确认清单.md`（`config.HUMAN_CONFIRMATION["seeded_from_v1_1"]`）；
+  每条带 `confirmed` 字段，`true` 即确认。脚本只读它，不做判定、不设默认值。
 * **写入口径**：`confirmed: true` 的条目各建**一个**自己的节点（节点名＝`name` 书写面，
   **不填 stock_code**——没有解析出代码，也不猜），编号按归一化名称确定性分配 `HCONF-####`；
   同名只产生一个节点。**确认名称命中配置公司书写面时拒绝建节点并计数上报**（绝不把确认名称
@@ -416,3 +427,8 @@ T6 另在**工作目录**（不是导出目录）写 `graph_check.json`（第八
   条目数／新增节点数与编号／据此写入的边数与按关系分布／被拒绝的条；`graph_check.json` 另加
   三条机检（无 stock_code、同名唯一、与确认文件的条目数一致）。`manifest.sha256` 追加一行
   确认文件的校验和。
+
+## 十二、合规提示（非阻断）
+
+套餐 Key 的使用限制要求「仅限在龙虾工具、编程工具中使用，禁止用于自动化脚本与非交互式批量调用」；本项目此前的批量跑属于该场景，如需再次批量跑请改用合规通道。
+本项目**没有任何运行时闸门**，本文仅为提示。

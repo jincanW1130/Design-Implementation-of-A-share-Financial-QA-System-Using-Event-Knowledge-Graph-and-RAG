@@ -37,6 +37,10 @@ ROOT = os.path.abspath(os.path.join(_THIS_DIR, "..", ".."))
 STAGE_DIR = os.path.join(ROOT, "阶段06-事件抽取与知识图谱")
 
 DATASET_VERSION = "v2.1"
+# v1.2 候选版本的目录后缀：缓存、导出、时间补抽三处派生共用这一个来源。
+# **2026-09-27 作者裁定：v1.2 升为默认口径**；v1.1 转为**归档版本**，仍可用
+# `--profile pilot`／`--profile v21` 原样复现（落点与缓存都不动）。
+V1_2_SUFFIX = "_v1_2"
 DATASET_ROOT = os.path.join(ROOT, "阶段05-数据准备", "数据集")
 DATASET_DIR = os.path.join(DATASET_ROOT, DATASET_VERSION)
 DOCS_PATH = os.path.join(DATASET_DIR, "clean", "documents.jsonl")
@@ -44,33 +48,50 @@ CHUNKS_PATH = os.path.join(DATASET_DIR, "chunks", "chunks.jsonl")
 
 # 原始返回缓存：与数据集版本目录同级，一版一个子目录；下划线前缀表示它不是数据集内容。
 CACHE_ROOT = os.path.join(DATASET_ROOT, "_抽取缓存")
-CACHE_DIR = os.path.join(CACHE_ROOT, DATASET_VERSION)
+# 两套缓存落点（**默认＝v1.2；v1.1 为归档版本**）：
+#   * `CACHE_DIR`（＝`CACHE_DIR_V1_2`＝`DEFAULT_CACHE_DIR`，**默认口径**）：`_抽取缓存\v2.1_v1_2\`；
+#   * `CACHE_DIR_V1_1`（**归档版本**）：`_抽取缓存\v2.1\`——709 篇 v1.1 原始返回，
+#     `--profile pilot`／`--profile v21` 复现时只读复用。
+# 名字口径（2026-09-27 第二步「验收重锚」后）：`CACHE_DIR` 这个既有名字改为指向**默认口径**
+# （v1.2）目录，与《工具\验收第6阶段.py》L1 的判据（`basename(CACHE_DIR) == DATASET_VERSION
+# ＋ V1_2_SUFFIX`）同步；v1.1 归档缓存一律经 `CACHE_DIR_V1_1` 显式取值。
+CACHE_DIR_V1_1 = os.path.join(CACHE_ROOT, DATASET_VERSION)
+CACHE_DIR_V1_2 = os.path.join(CACHE_ROOT, DATASET_VERSION + V1_2_SUFFIX)
+DEFAULT_CACHE_DIR = CACHE_DIR_V1_2
+CACHE_DIR = CACHE_DIR_V1_2
 
 
 def cache_dir_for_prompt_version(prompt_version: str) -> str:
     """按**有效 Prompt 版本**派生 T3 抽取缓存目录（缓存条目按有效的那个版本落盘）。
 
-    * 关闭 v1.2 变体（默认）时有效版本＝`LLM["prompt_version"]`（v1.1）
-      → 主缓存 `_抽取缓存\\v2.1\\`（709 篇 v1.1 原始返回，只读复用）；
-    * 开启 v1.2 变体时有效版本＝`LLM["ontology_defs"]["prompt_version"]`（v1.2）
-      → `_抽取缓存\\v2.1_v1_2\\`（`cache_suffix` 派生），与 v1.1 主缓存物理隔离。
+    * 有效版本＝`stage6-extract-v1.2`（**默认口径**，`ontology_defs.enabled=True`）
+      → `CACHE_DIR`（＝`DEFAULT_CACHE_DIR`＝`CACHE_DIR_V1_2`，`_抽取缓存\\v2.1_v1_2\\`）；
+    * 有效版本＝`LLM["prompt_version"]`（v1.1，**归档版本**，`--profile pilot`／`--profile v21`
+      或显式 `--no-ontology-defs` 复现）→ `CACHE_DIR_V1_1`（主缓存 `_抽取缓存\\v2.1\\`，
+      709 篇 v1.1 原始返回，只读复用）。
 
     未登记的版本一律抛错，绝不回落到 v1.1 目录——回落的后果是把 v1.2 的返回写进
     v1.1 主缓存（破坏可重放）；extract.py 侧还有一道同向守卫。
     """
     variant = LLM.get("ontology_defs") or {}
     if variant.get("prompt_version") and prompt_version == variant["prompt_version"]:
-        return CACHE_DIR + str(variant.get("cache_suffix") or "")
+        return CACHE_DIR
     if prompt_version != LLM["prompt_version"]:
         raise ValueError("未知的 Prompt 版本：%r" % (prompt_version,))
-    return CACHE_DIR
+    return CACHE_DIR_V1_1
 
 
 # 试跑产物目录：不是交付物、不入仓库（`.gitignore` 已含 `代码/抽取与图谱/_试跑/`）。
 PILOT_DIR = os.path.join(_THIS_DIR, "_试跑")
 
 # T6 的图谱导出物落点（本任务 T1 不产出，只登记，避免下游自行发明路径）。
-GRAPH_EXPORT_DIR = os.path.join(STAGE_DIR, "图谱导出", DATASET_VERSION)
+# **默认口径＝v1.2**（2026-09-27 作者裁定）：`GRAPH_EXPORT_DIR` 指向 `图谱导出\v2.1_v1_2\`；
+# v1.1 的**归档导出目录** `图谱导出\v2.1\` 由 `GRAPH_EXPORT_DIR_V1_1` 登记，
+# `--profile pilot`／`--profile v21` 仍落/读那一套（冻结点位，不动）。
+# 两套目录**平级、物理隔离**，v1.2 的产物不写进 v2.1 的目录里。
+GRAPH_EXPORT_DIR = os.path.join(STAGE_DIR, "图谱导出", DATASET_VERSION + V1_2_SUFFIX)
+GRAPH_EXPORT_DIR_V1_2 = GRAPH_EXPORT_DIR          # 兼容别名（上一轮已登记的键名）
+GRAPH_EXPORT_DIR_V1_1 = os.path.join(STAGE_DIR, "图谱导出", DATASET_VERSION)
 
 # 试跑产物文件名（机器可读产物一律 ASCII 名；运行日志用中文名，与第 5 阶段 勘察\\ 同风格）。
 OUTPUT_FILES = {
@@ -122,19 +143,24 @@ LLM = {
     "timeout_seconds": 180.0,
     "prompt_version": "stage6-extract-v1.1",
     # ------------------------------------------------------------------
-    # v1.2 提示词变体（8 类事件定义进提示词的显式开关，**默认关闭**）
+    # v1.2 提示词变体（8 类事件定义进提示词的显式开关，**2026-09-27 起默认开启**）
     # ------------------------------------------------------------------
-    # 口径（2026-09-27 定）：`prompt_version` 上面这一行是**仓库默认口径**，一个字都不改；
-    # v1.2 只在显式打开开关时生效，有效 Prompt 版本随之派生：
-    #   关闭（默认）→ 有效版本 `stage6-extract-v1.1`，提示词与 709 篇主缓存逐字节一致；
-    #   开启        → 有效版本 `ontology_defs.prompt_version`，缓存目录按 `cache_suffix` 派生。
+    # 口径（2026-09-27 作者裁定）：**默认口径＝v1.2**，v1.1 转为**归档版本**：
+    #   默认（本开关 True）→ 有效版本 `ontology_defs.prompt_version`（`stage6-extract-v1.2`），
+    #     缓存目录按 `cache_suffix` 派生（`_抽取缓存\v2.1_v1_2\`）；按 profile 复现时，
+    #     `--profile v21_v1_2` 就是这一套（默认 profile）。
+    #   归档（`--profile pilot`／`--profile v21`，或显式 `--no-ontology-defs`）→ 有效版本
+    #     `prompt_version`（`stage6-extract-v1.1`），提示词与 709 篇 v1.1 主缓存逐字节一致。
+    # 注：`prompt_version` 上面这一行**一个字都不改**——它仍是 v1.1 归档版本的版本号，
+    # 《16》与《工具\验收第6阶段.py》的 P1／P2 判据读的就是它。
     # 开关来源只有两条：`extract.py --ontology-defs`（关：`--no-ontology-defs`）或
     # 环境变量 `STAGE6_ONTOLOGY_DEFS=1`（关：`=0`）；两者同时给出且**冲突**时报错退出，
-    # 不静默取其一。默认关闭保证「仓库默认口径＝v1.1」不被误改。
+    # 不静默取其一。两条都不给出时按 **profile 的默认口径**取（见
+    # `GRAPH_PIPELINE["profile_prompt_variants"]`：v21_v1_2 → 开；pilot／v21 → 关）。
     "ontology_defs": {
-        "enabled": False,                     # 默认关闭：不改变 v1.1 的提示词与缓存键
+        "enabled": True,                      # 默认开启：默认口径＝v1.2（v1.1 用 pilot／v21 复现）
         "prompt_version": "stage6-extract-v1.2",
-        "cache_suffix": "_v1_2",              # 派生缓存目录用（见 cache_dir_for_prompt_version）
+        "cache_suffix": V1_2_SUFFIX,          # 派生缓存目录用（见 cache_dir_for_prompt_version）
         "env": "STAGE6_ONTOLOGY_DEFS",        # 开关的环境变量名（读取方式，不含取值）
     },
     # 压缩重试：**只在主尝试被输出上限截断（finish_reason == "length"）时**触发一次。
@@ -604,24 +630,41 @@ def load_dataset():
 #   `write_graph.py`（T6）分配。
 #
 # 目录口径：《15》第4.2节 要求 T4／T5 的产物「落缓存目录」、第4.3节 要求 T6 的导出物落
-# `阶段06-事件抽取与知识图谱\\图谱导出\\v2.1\\`。试跑（pilot）不改交付物目录，全部产物落
+# `阶段06-事件抽取与知识图谱\\图谱导出\\<版本>\\`。试跑（pilot）不改交付物目录，全部产物落
 # `阶段06-事件抽取与知识图谱\\_试跑_图谱管线\\`（与 `代码\\抽取与图谱\\_试跑\\` 那份 T1 记录分开）。
+# **2026-09-27 作者裁定：默认口径＝v1.2**——`default_profile` 取 `v21_v1_2`（落
+# `图谱导出\\v2.1_v1_2\\` 与 `_抽取缓存\\v2.1_v1_2\\图谱管线\\`）；v1.1 为**归档版本**，
+# `--profile pilot`／`--profile v21` 仍各自指向原落点与缓存，一个字都不动、可原样复现。
 
 GRAPH_PIPELINE = {
+    # 默认 profile：脚本 `--profile` 的缺省值一律取它（v1.2＝默认口径）。
+    "default_profile": "v21_v1_2",
+    # profile → Prompt 变体（8 类事件定义是否进提示词）的**默认口径**：
+    #   * v21_v1_2 → True：默认口径，有效 Prompt 版本 stage6-extract-v1.2；
+    #   * pilot／v21 → False：v1.1 归档版本，提示词与 709 篇主缓存逐字节一致。
+    # 命令行 `--ontology-defs`／`--no-ontology-defs` 与环境变量 `STAGE6_ONTOLOGY_DEFS`
+    # 仍是显式覆盖（两条冲突时报错退出，不静默取其一）；两条都没给出时才用本表。
+    # 本表里默认 profile 的那一项必须与 `LLM["ontology_defs"]["enabled"]` 一致（同一个裁定）。
+    "profile_prompt_variants": {"pilot": False, "v21": False, "v21_v1_2": True},
     "profile_roots": {
-        # pilot：试跑专用目录，不是交付物；v21：按《15》第4.2／4.3节 落缓存目录与导出目录。
+        # pilot：试跑专用目录，不是交付物；v21：v1.1 归档，按《15》第4.2／4.3节 落缓存目录；
+        # v21_v1_2：**默认口径 v1.2** 的 T4／T5 工作目录，与 v2.1 的 `图谱管线\` 物理分开，
+        # 否则一次 v1.2 复跑会覆盖 v2.1（归档）的消歧／去重产物。
         "pilot": os.path.join(STAGE_DIR, "_试跑_图谱管线"),
-        "v21": os.path.join(CACHE_DIR, "图谱管线"),
+        "v21": os.path.join(CACHE_DIR_V1_1, "图谱管线"),
+        "v21_v1_2": os.path.join(CACHE_DIR_V1_2, "图谱管线"),
     },
     "export_roots": {
         "pilot": os.path.join(STAGE_DIR, "_试跑_图谱管线", "图谱导出"),
-        "v21": GRAPH_EXPORT_DIR,
+        "v21": GRAPH_EXPORT_DIR_V1_1,
+        "v21_v1_2": GRAPH_EXPORT_DIR,
     },
     # T4～T7 的**唯一输入**是 extract.py（T3）解析后的抽取结果（一行一篇）；
-    # pilot 落 `OUTPUT_FILES["extracted"]`、v21 落 `FULL_OUTPUT_FILES["extracted"]`
-    # （第 8 节，T3 全量产物与试跑留痕物理隔离）。用函数取值而不是在定义处取，
-    # 这样本节的求值顺序与第 8 节的先后无关。
-    "extract_records_profiles": {"pilot": "OUTPUT_FILES", "v21": "FULL_OUTPUT_FILES"},
+    # pilot 落 `OUTPUT_FILES["extracted"]`、v21 落 `FULL_OUTPUT_FILES_V1_1["extracted"]`（归档）、
+    # v21_v1_2 落 `FULL_OUTPUT_FILES["extracted"]`（默认口径）——第 8 节，T3 全量产物与试跑
+    # 留痕物理隔离。用函数取值而不是在定义处取，这样本节的求值顺序与第 8 节的先后无关。
+    "extract_records_profiles": {"pilot": "OUTPUT_FILES", "v21": "FULL_OUTPUT_FILES_V1_1",
+                                 "v21_v1_2": "FULL_OUTPUT_FILES"},
     "extract_records_key": "extracted",
     "subdirs": {"disambig": "消歧", "dedup": "去重"},
     # 文件名（机器可读产物一律 ASCII 名，与第 7 节 OUTPUT_FILES 同风格）。
@@ -894,10 +937,12 @@ def round_confidence(value):
 # --------------------------------------------------------------------------
 # 依据：《15-第6阶段任务书》第4.2节 的「小规模先行」纪律——`PILOT_DIR`（`_试跑\`）是
 # T1 小规模验证的**留痕**，T3 的全量产物必须与它物理隔离，否则一次全量运行就会覆盖掉
-# 试跑记录。故 `--profile pilot` 仍落 `OUTPUT_FILES`（取值与行为不变），
-# `--profile v21` 落 `FULL_OUTPUT_FILES`（`_全量\<dataset_version>\`）。
+# 试跑记录。**2026-09-27 作者裁定：默认口径＝v1.2**——`FULL_RUN_DIR`／`FULL_OUTPUT_FILES`
+# 改指 `_全量\v2.1_v1_2\`（默认 profile `v21_v1_2` 的落点）；v1.1 归档的 `_全量\v2.1\`
+# 由 `FULL_RUN_DIR_V1_1`／`FULL_OUTPUT_FILES_V1_1` 登记，`--profile v21` 仍读它
+# （本任务**不重跑抽取**，v1.1 那份产物逐字节保留）。
 # 两处与缓存一样**都不是交付物、不入仓库**（`.gitignore` 应覆盖 `代码/抽取与图谱/_全量/`）。
-FULL_RUN_DIR = os.path.join(_THIS_DIR, "_全量", DATASET_VERSION)
+FULL_RUN_DIR = os.path.join(_THIS_DIR, "_全量", DATASET_VERSION + V1_2_SUFFIX)   # 默认（v1.2）
 FULL_OUTPUT_FILES = {
     "selection": os.path.join(FULL_RUN_DIR, "selection.json"),
     "coverage": os.path.join(FULL_RUN_DIR, "coverage.json"),
@@ -907,15 +952,27 @@ FULL_OUTPUT_FILES = {
     "verify": os.path.join(FULL_RUN_DIR, "verify.json"),
     "manifest": os.path.join(FULL_RUN_DIR, "manifest.sha256"),
 }
+FULL_RUN_DIR_V1_1 = os.path.join(_THIS_DIR, "_全量", DATASET_VERSION)           # 归档（v1.1）
+FULL_OUTPUT_FILES_V1_1 = {
+    "selection": os.path.join(FULL_RUN_DIR_V1_1, "selection.json"),
+    "coverage": os.path.join(FULL_RUN_DIR_V1_1, "coverage.json"),
+    "extracted": os.path.join(FULL_RUN_DIR_V1_1, "extracted.jsonl"),
+    "rejected": os.path.join(FULL_RUN_DIR_V1_1, "rejected.jsonl"),
+    "run_history": os.path.join(FULL_RUN_DIR_V1_1, "run_history.jsonl"),
+    "verify": os.path.join(FULL_RUN_DIR_V1_1, "verify.json"),
+    "manifest": os.path.join(FULL_RUN_DIR_V1_1, "manifest.sha256"),
+}
 # 全量运行的完整控制台输出**不由脚本写**，而是由启动命令把 stdout／stderr 重定向到这里
 # （脚本内不写日志文件，避免与「产物确定性」混在一起）；此键只登记落点。
-FULL_RUN_LOG = os.path.join(FULL_RUN_DIR, "运行日志_全量.txt")
+FULL_RUN_LOG = os.path.join(FULL_RUN_DIR, "运行日志_全量.txt")                  # 默认（v1.2）
+FULL_RUN_LOG_V1_1 = os.path.join(FULL_RUN_DIR_V1_1, "运行日志_全量.txt")        # 归档（v1.1）
 
 # --------------------------------------------------------------------------
-# v1.2 变体（8 类事件定义进提示词）的产物落点：与 v1.1 的 `_试跑\`／`_全量\v2.1\`
-# **物理隔离**，只在开关打开时使用；默认口径永远走上面的 OUTPUT_FILES／FULL_OUTPUT_FILES。
-# `--profile pilot --ontology-defs`（定向对照试跑）落 `_试跑\v1_2\定向\`，
-# `--profile v21 --ontology-defs` 落 `_全量\v2.1_v1_2\`（同名键，便于下游按表取路径）。
+# v1.2（8 类事件定义进提示词）的产物落点：与 v1.1 的 `_试跑\`／`_全量\v2.1\`
+# **物理隔离**。上面的 FULL_OUTPUT_FILES 已是 v1.2（默认口径），下面这两个名字保留为
+# **兼容别名**（上一轮已按这两个键名登记，extract.py 与下游按表取路径）。
+# `--profile pilot --ontology-defs`（定向对照试跑）落 `_试跑\v1_2\定向\`；
+# `--profile v21 --ontology-defs` 落 `_全量\v2.1_v1_2\`。
 # --------------------------------------------------------------------------
 PILOT_V1_2_DIR = os.path.join(PILOT_DIR, "v1_2", "定向")
 OUTPUT_FILES_V1_2 = {
@@ -929,8 +986,7 @@ OUTPUT_FILES_V1_2 = {
     "log_first": os.path.join(PILOT_V1_2_DIR, "运行日志_首跑.txt"),
     "log_second": os.path.join(PILOT_V1_2_DIR, "运行日志_复跑.txt"),
 }
-FULL_RUN_DIR_V1_2 = os.path.join(_THIS_DIR, "_全量",
-                                 DATASET_VERSION + LLM["ontology_defs"]["cache_suffix"])
+FULL_RUN_DIR_V1_2 = FULL_RUN_DIR
 FULL_OUTPUT_FILES_V1_2 = {
     "selection": os.path.join(FULL_RUN_DIR_V1_2, "selection.json"),
     "coverage": os.path.join(FULL_RUN_DIR_V1_2, "coverage.json"),
@@ -1013,7 +1069,18 @@ EVENT_TIME_BACKFILL = {
         "null": "窗口内确实没有可归属到该事件的日期；事件保持 event_time=null",
     },
     # 缓存：与主抽取缓存同一个 work root（`_抽取缓存\<version>\`）下的**独立子目录**。
-    "cache_dir": os.path.join(CACHE_DIR, "时间补抽"),
+    # **默认口径＝v1.2**（2026-09-27 作者裁定）：`cache_dir` 改指
+    # `_抽取缓存\v2.1_v1_2\时间补抽\`（＝`DEFAULT_CACHE_DIR` 下的子目录）；
+    # v1.1 归档仍走 `_抽取缓存\v2.1\时间补抽\`（`cache_dirs` 表里显式登记）。
+    "cache_dir": os.path.join(CACHE_DIR_V1_2, "时间补抽"),
+    # 两套补抽缓存必须分开，绝不复用对方的目录：v1.1（归档，pilot／v21）↔
+    # `_抽取缓存\v2.1\时间补抽\`；v1.2（默认口径，v21_v1_2）↔
+    # `_抽取缓存\v2.1_v1_2\时间补抽\`。
+    "cache_dirs": {
+        "pilot": os.path.join(CACHE_DIR_V1_1, "时间补抽"),
+        "v21": os.path.join(CACHE_DIR_V1_1, "时间补抽"),
+        "v21_v1_2": os.path.join(CACHE_DIR_V1_2, "时间补抽"),
+    },
     "cache_file_pattern": "{event_id}.json",
     "pacing": {
         "min_interval_seconds": PACING["min_interval_seconds"],
@@ -1029,6 +1096,11 @@ EVENT_TIME_BACKFILL = {
             "measure": os.path.join(PILOT_DIR, "时间覆盖_度量.json"),
         },
         "v21": {
+            "overlay": os.path.join(FULL_RUN_DIR_V1_1, "event_time_backfill.json"),
+            "report": os.path.join(FULL_RUN_DIR_V1_1, "event_time_backfill_report.json"),
+            "measure": os.path.join(FULL_RUN_DIR_V1_1, "时间覆盖_度量.json"),
+        },
+        "v21_v1_2": {
             "overlay": os.path.join(FULL_RUN_DIR, "event_time_backfill.json"),
             "report": os.path.join(FULL_RUN_DIR, "event_time_backfill_report.json"),
             "measure": os.path.join(FULL_RUN_DIR, "时间覆盖_度量.json"),
@@ -1042,9 +1114,11 @@ def time_backfill_paths(profile: str) -> dict:
     table = EVENT_TIME_BACKFILL["outputs"].get(profile)
     if not table:
         raise KeyError("profile=%s 的时间补抽落点未在 config 中登记" % profile)
+    cache_table = EVENT_TIME_BACKFILL.get("cache_dirs") or {}
+    cache_dir = cache_table.get(profile) or EVENT_TIME_BACKFILL["cache_dir"]
     return {
         "profile": profile,
-        "cache_dir": EVENT_TIME_BACKFILL["cache_dir"],
+        "cache_dir": cache_dir,
         "overlay": table["overlay"],
         "report": table["report"],
         "measure": table["measure"],
@@ -1089,12 +1163,19 @@ def time_backfill_api_key() -> str:
 #   （命中别名表书写面时拒绝写入并计数上报，绝不做「名字合并」）。
 # * 落点与命名：确认文件放交付物导出目录（与四件套同目录）；`write_graph.py` 在
 #   `graph_stats.json` 里登记「人工确认贡献」的节点数／边数与文件 sha256，效果可审计。
+# * **默认口径＝v1.2**（2026-09-27 作者裁定）：默认 profile `v21_v1_2` 的确认文件落
+#   `图谱导出\v2.1_v1_2\`（`human_confirmation_path()` 按 profile 解析，落点随导出目录）；
+#   v1.1 归档的确认文件仍在 `图谱导出\v2.1\`（`--profile v21`）。
 HUMAN_CONFIRMATION = {
     "schema": "stage6-human-confirmation-1.0",
     "filename": "人工确认清单.json",
     "field": "confirmed",
     "node_id_prefix": "HCONF",
-    "seeded_from": "阶段06-事件抽取与知识图谱\\图谱导出\\v2.1\\待人工确认清单.md",
+    # 播种来源：默认指向 **v1.2 默认口径**的确认入口（该目录随仓库带的是编译后的
+    # 人工确认清单.json；v1.1 归档的播种清单 `图谱导出\v2.1\待人工确认清单.md` 仍保留，
+    # 用 `--profile v21` 复现 v1.1 时按那一份）。
+    "seeded_from": "阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_2\\人工确认清单.json",
+    "seeded_from_v1_1": "阶段06-事件抽取与知识图谱\\图谱导出\\v2.1\\待人工确认清单.md",
     "identity_key_prefix": "human_confirmed",
     "note": (
         "确认条目＝《10》第4.5.4节 的待消歧主体经人工确认后的最终判定；节点编号按归一化名称"
@@ -1104,6 +1185,7 @@ HUMAN_CONFIRMATION = {
 
 
 def human_confirmation_path(profile: str) -> str:
-    """确认文件的落点：与图谱导出物同目录（pilot 落试跑导出目录，v21 落交付物导出目录）。"""
+    """确认文件的落点：与图谱导出物同目录（pilot 落试跑目录，v21 落 v1.1 归档目录，
+    v21_v1_2＝**默认口径**落 `图谱导出\\v2.1_v1_2\\`）。"""
     export_dir = GRAPH_PIPELINE["export_roots"][profile]
     return os.path.join(export_dir, HUMAN_CONFIRMATION["filename"])

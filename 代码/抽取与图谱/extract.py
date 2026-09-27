@@ -7,31 +7,35 @@ r"""extract.py —— 第 6 阶段「实体与事件抽取」的可执行脚本�
   每条事实的 `source_chunk_id` 由代码在该文档的文本块序列里定位得到。
 * **证据由代码解析，不由模型给编号**：模型对每一条实体／事件／关系必须给逐字引用
   `quote`，代码只做「折空白 + 精确子串」匹配；定位不到就整条丢弃并登记原因。
-* **缓存可重放**：原始返回按 `doc_id` 一篇一个文件落在 `config.CACHE_DIR`
-  （与数据集版本目录同级、不入仓库）；缓存命中时**不调用模型**，产物由缓存确定性重算，
+* **缓存可重放**：原始返回按 `doc_id` 一篇一个文件落在**有效 Prompt 版本**的缓存目录
+  （与数据集版本目录同级、不入仓库；默认口径 v1.2 落 `_抽取缓存\v2.1_v1_2\`，
+  v1.1 归档落 `_抽取缓存\v2.1\`）；缓存命中时**不调用模型**，产物由缓存确定性重算，
   因此能逐字节复现。
 * **密钥只从环境变量读**（`config.api_key()`），不入仓库、不落盘、不进日志。
 
 用法（全部参数取自 `代码\抽取与图谱\config.py`）：
 
     python 代码\抽取与图谱\extract.py --select-only     # 只算选样与覆盖性重算，不调模型
-    python 代码\抽取与图谱\extract.py                   # T1：试跑 12 篇（默认 --profile pilot）
+    python 代码\抽取与图谱\extract.py                   # **默认口径 v1.2**：全量 709 篇
+                                                       # （默认 --profile v21_v1_2，缓存齐全时零调用）
     python 代码\抽取与图谱\extract.py --limit 3         # 只跑选样结果的前 3 篇
     python 代码\抽取与图谱\extract.py --docs 1026,1018  # 只跑指定 doc_id
     python 代码\抽取与图谱\extract.py --force           # 忽略已有缓存，重新调用并重写缓存
     python 代码\抽取与图谱\extract.py --verify          # 独立核对既有产物（不调用模型）
-    python 代码\抽取与图谱\extract.py --profile v21     # 全量 709 篇（T3 的口径，T1 不执行）
-                                                       # 全量产物落 `_全量\v2.1\`，与 T1 的 `_试跑\` 物理隔离
+    python 代码\抽取与图谱\extract.py --profile v21     # **v1.1 归档版本**：全量 709 篇
+                                                       # 提示词与缓存与 v1.1 逐字节一致，
+                                                       # 产物落 `_全量\v2.1\`
+    python 代码\抽取与图谱\extract.py --profile pilot   # v1.1 归档的 T1 试跑 12 篇（落 `_试跑\`）
     python 代码\抽取与图谱\extract.py --profile pilot --ontology-defs
-                                                       # 打开 v1.2 提示词变体（8 类事件定义进提示词；
-                                                       # 默认关闭）。有效版本＝stage6-extract-v1.2，
-                                                       # 缓存落 `_抽取缓存\v2.1_v1_2\`、产物落
-                                                       # `_试跑\v1_2\定向\`；与 v1.1 缓存／产物隔离。
-    python 代码\抽取与图谱\extract.py --no-ontology-defs  # 显式关闭（与环境变量冲突时报错）
+                                                       # v1.1 归档落点 ＋ v1.2 提示词的定向对照
+                                                       # （产物落 `_试跑\v1_2\定向\`）
+    python 代码\抽取与图谱\extract.py --no-ontology-defs  # 显式回到 v1.1 提示词（与环境变量冲突时报错）
 
 退出码 0 表示成功；密钥未就位、选样断言不成立、缓存与当前输入不一致（且未 `--force`）
 等情形一律非零退出（《15》第十一节 的阻断项不得静默降级）。
 开关也可用环境变量 `STAGE6_ONTOLOGY_DEFS=1`（关：`=0`）；命令行与环境变量冲突时报错退出。
+**2026-09-27 作者裁定：默认口径＝v1.2**——`--profile v21_v1_2` 是默认 profile，两条开关都不
+给出时按 profile 的默认口径取（v21_v1_2 → 开；pilot／v21 → 关，复现 v1.1 归档）。
 """
 
 from __future__ import annotations
@@ -57,23 +61,28 @@ import config  # noqa: E402
 # --------------------------------------------------------------------------
 # 产物落点（T3 全量运行与 T1 试跑记录物理隔离）
 # --------------------------------------------------------------------------
-# `--profile pilot`（T1）用 config.OUTPUT_FILES（`_试跑\`），`--profile v21`（T3 全量）
-# 用 config.FULL_OUTPUT_FILES（`_全量\<dataset_version>\`）；取值全部来自 config.py
-# 第 8 节，脚本内不写死路径。这样《15》第4.2节 要求的「小规模先行」留痕不会被全量运行覆盖。
+# `--profile pilot`（T1 留痕）用 config.OUTPUT_FILES（`_试跑\`）；`--profile v21`（v1.1 归档
+# 全量）用 config.FULL_OUTPUT_FILES_V1_1（`_全量\v2.1\`）；**默认 profile `v21_v1_2`**
+# （＝默认口径 v1.2）用 config.FULL_OUTPUT_FILES（`_全量\v2.1_v1_2\`）。取值全部来自
+# config.py 第 8 节，脚本内不写死路径。这样《15》第4.2节 要求的「小规模先行」留痕不会被
+# 全量运行覆盖。
 OUT = dict(config.OUTPUT_FILES)
 
 
 def output_files_for(profile: str) -> dict:
     r"""按 profile 与**有效 Prompt 变体**取产物落点（v1.2 的产物与 v1.1 物理隔离）。
 
-    * 关闭 v1.2 变体（默认）：pilot → `_试跑\`；v21 → `_全量\<dataset_version>\`；
-    * 开启 v1.2 变体：pilot → `_试跑\v1_2\定向\`；v21 → `_全量\<dataset_version>_v1_2\`。
+    * `v21_v1_2`（**默认口径**）→ `_全量\v2.1_v1_2\`（只看 profile，不受开关影响）；
+    * 关闭 v1.2 变体（v1.1 归档口径）：pilot → `_试跑\`；v21 → `_全量\v2.1\`；
+    * 显式开启 v1.2 变体：pilot → `_试跑\v1_2\定向\`；v21 → `_全量\v2.1_v1_2\`。
     """
+    if profile == "v21_v1_2":
+        return dict(config.FULL_OUTPUT_FILES)
     if ontology_defs_enabled():
         table = (config.FULL_OUTPUT_FILES_V1_2 if profile == "v21"
                  else config.OUTPUT_FILES_V1_2)
     else:
-        table = config.FULL_OUTPUT_FILES if profile == "v21" else config.OUTPUT_FILES
+        table = (config.FULL_OUTPUT_FILES_V1_1 if profile == "v21" else config.OUTPUT_FILES)
     return dict(table)
 
 # --------------------------------------------------------------------------
@@ -215,18 +224,19 @@ def prompt_template_sha256() -> str:
 def effective_cache_dir() -> str:
     """按有效版本派生缓存目录，并加「开启模式下不得解析成 v1.1 目录」的守卫。
 
-    关闭 → `_抽取缓存\\v2.1\\`；开启 → `_抽取缓存\\v2.1_v1_2\\`（由 config 按 `cache_suffix`
-    派生）。守卫不通过时**立即中止**：v1.2 的原始返回一旦写进 v1.1 主缓存，709 篇的可重放
+    关闭 → `config.CACHE_DIR_V1_1`（`_抽取缓存\\v2.1\\`）；开启 → `config.CACHE_DIR`
+    （＝默认口径 v1.2 的 `_抽取缓存\\v2.1_v1_2\\`；由 config 按有效 Prompt 版本派生）。
+    守卫不通过时**立即中止**：v1.2 的原始返回一旦写进 v1.1 主缓存，709 篇的可重放
     与逐字节复现就同时被破坏。
     """
     version = effective_prompt_version()
     target = config.cache_dir_for_prompt_version(version)
     if ontology_defs_enabled():
-        v1_1_dir = os.path.normcase(os.path.abspath(config.CACHE_DIR))
+        v1_1_dir = os.path.normcase(os.path.abspath(config.CACHE_DIR_V1_1))
         if os.path.normcase(os.path.abspath(target)) == v1_1_dir:
             raise SystemExit(
                 "[阻断] 开启 v1.2 变体（有效版本 %s）时缓存目录解析成了 v1.1 主缓存：%s。"
-                "v1.2 的原始返回绝不能写进 v1.1 缓存，立即中止。" % (version, config.CACHE_DIR))
+                "v1.2 的原始返回绝不能写进 v1.1 缓存，立即中止。" % (version, config.CACHE_DIR_V1_1))
     return target
 
 
@@ -1571,7 +1581,9 @@ def resolve_ontology_defs(args) -> bool:
         开＝1/true/yes/on，关＝0/false/no/off。
 
     两条都给出且**冲突**（一个开一个关）时抛 `SystemExit` 非零退出；两条都没给出时
-    取 config 的默认值（`LLM["ontology_defs"]["enabled"]`，当前为 False）。
+    按 **profile 的默认口径**取（`GRAPH_PIPELINE["profile_prompt_variants"]`：
+    v21_v1_2 → 开＝v1.2 默认口径；pilot／v21 → 关＝v1.1 归档），取不到 profile 时回落到
+    config 的默认值（`LLM["ontology_defs"]["enabled"]`，2026-09-27 起为 True）。
     ``--ontology-defs`` 与 ``--no-ontology-defs`` 同时出现在命令行时，由 argparse 的
     互斥组直接报错（同样是非零退出）。
     """
@@ -1598,6 +1610,9 @@ def resolve_ontology_defs(args) -> bool:
         return bool(cli)
     if env is not None:
         return bool(env)
+    variants = config.GRAPH_PIPELINE.get("profile_prompt_variants") or {}
+    if getattr(args, "profile", None) in variants:
+        return bool(variants[args.profile])
     return bool((config.LLM.get("ontology_defs") or {}).get("enabled"))
 
 
@@ -1607,8 +1622,11 @@ def resolve_ontology_defs(args) -> bool:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
         description="第 6 阶段实体与事件抽取（T1 小规模试跑；参数一律取自 config.py）")
-    parser.add_argument("--profile", default="pilot", choices=["pilot", "v21"],
-                        help="pilot＝T1 的 12 篇确定性选样（默认）；v21＝全量 709 篇（T3 口径）")
+    # 既有 v1.1 口径：choices=["pilot", "v21"]；v1.2 升为默认口径后追加 v21_v1_2（默认 profile）。
+    parser.add_argument("--profile", default=config.GRAPH_PIPELINE["default_profile"],
+                        choices=["pilot", "v21", "v21_v1_2"],
+                        help="v21_v1_2＝**默认口径** v1.2 全量 709 篇（默认）；v21＝v1.1 归档"
+                             "全量；pilot＝v1.1 归档的 12 篇确定性选样")
     parser.add_argument("--limit", type=int, default=None, help="只跑选样结果的前 N 篇")
     parser.add_argument("--docs", default=None, help="只跑指定 doc_id，逗号或空格分隔")
     parser.add_argument("--force", action="store_true", help="忽略已有缓存，重新调用并重写缓存")
@@ -1624,6 +1642,11 @@ def main(argv=None) -> int:
         help="显式关闭 v1.2 变体（与 STAGE6_ONTOLOGY_DEFS 冲突时报错）")
     args = parser.parse_args(argv)
     enabled = resolve_ontology_defs(args)
+    if args.profile == "v21_v1_2" and not enabled:
+        raise SystemExit(
+            "[阻断] --profile v21_v1_2 是 v1.2 默认口径的落点，不能用 --no-ontology-defs／"
+            "STAGE6_ONTOLOGY_DEFS=0 把提示词退回 v1.1（那会把 v1.1 提示词的产物写进 v1.2 的"
+            "目录，破坏两套口径的物理隔离）。要复现 v1.1 请用 --profile v21。")
     set_ontology_defs(enabled)
     global OUT
     OUT = output_files_for(args.profile)

@@ -513,8 +513,13 @@ def run(args) -> int:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
         description="第 6 阶段实体消歧（T4；参数一律取自 config.py，不调用模型）")
-    parser.add_argument("--profile", default="pilot", choices=["pilot", "v21"],
-                        help="pilot＝12 篇试跑（默认）；v21＝全量 709 篇")
+    # 既有 v1.1 口径：choices=["pilot", "v21"]；2026-09-27 起 v1.2 为**默认口径**，
+    # 在同一参数上追加 v21_v1_2（＝默认 profile），v1.1 归档仍用 pilot／v21 显式复现。
+    parser.add_argument("--profile", default=config.GRAPH_PIPELINE["default_profile"],
+                        choices=["pilot", "v21", "v21_v1_2"],
+                        help="v21_v1_2＝**默认口径** v1.2 的全量产物（默认，读 "
+                             "FULL_OUTPUT_FILES）；v21＝v1.1 归档全量 709 篇；pilot＝v1.1 归档"
+                             "的 12 篇试跑")
     parser.add_argument("--force", action="store_true", help="忽略已有产物，重算并重写")
     args = parser.parse_args(argv)
     try:

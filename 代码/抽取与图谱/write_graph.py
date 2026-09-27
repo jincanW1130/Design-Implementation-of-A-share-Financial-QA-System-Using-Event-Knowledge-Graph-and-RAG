@@ -27,7 +27,10 @@ r"""write_graph.py —— 第 6 阶段「图谱写入与导出」（T6）。
    口径是「不能确定到日时写 null，绝不猜测」，此处不为凑齐而编日期。
 4. `role` 只出现在 `PARTICIPATES_IN` 上，取 `config.ROLES` 五个值之一（硬约束 6）。
 5. `ISSUED_BY` 只出现在 `政策`／`监管` 事件上（硬约束 7）；同一机构既发布又参与时只保留
-   `ISSUED_BY`（《10》第4.5.2节）。
+   `ISSUED_BY`（《10》第4.5.2节）。这条**不是靠放宽校验**实现的：写 `PARTICIPATES_IN` 之前
+   先算出每个事件上 `ISSUED_BY` 的终点机构集合，起点（Institution）命中的边**确定性丢弃**并
+   计数（`graph_stats.json` 的 `issuer_participation_dropped`，计数为 0 的归档口径不新增该字段，
+   以保证 v1.1 产物逐字节不变）；随后机检在同一口径上复核写出的边。
 6. `BELONGS_TO` 带 `valid_from`／`valid_to`；正文没给日期时**留空**，不用发布时间兜底
    （兜底等于替正文编有效期，与 T3「绝不猜测」同源）——空值条数逐条上报。
 7. 图上**没有** `data_cutoff_time`；三种时间形式只落在 Event.event_time／BELONGS_TO.valid_*／
@@ -537,8 +540,18 @@ def node_id_of_endpoint(local_id, by_identity, event_by_key, disambig, doc_id=No
     return row["node_id"], None
 
 
+# 写边前**程序侧确定性去重**的规则名（《10》第4.5.2节 的冻结口径，不是新规则）：
+# 同一机构既是某事件的发布／作出方、又被写成该事件的参与方时，只保留 ISSUED_BY。
+ISSUER_PARTICIPATION_RULE = "issuer_also_participant_only_issued_by"
+
+
 def build_edges(records, disambig, merged, by_identity, event_by_key, confirmed_by_name=None):
-    """关系边：先把事件端点重定向到合并后的事件，再补 EVIDENCED_BY。"""
+    """关系边：先把事件端点重定向到合并后的事件，再补 EVIDENCED_BY。
+
+    返回 `(edges, skipped, duplicates, dropped)`：`skipped` 是端点未消歧而跳过的关系，
+    `dropped` 是按《10》第4.5.2节 在写边前确定性丢弃的 `PARTICIPATES_IN`（同一机构既是
+    ISSUED_BY 终点、又是同一事件的参与方），与既有「跳过并计数」同一套风格。
+    """
     edges, skipped, seen = [], [], set()
     duplicates = 0
     allowed = set(config.RELATIONS)
@@ -600,11 +613,35 @@ def build_edges(records, disambig, merged, by_identity, event_by_key, confirmed_
             seen.add(key)
             edges.append(row)
 
+    # 《10》第4.5.2节：同一机构既是发布／作出方又参与该事件时只写 ISSUED_BY，不重复写
+    # PARTICIPATES_IN。做法与「端点未消歧 → 跳过并计数」一致：按**写出的边**确定性地丢弃
+    # 并在 graph_stats.json 计数，不放宽任何校验。
+    issuers_by_event = {}
+    for row in edges:
+        if row["relation"] == "ISSUED_BY":
+            issuers_by_event.setdefault(str(row["head_id"]), set()).add(str(row["tail_id"]))
+    dropped, kept = [], []
+    for row in edges:
+        if (row["relation"] == "PARTICIPATES_IN"
+                and str(row["head_id"]) in issuers_by_event.get(str(row["tail_id"]), ())):
+            dropped.append({
+                "event": str(row["tail_id"]), "institution": str(row["head_id"]),
+                "role": str(row.get("role") or ""),
+                "source_doc_id": int(row.get("source_doc_id") or 0),
+                "source_chunk_id": int(row.get("source_chunk_id") or 0),
+                "reason": ISSUER_PARTICIPATION_RULE,
+            })
+            continue
+        kept.append(row)
+    edges = kept
+    dropped.sort(key=lambda r: (r["source_doc_id"], r["source_chunk_id"], r["event"],
+                                r["institution"], r["role"]))
+
     edges.sort(key=lambda r: (str(r["head_id"]), r["relation"], str(r["tail_id"]),
                               int(r.get("source_doc_id") or 0),
                               int(r.get("source_chunk_id") or 0),
                               str(r.get("role") or "")))
-    return edges, skipped, duplicates
+    return edges, skipped, duplicates, dropped
 
 
 # --------------------------------------------------------------------------
@@ -677,7 +714,7 @@ def load_export(paths):
     return nodes, edges
 
 
-def check_export(paths, nodes, edges, fingerprint, profile, extra_text=""):
+def check_export(paths, nodes, edges, fingerprint, profile, extra_text="", dropped=None):
     text = "".join(read_text(paths[k]) for k in ("nodes", "edges", "graph_stats",
                                                  "replay_cypher") if os.path.isfile(paths[k]))
     text += extra_text
@@ -786,9 +823,21 @@ def check_export(paths, nodes, edges, fingerprint, profile, extra_text=""):
             (node_by_id.get(e["head_id"]) or {}).get("event_type") for e in issued}),
          "legal_event_types": list(config.ISSUED_BY_EVENT_TYPES),
          "violations": bad_issued[:5]})
-    add("issuer_not_also_participant", not both,
-        {"violations": both[:5],
-         "note": "《10》第4.5.2节：同一机构既发布又参与时只保留 ISSUED_BY"})
+    # 丢弃计数：写边的那一趟用内存里的 `dropped`；`--verify-only` 从已写出的
+    # graph_stats.json 读同一计数（读不到按 0）。计数为 0 时**不新增字段**，让归档口径
+    # （pilot／v21）的 graph_check.json 逐字节不变。
+    dropped_total = len(dropped) if dropped is not None else _dropped_from_stats(paths)
+    if dropped_total:
+        add("issuer_not_also_participant", not both,
+            {"violations": both[:5], "edges_dropped_by_rule": dropped_total,
+             "rule": "写边前按《10》第4.5.2节 确定性去重：同一机构既是发布／作出方又参与该"
+                     "事件时只写 ISSUED_BY（规则冻结，未放宽校验）",
+             "note": "本次写边前丢弃 PARTICIPATES_IN %d 条；写出的边上不再出现「同一机构既"
+                     "ISSUED_BY 又 PARTICIPATES_IN」" % dropped_total})
+    else:
+        add("issuer_not_also_participant", not both,
+            {"violations": both[:5],
+             "note": "《10》第4.5.2节：同一机构既发布又参与时只保留 ISSUED_BY"})
 
     # 6 BELONGS_TO 的有效期列与空值读数
     belongs = [e for e in edges if e["relation"] == "BELONGS_TO"]
@@ -961,8 +1010,8 @@ def build_all(paths, records, disambig, merged, meta):
     confirmation = load_confirmation(paths["profile"])
     nodes, by_identity, event_by_key, confirmation_info, endpoint_index = assign_nodes(
         disambig, merged, meta, paths["alias_table"], confirmation)
-    edges, skipped, duplicates = build_edges(records, disambig, merged, by_identity,
-                                             event_by_key, endpoint_index)
+    edges, skipped, duplicates, dropped = build_edges(records, disambig, merged, by_identity,
+                                                      event_by_key, endpoint_index)
     # 边的端点标签：重放脚本与机检都要用
     label_of = {str(n["node_id"]): n["label"] for n in nodes}
     for edge in edges:
@@ -980,11 +1029,11 @@ def build_all(paths, records, disambig, merged, meta):
         "《10》第4.5.4节：匹配失败进待消歧列表，**人工确认后再写入图谱**。确认是数据"
         "（确认文件的 confirmed 字段），不是代码；未确认条目继续排除，确认名称只建一个节点、"
         "不并进配置公司。")
-    return nodes, edges, skipped, duplicates, confirmation_info
+    return nodes, edges, skipped, duplicates, dropped, confirmation_info
 
 
 def write_products(paths, nodes, edges, skipped, duplicates, merged, fingerprint, stats_extra,
-                   confirmation_info=None):
+                   confirmation_info=None, dropped=None):
     columns_n, columns_e = config.GRAPH["node_columns"], config.GRAPH["edge_columns"]
     nodes_csv = to_csv(columns_n, nodes)
     edges_csv = to_csv(columns_e, edges)
@@ -1052,8 +1101,23 @@ def write_products(paths, nodes, edges, skipped, duplicates, merged, fingerprint
                     "其余内容逐字节可复现（见 manifest.sha256 与复跑比对读数）",
         },
     }
+    # 《10》第4.5.2节 的程序侧确定性去重（规则冻结、不放宽校验）：登记本次丢弃条数与
+    # 逐条样本。归档口径（pilot／v21）下无此边、计数为 0，此时**不新增字段**——
+    # v1.1 的四件产物因此逐字节不变（作者 2026-09-27 的零影响要求）。
+    dropped = list(dropped or [])
+    if dropped or paths["profile"] == "v21_v1_2":
+        stats["issuer_participation_dropped"] = {
+            "count": len(dropped),
+            "rule": ISSUER_PARTICIPATION_RULE,
+            "basis": "《10-系统总体设计（第四阶段）》第4.5.2节：同一机构既是发布／作出方又参与"
+                     "该事件时只写 ISSUED_BY，不再重复写 PARTICIPATES_IN",
+            "note": "写 PARTICIPATES_IN 之前算出每个事件上 ISSUED_BY 的终点机构集合，起点命中"
+                    "即确定性丢弃并计数（与「端点未消歧 → 跳过并计数」同一套风格）",
+            "sample": dropped[:5],
+        }
     first = check_export(paths, nodes, edges, fingerprint, paths["profile"],
-                         json.dumps(stats, ensure_ascii=False, sort_keys=True, indent=2))
+                         json.dumps(stats, ensure_ascii=False, sort_keys=True, indent=2),
+                         dropped=dropped)
     stats["event_core_attributes"] = {
         "events": stats["counts"]["events"],
         "event_time_null_count": _check_detail(first, "event_time_nonempty",
@@ -1065,7 +1129,7 @@ def write_products(paths, nodes, edges, skipped, duplicates, merged, fingerprint
                                                 indent=2) + "\n")
 
     # 第二趟：四件套齐了，逐字节范围覆盖全部四个文件（含刚写的 graph_stats.json）。
-    checks = check_export(paths, nodes, edges, fingerprint, paths["profile"])
+    checks = check_export(paths, nodes, edges, fingerprint, paths["profile"], dropped=dropped)
     if checks["summary"] != first["summary"]:
         print("[注意] 第二趟机检（覆盖 graph_stats.json 全文）与第一趟结论不同：%s → %s"
               % (first["summary"], checks["summary"]))
@@ -1117,6 +1181,22 @@ def _check_summary(checks):
     return dict(checks["summary"])
 
 
+def _dropped_from_stats(paths) -> int:
+    """`--verify-only` 用：从已写出的 graph_stats.json 读「作出方又当参与方」的丢弃计数。
+
+    读不到（归档口径下本就没有这个字段）按 0——与写边那一趟「计数为 0 不新增字段」一致。
+    """
+    if not os.path.isfile(paths["graph_stats"]):
+        return 0
+    try:
+        with open(paths["graph_stats"], encoding="utf-8") as fh:
+            data = json.load(fh)
+    except (ValueError, OSError):
+        return 0
+    block = (data or {}).get("issuer_participation_dropped") or {}
+    return int(block.get("count") or 0)
+
+
 def run(args) -> int:
     paths = config.pipeline_paths(args.profile)
     records_path = paths["extract_records"]
@@ -1137,13 +1217,13 @@ def run(args) -> int:
     doc_ids = {d for m in merged for d in m["evidence_doc_ids"]}
     meta = load_doc_meta(doc_ids)
     missing_meta = sorted(doc_ids - set(meta))
-    nodes, edges, skipped, duplicates, confirmation_info = build_all(paths, records, disambig,
-                                                                    merged, meta)
+    nodes, edges, skipped, duplicates, dropped, confirmation_info = build_all(
+        paths, records, disambig, merged, meta)
 
     stats, checks = write_products(paths, nodes, edges, skipped, duplicates, merged,
                                    fingerprint,
                                    {"document_meta_missing": missing_meta},
-                                   confirmation_info)
+                                   confirmation_info, dropped)
 
     print("输入（只读）：%s（%d 篇，sha256 %s…）"
           % (rel(records_path), len(records), fingerprint["extract_records_sha256"][:16]))
@@ -1151,9 +1231,10 @@ def run(args) -> int:
                                                  sorted(stats["counts"]["nodes_by_label"].items()))))
     print("边 %d（%s）" % (len(edges), "、".join("%s %d" % kv for kv in
                                                sorted(stats["counts"]["edges_by_relation"].items()))))
-    print("未消歧端点跳过的关系 %d 条（按原因 %s）；重复边去掉 %d 条；无边节点 %s 个"
+    print("未消歧端点跳过的关系 %d 条（按原因 %s）；重复边去掉 %d 条；"
+          "作出方又当参与方丢弃 %d 条（《10》第4.5.2节，%s）；无边节点 %s 个"
           % (len(skipped), stats["unresolved"]["relations_skipped_by_reason"], duplicates,
-             stats["isolated_nodes"]["count"]))
+             len(dropped), ISSUER_PARTICIPATION_RULE, stats["isolated_nodes"]["count"]))
     print("人工确认：确认文件 %s（sha256 %s…）；确认条目 %d／未确认 %d；"
           "新增节点 %d 个、据此写入边 %d 条（%s）"
           % (confirmation_info["source_file"], (confirmation_info["sha256"] or "-")[:16],
@@ -1192,7 +1273,12 @@ def _print_checks(checks):
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
         description="第 6 阶段图谱写入与导出（T6；只读缓存；编号显式分配；不调用模型）")
-    parser.add_argument("--profile", default="pilot", choices=["pilot", "v21"])
+    # 既有 v1.1 口径：choices=["pilot", "v21"]；2026-09-27 起 v1.2 为**默认口径**，
+    # 在同一参数上追加 v21_v1_2（＝默认 profile），v1.1 归档仍用 pilot／v21 显式复现。
+    parser.add_argument("--profile", default=config.GRAPH_PIPELINE["default_profile"],
+                        choices=["pilot", "v21", "v21_v1_2"],
+                        help="默认 v21_v1_2＝v1.2 口径（导出到 图谱导出\\v2.1_v1_2\\）；"
+                             "v21＝v1.1 归档（图谱导出\\v2.1\\）；pilot＝试跑目录")
     parser.add_argument("--force", action="store_true", help="重算并重写导出物")
     parser.add_argument("--verify-only", action="store_true",
                         help="只对已写出的导出物做机检，不重写")

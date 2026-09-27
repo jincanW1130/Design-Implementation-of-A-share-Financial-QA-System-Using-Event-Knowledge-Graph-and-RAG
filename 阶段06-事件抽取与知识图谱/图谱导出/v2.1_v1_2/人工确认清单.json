@@ -1,0 +1,155 @@
+{
+  "schema": "stage6-human-confirmation-1.0",
+  "dataset_version": "v2.1",
+  "field": "confirmed",
+  "seeded_from": "阶段06-事件抽取与知识图谱\\图谱导出\\v2.1\\待人工确认清单.md",
+  "source_rule": "《10-系统总体设计（第四阶段）》第4.5.4节「匹配失败进入待消歧列表，人工确认后再写入图谱」",
+  "confirmed_by": "作者",
+  "confirmed_at": "2026-09-26",
+  "usage": "人工把某条的 confirmed 改成 true（或 false）即视为当次的确认判定；write_graph.py 只读本文件、不做判定、不设默认值。改完只需重跑：python 代码\\抽取与图谱\\write_graph.py --profile v21（零模型调用）。confirmed=true 的条目会各建一个自己的节点（节点名＝name，无 stock_code，编号 HCONF-####），使以它为端点的边得以写入图谱；confirmed=false 或缺失的条目继续排除。",
+  "entries": [
+    {
+      "id": "HRC-001",
+      "name": "中国移动通信有限公司",
+      "label": "Company",
+      "confirmed": true,
+      "source": "待人工确认清单.md 第三节 序号 1",
+      "reason": "no_alias_match",
+      "unresolved_mentions": 4,
+      "docs": [1410, 1414, 1553, 1556],
+      "note": "人工确认：105 家配置公司名单之外的主体；作为独立 Company 节点写入，无 stock_code（不猜代码）。"
+    },
+    {
+      "id": "HRC-002",
+      "name": "安徽元控储充新能源科技有限公司",
+      "label": "Company",
+      "confirmed": true,
+      "source": "待人工确认清单.md 第三节 序号 3",
+      "reason": "no_alias_match",
+      "unresolved_mentions": 1,
+      "docs": [1373],
+      "note": "人工确认：名单外主体；作为独立 Company 节点写入，无 stock_code。"
+    },
+    {
+      "id": "HRC-003",
+      "name": "中国中元国际工程有限公司",
+      "label": "Company",
+      "confirmed": true,
+      "source": "待人工确认清单.md 第三节 序号 4",
+      "reason": "no_alias_match",
+      "unresolved_mentions": 1,
+      "docs": [1373],
+      "note": "人工确认：名单外主体；作为独立 Company 节点写入，无 stock_code。"
+    },
+    {
+      "id": "HRC-004",
+      "name": "芜湖联飞",
+      "label": "Company",
+      "confirmed": true,
+      "source": "待人工确认清单.md 第三节 序号 5",
+      "reason": "no_alias_match",
+      "unresolved_mentions": 1,
+      "docs": [1475],
+      "note": "人工确认：名单外主体（简称式写法）；作为独立 Company 节点写入，无 stock_code。"
+    },
+    {
+      "id": "HRC-005",
+      "name": "中国邮政速递物流股份有限公司",
+      "label": "Company",
+      "confirmed": true,
+      "source": "待人工确认清单.md 第三节 序号 6",
+      "reason": "no_alias_match",
+      "unresolved_mentions": 1,
+      "docs": [1491],
+      "note": "人工确认：名单外主体；作为独立 Company 节点写入，无 stock_code。"
+    },
+    {
+      "id": "HRC-006",
+      "name": "中国电信集团有限公司",
+      "label": "Company",
+      "confirmed": true,
+      "source": "待人工确认清单.md 第三节 序号 7",
+      "reason": "no_alias_match",
+      "unresolved_mentions": 2,
+      "docs": [1502, 1533],
+      "note": "人工确认：名单外主体；作为独立 Company 节点写入，无 stock_code。"
+    },
+    {
+      "id": "HRC-007",
+      "name": "中国电信股份有限公司",
+      "label": "Company",
+      "confirmed": true,
+      "source": "待人工确认清单.md 第三节 序号 8",
+      "reason": "no_alias_match",
+      "unresolved_mentions": 2,
+      "docs": [1502, 1533],
+      "note": "人工确认：名单外主体（与中国电信集团有限公司是两个不同书写面，本文件不合并）；作为独立 Company 节点写入，无 stock_code。"
+    },
+    {
+      "id": "HRC-008",
+      "name": "贵州时代矿业有限公司",
+      "label": "Company",
+      "confirmed": true,
+      "source": "待人工确认清单.md 第三节 序号 9",
+      "reason": "no_alias_match",
+      "unresolved_mentions": 1,
+      "docs": [1549],
+      "note": "人工确认：名单外主体；作为独立 Company 节点写入，无 stock_code。"
+    },
+    {
+      "id": "HRC-009",
+      "name": "PT.Hardases Abadi Indonesia",
+      "label": "Company",
+      "confirmed": true,
+      "source": "待人工确认清单.md 第三节 序号 10",
+      "reason": "no_alias_match",
+      "unresolved_mentions": 1,
+      "docs": [1573],
+      "note": "人工确认：境外主体；作为独立 Company 节点写入，无 stock_code。"
+    },
+    {
+      "id": "HRC-010",
+      "name": "PT.ACTER INTEGRATION TECHNOLOGY INDONESIA",
+      "label": "Company",
+      "confirmed": true,
+      "source": "待人工确认清单.md 第三节 序号 11",
+      "reason": "no_alias_match",
+      "unresolved_mentions": 1,
+      "docs": [1573],
+      "note": "人工确认：境外主体；作为独立 Company 节点写入，无 stock_code。"
+    },
+    {
+      "id": "HRC-011",
+      "name": "浪潮",
+      "label": "Company",
+      "confirmed": true,
+      "source": "待人工确认清单.md 第三节 序号 12",
+      "reason": "no_alias_match",
+      "unresolved_mentions": 1,
+      "docs": [2011],
+      "note": "人工确认：名单外主体；作为独立 Company 节点写入，无 stock_code。"
+    },
+    {
+      "id": "HRC-012",
+      "name": "川环科技",
+      "label": "Company",
+      "confirmed": true,
+      "source": "待人工确认清单.md 第三节 序号 13",
+      "reason": "no_alias_match",
+      "unresolved_mentions": 1,
+      "docs": [2011],
+      "note": "人工确认：名单外主体；作为独立 Company 节点写入，无 stock_code。"
+    },
+    {
+      "id": "HRC-013",
+      "name": "豪威集成电路（集团）股份有限公司",
+      "label": "Company",
+      "confirmed": false,
+      "source": "待人工确认清单.md 第五节 附录（603501）",
+      "reason": "no_alias_match",
+      "unresolved_mentions": 6,
+      "docs": [1047, 1048, 1049, 1181, 1241, 1299],
+      "note": "保持未确认：该名称是名单内公司 603501 的另一书写面（全角括号；登记全称只在语料佐证 ≥2 时启用，该公司佐证为 0）。确认它等于把名称并进配置公司（改冻结名单／数据版本），本机制明确「不把确认名称并进配置公司」，故不写入图谱。"
+    }
+  ]
+}
