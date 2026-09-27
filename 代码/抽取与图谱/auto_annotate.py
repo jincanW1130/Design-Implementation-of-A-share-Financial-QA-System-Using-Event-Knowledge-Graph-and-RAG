@@ -37,6 +37,13 @@ python 代码\抽取与图谱\auto_annotate.py --force             # 忽略已�
 $env:STAGE6_FORBID_MODEL_CALLS=1; python 代码\抽取与图谱\auto_annotate.py   # 缓存未命中即失败
 ```
 
+**换模型／换落点（缺省一律不变）**：`--model`（默认 `deepseek-v4-pro`）、`--prompt-version`
+（默认 `stage6-auto-annotate-v1.0`）、`--out-dir`、`--cache-dir`。后两个参数接受绝对路径，
+或相对**项目根**（`ROOT`）的路径；不给就是历史默认落点（产物 `…\v2.1\自动标注\`、
+缓存 `…\自动标注\_缓存\`）。给 `--out-dir` 时报告／台账／工作区／缓存默认都跟着走，
+`--cache-dir` 可把缓存单独指到别处（如 `阶段05-数据准备\数据集\_抽取缓存\v2.1_自动标注_flash`）。
+换模型必须同时换一个**不同的** `--prompt-version` 与独立落点，否则台账／缓存分不清是谁产出的。
+
 退出码：0 成功；密钥未就位、缓存与当前输入不一致（未 `--force`）、重放时缓存缺失、
 模型不可用等一律非零退出，绝不静默降级。
 
@@ -95,6 +102,10 @@ WORKSPACE_DIRNAME = "工作区"
 CACHE_SCHEMA = "stage6-auto-annotate-cache-1.0"
 LEDGER_SCHEMA = "stage6-auto-annotate-ledger-1.0"
 
+# 落点覆盖（CLI `--out-dir`／`--cache-dir` 用；默认 None 时行为与历史完全一致）。
+OUT_DIR_OVERRIDE = None
+CACHE_DIR_OVERRIDE = None
+
 TRUTH_SOURCE_NOTE = (
     "**模型参照集，不是人工金标准**：由 %s（Prompt 版本 %s，temperature=%d）在 260 条文本块上"
     "自动产出；未逐条人工复核。第 10 阶段引用这些指标时只能表述为「模型参照下的抽取表现」，"
@@ -110,6 +121,41 @@ PARAMS_SCOPE_NOTE = (
     "标注器侧唯一的参数改动是 `max_tokens` 8192 → 16384（理由见报告：dev 试点中推理占 completion "
     "的 93.9%，8192 被推理吃满导致返回正文为空、白烧 token 重试）。"
 )
+
+SAME_MODEL_BOUNDARY_NOTE = (
+    "**与抽取器同模型（必须如实登记，不得淡化）**：本次标注模型 `%s` 与抽取器"
+    "（`%s`，实测解析为 `%s`）**是同一个模型**。因此本参照集衡量的是"
+    "「**模型固定时，抽取链的提示词／格式与标注口径之间的差距**」："
+    "它**不是独立金标准**，也**不能**用来宣称「抽取准确率」——标注与抽取的一致（或分歧）"
+    "有一部分来自同一个模型的偏好同向，不构成对抽取质量的独立验证。"
+)
+
+CROSS_MODEL_BOUNDARY_NOTE = (
+    "**异模型对照（仍然不是独立金标准）**：标注模型 `%s` 与抽取器（`%s`，实测解析为 `%s`）"
+    "不是同一个模型，换模型**降低**但没有消除同源自证：两者同端点、同模型家族，"
+    "对「什么算一条事件」「字段该怎么填」的偏好可能同向；本参照集仍**不是人工金标准**，"
+    "也不能用来宣称「抽取准确率」。"
+)
+
+
+def is_extractor_model(model: str) -> bool:
+    """该标注模型是不是抽取器那个模型（`deepseek-v4-flash` 的请求名／解析名）。"""
+    return str(model or "").strip().lower() in {
+        "deepseek-flash", str(config.LLM.get("model_default") or "").strip().lower(),
+        str(config.LLM.get("model_pinned") or "").strip().lower(),
+    }
+
+
+def run_positioning_notes(cfg=None) -> tuple:
+    """返回 (定位, 边界) 两段话：**同模型／异模型分开写**，避免把两者的语义混谈。"""
+    positioning = TRUTH_SOURCE_NOTE % (ANNOTATE_MODEL, PROMPT_VERSION, TEMPERATURE)
+    extractor = (cfg.LLM["model_default"] if cfg is not None else config.LLM["model_default"])
+    resolved = (config.LLM.get("model_pinned") or "")
+    if is_extractor_model(ANNOTATE_MODEL):
+        positioning = positioning + " " + SAME_MODEL_BOUNDARY_NOTE % (ANNOTATE_MODEL, extractor, resolved)
+    else:
+        positioning = positioning + " " + CROSS_MODEL_BOUNDARY_NOTE % (ANNOTATE_MODEL, extractor, resolved)
+    return positioning, PARAMS_SCOPE_NOTE
 
 
 def _load_module(path: str, name: str):
@@ -130,7 +176,17 @@ def eval_dir() -> str:
 
 
 def out_dir() -> str:
-    return os.path.join(eval_dir(), OUT_DIRNAME)
+    return OUT_DIR_OVERRIDE or os.path.join(eval_dir(), OUT_DIRNAME)
+
+
+def cache_dir() -> str:
+    """缓存落点：默认 `out_dir/_缓存`；`--cache-dir` 给定时独立于 `out_dir`。"""
+    return CACHE_DIR_OVERRIDE or os.path.join(out_dir(), CACHE_DIRNAME)
+
+
+def resolve_dir_arg(value: str) -> str:
+    """CLI 目录参数：绝对路径原样用；相对路径一律相对**项目根**（ROOT）解析。"""
+    return os.path.abspath(value) if os.path.isabs(value) else os.path.abspath(os.path.join(ROOT, value))
 
 
 def now_iso() -> str:
@@ -674,7 +730,7 @@ def build_annotation(obj, rec, cfg) -> tuple:
 # 4. 单条：调用 → 校验 → 回喂重写（最多 MAX_ROUNDS 轮）→ 机械修复兜底
 # --------------------------------------------------------------------------
 def cache_path(item_id: str) -> str:
-    return os.path.join(out_dir(), CACHE_DIRNAME, "%s.json" % item_id)
+    return os.path.join(cache_dir(), "%s.json" % item_id)
 
 
 def load_cache(item_id: str):
@@ -888,13 +944,27 @@ def write_auto_jsonl(rows, out_path: str) -> str:
 
 
 def cmd_run(args) -> int:
-    global CONFIG
+    global CONFIG, ANNOTATE_MODEL, PROMPT_VERSION, OUT_DIR_OVERRIDE, CACHE_DIR_OVERRIDE
+    # —— CLI 覆盖（缺省不动任何历史取值）：模型／Prompt 版本／产物与缓存落点 ——
+    if getattr(args, "model", None):
+        ANNOTATE_MODEL = args.model
+    if getattr(args, "prompt_version", None):
+        PROMPT_VERSION = args.prompt_version
+    if getattr(args, "out_dir", None):
+        OUT_DIR_OVERRIDE = resolve_dir_arg(args.out_dir)
+    if getattr(args, "cache_dir", None):
+        CACHE_DIR_OVERRIDE = resolve_dir_arg(args.cache_dir)
     cfg = CONFIG = handann._load_config()
     splits = ["dev", "test"] if args.split == "all" else [args.split]
     ed = eval_dir()
     od = out_dir()
     os.makedirs(os.path.join(od, CACHE_DIRNAME), exist_ok=True)
     os.makedirs(os.path.join(od, WORKSPACE_DIRNAME), exist_ok=True)
+    os.makedirs(cache_dir(), exist_ok=True)
+    print("运行参数：model=%s｜prompt_version=%s｜temperature=%s｜max_tokens=%s｜workers=%s"
+          "｜split=%s｜limit=%s" % (ANNOTATE_MODEL, PROMPT_VERSION, TEMPERATURE, MAX_TOKENS,
+                                    args.workers, args.split, args.limit))
+    print("落点：eval_dir=%s｜out_dir=%s｜cache_dir=%s" % (ed, od, cache_dir()))
 
     records = []            # (rec, orig_line, split)
     for split in splits:
@@ -1010,6 +1080,7 @@ def cmd_run(args) -> int:
 
 
 def write_ledger(args, cfg, records, results, stats, wall, od) -> None:
+    positioning, boundary = run_positioning_notes(cfg)
     total = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0, "reasoning_tokens": 0}
     for r in results.values():
         u = summarize_usage(r.get("attempts_detail") or [])
@@ -1020,8 +1091,8 @@ def write_ledger(args, cfg, records, results, stats, wall, od) -> None:
     ledger = OrderedDict([
         ("schema", LEDGER_SCHEMA),
         ("tool", "代码\\抽取与图谱\\auto_annotate.py"),
-        ("定位", TRUTH_SOURCE_NOTE % (ANNOTATE_MODEL, PROMPT_VERSION, TEMPERATURE)),
-        ("参数边界", PARAMS_SCOPE_NOTE),
+        ("定位", positioning),
+        ("参数边界", boundary),
         ("标注器参数", OrderedDict([
             ("model", ANNOTATE_MODEL),
             ("temperature", TEMPERATURE),
@@ -1032,6 +1103,7 @@ def write_ledger(args, cfg, records, results, stats, wall, od) -> None:
         ("model", ANNOTATE_MODEL),
         ("model_resolved", sorted({r.get("model_resolved") for r in results.values()})),
         ("model_extractor_for_contrast", config.LLM["model_default"]),
+        ("same_model_as_extractor", is_extractor_model(ANNOTATE_MODEL)),
         ("prompt_version", PROMPT_VERSION),
         ("temperature", TEMPERATURE),
         ("max_tokens", MAX_TOKENS),
@@ -1093,8 +1165,12 @@ def write_workspace_guide(cfg, ed, od) -> None:
         % (os.path.relpath(os.path.join(od, WORKSPACE_DIRNAME), ROOT), os.path.relpath(ed, ROOT)),
         "```",
         "",
-        "模型：`%s`（抽取器是 `%s`，两者不同，用于降低同源自证）｜Prompt 版本：`%s`｜temperature：`%d`。"
-        % (ANNOTATE_MODEL, cfg.LLM["model_default"], PROMPT_VERSION, TEMPERATURE),
+        ("模型：`%s`（与抽取器 `%s` **是同一个模型**——衡量的是同模型下抽取链提示词／格式与标注口径的差距，"
+         "不是独立金标准，也不能用来宣称「抽取准确率」）｜Prompt 版本：`%s`｜temperature：`%d`。"
+         % (ANNOTATE_MODEL, cfg.LLM["model_default"], PROMPT_VERSION, TEMPERATURE)
+         if is_extractor_model(ANNOTATE_MODEL) else
+         "模型：`%s`（抽取器是 `%s`，两者不同，用于降低同源自证）｜Prompt 版本：`%s`｜temperature：`%d`。"
+         % (ANNOTATE_MODEL, cfg.LLM["model_default"], PROMPT_VERSION, TEMPERATURE)),
         "",
     ]))
 
@@ -1179,6 +1255,8 @@ def collect_stats(cfg, records, results):
 
 def write_report(args, cfg, records, results, stats, wall, od) -> None:
     S = collect_stats(cfg, records, results)
+    positioning, boundary = run_positioning_notes(cfg)
+    same_model = is_extractor_model(ANNOTATE_MODEL)
     total = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0, "reasoning_tokens": 0}
     for r in results.values():
         u = summarize_usage(r.get("attempts_detail") or [])
@@ -1193,7 +1271,7 @@ def write_report(args, cfg, records, results, stats, wall, od) -> None:
     add = L.append
     add("# 自动标注报告（第 6 阶段抽取评测集 v2.1）")
     add("")
-    add("> %s" % (TRUTH_SOURCE_NOTE % (ANNOTATE_MODEL, PROMPT_VERSION, TEMPERATURE)))
+    add("> %s" % positioning)
     add(">")
     add("> 第 6 阶段交付文件 `dev.jsonl`／`test.jsonl` 的**槽位仍为空**（《15》第八节 的冻结契约）；")
     add("> 本报告与全部自动标注产物落在独立目录 `阶段05-数据准备\\数据集\\抽取评测集\\v2.1\\自动标注\\`。")
@@ -1207,7 +1285,11 @@ def write_report(args, cfg, records, results, stats, wall, od) -> None:
     add("| 模型（请求） | `%s` |" % ANNOTATE_MODEL)
     add("| 模型（响应解析值） | %s |" % "、".join("`%s`" % m for m in sorted(
         {r.get("model_resolved") for r in results.values()})))
-    add("| 抽取器模型（对照，两者不同以降低同源自证） | `%s` |" % cfg.LLM["model_default"])
+    add("| 抽取器模型（%s） | `%s`（实测解析 `%s`） |"
+        % ("**与本标注器是同一个模型**，边界见下方",
+           cfg.LLM["model_default"], config.LLM.get("model_pinned") or "")
+        if same_model else
+        "| 抽取器模型（对照，两者不同以降低同源自证） | `%s` |" % cfg.LLM["model_default"])
     add("| Prompt 版本 | `%s` |" % PROMPT_VERSION)
     add("| temperature ／ max_tokens | %d ／ %d |" % (TEMPERATURE, MAX_TOKENS))
     add("| 校验重写轮数上限 max_rounds | %d |" % MAX_ROUNDS)
@@ -1227,7 +1309,7 @@ def write_report(args, cfg, records, results, stats, wall, od) -> None:
     add("| 整块无事实（`empty_but_checked`） | %d 条 |" % S["empty_but_checked"])
     add("| 触发了「机械剔除」的条目 | %d／%d |" % (S["items_with_drops"], n))
     add("")
-    add("> %s" % PARAMS_SCOPE_NOTE)
+    add("> %s" % boundary)
     add("")
     add("## 二、标注条目统计")
     add("")
@@ -1313,9 +1395,16 @@ def write_report(args, cfg, records, results, stats, wall, od) -> None:
     add("## 五、限制（如实登记，不淡化）")
     add("")
     add("1. **这不是人工金标准**，是模型参照集：`status = auto_annotated`，带 `provenance` 块。")
-    add("2. **同源偏差被降低但没有消除**：标注模型 `%s` 与抽取器 `%s` 不是同一个模型，"
-        "但都来自同一端点、同一个模型家族；两者对「什么算一条事件」「哪些字段该怎么填」的偏好可能同向。"
-        % (ANNOTATE_MODEL, cfg.LLM["model_default"]))
+    if same_model:
+        add("2. **与抽取器同模型**：标注模型 `%s` 与抽取器 `%s`（实测解析 `%s`）**是同一个模型**"
+            "——本参照集衡量的是「模型固定时，抽取链的提示词／格式与标注口径之间的差距」，"
+            "**不是独立金标准**，也**不能**用来宣称「抽取准确率」；标注与抽取的一致有一部分来自"
+            "同一模型的偏好同向，不构成独立验证。"
+            % (ANNOTATE_MODEL, cfg.LLM["model_default"], config.LLM.get("model_pinned") or ""))
+    else:
+        add("2. **同源偏差被降低但没有消除**：标注模型 `%s` 与抽取器 `%s` 不是同一个模型，"
+            "但都来自同一端点、同一个模型家族；两者对「什么算一条事件」「哪些字段该怎么填」的偏好可能同向。"
+            % (ANNOTATE_MODEL, cfg.LLM["model_default"]))
     add("3. **未逐条人工复核**：本次没有做任何人工抽检，所有数字都是模型的产出，不是核对过的结论。")
     add("4. **被迫猜测的字段**见第三节：校验器要求必填、而正文撑不住的属性，模型只能填或留空。")
     add("5. **第 6 阶段交付文件的槽位仍为空**（冻结契约）；自动标注不写回，`merge` 也拒绝写回"
@@ -1441,6 +1530,14 @@ def build_parser():
     p.add_argument("--workers", type=int, default=4, help="并发度（默认 4；1 = 串行）")
     p.add_argument("--force", action="store_true", help="忽略已有缓存，重新调用并重写缓存")
     p.add_argument("--replay", action="store_true", help="只从缓存重放，**0 次调用**")
+    p.add_argument("--model", default=None,
+                   help="标注模型（默认 %s；换模型必须同时换 --prompt-version 与落点）" % ANNOTATE_MODEL)
+    p.add_argument("--prompt-version", default=None,
+                   help="Prompt 版本（默认 %s）" % PROMPT_VERSION)
+    p.add_argument("--out-dir", default=None,
+                   help="产物落点（默认 %s；相对路径相对项目根）" % OUT_DIRNAME)
+    p.add_argument("--cache-dir", default=None,
+                   help="缓存落点（默认 <out-dir>/%s）" % CACHE_DIRNAME)
     return p
 
 
