@@ -14,18 +14,37 @@
           A／B／C 组走"保留图谱侧全部候选"的分支（不调用 G6，不是"过滤参数为空"）
     ② 按 chunk_id 合并去重（集合并集；一个文本块只算一个证据，不重复计数、不加分）
     ③ 裁剪到 Context Token Budget（先裁与问题实体无关的远端图谱路径，
-       再按向量检索的原始排名从后往前裁文本块；**不使用**排序结果）
+       再按「分层保留顺序」从尾部往前裁文本块；**不使用**排序结果）
     ④ 保留 K 个文本块（**先于** D／E 分组排序；候选不足 K 也不删题）
     ⑤ 最终证据集合（≤K）＋ 呈现顺序 ＋ 图谱路径载荷 ＋ 过滤前后候选差集 ＋ 断言结果
+
+**分层保留顺序（2026-09-27 作者裁定「甲案」；第③步裁剪与第④步保留 K 共用同一条顺序）**::
+
+    第一层  向量侧候选按**向量检索的原始排名**升序，取前 (K − g) 个；
+    第二层  **图谱侧新增块**（没有向量排名的那些）按**对问题的向量相似度**降序
+            （并列按 chunk_id 升序），**至多取 g 个**；
+    第三层  前两层不足 K 个（或预算未用尽）时，按向量原始排名升序用**向量侧剩余候选**回填；
+    尾部    图谱侧新增块里没有被第二层取到的那些（按原路径出现顺序）——只有在候选总数
+            不超过 K、或预算裁剪把排在它们之前的成员全部裁掉之后才会被取到。
+
+    g ＝ **全局固化量**：A～E 五组取同一值、**不进任何开关**、不随组变化，因此不破坏
+    "三开关只差一个变量"的单变量归因；由 T8 预实验按「**在不劣于 g=0 的四项指标的前提下，
+    让图谱侧证据进入最终集合的最大 g**」定值，定值后回《02》第12.7节 第一步与 第12.4节
+    登记并冻结。**g = 0 时退化为原字面口径**（向量侧按原始排名在前、图谱侧新增块按其在
+    路径上的出现顺序追加在后），用于对照与回归。图谱侧块参与排序用的是**索引里已有的
+    对问题相似度**（对同一问题取一次全池分数并缓存复用），不新增模型、不新增外部调用。
 
 **三个开关完全独立**（硬约束 9）：`graph_depth`（0／1／2）、`time_filter`（开／关）、
 `evidence_sort`（开／关），取值域见 `config.SWITCH_DOMAINS`；A～E 只是三开关的一组预设
 （`config.GROUPS`），代码里保存与判断的始终是三个独立变量，不合成模式字符串，
 也不引入第四个可变参数、权重或阈值。
 
-**K／N／Context Token Budget 一律经 `config.require_fixed(...)` 取**：预实验固化前读到 TBD
-即报错退出，不用默认值兜底。`--selftest` 的数值同样从命令行参数（`--k`／`--n`／`--budget`）
-取，缺省时才回落到 `config.require_fixed(...)`。
+`g` 不是第四个开关：它不进 `config.GROUPS`、不进 `config.SWITCH_DOMAINS`，A～E 五组同值，
+只决定第③／④步的"第二层"名额。
+
+**K／N／Context Token Budget／g 一律经 `config.require_fixed(...)` 取**：预实验固化前读到 TBD
+即报错退出，不用默认值兜底。`--selftest` 的数值同样从命令行参数（`--k`／`--n`／`--budget`／
+`--graph-share`）取，缺省时才回落到 `config.require_fixed(...)`。
 
 **四条可执行断言**（表 18-E，全部在 `--selftest` 里真跑，任一不成立即整体失败退出）：
 
@@ -35,6 +54,8 @@
    文本块，断言它只出现一次、且没有额外加分；
 4. `Precision@K` 的分母恒为 K：构造一题实际候选 M < K，断言题被保留、空缺记未命中、
    分母是 K，且**不实现"运行时候选不足就删题"**。
+5. `g = 0` 退化为原字面口径：对同一批**真实候选集合**，用 g=0 的分层键排序的结果与
+   「原字面口径」的排序键（`legacy_priority_key`）逐题、逐元素相同，取前 K 个也相同。
 
 **三条实现裁定（《19》与 T4～T7 交付报告必须一并登记）**：
 
@@ -43,11 +64,14 @@
 2. **时间过滤的空值口径**：D／E 组的 `exclude` 策略不仅剔除 `event_time` 为空的事件路径，
    也剔除**支撑路径上没有任何事件**的候选（v2.9 裁定 ①："无法判定是否落在时间窗口内的成员
    不得视为通过过滤"）。改判点是 `apply_time_filter()`。
-3. **第③／④步共用的"固定原始顺序"**：向量侧在前（按原始排名升序），图谱侧新增块按路径出现
-   顺序追加在后；裁剪从尾部往前、截取取前 K 个、D 组的呈现顺序也是它。由此产生一条**已知
-   结构性后果**——在 N ≥ K 且预算至少能容纳 K 个文本块时，图谱侧新增块进不了最终证据集合
-   （只影响候选集合与预算分账）；这是两条冻结口径叠加的结果，须在 T8 前由作者裁定。
-   改判点是 `evidence_priority_key()` 一处。
+3. **第③／④步共用的"分层保留顺序"**（2026-09-27 作者裁定「甲案」，替代原来的"固定原始
+   顺序"）：第一层＝向量侧按原始排名升序取前 (K − g) 个；第二层＝图谱侧新增块按**对问题的
+   向量相似度**降序（并列按 `chunk_id` 升序）至多 g 个；第三层＝向量侧剩余候选按原始排名
+   升序回填；尾部＝未被第二层取到的图谱侧新增块（按原路径出现顺序）。裁剪从尾部往前、第④步
+   取前 K 个、D 组的呈现顺序都用这一顺序。改判点是 `evidence_priority_key()` 一处（第二层名额
+   由 `plan_graph_layer()` 给出，全池相似度由 `full_pool_similarities()` 取一次并缓存）；
+   `legacy_priority_key()` 逐字保留原口径的排序键，**只用于自查与回归比对**（g = 0 时新键与
+   它同序）。P0 由此修复：图谱侧新增块可以进入最终证据集合。
 
 纪律：输入只读（数据集 v2.1 与图谱导出物一个字节都不写）；参数只取同目录 `config.py`；
 本链路 0 次大语言模型／外部接口调用（问题侧向量化是本地 Embedding 前向，按《18》第2.5节
@@ -57,6 +81,7 @@
 from __future__ import annotations
 
 import argparse
+import functools
 import json
 import os
 import re
@@ -94,28 +119,59 @@ SWITCH_NAMES = ("graph_depth", "time_filter", "evidence_sort")
 FIVE_STEPS = (
     "① 两路取候选（D／E 组先做时间过滤）",
     "② 按 chunk_id 合并去重（集合并集，不重复计数、不加分）",
-    "③ 裁剪到 Context Token Budget（先远端无关图谱路径，再向量排名从后往前）",
+    "③ 裁剪到 Context Token Budget（先远端无关图谱路径，再按分层保留顺序从尾部往前）",
     "④ 保留 K 个文本块（先于 D／E 分组排序；候选不足 K 不删题）",
     "⑤ 最终证据集合＋呈现顺序＋图谱路径载荷＋差集＋断言结果",
 )
 
-# 第③步裁剪、第④步截取、第⑤步呈现**共用同一个**"固定原始顺序"（《10》第4.6.6节）：
-# 向量侧在前（按原始排名升序），图谱侧新引入的文本块按其在路径上的出现顺序追加在后。
-# 三者用同一把尺子，避免"裁剪说一种、截取说另一种"的自相矛盾；它也不是第四个可变参数。
-PRIORITY_RULE = ("固定原始顺序＝《10》第4.6.6节：向量检索的原始排名在前（按排名升序），"
-                 "图谱侧新引入的文本块按其在路径上的出现顺序追加在后；"
-                 "第③步的文本块裁剪与第④步的保留 K 都用这一顺序（裁剪从尾部往前，"
-                 "截取取前 K 个），第⑤步 D 组的呈现顺序也是它")
+# 第③步裁剪、第④步截取、第⑤步呈现**共用同一个**"分层保留顺序"（《10》第4.6.4节 第四步、
+# 第4.6.5节、第4.6.6节；2026-09-27 作者裁定「甲案」）：
+#   第一层＝向量侧按向量检索的原始排名升序取前 (K − g) 个；
+#   第二层＝图谱侧新增块按**对问题的向量相似度**降序（并列按 chunk_id 升序）至多 g 个；
+#   第三层＝前两层不足 K 个时按向量原始排名升序用向量侧剩余候选回填；
+#   尾部＝未被第二层取到的图谱侧新增块（按原路径出现顺序）。
+# 三者用同一把尺子，避免"裁剪说一种、截取说另一种"的自相矛盾；g 是全局固化量、不是第四个
+# 可变参数（不进 config.GROUPS、不进 config.SWITCH_DOMAINS，A～E 五组同值）。
+LEGACY_PRIORITY_RULE = ("固定原始顺序＝《10》第4.6.6节：向量检索的原始排名在前（按排名升序），"
+                        "图谱侧新引入的文本块按其在路径上的出现顺序追加在后；"
+                        "第③步的文本块裁剪与第④步的保留 K 都用这一顺序（裁剪从尾部往前，"
+                        "截取取前 K 个），第⑤步 D 组的呈现顺序也是它")
 
-# "固定原始顺序"的两档标号：0＝向量侧（在前），1＝图谱侧新增块（追加在后）。
-# 顺序不可颠倒——颠倒就等于把图谱侧新增块排到向量侧之前，与《10》第4.6.6节 冲突。
-VECTOR_TIER = 0
-GRAPH_ONLY_TIER = 1
+# 「原字面口径」的两档标号（只用于 `legacy_priority_key` 与 g=0 的回归自查）：
+# 0＝向量侧（在前），1＝图谱侧新增块（追加在后）。
+LEGACY_VECTOR_TIER = 0
+LEGACY_GRAPH_TIER = 1
+
+# 「分层保留顺序」的四档标号（顺序不可颠倒——颠倒就等于把尾部块排到第一层之前）：
+# 0＝第一层（向量侧前 K−g 个）／1＝第二层（图谱侧新增块前 g 个）／
+# 2＝第三层（向量侧剩余候选回填）／3＝尾部（未被第二层取到的图谱侧新增块）。
+LAYER1_VECTOR_TIER = 0
+LAYER2_GRAPH_TIER = 1
+LAYER3_VECTOR_FILL_TIER = 2
+LEFTOVER_GRAPH_TIER = 3
 
 # 事件类型词的匹配方式：整串子串匹配（不引入分词依赖；《18》第2.5节）
 _CJK_RE = re.compile(r"[\u3000-\u303f\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff00-\uffef]")
 _ASCII_RUN_RE = re.compile(r"[A-Za-z0-9_]+")
 _CODE_RE = re.compile(r"(?<!\d)\d{6}(?!\d)")
+
+
+def priority_rule_text(k: int, g: int) -> str:
+    """本次运行的**有效保留顺序**口径文字（落进 trace 的 `priority_rule` 字段）。
+
+    * `g = 0`：逐字返回**原字面口径**（`LEGACY_PRIORITY_RULE`）——此时分层保留顺序与它同序，
+      该文字既如实、又保证"g=0 与修订前逐字节一致"的回归可比；
+    * `g > 0`：返回分层保留顺序的口径文字，并把本次的 `g` 写进文字（trace 自描述）。
+    """
+    if int(g) <= 0:
+        return LEGACY_PRIORITY_RULE
+    return ("分层保留顺序＝《10》第4.6.4节 第四步／第4.6.6节（2026-09-27 裁定）：第一层＝向量侧"
+            "候选按向量检索的原始排名升序取前 (K−g) 个；第二层＝图谱侧新增块（没有向量排名的那些）"
+            "按对问题的向量相似度降序（并列按 chunk_id 升序）至多取 g 个；第三层＝前两层不足 K 个时"
+            "按向量原始排名升序用向量侧剩余候选回填（尾部＝未被第二层取到的图谱侧新增块）。"
+            "g=%d 为全局固化量（A～E 同值、不进任何开关，由 T8 预实验定值）；第③步的文本块裁剪与"
+            "第④步的保留 K 都用这一顺序（裁剪从尾部往前，截取取前 K 个），第⑤步 D 组的呈现顺序也是它"
+            % int(g))
 
 
 # ---------------------------------------------------------------------------
@@ -158,9 +214,12 @@ def normalize_switches(group=None, graph_depth=None, time_filter=None,
 
 
 def resolve_k_n_budget(args) -> dict:
-    """K／N／Context Token Budget：命令行优先，缺省回落 `config.require_fixed(...)`。
+    """K／N／Context Token Budget／g：命令行优先，缺省回落 `config.require_fixed(...)`。
 
-    硬约束 10／22：三项在 T8 固化前是 TBD，读到即报错退出，**不用默认值兜底**。
+    硬约束 10／22：四项在 T8 固化前是 TBD，读到即报错退出，**不用默认值兜底**。
+    `g` 是**全局固化量**（A～E 五组同值、不进任何开关），由 T8 预实验按「在不劣于 g=0 的
+    四项指标的前提下，让图谱侧证据进入最终集合的最大 g」定值；取值域为 0…K（`g = K`
+    即"图谱侧优先"的极端口径，须由预实验裁定后才能使用）。
     """
     k = int(args.k) if args.k is not None else int(config.require_fixed("K"))
     n = int(args.n) if args.n is not None else int(config.require_fixed("N"))
@@ -172,7 +231,13 @@ def resolve_k_n_budget(args) -> dict:
     if n < k:
         raise SystemExit("[pipeline] 失败：必须 N ≥ K（收到 N=%d K=%d）；"
                          "预实验网格的口径见《02》第12.7节 第一步" % (n, k))
-    return {"k": k, "n": n, "budget": budget}
+    g = (int(args.graph_share) if getattr(args, "graph_share", None) is not None
+         else int(config.require_fixed("graph_retention_share")))
+    if g < 0 or g > k:
+        raise SystemExit("[pipeline] 失败：g（图谱侧保留份额）必须落在 0…K 之间"
+                         "（收到 g=%d K=%d）；g=K 即\"图谱侧优先\"的极端口径，"
+                         "须由 T8 预实验裁定后才能使用" % (g, k))
+    return {"k": k, "n": n, "budget": budget, "g": g}
 
 
 # ---------------------------------------------------------------------------
@@ -309,6 +374,27 @@ def collect_vector_candidates(searcher: VectorSearcher, question: str, n: int) -
     """第①步·向量侧：N 条候选与向量检索的原始排名（复用 T2，不重写检索）。"""
     rows, timing = searcher.search(question, n)
     return {"rows": rows, "timing": timing, "n": int(n)}
+
+
+def full_pool_similarities(searcher: VectorSearcher, question: str, cache: dict) -> dict:
+    """对同一问题取**全池**（`config.CORPUS["vectors"]` 条）相似度，按 `chunk_id` 建索引并缓存复用。
+
+    **只用于第二层（图谱侧新增块）的排序**，不改变向量侧候选池仍是 N 条这一语义：全池分数
+    不进入候选集合、不改写任何候选的 `similarity`／`vector_rank`，也不新增模型与外部调用。
+    相似度由 `VectorSearcher.search()` 按固定精度（8 位小数）给出，排序用它的原值。
+    """
+    key = str(question)
+    if key not in cache:
+        rows, _timing = searcher.search(key, int(config.CORPUS["vectors"]))
+        cache[key] = {int(row["chunk_id"]): float(row["similarity"]) for row in rows}
+    return cache[key]
+
+
+def attach_question_similarity(records, similarities: dict) -> None:
+    """把全池相似度挂到**图谱侧新增块**上（向量侧块保留它自己的 N 内相似度，不改写、不参与）。"""
+    for record in records:
+        if record.get("vector_rank") is None:
+            record["question_similarity"] = similarities.get(int(record["chunk_id"]))
 
 
 def _node_label(graph, node_id: str) -> str:
@@ -777,17 +863,29 @@ def is_remote_path(path: dict) -> bool:
     return int(path["anchor_distance"]) > 0
 
 
-def trim_to_budget(records, path_records, graph, chunks, budget: int) -> dict:
+def trim_rule_text(g: int) -> str:
+    """本次运行的**裁剪规则**文字（`g = 0` 时逐字返回原口径，保证回归逐字节一致）。"""
+    if int(g) <= 0:
+        return ("先裁与问题实体无关的远端图谱路径 → 再按向量检索的原始排名从后往前裁文本块"
+                "（裁剪先于证据排序，不使用排序结果）")
+    return ("先裁与问题实体无关的远端图谱路径 → 再按分层保留顺序从尾部往前裁文本块"
+            "（裁剪先于证据排序，不使用排序结果；g=%d）" % int(g))
+
+
+def trim_to_budget(records, path_records, graph, chunks, budget: int, g: int,
+                   order_key=None) -> dict:
     """第③步：把候选裁到 Context Token Budget 之内（**先裁远端无关图谱路径，再裁文本块**）。
 
-    * 裁剪**先于**证据排序，依据只有"路径的疏远程度"与"向量检索的原始排名"——不使用
-      任何重排结果（硬约束 16）；
+    * 裁剪**先于**证据排序，依据只有"路径的疏远程度"与**分层保留顺序**（`order_key`＝第④步
+      保留 K 用的同一个键，见 `evidence_priority_key`）——不使用任何重排结果（硬约束 16）；
     * 第一轮裁**与问题实体无关的远端图谱路径**（起点不是问题实体的路径，最远的先裁）；
       路径被裁掉后，只由这些路径支撑的图谱侧新增块随之出局；
-    * 第二轮按**固定原始顺序**（见 `evidence_priority_key`）从尾部往前裁文本块；
+    * 第二轮按**分层保留顺序**（见 `evidence_priority_key`）从尾部往前裁文本块；
     * 第三轮（前两轮仍装不下时的最后手段）才裁"从问题实体直接出发"的路径；
     * 至少保留 1 个文本块（预算再紧也不清空，并在 trace 里如实打印 `budget_floor_applied`）。
     """
+    if order_key is None:
+        order_key = retention_key(0, 0)
     kept = {rec["chunk_id"]: rec for rec in records}
     alive_paths = {path["ordinal"]: path for path in path_records}
 
@@ -803,7 +901,7 @@ def trim_to_budget(records, path_records, graph, chunks, budget: int) -> dict:
     anchored = sorted([p for p in path_records if not is_remote_path(p)], key=path_trim_key)
     drops = [("path", p["ordinal"]) for p in remote]
     drops += [("chunk", rec["chunk_id"]) for rec in
-              sorted(records, key=evidence_priority_key, reverse=True)]
+              sorted(records, key=order_key, reverse=True)]
     drops += [("path", p["ordinal"]) for p in anchored]
     index = 0
     while before["total_tokens"] > int(budget) and index < len(drops):
@@ -849,39 +947,116 @@ def trim_to_budget(records, path_records, graph, chunks, budget: int) -> dict:
         "paths": [alive_paths[o] for o in sorted(alive_paths)],
         "budget_exceeded": bool(after["total_tokens"] > int(budget)),
         "budget_floor_applied": floor_applied,
-        "rule": "先裁与问题实体无关的远端图谱路径 → 再按向量检索的原始排名从后往前裁文本块"
-                "（裁剪先于证据排序，不使用排序结果）",
+        "rule": trim_rule_text(g),
     }
 
 
 # ---------------------------------------------------------------------------
 # 七、第④步：保留 K 个文本块（先于 D／E 分组排序）
 # ---------------------------------------------------------------------------
-def evidence_priority_key(record) -> tuple:
-    """"固定原始顺序"的排序键（第③步裁剪、第④步截取、第⑤步呈现共用）。
+def evidence_priority_key(record, k: int, g: int, layer2_positions=None) -> tuple:
+    """"分层保留顺序"的排序键（第③步裁剪、第④步截取、第⑤步呈现共用；2026-09-27 裁定）。
 
-    * 向量侧块：按向量检索的原始排名升序（并列按 `chunk_id`）；
-    * 图谱侧新增块（没有向量排名）：按其在路径上的出现顺序（首条支撑路径的序号 →
-      该路径上的关系序号 → `chunk_id`）。
+    四档（数值即先后；`k`＝保留上限 K，`g`＝图谱侧保留份额，`layer2_positions`＝第二层成员的
+    `chunk_id → 位次` 映射，由 `plan_graph_layer()` 算一次后传入）：
 
-    **已知结构性后果（必须在《19》与交付报告里登记，T8 前请作者裁定）**：在 N ≥ K 且预算
-    至少能容纳 K 个文本块的预实验口径下，向量侧会占满前 K 个位置，因此**图谱侧新增块进不了
-    最终证据集合**；此时图谱侧只影响候选集合（第①②步）与 Context Token Budget 的分账。
-    这是"裁剪先裁远端图谱路径、再按向量原始排名从后往前裁文本块"与"按固定原始顺序保留
-    K 个"两条冻结口径叠加后的结果，不是实现缺陷。另一读法（把图谱侧新增块排在向量侧之前）
-    会与《18》第八节 第 16 行的裁剪顺序断言冲突，故本文件不采用；两种读法的实测差别见
-    交付报告第四节。
+    * 第一层（`LAYER1_VECTOR_TIER`）：向量侧块且 `vector_rank ≤ K − g`，按原始排名升序；
+    * 第二层（`LAYER2_GRAPH_TIER`）：图谱侧新增块（没有向量排名）中按**对问题的向量相似度**
+      降序、并列按 `chunk_id` 升序取前 `g` 个，按取中的位次排序；
+    * 第三层（`LAYER3_VECTOR_FILL_TIER`）：向量侧块且 `vector_rank > K − g`，按原始排名升序回填；
+    * 尾部（`LEFTOVER_GRAPH_TIER`）：未被第二层取到的图谱侧新增块，按原路径出现顺序。
+
+    **g = 0 的退化行为**：`K − g = K`、第二层名额为 0，于是向量侧全部按原始排名升序在前、
+    图谱侧新增块按原路径出现顺序追加在后——与**原字面口径**（`legacy_priority_key`，2026-09-27
+    修订前的实现）逐题同序；这是"g=0 退化为原口径"这一自查的依据。裁剪从尾部往前、
+    第④步取前 K 个、第⑤步 D 组的呈现顺序都用本键。
+    """
+    g = max(0, int(g))
+    cut = int(k) - g
+    rank = record.get("vector_rank")
+    if rank is not None:
+        rank = int(rank)
+        if cut > 0 and rank <= cut:
+            return (LAYER1_VECTOR_TIER, rank, 0, int(record["chunk_id"]))
+        return (LAYER3_VECTOR_FILL_TIER, rank, 0, int(record["chunk_id"]))
+    position = (layer2_positions or {}).get(int(record["chunk_id"]))
+    if position is not None:
+        return (LAYER2_GRAPH_TIER, int(position), 0, int(record["chunk_id"]))
+    first = record.get("first_path_key") or (10 ** 9, 0)
+    return (LEFTOVER_GRAPH_TIER, int(first[0]), int(first[1]), int(record["chunk_id"]))
+
+
+def legacy_priority_key(record) -> tuple:
+    """**原字面口径**的排序键（2026-09-27 修订前的实现，逐字保留原样）。
+
+    向量侧在前（按原始排名升序、并列按 `chunk_id`），图谱侧新引入的文本块按其在路径上的
+    出现顺序（首条支撑路径的序号 → 该路径上的关系序号 → `chunk_id`）追加在后。
+
+    本函数**不参与任何实际排序**：只在 `--selftest` 的自查「g = 0 退化为原口径」与修订前后的
+    回归比对里作为参照实现（对照 `evidence_priority_key(..., g=0)`）。
     """
     if record.get("vector_rank") is None:
         first = record.get("first_path_key") or (10 ** 9, 0)
-        return (GRAPH_ONLY_TIER, int(first[0]), int(first[1]), int(record["chunk_id"]))
-    return (VECTOR_TIER, int(record["vector_rank"]), 0, int(record["chunk_id"]))
+        return (LEGACY_GRAPH_TIER, int(first[0]), int(first[1]), int(record["chunk_id"]))
+    return (LEGACY_VECTOR_TIER, int(record["vector_rank"]), 0, int(record["chunk_id"]))
 
 
-def keep_top_k(trimmed: dict, k: int) -> dict:
-    """第④步：保留 K 个文本块（**必须在 D／E 分组排序之前**；候选不足 K 也不删题）。
+def plan_graph_layer(records, k: int, g: int) -> dict:
+    """"第二层"名额（第③／④／⑤步共用的同一份映射）：图谱侧新增块按**对问题的向量相似度**
+    降序、并列按 `chunk_id` 升序，**至多取 g 个**。
+
+    相似度是索引里已有的对问题相似度（`question_similarity`，由 `full_pool_similarities()` 挂上），
+    不新增模型、不新增外部调用；取不到分数的块按确定性规则排到最后（理论上不会出现——检索池
+    与文本块表同为 5018 条）。
+    """
+    g = max(0, int(g))
+    graph_only = [rec for rec in records if rec.get("vector_rank") is None]
+
+    def order_of(rec):
+        similarity = rec.get("question_similarity")
+        if similarity is None:
+            return (1, 0.0, int(rec["chunk_id"]))
+        return (0, -float(similarity), int(rec["chunk_id"]))
+
+    ordered = sorted(graph_only, key=order_of)
+    layer2 = ordered[:g] if g > 0 else []
+    return {"k": int(k), "g": g, "cut": int(k) - g, "graph_only_count": len(graph_only),
+            "layer2_ids": [int(rec["chunk_id"]) for rec in layer2],
+            "layer2_positions": {int(rec["chunk_id"]): index
+                                 for index, rec in enumerate(layer2)}}
+
+
+def retention_key(k: int, g: int, layer2_positions=None):
+    """第③／④／⑤步共用的**同一个**排序键（绑定 K／g 与第二层名额后的可调用对象）。"""
+    return functools.partial(evidence_priority_key, k=int(k), g=int(g),
+                             layer2_positions=layer2_positions or {})
+
+
+def retention_breakdown(evidence, plan: dict, by_id) -> dict:
+    """最终证据集合按分层的逐条归属（内部字段，只供 `--selftest` 打印；落盘前剔除）。"""
+    layer2 = set(plan["layer2_ids"])
+    cut = int(plan["cut"])
+    layers = {"layer1_vector_top": [], "layer2_graph_new": [],
+              "layer3_vector_fill": [], "leftover_graph": []}
+    for chunk_id in evidence:
+        record = by_id[int(chunk_id)]
+        if record.get("vector_rank") is None:
+            key = "layer2_graph_new" if int(chunk_id) in layer2 else "leftover_graph"
+            layers[key].append(int(chunk_id))
+        elif cut > 0 and int(record["vector_rank"]) <= cut:
+            layers["layer1_vector_top"].append(int(chunk_id))
+        else:
+            layers["layer3_vector_fill"].append(int(chunk_id))
+    return {"k": int(plan["k"]), "g": int(plan["g"]), "cut": int(plan["cut"]),
+            "layer2_candidates": list(plan["layer2_ids"]), **layers}
+
+
+def keep_top_k(trimmed: dict, k: int, g: int, layer2_positions=None) -> dict:
+    """第④步：按**分层保留顺序**保留 K 个文本块（**必须在 D／E 分组排序之前**；候选不足 K 也不删题）。
 
     返回里同时给出"空缺记未命中"的账：`precision_denominator = K`、`vacant = K − M`。
+    排序键与第③步裁剪、第⑤步呈现共用（见 `evidence_priority_key`）；`g = 0` 时键与
+    `legacy_priority_key` 同序，即退化为"按固定原始顺序取前 K 个"的原口径。
     """
     records = list(trimmed["records"])
     if len(records) <= int(k):
@@ -891,25 +1066,30 @@ def keep_top_k(trimmed: dict, k: int) -> dict:
                                    "vacant": int(k) - len(records),
                                    "note": "候选不足 K：空缺位置记未命中，题目保留"},
                 "note": "候选数不超过 K：全部保留（不因候选少而删题）"}
-    ordered = sorted(records, key=evidence_priority_key)
+    ordered = sorted(records, key=retention_key(k, g, layer2_positions))
     kept, dropped = ordered[:int(k)], ordered[int(k):]
     return {"records": kept, "dropped": [rec["chunk_id"] for rec in dropped],
             "candidates": len(records), "kept": len(kept), "k": int(k),
             "precision_fill": {"denominator": int(k), "candidates": len(kept),
                                "vacant": 0,
                                "note": "候选数不少于 K：分母恒为 K（检索指标在 metrics.py 计算）"},
-            "note": "按固定原始顺序取前 K 个（截取先于分组排序）"}
+            "note": ("按固定原始顺序取前 K 个（截取先于分组排序）" if int(g) <= 0 else
+                     "按分层保留顺序取前 K 个（第一层向量侧前 K−g 个 → 第二层图谱侧新增块"
+                     "至多 g 个 → 第三层向量侧剩余候选回填；截取先于分组排序；g=%d）" % int(g))}
 
 
 # ---------------------------------------------------------------------------
 # 八、第⑤步：呈现顺序、图谱路径载荷、逐题编排
 # ---------------------------------------------------------------------------
-def fixed_original_order(records, path_records) -> list:
-    """D 组的固定原始顺序：向量侧按原始排名升序在前，图谱侧新增块按路径出现顺序追加在后。
+def fixed_original_order(records, path_records, k: int, g: int, layer2_positions=None) -> list:
+    """D 组的固定顺序＝**分层保留顺序**（与第③步裁剪、第④步截取用的是同一个排序键）。
 
-    （与第③步裁剪、第④步截取用的是同一个排序键；`path_records` 只作签名一致之用。）
+    第一层向量侧按原始排名升序在前，第二层图谱侧新增块按对问题的向量相似度降序居中
+    （至多 g 个），第三层向量侧剩余候选按原始排名升序回填，尾部为未被第二层取到的图谱侧
+    新增块；`g = 0` 时退化为"向量侧在前、图谱侧新增块按路径出现顺序追加在后"的原口径。
+    （`path_records` 只作签名一致之用。）
     """
-    return sorted(records, key=evidence_priority_key)
+    return sorted(records, key=retention_key(k, g, layer2_positions))
 
 
 def evidence_sort_factors(graph, record, seeds, documents, chunks) -> dict:
@@ -945,17 +1125,20 @@ def evidence_sort_factors(graph, record, seeds, documents, chunks) -> dict:
 
 
 def order_evidence(graph, records, path_records, enabled: bool, seeds, documents,
-                   chunks) -> dict:
+                   chunks, k: int, g: int, layer2_positions=None) -> dict:
     """第⑤步的呈现顺序：D 组固定原始顺序；E 组**只读集合、只改顺序**（单变量）。
 
     E 组的排序键依次取 `config.EVIDENCE_SORT_KEYS` 的四个因素（实体匹配度 → 证据类型 →
     来源发布时间 → 图谱关系类型），最后用 `chunk_id` 升序破并列；不使用任何学习型排序器、
     外部模型、权重或阈值。
     """
-    base = fixed_original_order(records, path_records)
+    base = fixed_original_order(records, path_records, k, g, layer2_positions)
     if not enabled:
         return {"order": [rec["chunk_id"] for rec in base], "records": base,
-                "rule": "D 组固定原始顺序（向量原始排名升序在前，图谱侧新增块按路径出现顺序追加在后）",
+                "rule": ("D 组固定原始顺序（向量原始排名升序在前，图谱侧新增块按路径出现顺序追加在后）"
+                         if int(g) <= 0 else
+                         "D 组分层保留顺序（向量侧前 K−g 个 → 图谱侧新增块按对问题的向量相似度"
+                         "降序至多 g 个 → 向量侧剩余候选回填；g=%d）" % int(g)),
                 "factors": None}
     decorated = []
     for record in base:
@@ -993,11 +1176,14 @@ def build_answer_graph_payload(graph, records, path_records, depth: int) -> dict
 
 
 def run_question(question_row, switches, graph, searcher, chunks, documents,
-                 n: int, k: int, budget: int, vector_cache: dict,
-                 graph_cache: dict | None = None) -> dict:
+                 n: int, k: int, budget: int, g: int, vector_cache: dict,
+                 graph_cache: dict | None = None, full_pool_cache: dict | None = None) -> dict:
     """跑完五步契约的一题（返回一条 trace 记录；耗时只回传、不落盘）。"""
     if graph_cache is None:
         graph_cache = {}
+    if full_pool_cache is None:
+        full_pool_cache = {}
+    g = int(g)
     timings = {}
     cid = question_row["qid"]
     # ---- ① 两路取候选
@@ -1042,19 +1228,31 @@ def run_question(question_row, switches, graph, searcher, chunks, documents,
     # 也不会出现在 trace 的丢路径清单里（它们不是被预算裁掉的）。
     referenced = {o for rec in merged["records"] for o in (rec["graph_path_ordinals"] or [])}
     relevant_paths = [p for p in graph_side["paths"] if p["ordinal"] in referenced]
+
+    # 第③／④／⑤步共用的「分层保留顺序」：第二层名额只在本题的**过滤后合并候选**上算一次。
+    # g=0 时不算第二层、也不取全池分数（与修订前的调用行为一致）。
+    if g > 0:
+        graph_only_records = [rec for rec in merged["records"] if rec["vector_rank"] is None]
+        if graph_only_records:
+            attach_question_similarity(
+                graph_only_records,
+                full_pool_similarities(searcher, question_row["question"], full_pool_cache))
+    plan = plan_graph_layer(merged["records"], k, g)
+    order_key = retention_key(k, g, plan["layer2_positions"])
     t4 = time.time()
-    trimmed = trim_to_budget(merged["records"], relevant_paths, graph, chunks, budget)
+    trimmed = trim_to_budget(merged["records"], relevant_paths, graph, chunks, budget, g, order_key)
     timings["trim_seconds"] = time.time() - t4
 
     # ---- ④ 保留 K（先于分组排序）
     t5 = time.time()
-    kept = keep_top_k(trimmed, k)
+    kept = keep_top_k(trimmed, k, g, plan["layer2_positions"])
     timings["keep_k_seconds"] = time.time() - t5
 
     # ---- ⑤ 呈现顺序、图谱路径载荷
     t6 = time.time()
     ordered = order_evidence(graph, kept["records"], trimmed["paths"],
-                             switches["evidence_sort"], entities["seeds"], documents, chunks)
+                             switches["evidence_sort"], entities["seeds"], documents, chunks,
+                             k, g, plan["layer2_positions"])
     payload = build_answer_graph_payload(graph, kept["records"], trimmed["paths"],
                                          switches["graph_depth"])
     token_account = account_tokens(kept["records"], trimmed["paths"], graph, chunks)
@@ -1071,7 +1269,9 @@ def run_question(question_row, switches, graph, searcher, chunks, documents,
         "qid": cid, "question": question_row["question"],
         "group": switches["_group"], "switches": {key: switches[key] for key in SWITCH_NAMES},
         "n": int(n), "k": int(k), "context_token_budget": int(budget),
-        "priority_rule": PRIORITY_RULE,
+        "priority_rule": priority_rule_text(k, g),
+        # 内部字段：本条最终证据集合按分层的逐条归属（只供 --selftest 打印；落盘前剔除）
+        "_retention": retention_breakdown(evidence, plan, final_by_id),
         "segments": {
             "① 两路取候选": {
                 "vector": {"input_questions": 1, "n": int(n),
@@ -1146,14 +1346,21 @@ def run_question(question_row, switches, graph, searcher, chunks, documents,
     if switches["graph_depth"] > 0 and not graph_in_final:
         record["structural_note"] = (
             "本题最终证据集合中没有『图谱侧新增块』：在 N ≥ K 且预算至少能容纳 K 个文本块时，"
-            "固定原始顺序的前 K 个位置由向量侧占满（已知结构性口径，见《19》与交付报告的登记项）")
+            "固定原始顺序的前 K 个位置由向量侧占满（已知结构性口径，见《19》与交付报告的登记项）"
+            if int(g) <= 0 else
+            "本题最终证据集合中没有『图谱侧新增块』：本题图谱侧新增候选为空，或第二层（至多 g 个）"
+            "在预算裁剪中被先裁掉（分层保留顺序见《10》第4.6.4节～第4.6.6节；g=%d）" % int(g))
     return record
 
 
 def strip_timings(record: dict) -> dict:
-    """落盘前剔除耗时（参与逐字节比对的文件不得含耗时与时间戳）。"""
-    out = {key: value for key, value in record.items() if key != "timings"}
-    return out
+    """落盘前剔除耗时与内部字段（参与逐字节比对的文件不得含耗时与时间戳）。
+
+    内部字段指以 `_` 开头的键（如 `_retention`：分层逐条归属，只在 `--selftest` 里打印）。
+    `g = 0` 时 trace 的记录内容与修订前逐字节一致——这正是"退化"的判据之一。
+    """
+    return {key: value for key, value in record.items()
+            if key != "timings" and not key.startswith("_")}
 
 
 # ---------------------------------------------------------------------------
@@ -1171,6 +1378,7 @@ class PipelineRunner:
         self.searcher = searcher
         self.vector_cache = {}
         self.graph_cache = {}
+        self.full_pool_cache = {}          # 第二层排序用的全池相似度（按问题缓存复用）
         self.load_seconds = {"graph": 0.0, "vector": 0.0}
 
     def ensure_searcher(self):
@@ -1180,7 +1388,7 @@ class PipelineRunner:
             self.load_seconds["vector"] = time.time() - t0
         return self.searcher
 
-    def run(self, questions, switches, n: int, k: int, budget: int) -> dict:
+    def run(self, questions, switches, n: int, k: int, budget: int, g: int) -> dict:
         self.ensure_searcher()
         switch_values = dict(switches["switches"])
         switch_values["_group"] = switches["group"]
@@ -1188,10 +1396,11 @@ class PipelineRunner:
         t0 = time.time()
         for row in questions:
             records.append(run_question(row, switch_values, self.graph, self.searcher,
-                                        self.chunks, self.documents, n, k, budget,
-                                        self.vector_cache, self.graph_cache))
+                                        self.chunks, self.documents, n, k, budget, g,
+                                        self.vector_cache, self.graph_cache,
+                                        self.full_pool_cache))
         return {"records": records, "switches": switches, "n": int(n), "k": int(k),
-                "budget": int(budget), "seconds": time.time() - t0}
+                "budget": int(budget), "g": int(g), "seconds": time.time() - t0}
 
 
 def summarize(records) -> dict:
@@ -1296,14 +1505,14 @@ def construct_dual_hit_case(runner, questions, switches, n: int, k: int, budget:
 
 
 def assert_precision_denominator(runner, questions, switches, n: int, k: int,
-                                 budget: int) -> dict:
+                                 budget: int, g: int) -> dict:
     """断言 4：`Precision@K` 的分母恒为 K（构造 M < K 的用例；**不删题**）。
 
     构造方式（确定性、不改单题口径）：把 Context Token Budget 按 `budget // 10` 收紧，
     使实际候选 M 被裁到 K 以下；断言题被保留、`分母 = K`、`空缺 = K − M ≥ 1`。
     """
     small_budget = max(1, int(budget) // 10)
-    run = runner.run(questions, switches, n, k, small_budget)
+    run = runner.run(questions, switches, n, k, small_budget, g)
     records = run["records"]
     kept_questions = len(records) == len(questions)
     per_question = []
@@ -1376,6 +1585,78 @@ def assert_d_equals_e(records_d, records_e) -> dict:
                     "且 len(D.证据) == len(E.证据)；任一题不等即整体失败退出"}
 
 
+def merged_records_for_question(runner, question_row, switches, n: int) -> list:
+    """重建某一题的**过滤后**合并候选（只读、复用 runner 的缓存，不改动任何状态）。
+
+    与 `run_question()` 第①②步的取法逐行一致（同一套缓存键、同一个分支判断），因此自查与
+    逐层统计看到的就是实际运行看到的那一批候选；本函数不参与任何产出。
+    `switches` 既接受 `normalize_switches()` 的返回（`{"group", "switches"}`），也接受
+    `run_question()` 用的扁平三开关字典。
+    """
+    if "switches" in switches:
+        switches = dict(switches["switches"])
+    searcher = runner.ensure_searcher()
+    qid = question_row["qid"]
+    cache_key = (qid, int(n))
+    if cache_key not in runner.vector_cache:
+        runner.vector_cache[cache_key] = collect_vector_candidates(
+            searcher, question_row["question"], int(n))
+    vector_side = runner.vector_cache[cache_key]
+    entities = resolve_question_entities(runner.graph, question_row["question"])
+    types = question_event_types(question_row["question"])
+    graph_key = (qid, int(switches["graph_depth"]), tuple(types), tuple(entities["seeds"]))
+    if graph_key not in runner.graph_cache:
+        runner.graph_cache[graph_key] = collect_graph_candidates(
+            runner.graph, entities["seeds"], types, switches["graph_depth"], runner.chunks)
+    graph_side = runner.graph_cache[graph_key]
+    if switches["time_filter"]:
+        filter_record = apply_time_filter(runner.graph, graph_side, question_row, runner.chunks)
+    else:
+        filter_record = keep_all_graph_candidates(graph_side)
+    filtered = graph_candidates_after_filter(graph_side, filter_record)
+    return merge_candidates(vector_side["rows"], filtered, runner.chunks)["records"]
+
+
+def assert_g0_degenerates(runner, questions, switches, n: int, k: int) -> dict:
+    """自查 5：`g = 0` 时「分层保留顺序」退化为**原字面口径**（`legacy_priority_key`）。
+
+    判据（逐题、用**真实候选集合**，不改单题口径）：
+
+    1. 升序：`sorted(records, key=分层键(g=0))` 与 `sorted(records, key=原字面键)` 的
+       `chunk_id` 序列逐元素相同（第④步"取前 K 个"与第⑤步 D 组呈现顺序都用它）；
+    2. 降序：两者的**逆序**（第③步裁剪从尾部往前的那个序列）逐元素相同；
+    3. 保留 K：两者各自的前 K 个 `chunk_id` 逐元素相同。
+
+    另报告"g=0 时最终保留里有没有图谱侧新增块"这一结构性读数（原口径下应为 0），
+    作为"已退化回修订前行为"的正面证据，不参与 ok 判定。
+    """
+    per_question, ok = [], True
+    for row in questions:
+        records = merged_records_for_question(runner, row, switches, n)
+        new_asc = [rec["chunk_id"] for rec in sorted(records, key=retention_key(k, 0))]
+        legacy_asc = [rec["chunk_id"] for rec in sorted(records, key=legacy_priority_key)]
+        new_desc = [rec["chunk_id"] for rec in
+                    sorted(records, key=retention_key(k, 0), reverse=True)]
+        legacy_desc = [rec["chunk_id"] for rec in
+                       sorted(records, key=legacy_priority_key, reverse=True)]
+        asc_equal = new_asc == legacy_asc
+        desc_equal = new_desc == legacy_desc
+        keep_equal = new_asc[:int(k)] == legacy_asc[:int(k)]
+        graph_only = {rec["chunk_id"] for rec in records if rec["vector_rank"] is None}
+        graph_in_keep = sorted(cid for cid in legacy_asc[:int(k)] if cid in graph_only)
+        row_ok = bool(asc_equal and desc_equal and keep_equal)
+        ok = ok and row_ok
+        per_question.append({"qid": row["qid"], "candidates": len(records),
+                             "graph_only_candidates": len(graph_only),
+                             "asc_equal": asc_equal, "desc_equal": desc_equal,
+                             "keep_equal": keep_equal,
+                             "graph_only_in_legacy_keep": graph_in_keep,
+                             "ok": row_ok})
+    return {"ok": bool(ok), "per_question": per_question,
+            "rule": "对同一批真实候选集合，分层键（g=0）与原字面键的升序、降序与前 K 个"
+                    "逐题逐元素相同——即 g=0 退化为修订前的「固定原始顺序」"}
+
+
 # ---------------------------------------------------------------------------
 # 十一、trace 落盘（固定键序、无时间戳与耗时）
 # ---------------------------------------------------------------------------
@@ -1424,6 +1705,10 @@ def parse_args(argv=None):
     parser.add_argument("--budget", type=int, default=None,
                         help="Context Token Budget；缺省取 config.require_fixed("
                              "'context_token_budget')")
+    parser.add_argument("--graph-share", type=int, default=None,
+                        help="g：图谱侧新增块在最终证据集合中的全局固化份额（0 ≤ g ≤ K；"
+                             "与三个开关无关、A～E 五组同值）；缺省取 "
+                             "config.require_fixed('graph_retention_share')")
     parser.add_argument("--time-lo", default=None, help="单题的时间闭区间下界（可选）")
     parser.add_argument("--time-hi", default=None, help="单题的时间闭区间上界（可选）")
     parser.add_argument("--limit", type=int, default=None,
@@ -1492,7 +1777,7 @@ def cmd_run(args) -> int:
             questions = questions[:int(args.limit)]
     runner = PipelineRunner(verbose=not args.quiet)
     t0 = time.time()
-    run = runner.run(questions, switches, sizes["n"], sizes["k"], sizes["budget"])
+    run = runner.run(questions, switches, sizes["n"], sizes["k"], sizes["budget"], sizes["g"])
     summary = summarize(run["records"])
     out_path = args.out or default_out_path()
     sha = write_trace(out_path, run["records"])
@@ -1500,8 +1785,9 @@ def cmd_run(args) -> int:
     print("=" * 78)
     print("T4～T7 五步契约：%d 题 × 三开关 %s（分组预设 %s）"
           % (len(questions), switches["switches"], switches["group"]))
-    print("K=%d  N=%d  Context Token Budget=%d  优先级口径：%s"
-          % (sizes["k"], sizes["n"], sizes["budget"], PRIORITY_RULE))
+    print("K=%d  N=%d  Context Token Budget=%d  g=%d（全局固化量）  保留顺序口径：%s"
+          % (sizes["k"], sizes["n"], sizes["budget"], sizes["g"],
+             priority_rule_text(sizes["k"], sizes["g"])))
     print("=" * 78)
     for record in run["records"]:
         print("\n[%s] %s" % (record["qid"], record["question"]))
@@ -1559,10 +1845,12 @@ def cmd_selftest(args) -> int:
     switches_e = normalize_switches("E")
 
     print("=" * 78)
-    print("T4～T7 Top-K 五步契约自证：%d 题；K=%d  N=%d  Context Token Budget=%d"
-          % (len(questions), sizes["k"], sizes["n"], sizes["budget"]))
+    print("T4～T7 Top-K 五步契约自证：%d 题；K=%d  N=%d  Context Token Budget=%d  g=%d"
+          % (len(questions), sizes["k"], sizes["n"], sizes["budget"], sizes["g"]))
     print("三个独立开关：graph_depth 0／1／2、time_filter 开／关、evidence_sort 开／关"
           "（不合并成模式字符串；A～E 只是三开关的预设）")
+    print("g 是全局固化量（A～E 同值、不进任何开关）：第一层向量侧前 K−g 个 → "
+          "第二层图谱侧新增块按对问题的向量相似度降序至多 g 个 → 第三层向量侧剩余候选回填")
     print("=" * 78)
 
     t_all = time.time()
@@ -1580,7 +1868,8 @@ def cmd_selftest(args) -> int:
     runs = {}
     for name, switches in (("A", normalize_switches("A")), ("B", normalize_switches("B")),
                            ("C", switches_c), ("D", switches_d), ("E", switches_e)):
-        runs[name] = runner.run(questions, switches, sizes["n"], sizes["k"], sizes["budget"])
+        runs[name] = runner.run(questions, switches, sizes["n"], sizes["k"], sizes["budget"],
+                                sizes["g"])
         summary = summarize(runs[name]["records"])
         print("  [OK  ] %s 组 %s：%d 题，最终集合大小 %s，可测 %d／%d"
               % (name, switches["switches"], len(runs[name]["records"]),
@@ -1633,7 +1922,7 @@ def cmd_selftest(args) -> int:
     # ---- 断言 4：Precision@K 的分母恒为 K（构造 M < K）
     print("\n五、断言 4：Precision@K 的分母恒为 K（构造 M < K 的用例，题目不删）")
     a4 = assert_precision_denominator(runner, questions, switches_d, sizes["n"], sizes["k"],
-                                      sizes["budget"])
+                                      sizes["budget"], sizes["g"])
     for row in a4["per_question"]:
         print("      %s  M=%d < K=%d｜分母=%d｜空缺=%d｜题目保留=%s"
               % (row["qid"], row["m_candidates"], row["k"], row["denominator"],
@@ -1647,7 +1936,7 @@ def cmd_selftest(args) -> int:
     hashes = {}
     for name in ("C", "D", "E"):
         again = runner.run(questions, normalize_switches(name), sizes["n"], sizes["k"],
-                           sizes["budget"])
+                           sizes["budget"], sizes["g"])
         path_a = trace_path(args.trace_dir, name)
         path_b = trace_path(args.trace_dir, name + "_rerun")
         sha_a = write_trace(path_a, runs[name]["records"])
@@ -1660,17 +1949,70 @@ def cmd_selftest(args) -> int:
               "sha256 %s" % ("相同" if sha_a == sha_b else "不同"))
 
     # ---- 四条断言的原始输出留痕（确定性：不含耗时与时间戳，可逐字节复跑比对）
+    # ---- 附加：分层保留顺序的正面证据（图谱侧新增块确实进入了最终证据集合）
+    print("\n七、分层保留顺序的正面证据（g=%d）：最终证据集合按层次的条数" % sizes["g"])
+    layer_totals = {}
+    for name in ("C", "D"):
+        totals = {"layer1_vector_top": 0, "layer2_graph_new": 0,
+                  "layer3_vector_fill": 0, "leftover_graph": 0}
+        for rec in runs[name]["records"]:
+            row = rec["_retention"]
+            for key in totals:
+                totals[key] += len(row[key])
+            print("      %s·%s  第一层（向量侧前 K−g=%d 个）%d 条 ｜ 第二层（图谱侧新增，"
+                  "至多 g=%d 个）%d 条%s ｜ 第三层（向量侧回填）%d 条 ｜ 尾部（图谱侧剩余）%d 条"
+                  % (name, rec["qid"], row["cut"], len(row["layer1_vector_top"]),
+                     row["g"], len(row["layer2_graph_new"]),
+                     ("（候选：%s）" % row["layer2_candidates"][:4]
+                      if row["layer2_candidates"] else "（本题无图谱侧新增候选）"),
+                     len(row["layer3_vector_fill"]), len(row["leftover_graph"])))
+        layer_totals[name] = totals
+        print("      %s 组合计：第一层 %d 条 ｜ **第二层（图谱侧新增块）%d 条** ｜ 第三层 %d 条 ｜ "
+              "尾部 %d 条（%d 题）"
+              % (name, totals["layer1_vector_top"], totals["layer2_graph_new"],
+                 totals["layer3_vector_fill"], totals["leftover_graph"], len(runs[name]["records"])))
+    positive = layer_totals["D"]["layer2_graph_new"] > 0
+    print("      正面证据：g=%d 时图谱侧新增块进入最终证据集合 %d 条（C 组 %d 条、D 组 %d 条）→ %s"
+          % (sizes["g"], max(layer_totals["C"]["layer2_graph_new"],
+                             layer_totals["D"]["layer2_graph_new"]),
+             layer_totals["C"]["layer2_graph_new"], layer_totals["D"]["layer2_graph_new"],
+             "成立" if positive else "不成立（本题集上没有图谱侧新增候选进入）"))
+
+    # ---- 自查 5：g = 0 退化为原字面口径（分层键 vs 原字面键，逐题三个方向）
+    print("\n八、自查：g = 0 退化为原字面口径（分层键 vs 原字面键）")
+    a5 = assert_g0_degenerates(runner, questions, switches_d, sizes["n"], sizes["k"])
+    for row in a5["per_question"]:
+        print("      %s  候选 %d 个（其中图谱侧新增 %d 个）｜升序相同=%s｜降序相同=%s｜"
+              "前 K 个相同=%s｜原口径保留里的图谱侧新增 %d 个"
+              % (row["qid"], row["candidates"], row["graph_only_candidates"],
+                 row["asc_equal"], row["desc_equal"], row["keep_equal"],
+                 len(row["graph_only_in_legacy_keep"])))
+    check("自查（g=0 退化）：分层键（g=0）与原字面口径的升序／降序／前 K 个逐题逐元素相同",
+          a5["ok"], "不一致题数 %d" % sum(1 for row in a5["per_question"] if not row["ok"]))
+    g0_run = runner.run(questions, switches_d, sizes["n"], sizes["k"], sizes["budget"], 0)
+    g0_summary = summarize(g0_run["records"])
+    print("      g=0 实跑（D 组，与修订前同口径）：图谱侧新增块进入最终证据集合 %d 个"
+          "（涉及 %d／%d 题）；四项指标与修订前的逐字节比对见交付报告"
+          % (g0_summary["graph_evidence_total"], g0_summary["graph_evidence_questions"],
+             g0_summary["questions"]))
+
+    # ---- 四条断言的原始输出留痕（确定性：不含耗时与时间戳，可逐字节复跑比对）
     report = {
         "schema": "stage7-pipeline-assertions-1.0",
         "generated_by": "代码/检索/pipeline.py --selftest",
         "questions": [row["qid"] for row in questions],
         "k": sizes["k"], "n": sizes["n"], "context_token_budget": sizes["budget"],
-        "priority_rule": PRIORITY_RULE,
+        "graph_retention_share": sizes["g"],
+        "priority_rule": priority_rule_text(sizes["k"], sizes["g"]),
         "assertion_1_d_equals_e": a1,
         "assertion_2_c_vs_d_diff": a2,
         "assertion_3a_unique_chunk": a3,
         "assertion_3b_constructed_dual_hit": a3b,
         "assertion_4_precision_denominator": a4,
+        "assertion_5_g0_degenerates": a5,
+        "retention_layers": {"g": sizes["g"], "totals": layer_totals,
+                             "per_question_D": [rec["_retention"] for rec in runs["D"]["records"]],
+                             "g0_run_graph_evidence_total": g0_summary["graph_evidence_total"]},
         "group_summaries": {
             name: summarize(runs[name]["records"]) for name in ("A", "B", "C", "D", "E")},
         "trace_sha256": hashes,
@@ -1686,7 +2028,8 @@ def cmd_selftest(args) -> int:
     print("自证结论：%d／%d 条通过（耗时 %.1fs，只打印到 stdout，产物只落 _工作底稿\\）"
           % (passed, len(checks), time.time() - t_all))
     print("实现裁定：① 深度＝从问题实体出发的最大关系边数；"
-          "② D／E 的空值口径含「无事件可判定」的路径一并剔除；③ %s" % PRIORITY_RULE)
+          "② D／E 的空值口径含「无事件可判定」的路径一并剔除；③ %s"
+          % priority_rule_text(sizes["k"], sizes["g"]))
     print("=" * 78)
     return 0 if passed == len(checks) else 1
 

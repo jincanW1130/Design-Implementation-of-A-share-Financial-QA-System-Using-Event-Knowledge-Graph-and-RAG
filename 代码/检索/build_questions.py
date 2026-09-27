@@ -22,9 +22,15 @@
   （T8 才能找出 Complete Evidence Recall@K 饱和的最小 K）。
 * **带时间约束的题**，其 gold 证据所在文档必须落在"含 ≥2 个不同 `event_time` 日期"的
   66 篇里（v1.2 现行口径；脚本内现场复算，数目不符即报错退出）。
-* `gold_verified_by` 一律写 `decision_maker_ai_verify_v1`——这套 gold 是**决策者（AI）**
-  用确定性脚本构造并逐条回原文核验的，**不是独立第三方的人工标注**；
-  未确认前不得写成"人工构造"或"人工金标准"，作者逐题确认后由作者改这一字段。
+* `gold_verified_by` 写 `third_party_model_review_v1`（原值另存于 `third_party_review.prior_verified_by`）：
+  这套 gold 由**决策者（AI）**用确定性脚本构造并逐条回原文核验，再交**两家第三方模型盲标复核**
+  （`kimi`＋`zhipu`，prompt 版本 `stage7-thirdparty-review-v1.0`），最后由决策者**回原文逐条裁定**。
+  第三方模型复核**不是人工抽检、不是金标准**；报告里的一切比率都是**模型间一致率**，**不等于事实**；
+  人工抽检仍未做，不得写成"人工构造"或"人工金标准"。
+  另一条第三方线（百度千帆 `ernie-5.1`）**原已完整跑通（30/30、0 失败、60,073 token）**，但作者裁定该
+  通道不可用、其凭据已从 `代码\\抽取与图谱\\config.local.json` 删除，故**不参与本次确认**；它的逐题
+  verdict 与模型名仍在 `third_party_review` 里保留并标 `excluded`，30 条原始返回与结果留痕在
+  `阶段07-RAG检索系统\\_工作底稿\\第三方复核\\qianfan\\`（不删改、不入库）。
 
 术语纪律：全文不写出被禁用的四字连写术语（一律写「向量索引」或「向量检索组件」）。
 """
@@ -59,8 +65,104 @@ GOLD_MAX = 8                     # T9 设计约束 2：gold 证据条数上限
 GOLD_MIN = 1
 GOLD_BANDS = ((1, 1), (3, 5), (6, 8))   # 必须有实例的三档
 TIME_SUBSET_EXPECTED = 66        # 表 18-C 的 v1.2 现行口径；不符即报错退出
-VERIFIED_BY = "decision_maker_ai_verify_v1"
-REVIEW_STATUS = "待作者逐题确认（确认前不得当作已确认金标准）"
+VERIFIED_BY = "third_party_model_review_v1"
+REVIEW_STATUS = ("经两家第三方模型盲标复核（kimi＋zhipu）＋决策者回原文裁定；非人工逐题确认，人工抽检未做，"
+                 "复核结论不等于事实")
+PRIOR_VERIFIED_BY = "decision_maker_ai_verify_v1"
+
+# ---------------------------------------------------------------------------
+# 0b. 第三方模型盲标复核的登记（T9 追加；明细见 代码\检索\third_party_review.py 与
+#     阶段07-RAG检索系统\预实验问题集\第三方复核报告.md、第三方复核台账.json）
+#     本表只登记结果，不含任何凭据；参与确认的两家是不同厂商，构成跨厂商独立证据。
+#     另一条第三方线已按作者指示从确认口径剥离：本表保留其逐题 verdict 与模型名，
+#     并在 third_party_review.excluded 里标 excluded=true 与原因（只作留痕，不参与一致率）。
+# ---------------------------------------------------------------------------
+REVIEW_PROMPT_VERSION = "stage7-thirdparty-review-v1.0"
+REVIEW_OUTPUT_SCHEMA = "stage7-thirdparty-review-1.0"
+REVIEW_VENDORS = (("kimi", "kimi-k3"), ("zhipu", "glm-5.3-flash"))
+REVIEW_EXCLUDED_VENDORS = (("qianfan", "ernie-5.1"),)
+REVIEW_SCOPE = "参与本次确认的线＝kimi（kimi-k3）＋zhipu（glm-5.3-flash）两家"
+REVIEW_EXCLUDED_REASON = ("百度千帆（ernie-5.1）线按作者指示剥离：该通道已被判定不可用、凭据已从 "
+                          "代码\\抽取与图谱\\config.local.json 删除，故不参与本次确认；该线实测曾完整跑通"
+                          "（30 题 0 失败、60,073 token），其 30 条原始返回与结果保留在 "
+                          "阶段07-RAG检索系统\\_工作底稿\\第三方复核\\qianfan\\ 作为留痕，不删不改。")
+REVIEW_DEFAULT_ADJUDICATION = "参与确认的两家（kimi、zhipu）判定一致，维持现行 gold 与参考答案（只登记不改）"
+# qid -> {厂商: (verdict, answer_supported)}
+THIRD_PARTY_VERDICTS = {
+    "PE-01": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-02": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-03": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-04": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-05": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-06": {"kimi": ("成立", True), "qianfan": ("部分成立", True), "zhipu": ("成立", True)},
+    "PE-07": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-08": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-09": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-10": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-11": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-12": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-13": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-14": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-15": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-16": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-17": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-18": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-19": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-20": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-21": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-22": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-23": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-24": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-25": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-26": {"kimi": ("部分成立", False), "qianfan": ("部分成立", False), "zhipu": ("部分成立", False)},
+    "PE-27": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-28": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+    "PE-29": {"kimi": ("成立", True), "qianfan": ("部分成立", True), "zhipu": ("部分成立", True)},
+    "PE-30": {"kimi": ("成立", True), "qianfan": ("成立", True), "zhipu": ("成立", True)},
+}
+# 只有原文明确支持的修正才动 gold／参考答案；其余一律只登记不改。
+THIRD_PARTY_ADJUDICATION = {
+    "PE-06": ("只登记不改：参与确认的两家（kimi、zhipu）均判“成立”，维持现行 gold 与参考答案；"
+              "已按作者指示剥离的一条第三方线（不参与确认、只作留痕）判“部分成立”系误读"
+              "（把“品种一”的单只发行金额当成合计发行总额），原文 1021001 已写明"
+              "“发行总额为人民币45亿元”、1021002 写明“品种二 5亿元”，40亿＋5亿＝45亿，两处一致。"),
+    "PE-26": ("已按原文改 gold：参与确认的两家（kimi、zhipu）一致指出参考答案里的两份框架协议名称不在原 gold 块内"
+              "（已剥离的一条线同向，只作留痕）；"
+              "回原文 1502001／1533001 逐字给出协议全称，属 gold 证据不足，"
+              "故补入 1502001、1533001（gold 由 2 块增至 4 块），候选规则相应改为“文档内全部文本块”。"),
+    "PE-29": ("已按原文改参考答案：参与确认的两家为 1:1 分歧（kimi“成立”、zhipu“部分成立”）；"
+              "zhipu 指出原文 1001001 同一块内并列“首次授予第二个行权期”与“预留授予第一个行权期”"
+              "两条均自 2026-09-11 起行权的事件，原答案漏了后者（kimi 也把该点记入 missing_from_answer），"
+              "回原文确认属实，属参考答案不完整，gold 证据块不变（1001000、1001001）。"),
+}
+
+
+def third_party_review_block(qid: str) -> dict:
+    """把盲标复核的结论固化成 questions.jsonl 里的 third_party_review 字段。
+
+    确认口径＝`REVIEW_VENDORS` 两家（consistent 只按这两家算）；已剥离线按留痕口径
+    保留 verdict 与模型名，并在 `excluded` 里标 `excluded: true` 与原因。
+    """
+    verdicts = THIRD_PARTY_VERDICTS[qid]
+    return {
+        "prompt_version": REVIEW_PROMPT_VERSION,
+        "output_schema": REVIEW_OUTPUT_SCHEMA,
+        "review_scope": REVIEW_SCOPE,
+        "confirmed_lines": [v for v, _ in REVIEW_VENDORS],
+        "models": {v: m for v, m in review_models()},
+        "verdicts": {v: verdicts[v][0] for v, _ in review_models()},
+        "answer_supported": {v: verdicts[v][1] for v, _ in review_models()},
+        "excluded": {v: {"excluded": True, "excluded_per_author": True, "reason": REVIEW_EXCLUDED_REASON}
+                     for v, _ in REVIEW_EXCLUDED_VENDORS},
+        "consistent": len({verdicts[v][0] for v, _ in REVIEW_VENDORS}) == 1,
+        "adjudication": THIRD_PARTY_ADJUDICATION.get(qid, REVIEW_DEFAULT_ADJUDICATION),
+        "prior_verified_by": PRIOR_VERIFIED_BY,
+    }
+
+
+def review_models() -> tuple:
+    """确认口径两家 ＋ 留痕口径一家的（厂商, 模型名）登记（models 里保留被剥离线）。"""
+    return tuple(REVIEW_VENDORS) + tuple(REVIEW_EXCLUDED_VENDORS)
 EDGE_COLUMNS = config.EDGE_COLUMNS
 RELATIVE_WINDOW_LABELS = {"最近30天": 30, "近期90天": 90}
 
@@ -638,14 +740,16 @@ FROZEN_QUESTIONS = [
         qid="PE-26", task_type="关系型", gold_hop_depth=2, time_constraint="无", window=None,
         question="天邑股份与中国电信集团有限公司、中国电信股份有限公司共同签署过哪些集中采购框架协议？",
         reference_answer="两份：《中国电信家庭FTTR产品（2026年-2027年）集中采购项目》框架协议（2026年8月3日签署）与《中国电信天翼智屏产品（2026年）集中采购项目》框架协议（2026年7月13日签署）。",
-        gold=[1502005, 1533005], docs=[1502, 1533],
-        rule=dict(kind="shared_events", company_ids=["300504", "HCONF-0004", "HCONF-0005"],
-                  note="天邑股份与两家中国电信系节点的共同参与事件 EVT-0662／EVT-0704"),
+        gold=[1502001, 1502005, 1533001, 1533005], docs=[1502, 1533],
+        rule=dict(kind="doc_chunks", doc_ids=[1502, 1533],
+                  note="候选来自两篇公告的全部文本块；共同参与事件 EVT-0662／EVT-0704 由登记的 PARTICIPATES_IN 边另行核验"),
         edges_spec=[("300504", "PARTICIPATES_IN", "EVT-0662"), ("HCONF-0004", "PARTICIPATES_IN", "EVT-0662"),
                     ("300504", "PARTICIPATES_IN", "EVT-0704"), ("HCONF-0005", "PARTICIPATES_IN", "EVT-0704")],
-        anchors=[(1502005, "买方：中国电信集团有限公司、中国电信股份有限公司"),
+        anchors=[(1502001, "《中国电信家庭FTTR产品（2026年-2027年）集中采购项目设备及相关服务采购框架协议"),
+                 (1533001, "《中国电信天翼智屏产品（2026年）集中采购项目设备及相关服务采购框架协议"),
+                 (1502005, "买方：中国电信集团有限公司、中国电信股份有限公司"),
                  (1533005, "买方：中国电信集团有限公司、中国电信股份有限公司")],
-        note="回原文核验：两块分别是 FTTR 与天翼智屏两份框架协议正文，均写明买方为两家中国电信系公司、卖方为四川天邑康和通信股份有限公司；两家中国电信系节点是人工确认写入的 HCONF 节点（只有名称、没有 stock_code），本题正是为覆盖该边界。",
+        note="回原文核验（T9 初版）＋第三方复核裁定（T9 追加）：1502001／1533001 逐字给出两份框架协议全称（FTTR 与天翼智屏），1502005／1533005 分别给出买卖双方与签署时间（2026年8月3日／2026年7月13日），四块合起来才是“共同签署过哪些框架协议”的完整答案；两家中国电信系节点是人工确认写入的 HCONF 节点（只有名称、没有 stock_code），本题正是为覆盖该边界。参与本次确认的两家（kimi＋zhipu）一致指出原 gold 只含协议正文块、不含协议名称块（已按作者指示剥离的一条线同向，只作留痕），回原文确认属实，故由 2 块补为 4 块。",
     ),
     dict(
         qid="PE-27", task_type="关系型", gold_hop_depth=2, time_constraint="有",
@@ -677,13 +781,14 @@ FROZEN_QUESTIONS = [
         qid="PE-29", task_type="关系型", gold_hop_depth=2, time_constraint="有",
         window=_w("2026年9月1日至2026年9月30日", "2026-09-01", "2026-09-30"),
         question="2026年9月1日至2026年9月30日期间，长城汽车依据《上市公司股权激励管理办法》发生的股票期权行权事件是什么？",
-        reference_answer="2023年股票期权激励计划首次授予股票期权第二个行权期于2026年9月11日开始行权（行权期有效期至2027年1月25日）。",
+        reference_answer="两起：2023年股票期权激励计划首次授予股票期权第二个行权期（期权代码1000000573，有效期2026年9月11日至2027年1月25日）与预留授予股票期权第一个行权期（期权代码1000000794，有效期2026年9月11日至2027年1月23日），均于2026年9月11日开始行权。",
         gold=[1001000, 1001001], docs=[1001],
         rule=dict(kind="event_org", event_ids=["EVT-0001"], note="EVT-0001 的 RELATED_TO 边指向《上市公司股权激励管理办法》（源块 1001000）"),
         edges_spec=[("601633", "PARTICIPATES_IN", "EVT-0001"), ("EVT-0001", "RELATED_TO", "POL-0009")],
         anchors=[(1001000, "根据《上市公司股权激励管理办法》"),
+                 (1001001, "预留授予股票期权于2026年1月24日进入第一个行权期"),
                  (1001001, "行权期有效期为2026年9月11日-2027年1月25日")],
-        note="回原文核验：1001000 给出政策依据与“进入第二个行权期”的开头，1001001 给出开始行权日期与有效期。doc 1001 在 66 篇内（2026-09-11、2026-10-01），窗口只保留 09-11 的行权事件，2026-10-01 的限制行权期事件被过滤。",
+        note="回原文核验（T9 初版）＋第三方复核裁定（T9 追加）：1001000 给出政策依据与“进入第二个行权期”的开头，1001001 在同一块内并列披露首次授予第二个行权期与预留授予第一个行权期两条事件，二者行权期均自 2026年9月11日 起算，故答案须一并给出；gold 证据块仍为 1001000、1001001（块数不变，答案补全）。doc 1001 在 66 篇内（2026-09-11、2026-10-01），窗口只保留 09-11 的行权事件，2026-10-01 的限制行权期事件被过滤。",
     ),
     dict(
         qid="PE-30", task_type="关系型", gold_hop_depth=2, time_constraint="有", window=W30,
@@ -768,6 +873,9 @@ def build_rows(inputs: Inputs, verbose=True):
         raise SystemExit("qid 重复")
     if len(specs := FROZEN_QUESTIONS) != 30:
         raise SystemExit("冻结表题量不是 30：%d" % len(specs))
+    missing_review = [q for q in qids if q not in THIRD_PARTY_VERDICTS]
+    if missing_review:
+        raise SystemExit("以下题缺第三方盲标复核登记：%s" % missing_review)
     if len(inputs.time_subset) != TIME_SUBSET_EXPECTED:
         raise SystemExit("含 >=2 个不同 event_time 日期的文档为 %d 篇，与 v1.2 现行口径的 %d 篇不符，停止构建"
                          % (len(inputs.time_subset), TIME_SUBSET_EXPECTED))
@@ -871,6 +979,7 @@ def build_rows(inputs: Inputs, verbose=True):
             "gold_evidence_rule": rule_text,
             "gold_verified_by": VERIFIED_BY,
             "gold_review_status": REVIEW_STATUS,
+            "third_party_review": third_party_review_block(qid),
             "gold_verify_anchors": [
                 {"chunk_id": cid, "quote": quote} for cid, quote in spec["anchors"]
             ],

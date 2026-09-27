@@ -15,11 +15,12 @@
 | `check_inputs.py` | 输入校验与**输入指纹清单**（T1） | T1 | 已产出 |
 | `vector_search.py` | 向量检索：问题编码、索引检索、N 个候选与**原始排名** | T2 | 已产出 |
 | `graph_query.py` | 图谱查询层：七个接口 ＋ 与 Cypher 一一对应 | T3 | 已产出 |
-| `pipeline.py` | Top-K 五步契约的端到端（合并去重／时间过滤／裁剪／保留 K／分组排序） | T4～T7 | 待产出 |
-| `metrics.py` | 四项检索指标（chunk 级：Recall@K／Precision@K／MRR／Complete Evidence Recall@K） | T10 | 待产出 |
-| `pre_experiment.py` | 预实验 9 格网格与 K／N／预算定值 | T8 | 待产出 |
-| `build_questions.py` | 预实验问题集的确定性构建 | T9 | 待产出 |
-| `run_query.py` | 入口：串起一次完整运行并留痕 | T12 前置 | 待产出 |
+| `pipeline.py` | Top-K 五步契约的端到端（合并去重／时间过滤／裁剪／保留 K／分组排序）；同时是**端到端入口**：`--group A|B|C|D|E --out …` 串起向量检索 → 图谱查询 → 五步契约并落逐题 trace | T4～T7 | 已产出 |
+| `metrics.py` | 四项检索指标（chunk 级：Recall@K／Precision@K／MRR／Complete Evidence Recall@K） | T10 | 已产出 |
+| `pre_experiment.py` | 预实验 9 格网格与 K／N／预算定值（含 g 曲线与预算敏感性） | T8 | 已产出 |
+| `build_questions.py` | 预实验问题集的确定性构建（candidates／freeze／verify） | T9 | 已产出 |
+| `third_party_review.py` | 第三方模型盲标复核（**链外工具**，唯一会调用外部接口的脚本；不属检索链路，产物与定性见《19》的「已知限制与证据不足清单」第 9 条） | T9 收口 | 已产出 |
+| `run_query.py` | 《18》第4.2节 的独立入口：`--question`／`--group A..E`（默认 C）／`--k/--n/--budget`／`--out` 串起 `vector_search → graph_query → pipeline → metrics` 的单题完整运行（运行记录默认落 `_工作底稿\`，不写 `检索产出\`）；`--selftest` 跑通 A 与 C 两组各一题；`--run-manifest` 一键复跑生成 `检索产出\run_manifest.json` | T12 收口 | 已产出 |
 
 产出物落点：`阶段07-RAG检索系统\检索产出\`（结构化 JSONL／CSV）与
 `阶段07-RAG检索系统\预实验问题集\`（题集四件）；中间产物写 `阶段07-RAG检索系统\_工作底稿\`。
@@ -61,7 +62,7 @@
 ```
 ① 两路取候选（D／E 组先做时间过滤，剔除 event_time 为空者）
 ② 按 chunk_id 合并去重（集合并集，不重复计数、不加分）
-③ 裁剪到 Context Token Budget（先裁与问题实体无关的远端图谱路径，再按向量原始排名从后往前裁）
+③ 裁剪到 Context Token Budget（先裁与问题实体无关的远端图谱路径，再按分层保留顺序从尾部往前裁）
 ④ 保留 K 个文本块（**先于**分组排序）
 ⑤ 该集合同时喂四项指标与 Prompt（第 8 阶段消费）
 ```
@@ -76,6 +77,14 @@ python 代码\检索\check_inputs.py                     :: T1 输入校验 ＋ 
 python 代码\检索\vector_search.py --selftest          :: T2 自证（Embedding 口径复现等）
 python 代码\检索\graph_query.py --selftest            :: T3 自证（七接口与三条断言）
 python 代码\检索\pipeline.py --selftest               :: T4～T7 自证（四条断言）
+python 代码\检索\pre_experiment.py                    :: T8 预实验（9 格 ＋ 第二轮，落盘两个产出）
+python 代码\检索\metrics.py                           :: T10 四项指标（落盘 metrics_pre.jsonl）
+python 代码\检索\pipeline.py --group C --out 阶段07-RAG检索系统\检索产出\per_question_trace.jsonl
+                                                      :: T7 端到端入口（30 题逐题 trace）
+python 代码\检索\run_query.py --question "……" --group C
+                                                      :: 《18》第4.2节 单题完整运行（默认落 _工作底稿\run_query_C_<题号>.json）
+python 代码\检索\run_query.py --selftest            :: A 与 C 两组各一题的自证（含同题两次运行比对）
+python 代码\检索\run_query.py --run-manifest        :: 一键复跑：11 条输入指纹 ＋ 四个产物两次运行 SHA-256 → 检索产出\run_manifest.json
 ```
 
 门禁：每次产出一律先跑 `python 工具\跨文档核验.py`；阶段收口以
