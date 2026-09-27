@@ -1,0 +1,373 @@
+{
+  "all_ok": true,
+  "checks": [
+    {
+      "detail": "code=OK count=21",
+      "name": "G1 一跳邻居（node_id=000001）",
+      "ok": true
+    },
+    {
+      "detail": "code=OK 路径 50（其中一跳 21）",
+      "name": "G2 两跳邻居（node_id=000001）",
+      "ok": true
+    },
+    {
+      "detail": "code=OK count=226",
+      "name": "G3 按事件类型取事件（股权）",
+      "ok": true
+    },
+    {
+      "detail": "code=OK count=11",
+      "name": "G4 按公司取参与事件（stock_code=000001）",
+      "ok": true
+    },
+    {
+      "detail": "code=OK 语义边项 3、chunk_id 2 个、来源文档 1 个",
+      "name": "G5 事件到证据块（EVT-0001）",
+      "ok": true
+    },
+    {
+      "detail": "通过 3、空值剔除 6、越界剔除 2、chunk_id 差集 11 个",
+      "name": "G6 时间过滤（平安银行 11 个事件 / [2026-06-26, 2026-09-22]）",
+      "ok": true
+    },
+    {
+      "detail": "code=OK 路径 1",
+      "name": "G7 路径枚举（000001 → EVT-0029，max_depth=2）",
+      "ok": true
+    },
+    {
+      "detail": "G1 21 项 ⊆ G2 一跳层 21 项：缺失 0",
+      "name": "断言① G2 的结果包含 G1 的结果（2-hop ⊇ 1-hop）",
+      "ok": true
+    },
+    {
+      "detail": "抽查 200 个事件的 291 条入池边：EVIDENCED_BY 0 条、缺 source_chunk_id 0 条",
+      "name": "断言② G5 的每条边都带 source_chunk_id 且不含 EVIDENCED_BY",
+      "ok": true
+    },
+    {
+      "detail": "12 个 HCONF：能取到参与事件 10 个、EMPTY（且经 graph_stats 核对为孤立）2 个、未匹配 0 个",
+      "name": "断言③ G4 按名称匹配无 stock_code 的 HCONF 公司节点",
+      "ok": true
+    },
+    {
+      "detail": "差集 11 个",
+      "name": "G6 差集非空（该题可测）",
+      "ok": true
+    },
+    {
+      "detail": "NOT_FOUND",
+      "name": "未匹配 → NOT_FOUND",
+      "ok": true
+    },
+    {
+      "detail": "INVALID_INPUT",
+      "name": "非法入参 → INVALID_INPUT",
+      "ok": true
+    },
+    {
+      "detail": "EMPTY（node_ids=['HCONF-0010']）",
+      "name": "命中但无结果（孤立节点 HCONF-0010 浪潮）→ EMPTY",
+      "ok": true
+    }
+  ],
+  "cypher": {
+    "G1": "MATCH (a {node_id:$id})-[r]-(b) RETURN a, r, b",
+    "G2": "MATCH (a {node_id:$id})-[r1]-(b)-[r2]-(c) RETURN a, r1, b, r2, c",
+    "G3": "MATCH (e:Event) WHERE e.event_type = $type RETURN e",
+    "G4": "MATCH (c:Company {stock_code:$code})-[:PARTICIPATES_IN]->(e:Event) RETURN e",
+    "G5": "MATCH (e:Event {node_id:$id})-[r]-(x) WHERE r.source_chunk_id IS NOT NULL RETURN type(r), r.source_doc_id, r.source_chunk_id",
+    "G6": "MATCH (e:Event) WHERE e.node_id IN $ids AND e.event_time IS NOT NULL AND e.event_time >= $lo AND e.event_time <= $hi RETURN e",
+    "G7": "MATCH p = (a {node_id:$from})-[r*1..2]-(b {node_id:$to}) RETURN p"
+  },
+  "edges": 2736,
+  "evidence": {
+    "G1": {
+      "code": "OK",
+      "count": 21,
+      "sample": [
+        {
+          "direction": "out",
+          "edge_id": 0,
+          "evidence": {
+            "confidence": "0.9",
+            "source_chunk_id": "1337000",
+            "source_doc_id": "1337"
+          },
+          "neighbor": "PER-0010",
+          "neighbor_node": {
+            "label": "Person",
+            "name": "付欣",
+            "node_id": "PER-0010",
+            "stock_code": ""
+          },
+          "relation": "HAS_EXECUTIVE",
+          "role": ""
+        },
+        {
+          "direction": "out",
+          "edge_id": 1,
+          "evidence": {
+            "confidence": "0.8",
+            "source_chunk_id": "1231000",
+            "source_doc_id": "1231"
+          },
+          "neighbor": "PER-0029",
+          "neighbor_node": {
+            "label": "Person",
+            "name": "冀光恒",
+            "node_id": "PER-0029",
+            "stock_code": ""
+          },
+          "relation": "HAS_EXECUTIVE",
+          "role": ""
+        }
+      ]
+    },
+    "G2": {
+      "code": "OK",
+      "count": 50,
+      "one_hop_count": 21
+    },
+    "G3": {
+      "code": "OK",
+      "count": 226,
+      "sample": [
+        {
+          "confidence": "0.9",
+          "description": "公司在利润分配方案公告披露之日起至本公告披露日期间，注销回购的A股和H股共计211,035,050股，公司总股本发生变动。",
+          "event_id": "EVT-0015",
+          "event_name": "中国石化注销回购的A股和H股股份",
+          "event_time": "",
+          "event_type": "股权",
+          "label": "Event",
+          "node_id": "EVT-0015"
+        }
+      ]
+    },
+    "G4": {
+      "code": "OK",
+      "count": 11
+    },
+    "G5": {
+      "chunk_ids": [
+        "1001000",
+        "1001001"
+      ],
+      "code": "OK",
+      "count": 3,
+      "document_refs": 1
+    },
+    "G6": {
+      "chunk_id_diff": [
+        "1037004",
+        "1037019",
+        "1038000",
+        "1038003",
+        "1183000",
+        "1183001",
+        "1274003",
+        "1355000",
+        "2025001",
+        "2039000",
+        "2039005"
+      ],
+      "chunk_ids_removed": [
+        "1037004",
+        "1037019",
+        "1038000",
+        "1038003",
+        "1183000",
+        "1183001",
+        "1274003",
+        "1355000",
+        "2025001",
+        "2039000",
+        "2039005"
+      ],
+      "chunk_ids_survived": [
+        "1023000",
+        "1200000",
+        "1231000"
+      ],
+      "code": "OK",
+      "passed_ids": [
+        "EVT-0029",
+        "EVT-0260",
+        "EVT-0310"
+      ],
+      "query_key": {
+        "hi": "2026-09-22",
+        "ids": [
+          "EVT-0045",
+          "EVT-0046",
+          "EVT-0236",
+          "EVT-0358",
+          "EVT-0840",
+          "EVT-0861",
+          "EVT-0466",
+          "EVT-0860",
+          "EVT-0310",
+          "EVT-0260",
+          "EVT-0029"
+        ],
+        "lo": "2026-08-01",
+        "null_policy": "exclude"
+      },
+      "removed_null_ids": [
+        "EVT-0045",
+        "EVT-0046",
+        "EVT-0236",
+        "EVT-0358",
+        "EVT-0840",
+        "EVT-0861"
+      ],
+      "removed_out_of_range_ids": [
+        "EVT-0466",
+        "EVT-0860"
+      ]
+    },
+    "G7": {
+      "code": "OK",
+      "count": 1,
+      "sample": [
+        {
+          "depth": 1,
+          "end": "EVT-0045",
+          "nodes": [
+            "000001",
+            "EVT-0045"
+          ],
+          "relations": [
+            {
+              "direction": "out",
+              "edge_id": 11,
+              "evidence": {
+                "confidence": "0.9",
+                "source_chunk_id": "1037019",
+                "source_doc_id": "1037"
+              },
+              "neighbor": "EVT-0045",
+              "relation": "PARTICIPATES_IN",
+              "role": "主体"
+            }
+          ],
+          "start": "000001"
+        }
+      ]
+    },
+    "assert1": {
+      "g1_items": 21,
+      "g2_one_hop_items": 21,
+      "missing": [],
+      "subset": true
+    },
+    "assert2": {
+      "campool_edges": 291,
+      "events_scanned": 200,
+      "evidenced_by_in_pool": 0,
+      "missing_source_chunk_id": 0
+    },
+    "assert3": {
+      "empty_and_isolated": [
+        {
+          "in_graph_stats_isolated": true,
+          "name": "浪潮",
+          "node_id": "HCONF-0010"
+        },
+        {
+          "in_graph_stats_isolated": true,
+          "name": "芜湖联飞",
+          "node_id": "HCONF-0011"
+        }
+      ],
+      "empty_matches_isolated_list": true,
+      "isolated_ids_from_graph_stats": [
+        "002090",
+        "300351",
+        "HCONF-0010",
+        "HCONF-0011",
+        "IND-0001",
+        "IND-0002",
+        "IND-0003",
+        "IND-0004",
+        "IND-0005",
+        "IND-0006",
+        "IND-0007",
+        "IND-0008",
+        "IND-0009",
+        "IND-0010",
+        "IND-0011",
+        "IND-0013",
+        "IND-0014",
+        "IND-0017",
+        "IND-0018",
+        "IND-0019"
+      ],
+      "not_found": [],
+      "with_events": [
+        {
+          "events": 1,
+          "name": "PT.ACTER INTEGRATION TECHNOLOGY INDONESIA",
+          "node_id": "HCONF-0001"
+        },
+        {
+          "events": 1,
+          "name": "PT.Hardases Abadi Indonesia",
+          "node_id": "HCONF-0002"
+        },
+        {
+          "events": 1,
+          "name": "中国中元国际工程有限公司",
+          "node_id": "HCONF-0003"
+        },
+        {
+          "events": 2,
+          "name": "中国电信股份有限公司",
+          "node_id": "HCONF-0004"
+        },
+        {
+          "events": 2,
+          "name": "中国电信集团有限公司",
+          "node_id": "HCONF-0005"
+        },
+        {
+          "events": 4,
+          "name": "中国移动通信有限公司",
+          "node_id": "HCONF-0006"
+        },
+        {
+          "events": 1,
+          "name": "中国邮政速递物流股份有限公司",
+          "node_id": "HCONF-0007"
+        },
+        {
+          "events": 1,
+          "name": "安徽元控储充新能源科技有限公司",
+          "node_id": "HCONF-0008"
+        },
+        {
+          "events": 4,
+          "name": "川环科技",
+          "node_id": "HCONF-0009"
+        },
+        {
+          "events": 1,
+          "name": "贵州时代矿业有限公司",
+          "node_id": "HCONF-0012"
+        }
+      ]
+    },
+    "codes": {
+      "empty": "EMPTY",
+      "invalid_input": "INVALID_INPUT",
+      "not_found": "NOT_FOUND",
+      "ok": "OK"
+    }
+  },
+  "generated_by": "代码/检索/graph_query.py --selftest",
+  "graph_version": "v2.1_v1_2",
+  "nodes": 2802,
+  "schema": "stage7-graph-query-selftest-1.0"
+}
