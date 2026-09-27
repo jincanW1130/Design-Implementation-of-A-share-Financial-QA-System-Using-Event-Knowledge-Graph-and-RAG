@@ -719,20 +719,35 @@ def build_case(record, event, doc_chunks):
 # 度量：时间覆盖与「可过滤性」（补抽前／后）
 # --------------------------------------------------------------------------
 def _doc_time_metrics(doc_dates):
-    """doc_dates: {doc_id: [date, ...]} → 可过滤性读数（确定性、无阈值猜测）。"""
-    both, months, span31 = [], [], []
+    """doc_dates: {doc_id: [date, ...]} → 可过滤性读数（确定性、无阈值猜测）。
+
+    两个口径都给，字段名必须名副其实（2026-09-27 审查 A 的冲突 7）：
+
+      * `docs_with_ge2_distinct_event_dates`：≥2 个**不同日期**（同一日期出现多次只算一个）
+        ——第 10 阶段的可过滤性要的就是这个口径（第 1.6／9.4 节）。历史缺陷：字段原名
+        `docs_with_ge2_dated_events`、随附定义写「≥2 条 event_time 非空」，而算法算的是不同日期。
+      * `docs_with_ge2_nonnull_events`：字面口径「≥2 条 event_time 非空」（同一日期出现多次照数），
+        作为附加字段一并登记，使两种口径都能从产物直接查到。
+    """
+    distinct_docs, nonnull_docs, months, span31 = [], [], [], []
     for doc_id in sorted(doc_dates):
-        dates = sorted({d for d in doc_dates[doc_id] if d})
+        raw = [d for d in doc_dates[doc_id] if d]
+        dates = sorted(set(raw))
+        if len(raw) >= 2:
+            nonnull_docs.append(doc_id)
         if len(dates) >= 2:
-            both.append(doc_id)
+            distinct_docs.append(doc_id)
             if len({(d.year, d.month) for d in dates}) >= 2:
                 months.append(doc_id)
             if (dates[-1] - dates[0]).days >= 31:
                 span31.append(doc_id)
-    return {"docs_with_ge2_dated_events": len(both),
+    return {"docs_with_ge2_distinct_event_dates": len(distinct_docs),
+            "docs_with_ge2_nonnull_events": len(nonnull_docs),
             "docs_times_span_more_than_one_month": len(months),
             "docs_times_span_ge_31_days": len(span31),
-            "doc_ids_ge2": both, "doc_ids_multi_month": months}
+            "doc_ids_ge2_distinct_event_dates": distinct_docs,
+            "doc_ids_ge2_nonnull_events": nonnull_docs,
+            "doc_ids_multi_month": months}
 
 
 def measure(records, chunks_by_doc, overlay, merged_rows):
@@ -775,9 +790,15 @@ def measure(records, chunks_by_doc, overlay, merged_rows):
     return {
         "schema": SPEC["schema"] + "-measure",
         "definition": {
-            "docs_with_ge2_dated_events": "该文档的事件里有 ≥2 条 event_time 非空",
-            "docs_times_span_more_than_one_month": "同上的日期落在 ≥2 个不同自然月（主口径）",
-            "docs_times_span_ge_31_days": "同上最早与最晚日期相差 ≥31 天（次要口径，一并给出）",
+            "docs_with_ge2_distinct_event_dates":
+                "该文档的事件里有 ≥2 个**不同** event_date（同一日期出现多次只算一个；"
+                "第 10 阶段的可过滤性主口径）",
+            "docs_with_ge2_nonnull_events":
+                "该文档的事件里有 ≥2 条 event_time 非空（字面口径；同一日期出现多次照数）",
+            "docs_times_span_more_than_one_month":
+                "同上的日期落在 ≥2 个不同自然月（主口径）",
+            "docs_times_span_ge_31_days":
+                "同上最早与最晚日期相差 ≥31 天（次要口径，一并给出）",
             "layer_note": "抽取层＝每篇的 events[]（补抽覆盖层已应用）；"
                           "图谱层＝去重合并后事件按其证据文档展开（dedup_events.py 产物）",
         },

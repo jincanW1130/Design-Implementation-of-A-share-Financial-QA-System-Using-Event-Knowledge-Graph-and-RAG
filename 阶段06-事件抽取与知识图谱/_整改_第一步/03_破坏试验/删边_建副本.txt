@@ -1,0 +1,16 @@
+$ python 阶段06-事件抽取与知识图谱\_整改_第一步\_工具\建删边副本.py C:\Users\15129\AppData\Local\Temp\F6_删边副本\v2.1_v1_2
+cwd: C:\Users\15129\Desktop\毕业设计
+env_overrides: {}
+env_unset: []
+exit_code: 0
+wall_clock_seconds: 0.038
+
+--- stdout ---
+源目录 = C:\Users\15129\Desktop\毕业设计\阶段06-事件抽取与知识图谱\图谱导出\v2.1_v1_2
+副本目录 = C:\Users\15129\AppData\Local\Temp\F6_删边副本\v2.1_v1_2
+复制文件 = ['edges.csv', 'graph_stats.json', 'nodes.csv', 'replay.cypher', '人工确认清单.json']
+原 edges.csv 行数（含表头）= 2737
+已删除最后一行：PER-0400,PARTICIPATES_IN,EVT-0098,1076,1076000,0.7,涉及方,,
+删后行数（含表头）= 2736
+
+--- stderr ---

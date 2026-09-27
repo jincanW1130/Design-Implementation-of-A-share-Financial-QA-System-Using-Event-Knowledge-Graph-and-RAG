@@ -1,0 +1,394 @@
+{
+  "documents_field_profile_first2": [
+    {
+      "field": "doc_id",
+      "types": [
+        "int"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        1001,
+        1004
+      ]
+    },
+    {
+      "field": "title",
+      "types": [
+        "str"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        "长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告",
+        "恒瑞医药2026年第一次临时股东会决议公告"
+      ]
+    },
+    {
+      "field": "content",
+      "types": [
+        "str"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        "转债代码：113049\n转债简称：长汽转债\n长城汽车股份有限公司\n关于公司股票期权限制行权期间的提示性公告\n本公司董事会及全体董事保证本公告内容不存在任何虚假记载、误导性陈述或者重\n大遗漏，并对其内容的真实性、准确性和完整性承担法律责任。\n…[截断，全长 746 字符]",
+        "江苏恒瑞医药股份有限公司\n2026年第一次临时股东会决议公告\n大遗漏，并对其内容的真实性、准确性和完整性承担法律责任。\n重要内容提示：\n\n本次会议是否有否决议案：无\n一、\n会议召开和出席情况\n(一)\n股东会召开的时间：2026 年9 月2…[截断，全长 3343 字符]"
+      ]
+    },
+    {
+      "field": "source",
+      "types": [
+        "str"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        "巨潮资讯网",
+        "巨潮资讯网"
+      ]
+    },
+    {
+      "field": "category",
+      "types": [
+        "str"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        "公告",
+        "公告"
+      ]
+    },
+    {
+      "field": "url",
+      "types": [
+        "str"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        "https://static.cninfo.com.cn/finalpage/2026-09-25/1225581315.PDF",
+        "https://static.cninfo.com.cn/finalpage/2026-09-25/1225582847.PDF"
+      ]
+    },
+    {
+      "field": "publish_time",
+      "types": [
+        "str"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        "2026-09-25",
+        "2026-09-25"
+      ]
+    },
+    {
+      "field": "ingest_time",
+      "types": [
+        "str"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        "2026-09-25T21:19:14+08:00",
+        "2026-09-25T21:19:14+08:00"
+      ]
+    },
+    {
+      "field": "company_list",
+      "types": [
+        "list"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        [
+          "601633"
+        ],
+        [
+          "600276"
+        ]
+      ]
+    },
+    {
+      "field": "content_sha256_16",
+      "types": [
+        "str"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        "238af0dddff3bb7d",
+        "b4c880d3d04cb254"
+      ]
+    },
+    {
+      "field": "subject_companies",
+      "types": [
+        "list"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        [
+          "601633"
+        ],
+        [
+          "600276"
+        ]
+      ]
+    }
+  ],
+  "chunks_field_profile_first2": [
+    {
+      "field": "chunk_id",
+      "types": [
+        "int"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        1001000,
+        1001001
+      ]
+    },
+    {
+      "field": "doc_id",
+      "types": [
+        "int"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        1001,
+        1001
+      ]
+    },
+    {
+      "field": "chunk_index",
+      "types": [
+        "int"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        0,
+        1
+      ]
+    },
+    {
+      "field": "content",
+      "types": [
+        "str"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        "转债代码：113049\n转债简称：长汽转债\n长城汽车股份有限公司\n关于公司股票期权限制行权期间的提示性公告\n本公司董事会及全体董事保证本公告内容不存在任何虚假记载、误导性陈述或者重\n大遗漏，并对其内容的真实性、准确性和完整性承担法律责任。\n…[截断，全长 376 字符]",
+        "：\n一、基本情况\n公司2023年股票期权激励计划首次授予股票期权于2026年1月26日进入第二个行权\n期（期权代码：1000000573），行权期有效期为2026年9月11日-2027年1月25日，2026年\n9月11日开始行权。\n公司20…[截断，全长 420 字符]"
+      ]
+    },
+    {
+      "field": "token_count",
+      "types": [
+        "int"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        347,
+        338
+      ]
+    },
+    {
+      "field": "vector_id",
+      "types": [
+        "int"
+      ],
+      "null_in_sample": 0,
+      "sample_values": [
+        0,
+        1
+      ]
+    }
+  ],
+  "documents_key_order_all_rows": [
+    {
+      "key_order": [
+        "doc_id",
+        "title",
+        "content",
+        "source",
+        "category",
+        "url",
+        "publish_time",
+        "ingest_time",
+        "company_list",
+        "content_sha256_16",
+        "subject_companies"
+      ],
+      "rows": 709
+    }
+  ],
+  "chunks_key_order_all_rows": [
+    {
+      "key_order": [
+        "chunk_id",
+        "doc_id",
+        "chunk_index",
+        "content",
+        "token_count",
+        "vector_id"
+      ],
+      "rows": 5018
+    }
+  ],
+  "row_counts": {
+    "documents_rows": 709,
+    "chunks_rows": 5018,
+    "vector_map_rows": 5018
+  },
+  "build_meta": {
+    "dataset_version": "v2.1",
+    "pipeline_version": "pipeline-1.0",
+    "profile": "v1",
+    "model_name": "BAAI/bge-small-zh-v1.5",
+    "model_revision": "7999e1d3359715c523056ef9478215996d62a620",
+    "resolved_snapshot": "7999e1d3359715c523056ef9478215996d62a620",
+    "revision_matches_config": true,
+    "pinned_revision_in_cache": "yes",
+    "dim": 512,
+    "vector_count": 5018,
+    "chunk_count": 5018,
+    "doc_count": 709,
+    "index_type": "IndexFlatIP",
+    "metric": "inner_product",
+    "similarity": "cosine",
+    "normalize_embeddings": true,
+    "pooling": "cls",
+    "query_instruction": "",
+    "max_seq_length": 512,
+    "device": "cpu",
+    "batch_size": 32,
+    "index_file": "faiss.index",
+    "map_file": "vector_map.jsonl",
+    "id_order": "chunk_id 升序 -> vector_id = 向量索引行号",
+    "build_time": "2026-09-25T21:21:00+08:00",
+    "build_seconds": 98.358,
+    "model_load_seconds": 7.248,
+    "encode_seconds": 91.109,
+    "faiss_version": "1.15.1",
+    "numpy_version": "2.5.1"
+  },
+  "dataset_meta": {
+    "dataset_version": "v2.1",
+    "pipeline_version": "pipeline-1.0",
+    "data_cutoff_time": "2026-09-25T23:59:59+08:00",
+    "data_cutoff_date": "2026-09-25",
+    "scale": {
+      "company_count": 105,
+      "configured_company_count": 105,
+      "doc_count": 709,
+      "chunk_count": 5018,
+      "company_count_basis": "documents.jsonl 中 company_list 的并集（实测）"
+    },
+    "time_range": {
+      "publish_time_min": "2026-06-17",
+      "publish_time_max": "2026-09-25",
+      "span_days_between_min_and_max": 100,
+      "cutoff_minus_earliest_days": 100,
+      "window_start": "2026-06-17",
+      "window_end": "2026-09-25",
+      "window_days": 100,
+      "buckets": {
+        "recent": {
+          "range": [
+            "2026-08-27",
+            "2026-09-25"
+          ],
+          "doc_count": 275
+        },
+        "earlier": {
+          "range": [
+            "2026-06-17",
+            "2026-08-26"
+          ],
+          "doc_count": 434
+        }
+      },
+      "analysis_90_range": {
+        "range": [
+          "2026-06-27",
+          "2026-09-25"
+        ],
+        "doc_count": 629,
+        "gate": false,
+        "note": "报告项，不参与 check #13 的通过判定"
+      },
+      "per_month_histogram": {
+        "2026-06": 104,
+        "2026-07": 157,
+        "2026-08": 254,
+        "2026-09": 194
+      },
+      "per_month_histogram_basis": "覆盖最早与最晚文档之间的每一个自然月；无文档的月份显式记 0，不得省略键（《12》v1.2 修订）",
+      "months_with_zero_documents": [],
+      "basis": "documents.jsonl 的 publish_time（实测）"
+    },
+    "embedding": {
+      "model_name": "BAAI/bge-small-zh-v1.5",
+      "model_version": "7999e1d3359715c523056ef9478215996d62a620",
+      "resolved_snapshot": "7999e1d3359715c523056ef9478215996d62a620",
+      "dim": 512,
+      "pooling": "cls",
+      "similarity": "cosine",
+      "normalize_embeddings": true,
+      "max_seq_length": 512,
+      "device": "cpu",
+      "query_instruction": "",
+      "vector_count": 5018,
+      "revision_matches_config": true,
+      "basis": "index\\build_meta.json（实际建索引记录）"
+    },
+    "chunking": {
+      "unit": "字符（中文按字符计，config.CHUNK 口径）",
+      "target_chars": 400,
+      "max_chars": 512,
+      "min_chars": 128,
+      "overlap_chars": 50,
+      "boundary_priority": [
+        "\n\n",
+        "\n",
+        "。",
+        "！",
+        "？",
+        "；",
+        "…",
+        ".",
+        "!",
+        "?",
+        ";"
+      ],
+      "strip_rules": true,
+      "min_doc_chars": 80,
+      "chunk_id_stride": 1000,
+      "chunk_id_rule": "chunk_id = doc_id * DOC_ID_STRIDE + chunk_index（config.chunk_id_for）",
+      "basis": "config.CHUNK（封版后不得更改）"
+    },
+    "generated_at": "2026-09-25T21:24:33+08:00",
+    "generated_by": "check.py（T8 一致性检查，随报告一并重建）",
+    "profile": "v1",
+    "root": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段05-数据准备\\数据集\\v2.1",
+    "category_counts": {
+      "公告": 556,
+      "财经新闻": 103,
+      "政策文件": 30,
+      "监管公开信息": 20
+    },
+    "consistency": {
+      "checks_total": 14,
+      "checks_passed": 14,
+      "checks_failed": 0,
+      "pass": true,
+      "failed_checks": []
+    }
+  },
+  "recomputed_facts": {
+    "documents_by_category": {
+      "公告": 556,
+      "财经新闻": 103,
+      "政策文件": 30,
+      "监管公开信息": 20
+    },
+    "chunks_total": 5018,
+    "chunks_vector_id_null": 0,
+    "chunks_token_count_min": 64,
+    "chunks_token_count_max": 500
+  }
+}

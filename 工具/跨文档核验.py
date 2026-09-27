@@ -263,22 +263,17 @@ print('  （? 行需人工确认语境；出现"不引入/不研究"等否定语
 print(); print('=' * 78); print('K 文档内提到的文件路径是否存在'); print('=' * 78)
 WHITE = re.compile(r'(输入|输出|模板)\.|^\{|^\d+_\d+_|^[A-Z]+-\d+_[A-Za-z]+\d+_|\.\.\.$|…|^X\.md$|_译文\.docx$|方向X_|^[^\\/]*\{[^}]*\}')
 # 已在文档中声明、但尚未创建的产出（计划产出）。新增计划产出时在此登记，创建后请立即删除对应条目。
-PLANNED = {
-    # 第 6 阶段的计划产出（《15-第6阶段任务书》点名要在本阶段创建）。文件一旦创建就
-    # 立刻从这里删掉，否则会掩盖真正的悬空路径。分两类：
-    #   * 裸文件名 —— 在任意位置都算已登记；
-    #   * 带路径 —— 只匹配该路径。
-    # 带路径这一类是 2026-09-25 加的：`代码\抽取与图谱\README.md` 若按裸名 `README.md`
-    # 登记，会连带跳过全项目所有 README.md 的悬空判定，副作用大于收益。
-    '16-事件抽取与知识图谱（第六阶段）.md',
-    # 'nodes.csv'／'edges.csv' 已于 2026-09-26 落盘（图谱导出\v2.1\），按编写约定 5 移除
-    'extract.py', 'disambiguate.py', 'dedup_events.py', 'write_graph.py',
-    '标注说明.md',
-    # '验收第6阶段.py' 已于 2026-09-25 落盘，按编写约定 5 从 PLANNED 移除
-    '代码\\抽取与图谱\\README.md',                # 带路径：只匹配这个路径
-    '代码\\抽取与图谱\\config.py',
-    '代码\\抽取与图谱\\run_all.py',
-}
+# 2026-09-27 按编写约定 5 清空（审查 A 的 A1.4）：第 6 阶段的 9 条生效登记
+# （`16-事件抽取与知识图谱（第六阶段）.md`、`extract.py`、`disambiguate.py`、`dedup_events.py`、
+#  `write_graph.py`、`标注说明.md`、`代码\抽取与图谱\README.md`、`代码\抽取与图谱\config.py`、
+#  `代码\抽取与图谱\run_all.py`）**全部已在磁盘上**，留着只会掩盖真正的悬空路径。
+# 更早的 `nodes.csv`／`edges.csv`（2026-09-26 落盘）与 `验收第6阶段.py`（2026-09-25 落盘）
+# 已按同一约定移除。分类规则保留在这里，供下一次登记时照用：
+#   * 裸文件名 —— 在任意位置都算已登记；
+#   * 带路径 —— 只匹配该路径。
+# 带路径这一类是 2026-09-25 加的：`代码\抽取与图谱\README.md` 若按裸名 `README.md`
+# 登记，会连带跳过全项目所有 README.md 的悬空判定，副作用大于收益。
+PLANNED = set()
 PLANNED_BARE = {p for p in PLANNED if '\\' not in p and '/' not in p}
 PLANNED_PATH = {p.replace('/', '\\').lower() for p in PLANNED if ('\\' in p or '/' in p)}
 def is_planned(tok):
@@ -287,6 +282,8 @@ def is_planned(tok):
         return True
     t = tok.replace('/', '\\').lower()
     return any(t == p or t.endswith('\\' + p) or p.endswith('\\' + t) for p in PLANNED_PATH)
+print('  （计划产出登记：PLANNED %d 条——按编写约定 5，文件一旦落盘就立即移出；'
+      '核验项 A～N 共 14 项，与登记数不是一回事）' % len(PLANNED))
 # 归档目录（含其下一层子目录）
 ARCH = glob.glob(os.path.join(LITDIR, '_归档_*'))
 ARCH += [d for d in glob.glob(os.path.join(LITDIR, '_归档_*', '*')) if os.path.isdir(d)]
@@ -299,6 +296,15 @@ SEARCH += [d for d in glob.glob(os.path.join(ROOT, '代码', '*')) if os.path.is
 # `_试跑\` 同理（《12》第九节 要求的小规模验证目录）。
 SEARCH += [d for d in glob.glob(os.path.join(ROOT, '阶段05-数据准备', '数据集', '*')) if os.path.isdir(d)]
 SEARCH += [os.path.join(ROOT, '阶段05-数据准备', '_试跑')]
+# 抽取评测集（第 6 阶段起存在）：文档里既有带路径的写法（`阶段05-…\抽取评测集\v2.1\标注说明.md`），
+# 也有**裸文件名**（`标注说明.md`、`dev.jsonl`、`分层统计.json`）。版本目录与数据集版本目录、
+# 图谱导出版本目录同一处理：把 `抽取评测集\<版本>\` 也列入查找位置。
+# 2026-09-27：按编写约定 5 清空 PLANNED 后，K 立刻暴露《15》《16》里裸引用的 `标注说明.md`
+# 两处「悬空」；回查确认文件真实存在（`阶段05-数据准备\数据集\抽取评测集\v2.1\标注说明.md`，
+# 也在同目录的带路径写法里），属 K 的**搜索范围缺口**、不是文档引用错——按约定 6 扩大搜索范围，
+# 不把它塞回 PLANNED（那才会掩盖真正的悬空路径）。扩范围只增加候选落点，不豁免任何判定。
+SEARCH += [d for d in glob.glob(os.path.join(ROOT, '阶段05-数据准备', '数据集', '抽取评测集', '*'))
+           if os.path.isdir(d)]
 # 第 6 阶段的图谱导出物（`图谱导出\v2.1\`）：《16》与《00》里既有带路径的写法、也有裸文件名（`nodes.csv`、`edges.csv`），把每个导出版本目录也列入查找位置。
 SEARCH += [d for d in glob.glob(os.path.join(ROOT, '阶段06-事件抽取与知识图谱', '图谱导出', '*')) if os.path.isdir(d)]
 # 旧路径别名：2026-09-25 目录重组前的写法。记录类文档（《05》《06》《08》）会逐字保留当时的路径，

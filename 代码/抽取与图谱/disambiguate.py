@@ -79,7 +79,13 @@ import config  # noqa: E402
 # 基础工具（与 extract.py 同风格：显式排序、确定性序列化、UTF-8 无 BOM）
 # --------------------------------------------------------------------------
 def now_iso() -> str:
-    return _dt.datetime.now().astimezone().isoformat(timespec="seconds")
+    """时间戳一律北京时间（+08:00），与 run_all.py／write_graph.py 同一口径。
+
+    2026-09-27 审查 B 的缺陷 3：本函数原先用机器本地时区，异地复跑会写出与
+    管线其它环节不同的 UTC 偏移。
+    """
+    tz = _dt.timezone(_dt.timedelta(hours=8))
+    return _dt.datetime.now(tz).isoformat(timespec="seconds")
 
 
 def read_jsonl(path):

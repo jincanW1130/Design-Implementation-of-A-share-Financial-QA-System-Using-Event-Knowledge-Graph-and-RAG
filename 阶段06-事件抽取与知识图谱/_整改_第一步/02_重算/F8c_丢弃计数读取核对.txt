@@ -1,0 +1,16 @@
+$ python 阶段06-事件抽取与知识图谱\_整改_第一步\_工具\F8c_丢弃计数读取核对.py
+cwd: C:\Users\15129\Desktop\毕业设计
+env_overrides: {'STAGE6_FORBID_MODEL_CALLS': '1'}
+env_unset: ['LLM_API_KEY']
+exit_code: 0
+wall_clock_seconds: 0.062
+
+--- stdout ---
+A 文件不存在 → count=None；说明='graph_stats.json 不存在：C:\\Users\\15129\\AppData\\Local\\Temp\\F8c_dropped_p25_81l4\\missing.json'
+B 文件不可解析 → count=None；说明='graph_stats.json 读不到／不可解析（JSONDecodeError）：C:\\Users\\15129\\AppData\\Local\\Temp\\F8c_dropped_p25_81l4\\broken.json'
+C 无该字段（归档口径） → count=0；说明='未登记 issuer_participation_dropped（归档口径：计数为 0 时不新增字段）'
+D 字段完整 → count=3；说明=''
+E 现行 v1.2 产物 → count=1；说明=''
+调用方约定：count=None 时 add(..., False, ...) 按失败记账（读不到 ≠ 丢弃 0 条）。
+
+--- stderr ---

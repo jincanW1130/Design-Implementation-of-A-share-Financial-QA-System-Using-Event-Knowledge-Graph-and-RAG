@@ -1,0 +1,24 @@
+$ python 代码\抽取与图谱\disambiguate.py --profile v21_v1_2 --force
+cwd: C:\Users\15129\Desktop\毕业设计
+env_overrides: {'STAGE6_FORBID_MODEL_CALLS': '1'}
+env_unset: ['LLM_API_KEY']
+exit_code: 0
+wall_clock_seconds: 0.226
+
+--- stdout ---
+输入：C:\Users\15129\Desktop\毕业设计\代码\抽取与图谱\_全量\v2.1_v1_2\extracted.jsonl（709 篇，sha256=bae28dc7682b2901…）
+别名表：105 家配置公司（只读自 代码/数据准备/config.py）
+        注册全称补充 代码/抽取与图谱/company_registered_names.py：来源分布 {'cninfo_company_intro': 105}
+实体 3293 条：已判身份 2223／待消歧 1070
+  Company      共 1825 已判 755 待消歧 1070
+  Industry     共 90  已判 90  待消歧 0  
+  Institution  共 744 已判 744 待消歧 0  
+  Person       共 508 已判 508 待消歧 0  
+  Policy       共 126 已判 126 待消歧 0  
+  待消歧原因：{'distinct_entity_marker': 7, 'no_alias_match': 1063}
+归并出的公司身份 104 个（其中 73 个有多种写法被归并到同一个 stock_code）
+产物：C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\_抽取缓存\v2.1_v1_2\图谱管线\消歧\alias_table.json
+      C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\_抽取缓存\v2.1_v1_2\图谱管线\消歧\disambiguation.json
+      C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\_抽取缓存\v2.1_v1_2\图谱管线\消歧\unresolved.jsonl（1070 条）
+
+--- stderr ---

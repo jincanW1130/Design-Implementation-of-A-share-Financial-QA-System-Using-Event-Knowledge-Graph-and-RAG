@@ -1,0 +1,22 @@
+$ python 工具\抽检助手.py selftest
+cwd: C:\Users\15129\Desktop\毕业设计
+env_overrides: {}
+env_unset: []
+exit_code: 0
+wall_clock_seconds: 0.539
+
+--- stdout ---
+抽检助手 selftest（在系统临时目录里跑，不碰真实产物）
+  临时根目录：C:\Users\15129\AppData\Local\Temp
+  [PASS] 抽样确定性：连跑两次 export，台账＋说明＋40 个工作区文件逐字节一致 —— 比对 42 个文件（台账 1＋说明 1＋工作区 40）；不一致 0 个
+  [PASS] 强制覆盖：8 类事件每类 ≥2 条，或未达标项已登记 —— 达标 8／8；未达标已登记 0 个
+  [PASS] 未复核检出：未改动的工作区报 40 条未复核、0 个结构问题 —— 未复核 40／40；结构问题 0 个
+  [PASS] diff 条目级分类：corrected×2、agree×1、unreviewed×37 —— 实测 agree 1｜corrected 2｜unreviewed 37
+  [PASS] diff 定位精度：entity_type 与 relation 两处改动被精确报出（共 2 处，无多余） —— DEV-018：Company→Institution（定位「实体 E1 · Company · 紫金矿业集团股份有限公司」）；DEV-022：PARTICIPATES_IN→RELATED_TO（定位「关系 PARTICIPATES_IN · Company E1→Event V1」）；改动行合计 2
+  [PASS] notes 写成 OK 的条目：判为已复核且完全未改（agree），码统计为 OK —— DEV-012：state=agree、codes=['OK']、改动 0 处
+  [PASS] 未复核检出：没有人工 notes 的条目被算作未复核（含模型自述 notes 的条目） —— 未复核 37 条＝notes 为空 21 条 ＋ 仍是模型原样 16 条；误判 0 条
+  [PASS] 抽样与抽取链无关：export／check／diff 全程没有打开过 `代码\抽取与图谱\_全量\` 与 `图谱导出\` 下的任何文件（文件访问审计） —— 审计文件访问 846 次；命中禁用目录 0 次
+  [PASS] 源文件未被改：自动标注\{dev,test}.auto.jsonl 与 工作区\ 的 sha256 前后一致 —— jsonl 2 个（b0ddf54b7540、97962ca655eb）＋工作区摘要 d07212cb200f→d07212cb200f；变化 0 个
+selftest 通过（退出码 0）
+
+--- stderr ---

@@ -1,0 +1,33 @@
+$ python 代码\抽取与图谱\dedup_events.py --profile v21_v1_2 --force
+cwd: C:\Users\15129\Desktop\毕业设计
+env_overrides: {'STAGE6_FORBID_MODEL_CALLS': '1'}
+env_unset: ['LLM_API_KEY']
+exit_code: 0
+wall_clock_seconds: 3.470
+
+--- stdout ---
+输入：C:\Users\15129\Desktop\毕业设计\代码\抽取与图谱\_全量\v2.1_v1_2\extracted.jsonl（709 篇，指纹 bae28dc7682b2901…）；消歧产物指纹一致 ✓
+时间补抽覆盖层：代码/抽取与图谱/_全量/v2.1_v1_2/event_time_backfill.json（sha256 46c61022eb6df6f2…；应用 173 条事件，依据 {'stated': 110, 'year_from_publish': 63}）
+事件 1114 条；类型相同因而进入逐条判据的候选对 94901 对；四条件同时满足 14 对；合并成组 14 组，事件数 1114 → 1100
+逐条判据的首个不成立条件分布：{'all_satisfied': 14, 'participants': 94449, 'time_window': 384, 'trigger_similarity': 54}
+  [合并] MEVT-0001 成员 2：证据文档 [1001]
+  [合并] MEVT-0022 成员 2：证据文档 [1015, 2010]
+  [合并] MEVT-0028 成员 2：证据文档 [1021, 1163]
+  [合并] MEVT-0036 成员 2：证据文档 [1027, 1239]
+  [合并] MEVT-0079 成员 2：证据文档 [1056, 1057]
+  [合并] MEVT-0088 成员 2：证据文档 [1065]
+  [合并] MEVT-0097 成员 2：证据文档 [1072, 1197]
+  [合并] MEVT-0164 成员 2：证据文档 [1129, 2003]
+  [合并] MEVT-0315 成员 2：证据文档 [1232, 1233]
+  [合并] MEVT-0327 成员 2：证据文档 [1244, 1294]
+  [合并] MEVT-0333 成员 2：证据文档 [1249]
+  [合并] MEVT-0403 成员 2：证据文档 [1304, 1363]
+  [合并] MEVT-0974 成员 2：证据文档 [2083, 2091]
+  [合并] MEVT-1038 成员 2：证据文档 [3009, 3012]
+自检（合并后保留全部证据文档）：passed=True；成员证据 [[1056], [1057], [901056]] → 合并后 [1056, 1057, 901056]
+产物：C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\_抽取缓存\v2.1_v1_2\图谱管线\去重\merge_log.jsonl（94901 条判据）
+      C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\_抽取缓存\v2.1_v1_2\图谱管线\去重\events_merged.jsonl（1100 条合并后事件）
+      C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\_抽取缓存\v2.1_v1_2\图谱管线\去重\merge_summary.json
+      C:\Users\15129\Desktop\毕业设计\阶段05-数据准备\数据集\_抽取缓存\v2.1_v1_2\图谱管线\去重\dedup_self_test.json
+
+--- stderr ---

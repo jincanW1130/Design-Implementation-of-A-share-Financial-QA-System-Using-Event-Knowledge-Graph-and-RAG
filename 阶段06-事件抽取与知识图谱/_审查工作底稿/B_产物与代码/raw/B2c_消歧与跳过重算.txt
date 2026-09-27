@@ -1,0 +1,19 @@
+#### 消歧计数（重算 vs 声明）
+  Company      重算 resolved=755 unresolved=1070 total=1825 ｜ 声明 resolved=755 unresolved=1070 total=1825 ｜ 一致
+  Institution  重算 resolved=744 unresolved=0 total=744 ｜ 声明 resolved=744 unresolved=0 total=744 ｜ 一致
+  Person       重算 resolved=508 unresolved=0 total=508 ｜ 声明 resolved=508 unresolved=0 total=508 ｜ 一致
+  Policy       重算 resolved=126 unresolved=0 total=126 ｜ 声明 resolved=126 unresolved=0 total=126 ｜ 一致
+  Industry     重算 resolved=90 unresolved=0 total=90 ｜ 声明 resolved=90 unresolved=0 total=90 ｜ 一致
+  Company 消歧率 重算 = 0.4137（《16》8.4 声明 41.4%）
+
+#### 待消歧构成（unresolved.jsonl 的 reason 分布）
+  条目数 = 1070  reason 分布 = {'no_alias_match': 1063, 'distinct_entity_marker': 7}
+  《16》4.4 声明：no_alias_match 1063 ＋ distinct_entity_marker 7 = 1070
+
+#### 跳过边（端点未消歧）按关系重算
+  重算跳过 = {'PARTICIPATES_IN': 680, 'HAS_EXECUTIVE': 142, 'SUPPLIES': 29, 'COMPETES_WITH': 7, 'CUSTOMER_OF': 9, 'BELONGS_TO': 40}  合计 = 907
+  peer 不在 entity_map 的关系数 = {}
+  声明值：PARTICIPATES_IN 662／HAS_EXECUTIVE 135／BELONGS_TO 40／SUPPLIES 29／COMPETES_WITH 7／CUSTOMER_OF 5，合计 878
+
+#### 公司身份数
+  company_identities 声明 = 104 ；重算 entity_map 里 Company 的不同数字代码身份 = 104

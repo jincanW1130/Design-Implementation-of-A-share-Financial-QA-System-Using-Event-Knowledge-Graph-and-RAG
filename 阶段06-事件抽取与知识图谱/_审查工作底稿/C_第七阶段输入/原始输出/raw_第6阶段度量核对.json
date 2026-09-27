@@ -1,0 +1,46 @@
+{
+  "source_file": "代码\\抽取与图谱\\_全量\\v2.1_v1_2\\时间覆盖_度量.json",
+  "backfill": {
+    "accepted": 173,
+    "by_basis": {
+      "null": 544,
+      "stated": 110,
+      "year_from_publish": 63
+    },
+    "null_events": 717
+  },
+  "extraction_layer_after_backfill": {
+    "events": 1114,
+    "events_with_time": 570,
+    "events_without_time": 544,
+    "docs_with_ge2_dated_events": 66,
+    "docs_times_span_more_than_one_month": 49,
+    "docs_times_span_ge_31_days": 40,
+    "doc_ids_ge2_count": 66,
+    "doc_ids_multi_month_count": 49
+  },
+  "top_level_keys": [
+    "backfill",
+    "definition",
+    "extraction_layer_after_backfill",
+    "extraction_layer_before_backfill",
+    "generated_at",
+    "graph_layer_after_backfill",
+    "schema",
+    "sources"
+  ],
+  "graph_layer_keys": [
+    "graph_layer_after_backfill"
+  ],
+  "graph_layer_after_backfill": {
+    "keys": [
+      "events",
+      "events_with_time",
+      "events_without_time",
+      "metrics"
+    ],
+    "events": 1100,
+    "events_with_time": 556,
+    "events_without_time": 544
+  }
+}

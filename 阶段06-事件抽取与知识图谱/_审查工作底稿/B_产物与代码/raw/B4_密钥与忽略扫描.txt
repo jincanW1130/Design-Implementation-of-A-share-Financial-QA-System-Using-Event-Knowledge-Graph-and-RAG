@@ -1,0 +1,101 @@
+#### B4-01 扫描目标集合
+$ git ls-files -co --exclude-standard  →  170 个文件
+（含已跟踪文件与未忽略的新文件；被 .gitignore 排除的文件不在其中）
+
+#### B4-02 密钥模式扫描（逐文件、按 utf-8 容错读）
+已扫描文件 170 个／11412772 字节；不可读 0 个
+命中总数 = 9
+  HIT [sk-] 阶段06-事件抽取与知识图谱/_审查工作底稿/B_产物与代码/recompute/scan_B4_secrets.py :: ), p.stderr.decode('utf-8', 'replace')\n\n\nPATTERNS = [\n    ('sk-', re.compile(r'sk-')),\n    ('bce-v3/', re.compile(r'bce-v3/
+      匹配片段=sk-
+  HIT [sk-] 阶段06-事件抽取与知识图谱/_审查工作底稿/B_产物与代码/recompute/scan_B4_secrets.py :: 'utf-8', 'replace')\n\n\nPATTERNS = [\n    ('sk-', re.compile(r'sk-')),\n    ('bce-v3/', re.compile(r'bce-v3/')),\n    ('id.secre
+      匹配片段=sk-
+  HIT [sk-] 阶段06-事件抽取与知识图谱/_审查工作底稿/B_产物与代码/recompute/scan_B4_secrets.py :: nt('#### B4-04 历史检索 git log --all -S/-G')\n    for frag in ('sk-', 'bce-v3/', 'DEEPSEEK_API_KEY', 'LLM_API_KEY'):\n        rc
+      匹配片段=sk-
+  HIT [bce-v3/] 阶段06-事件抽取与知识图谱/_审查工作底稿/B_产物与代码/recompute/scan_B4_secrets.py :: ace')\n\n\nPATTERNS = [\n    ('sk-', re.compile(r'sk-')),\n    ('bce-v3/', re.compile(r'bce-v3/')),\n    ('id.secret(32+hex.32+hex)',
+      匹配片段=bce-v3/
+  HIT [bce-v3/] 阶段06-事件抽取与知识图谱/_审查工作底稿/B_产物与代码/recompute/scan_B4_secrets.py ::   ('sk-', re.compile(r'sk-')),\n    ('bce-v3/', re.compile(r'bce-v3/')),\n    ('id.secret(32+hex.32+hex)', re.compile(r'\b[0-9a-f
+      匹配片段=bce-v3/
+  HIT [bce-v3/] 阶段06-事件抽取与知识图谱/_审查工作底稿/B_产物与代码/recompute/scan_B4_secrets.py :: # B4-04 历史检索 git log --all -S/-G')\n    for frag in ('sk-', 'bce-v3/', 'DEEPSEEK_API_KEY', 'LLM_API_KEY'):\n        rc, out, err 
+      匹配片段=bce-v3/
+  HIT [bce-v3/] 阶段06-事件抽取与知识图谱/_审查工作底稿/B_产物与代码/recompute/scan_B4_secrets.py :: 无'))\n    for pat in (r'[0-9a-fA-F]{32}\.[0-9a-fA-F]{32}', r'bce-v3/'):\n        rc, out, err = git('log', '--all', '--oneline', 
+      匹配片段=bce-v3/
+  HIT [sk-] 工具/验收第6阶段.py :: 只列信息行；脚本只写读取方式）")\nprint("=" * 78)\n\nKEY_RE = re.compile(r"(?:sk-[A-Za-z0-9_\-]{16,}|"\n                    r"(?:api[_-]?key|A
+      匹配片段=sk-
+  HIT [sk-] 工具/验收第6阶段.py :: 命中」的密钥形态字面量，否则 U1 会自己命中自己。\ncontrol_ok = bool(KEY_RE.search("sk-" + "A" * 24)) and bool(\n    KEY_RE.search("api_key" + ' = "
+      匹配片段=sk-
+
+#### B4-03 逐模式命中计数
+  sk-                          5
+  bce-v3/                      4
+  id.secret(32+hex.32+hex)     0
+  id.secret(32+hex:32+hex)     0
+  bearer_token                 0
+  api_key_literal              0
+
+#### B4-04 历史检索 git log --all -S/-G
+  -Ssk-              命中提交 1 个：a8555be 第 6 阶段验收脚本：29 行验收标准落地为 A～X 24 组 100 项检查
+  -Sbce-v3/          命中提交 0 个：无
+  -SDEEPSEEK_API_KEY 命中提交 0 个：无
+  -SLLM_API_KEY      命中提交 6 个：9632e33 第 6 阶段交付物切换到 v1.2：抽取提示词含 8 类事件类型定义；dd654e8 修三处运行期缺陷：模型变量撞名、密钥不可达、重放守卫被削弱；0df4d8b 第 6 阶段完成：事件抽取与知识图谱（T1～T9 全部落地并通过验收）；a8555be 第 6 阶段验收脚本：29 行验收标准落地为 A～X 24 组 100 项检查；80dbc18 第 6 阶段 T2～T8：抽取配置冻结、图谱管线落地、评测集选样完成
+  -G[0-9a-fA-F]{32}\.[0-9a-fA-F]{32} 命中提交 0 个：无
+  -Gbce-v3/                          命中提交 0 个：无
+  历史中是否出现 .env                               → 无
+  历史中是否出现 代码/抽取与图谱/config.local.json         → 无
+
+#### B4-05 .gitignore 覆盖核查（《00》第八节规则 7 的三类＋密钥／本地配置）
+  .gitignore:10:阶段02-文献调研与开题/文献PDF/	阶段02-文献调研与开题/文献PDF/FIN-16_Saxena2021_CronKGQA.pdf
+  .gitignore:11:阶段02-文献调研与开题/文献翻译/	阶段02-文献调研与开题/文献翻译/RAG-1_Lewis2020_RAG_译文.docx
+  .gitignore:19:阶段05-数据准备/数据集/	阶段05-数据准备/数据集/v2.1/clean/documents.jsonl
+  .gitignore:2:.idea/	.idea/workspace.xml
+  .gitignore:47:config.local.*	代码/抽取与图谱/config.local.json
+  .gitignore:44:.env	.env
+  退出码 = 0
+  阶段02-文献调研与开题/文献PDF/FIN-16_Saxena2021_CronKGQA.pdf          已入库=False
+  阶段05-数据准备/数据集/v2.1/clean/documents.jsonl                   已入库=False
+  .idea/workspace.xml                                        已入库=False
+  代码/抽取与图谱/config.local.json                                 已入库=False
+
+#### B4-06 是否有 .gitignore 未覆盖但明显该忽略的落点
+  阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/nodes.csv                                忽略=False 
+  阶段06-事件抽取与知识图谱/_试跑_图谱管线/运行日志_首跑.txt                                    忽略=True .gitignore:29:阶段06-事件抽取与知识图谱/_试跑*/	阶段06-事件抽取与知识图谱/_试跑_图谱管线/运行日志_首跑.txt
+  代码/抽取与图谱/_试跑/v1_2/定向对照报告.md                                            忽略=True .gitignore:34:代码/抽取与图谱/_试跑/	代码/抽取与图谱/_试跑/v1_2/定向对照报告.md
+  代码/抽取与图谱/_全量/v2.1_v1_2/对照报告.md                                         忽略=True .gitignore:32:代码/抽取与图谱/_全量/	代码/抽取与图谱/_全量/v2.1_v1_2/对照报告.md
+  阶段05-数据准备/数据集/抽取评测集/v2.1/自动标注/自动标注报告.md                                忽略=True .gitignore:19:阶段05-数据准备/数据集/	阶段05-数据准备/数据集/抽取评测集/v2.1/自动标注/自动标注报告.md
+  阶段06-事件抽取与知识图谱/_审查工作底稿/A_文档与口径/raw_跨文档核验.txt                           忽略=False 
+  工具/__pycache__/执行助手.cpython-312.pyc                                    忽略=True .gitignore:38:__pycache__/	工具/__pycache__/执行助手.cpython-312.pyc
+  代码/抽取与图谱/__pycache__/config.cpython-312.pyc                            忽略=True .gitignore:38:__pycache__/	代码/抽取与图谱/__pycache__/config.cpython-312.pyc
+
+#### B4-07 历史提交中的新增文件（git log --diff-filter=A --stat 抽查）
+  历史新增文件条目总数 = 113（按提交）
+   9632e33 第 6 阶段交付物切换到 v1.2：抽取提示词含 8 类事件类型定义                             新增 5
+   0054092 自动标注提准：flash 版全量 ＋ lint／定向修复 ＋ 两版对照 ＋ 参照集裁定                    新增 5
+   37fbba0 第 6 阶段审查与自动标注：修 8 处缺陷、细化事件类型口径、产出 260 条模型参照集                   新增 1
+   919238e 修复 event_time 空值坑：两级抽取补时间 ＋ 人工确认实体入图                           新增 3
+   0df4d8b 第 6 阶段完成：事件抽取与知识图谱（T1～T9 全部落地并通过验收）                            新增 8
+   a8555be 第 6 阶段验收脚本：29 行验收标准落地为 A～X 24 组 100 项检查                        新增 1
+   80dbc18 第 6 阶段 T2～T8：抽取配置冻结、图谱管线落地、评测集选样完成                             新增 5
+   f30eb5c 第 6 阶段 T1：抽取试跑打通，证据回链与防幻觉门禁经独立验证生效                             新增 3
+   cc8c1c6 数据集 v2.1：按事件类型优先的定向补样，补上审核报告路线 A 缺的那一半                         新增 27
+   16e6bcc 第 6 阶段准备：任务书《15》落盘，索引与数据集说明同步到 v2.0                            新增 1
+   07d1e40 前五阶段审核：新增 14-审核报告，补做本体覆盖性检查，修两处口径残留                            新增 1
+   9424c33 执行复盘落地：新增 工具/执行助手.py（能机械修的），作业纪律写进 工具/README.md（修不了靠动作）        新增 1
+   2b2aa8d 第 5 阶段完成：数据集 v1.0 与数据管线落地                                      新增 11
+   2ae6a57 第 4 阶段完成 + 工作区按阶段重组，第 5 阶段任务书就位                                新增 40
+   cafd485 Initial commit                                                 新增 1
+  历史中曾入库、且属《00》规则 7 应排除范围的路径数 = 0
+
+#### B4-08 当前入库文件总览（按顶层目录）
+  .gitattributes                           1
+  .gitignore                               1
+  00-项目总览与索引.md                            1
+  02-项目执行总控文档.md                           1
+  README.md                                1
+  代码                                       53
+  图表                                       2
+  工具                                       9
+  阶段01-选题与项目规划                             1
+  阶段02-文献调研与开题                             15
+  阶段03-需求分析                                2
+  阶段04-系统总体设计                              10
+  阶段05-数据准备                                3
+  阶段06-事件抽取与知识图谱                           13

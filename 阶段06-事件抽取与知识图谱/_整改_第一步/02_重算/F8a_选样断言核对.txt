@@ -1,0 +1,14 @@
+$ python 阶段06-事件抽取与知识图谱\_整改_第一步\_工具\F8a_选样断言核对.py
+cwd: C:\Users\15129\Desktop\毕业设计
+env_overrides: {'STAGE6_FORBID_MODEL_CALLS': '1'}
+env_unset: ['LLM_API_KEY']
+exit_code: 0
+wall_clock_seconds: 0.103
+
+--- stdout ---
+① pilot 完整选样：12 篇；断言 problems=0 条；skip 提示=None
+② pilot ＋ --docs 1001：1 篇；断言 problems=0 条；skip 提示='--docs 指定了抽取子集（1001）：pilot 样本构成断言只适用于完整选样，本次运行的『样本合规』结论不成立'
+③ 负对照：把同一子集直接喂给 check_selection → problems=12 条（前两条：['选出 1 篇，应为 12 篇', '类目缺失：财经新闻']）
+结论：改后 --docs 运行会打印 [选样断言已跳过] 并把原因写进 selection.json 的 assertion_skipped；改前该分支返回空列表且不打任何提示（静默绕过）。
+
+--- stderr ---

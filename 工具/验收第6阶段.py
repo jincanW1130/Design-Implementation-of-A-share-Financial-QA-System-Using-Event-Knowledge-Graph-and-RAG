@@ -867,6 +867,43 @@ else:
     b11_rel_n = Counter(cell(_r, "relation") for _ln, _r in b11_edges)
     b11_evt_n = Counter(cell(_r, "event_type") for _ln, _r in b11_nodes
                         if cell(_r, "label") == "Event")
+    # 条数交叉核对（2026-09-27 补强；审查 B 的守卫边界 ③）：B11 原先只核「覆盖集合」——
+    # 某关系是否 0 条／有条目，不看条数，于是把 edges.csv 删掉一行在 `--no-replay` 下
+    # （J 组逐字节比对被跳过）仍然全绿。现在把交付物导出与**同一次 write_graph.py 写出**的
+    # graph_stats.json 按逐关系条数、逐标签节点数与总数交叉核对：两个文件必须互相印证，
+    # 删一行／改一行／统计文件缺失都会在这里变红。只加判定条件、不加检查项（项数不变）。
+    b11_nodes_n = Counter(cell(_r, "label") for _ln, _r in b11_nodes)
+    b11_stats_path = os.path.join(B11_EXPORT_DIR, config.GRAPH_PIPELINE["files"]["graph_stats"])
+    b11_stats = read_json(b11_stats_path, default=None) or {}
+    b11_stats_counts = b11_stats.get("counts") or {}
+    b11_stats_rel = b11_stats_counts.get("edges_by_relation") or {}
+    b11_stats_label = b11_stats_counts.get("nodes_by_label") or {}
+
+    def _as_int(value):
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return -1
+
+    b11_count_bad = []
+    if _as_int(b11_stats_counts.get("edges_total")) != len(b11_edges):
+        b11_count_bad.append("edges_total graph_stats.json=%s vs edges.csv=%d"
+                             % (b11_stats_counts.get("edges_total"), len(b11_edges)))
+    if _as_int(b11_stats_counts.get("nodes_total")) != len(b11_nodes):
+        b11_count_bad.append("nodes_total graph_stats.json=%s vs nodes.csv=%d"
+                             % (b11_stats_counts.get("nodes_total"), len(b11_nodes)))
+    for _n in sorted(set(config.RELATIONS) | set(b11_rel_n) | set(b11_stats_rel)):
+        # graph_stats.json 的 edges_by_relation 与「计数为 0 不新增字段」的老规矩一致：
+        # 缺键就是 0 条（例如 SUPPLIES），不是「读不到」——读不到由 edges_total／nodes_total 兜。
+        _stat, _csv = _as_int(b11_stats_rel.get(_n, 0)), b11_rel_n.get(_n, 0)
+        if _stat != _csv:
+            b11_count_bad.append("关系 %s graph_stats.json=%s vs edges.csv=%d"
+                                 % (_n, b11_stats_rel.get(_n), _csv))
+    for _n in sorted(set(b11_nodes_n) | set(b11_stats_label)):
+        _stat, _csv = _as_int(b11_stats_label.get(_n, 0)), b11_nodes_n.get(_n, 0)
+        if _stat != _csv:
+            b11_count_bad.append("标签 %s graph_stats.json=%s vs nodes.csv=%d"
+                                 % (_n, b11_stats_label.get(_n), _csv))
     b11_unreg, b11_contradict, b11_cover = [], [], []
     for _kind, _names, _counts in (("关系", config.RELATIONS, b11_rel_n),
                                    ("事件类型", config.EVENT_TYPES, b11_evt_n)):
@@ -880,14 +917,18 @@ else:
             if _num > 0 and _cln is not None:
                 b11_contradict.append("%s %s（导出物 %d 条，而《16》第%d行登记为缺失：「%s」）"
                                       % (_kind, _n, _num, _cln, _cline[:60]))
-    chk(not b11_unreg and not b11_contradict, B11_LABEL,
+    chk(not b11_unreg and not b11_contradict and not b11_count_bad, B11_LABEL,
         "实测 交付物导出 %s：关系 %d 条、节点 %d 个（其中 Event %d 个）；逐类覆盖 %s；"
-        "导出物 0 条却未在《16》量化登记的 %d 项%s；导出物有条目却被《16》登记为缺失的 %d 项%s%s"
+        "条数交叉核对 graph_stats.json：edges_total=%s、nodes_total=%s、逐关系／逐标签不一致 "
+        "%d 项%s；导出物 0 条却未在《16》量化登记的 %d 项%s；"
+        "导出物有条目却被《16》登记为缺失的 %d 项%s%s"
         % (rel_to_root(B11_EXPORT_DIR), len(b11_edges), len(b11_nodes), sum(b11_evt_n.values()),
            "、".join(b11_cover),
+           b11_stats_counts.get("edges_total"), b11_stats_counts.get("nodes_total"),
+           len(b11_count_bad), "：" + br(b11_count_bad, 4) if b11_count_bad else "",
            len(b11_unreg), "：" + br(b11_unreg, 6) if b11_unreg else "",
            len(b11_contradict), "：" + br(b11_contradict, 3) if b11_contradict else "",
-           ("；" + B11_HINT) if (b11_unreg or b11_contradict) else ""))
+           ("；" + B11_HINT) if (b11_unreg or b11_contradict or b11_count_bad) else ""))
 
 # ==========================================================================
 print(); print("=" * 78)

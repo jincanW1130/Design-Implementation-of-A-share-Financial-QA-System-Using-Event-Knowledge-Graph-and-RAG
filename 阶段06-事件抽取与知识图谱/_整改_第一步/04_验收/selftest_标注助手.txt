@@ -1,0 +1,177 @@
+$ python 工具\标注助手.py selftest
+cwd: C:\Users\15129\Desktop\毕业设计
+env_overrides: {}
+env_unset: []
+exit_code: 0
+wall_clock_seconds: 2.154
+
+--- stdout ---
+selftest 临时目录：C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix
+------------------------------------------------------------------------
+[1] export 两次 → 幂等
+export 完成
+  评测集目录：C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix\抽取评测集\v2.1
+  工作区：    C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix\抽取评测集\v2.1\标注工作区
+  dev   条目  60 条，工作区现有  60 个 .md
+  test  条目 200 条，工作区现有 200 个 .md
+  新建 260｜刷新空模板 0｜跳过（未填、未动）0｜跳过（**已填写，不覆盖**）0｜覆盖并备份 0
+  工作区入口：C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix\抽取评测集\v2.1\标注工作区\说明.md
+  说明：默认**跳过**已存在的文件（不覆盖任何已填写的标注）；`--refresh` 只重写仍是空模板的条目；`--overwrite` 才会重写已填写的条目，且先把原文件备份到 `_备份\`。
+export 完成
+  评测集目录：C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix\抽取评测集\v2.1
+  工作区：    C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix\抽取评测集\v2.1\标注工作区
+  dev   条目  60 条，工作区现有  60 个 .md
+  test  条目 200 条，工作区现有 200 个 .md
+  新建 0｜刷新空模板 0｜跳过（未填、未动）260｜跳过（**已填写，不覆盖**）0｜覆盖并备份 0
+  工作区入口：C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix\抽取评测集\v2.1\标注工作区\说明.md
+  说明：默认**跳过**已存在的文件（不覆盖任何已填写的标注）；`--refresh` 只重写仍是空模板的条目；`--overwrite` 才会重写已填写的条目，且先把原文件备份到 `_备份\`。
+  [OK] 工作区两次导出的摘要一致（幂等） —— 3d65b270796c5175 vs 3d65b270796c5175
+------------------------------------------------------------------------
+[2] 全新工作区 check → 全 pending、0 问题
+  [OK] 刚导出时 0 问题 —— 实测 0 个
+  [OK] 全 260 条均为待标注 —— dev filled=0 pending=60；test pending=200
+------------------------------------------------------------------------
+[3] stats（全空工作区）
+stats：工作区 C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix\抽取评测集\v2.1\标注工作区
+
+== dev ==（jsonl 60 条）
+  已标注 0｜待标注 60｜其中空块已核对（notes 含 empty_but_checked）0
+  实体类型（5 类）：Company 0｜Person 0｜Industry 0｜Institution 0｜Policy 0
+  事件类型（8 类）：业绩 0｜监管 0｜股权 0｜投资并购 0｜重大合同 0｜产品 0｜政策 0｜重大经营 0
+  关系（9 类）：BELONGS_TO 0｜SUPPLIES 0｜CUSTOMER_OF 0｜COMPETES_WITH 0｜HAS_EXECUTIVE 0｜PARTICIPATES_IN 0｜ISSUED_BY 0｜RELATED_TO 0｜EVIDENCED_BY 0
+  时间条目 0｜本体边界登记 0
+  **零覆盖事件类型**：业绩、监管、股权、投资并购、重大合同、产品、政策、重大经营 —— 冻结前若仍为 0，须按《标注说明.md》第11节／《16》「已知限制与证据不足清单」显式登记为证据不足
+  **零覆盖关系**：BELONGS_TO、SUPPLIES、CUSTOMER_OF、COMPETES_WITH、HAS_EXECUTIVE、PARTICIPATES_IN、ISSUED_BY、RELATED_TO、EVIDENCED_BY —— 同上（EVIDENCED_BY 本就不标注，恒为 0 属正常）
+
+== test ==（jsonl 200 条）
+  已标注 0｜待标注 200｜其中空块已核对（notes 含 empty_but_checked）0
+  实体类型（5 类）：Company 0｜Person 0｜Industry 0｜Institution 0｜Policy 0
+  事件类型（8 类）：业绩 0｜监管 0｜股权 0｜投资并购 0｜重大合同 0｜产品 0｜政策 0｜重大经营 0
+  关系（9 类）：BELONGS_TO 0｜SUPPLIES 0｜CUSTOMER_OF 0｜COMPETES_WITH 0｜HAS_EXECUTIVE 0｜PARTICIPATES_IN 0｜ISSUED_BY 0｜RELATED_TO 0｜EVIDENCED_BY 0
+  时间条目 0｜本体边界登记 0
+  **零覆盖事件类型**：业绩、监管、股权、投资并购、重大合同、产品、政策、重大经营 —— 冻结前若仍为 0，须按《标注说明.md》第11节／《16》「已知限制与证据不足清单」显式登记为证据不足
+  **零覆盖关系**：BELONGS_TO、SUPPLIES、CUSTOMER_OF、COMPETES_WITH、HAS_EXECUTIVE、PARTICIPATES_IN、ISSUED_BY、RELATED_TO、EVIDENCED_BY —— 同上（EVIDENCED_BY 本就不标注，恒为 0 属正常）
+
+== 合计 ==（jsonl 260 条）
+  已标注 0｜待标注 260
+------------------------------------------------------------------------
+[4] 往返：给 dev 的 1 条填一个**合成假标签**，check 应通过，merge 只改 annotation
+  [OK] 合成标签（结构合法）下 check 通过 —— 实测问题 []
+check：工作区 C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix\抽取评测集\v2.1\标注工作区
+  dev   jsonl  60 条｜工作区文件  60｜已标注   1｜待标注  59｜空块已核对   0｜无文件   0
+  **0 个问题**：已填写的条目全部通过。
+merge dev  ：写回 1 条，status → human_annotated；原件已备份到 _备份\dev.jsonl.651bc18e.bak
+              输出 SHA-256 915c87b262a5f9f9ac7a5e79bebced249e7aa008e24aee43d60e799fec78eda7
+merge 完成。记录：C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix\抽取评测集\v2.1\标注工作区\_合并记录.json
+只改了 annotation（status → human_annotated），其余字段与字段顺序逐字保留；重跑本命令不会二次改动。
+  [OK] 合并后的行与原件**只在 annotation 上不同** —— 只有 annotation 变化
+  [OK] status 已切到完成标记 human_annotated —— human_annotated
+check：工作区 C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix\抽取评测集\v2.1\标注工作区
+  dev   jsonl  60 条｜工作区文件  60｜已标注   1｜待标注  59｜空块已核对   0｜无文件   0
+  **0 个问题**：已填写的条目全部通过。
+merge dev  ：已是最新状态，未改动（幂等）
+merge 完成。记录：C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix\抽取评测集\v2.1\标注工作区\_合并记录.json
+只改了 annotation（status → human_annotated），其余字段与字段顺序逐字保留；重跑本命令不会二次改动。
+  [OK] merge 重跑不二次改动（幂等） —— 两次写盘逐字节一致
+------------------------------------------------------------------------
+[5] 负向自测：6 个不同的错，check 必须逐条报出正确的证据行
+  [OK] DEV-002：check 报出 `entity_type_illegal` —— 实测 ['entity_type_illegal']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-002.md | item_id=DEV-002 | 字段=entities[0].entity_type | 值=Product
+  [OK] DEV-003：check 报出 `role_illegal` —— 实测 ['event_field_missing', 'participant_ref_dangling', 'role_illegal']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-003.md | item_id=DEV-003 | 字段=events[0].participants[0].role | 值=第六个角色
+  [OK] DEV-004：check 报出 `quote_not_in_text` —— 实测 ['quote_not_in_text']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-004.md | item_id=DEV-004 | 字段=times[0].quote | 值=这段文字绝对不在本块的原文里出现过
+  [OK] DEV-005：check 报出 `relation_evidence_missing` —— 实测 ['relation_evidence_missing', 'relation_extra_missing', 'relation_ref_dangling', 'role_illegal']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-005.md | item_id=DEV-005 | 字段=relations[0].source_chunk_id | 值=（缺该键）
+  [OK] DEV-006：check 报出 `relation_evidence_missing` —— 实测 ['relation_evidence_missing', 'relation_ref_dangling']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-006.md | item_id=DEV-006 | 字段=relations[0].source_chunk_id | 值=999999
+  [OK] DEV-007：check 报出 `ontology_invention` —— 实测 ['ontology_invention']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-007.md | item_id=DEV-007 | 字段=ontology_boundary_log[0] | 值=文本断言「新增第 10 条关系」这类**已生效**口径（协议第八节：只在 suggested_handling 里提**建议**，不许把新本体当已生效）
+------------------------------------------------------------------------
+[6] F1～F6 回归：六项「修前会误判」的缺陷，逐条断言（含「仍须拒绝」的对照）
+  [OK] F1a 关系 confidence=1.5 越界：check 报出 `confidence_range` —— 实测 ['confidence_range']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-009.md | item_id=DEV-009 | 字段=relations[0].confidence | 值=1.5
+  [OK] F1b 关系 confidence="abc" 非数值（与 events 同码 confidence_range）：check 报出 `confidence_range` —— 实测 ['confidence_range']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-010.md | item_id=DEV-010 | 字段=relations[0].confidence | 值=abc
+  [OK] F2 source_doc_id 与本条 doc_id 不符：check 报出 `relation_doc_mismatch` —— 实测 ['relation_doc_mismatch']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-011.md | item_id=DEV-011 | 字段=relations[0].source_doc_id | 值=999999
+  [OK] F3 from_label 与端点实际类型不符：check 报出 `relation_label_mismatch` —— 实测 ['relation_label_mismatch']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-012.md | item_id=DEV-012 | 字段=relations[0].from_label | 值=Person
+  [OK] F5b BELONGS_TO 有效期格式非法（乱填照样报）：check 报出 `relation_validity_format` —— 实测 ['relation_validity_format']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-015.md | item_id=DEV-015 | 字段=relations[0].valid_to | 值=2020年1月
+  [OK] F6b 本体边界写「已新增……关系」（生效口径）：check 报出 `ontology_invention` —— 实测 ['ontology_invention']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-017.md | item_id=DEV-017 | 字段=ontology_boundary_log[0] | 值=文本断言「新增第 10 条关系」这类**已生效**口径（协议第八节：只在 suggested_handling 里提**建议**，不许把新本体当已生效）
+  [OK] F5a BELONGS_TO 有效期写 null（正文无日期，视为未知）：check 必须通过（不许误拒） —— 实测 0 个问题
+  [OK] F5a2 BELONGS_TO 省略 valid_from／valid_to（同上）：check 必须通过（不许误拒） —— 实测 0 个问题
+  [OK] F6a 本体边界写「建议新增……」（建议口径）：check 必须通过（不许误拒） —— 实测 0 个问题
+  [OK] F6c 本体边界写「待／记录」未定语境（同上放行）：check 必须通过（不许误拒） —— 实测 0 个问题
+  [OK] F4 META 的 text_digest 被改：check 报出 `text_digest_mismatch` —— meta.text_digest=022af6805c161994ac46f7aba863e0796873c5f007b8bece4359e32b4ed368827
+  [OK] 对照 T8 to_ref 悬空仍拒：check 报出 `relation_ref_dangling` —— 实测 ['relation_ref_dangling']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-018.md | item_id=DEV-018 | 字段=relations[0].to_ref | 值=V9
+  [OK] 对照 T9 quote 取自别块仍拒：check 报出 `quote_not_in_text` —— 实测 ['quote_not_in_text']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-019.md | item_id=DEV-019 | 字段=entities[0].quote | 值=别块原文示例：这段文字不在本条目文本块里出现
+  [OK] 对照 T10 事件 confidence=2.0 仍拒：check 报出 `confidence_range` —— 实测 ['confidence_range']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-022.md | item_id=DEV-022 | 字段=events[0].confidence | 值=2.0
+------------------------------------------------------------------------
+[7] G1 一致性对照：同一个 confidence 取值，events[]／relations[] 必须同一口径
+  [OK] G1 confidence=0.9（数值） → 两条路径错误码完全相同（都通过） —— events=[]；relations=[]
+  [OK] G1 confidence="0.9"（数字字符串） → 两条路径错误码完全相同（都通过） —— events=[]；relations=[]
+  [OK] G1 confidence="abc"（非数值） → 两条路径错误码完全相同（confidence_range） —— events=['confidence_range']；relations=['confidence_range']
+  [OK] G1 confidence=2.0（越界） → 两条路径错误码完全相同（confidence_range） —— events=['confidence_range']；relations=['confidence_range']
+  [OK] G1 confidence 键缺失 → 两条路径都拒绝，各报一条、不重复 —— events=['confidence_empty']；relations=['relation_evidence_missing']
+------------------------------------------------------------------------
+[8] G2 本体边界「建议语境」：记录／备注不再是免罪符（只有真没断言已生效才放行）
+  [OK] G2a「建议新增第 10 条关系：公司与代销机构之间的委托关系。」：建议／疑似语境，必须通过：check 必须通过（不许误拒） —— 实测 0 个问题
+  [OK] G2b「疑似需要第 10 条关系。」：建议／疑似语境，必须通过：check 必须通过（不许误拒） —— 实测 0 个问题
+  [OK] G2c「记录：疑似需要第 10 条关系。」：建议／疑似语境，必须通过：check 必须通过（不许误拒） —— 实测 0 个问题
+  [OK] G2d「记录：已新增第 10 条关系，并写入图谱。」：已生效口径，必须拒绝：check 报出 `ontology_invention` —— 实测 ['ontology_invention']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-025.md | item_id=DEV-025 | 字段=ontology_boundary_log[0] | 值=文本断言「新增第 10 条关系」这类**已生效**口径（协议第八节：只在 suggested_handling 里提**建议**，不许把新本体当已生效）
+  [OK] G2e「已新增第 10 条关系：委托关系，并写入图谱。」：已生效口径，必须拒绝：check 报出 `ontology_invention` —— 实测 ['ontology_invention']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-025.md | item_id=DEV-025 | 字段=ontology_boundary_log[0] | 值=文本断言「新增第 10 条关系」这类**已生效**口径（协议第八节：只在 suggested_handling 里提**建议**，不许把新本体当已生效）
+------------------------------------------------------------------------
+[9] G3 to_label 与端点实际类型不符 → `relation_label_mismatch`（补上 to 侧缺口）
+  [OK] G3 to_label="Company" 而 to_ref=E2 实际是 Industry：报出 `relation_label_mismatch` —— 实测 ['relation_endpoint_type', 'relation_label_mismatch']
+  [OK] G3 这条问题落在 `relations[0].to_label`（确实是 to 侧被判定） —— 证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-023.md | item_id=DEV-023 | 字段=relations[0].to_label | 值=Company
+------------------------------------------------------------------------
+[10] 空槽位但 status 说完成 → check 必须拒绝
+  [OK] check 拒绝「status 完成但槽位全空」 —— status 说已完成，但 entities／events／relations／times／ontology_boundary_log 全空、notes 也空；本块确实没有可标事实时，四个槽位留空并在 notes 写 `empty_but_checked: true` 加理由
+------------------------------------------------------------------------
+[11] H1 status=auto_annotated 必须带 provenance（防「自动标注被当成人工标注」）
+  [OK] H1a 带齐 model／prompt_version／temperature（temperature=0 合法）：check 必须通过（不许误拒） —— 实测 0 个问题
+  [OK] H1b 整个 provenance 缺失：check 报出 `auto_provenance_missing` —— 实测 ['auto_provenance_missing']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-027.md | item_id=DEV-027 | 字段=provenance | 值=null
+  [OK] H1c provenance 缺 temperature：check 报出 `auto_provenance_missing` —— 实测 ['auto_provenance_missing']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-028.md | item_id=DEV-028 | 字段=provenance.temperature | 值=null
+  [OK] H1d provenance 缺 prompt_version：check 报出 `auto_provenance_missing` —— 实测 ['auto_provenance_missing']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-029.md | item_id=DEV-029 | 字段=provenance.prompt_version | 值=null
+  [OK] H1e provenance 缺 model：check 报出 `auto_provenance_missing` —— 实测 ['auto_provenance_missing']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-030.md | item_id=DEV-030 | 字段=provenance.model | 值=null
+  [OK] H1f 对照：human_annotated 不带 provenance 照样通过（守卫不误伤人工）：check 必须通过（不许误拒） —— 实测 0 个问题
+  [OK] H1g 对照：status="machine_annotated" 仍报 status_unknown：check 报出 `status_unknown` —— 实测 ['status_unknown']
+        证据行 → 文件=抽取评测集\v2.1\标注工作区\dev\DEV-033.md | item_id=DEV-033 | 字段=status | 值=machine_annotated
+------------------------------------------------------------------------
+[12] H2 merge 拒绝把 auto_annotated 写回交付文件（`merge_refuses_auto`）
+merge 拒绝写盘：发现 1 条 `auto_annotated`（merge_refuses_auto）。
+    [merge_refuses_auto] 文件=C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix\抽取评测集\v2.1\标注工作区\dev\DEV-031.md | item_id=DEV-031 | 字段=status | 值=auto_annotated | 第 6 阶段交付文件的槽位必须保持为空（《15》第八节 的冻结契约），自动标注落在独立产物里（`阶段05-数据准备\数据集\抽取评测集\v2.1\自动标注\`）。本守卫为硬守卫，`--force` 不放行。
+  [OK] merge 返回非零（拒绝写盘） —— 退出码 1
+  [OK] dev.jsonl 逐字节未动（交付文件槽位冻结契约） —— 写盘前后 SHA-256 一致
+merge 拒绝写盘：发现 1 条 `auto_annotated`（merge_refuses_auto）。
+    [merge_refuses_auto] 文件=C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix\抽取评测集\v2.1\标注工作区\dev\DEV-031.md | item_id=DEV-031 | 字段=status | 值=auto_annotated | 第 6 阶段交付文件的槽位必须保持为空（《15》第八节 的冻结契约），自动标注落在独立产物里（`阶段05-数据准备\数据集\抽取评测集\v2.1\自动标注\`）。本守卫为硬守卫，`--force` 不放行。
+  [OK] `--force` 也不放行（冻结契约是硬守卫，不是可越过的 check 问题） —— 退出码 1
+check：工作区 C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix\抽取评测集\v2.1\标注工作区
+  dev   jsonl  60 条｜工作区文件  60｜已标注   2｜待标注  58｜空块已核对   0｜无文件   0
+  **0 个问题**：已填写的条目全部通过。
+merge dev  ：写回 2 条，status → human_annotated；原件已备份到 _备份\dev.jsonl.915c87b2.bak
+              输出 SHA-256 f303f8be866f744c7d8de976c03c2e5f49cf0f1a4b59f4103bde3b2594fd9b7b
+merge 完成。记录：C:\Users\15129\AppData\Local\Temp\handann-selftest-fqm5mjix\抽取评测集\v2.1\标注工作区\_合并记录.json
+只改了 annotation（status → human_annotated），其余字段与字段顺序逐字保留；重跑本命令不会二次改动。
+  [OK] 对照：同一条改成 human_annotated 后 merge 正常写回（守卫不误伤） —— 退出码 0
+------------------------------------------------------------------------
+[13] 真实 dev.jsonl／test.jsonl 全程未被触碰
+  [OK] 真实 jsonl 字节未变（SHA-256） —— dev.jsonl=651bc18e398c…  test.jsonl=8d96c000d85c…
+------------------------------------------------------------------------
+自检**全部通过**
+
+--- stderr ---
+C:\Users\15129\Desktop\毕业设计\工具\标注助手.py:110: SyntaxWarning: invalid escape sequence '\`'
+  （`阶段05-数据准备\数据集\抽取评测集\v2.1\自动标注\`）。这一条是**硬守卫，`--force` 不放行**，

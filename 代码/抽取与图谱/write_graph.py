@@ -627,15 +627,21 @@ def build_edges(records, disambig, merged, by_identity, event_by_key, confirmed_
             dropped.append({
                 "event": str(row["tail_id"]), "institution": str(row["head_id"]),
                 "role": str(row.get("role") or ""),
-                "source_doc_id": int(row.get("source_doc_id") or 0),
-                "source_chunk_id": int(row.get("source_chunk_id") or 0),
+                # 2026-09-27 审查 B 的缺陷 5：原先写 `int(... or 0)`，把缺失的落点**静默**变成
+                # doc_id=0／chunk_id=0（一个并不存在的证据落点，回原文核对会「查不到」）。
+                # 现按原值登记（缺失即 null），不再伪造落点；排序键另做 None 兜底。
+                "source_doc_id": (None if row.get("source_doc_id") is None
+                                  else int(row["source_doc_id"])),
+                "source_chunk_id": (None if row.get("source_chunk_id") is None
+                                    else int(row["source_chunk_id"])),
                 "reason": ISSUER_PARTICIPATION_RULE,
             })
             continue
         kept.append(row)
     edges = kept
-    dropped.sort(key=lambda r: (r["source_doc_id"], r["source_chunk_id"], r["event"],
-                                r["institution"], r["role"]))
+    dropped.sort(key=lambda r: (r["source_doc_id"] is None, int(r["source_doc_id"] or 0),
+                                r["source_chunk_id"] is None, int(r["source_chunk_id"] or 0),
+                                r["event"], r["institution"], r["role"]))
 
     edges.sort(key=lambda r: (str(r["head_id"]), r["relation"], str(r["tail_id"]),
                               int(r.get("source_doc_id") or 0),
@@ -824,10 +830,23 @@ def check_export(paths, nodes, edges, fingerprint, profile, extra_text="", dropp
          "legal_event_types": list(config.ISSUED_BY_EVENT_TYPES),
          "violations": bad_issued[:5]})
     # 丢弃计数：写边的那一趟用内存里的 `dropped`；`--verify-only` 从已写出的
-    # graph_stats.json 读同一计数（读不到按 0）。计数为 0 时**不新增字段**，让归档口径
+    # graph_stats.json 读同一计数。计数为 0 时**不新增字段**，让归档口径
     # （pilot／v21）的 graph_check.json 逐字节不变。
-    dropped_total = len(dropped) if dropped is not None else _dropped_from_stats(paths)
-    if dropped_total:
+    # 2026-09-27 审查 B 的缺陷 6：`--verify-only` 原先「读不到就按 0」——文件缺失／不可解析
+    # 时会把「本应丢弃 >0 条」的场景读成通过。现把「读不到」与「读到 0」分开：读不到按
+    # **失败**记账（读不到 ≠ 没有丢弃），只有「文件可读且未登记该字段」才按 0（归档口径的
+    # 正常形态：计数为 0 时不新增字段）。
+    if dropped is not None:
+        dropped_total = len(dropped)
+    else:
+        dropped_total, dropped_note = _dropped_from_stats(paths)
+    if dropped_total is None:
+        add("issuer_not_also_participant", False,
+            {"violations": both[:5], "dropped_count_unreadable": dropped_note,
+             "note": "《10》第4.5.2节：同一机构既发布又参与时只保留 ISSUED_BY。本次为"
+                     " `--verify-only` 且读不到 graph_stats.json 的丢弃计数——读不到不等于"
+                     "「丢弃 0 条」，按失败记账，不得把失败读成通过。"})
+    elif dropped_total:
         add("issuer_not_also_participant", not both,
             {"violations": both[:5], "edges_dropped_by_rule": dropped_total,
              "rule": "写边前按《10》第4.5.2节 确定性去重：同一机构既是发布／作出方又参与该"
@@ -1039,6 +1058,17 @@ def write_products(paths, nodes, edges, skipped, duplicates, merged, fingerprint
     edges_csv = to_csv(columns_e, edges)
     stats_note = "事件 %d 条（合并后）" % len(merged)
     replay = build_replay(nodes, edges, fingerprint, stats_note)
+    isolated_ids = _isolated(nodes, edges)
+    # 2026-09-27 审查 B 的缺陷 2：`isolated_nodes.count` 原先直接放 **435 个 id 的列表**
+    # （字段名撒谎）。修法分口径——默认口径 v21_v1_2 改成名副其实的形状（count 为整数、
+    # ids 存列表）；pilot／v21 是 v1.1 **冻结归档**，其 `图谱导出\v2.1\graph_stats.json`
+    # 已入库、逐字节不许动（且 `验收第6阶段.py --profile v21` 要求它能被现有代码逐字节复现），
+    # 因此归档口径保持历史形状不变——与 `issuer_participation_dropped` 的「归档零影响」同一惯例。
+    isolated_note = "无边节点：实体抽到了但语料没给出关系；如实保留，不删（不是遗漏）"
+    if paths["profile"] == config.GRAPH_PIPELINE["default_profile"]:
+        isolated_block = {"count": len(isolated_ids), "ids": isolated_ids, "note": isolated_note}
+    else:
+        isolated_block = {"count": isolated_ids, "note": isolated_note}
     write_text(paths["nodes"], nodes_csv)
     write_text(paths["edges"], edges_csv)
     write_text(paths["replay_cypher"], replay)
@@ -1084,10 +1114,7 @@ def write_products(paths, nodes, edges, skipped, duplicates, merged, fingerprint
             "note": "basis 只作为审计读数落在 graph_stats.json；Event 节点列仍严格照"
                     "《10》第4.5.1节 表 4-8 的六项核心属性，不新增字段。",
         },
-        "isolated_nodes": {
-            "count": _isolated(nodes, edges),
-            "note": "无边节点：实体抽到了但语料没给出关系；如实保留，不删（不是遗漏）",
-        },
+        "isolated_nodes": isolated_block,
         "files": {
             name: {"rows": rows, "bytes": len(content.encode("utf-8")),
                    "sha256": sha256_text(content)}
@@ -1181,20 +1208,30 @@ def _check_summary(checks):
     return dict(checks["summary"])
 
 
-def _dropped_from_stats(paths) -> int:
+def _dropped_from_stats(paths):
     """`--verify-only` 用：从已写出的 graph_stats.json 读「作出方又当参与方」的丢弃计数。
 
-    读不到（归档口径下本就没有这个字段）按 0——与写边那一趟「计数为 0 不新增字段」一致。
+    返回 `(count, note)`：
+      * `count` 为整数 —— 正常读到（文件里没有该字段＝归档口径下计数为 0，与写边那一趟
+        「计数为 0 不新增字段」一致，记 0）；
+      * `count` 为 None  —— **读不到**（文件缺失／不可解析／字段值非法）：调用方必须按失败
+        处理，不得静默按 0（2026-09-27 审查 B 的缺陷 6）。
     """
     if not os.path.isfile(paths["graph_stats"]):
-        return 0
+        return None, "graph_stats.json 不存在：%s" % paths["graph_stats"]
     try:
         with open(paths["graph_stats"], encoding="utf-8") as fh:
             data = json.load(fh)
-    except (ValueError, OSError):
-        return 0
-    block = (data or {}).get("issuer_participation_dropped") or {}
-    return int(block.get("count") or 0)
+    except (ValueError, OSError) as exc:
+        return None, "graph_stats.json 读不到／不可解析（%s）：%s" % (type(exc).__name__,
+                                                                      paths["graph_stats"])
+    block = (data or {}).get("issuer_participation_dropped")
+    if block is None:
+        return 0, "未登记 issuer_participation_dropped（归档口径：计数为 0 时不新增字段）"
+    try:
+        return int((block or {}).get("count")), ""
+    except (TypeError, ValueError):
+        return None, "issuer_participation_dropped.count 非法：%r" % ((block or {}).get("count"),)
 
 
 def run(args) -> int:
@@ -1231,10 +1268,15 @@ def run(args) -> int:
                                                  sorted(stats["counts"]["nodes_by_label"].items()))))
     print("边 %d（%s）" % (len(edges), "、".join("%s %d" % kv for kv in
                                                sorted(stats["counts"]["edges_by_relation"].items()))))
+    # 归档口径（pilot／v21）的 count 是历史形状（id 列表，冻结交付逐字节不变），
+    # 这里只为日志算个数；v21_v1_2 的 count 已经是整数。
+    isolated_total = stats["isolated_nodes"]["count"]
+    if isinstance(isolated_total, list):
+        isolated_total = len(isolated_total)
     print("未消歧端点跳过的关系 %d 条（按原因 %s）；重复边去掉 %d 条；"
           "作出方又当参与方丢弃 %d 条（《10》第4.5.2节，%s）；无边节点 %s 个"
           % (len(skipped), stats["unresolved"]["relations_skipped_by_reason"], duplicates,
-             len(dropped), ISSUER_PARTICIPATION_RULE, stats["isolated_nodes"]["count"]))
+             len(dropped), ISSUER_PARTICIPATION_RULE, isolated_total))
     print("人工确认：确认文件 %s（sha256 %s…）；确认条目 %d／未确认 %d；"
           "新增节点 %d 个、据此写入边 %d 条（%s）"
           % (confirmation_info["source_file"], (confirmation_info["sha256"] or "-")[:16],

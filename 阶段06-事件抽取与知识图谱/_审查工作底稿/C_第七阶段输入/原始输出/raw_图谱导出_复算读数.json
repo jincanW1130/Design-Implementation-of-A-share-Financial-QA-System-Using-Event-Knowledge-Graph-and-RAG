@@ -1,0 +1,55 @@
+{
+  "nodes_total": 2802,
+  "nodes_by_label": {
+    "Company": 116,
+    "Person": 403,
+    "Industry": 73,
+    "Institution": 316,
+    "Event": 1100,
+    "Policy": 102,
+    "Document": 692
+  },
+  "company_nodes": 116,
+  "hconf_company_nodes": 12,
+  "company_nodes_without_stock_code": 12,
+  "event_nodes": 1100,
+  "event_time_empty": 544,
+  "event_time_nonempty": 556,
+  "edges_total": 2736,
+  "edges_by_relation": {
+    "HAS_EXECUTIVE": 143,
+    "PARTICIPATES_IN": 1252,
+    "BELONGS_TO": 14,
+    "CUSTOMER_OF": 4,
+    "COMPETES_WITH": 1,
+    "EVIDENCED_BY": 1111,
+    "RELATED_TO": 87,
+    "ISSUED_BY": 124
+  },
+  "missing_evidence_attrs_except_evidenced_by": 0,
+  "evidenced_by_rows_carrying_evidence_attrs": 0,
+  "belongs_to_with_valid_from": {
+    "BELONGS_TO_rows": 14,
+    "BELONGS_TO_with_valid_from": 0,
+    "BELONGS_TO_with_valid_to": 0
+  },
+  "participates_in_role_distribution": {
+    "主体": 752,
+    "合作方": 62,
+    "涉及方": 431,
+    "受影响方": 6,
+    "监管方": 1
+  },
+  "isolated_nodes": 435,
+  "isolated_nodes_by_label": {
+    "Company": 4,
+    "Person": 209,
+    "Industry": 63,
+    "Institution": 125,
+    "Policy": 34
+  },
+  "distinct_source_chunk_ids": 1060,
+  "source_chunk_id_unknown_in_v21": 0,
+  "source_doc_id_mismatch": 0,
+  "note_doc_id_0_edges": 0
+}

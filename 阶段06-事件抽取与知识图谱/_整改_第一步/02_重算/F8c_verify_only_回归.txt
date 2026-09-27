@@ -1,0 +1,32 @@
+$ python 代码\抽取与图谱\write_graph.py --profile v21_v1_2 --verify-only
+cwd: C:\Users\15129\Desktop\毕业设计
+env_overrides: {'STAGE6_FORBID_MODEL_CALLS': '1'}
+env_unset: ['LLM_API_KEY']
+exit_code: 0
+wall_clock_seconds: 0.480
+
+--- stdout ---
+仅机检（不重写导出物）：C:\Users\15129\Desktop\毕业设计\阶段06-事件抽取与知识图谱\图谱导出\v2.1_v1_2
+  [通过] nodes_label_in_ontology
+  [通过] nodes_id_unique_nonempty
+  [通过] relations_in_ontology
+  [通过] edge_endpoints_exist
+  [通过] evidence_attrs_on_8_relations
+  [通过] evidenced_by_clean_and_doc_tail
+  [通过] event_core_attrs_columns_and_values
+  [已知缺口] event_time_nonempty
+  [通过] role_in_frozen_values
+  [通过] issued_by_only_on_policy_and_regulation
+  [通过] issuer_not_also_participant
+  [已知缺口] belongs_to_carries_validity_columns
+  [通过] no_cutoff_time_or_autoincrement_in_export
+  [通过] no_relational_ddl_in_export
+  [通过] explicit_unique_ids
+  [通过] no_body_text_in_export
+  [通过] document_label_is_not_an_entity
+  [通过] human_confirmed_nodes_no_stock_code
+  [通过] human_confirmed_nodes_unique_one_per_name
+  [通过] human_confirmed_entries_match_export
+机检：20 项，通过 18，不通过 2（=belongs_to_carries_validity_columns、event_time_nonempty，其中已知缺口 belongs_to_carries_validity_columns、event_time_nonempty）
+
+--- stderr ---

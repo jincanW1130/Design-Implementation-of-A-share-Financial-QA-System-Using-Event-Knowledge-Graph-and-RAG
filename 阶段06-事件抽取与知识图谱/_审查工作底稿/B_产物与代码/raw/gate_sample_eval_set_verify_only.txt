@@ -1,0 +1,37 @@
+{
+  "dev_items": 60,
+  "test_items": 200,
+  "total_items": 260,
+  "dev_chunk_id_set_size": 60,
+  "test_chunk_id_set_size": 200,
+  "chunk_id_intersection_size": 0,
+  "chunk_id_intersection_examples": [],
+  "document_overlap_size": 0,
+  "annotation_slots_empty": true,
+  "annotation_violations": [],
+  "chunk_ids_resolvable_in_v21": true,
+  "unresolved_chunk_ids": [],
+  "chunk_doc_link_ok": true,
+  "chunk_doc_link_violations": [],
+  "category_counts": {
+    "dev": {
+      "公告": 48,
+      "财经新闻": 7,
+      "政策文件": 3,
+      "监管公开信息": 2
+    },
+    "test": {
+      "公告": 161,
+      "财经新闻": 22,
+      "政策文件": 12,
+      "监管公开信息": 5
+    }
+  },
+  "category_counts_match_stats": true,
+  "protocol_file_exists": true,
+  "stats_file_fingerprints": {
+    "dev": "d2adb2b992281552386f8046f51ea310c249325d8f0162f4aa008cf3231c1c49",
+    "test": "6ec80a044404fbb3017f88e25fea5b82860de8a8d7c0b755ad334a00865c7c34"
+  },
+  "ok": true
+}

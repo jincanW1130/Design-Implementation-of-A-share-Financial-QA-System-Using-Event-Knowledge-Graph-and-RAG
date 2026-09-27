@@ -249,7 +249,15 @@ PROMPT_TEMPLATE_SHA256 = prompt_template_sha256()
 # 基础工具
 # --------------------------------------------------------------------------
 def now_iso() -> str:
-    return _dt.datetime.now().astimezone().isoformat(timespec="seconds")
+    """时间戳一律北京时间（+08:00），与本项目的时间口径一致。
+
+    2026-09-27 审查 B 的缺陷 3：本函数原先用 `astimezone()`（机器本地时区），而
+    `run_all.py`／`write_graph.py`／`extract_event_time.py` 固定 +08:00。在系统时区不是
+    +08:00 的机器上复跑，同一次运行的 run_history.started_at 与 graph_stats.generated_at
+    会带不同的 UTC 偏移，并被误读成两次不同时间窗的运行。这里统一成固定 +08:00。
+    """
+    tz = _dt.timezone(_dt.timedelta(hours=8))
+    return _dt.datetime.now(tz).isoformat(timespec="seconds")
 
 
 def normalize_ws(text) -> str:
@@ -1168,9 +1176,9 @@ def pick_docs(args, docs):
     return selection
 
 
-def build_selection_payload(selection, problems):
+def build_selection_payload(selection, problems, skipped_note=None):
     spec = config.PILOT
-    return {
+    payload = {
         "dataset_version": config.DATASET_VERSION,
         "rule": {
             "doc_count": spec["doc_count"],
@@ -1196,6 +1204,32 @@ def build_selection_payload(selection, problems):
         "assertions_ok": not problems,
         "assertion_problems": problems,
     }
+    if skipped_note:
+        # 断言未执行（pilot ＋ --docs 的子集运行）：显式登记，不冒充「断言通过」。
+        payload["assertion_skipped"] = skipped_note
+    return payload
+
+
+def selection_assertion(args, selection):
+    """pilot 口径的选样断言：返回 `(problems, skipped_note)`。
+
+    2026-09-27 审查 B 的缺陷 4：同一表达式曾在 main 与 run_extraction 里各写一遍
+    （`check_selection(selection) if (args.profile == "pilot" and not args.docs) else []`），
+    于是 `--docs` 一出现，整段样本构成断言被**静默**跳过，脚本连提示都不打印——「pilot 样本
+    合规」这个结论在带 `--docs` 的运行里没有守卫。现在收成一个入口：
+
+      * 非 pilot：不做断言（problems 空、无 note）；
+      * pilot 且不带 --docs：照旧跑 check_selection；
+      * pilot 且带 --docs：样本构成断言对**子集**不适用（子集必然不等于整份 pilot 样本），
+        此时返回 skipped_note，由调用方**显式打印**并把「样本合规结论不成立」写进
+        selection.json 的 `assertion_skipped`——行为不变、但不再静默。
+    """
+    if args.profile != "pilot":
+        return [], None
+    if args.docs:
+        return [], ("--docs 指定了抽取子集（%s）：pilot 样本构成断言只适用于完整选样，"
+                    "本次运行的『样本合规』结论不成立" % args.docs)
+    return check_selection(selection), None
 
 
 def write_manifest(selection):
@@ -1228,9 +1262,8 @@ def append_run_history(stats):
 def run_extraction(args, docs, chunks, by_doc, selection, stats):
     os.makedirs(os.path.dirname(os.path.abspath(OUT["selection"])), exist_ok=True)
     os.makedirs(effective_cache_dir(), exist_ok=True)
-    problems = check_selection(selection) if (args.profile == "pilot"
-                                              and not args.docs) else []
-    selection_payload = build_selection_payload(selection, problems)
+    problems, assertion_note = selection_assertion(args, selection)
+    selection_payload = build_selection_payload(selection, problems, assertion_note)
     dump_json(OUT["selection"], selection_payload)
     coverage = compute_coverage(docs, chunks)
     dump_json(OUT["coverage"], coverage)
@@ -1284,8 +1317,6 @@ def run_extraction(args, docs, chunks, by_doc, selection, stats):
     rejects_all.sort(key=lambda r: (r["doc_id"], r["kind"], r.get("item_index") or 0, r["reason"]))
     dump_jsonl(OUT["extracted"], records)
     dump_jsonl(OUT["rejected"], rejects_all)
-    dump_json(OUT["verify"],
-              build_verify_payload(docs, chunks, records, rejects_all, selection))
     manifest = write_manifest(selection)
     stats["manifest_sha256"] = manifest["manifest_sha256"]
     stats["manifest_files"] = manifest["file_count"]
@@ -1295,7 +1326,14 @@ def run_extraction(args, docs, chunks, by_doc, selection, stats):
     stats["api_calls_total"] = stats["api_calls"]
     stats["failures"] = failures
     stats["reject_total"] = len(rejects_all)
+    # 顺序硬约束：**先落本轮的 run_history 记录，再算并写复现性块**。
+    # 历史缺陷（2026-09-27 审查 B 的缺陷 1）：verify.json 曾在 append_run_history 之前写出，
+    # 于是 reproducibility 永远看不到本轮记录——单跑一轮时 runs=1，跑两轮时看到的是上一轮
+    # 与更早一轮；本批的表现就是 runs=2、compared_runs=[2]（只有一条），在「根本没比较」
+    # 的情况下返回 identical_across_runs=false。比较逻辑本身（reproducibility_check）不变。
     append_run_history(stats)
+    dump_json(OUT["verify"],
+              build_verify_payload(docs, chunks, records, rejects_all, selection))
     return records, rejects_all, failures, selection_payload, coverage, manifest
 
 
@@ -1681,8 +1719,10 @@ def main(argv=None) -> int:
         return 0
 
     selection = pick_docs(args, docs)
-    problems = check_selection(selection) if (args.profile == "pilot"
-                                              and not args.docs) else []
+    problems, assertion_note = selection_assertion(args, selection)
+    if assertion_note:
+        # 不静默：断言没跑就说清楚（2026-09-27 审查 B 的缺陷 4）。
+        print("[选样断言已跳过] %s" % assertion_note)
     if problems:
         for problem in problems:
             print("[选样断言未通过] %s" % problem)

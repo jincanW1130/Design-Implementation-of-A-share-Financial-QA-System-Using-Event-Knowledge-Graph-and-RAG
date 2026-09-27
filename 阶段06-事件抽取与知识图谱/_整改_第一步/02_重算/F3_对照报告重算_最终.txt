@@ -1,0 +1,12 @@
+$ python 代码\抽取与图谱\_全量\v2.1_v1_2\_对照报告.py
+cwd: C:\Users\15129\Desktop\毕业设计
+env_overrides: {'STAGE6_FORBID_MODEL_CALLS': '1'}
+env_unset: ['LLM_API_KEY']
+exit_code: 0
+wall_clock_seconds: 0.596
+
+--- stdout ---
+对照报告已生成：C:\Users\15129\Desktop\毕业设计\代码\抽取与图谱\_全量\v2.1_v1_2\对照报告.md（13717 字符）
+{"missing": 396, "split": 20, "polarity": 0}
+
+--- stderr ---

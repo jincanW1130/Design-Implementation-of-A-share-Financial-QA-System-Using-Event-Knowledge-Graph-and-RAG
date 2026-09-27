@@ -1,0 +1,32 @@
+文件：阶段05-数据准备\数据集\v2.1\clean\documents.jsonl
+取样：前 2 行（长文本按 200 字符截断）
+
+---- 第 1 行：字段顺序（JSON 对象键序）----
+doc_id | title | content | source | category | url | publish_time | ingest_time | company_list | content_sha256_16 | subject_companies
+---- 第 1 行：逐字段值（截断）----
+doc_id = 1001
+title = "长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告"
+content = "转债代码：113049\n转债简称：长汽转债\n长城汽车股份有限公司\n关于公司股票期权限制行权期间的提示性公告\n本公司董事会及全体董事保证本公告内容不存在任何虚假记载、误导性陈述或者重\n大遗漏，并对其内容的真实性、准确性和完整性承担法律责任。\n根据《上市公司股权激励管理办法》《长城汽车股份有限公司2023年股票期权激励\n计划》（以下简称“《2023年股票期权激励计划》”）和中国证券登记结算有限责任公司…[截断，全长 746 字符]"
+source = "巨潮资讯网"
+category = "公告"
+url = "https://static.cninfo.com.cn/finalpage/2026-09-25/1225581315.PDF"
+publish_time = "2026-09-25"
+ingest_time = "2026-09-25T21:19:14+08:00"
+company_list = ["601633"]
+content_sha256_16 = "238af0dddff3bb7d"
+subject_companies = ["601633"]
+
+---- 第 2 行：字段顺序（JSON 对象键序）----
+doc_id | title | content | source | category | url | publish_time | ingest_time | company_list | content_sha256_16 | subject_companies
+---- 第 2 行：逐字段值（截断）----
+doc_id = 1004
+title = "恒瑞医药2026年第一次临时股东会决议公告"
+content = "江苏恒瑞医药股份有限公司\n2026年第一次临时股东会决议公告\n大遗漏，并对其内容的真实性、准确性和完整性承担法律责任。\n重要内容提示：\n\n本次会议是否有否决议案：无\n一、\n会议召开和出席情况\n(一)\n股东会召开的时间：2026 年9 月24 日\n(二)\n股东会召开的地点：公司会议室（上海市浦东新区海科路1288 号）\n(三)\n出席会议的普通股股东和恢复表决权的优先股股东及其持有股份情况：\n1、出…[截断，全长 3343 字符]"
+source = "巨潮资讯网"
+category = "公告"
+url = "https://static.cninfo.com.cn/finalpage/2026-09-25/1225582847.PDF"
+publish_time = "2026-09-25"
+ingest_time = "2026-09-25T21:19:14+08:00"
+company_list = ["600276"]
+content_sha256_16 = "b4c880d3d04cb254"
+subject_companies = ["600276"]

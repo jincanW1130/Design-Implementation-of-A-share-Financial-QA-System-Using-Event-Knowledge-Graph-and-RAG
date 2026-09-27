@@ -1,0 +1,71 @@
+$ python 阶段06-事件抽取与知识图谱\_整改_第一步\_工具\定行号.py 代码\抽取与图谱\extract.py def now_iso def selection_assertion def build_selection_payload 先落本轮 problems, assertion_note append_run_history(stats) dump_json(OUT[ assertion_skipped 选样断言已跳过 -- 代码\抽取与图谱\disambiguate.py def now_iso 一律北京时间 -- 代码\抽取与图谱\write_graph.py def _dropped_from_stats def _isolated isolated_block = dropped_note 审查 B 的缺陷 5 isolated_note len(isolated_ids) -- 代码\抽取与图谱\extract_event_time.py def _doc_time_metrics docs_with_ge2_distinct_event_dates docs_with_ge2_nonnull_events -- 工具\验收第6阶段.py 条数交叉核对 b11_count_bad b11_stats_rel -- 工具\跨文档核验.py PLANNED = set() 抽取评测集 计划产出登记
+cwd: C:\Users\15129\Desktop\毕业设计
+env_overrides: {}
+env_unset: []
+exit_code: 0
+wall_clock_seconds: 0.028
+
+--- stdout ---
+===== 代码\抽取与图谱\extract.py
+   251  def now_iso() -> str:
+  1179  def build_selection_payload(selection, problems, skipped_note=None):
+  1209  payload["assertion_skipped"] = skipped_note
+  1213  def selection_assertion(args, selection):
+  1225  selection.json 的 `assertion_skipped`——行为不变、但不再静默。
+  1252  def append_run_history(stats):
+  1265  problems, assertion_note = selection_assertion(args, selection)
+  1266  selection_payload = build_selection_payload(selection, problems, assertion_note)
+  1267  dump_json(OUT["selection"], selection_payload)
+  1269  dump_json(OUT["coverage"], coverage)
+  1329  # 顺序硬约束：**先落本轮的 run_history 记录，再算并写复现性块**。
+  1334  append_run_history(stats)
+  1335  dump_json(OUT["verify"],
+  1704  dump_json(OUT["selection"], payload)
+  1706  dump_json(OUT["coverage"], coverage)
+  1717  dump_json(OUT["verify"], payload)
+  1722  problems, assertion_note = selection_assertion(args, selection)
+  1725  print("[选样断言已跳过] %s" % assertion_note)
+===== 代码\抽取与图谱\disambiguate.py
+    81  def now_iso() -> str:
+    82  """时间戳一律北京时间（+08:00），与 run_all.py／write_graph.py 同一口径。
+===== 代码\抽取与图谱\write_graph.py
+   630  # 2026-09-27 审查 B 的缺陷 5：原先写 `int(... or 0)`，把缺失的落点**静默**变成
+   842  dropped_total, dropped_note = _dropped_from_stats(paths)
+   845  {"violations": both[:5], "dropped_count_unreadable": dropped_note,
+  1067  isolated_note = "无边节点：实体抽到了但语料没给出关系；如实保留，不删（不是遗漏）"
+  1069  isolated_block = {"count": len(isolated_ids), "ids": isolated_ids, "note": isolated_note}
+  1071  isolated_block = {"count": isolated_ids, "note": isolated_note}
+  1192  def _isolated(nodes, edges):
+  1211  def _dropped_from_stats(paths):
+===== 代码\抽取与图谱\extract_event_time.py
+   721  def _doc_time_metrics(doc_dates):
+   726  * `docs_with_ge2_distinct_event_dates`：≥2 个**不同日期**（同一日期出现多次只算一个）
+   729  * `docs_with_ge2_nonnull_events`：字面口径「≥2 条 event_time 非空」（同一日期出现多次照数），
+   744  return {"docs_with_ge2_distinct_event_dates": len(distinct_docs),
+   745  "docs_with_ge2_nonnull_events": len(nonnull_docs),
+   793  "docs_with_ge2_distinct_event_dates":
+   796  "docs_with_ge2_nonnull_events":
+===== 工具\验收第6阶段.py
+   870  # 条数交叉核对（2026-09-27 补强；审查 B 的守卫边界 ③）：B11 原先只核「覆盖集合」——
+   879  b11_stats_rel = b11_stats_counts.get("edges_by_relation") or {}
+   888  b11_count_bad = []
+   890  b11_count_bad.append("edges_total graph_stats.json=%s vs edges.csv=%d"
+   893  b11_count_bad.append("nodes_total graph_stats.json=%s vs nodes.csv=%d"
+   895  for _n in sorted(set(config.RELATIONS) | set(b11_rel_n) | set(b11_stats_rel)):
+   898  _stat, _csv = _as_int(b11_stats_rel.get(_n, 0)), b11_rel_n.get(_n, 0)
+   900  b11_count_bad.append("关系 %s graph_stats.json=%s vs edges.csv=%d"
+   901  % (_n, b11_stats_rel.get(_n), _csv))
+   905  b11_count_bad.append("标签 %s graph_stats.json=%s vs nodes.csv=%d"
+   920  chk(not b11_unreg and not b11_contradict and not b11_count_bad, B11_LABEL,
+   922  "条数交叉核对 graph_stats.json：edges_total=%s、nodes_total=%s、逐关系／逐标签不一致 "
+   928  len(b11_count_bad), "：" + br(b11_count_bad, 4) if b11_count_bad else "",
+   931  ("；" + B11_HINT) if (b11_unreg or b11_contradict or b11_count_bad) else ""))
+===== 工具\跨文档核验.py
+   276  PLANNED = set()
+   285  print('  （计划产出登记：PLANNED %d 条——按编写约定 5，文件一旦落盘就立即移出；'
+   299  # 抽取评测集（第 6 阶段起存在）：文档里既有带路径的写法（`阶段05-…\抽取评测集\v2.1\标注说明.md`），
+   301  # 图谱导出版本目录同一处理：把 `抽取评测集\<版本>\` 也列入查找位置。
+   303  # 两处「悬空」；回查确认文件真实存在（`阶段05-数据准备\数据集\抽取评测集\v2.1\标注说明.md`，
+   306  SEARCH += [d for d in glob.glob(os.path.join(ROOT, '阶段05-数据准备', '数据集', '抽取评测集', '*'))
+
+--- stderr ---

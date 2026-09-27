@@ -1,0 +1,230 @@
+==============================================================================
+第 6 阶段（事件抽取与知识图谱）阶段级验收：《16》、缓存管线、图谱导出物、评测集与代码
+==============================================================================
+  工作区根目录：  C:\Users\15129\AppData\Local\Temp\B_fullcopy_jg98q3dy\root
+  profile：       v21_v1_2（现行交付 v1.2（图谱导出\v2.1_v1_2\））
+  管线工作目录：  C:\Users\15129\AppData\Local\Temp\B_fullcopy_jg98q3dy\root\阶段05-数据准备\数据集\_抽取缓存\v2.1_v1_2\图谱管线
+  图谱导出目录：  C:\Users\15129\AppData\Local\Temp\B_fullcopy_jg98q3dy\root\阶段06-事件抽取与知识图谱\图谱导出\v2.1_v1_2
+  抽取结果：      C:\Users\15129\AppData\Local\Temp\B_fullcopy_jg98q3dy\root\代码\抽取与图谱\_全量\v2.1_v1_2\extracted.jsonl
+  冻结参数来源：  C:\Users\15129\AppData\Local\Temp\B_fullcopy_jg98q3dy\root\代码\抽取与图谱\config.py
+  《16》交付文档：C:\Users\15129\AppData\Local\Temp\B_fullcopy_jg98q3dy\root\阶段06-事件抽取与知识图谱\16-事件抽取与知识图谱（第六阶段）.md
+  重跑比对：      在系统临时目录镜像重跑（只读交付物，绝不写入工作区）
+
+
+==============================================================================
+A、《15》第八节 第 1 行：《16》的 9 个必备小节齐全（逐节检查）
+==============================================================================
+  [OK  ] A1 从《15》第八节 解析出必备小节清单（不写死小节名）  实测 解析 9 个：抽取口径与配置／Prompt 与规则设计／抽取结果统计／实体消歧实现／事件去重实现／图谱写入与导出／评测集构成与分层依据／已知限制与证据不足清单／对下游的使用说明（来源：《15》第 324 行）
+  [OK  ] A2 解析出的数目 == 《15》第八节 声明的数目  实测 《15》声明 9 个、解析得 9 个
+  [OK  ] A3 《16》存在且可读（T9 阶段交付文档）  实测 阶段06-事件抽取与知识图谱/16-事件抽取与知识图谱（第六阶段）.md：可读
+  [OK  ] A4 9 个必备小节逐节命中（二～四级标题，按《15》清单逐名）  实测 9/9 命中；缺失 无
+  [OK ] A5 小节命中位置（证据）  抽取口径与配置→《16》第33行「一、抽取口径与配置」；Prompt 与规则设计→《16》第143行「二、Prompt 与规则设计」；抽取结果统计→《16》第201行「三、抽取结果统计」；实体消歧实现→《16》第294行「四、实体消歧实现」；事件去重实现→《16》第346行「五、事件去重实现」；图谱写入与导出→《16》第401行「六、图谱写入与导出」；评测集构成与分层依据→《16》第467行「七、评测集构成与分层依据」；已知限制与证据不足清单→《16》第566行「八、已知限制与证据不足清单」；对下游的使用说明→《16》第704行「九、对下游的使用说明」
+  [OK  ] A6 《16》二级标题数与必备小节数相称  实测 二级标题 10 个，必备小节 9 个，清单命中 9 个
+
+==============================================================================
+B、《15》第八节 第 2 行：本体一致性（6 类实体／8 种事件类型／9 条核心关系不多不少，无 Product／Location、无 INVOLVES）；另含两条跨行守卫——B10＝第 18 行（Dev＋Test 有标注条目或在《16》登记证据不足，评测集口径，与导出物无关）、B11＝第 19 行（导出物覆盖 ↔ 《16》登记的已知限制，双向一致）
+==============================================================================
+  [OK  ] B1 《10》表 4-8 解析的 6 类实体 == config.ENTITY_TYPES  实测 《10》第 637 行：Company、Person、Industry、Institution、Event、Policy；config：Company、Person、Industry、Institution、Event、Policy
+  [OK  ] B2 《10》表 4-8 解析的 8 种事件类型 == config.EVENT_TYPES  实测 《10》第 644 行：业绩、监管、股权、投资并购、重大合同、产品、政策、重大经营；config：业绩、监管、股权、投资并购、重大合同、产品、政策、重大经营
+  [OK  ] B3 《10》第4.5.2节 cypher 块解析的 9 条核心关系 == config.RELATIONS  实测 《10》第 186 行：BELONGS_TO、SUPPLIES、CUSTOMER_OF、COMPETES_WITH、HAS_EXECUTIVE、PARTICIPATES_IN、ISSUED_BY、RELATED_TO、EVIDENCED_BY；config：BELONGS_TO、SUPPLIES、CUSTOMER_OF、COMPETES_WITH、HAS_EXECUTIVE、PARTICIPATES_IN、ISSUED_BY、RELATED_TO、EVIDENCED_BY
+  [OK  ] B4 无 Product／Location、无 INVOLVES（不复活已删除的关系）  实测 Product／Location 命中 无；INVOLVES 命中 无；Document：独立证据标签，不在 6 类实体中
+  [OK  ] B5 《15》声明的 6 类实体／8 种事件类型／9 条核心关系 == 实测  实测 《15》第 14 行声明「6 类实体／8 种事件类型／9 条核心关系」；解析得 实体 6／事件 8／关系 9
+  [OK  ] B6 导出物节点标签 ⊆ 6 类实体 ＋ Document（不多）  实测 标签 7 个：Company、Document、Event、Industry、Institution、Person、Policy；越界 无
+  [OK  ] B7 导出物关系类型 ⊆ 9 条核心关系（不多）  实测 关系 8 种：BELONGS_TO、COMPETES_WITH、CUSTOMER_OF、EVIDENCED_BY、HAS_EXECUTIVE、ISSUED_BY、PARTICIPATES_IN、RELATED_TO；越界 无
+  [OK  ] B8 导出物 event_type 取值 ⊆ 8 种事件类型（不多）  实测 事件类型 8 种：业绩、产品、投资并购、政策、监管、股权、重大合同、重大经营；越界 无
+  [OK  ] B9 每条边的起止标签符合 config.RELATION_SCHEMA 的 domain／range  实测 检查 2736 条边；违例 0 条
+  [OK  ] B10 第 18 行：8 种事件类型与 9 条核心关系在 Dev＋Test 中有标注条目或在《16》登记证据不足（评测集口径，与导出物无关）  实测 dev 60 条＋test 200 条；有标注条目的 事件类型 0/8、关系 0/9；分层统计.json 逐类登记问题 0 项；coverage_tags 重算不一致 0 项；既无条目又未在《16》登记的 0 个
+  [OK  ] B11 第 19 行：导出物的关系／事件类型覆盖 == 《16》登记的已知限制（缺则按导出物口径量化登记、有则不得登记为缺失）  实测 交付物导出 阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2：关系 2736 条、节点 2802 个（其中 Event 1100 个）；逐类覆盖 BELONGS_TO=14、SUPPLIES=0、CUSTOMER_OF=4、COMPETES_WITH=1、HAS_EXECUTIVE=143、PARTICIPATES_IN=1252、ISSUED_BY=124、RELATED_TO=87、EVIDENCED_BY=1111、业绩=167、监管=53、股权=226、投资并购=51、重大合同=145、产品=168、政策=74、重大经营=216；导出物 0 条却未在《16》量化登记的 0 项；导出物有条目却被《16》登记为缺失的 0 项
+
+==============================================================================
+C、《15》第八节 第 3～4 行：证据属性口径（除 EVIDENCED_BY 外的 8 条关系带齐三项且无空值；EVIDENCED_BY 不带三项、终点是 Document）
+==============================================================================
+  [OK  ] C1 edges.csv 表头 == config.GRAPH["edge_columns"]（含三项证据列）  实测 表头 9 列：head_id、relation、tail_id、source_doc_id、source_chunk_id、confidence、role、valid_from、valid_to；config 声明 9 列：head_id、relation、tail_id、source_doc_id、source_chunk_id、confidence、role、valid_from、valid_to
+  [OK  ] C2 除 EVIDENCED_BY 外的 8 条关系都带齐 source_doc_id／source_chunk_id／confidence 且无空值  实测 逐行检查 1625 条非 EVIDENCED_BY 边；三列有空值 0 处；涉及关系 BELONGS_TO、COMPETES_WITH、CUSTOMER_OF、HAS_EXECUTIVE、ISSUED_BY、PARTICIPATES_IN、RELATED_TO
+  [OK  ] C3 非 EVIDENCED_BY 的关系取值都落在 config 的 8 条 from_model 关系内  实测 实测取值 BELONGS_TO、COMPETES_WITH、CUSTOMER_OF、HAS_EXECUTIVE、ISSUED_BY、PARTICIPATES_IN、RELATED_TO；config.RELATIONS_FROM_MODEL BELONGS_TO、SUPPLIES、CUSTOMER_OF、COMPETES_WITH、HAS_EXECUTIVE、PARTICIPATES_IN、ISSUED_BY、RELATED_TO
+  [OK  ] C4 三项取值域：confidence ∈ [0.0, 1.0]，source_doc_id／source_chunk_id 为整数  实测 confidence 越界 0 处；编号非整数 0 处
+  [OK  ] C5 EVIDENCED_BY 不携带 source_doc_id／source_chunk_id／confidence 三项  实测 EVIDENCED_BY 1111 条；携带三项的 0 条
+  [OK  ] C6 EVIDENCED_BY 的终点必须是 Document 节点  实测 检查 1111 条；终点不是 Document 的 0 条（起点是否为 Event 见 B9 的 domain／range）
+
+==============================================================================
+D、《15》第八节 第 5 行：证据可回溯（每个 source_chunk_id 真实存在于 v2.1 的 chunks\chunks.jsonl，且其 doc_id == 同一条事实的 source_doc_id）
+==============================================================================
+  [OK  ] D1 每个 source_chunk_id 都存在于 v2.1 chunks\chunks.jsonl 中  实测 检查 1625 条事实；v2.1 文本块 5018 个；查不到的 0 条
+  [OK  ] D2 文本块所属 doc_id == 同一条事实的 source_doc_id  实测 不一致 0 条
+  [OK  ] D3 source_doc_id 与 EVIDENCED_BY 的 Document 都能回溯到 v2.1 clean\documents.jsonl  实测 v2.1 文档 709 篇；source_doc_id 查不到 0 处；EVIDENCED_BY 终点查不到 0 处
+  [OK ] D4 可回溯读数（证据）  实测 抽查首条：第2行 HAS_EXECUTIVE.source_chunk_id=1337000（chunk 在 chunks.jsonl 第 2121 行）；chunk_id → doc_id 映射由 chunks.jsonl 现场重算，不读任何报告
+
+==============================================================================
+E、《15》第八节 第 6 行：Event 六项核心属性齐全（event_time 允许为空但必须计数登记）、role 取值、ISSUED_BY 的事件类型范围
+==============================================================================
+  [OK  ] E1 nodes.csv 表头 == config.GRAPH["node_columns"]（含事件六项核心属性列）  实测 表头 33 列：node_id、label、name、stock_code、company_name、short_name、aliases、exchange、person_id、person_name、role_title、industry_code、industry_name、level、institution_id、institution_name、institution_type、event_id、event_type、event_name、event_time、description、confidence、policy_id、policy_name、issuer、publish_date、doc_id、title、source、url、publish_time、category；config 声明 33 列
+  [OK  ] E2 《10》第4.5.1节 解析的六项核心属性 == config.EVENT_CORE_ATTRS  实测 《10》第 118 行解析：event_id、event_type、event_name、event_time、description、confidence；config：event_id、event_type、event_name、event_time、description、confidence
+  [OK  ] E3 每个 Event 节点六项核心属性齐全；除 event_time 外五项非空  实测 Event 1100 条；缺项 0 处
+  [OK  ] E4 event_type ∈ 8 种事件类型；confidence ∈ [0,1]；event_id 形如 EVT-<4 位>  实测 非法 event_type 0 处；confidence 越界 0 处；event_id 不合规则 0 处
+  [OK  ] E5 event_time 允许为空，但空值必须在 graph_stats.json 计数登记  实测 现场重算空值 544/1100（49.5%）；graph_stats.json 登记 544（字段 event_core_attributes.event_time_null_count）
+  [OK  ] E6 《16》报告 event_time 空值率  实测 《16》第 280 行：- event_time（两级抽取的合计口径）：T3 抽完时 717／1114 为空（64.4%）、非空 397 条；T3.5 补出 173 条后，**抽取层空值 544／1114（48.8%）**、非空 570 条，依
+  [OK  ] E7 《10》第4.5.2节 解析的 5 个合法 role == config.ROLES  实测 《10》第 669 行：主体、合作方、涉及方、监管方、受影响方；config：主体、合作方、涉及方、监管方、受影响方
+  [OK  ] E8 role 取值落在五个合法值内，且只出现在 PARTICIPATES_IN 上  实测 非法取值 0 处；出现在其它关系上 0 处；本批用到的 role：主体、受影响方、合作方、涉及方、监管方
+  [OK  ] E9 ISSUED_BY 只出现在政策事件与监管事件上  实测 ISSUED_BY 124 条，起点事件类型 {'监管': 52, '政策': 72}；config.ISSUED_BY_EVENT_TYPES=政策、监管；违例 0 条
+
+==============================================================================
+F、《15》第八节 第 7 行：BELONGS_TO 带 valid_from／valid_to；data_cutoff_time 不出现在任何节点或关系上
+==============================================================================
+  [OK  ] F1 edges.csv 带 valid_from／valid_to 两列（表 4-9 的额外属性）  实测 表头：head_id、relation、tail_id、source_doc_id、source_chunk_id、confidence、role、valid_from、valid_to；两列齐备
+  [OK  ] F2 BELONGS_TO 的 valid_from／valid_to 可解析、区间有序（空值＝正文未给日期，逐条登记）  实测 BELONGS_TO 14 条；带值 0 条；日期不可解析 0 处；起点晚于终点 0 处（格式取自 config.TIME["format"]=YYYY-MM-DD）
+  [OK ] F3 证据（有效期填值率）  实测 带值 0/14 条；T6 的 graph_check.json 把「全部无有效期」登记为已知缺口，《16》须登记该缺口与影响（本条只判列与取值，不判填值率）
+  [OK  ] F4 data_cutoff_time 不出现在任何节点或关系上（图谱上只有 event_time／publish_time／valid_from／valid_to）  实测 三个导出文件逐行扫描（排除否定语境）：命中 0 处（graph_stats.json 是统计文件，单独看：无命中）
+
+==============================================================================
+G、《15》第八节 第 8 行：编号显式且唯一（event_id／policy_id／institution_id／person_id 无重复、无空值、不是数据库自增）
+==============================================================================
+  [OK  ] G1 node_id 无重复、无空值  实测 节点 2802 个、distinct 2802；重复 无；空值 0 个
+  [OK  ] G2 event_id／policy_id／institution_id／person_id 无重复、无空值（逐类检查）  实测 event_id 1100 条：distinct 1100、重复 无、空值 0；policy_id 102 条：distinct 102、重复 无、空值 0；institution_id 316 条：distinct 316、重复 无、空值 0；person_id 403 条：distinct 403、重复 无、空值 0
+  [OK ] G3 证据（逐类读数）  event_id 1100 条：distinct 1100、重复 无、空值 0；policy_id 102 条：distinct 102、重复 无、空值 0；institution_id 316 条：distinct 316、重复 无、空值 0；person_id 403 条：distinct 403、重复 无、空值 0
+  [OK  ] G4 四类编号 == node_id，且形如 config.GRAPH["id_prefixes"] ＋ id_width 的显式规则  实测 与 node_id 不一致 0 处；不合前缀规则 0 处；公司＝stock_code、文档＝doc_id（config.GRAPH["id_rule"]）
+  [OK  ] G5 导出物不含数据库自增字样（编号由本阶段一次性显式分配；重放可复现见 J 组）  实测 AUTO_INCREMENT／AUTOINCREMENT 命中 0 处
+
+==============================================================================
+H、《15》第八节 第 9 行：实体消歧可复算（同一份缓存重跑 disambiguate.py，消歧映射与待消歧清单逐字节一致）
+==============================================================================
+  [OK  ] H1 disambiguate.py 单独重跑退出码为 0  实测 命令：python 代码\抽取与图谱\disambiguate.py --profile v21_v1_2 --force；退出码=0、耗时 0.24s
+  [OK  ] H2 消歧映射与待消歧清单逐字节一致（sha256 比对）  实测 逐字节一致 3/3；不一致 无；原文：disambiguation.json=cebe086999f9c46f；unresolved.jsonl=57d547b03bf8e8b1；alias_table.json=8dbdeee006dddfec
+  [OK  ] H3 重跑后的消歧读数与原产物一致（实体／已消歧／待消歧／公司身份）  实测 原 {'entities': 3293, 'resolved': 2223, 'unresolved': 1070, 'company_identities': 104}；重跑 {'entities': 3293, 'resolved': 2223, 'unresolved': 1070, 'company_identities': 104}
+  [OK ] H4 重跑证据（镜像内的命令与耗时）  镜像：C:\Users\15129\AppData\Local\Temp\stage6_accept_1qfj8_c2（复制 1548 个文件）；run_all 退出码=0/5.75s；write_graph_again 退出码=0/0.88s；from_run 退出码=0/1.17s
+
+==============================================================================
+I、《15》第八节 第 10 行：事件去重可复算（重跑 dedup_events.py，合并日志逐字节一致；被合并事件保留全部证据文档）
+==============================================================================
+  [OK  ] I1 dedup_events.py 单独重跑退出码为 0  实测 退出码=0、耗时 3.57s；判据条数（merge_log 行数）= 94901
+  [OK  ] I2 合并日志 merge_log.jsonl 逐字节一致  实测 原 1d3131f32f6a88d9 vs 重跑 1d3131f32f6a88d9（字节数 115803404）
+  [OK  ] I3 合并后事件集合、汇总与自检文件逐字节一致  实测 一致 3/3；不一致 无；sha256：events_merged.jsonl=cf1dde2308da；merge_summary.json=5d984a28d19f；dedup_self_test.json=f7a5853b8633
+  [OK  ] I4 被合并事件保留全部证据文档（自检 ＋ 逐组证据并集校验）  实测 自检 passed=True、all_members_retained=True、期望并集 [1056, 1057, 901056]→实得 [1056, 1057, 901056]；本批合并组 14 个（证据并集校验 通过）
+
+==============================================================================
+J、《15》第八节 第 11 行：图谱导出物与缓存重放一致（删掉导出物、只读缓存重跑 write_graph.py，两次导出物逐字节一致；generated_at 与缓存指纹字段除外）
+==============================================================================
+  [OK  ] J1 删掉导出物后 write_graph.py 重跑退出码为 0（两次：单独执行 ＋ 再删再跑）  实测 单独执行退出码=0、再删再跑退出码=0；整链 run_all 退出码=0
+  [OK  ] J2 nodes.csv 逐字节一致（sha256 比对）  实测 原 04f2ac227e9595e2 vs 重跑 04f2ac227e9595e2；字节数 708043
+  [OK  ] J3 edges.csv 逐字节一致（sha256 比对）  实测 原 e86f86d99bb1b227 vs 重跑 e86f86d99bb1b227；字节数 131275
+  [OK  ] J4 replay.cypher 逐字节一致（sha256 比对）  实测 原 8cdb68d0782b04a8 vs 重跑 8cdb68d0782b04a8；字节数 727503
+  [OK  ] J5 graph_stats.json 排除 generated_at／cache_fingerprint 后一致  实测 排除字段 generated_at、cache_fingerprint；差异字段 无；两文件 sha256 原 63394794a90a vs 重跑 c24e2c63b08c（含 generated_at 时本就不等）
+  [OK ] J6 逐字节比对读数（证据）  四件套 sha256（原→重跑）：nodes 04f2ac227e95→04f2ac227e95；edges e86f86d99bb1→e86f86d99bb1；replay 8cdb68d0782b→8cdb68d0782b；stats 63394794a90a→c24e2c63b08c
+  [OK ] J7 被验收对象的内建自检快照（读 graph_check.json，仅作参考）  T6 机检 20 项：通过 18、不通过 belongs_to_carries_validity_columns、event_time_nonempty（其中 known_gap belongs_to_carries_validity_columns、event_time_nonempty）
+
+==============================================================================
+K、《15》第八节 第 12 行：重放不调用模型（重跑过程中的模型调用次数为 0）
+==============================================================================
+  [OK  ] K1 重跑过程中模型调用次数为 0（上限 config.RUN_ALL["max_api_calls_on_replay"]=0）  实测 镜像内 run_history.jsonl 末条：api_calls_total=0 ≤ 上限 0；文件 ../../stage6_accept_1qfj8_c2/代码/抽取与图谱/_全量/v2.1_v1_2/run_history.jsonl（第 6 条记录）
+  [OK  ] K2 缓存命中覆盖全部文档（cache_hits == 文档数、fetched == 0）  实测 cache_hits=709、documents=709、fetched=0、retries=0
+  [OK  ] K3 重跑子进程显式摘掉 LLM_API_KEY（缓存未命中即硬失败，不可能静默调用模型）  实测 本脚本用 env.pop("LLM_API_KEY") 构造子进程环境，只打印变量名、不读取值；重跑退出码：run_all=0、run_all_2=0、from=0、write_graph=0
+  [OK  ] K4 disambiguate／dedup_events／write_graph 源码内无模型或 HTTP 客户端 import  实测 三个脚本命中 0 处；extract.py 单独豁免（它是唯一会调模型的环节，缓存齐全时 api_calls_total=0）
+
+==============================================================================
+L、《15》第八节 第 13 行：缓存目录位于数据集版本的同级位置且不在公开仓库（.gitignore 覆盖，导出物不含正文）
+==============================================================================
+  [OK  ] L1 缓存根目录与数据集版本目录同级、且按版本分子目录（默认口径 <数据集根>\_抽取缓存\<数据集版本＋v1.2 后缀>\）且存在  实测 config.CACHE_ROOT=阶段05-数据准备/数据集/_抽取缓存（父=数据集）、config.DATASET_DIR=阶段05-数据准备/数据集/v2.1（父=数据集）；同级=True；缓存子目录名=v2.1_v1_2（期望 v2.1_v1_2）；目录存在=True；v1.1 归档缓存 阶段05-数据准备/数据集/_抽取缓存/v2.1（存在=True）
+  [OK  ] L2 .gitignore 覆盖抽取缓存与评测集目录（两处都不入公开仓库）  实测 .gitignore 规则 18 条；缓存命中规则 第19行 阶段05-数据准备/数据集/；评测集命中规则 第19行 阶段05-数据准备/数据集/（行号＋模式）
+  [OK  ] L3 图谱导出物放在数据集版本目录之外（硬约束 11；导出物可随仓库提交）  实测 导出目录 阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2；数据集根 阶段05-数据准备/数据集；是否在数据集内=False
+  [OK ] L4 证据（导出物是否被 .gitignore 排除）  实测 阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2 → 未被排除（与《15》第4.3节 一致）
+
+==============================================================================
+M、《15》第八节 第 14 行：导出物不复制正文（抽样比对导出物字段与 v2.1 正文片段，无长文本命中）
+==============================================================================
+  [OK  ] M1 导出物表头不含被禁字段（quote／quote_match_count／note／content／response_text）  实测 nodes.csv 表头 33 列、edges.csv 表头 9 列；被禁字段命中 无
+  [OK  ] M2 抽样 200 块 × 3 段 × 100 字符的正文子串，导出物文件内 0 命中  实测 探针 600 条（分块抽样 200 块／可选 5017 块，seed=20260925，参数取 config.GRAPH["body_text_check"]）；命中 0 条；去空白后命中 0 条
+
+==============================================================================
+N、《15》第八节 第 15～18 行：抽取评测集（Dev 60 ＋ Test 200 ＝ 260、两段式、chunk_id 不重叠、文档重叠登记、分层与表 15-E 一致、8 类事件类型与 9 条关系要么有条目要么登记为证据不足、不得出现「按 8 类均衡」的分层声明）
+==============================================================================
+  [OK  ] N1 评测集四件齐全（与数据集版本目录同级，落 阶段05-数据准备/数据集/抽取评测集/v2.1）  实测 4/4 存在；缺失 无
+  [OK  ] N2 Dev 60 ＋ Test 200 ＝ 260 条，两段式（split 字段与文件归属一致）  实测 dev.jsonl 60 条、test.jsonl 200 条、合计 260；split 字段不符 0 条；文件行数校验 通过
+  [OK  ] N3 每条都带 chunk_id／doc_id 与 annotations 骨架（entities／events／relations／times／notes）  实测 检查 260 条；缺字段 0 处；标注状态分布 {'pending_human_annotation': 260}
+  [OK ] N3 证据（人工标注状态）  实测 260 条全部为 pending_human_annotation：T8 的选点与配额已落盘，人工标注尚未填写；这正是 N9 与 O4 需要《16》登记证据不足清单的原因
+  [OK  ] N4 Dev 与 Test 的 chunk_id 不重叠；260 个文本块互不重复（一个文本块只算一个证据）  实测 dev 60 个、test 200 个、交集 0 个；重复 chunk_id 无
+  [OK  ] N5 文档集合重叠部分已在《标注说明.md》登记（实测交集为 0）  实测 dev 文档 60 个、test 文档 200 个、交集 0 个；交集为空故无需登记；分层统计.json 登记 document_overlap_size=0
+  [OK  ] N6 标注分层与表 15-E 的文本块级实测分布一致（类目／月份／公司三维度偏差在容差内）  实测 数据集侧文本块 5018 个、评测集侧条目 260 条（容差取自分层统计.json 的 sampler.tolerance：{'category_pp': 3.0, 'month_pp': 3.0, 'company_pp': 3.0, 'cell_count': 2}）；category：最大偏差 0.1654 pp（公告，阈值 3.0 pp）；month：最大偏差 0.7931 pp（2026-08，阈值 3.0 pp）；company：最大偏差 1.2963 pp（000651，阈值 3.0 pp）
+  [OK  ] N7 差异逐项登记且与现场重算一致（分层统计.json 的 delta_pp 逐项核对）  实测 登记键 category 4 项、month 4 项、company 105 项；不一致 0 项
+  [OK  ] N8 《16》声明分层容差并逐项登记差异  实测 《16》第 30 行：| 抽取评测集 | Dev 60 ＋ Test 200 ＝ 260 条（单位：文本块）；chunk 交集 0、文档交集 0；分层容差 3.0 pp |；分层统计.json 的容差 {'category_pp': 3.0, 'month_pp': 3.0, 'company_pp': 3.0, 'cell_count': 2}（该行解析出数值 [60.0, 200.0, 260.0, 0.0, 0.0, 3.0]，须逐一出现）
+  [OK  ] N9 8 种事件类型与 9 条核心关系：要么有标注条目、要么在《16》显式登记为证据不足  实测 事件类型条目 无；关系条目 无；实体条目 无；既无条目又未登记的 0 个；登记示例：业绩→《16》第634行、监管→《16》第421行、股权→《16》第636行…（共 17 个）
+  [OK  ] N10 不得出现「按 8 类均衡」一类分层声明（含「9 条关系均等」；否定语境除外）  实测 命中（未排除）0 处；另有否定语境 12 处已排除（例：卡片行逐字引用验收标准）；全部命中位置 《15》 第183行「8 类均衡」、《15》 第183行「9 条关系均等」、《15》 第187行「8 类均衡」…（共 12 个）
+
+==============================================================================
+O、《15》第八节 第 19 行：证据不足类别的登记与 表 15-C／15-D 的实测值一致（重大合同、产品、三条公司间关系）
+==============================================================================
+  [OK  ] O1 表 15-C 重算 == 《15》声明（company_list ≥2 篇数、subject_companies ≥2 篇数）  实测 company_list≥2 66（声明 66）、subject_companies≥2 9（声明 9）
+  [OK  ] O2 表 15-D 公告标题级 8 类重算 == 《15》声明（正则取自 config.EVENT_TYPE_TITLE_PATTERNS）  实测 重算 {'业绩': 21, '产品': 102, '投资并购': 1, '政策': 45, '监管': 1, '股权': 46, '重大合同': 100, '重大经营': 60}；与声明不符 无
+  [OK  ] O3 表 15-D「公告外监管标题级」重算 == 《15》声明  实测 非公告类目标题命中监管正则 21 篇（声明 21）；监管公开信息类目 20 篇
+  [OK  ] O4 表 15-D 正文级 SUPPLIES／CUSTOMER_OF／COMPETES_WITH 重算 == 《15》声明  实测 重算 {'SUPPLIES': 32, 'CUSTOMER_OF': 88, 'COMPETES_WITH': 9}；与声明不符 无
+  [OK  ] O5 证据不足类别的登记与实测值一致（重大合同／产品／三条公司间关系逐项）  实测 五类重算 重大合同=100、产品=102、SUPPLIES=32、CUSTOMER_OF=88、COMPETES_WITH=9；登记问题 0 项
+
+==============================================================================
+P、《15》第八节 第 20～21 行：抽取配置四要素齐备且非 TBD；《02》第12.4节「大语言模型」仍为 TBD；《16》《10》、缓存与导出物中不出现答案生成模型型号
+==============================================================================
+  [OK  ] P1 抽取配置四要素（模型、模型版本、Prompt 版本、temperature）齐备且非 TBD  实测 抽取口径与配置小节：第33～142 行；缺 无；含 TBD 无；逐要素：模型→第39行「| 模型（请求名） | `deepseek-v4-flash` | `config.LLM["model_default」、模型版本→第41行「| 模型版本 | 端点不提供版本号，如实记 null | `config.LLM["model_version"]` 为」、Prompt 版本→第42行「| Prompt 版本（默认口径） | `stage6-extract-v1.2` | `config.LLM["ont」、temperature→第44行「| temperature | 0 | `config.LLM["temperature"]`；抽取时固定 0，重放对得」
+  [OK  ] P2 《16》写明的模型与默认口径 Prompt 版本 == config.LLM（v1.1 归档版本同时保留；不写死在本脚本里）  实测 config：model_default=deepseek-v4-flash、model_pinned=deepseek-flash、默认口径 Prompt 版本=stage6-extract-v1.2、v1.1 归档版本=stage6-extract-v1.1、temperature=0；《16》命中模型 是、默认口径 Prompt 版本 是、v1.1 归档版本 是
+  [OK  ] P3 《02》第12.4节 的「大语言模型」行仍为 TBD（答案生成模型归第 8 阶段）  实测 《02》第 780 行取值「TBD（选型后固化）」
+  [OK ] P4 证据（第12.4节 固定表行数）  实测 含「大语言模型」的表共 7 行数据（表头与分隔行已排除）；硬约束 12 要求七项计数不变
+  [OK  ] P5 《16》《10》、缓存与导出物中不出现答案生成模型型号（抽取型号写在抽取语境里是允许的）  实测 模型型号出现 1562 处（均在抽取／Prompt／缓存指纹语境），其中「答案生成」语境 0 处
+
+==============================================================================
+Q、《15》第八节 第 22 行：未新增第七张表（本阶段不产出 DDL，交付物中不出现六张表以外的表名）
+==============================================================================
+  [OK  ] Q1 交付物中无关系库 DDL（CREATE／ALTER／DROP TABLE、CREATE DATABASE／SCHEMA）  实测 扫描 26 个交付文件；DDL 形态命中 0 处（否定语境／检测模式引用 1 处，已排除）；已排除项：write_graph.py 第861行「table_ddl = [ln.strip() for ln in text.splitlines() if "CREATE TABLE" 」
+  [OK  ] Q2 交付物中出现的表名 ⊆ 《10》的六张表（user／document／document_chunk／question／answer／answer_evidence）  实测 命中表名 无；六张表以内的 无；越界 无
+  [OK  ] Q3 交付物中无「新增表／第七张表」的肯定式声明  实测 命中 0 处（否定语境已排除）
+
+==============================================================================
+R、《15》第八节 第 23 行：数据集只读（T9 结束时的 v2.1 目录文件指纹与开工时一致）
+==============================================================================
+  [OK  ] R1 v2.1 目录指纹与开工基线一致（763 个文件逐文件 sha256 比对）  实测 基线 代码/数据准备/勘察/manifest_宽口径_最终.json（第 5 阶段封版清单，root 与 v2.1 目录一致）：763 个文件；现测 763 个文件；内容不同 0 个；缺失 0 个；多出 0 个；组合摘要 基线→01572dfd144a1472
+  [OK  ] R2 每篇文档声明的 content_sha256_16 == 现场重算（数据集未被就地改动）  实测 重算 709 篇；不一致 0 篇
+  [OK ] R3 证据（v2.1 目录读数）  实测 文件 763 个、组合摘要 01572dfd144a1472；文档 709 篇、文本块 5018 个；基线来源：代码/数据准备/勘察/manifest_宽口径_最终.json（第 5 阶段封版清单，root 与 v2.1 目录一致）
+
+==============================================================================
+S、《15》第八节 第 24 行：脚本幂等（重复执行不产生重复 event_id；中断后可续跑）
+==============================================================================
+  [OK  ] S1 连续两次整链重跑（run_all --force）导出物逐字节一致  实测 run_all 退出码 0→0；三次比对：nodes 04f2ac227e95→04f2ac227e95；edges e86f86d99bb1→e86f86d99bb1；replay 8cdb68d0782b→8cdb68d0782b
+  [OK  ] S2 重跑不产生重复 event_id（编号集合与原始一致）  实测 重跑 Event 1100 条、distinct 1100；重复 无；与原始集合一致：True
+  [OK  ] S3 中断后可续跑：run_all --from dedup_events 退出码 0  实测 退出码=0、耗时 1.17s；四个环节脚本单独执行退出码：extract=0、disambiguate=0、dedup_events=0、write_graph=0
+  [OK ] S4 证据（重跑读数）  镜像 C:\Users\15129\AppData\Local\Temp\stage6_accept_1qfj8_c2；复制文件 1548 个；run_all 退出码=0/5.75s；write_graph_again 退出码=0/0.88s；from_run 退出码=0/1.17s；重跑后事件数仍为 1100
+
+==============================================================================
+T、《15》第八节 第 25 行：代码\抽取与图谱\ 的四个环节脚本与入口脚本均可单独执行，参数全部取自 config.py（脚本内无写死的模型名、日期、路径、阈值）
+==============================================================================
+  [OK  ] T1 四个环节脚本 ＋ 入口脚本 ＋ config.py ＋ README.md 齐全  实测 7/7 存在；缺失 无
+  [OK  ] T2 四个环节脚本与入口脚本均可单独执行（镜像内 --profile v21_v1_2 各跑一次，退出码 0）  实测 extract 退出码=0（0.98s）；disambiguate 退出码=0（0.24s）；dedup_events 退出码=0（3.57s）；write_graph 退出码=0（0.95s）；入口 run_all.py 退出码=0
+  [OK  ] T3 脚本内无写死的模型名／日期／绝对路径（config.py 作正对照，只写取值与读取方式）  实测 正对照：config.py 命中模型名 是；其余脚本命中 0 处；提示词模板／注释内的日期示例 12 处（不计入，逐处登记：extract.py 第37行、extract.py 第155行、extract.py 第577行、extract.py 第1586行…（共 12 个））
+  [OK  ] T4 脚本内无写死的阈值（阈值名赋字面量的赋值扫描）  实测 阈值赋值命中 0 处；五个脚本引用 config. 共 308 处（参数一律经 config 取值）
+  [OK  ] T5 五个脚本都接受 --profile（pilot／v21／v21_v1_2 三个取值，与 config.pipeline_paths 对齐）  实测 未声明 --profile 的脚本 无；choices 均为 pilot／v21／v21_v1_2：True
+
+==============================================================================
+U、《15》第八节 第 26 行：密钥不入仓库（U1 按 git 的真值把「可提交文件」与「被 .gitignore 排除的本地配置」分开：前者判失败、后者只列信息行；脚本只写读取方式）
+==============================================================================
+  [OK  ] U1 可提交文件内无密钥取值；被 .gitignore 排除的本地配置只列信息行、不判失败（正对照：密钥形态扫描必须先命中合成样本）  实测 扫描 167 个可提交文件（git ls-files -co --exclude-standard 的真值）；命中 0 处；未读 15 个：阶段02-文献调研与开题/03-精选文献库（22篇）.md（索引里有、工作区没有）、阶段02-文献调研与开题/04-开题报告.md（索引里有、工作区没有）、阶段02-文献调研与开题/05-评审修订决议（2026-09-23）.md（索引里有、工作区没有）、阶段02-文献调研与开题/06-第二阶段完成与交接（2026-09-23）.md（索引里有、工作区没有）…（共 15 个）；另有 2 处命中位于被 .gitignore 排除的本地文件，只列信息行、不判失败：代码/抽取与图谱/config.local.json 第3行、代码/抽取与图谱/config.local.json 第4行（.gitignore:47:config.local.*；属受认可的 gitignored 本地配置路径——config.api_key() 的 LLM_API_KEY → config.local.json 回退，不入公开仓库，故只列信息行、不判失败）；正对照 通过
+  [OK  ] U2 config.py 只写密钥读取方式（环境变量 LLM_API_KEY），不写取值  实测 config.py 含 os.environ.get=True、含 api_key 字面量赋值 0 处；密钥形态命中 0 处（在 167 个可提交文件里逐行扫；config.py 不豁免扫描）
+
+==============================================================================
+V、《15》第八节 第 27 行：未出现「向量数据库」（排除语境除外）
+==============================================================================
+  [OK  ] V1 第 6 阶段交付物中不含「向量数据库」（否定语境除外）  实测 扫描 28 个交付文本；命中（未排除）0 处；另有否定语境 1 处已排除
+  [OK ] V2 证据（含否定语境的全部命中，供人工确认）  代码/抽取与图谱/README.md 第274行「向量数据库」
+
+==============================================================================
+W、《15》第八节 第 28 行：`15-第6阶段任务书（事件抽取与知识图谱）.md` 与 `16-事件抽取与知识图谱（第六阶段）.md` 均出现在《00》索引中
+==============================================================================
+  [OK  ] W1 《00》索引登记 `15-第6阶段任务书（事件抽取与知识图谱）`  实测 《00》命中；带 .md 写法命中；对应文件存在（阶段06-事件抽取与知识图谱/15-第6阶段任务书（事件抽取与知识图谱）.md）；《00》第 164 行
+  [OK  ] W2 《00》索引登记 `16-事件抽取与知识图谱（第六阶段）`  实测 《00》命中；带 .md 写法命中；对应文件存在（阶段06-事件抽取与知识图谱/16-事件抽取与知识图谱（第六阶段）.md）；《00》第 5 行
+
+==============================================================================
+X、汇总与收口（《15》第八节 第 29 行：两脚本退出码均为 0 才放行）
+==============================================================================
+  检查项合计（A～W）：99 项，其中通过 99、失败 0、SKIP 0
+  [OK  ] X1 全部检查项通过（任一失败即非零退出；SKIP 不影响退出码）  实测 失败 0 项：无
+  [OK  ] X2 工作区跨文档核验脚本存在（本脚本不调用它，供操作者另行运行）  实测 工具/跨文档核验.py：存在；操作者应另行运行：python 工具\跨文档核验.py（T9 要求两脚本退出码均为 0）
+  [OK ] X3 本脚本的只读性（证据）  镜像根目录 C:\Users\15129\AppData\Local\Temp\stage6_accept_1qfj8_c2（1548 个文件，--keep-tmp 可保留）；镜像内的重跑均以镜像为工作目录，工作区的交付目录一个字节都没写；子进程环境已摘掉 LLM_API_KEY，全程不调用模型
+
+  最终：检查项 101 项，通过 101，失败 0
+  另有 SKIP 0 项（pilot 模式下不适用或按命令行跳过；原因见各组 [SKIP] 行，不计入失败）
+==============================================================================
+结论：全部通过（通过 101 项／检查项 101 项，另有 SKIP 0 项）。第 6 阶段验收通过，退出码 0。
+==============================================================================

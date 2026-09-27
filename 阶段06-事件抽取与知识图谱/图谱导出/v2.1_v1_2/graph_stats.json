@@ -795,7 +795,7 @@
       "sha256": "8cdb68d0782b04a852614dbbfee51efe81885f059d957b2a96c9655746b6c9ae"
     }
   },
-  "generated_at": "2026-09-27T18:56:41+08:00",
+  "generated_at": "2026-09-27T20:32:39+08:00",
   "graph_check": {
     "checks": 20,
     "failed": [
@@ -863,7 +863,8 @@
   },
   "id_rule": "Company=stock_code；Document=doc_id；Person／Institution／Policy／Industry／Event 按（类型, 归一化名称）或事件的确定性排序一次性分配 PER／INST／POL／IND／EVT 编号",
   "isolated_nodes": {
-    "count": [
+    "count": 435,
+    "ids": [
       "002090",
       "300351",
       "HCONF-0010",

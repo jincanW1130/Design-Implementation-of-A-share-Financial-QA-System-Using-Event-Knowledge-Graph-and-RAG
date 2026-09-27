@@ -1,0 +1,16 @@
+$ python 代码\抽取与图谱\extract_event_time.py --profile v21_v1_2 --measure
+cwd: C:\Users\15129\Desktop\毕业设计
+env_overrides: {'STAGE6_FORBID_MODEL_CALLS': '1'}
+env_unset: ['LLM_API_KEY']
+exit_code: 0
+wall_clock_seconds: 0.217
+
+--- stdout ---
+时间覆盖／可过滤性度量：
+  extraction_layer_before_backfill：事件 1114 条、有时间 397 条、无时间 717 条；{'docs_with_ge2_distinct_event_dates': 44, 'docs_with_ge2_nonnull_events': 81, 'docs_times_span_more_than_one_month': 32, 'docs_times_span_ge_31_days': 26}
+  extraction_layer_after_backfill：事件 1114 条、有时间 570 条、无时间 544 条；{'docs_with_ge2_distinct_event_dates': 66, 'docs_with_ge2_nonnull_events': 117, 'docs_times_span_more_than_one_month': 49, 'docs_times_span_ge_31_days': 40}
+  graph_layer_after_backfill：事件 1100 条、有时间 556 条、无时间 544 条；{'docs_with_ge2_distinct_event_dates': 66, 'docs_with_ge2_nonnull_events': 117, 'docs_times_span_more_than_one_month': 49, 'docs_times_span_ge_31_days': 40}
+  补抽：{'null_events': 717, 'accepted': 173, 'by_basis': {'null': 544, 'stated': 110, 'year_from_publish': 63}}
+产物：代码/抽取与图谱/_全量/v2.1_v1_2/时间覆盖_度量.json
+
+--- stderr ---
