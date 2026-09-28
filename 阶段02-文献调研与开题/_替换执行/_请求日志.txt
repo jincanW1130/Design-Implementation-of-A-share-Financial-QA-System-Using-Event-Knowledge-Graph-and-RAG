@@ -1,0 +1,50 @@
+2026-09-28 21:04:44	-	RUN_START	01_检索候选.py	
+2026-09-28 21:04:46	POST	裁定点名的池内更优候选 KG-7 题录核实	https://search.cnki.com.cn/search/listresult	content=知识关联视角下金融证券知识图谱构建与相关股票发现 status=200 bytes=27510 items=0
+2026-09-28 21:04:50	POST	裁定点名的池内更优候选 RAG-15 题录核实	https://search.cnki.com.cn/search/listresult	content=面向大语言模型生成能力提升的检索增强生成研究进展 status=200 bytes=98701 items=0
+2026-09-28 21:04:56	POST	裁定点名的池内更优候选 SYS-2 题录核实	https://search.cnki.com.cn/search/listresult	content=基于Langchain-LLMs框架的智能问答系统的设计与实现 status=200 bytes=596 items=0
+2026-09-28 21:05:00	POST	裁定点名的池内更优候选 SYS-16 题录核实	https://search.cnki.com.cn/search/listresult	content=基于大语言模型的知识图谱构建及应用研究 status=200 bytes=104908 items=0
+2026-09-28 21:05:07	POST	裁定点名的池内更优候选 SYS-18 题录核实	https://search.cnki.com.cn/search/listresult	content=融合知识图谱和大模型的高校科研管理问答系统设计 status=200 bytes=103099 items=0
+2026-09-28 21:05:12	POST	SYS-13 端点：中文评测/基准类候选	https://search.cnki.com.cn/search/listresult	content=检索增强生成 系统 评测 status=200 bytes=100732 items=0
+2026-09-28 21:05:18	POST	SYS-13 端点：中文评测/基准类候选（第二式）	https://search.cnki.com.cn/search/listresult	content=检索增强生成 评测框架 status=200 bytes=98009 items=0
+2026-09-28 21:05:24	POST	SYS-13 端点：中文评测/基准类候选（第三式）	https://search.cnki.com.cn/search/listresult	content=大语言模型 问答系统 性能评测 status=200 bytes=118718 items=0
+2026-09-28 21:05:27	-	RUN_END	8 queries	
+2026-09-28 21:06:15	-	RUN_START	01_检索候选.py	
+2026-09-28 21:06:17	POST	裁定点名的池内更优候选 KG-7 题录核实	https://search.cnki.com.cn/search/listresult	content=知识关联视角下金融证券知识图谱构建与相关股票发现 status=200 bytes=27510 items=5
+2026-09-28 21:06:21	POST	裁定点名的池内更优候选 RAG-15 题录核实	https://search.cnki.com.cn/search/listresult	content=面向大语言模型生成能力提升的检索增强生成研究进展 status=200 bytes=98701 items=20
+2026-09-28 21:06:25	POST	裁定点名的池内更优候选 SYS-2 题录核实	https://search.cnki.com.cn/search/listresult	content=基于Langchain-LLMs框架的智能问答系统的设计与实现 status=200 bytes=596 items=0
+2026-09-28 21:06:30	POST	裁定点名的池内更优候选 SYS-16 题录核实	https://search.cnki.com.cn/search/listresult	content=基于大语言模型的知识图谱构建及应用研究 status=200 bytes=104908 items=20
+2026-09-28 21:06:35	POST	裁定点名的池内更优候选 SYS-18 题录核实	https://search.cnki.com.cn/search/listresult	content=融合知识图谱和大模型的高校科研管理问答系统设计 status=200 bytes=103099 items=20
+2026-09-28 21:06:39	POST	SYS-13 端点：中文评测/基准类候选	https://search.cnki.com.cn/search/listresult	content=检索增强生成 系统 评测 status=200 bytes=100732 items=20
+2026-09-28 21:06:43	POST	SYS-13 端点：中文评测/基准类候选（第二式）	https://search.cnki.com.cn/search/listresult	content=检索增强生成 评测框架 status=200 bytes=98009 items=20
+2026-09-28 21:06:47	POST	SYS-13 端点：中文评测/基准类候选（第三式）	https://search.cnki.com.cn/search/listresult	content=大语言模型 问答系统 性能评测 status=200 bytes=118718 items=20
+2026-09-28 21:06:52	POST	RAG-15 精确题名复核（第二式）	https://search.cnki.com.cn/search/listresult	content="面向大语言模型生成能力提升的检索增强生成研究进展" status=200 bytes=98701 items=20
+2026-09-28 21:06:56	POST	SYS-2 题录复核（第二式）	https://search.cnki.com.cn/search/listresult	content=Langchain LLMs 框架 智能问答系统 设计与实现 status=200 bytes=110178 items=20
+2026-09-28 21:07:00	POST	SYS-16 精确题名复核（第二式）	https://search.cnki.com.cn/search/listresult	content="基于大语言模型的知识图谱构建及应用研究" status=200 bytes=104908 items=20
+2026-09-28 21:07:04	POST	SYS-18 精确题名复核（第二式）	https://search.cnki.com.cn/search/listresult	content="融合知识图谱和大模型的高校科研管理问答系统设计" status=200 bytes=103099 items=20
+2026-09-28 21:07:08	POST	SYS-13 端点：中文评测/基准类候选（第四式）	https://search.cnki.com.cn/search/listresult	content=检索增强生成 基准 评测 status=200 bytes=110316 items=20
+2026-09-28 21:07:12	POST	SYS-13 端点：中文评测/基准类候选（第五式）	https://search.cnki.com.cn/search/listresult	content=检索增强生成 评价 综述 status=200 bytes=98051 items=20
+2026-09-28 21:07:17	POST	SYS-13 端点：RAG 系统流程优化类候选复核	https://search.cnki.com.cn/search/listresult	content=面向检索增强生成系统的流程优化方法研究 status=200 bytes=96454 items=20
+2026-09-28 21:07:19	-	RUN_END	15 queries	
+2026-09-28 21:07:46	-	RUN_START	01_检索候选.py	
+2026-09-28 21:07:48	POST	裁定点名的池内更优候选 KG-7 题录核实	https://search.cnki.com.cn/search/listresult	content=知识关联视角下金融证券知识图谱构建与相关股票发现 status=200 bytes=27510 items=5
+2026-09-28 21:07:52	POST	裁定点名的池内更优候选 RAG-15 题录核实	https://search.cnki.com.cn/search/listresult	content=面向大语言模型生成能力提升的检索增强生成研究进展 status=200 bytes=98701 items=20
+2026-09-28 21:07:56	POST	裁定点名的池内更优候选 SYS-2 题录核实	https://search.cnki.com.cn/search/listresult	content=基于Langchain-LLMs框架的智能问答系统的设计与实现 status=200 bytes=596 items=0
+2026-09-28 21:08:00	POST	裁定点名的池内更优候选 SYS-16 题录核实	https://search.cnki.com.cn/search/listresult	content=基于大语言模型的知识图谱构建及应用研究 status=200 bytes=104908 items=20
+2026-09-28 21:08:04	POST	裁定点名的池内更优候选 SYS-18 题录核实	https://search.cnki.com.cn/search/listresult	content=融合知识图谱和大模型的高校科研管理问答系统设计 status=200 bytes=103099 items=20
+2026-09-28 21:08:08	POST	SYS-13 端点：中文评测/基准类候选	https://search.cnki.com.cn/search/listresult	content=检索增强生成 系统 评测 status=200 bytes=100732 items=20
+2026-09-28 21:08:12	POST	SYS-13 端点：中文评测/基准类候选（第二式）	https://search.cnki.com.cn/search/listresult	content=检索增强生成 评测框架 status=200 bytes=98009 items=20
+2026-09-28 21:08:16	POST	SYS-13 端点：中文评测/基准类候选（第三式）	https://search.cnki.com.cn/search/listresult	content=大语言模型 问答系统 性能评测 status=200 bytes=118718 items=20
+2026-09-28 21:08:20	POST	RAG-15 精确题名复核（第二式）	https://search.cnki.com.cn/search/listresult	content="面向大语言模型生成能力提升的检索增强生成研究进展" status=200 bytes=98701 items=20
+2026-09-28 21:08:25	POST	SYS-2 题录复核（第二式）	https://search.cnki.com.cn/search/listresult	content=Langchain LLMs 框架 智能问答系统 设计与实现 status=200 bytes=110178 items=20
+2026-09-28 21:08:29	POST	SYS-16 精确题名复核（第二式）	https://search.cnki.com.cn/search/listresult	content="基于大语言模型的知识图谱构建及应用研究" status=200 bytes=104908 items=20
+2026-09-28 21:08:33	POST	SYS-18 精确题名复核（第二式）	https://search.cnki.com.cn/search/listresult	content="融合知识图谱和大模型的高校科研管理问答系统设计" status=200 bytes=103099 items=20
+2026-09-28 21:08:37	POST	SYS-13 端点：中文评测/基准类候选（第四式）	https://search.cnki.com.cn/search/listresult	content=检索增强生成 基准 评测 status=200 bytes=110316 items=20
+2026-09-28 21:08:41	POST	SYS-13 端点：中文评测/基准类候选（第五式）	https://search.cnki.com.cn/search/listresult	content=检索增强生成 评价 综述 status=200 bytes=98051 items=20
+2026-09-28 21:08:45	POST	SYS-13 端点：RAG 系统流程优化类候选复核	https://search.cnki.com.cn/search/listresult	content=面向检索增强生成系统的流程优化方法研究 status=200 bytes=96454 items=20
+2026-09-28 21:08:49	POST	RAG-15 题录复核（第三式：按作者）	https://search.cnki.com.cn/search/listresult	content=刘澳迪 奚雪峰 周国栋 status=200 bytes=99526 items=20
+2026-09-28 21:08:53	POST	RAG-15 题录复核（第四式）	https://search.cnki.com.cn/search/listresult	content=软件学报 检索增强生成 研究进展 status=200 bytes=102653 items=20
+2026-09-28 21:08:59	POST	SYS-2 题录复核（第三式）	https://search.cnki.com.cn/search/listresult	content=基于Langchain的智能问答系统的设计与实现 status=200 bytes=110519 items=20
+2026-09-28 21:09:02	POST	SYS-16 题录复核（第三式：按作者）	https://search.cnki.com.cn/search/listresult	content=张才科 基于大语言模型的知识图谱构建 status=200 bytes=101227 items=20
+2026-09-28 21:09:06	POST	SYS-18 题录复核（第三式：按作者）	https://search.cnki.com.cn/search/listresult	content=王永 秦嘉俊 融合知识图谱和大模型 科研管理 status=200 bytes=113293 items=20
+2026-09-28 21:09:11	POST	SYS-13 端点：中文评测/基准类候选（第六式）	https://search.cnki.com.cn/search/listresult	content=检索增强生成系统 组件 性能 优化 status=200 bytes=116608 items=20
+2026-09-28 21:09:13	-	RUN_END	21 queries	

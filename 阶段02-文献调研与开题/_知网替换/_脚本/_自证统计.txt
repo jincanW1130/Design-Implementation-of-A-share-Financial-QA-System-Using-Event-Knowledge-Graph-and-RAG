@@ -1,0 +1,70 @@
+# 无登录自证统计
+请求清单文件：_请求清单_本轮.txt
+清单行数：22；其中含 URL 的请求行：20（含 RUN_START／RUN_END 两行无 URL 登记）
+
+## 一、域名命中统计
+www.cnki.com.cn	11
+cdmd.cnki.com.cn	9
+
+## 二、禁用域名命中
+kns.cnki.net	命中 0
+pay.cnki.net	命中 0
+mall.cnki.net	命中 0
+card.cnki.net	命中 0
+vipcard.cnki.net	命中 0
+bank.cnki.net	命中 0
+
+## 三、本轮脚本账号字段扫描
+00_探测.py	账号×1
+    L4: 不使用任何账号、不提交任何凭据、不点击下载链接。
+    → 赋值／调用式账号字段命中：0
+01_检索.py	账号×1、密码×1
+    L6: - 不登录、不使用任何账号或密码、不提交任何凭据；
+    → 赋值／调用式账号字段命中：0
+02_抓文章页.py	账号×1、密码×1
+    L5: - 不登录、不使用账号或密码、不提交任何凭据；
+    → 赋值／调用式账号字段命中：0
+03_核实文章页.py	账号×1、密码×1
+    L5: - 不登录、不使用任何账号或密码、不提交任何凭据；
+    → 赋值／调用式账号字段命中：0
+04_扫描归档池.py	无账号类字段命中
+    → 赋值／调用式账号字段命中：0
+05_自证统计.py	账号×7、帐号×2、密码×2、用户名×2、password×2、passwd×2、username×2、user_name×2、login×2、signin×2、cookie×2、token=×1
+    L2: """无登录自证：统计本轮请求 URL 清单的域名命中，并扫描本轮脚本的账号字段。
+    L29: # 账号类字段关键词
+    L30: ACCOUNT_WORDS = ["账号", "帐号", "密码", "用户名", "password", "passwd", "username", "user_name", "login", "signin", "cookie", "token="]
+    L58: lines.append("## 三、本轮脚本账号字段扫描")
+    L60: r"(账号|帐号|用户名|密码|password|passwd|username|user_name|login|signin|cookie)\s*[=:（(]",
+    L73: lines.append(f"{name}\t{'、'.join(hits) if hits else '无账号类字段命中'}")
+    → 赋值／调用式账号字段命中：0
+06_生成产物.py	账号×7、密码×2
+    L322: D.append("> 本清单只给下载指引，**未下载任何全文**；所有链接都是知网公开文章页，正文页上的\"下载全文\"入口需要作者本人以机构账号在知网完成。")
+    L357: D.append("1. 知网全文下载需机构/个人账号与订阅权限，本任务全程未登录、未下载、未点击任何下载链接，因此下载环节必须由作者完成。")
+    L426: R.append("- 全程**不登录**、不使用任何账号或密码、不提交任何凭据、不绕过验证；**不下载、不点击任何全文/CAJ/PDF 下载链接**（只在页面里登记 href，不跳转）。")
+    L437: R.append("| `_脚本/05_自证统计.py` | 统计请求域名命中与脚本账号字段，产出 `_脚本/_自证统计.txt` |")
+    L506: R.append("本轮 `_脚本/_请求清单_本轮.txt` 共 22 行（20 条 GET＋RUN_START/RUN_END），含 URL 的请求行 20 条，域名命中：`www.cnki.com.cn` 11、`cdmd.cnki.com.cn` 9；`kns.cnki.net` 命中 **
+    → 赋值／调用式账号字段命中：0
+07_追加验证输出.py	无账号类字段命中
+    → 赋值／调用式账号字段命中：0
+
+## 四、本轮全部请求 URL
+https://cdmd.cnki.com.cn/Article/CDMD-10749-1026398565.htm
+https://www.cnki.com.cn/Article/CJFDTotal-KXTS202608009.htm
+https://cdmd.cnki.com.cn/Article/CDMD-10361-1026321974.htm
+https://cdmd.cnki.com.cn/Article/CDMD-10140-1026248350.htm
+https://www.cnki.com.cn/Article/CJFDTotal-RJXB202511014.htm
+https://www.cnki.com.cn/Article/CJFDTotal-QBGC202503007.htm
+https://www.cnki.com.cn/Article/CJFDTotal-JSJA202607012.htm
+https://cdmd.cnki.com.cn/Article/CDMD-10431-1026344672.htm
+https://cdmd.cnki.com.cn/Article/CDMD-11660-1026346236.htm
+https://www.cnki.com.cn/Article/CJFDTotal-SJSJ202608032.htm
+https://cdmd.cnki.com.cn/Article/CDMD-10358-1026362151.htm
+https://www.cnki.com.cn/Article/CJFDTotal-QBTS202609016.htm
+https://cdmd.cnki.com.cn/Article/CDMD-10749-1026398545.htm
+https://cdmd.cnki.com.cn/Article/CDMD-11660-1026346229.htm
+https://www.cnki.com.cn/Article/CJFDTotal-DZJY202606022.htm
+https://cdmd.cnki.com.cn/Article/CDMD-10013-1025075409.htm
+https://www.cnki.com.cn/Article/CJFDTotal-FHKH202609011.htm
+https://www.cnki.com.cn/Article/CJFDTotal-SSDB202604002.htm
+https://www.cnki.com.cn/Article/CJFDTotal-ZXYX202609007.htm
+https://www.cnki.com.cn/Article/CJFDTotal-DWJS202608019.htm

@@ -1,0 +1,8 @@
+SYS16_t1	Title	page=1	status=200	bytes=104908	items=20	hit=基于大语言模型的知识图谱构建及应用研究;
+SYS16_p2	MulityTermsSearch	page=2	status=200	bytes=103160	items=20	hit=
+SYS18_t1	Title	page=1	status=200	bytes=103099	items=20	hit=融合知识图谱和大模型的高校科研管理问答系统设计;
+SYS18_p2	MulityTermsSearch	page=2	status=200	bytes=600	items=0	hit=融合知识图谱和大模型的高校科研管理问答系统设计;
+RAG15_t1	Title	page=1	status=200	bytes=98701	items=20	hit=
+RAG15_kw	Keyword	page=1	status=200	bytes=102653	items=20	hit=
+SYS2_t1	Title	page=1	status=200	bytes=596	items=0	hit=基于Langchain-LLMs框架的智能问答系统的设计与实现;
+SYS2_kw	Keyword	page=1	status=200	bytes=115319	items=20	hit=

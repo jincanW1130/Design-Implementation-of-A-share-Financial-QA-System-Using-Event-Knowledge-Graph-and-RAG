@@ -398,7 +398,12 @@ def g_curve(runner, questions, k_star, n_star, budget, group, progress=True):
     switches = pipeline.normalize_switches(group)
     base, rows = None, []
     for g in G_PROBE:
-        run = runner.run(questions, switches, n_star, k_star, budget, g)
+        # B-16（2026-09-28 整改）：g=0 不再走运行入口（run() 只接受 1 ≤ g ≤ K），
+        # 改用显式命名的「原字面口径」退化通道；g ≥ 1 仍走 run()。
+        if int(g) == pipeline.LEGACY_G0:
+            run = runner.run_legacy_g0(questions, switches, n_star, k_star, budget)
+        else:
+            run = runner.run(questions, switches, n_star, k_star, budget, g)
         records = run["records"]
         _rows, avg = evaluate(records, questions, k_star)
         flags = None
@@ -441,7 +446,11 @@ def budget_sensitivity(runner, questions, switches, k_anchor, n_anchor, median_t
         budget = _ceil100(float(median_text) * (1.0 + margin))
         curve = {}
         for gv in (0, 2):
-            run = runner.run(questions, switches, n_anchor, k_anchor, budget, gv)
+            # 同上：gv=0 走显式退化通道，gv=2 走运行入口
+            if int(gv) == pipeline.LEGACY_G0:
+                run = runner.run_legacy_g0(questions, switches, n_anchor, k_anchor, budget)
+            else:
+                run = runner.run(questions, switches, n_anchor, k_anchor, budget, gv)
             _rows, avg = evaluate(run["records"], questions, k_anchor)
             curve[gv] = {key: avg[key] for key in metrics.CHUNK_METRIC_KEYS}
         flags = ["+" if curve[2][key] > curve[0][key] + 1e-12

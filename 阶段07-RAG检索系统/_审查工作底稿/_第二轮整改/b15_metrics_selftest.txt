@@ -1,0 +1,22 @@
+﻿  [OK  ] 完全命中：Recall@K == 1   → Recall@K=1.0
+  [OK  ] 完全命中：Complete Evidence Recall@K == 1   → Complete Evidence Recall@K=1.0
+  [OK  ] 部分命中：Recall@K == 0.5   → Recall@K=0.5
+  [OK  ] 部分命中：Complete Evidence Recall@K == 0   → Complete Evidence Recall@K=0.0
+  [OK  ] 部分命中：Precision@K == 1/5   → Precision@K=0.2
+  [OK  ] M<K 分母：Precision@K == 0.1（分母是 10 不是 2）   → M=2  K=10  命中=1  Precision@K=0.1
+  [OK  ] M<K 分母：题被保留（逐题行存在且 n_final < K）   → n_final=2  K=10
+  [OK  ] M<K 分母：占位位置记未命中（命中数仍是 1，未补足）   → n_hit=1
+  [OK  ] MRR：首个命中在第 3 位 → 1/3   → MRR=0.33333333（1/3=0.33333333）
+  [OK  ] MRR：首个命中在第 1 位 → 1   → MRR=1.0
+  [OK  ] MRR：无命中 → 0   → MRR=0.0
+  [OK  ] 空 gold／空 final：四项一律返回 0 且不抛异常   → 空gold=(0.0, 0.0, 0.0, 0.0)  空final=(0.0, 0.0, 0.0, 0.0)
+  [OK  ] 集合语义：列表＝集合＝含重复列表（同一 chunk 只算一次）   → 重复命中不重复计数
+  [OK  ] 混算拦截：文档级行进入 chunk 级聚合即抛错   → aggregate_chunk_level 拒绝 level="document"
+  [OK  ] 文档级诊断单独标注：level == "document" 且指标键与 chunk 级不同名   → keys=['K', 'level', 'metric', 'n_final_docs', 'n_gold_docs', 'note', 'recall_at_k_doc_level']
+  [OK  ] 文档级平均值不含 chunk 级指标键（键集不相交）   → doc-level keys=['recall_at_k_doc_level']
+  [OK  ] 可重算：同一输入两次运行 sha256 相同   → sha256=afa51f82737e53be
+  [OK  ] 输出不含时间戳／耗时字段   → 无 timestamp／elapsed／duration／耗时
+  [OK  ] |final|>K：前 K 内无 gold 时 mrr == 0（与 n_hit／recall 同源，旧实现是 1/11）   → n_final=10  n_hit=0  mrr=0.0  按 final[:K] 重算=0.0
+  [OK  ] |final|>K：gold 落在前 K 内时 mrr 仍是首个命中的倒数（1/3）   → n_hit=1  mrr=0.33333333
+------------------------------------------------------------
+  自证：20／20 通过 → 全部通过

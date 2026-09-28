@@ -19,11 +19,14 @@ r"""《18-第7阶段任务书（RAG检索系统）》第 7 阶段交付物的阶
     是哪一份产物、并在镜像里**现场重跑生成**（不是读工作区的旧报告）。
 
 **只读纪律（沿用 `工具\验收第6阶段.py` 的镜像根目录做法）**：本脚本对交付物只读。唯一的写动作
-发生在系统临时目录里——把 `代码\检索\*.py`、数据集 v2.1 的 11 个输入、预实验问题集三件与
-`检索产出\` 的既有产物**镜像**到一个临时根目录，在那里重跑：
+发生在系统临时目录里——把 `代码\检索\*.py`、数据集 v2.1 的 11 个输入、预实验问题集三件、
+`检索产出\` 的既有产物与 `_工作底稿\_T11\T11_summary.json`（`run_query --run-manifest` 的输入）
+**镜像**到一个临时根目录，在那里重跑：
 
     check_inputs → vector_search --selftest → graph_query --selftest → pipeline --selftest
+    → run_query --selftest
     → （pipeline --group C → pre_experiment --quiet → metrics）× 2
+    → run_query --run-manifest
 
 再与工作区里的原产物逐字节比对。**绝不写入工作区的任何交付目录**；镜像文件数与本脚本的只读
 证据在「汇总与收口」组打印（`--keep-tmp` 保留镜像目录供事后复核）。
@@ -140,14 +143,15 @@ FROZEN_GRAPH_KEYS = ("nodes_csv", "edges_csv", "replay_cypher", "graph_stats",
                      "human_confirmation")
 FROZEN_BY_KEY = {row[0]: row for row in FROZEN_INPUT_FINGERPRINTS}
 
-# 固定结构：28 组、full 档 71 条内容检查 ＋ AB3 汇总 = 72 项；
-# static 档未执行的正是 13 个镜像块内的 28 条内容检查。
+# 固定结构：28 组、full 档 73 条内容检查 ＋ AB3 汇总 = 74 项；
+# static 档未执行的正是 13 个镜像块内的 30 条内容检查
+# （2026-09-28 第二轮复审 B-10 整改：W 组新增 W4、X 组新增 X4，两项都在镜像块内）。
 EXPECTED_GROUP_ORDER = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
                         "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X",
                         "Y", "Z", "AA", "AB"]
-EXPECTED_CONTENT_CHECKS = 71
-EXPECTED_TOTAL_CHECKS = 72
-EXPECTED_STATIC_UNRUN = 28
+EXPECTED_CONTENT_CHECKS = 73
+EXPECTED_TOTAL_CHECKS = 74
+EXPECTED_STATIC_UNRUN = 30
 
 # U 组独立探针的常量取自《18》第2.3／2.4节与《02》第12.4节，不读
 # `k_selection.json` 作为期望值。
@@ -318,10 +322,18 @@ def section_text(text, start_heading, end_heading=None):
 # 镜像重跑（唯一一次进程链，供 4／7／8／10～24／27／28 组共用）
 # ---------------------------------------------------------------------------
 REPLAY = {"error": None, "error_kind": None}
+# 2026-09-28 第二轮复审 B-10 整改：`检索产出\run_manifest.json`（《18》第4.2／4.3节 点名的独立
+# 入口 `run_query.py --run-manifest` 的产物）此前**零覆盖**——不在镜像链、不在产物新鲜度、
+# 不在 T2／X2 逐字节比对集。现把它并入 MIRROR_OUTPUTS：镜像先删、链上 `run_query.py
+# --run-manifest` 现场重生成、再与工作区交付产物逐字节比对（X4）。
 MIRROR_OUTPUTS = ["input_manifest.json", "pre_experiment_matrix.jsonl", "k_selection.json",
-                  "per_question_trace.jsonl", "metrics_pre.jsonl"]
+                  "per_question_trace.jsonl", "metrics_pre.jsonl", "run_manifest.json"]
 MIRROR_SCRATCH = ["pipeline_assertions.json", "pipeline_trace_D.jsonl",
                   "pipeline_trace_E.jsonl"]
+# `run_query.py --run-manifest` 的**输入**（T11 的实测量留痕）：逐字节复跑 run_manifest.json
+# 必须有它（否则 run_query 会退回"现场计数"分支而得到不同的字节）。按输入复制、**不参与
+# 新鲜度判定**——新鲜度只看 run_manifest.json 本身是否由本次链上运行重新生成。
+MIRROR_INPUT_EVIDENCE = ["阶段07-RAG检索系统/_工作底稿/_T11/T11_summary.json"]
 
 
 class ChainFailure(RuntimeError):
@@ -341,6 +353,10 @@ def mirror_items():
         path = os.path.join(OUT, name)
         if os.path.isfile(path):
             items.append((path, os.path.relpath(path, ROOT)))
+    for rel_path in MIRROR_INPUT_EVIDENCE:
+        path = os.path.join(ROOT, rel_path.replace("/", os.sep))
+        if os.path.isfile(path):
+            items.append((path, rel_path.replace("/", os.sep)))
     return items
 
 
@@ -449,8 +465,13 @@ runner = pipeline.PipelineRunner(verbose=False)
 
 
 def cell(k, n, g):
-    run = runner.run(questions, pipeline.normalize_switches("C"), int(n), int(k),
-                     3600, int(g))
+    # B-16（2026-09-28 整改）：g=0 不再走运行入口（run() 只接受 1 <= g <= K），
+    # 独立探针里的 g=0 档改用显式命名的「原字面口径」退化通道 run_legacy_g0()。
+    switches = pipeline.normalize_switches("C")
+    if int(g) == pipeline.LEGACY_G0:
+        run = runner.run_legacy_g0(questions, switches, int(n), int(k), 3600)
+    else:
+        run = runner.run(questions, switches, int(n), int(k), 3600, int(g))
     rows = [metrics.evaluate_question_chunk_level(
         rec["evidence"], q.get("gold_evidence_chunk_ids") or [], int(k), qid=rec["qid"])
         for rec, q in zip(run["records"], questions)]
@@ -509,6 +530,9 @@ def ensure_replay():
             ("vector_search_selftest", [os.path.join(code_dir, "vector_search.py"), "--selftest"]),
             ("graph_query_selftest", [os.path.join(code_dir, "graph_query.py"), "--selftest"]),
             ("pipeline_selftest", [os.path.join(code_dir, "pipeline.py"), "--selftest"]),
+            # B-10：`run_query.py`（《18》第4.2节 点名的独立入口）进入镜像链，先跑它的 --selftest
+            ("run_query_selftest", [os.path.join(code_dir, "run_query.py"), "--selftest",
+                                    "--quiet"]),
         ]
         REPLAY["chain"] = []
         for tag, argv in steps:
@@ -533,6 +557,12 @@ def ensure_replay():
                                   "per_question_trace.jsonl", "metrics_pre.jsonl")}
             cyc.append(r)
         REPLAY["cycles"] = cyc
+        # B-10：让链上现场重生成 `检索产出\run_manifest.json`（镜像里的四个产出已由上面两轮
+        # 重新写出；它自带的输入指纹／两次运行 SHA-256 也必须在镜像里能复现同样的字节）
+        REPLAY["run_manifest_step"] = run_cmd(
+            [os.path.join(code_dir, "run_query.py"), "--run-manifest", "--quiet"],
+            tmp, "chain_run_query_run_manifest")
+        require_zero(REPLAY["run_manifest_step"], "链上步骤 run_query --run-manifest")
         probe = run_cmd(["-c", INDEPENDENT_PROBE_CODE], tmp, "independent_metric_probe",
                         write_log=False)
         require_zero(probe, "U 组独立指标探针")
@@ -562,6 +592,7 @@ def ensure_replay():
         if fresh_bad:
             raise ChainFailure("镜像产物新鲜度不成立（删除后不存在→运行后出现）：%s"
                                % "、".join(fresh_bad))
+        REPLAY["mirror_out_dir"] = m("阶段07-RAG检索系统", "检索产出")
         REPLAY["assertions"] = read_json(
             m("阶段07-RAG检索系统", "_工作底稿", "pipeline_assertions.json"), default={})
         REPLAY["matrix"] = read_jsonl(m("阶段07-RAG检索系统", "检索产出",
@@ -1573,7 +1604,7 @@ chk(not key_hits and ctrl_ok and config.MODEL_CALLS_ALLOWED == 0 and guard_decla
     % (len(scan_files), len(key_hits), "：" + br(key_hits) if key_hits else "",
        len(ctrl_hits), "：" + br(ctrl_hits) if ctrl_hits else "",
        config.MODEL_CALLS_ALLOWED, guard_declared))
-R = mirror_or_skip("W2", ["摘除密钥的镜像全链路运行记录"], 2)
+R = mirror_or_skip("W2", ["摘除密钥的镜像全链路运行记录"], 3)
 if R:
     codes = [c["code"] for c in R["chain"]]
     cycle_codes = [s["code"] for cyc in R["cycles"] for s in cyc.values()
@@ -1599,6 +1630,20 @@ if R:
         "W3 《19》写明口径区分：本地 Embedding 前向不计入模型调用，但不得写成全程未跑模型",
         "实测 三处表述齐备=%s"
         % all(k in t19 for k in ("本地 Embedding 前向", "不计入「模型调用」", "全程未跑模型")))
+    # B-10（2026-09-28 整改）：`run_query.py`（《18》第4.2节 点名的独立入口）此前不在镜像链上、
+    # 零验收覆盖；现在它在镜像里真跑 --selftest，并把"自证结论：n／n 条通过"作为判据。
+    rq_step = next((c for c in (R.get("chain") or [])
+                    if c.get("tag") == "chain_run_query_selftest"), None)
+    rq_out = (rq_step or {}).get("stdout") or ""
+    rq_m = re.search(r"自证结论：(\d+)／(\d+) 条通过", rq_out)
+    rq_ok = (rq_step is not None and rq_step.get("code") == 0 and rq_m is not None
+             and rq_m.group(1) == rq_m.group(2))
+    chk(rq_ok,
+        "W4 run_query.py --selftest 在镜像链上真跑（独立入口进入覆盖）：退出码 0 且自证结论"
+        "条数全部通过",
+        "镜像链步骤 tag=%s；退出码=%s；自证结论=%s"
+        % ((rq_step or {}).get("tag"), (rq_step or {}).get("code"),
+           ("%s／%s 条通过" % (rq_m.group(1), rq_m.group(2))) if rq_m else "<未解析到>"))
 
 
 # ==========================================================================
@@ -1607,7 +1652,7 @@ print("=" * 78)
 print("X、《18》第八节 第 24 行：重放逐字节一致（同一输入两次运行，网格结果、逐题 trace "
       "与指标输出逐字节一致）")
 print("=" * 78)
-R = mirror_or_skip("X1", ["两次运行的 SHA-256 比对"], 3)
+R = mirror_or_skip("X1", ["两次运行的 SHA-256 比对"], 4)
 if R:
     files = ["pre_experiment_matrix.jsonl", "k_selection.json",
              "per_question_trace.jsonl", "metrics_pre.jsonl"]
@@ -1616,12 +1661,33 @@ if R:
     chk(same, "X1 四个文件两次运行 SHA-256 相同（逐字节一致）",
         "；".join("%s %s==%s" % (n, R["cycles"][0]["sha"][n][:12],
                                  R["cycles"][1]["sha"][n][:12]) for n in files))
-    chk(ws_same, "X2 镜像重跑的四个文件与工作区交付产物逐字节一致",
-        "；".join("%s 工作区=%s" % (n, sha256_file(os.path.join(OUT, n))[:12]) for n in files))
+    # B-10：逐字节比对集扩到 MIRROR_OUTPUTS 的**全部六个**产物（含 run_manifest.json）
+    outs = list(MIRROR_OUTPUTS)
+    outs_same = all(sha256_file(os.path.join(R["mirror_out_dir"], n))
+                    == sha256_file(os.path.join(OUT, n)) for n in outs)
+    chk(ws_same and outs_same,
+        "X2 镜像重跑的全部 %d 个 MIRROR_OUTPUTS 产物与工作区交付产物逐字节一致" % len(outs),
+        "；".join("%s 工作区=%s" % (n, sha256_file(os.path.join(OUT, n))[:12]) for n in outs))
     no_ts = all(not any(k in ("timestamp", "seconds", "elapsed", "duration") for k in row)
                 for row in R["matrix"])
     chk(no_ts, "X3 参与比对的文件不含运行时间戳与耗时字段",
         "实测 网格行内无 timestamp／seconds／elapsed／duration=%s" % no_ts)
+    # B-10：run_manifest.json 的"可复跑"专项——它必须由链上 `run_query.py --run-manifest`
+    # 在镜像里现场重生成（新鲜度另由 REPLAY['freshness'] 保证），并与工作区交付产物逐字节一致。
+    rm_ws = os.path.join(OUT, "run_manifest.json")
+    rm_mi = os.path.join(R["mirror_out_dir"], "run_manifest.json")
+    rm_row = (R.get("freshness") or {}).get("run_manifest.json") or {}
+    rm_sha_ws = sha256_file(rm_ws)
+    rm_sha_mi = sha256_file(rm_mi) if os.path.isfile(rm_mi) else "<缺失>"
+    rm_step = R.get("run_manifest_step") or {}
+    chk(rm_row.get("absent_after_drop") and rm_row.get("exists_after_run")
+        and rm_sha_ws == rm_sha_mi and rm_step.get("code") == 0,
+        "X4 run_manifest.json 由链上 run_query.py --run-manifest 现场重生成（先删后生成），"
+        "且与工作区交付产物逐字节一致",
+        "镜像链步骤退出码=%s；删除后缺失=%s、运行后出现=%s；镜像 sha=%s…；工作区 sha=%s…；"
+        "MIRROR_OUTPUTS=%s"
+        % (rm_step.get("code"), rm_row.get("absent_after_drop"), rm_row.get("exists_after_run"),
+           str(rm_sha_mi)[:16], rm_sha_ws[:16], "、".join(MIRROR_OUTPUTS)))
 
 
 # ==========================================================================
@@ -1787,12 +1853,13 @@ if R.get("tmp"):
     note("AB2 本脚本的只读证据（镜像根目录）",
          "镜像根目录 %s（文件 %d 个）；copied=%d、skipped=%d；工作区交付目录零写入；"
          "工作区指纹前后一致=%s%s；真实摘除凭据类变量 %d 个（%s）；"
-         "MIRROR_OUTPUTS 删除后缺失态→运行后出现态全成立=%s"
+         "MIRROR_OUTPUTS（%d 个：%s）删除后缺失态→运行后出现态全成立=%s"
          % (R["tmp"], R.get("mirror_files") or 0, R.get("copied") or 0,
             R.get("skipped") or 0,
             R.get("workspace_unchanged"),
             "" if not R.get("workspace_changed") else "（变化：%s）" % br(R.get("workspace_changed")),
             len(removed), "、".join(removed) if removed else "无",
+            len(MIRROR_OUTPUTS), "、".join(MIRROR_OUTPUTS),
             all(row.get("absent_after_drop") and row.get("exists_after_run")
                 for row in (R.get("freshness") or {}).values())))
 else:
@@ -1828,8 +1895,8 @@ else:
         structure_ok = (observed_groups == set(EXPECTED_GROUP_ORDER)
                         and completed_before_summary == EXPECTED_CONTENT_CHECKS)
         chk(not fails and not env_fails and workspace_ok and freshness_ok and structure_ok,
-            "AB3 本脚本 28 组检查全部通过（组结构与 71 条内容检查计数同时成立；"
-            "工作区零写入与产物新鲜度同时成立）",
+            "AB3 本脚本 28 组检查全部通过（组结构与 %d 条内容检查计数同时成立；"
+            "工作区零写入与产物新鲜度同时成立）" % EXPECTED_CONTENT_CHECKS,
             "实测 失败 %d 项、环境／链上失败 %d 项；组 %d／%d、内容检查 %d／%d；"
             "工作区透明=%s、产物新鲜=%s%s"
             % (len(fails), len(env_fails), len(observed_groups), len(EXPECTED_GROUP_ORDER),

@@ -175,6 +175,11 @@ def mrr(final_ids, gold_ids):
     前 K 内无 gold 证据则该问题记 0。传入的 `final_ids` 已经是"不超过 K 个文本块"的
     最终证据集合（K 是**每个问题最终证据集合的文本块数量上限**），故本函数不再要 K。
 
+    **调用方义务（2026-09-28 第二轮复审 B-15 整改）**：本函数按传入顺序取首个命中，
+    因此调用方必须传**已经截断到前 K 个**的集合；`evaluate_question_chunk_level()`
+    已按此口径改用 `final[:K]`（此前传的是未截断的 `final`，当 `|final| > K` 且 gold
+    只落在第 K 名之后时会算出 `n_hit=0` 而 `mrr>0` 的矛盾读数）。
+
     `final_ids` 只接受 `chunk_id`，按集合语义去重后**按原顺序**找首个命中：
     排名从 1 起算，命中在第 r 位即 `1/r`。边界（不抛异常，记 0）：gold 为空，或
     集合内无命中 → `0.0`。
@@ -257,7 +262,10 @@ def evaluate_question_chunk_level(final_ids, gold_ids, K, qid=None, **extra):
     这正是《18》第八节 第 18 行"以同一份最终证据集合与 gold 重算，逐题值与平均值
     逐字节一致"所要求的可核验性。
 
-    K 是**每个问题最终证据集合的文本块数量上限**，同时就是四项指标里的 K。
+    K 是**每个问题最终证据集合的文本块数量上限**，同时就是四项指标里的 K：本函数把
+    `final_ids` 去重后先截断到前 K 个（`top = final[:k]`），**四项指标都只用这前 K 个**算
+    （2026-09-28 第二轮复审 B-15 整改：mrr 此前用的是未截断的 `final`，`|final| > K` 时会与
+    另外三项自相矛盾）。
     `**extra` 用于透传标签（`task_type`／`gold_hop_depth`／`time_constraint`／`time_window`），
     只供第 10 阶段按子集分组统计，**不参与任何指标计算**。
     """
@@ -277,7 +285,10 @@ def evaluate_question_chunk_level(final_ids, gold_ids, K, qid=None, **extra):
         "gold_ids": gold,
         "recall_at_k": recall_at_k(final, gold, k),
         "precision_at_k": precision_at_k(final, gold, k),
-        "mrr": mrr(final, gold),
+        # B-15（2026-09-28 整改）：四项指标一律只看**前 K 个**——mrr 此前传的是未截断的
+        # `final`，`|final| > K` 且 gold 落在第 K 名之后时会与 recall／precision／CER
+        # 自相矛盾（n_hit=0 而 mrr>0）。这里改用 `top = final[:k]`，与其余三项同源。
+        "mrr": mrr(top, gold),
         "complete_evidence_recall_at_k": complete_evidence_recall_at_k(final, gold, k),
     }
     for key, value in extra.items():
@@ -706,6 +717,22 @@ def cmd_selftest(args) -> int:
     check("输出不含时间戳／耗时字段",
           not any(w in text for w in ("timestamp", "elapsed", "duration", "seconds", "耗时")),
           "无 timestamp／elapsed／duration／耗时")
+
+    # 10 `|final| > K`：四项指标必须都只看前 K 个（B-15 构造用例；旧实现在此处给出
+    #    n_hit=0 而 mrr>0 的矛盾读数）
+    f_big = ["c%02d" % i for i in range(1, 13)]        # 12 条 > K
+    gold_out = ["c11"]                                 # 只落在第 11 名（K 之外）
+    gold_in = ["c03"]                                  # 落在第 3 名（K 之内）
+    row_big = evaluate_question_chunk_level(f_big, gold_out, 10, qid="PE-B15")
+    row_in = evaluate_question_chunk_level(f_big, gold_in, 10, qid="PE-B15B")
+    check("|final|>K：前 K 内无 gold 时 mrr == 0（与 n_hit／recall 同源，旧实现是 1/11）",
+          row_big["n_final"] == 10 and row_big["n_hit"] == 0 and row_big["mrr"] == 0.0
+          and row_big["mrr"] == mrr(f_big[:10], gold_out),
+          "n_final=%d  n_hit=%d  mrr=%s  按 final[:K] 重算=%s"
+          % (row_big["n_final"], row_big["n_hit"], row_big["mrr"], mrr(f_big[:10], gold_out)))
+    check("|final|>K：gold 落在前 K 内时 mrr 仍是首个命中的倒数（1/3）",
+          row_in["n_hit"] == 1 and row_in["mrr"] == _r(1.0 / 3),
+          "n_hit=%d  mrr=%s" % (row_in["n_hit"], row_in["mrr"]))
 
     ok_all = all(results)
     print("-" * 60)

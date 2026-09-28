@@ -385,3 +385,29 @@ def require_fixed(name: str):
             "参数 %s 仍为 TBD（第 7 阶段预实验 T8 固化后回填 config.RETRIEVAL，"
             "并回《02》第12.7节 第一步与 第12.4节 登记）；不得用默认值兜底。" % name)
     return value
+
+
+# --------------------------------------------------------------------------
+# 7. g 的取值域与显式校验（2026-09-28 第二轮复审 B-16 整改）
+# --------------------------------------------------------------------------
+# g 是**全局固化量**（《02》第12.4节／第12.7节 第一步、《18》第2.3节、硬约束 10），
+# 现行选择规则自 v3.2 起含**硬下限 1**：1 ≤ g ≤ K。第 8 阶段将**直接调用库函数**
+# （`pipeline.PipelineRunner.run`），因此取值域必须在库里**显式校验**，越界即抛错——
+# 不许再像修订前那样由 `max(0, int(g))` 静默夹取（g=-1 当作 0、g≥K 得"图谱侧优先"）。
+# g = 0 是《02》第12.7节 与《19》「已知限制」登记的**原字面口径退化值**，只保留在
+# **显式命名**的退化回归通道里（`pipeline.PipelineRunner.run_legacy_g0()` 与
+# 低层的 `retention_key()`／`plan_graph_layer()`），不再能从运行入口或命令行直接传。
+GRAPH_SHARE_FLOOR = 1
+
+
+def check_graph_share(g, k, where: str = "") -> int:
+    """g 的显式校验：合法域 `GRAPH_SHARE_FLOOR ≤ g ≤ K`（1 ≤ g ≤ K），越界即抛错。"""
+    g, k = int(g), int(k)
+    if not (GRAPH_SHARE_FLOOR <= g <= k):
+        raise ValueError(
+            "%sg 越界：收到 g=%d、K=%d；合法域为 %d ≤ g ≤ K（g 是全局固化量，"
+            "由 T8 预实验定值并回《02》登记）。g=0 只是「原字面口径」的**退化回归值**，"
+            "须走显式通道（pipeline.PipelineRunner.run_legacy_g0() 或命令行 "
+            "--legacy-g0-degeneration），不得从运行入口／命令行直接传，也不得静默夹取。"
+            % ((where + "：") if where else "", g, k, GRAPH_SHARE_FLOOR))
+    return g

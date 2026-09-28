@@ -1,0 +1,4 @@
+KXTS_journal		status=200	bytes=16805	title=	article_links=0	sample=[]
+KXTS_2024_10	SYS-16	status=200	bytes=16805	title=	article_links=0	sample=[]
+KXTS_2025_01	SYS-18	status=200	bytes=16805	title=	article_links=0	sample=[]
+RJXB_journal	RAG-15	status=200	bytes=16805	title=	article_links=0	sample=[]

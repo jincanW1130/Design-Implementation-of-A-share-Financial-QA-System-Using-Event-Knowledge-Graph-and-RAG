@@ -1,0 +1,18 @@
+SYS-18	1	status=200	bytes=128292	hit=False	title=图像处理中CNN与视觉Transformer混合模型研究综述--《计算机科学与探索》2025年01期
+SYS-18	2	status=200	bytes=128020	hit=False	title=基于Transformer模型的时序数据预测方法综述--《计算机科学与探索》2025年01期
+SYS-18	3	status=200	bytes=128346	hit=False	title=深度学习在心力衰竭检测中的应用综述--《计算机科学与探索》2025年01期
+SYS-18	4	status=200	bytes=127886	hit=False	title=多模态场景下AIGC的应用综述--《计算机科学与探索》2025年01期
+SYS-18	5	status=200	bytes=128408	hit=False	title=融合前缀调优和提示学习的仇恨言论检测方法--《计算机科学与探索》2025年01期
+SYS-18	6	status=200	bytes=128355	hit=True	title=融合知识图谱和大模型的高校科研管理问答系统设计--《计算机科学与探索》2025年01期
+SYS-18	FOUND	https://www.cnki.com.cn/Article/CJFDTotal-KXTS202501006.htm
+SYS-18	RESULT	found=True
+SYS-16	1	status=200	bytes=128024	hit=False	title=多模态数据融合研究综述--《计算机科学与探索》2024年10期
+SYS-16	2	status=200	bytes=128151	hit=False	title=分布式服务资源自适应弹性伸缩研究综述--《计算机科学与探索》2024年10期
+SYS-16	3	status=200	bytes=128170	hit=False	title=区块链在PKI安全中的应用研究--《计算机科学与探索》2024年10期
+SYS-16	4	status=200	bytes=128396	hit=False	title=基于大语言模型的命名实体识别研究进展--《计算机科学与探索》2024年10期
+SYS-16	5	status=200	bytes=128766	hit=False	title=面向中医药大模型的知识增强方法研究--《计算机科学与探索》2024年10期
+SYS-16	6	status=200	bytes=128318	hit=False	title=基于大语言模型的公安专业小样本知识抽取方法研究--《计算机科学与探索》2024年10期
+SYS-16	7	status=200	bytes=128417	hit=False	title=融合大模型与图神经网络的电力设备缺陷诊断--《计算机科学与探索》2024年10期
+SYS-16	8	status=200	bytes=128617	hit=True	title=基于大语言模型的知识图谱构建及应用研究--《计算机科学与探索》2024年10期
+SYS-16	FOUND	https://www.cnki.com.cn/Article/CJFDTotal-KXTS202410008.htm
+SYS-16	RESULT	found=True

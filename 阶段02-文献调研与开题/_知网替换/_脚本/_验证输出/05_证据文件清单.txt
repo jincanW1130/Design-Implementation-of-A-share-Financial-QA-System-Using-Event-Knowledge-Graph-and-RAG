@@ -1,0 +1,44 @@
+# 验证 5：证据文件清单（文件名＋字节数）
+
+KG-5.html	128337 字节
+KG-5.txt	1278 字节
+KG-9.html	130423 字节
+KG-9.txt	1414 字节
+KG-16.html	128344 字节
+KG-16.txt	1310 字节
+KG-17.html	128431 字节
+KG-17.txt	1330 字节
+KG-19.html	130433 字节
+KG-19.txt	1306 字节
+KG-29.html	130501 字节
+KG-29.txt	1315 字节
+RAG-1.html	130647 字节
+RAG-1.txt	1314 字节
+RAG-9.html	127686 字节
+RAG-9.txt	1016 字节
+RAG-10.html	128423 字节
+RAG-10.txt	1340 字节
+RAG-11.html	130393 字节
+RAG-11.txt	1387 字节
+RAG-13.html	128398 字节
+RAG-13.txt	1322 字节
+RAG-24.html	130263 字节
+RAG-24.txt	1372 字节
+FIN-3.html	128432 字节
+FIN-3.txt	1283 字节
+FIN-16.html	128452 字节
+FIN-16.txt	1348 字节
+FIN-17.html	130942 字节
+FIN-17.txt	1309 字节
+FIN-20.html	128347 字节
+FIN-20.txt	1324 字节
+SYS-4.html	130911 字节
+SYS-4.txt	1414 字节
+SYS-8.html	130404 字节
+SYS-8.txt	1324 字节
+SYS-13.html	131683 字节
+SYS-13.txt	1638 字节
+SYS-14.html	130717 字节
+SYS-14.txt	1382 字节
+
+合计 40 个文件，2618893 字节；另有 KG-21_1（沿用上轮）、KG-28（《_知网核验》目录）两条保留项的既有证据。

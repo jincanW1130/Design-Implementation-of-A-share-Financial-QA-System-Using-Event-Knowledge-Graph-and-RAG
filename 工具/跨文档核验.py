@@ -29,7 +29,7 @@
     N1 《02》自身三处版本号一致（标题末尾／版本字段／第1.2节 修订记录末行）
     N2 其余文档引用《02》的版本是否等于当前基线（默认只报告；--strict-citations 门禁）
 """
-import os, re, sys, glob, io
+import os, re, sys, glob, io, fnmatch
 
 try:
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -139,18 +139,35 @@ bynum = {}
 for name in D:
     m = re.match(r'^(\d\d)-', name)
     if m: bynum[m.group(1)] = name
+# 2026-09-28（第二轮复审 B-27 整改，只动这两处判据；其余不变）：
+#   ① **未知文档号不再静默跳过**：此前 `《99》第1.1节` 因 `doc not in bynum` 直接 continue，
+#      等于"声称在查全部《0N》引用，却对不存在的文档号视而不见"；现在照样报出。
+#   ② **链式引用逐个校验**：`《07》第3.1节、第9.9节` 此前只校验首个节号；现在把链上
+#      （`、`／`，`／`～` 连接）的每个节号都单独校验（实测现行工作区链上 213 个节号，
+#      逐个校验后新增失败 0 处——属于"加牙不加噪"）。
+#   ③ 父节松匹配（`k.startswith(sec + '.')`）本轮**不改**：它与 `sections()` 的派生父键
+#      等价（实测靠它单独通过的引用 0 处），改动只会重新定义"父节引用"的语义而不会增加覆盖。
 unres = []
 for name in D:
-    for mm in re.finditer(r'《(\d\d)》第(\d+(?:\.\d+)*)节', D[name]):
-        doc, sec = mm.group(1), mm.group(2)
-        if doc not in bynum: continue
+    for mm in re.finditer(r'《(\d\d)》第(\d+(?:\.\d+)*)节'
+                          r'((?:[、，]第\d+(?:\.\d+)*节|[～~-]第?\d+(?:\.\d+)*节)*)', D[name]):
+        doc, sec, tail = mm.group(1), mm.group(2), mm.group(3)
+        nums = [sec] + re.findall(r'第(\d+(?:\.\d+)*)节', tail) \
+            + re.findall(r'[～~-]第?(\d+(?:\.\d+)*)节', tail)
+        if doc not in bynum:
+            for s in nums:
+                unres.append('%s -> 《%s》第%s节（本工作区没有编号 %s 的文档）'
+                             % (name, doc, s, doc))
+            continue
         keys = SEC[bynum[doc]]
-        if not any(sec == k or sec.startswith(k + '.') or k.startswith(sec + '.') for k in keys):
-            unres.append('%s -> 《%s》第%s节' % (name, doc, sec))
+        for s in nums:
+            if not any(s == k or s.startswith(k + '.') or k.startswith(s + '.') for k in keys):
+                unres.append('%s -> 《%s》第%s节' % (name, doc, s))
 print('  被引文档：%s' % ', '.join(sorted(bynum)))
 if unres:
     for u in sorted(set(unres)): print('    !! %s' % u)
-report(not unres, '所有《0N》第x.y节 引用均可解析', '%d 处无法解析' % len(set(unres)))
+report(not unres, '所有《0N》第x.y节 引用均可解析（含链式引用的每个节号；未知文档号报出）',
+       '%d 处无法解析' % len(set(unres)))
 
 # ---- D 《07》来源清单覆盖 ----------------------------------------------
 print(); print('=' * 78); print('D 《07》来源清单覆盖'); print('=' * 78)
@@ -250,18 +267,51 @@ report(not bad, '证据属性表述均已限定范围（不含记录类文件）
 print(); print('=' * 78); print('J 边界禁用词（仅报告，供人工判断语境）'); print('=' * 78)
 BAN = ['向量数据库', 'LangChain', 'LlamaIndex', 'Elasticsearch', 'Kafka', 'Kubernetes',
        '量化交易', '股票预测', '实时行情', '多模态', '语音', 'Agent']
+# 2026-09-28（第二轮复审 B-26 整改，只加"扫描器可用性正对照"，不改命中判定强度）：
+# J 组此前**只 print、不进 fails**——扫描器自身坏掉（词表被删、正则写错）也无人发现。
+# 现在补一条正对照并真正 report()：构造样本必须命中"未否定的边界词"，否则 J 组判失败。
+# 至于把"真实文档里的未否定命中"本身升为门禁：实测收紧为「有引入/使用类正向词且无否定词」
+# 后，现行 5 处正当表述（如《03》"本库不含…"缺否定词形态、《01》的题目收敛说明）会被误判为
+# 失败，需要文档侧配合——本轮登记不改判据强度（详见整改报告 B-26）。
+J_NEG = re.compile(r'不引入|不研究|不接入|不处理|不提供|不涉及|不得|禁止|不再|边界|除外|不同|vs|不按|不是|不称|never|明确不')
+J_CTRL = '本系统引入' + BAN[0] + '作为主存储并对外提供查询。'
+J_CTRL_OK = any(w in J_CTRL for w in BAN) and not J_NEG.search(J_CTRL)
 for name in sorted(D):
     for i, L in enumerate(D[name].split('\n'), 1):
         for w in BAN:
             if w in L:
-                ctx_ok = bool(re.search(r'不引入|不研究|不接入|不处理|不提供|不涉及|不得|禁止|不再|边界|除外|不同|vs|不按|不是|不称|never|明确不', L))
+                ctx_ok = bool(J_NEG.search(L))
                 if not ctx_ok:
                     print('    ?  %s:%d  「%s」  %s' % (name, i, w, L.strip()[:80]))
 print('  （? 行需人工确认语境；出现"不引入/不研究"等否定语境的已自动过滤）')
+report(J_CTRL_OK, 'J 组语境扫描器可用（构造样本必须命中未否定的边界词）',
+       '构造样本命中=%s；真实文档的命中仍逐行列出、不进退出码（需人工判断语境）' % J_CTRL_OK)
 
 # ---- K 路径存在性 -------------------------------------------------------
 print(); print('=' * 78); print('K 文档内提到的文件路径是否存在'); print('=' * 78)
+# 2026-09-28（第二轮复审 B-25 整改，只改"扩展名白名单／路径存在性"这一块）：
+#   ① 扩展名白名单补齐 `.json`／`.jsonl`／`.txt`／`.cypher`（原 8 种把数据侧交付物整片漏掉；
+#      实测参与核验文档的反引号 token 里 `.json` 232 处、`.jsonl` 154 处、`.txt` 74 处、
+#      `.cypher` 30 处看不见）；
+#   ② 存在性判定由"15 个搜索目录、只到一层深"改为**全树索引**（排除 .git／__pycache__／.idea）：
+#      原实现够不到 `数据集\v2.1\chunks\chunks.jsonl`、`图谱导出\v2.1_v1_2\…`、`_工作底稿\…`
+#      这类两层以上的路径，文件在盘上也可能被判悬空（只扩扩展名会制造大量误报，两者必须一起改）；
+#   ③ 通配写法（`exp_*.py`、`代码\检索\*.py`）改为**真判**：必须匹配到 ≥1 个真实文件；
+#   ④ 三类"不是工作区内的路径"的写法**单独逐条列出**、不计悬空（不隐藏、不静默）：
+#      · 非路径写法：占位符 `raw\{doc_id}.json`、缩略写法 `...\raw\gate_x.txt`、纯后缀 `.out.txt`；
+#      · 工作区外路径：`%TEMP%\stage7audit\...` 这类以环境变量／盘符起头、落在工作区外的写法；
+#      · 第三方复核留痕：同一文档已把某批文件登记为"落盘在仓库外"（文档内出现 `%VAR%\…` 或
+#        `...\…` 缩略写法）时，该文档内与登记项同名的裸文件名（或与登记项同一行的裸文件名）
+#        按工作区外留痕处理——这是**逐条打印**的豁免，且只在"该文档确实登记了工作区外留痕"
+#        时生效，通道挪不到普通交付文档上去掩盖真正的悬空引用。
+#   别名（LEGACY／RENAMED）与归档目录仍按原样解析；索引只增加"候选落点"，不豁免任何判定。
 WHITE = re.compile(r'(输入|输出|模板)\.|^\{|^\d+_\d+_|^[A-Z]+-\d+_[A-Za-z]+\d+_|\.\.\.$|…|^X\.md$|_译文\.docx$|方向X_|^[^\\/]*\{[^}]*\}')
+# K 组识别的扩展名白名单（2026-09-28 由 8 种扩到 12 种；扩名单后新暴露的悬空路径见整改报告）
+K_TOKEN = re.compile(r'`([^`\n]+\.(?:md|py|html|csv|docx|pdf|png|svg|json|jsonl|txt|cypher))`')
+PLACEHOLDER = re.compile(r'\{[^}]*\}')                    # 占位符写法（模板路径）
+ABBREV = re.compile(r'\.\.\.|…')                          # 缩略写法（`...\raw\…`）
+EXTERNAL = re.compile(r'^(%[^%]+%|[A-Za-z]:)[\\/]')       # 工作区外写法（`%TEMP%\…`／`C:\…`）
+WILDCARD = re.compile(r'[*?\[]')                          # 通配写法（按真判，不豁免）
 # 已在文档中声明、但尚未创建的产出（计划产出）。新增计划产出时在此登记，创建后请立即删除对应条目。
 # 2026-09-27 按编写约定 5 清空（审查 A 的 A1.4）：第 6 阶段的 9 条生效登记
 # （`16-事件抽取与知识图谱（第六阶段）.md`、`extract.py`、`disambiguate.py`、`dedup_events.py`、
@@ -328,25 +378,118 @@ def legacy_paths(tok):
     if alt:
         for d in SEARCH + ARCH: out.append(os.path.join(d, alt))
     return out
-miss = set()
+
+
+# 全树索引（B-25 整改的"搜索深度"落点）：相对路径（小写、正斜杠）＋ 是否目录。
+IDX_SKIP = {'.git', '__pycache__', '.idea'}
+PATH_INDEX = []
+for _dp, _dn, _fn in os.walk(ROOT):
+    _dn[:] = [d for d in _dn if d not in IDX_SKIP]
+    _rel = os.path.relpath(_dp, ROOT).replace('\\', '/')
+    if _rel != '.':
+        PATH_INDEX.append((_rel.lower(), True))
+    for _f in _fn:
+        _r = ((_rel + '/') if _rel != '.' else '') + _f
+        PATH_INDEX.append((_r.replace('\\', '/').lower(), False))
+
+
+def _norm(tok):
+    return tok.replace('\\', '/').strip().lower()
+
+
+def indexed(tok):
+    """全树索引查找：带目录成分的 token 按**路径后缀**匹配；裸文件名按**文件名**匹配。"""
+    t = _norm(tok)
+    if '/' in t:
+        return any(rel == t or rel.endswith('/' + t) for rel, _isdir in PATH_INDEX)
+    return any(rel == t or rel.rsplit('/', 1)[-1] == t for rel, _isdir in PATH_INDEX)
+
+
+def glob_hits(tok):
+    """通配写法按**真判**：带目录成分按整条相对路径匹配，裸写法按文件名匹配。"""
+    t = _norm(tok)
+    if '/' in t:
+        return [rel for rel, _isdir in PATH_INDEX if fnmatch.fnmatch(rel, t)]
+    return [rel for rel, _isdir in PATH_INDEX if fnmatch.fnmatch(rel.rsplit('/', 1)[-1], t)]
+
+
+# 第三方复核留痕：逐文档收集"工作区外／缩略写法"里登记过的文件名（含与之同一行的裸文件名）。
+TRACE_NAMES = {}
+for _name in D:
+    _all, _line = set(), {}
+    for _i, _L in enumerate(D[_name].split('\n'), 1):
+        _toks = re.findall(r'`([^`\n]+)`', _L)
+        _ext = [t for t in _toks if EXTERNAL.match(t) or ABBREV.search(t)]
+        for _t in _ext:
+            _all.add(os.path.basename(_norm(_t).rstrip('/')))
+        if _ext:
+            _line[_i] = {os.path.basename(_norm(t).rstrip('/')) for t in _toks}
+    TRACE_NAMES[_name] = (_all, _line)
+
+# 逐 token（同一 token 在同一文档里可能出现多次）归一个"最宽判定"：只要有一处能解析／
+# 属于已登记的三类写法，就不算悬空；只有**处处都解析不到**的 token 才判悬空。
+# 顺序＝优先级（越靠后越"宽"）：同一 token 在一处判悬空、另一处能解析／属已登记写法时，取宽的。
+VERDICT_ORDER = ['miss', 'tmpl', 'external', 'trace', 'wild', 'planned', 'exists', 'skip']
+verdicts = {}          # (name, token) -> [rank, 首个行号]
+
+
+def _mark(key, verdict, line_no):
+    row = verdicts.get(key)
+    rank = VERDICT_ORDER.index(verdict)
+    if row is None or rank > row[0]:
+        verdicts[key] = [rank, line_no]
+
+
 for name in D:
-    for tok in re.findall(r'`([^`\n]+\.(?:md|py|html|csv|docx|pdf|png|svg))`', D[name]):
-        if tok.startswith('http') or WHITE.search(tok) or ' ' in tok: continue
-        if is_planned(tok): continue
-        cands = []
-        for d in SEARCH: cands.append(os.path.join(d, tok))
-        # 退路：按**文件名**在全部搜索目录里找——只对**不含目录成分**的裸引用开放。
-        # 文档里常有「见 03-精选文献库（22篇）.md」这种不带路径的写法，需要这条退路。
-        # 但带路径的 token 必须按路径解析：否则 `代码\抽取与图谱\README.md` 会因为
-        # `代码\README.md` 存在而被判为「已存在」，把真正的悬空路径吃掉（假阴性）。
-        # 2026-09-25 修：新目录下的 README.md／config.py／run_all.py 曾整类被吃掉。
-        if '\\' not in tok and '/' not in tok:
-            for d in SEARCH + ARCH: cands.append(os.path.join(d, os.path.basename(tok)))
-        cands += legacy_paths(tok)
-        if not any(os.path.exists(c) for c in cands):
-            miss.add('%s  提到  %s' % (name, tok))
+    _all, _line = TRACE_NAMES[name]
+    for i, L in enumerate(D[name].split('\n'), 1):
+        for tok in K_TOKEN.findall(L):
+            key = (name, tok)
+            if tok.startswith('http') or ' ' in tok:
+                _mark(key, 'skip', i); continue
+            if PLACEHOLDER.search(tok) or ABBREV.search(tok) \
+                    or os.path.basename(_norm(tok).rstrip('/')).startswith('.'):
+                _mark(key, 'tmpl', i); continue
+            if EXTERNAL.match(tok):
+                _mark(key, 'external', i); continue
+            if WILDCARD.search(tok):
+                _mark(key, 'wild' if glob_hits(tok) else 'miss', i); continue
+            if WHITE.search(tok):
+                _mark(key, 'skip', i); continue
+            if is_planned(tok):
+                _mark(key, 'planned', i); continue
+            if indexed(tok) or any(os.path.exists(c) for c in legacy_paths(tok)):
+                _mark(key, 'exists', i); continue
+            base = os.path.basename(_norm(tok).rstrip('/'))
+            if '\\' not in tok and '/' not in tok and (base in _all or base in _line.get(i, ())):
+                _mark(key, 'trace', i); continue
+            _mark(key, 'miss', i)
+
+
+def _rows(verdict):
+    return ['%s:%d  %s' % (name, line_no, tok)
+            for (name, tok), (rank, line_no) in verdicts.items()
+            if VERDICT_ORDER[rank] == verdict]
+
+
+k_tmpl, k_ext, k_trace, k_wild = _rows('tmpl'), _rows('external'), _rows('trace'), _rows('wild')
+miss = set('%s  提到  %s%s' % (name, tok,
+                              '（通配写法，匹配不到任何文件）' if WILDCARD.search(tok) else '')
+           for (name, tok), (rank, _i) in verdicts.items() if VERDICT_ORDER[rank] == 'miss')
+k_tmpl.sort(); k_ext.sort(); k_trace.sort(); k_wild.sort()
+print('  非路径写法（占位符／缩略／纯后缀）%d 处：' % len(k_tmpl))
+for x in k_tmpl: print('    ~ %s' % x)
+print('  工作区外路径（不计存在性）%d 处：' % len(k_ext))
+for x in k_ext: print('    ~ %s' % x)
+print('  第三方复核留痕（工作区外原始输出的同批登记，按文档逐条豁免）%d 处：' % len(k_trace))
+for x in k_trace: print('    ~ %s' % x)
+print('  通配写法（真判：匹配到 ≥1 个真实文件）%d 处：' % len(k_wild))
+for x in k_wild: print('    ~ %s' % x)
 for x in sorted(miss): print('    !! %s' % x)
-report(not miss, '文档提到的文件均存在（含阶段目录、归档目录与旧路径别名）', '%d 处悬空' % len(miss))
+report(not miss, '文档提到的文件均存在（全树索引 ＋ 旧路径别名；通配写法按真判）',
+       '%d 处悬空；另有非路径写法 %d 处、工作区外路径 %d 处、第三方复核留痕 %d 处、'
+       '通配写法 %d 处（逐条列出）'
+       % (len(miss), len(k_tmpl), len(k_ext), len(k_trace), len(k_wild)))
 
 # ---- L 索引登记 ---------------------------------------------------------
 print(); print('=' * 78); print('L 工作区内的 0N- 文档是否都登记在《00》索引'); print('=' * 78)
@@ -463,6 +606,133 @@ if n2:
                % (len(cites), len(stale),
                   '（--strict-citations 计入门禁）' if STRICT_CITATIONS else '（只报告）'),
                gating=STRICT_CITATIONS)
+
+# ---- O 题录指纹一致性 ---------------------------------------------------
+# 2026-09-28 新增（依《文献替换独立核验》的门禁缺口 G1／G3／G4）：独立核验的破坏性实验证明，
+# 把《03》总表或分节的题名换成另一个名字、把《04》引用编号错一位、把总表「全文」列的文件名
+# 改成不存在的文件，四道门禁全部放行。K 项只查“反引号路径在不在”，而**总表「全文」列没有
+# 反引号**，扫不到；`_替换执行/07_文档自检.py` 又恒以 0 退出、不构成门禁。
+# 因此这里加一份**外部金标准**（`_替换执行/22条题录指纹.json`，由 `_替换执行/11_生成题录指纹.py`
+# 生成），据它比对四件事，本项计入退出码：
+#   O1 指纹文件本身自洽（22 条、槽位互不重复、每条 sha256 与总 sha256 可重算一致）；
+#   O2 《03》第二节总表 22 行的 槽位／题名／年 与指纹一致（**直接按表格列解析，不依赖反引号**）；
+#   O3 《03》总表「全文」列的文件名与指纹一致，且该文件在 `文献PDF/` 下真实存在；
+#   O4 《04》参考文献表 22 行与指纹逐条一致（题名与首作者均须出现在该行）；
+#   O5 《04》正文引用编号：集合＝[1,22]、按首次出现顺序严格递增、每条的出现次数与指纹一致
+#      （出现次数这一条是为“把某次出现的编号错一位”而设：只查集合与首现顺序抓不到它）。
+# 只增不减：不修改 A～N 的任何判据。
+print(); print('=' * 78); print('O 题录指纹（22 条）一致性：以 _替换执行/22条题录指纹.json 为外部金标准'); print('=' * 78)
+_o3 = next((n for n in D if n.startswith('03-')), None)
+_o4 = next((n for n in D if n.startswith('04-')), None)
+_ofl = os.path.join(LITDIR, '_替换执行', '22条题录指纹.json')
+_fp = None
+if not os.path.exists(_ofl):
+    report(False, 'O 题录指纹文件存在：阶段02-文献调研与开题\\_替换执行\\22条题录指纹.json', '文件不存在')
+else:
+    try:
+        import json as _json
+        _fp = _json.load(io.open(_ofl, encoding='utf-8'))
+        report(True, 'O 题录指纹文件可解析')
+    except Exception as _e:
+        report(False, 'O 题录指纹文件可解析', '解析失败：%s' % _e)
+
+O_SLOTS = ["KG-5", "KG-9", "KG-16", "KG-17", "KG-19", "KG-21", "KG-28", "KG-29",
+           "RAG-1", "RAG-9", "RAG-10", "RAG-11", "RAG-13", "RAG-24",
+           "FIN-3", "FIN-16", "FIN-17", "FIN-20", "SYS-4", "SYS-8", "SYS-13", "SYS-14"]
+
+
+def _sha(s):
+    import hashlib
+    return hashlib.sha256(s.encode('utf-8')).hexdigest()
+
+
+if _fp is not None and _o3 and _o4:
+    ROWS = _fp.get('条目', [])
+    if len(ROWS) != 22:
+        report(False, 'O1 指纹条数为 22', '实测 %d 条' % len(ROWS))
+    else:
+        report(True, 'O1 指纹条数为 22')
+    _slots = [r.get('槽位') for r in ROWS]
+    report(_slots == O_SLOTS, 'O1 指纹槽位集合与顺序为既定 22 槽位',
+           '实测 %s' % ('、'.join(_slots) if _slots != O_SLOTS else '一致'))
+    _bad = []
+    for r in ROWS:
+        canon = '|'.join([r.get('槽位', ''), r.get('题名', ''), r.get('作者', ''), r.get('出处', ''),
+                          r.get('年', ''), r.get('卷期页', ''), r.get('全文', ''), str(r.get('引用编号', ''))])
+        if _sha(canon) != r.get('sha256'):
+            _bad.append(r.get('槽位'))
+    report(not _bad, 'O1 指纹每条 sha256 可重算一致', '不一致 %s' % _bad)
+    report(_sha('\n'.join(r.get('sha256', '') for r in ROWS)) == _fp.get('总sha256'),
+           'O1 指纹 总sha256 可重算一致')
+
+    # ---- O2／O3 《03》第二节总表（按表格列解析，不依赖反引号）----
+    _t3 = D[_o3]
+    _m2 = re.search(r'## 二、文献库总表(.*?)\n---\n', _t3, re.S)
+    _tot = {}
+    if _m2:
+        for _mm in re.finditer(r'^\| ((?:KG|RAG|FIN|SYS)-\d+) \| ([^|]+?) \| ([^|]+?) \| ([^|]+?) \| '
+                               r'([^|]+?) \| ([^|]+?) \| ([^|]+?) \|', _m2.group(1), re.M):
+            _s, _ti, _dd, _yr, _pr, _fu, _ld = [x.strip() for x in _mm.groups()]
+            _fm = re.search(r'（([^）]+)）', _fu)
+            _tot[_s] = {'题名': _ti, '年': _yr, '全文': (_fm.group(1).strip() if _fm else _fu)}
+    _mism = []
+    for r in ROWS:
+        _t = _tot.get(r['槽位'])
+        if not _t:
+            _mism.append('%s 不在总表' % r['槽位']); continue
+        if _t['题名'] != r['题名']:
+            _mism.append('%s 题名（总表 %r ≠ 指纹 %r）' % (r['槽位'], _t['题名'], r['题名']))
+        if _t['年'] != r['年']:
+            _mism.append('%s 年份（总表 %r ≠ 指纹 %r）' % (r['槽位'], _t['年'], r['年']))
+        if _t['全文'] != r['全文']:
+            _mism.append('%s 全文列（总表 %r ≠ 指纹 %r）' % (r['槽位'], _t['全文'], r['全文']))
+    for _x in _mism:
+        print('    !! %s' % _x)
+    report(not _mism, 'O2/O3 《03》总表 22 行的 槽位/题名/年/全文列 与指纹一致', '%d 处不一致' % len(_mism))
+    _missing = [r['全文'] for r in ROWS
+                if not os.path.exists(os.path.join(LITDIR, '文献PDF', r['全文']))]
+    report(not _missing, 'O3 指纹的 22 个全文文件均在 文献PDF/ 下存在', '缺 %s' % _missing)
+
+    # ---- O4 《04》参考文献表 22 行 ----
+    _t4 = D[_o4]
+    _i11 = _t4.index('## 十一、参考文献')
+    _body, _refs = _t4[:_i11], _t4[_i11:]
+    _ref = {int(a): b for a, b in re.findall(r'^\[(\d+)\] (.+)$', _refs, re.M)}
+    _rbad = []
+    if sorted(_ref) != list(range(1, 23)):
+        _rbad.append('参考文献表编号不是 1..22：%s' % sorted(_ref))
+    for r in ROWS:
+        _n = int(r['引用编号'])
+        _ln = _ref.get(_n, '')
+        _firstauthor = r['作者'].split(',')[0].strip()
+        if r['题名'] not in _ln:
+            _rbad.append('[%d] 题名未出现：%r' % (_n, r['题名']))
+        if _firstauthor and _firstauthor not in _ln:
+            _rbad.append('[%d] 首作者 %r 未出现' % (_n, _firstauthor))
+    for _x in _rbad:
+        print('    !! %s' % _x)
+    report(not _rbad, 'O4 《04》参考文献表 22 行与指纹逐条一致（题名＋首作者）', '%d 处不一致' % len(_rbad))
+
+    # ---- O5 《04》正文引用编号 ----
+    _seq = []
+    for _no, _L in enumerate(_body.split('\n'), 1):
+        for _mm in re.finditer(r'\[(\d+)\]', _L):
+            _seq.append((_no, int(_mm.group(1))))
+    _nums = [n for _, n in _seq]
+    _occ = {n: _nums.count(n) for n in sorted(set(_nums))}
+    _first = {}
+    for _no, _n in _seq:
+        _first.setdefault(_n, _no)
+    _order = [x[0] for x in sorted(_first.items(), key=lambda kv: (kv[1], kv[0]))]
+    report(sorted(set(_nums)) == list(range(1, 23)), 'O5 正文引用编号集合 ＝ [1]～[22]',
+           '实测 %s' % sorted(set(_nums)))
+    report(_order == list(range(1, 23)), 'O5 正文引用编号按首次出现顺序严格递增',
+           '首现顺序 %s' % _order)
+    _cbad = [(r['槽位'], r['引用编号'], _occ.get(int(r['引用编号']), 0), r.get('正文引用次数'))
+             for r in ROWS if _occ.get(int(r['引用编号']), 0) != r.get('正文引用次数')]
+    for _x in _cbad:
+        print('    !! %s [%s] 正文出现 %d 次 ≠ 指纹 %s 次' % _x)
+    report(not _cbad, 'O5 正文每条引用出现次数与指纹一致', '%d 条不一致' % len(_cbad))
 
 print(); print('=' * 78)
 print('结论：%s' % ('全部通过' if not fails else '存在 %d 项失败：%s' % (len(fails), '；'.join(fails))))

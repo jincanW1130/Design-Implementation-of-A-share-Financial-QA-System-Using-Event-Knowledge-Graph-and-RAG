@@ -142,6 +142,15 @@ LEGACY_PRIORITY_RULE = ("固定原始顺序＝《10》第4.6.6节：向量检索
 LEGACY_VECTOR_TIER = 0
 LEGACY_GRAPH_TIER = 1
 
+# g 的「原字面口径」退化值（2026-09-28 第二轮复审 B-16 整改）。
+# **它不再是运行值**：运行入口 `PipelineRunner.run()` 与命令行 `--graph-share` 只接受
+# 1 ≤ g ≤ K（config.check_graph_share）；g = 0 只保留在**显式命名**的退化回归通道里——
+# `PipelineRunner.run_legacy_g0()`（预实验 g 曲线、`--selftest` 的退化自查用）与低层
+# `retention_key()/plan_graph_layer()`（自查里直接构造排序键用），命令行侧对应
+# `--legacy-g0-degeneration`。这样第 8 阶段直接调用库函数时，越界 g 一定抛错而不是被
+# 静默夹取（修订前 `evidence_priority_key` 里是 `g = max(0, int(g))`）。
+LEGACY_G0 = 0
+
 # 「分层保留顺序」的四档标号（顺序不可颠倒——颠倒就等于把尾部块排到第一层之前）：
 # 0＝第一层（向量侧前 K−g 个）／1＝第二层（图谱侧新增块前 g 个）／
 # 2＝第三层（向量侧剩余候选回填）／3＝尾部（未被第二层取到的图谱侧新增块）。
@@ -231,12 +240,20 @@ def resolve_k_n_budget(args) -> dict:
     if n < k:
         raise SystemExit("[pipeline] 失败：必须 N ≥ K（收到 N=%d K=%d）；"
                          "预实验网格的口径见《02》第12.7节 第一步" % (n, k))
-    g = (int(args.graph_share) if getattr(args, "graph_share", None) is not None
-         else int(config.require_fixed("graph_retention_share")))
-    if g < 0 or g > k:
-        raise SystemExit("[pipeline] 失败：g（图谱侧保留份额）必须落在 0…K 之间"
-                         "（收到 g=%d K=%d）；g=K 即\"图谱侧优先\"的极端口径，"
-                         "须由 T8 预实验裁定后才能使用" % (g, k))
+    # B-16（2026-09-28 整改）：CLI 的 g 也按**硬下限 1** 显式校验（1 ≤ g ≤ K，越界即报错）。
+    # g = 0 只能走 `--legacy-g0-degeneration` 这个显式命名的退化回归通道。
+    if getattr(args, "legacy_g0_degeneration", False):
+        if getattr(args, "graph_share", None) is not None:
+            raise SystemExit("[pipeline] 失败：--legacy-g0-degeneration 与 --graph-share 互斥"
+                             "（前者是 g=0 退化回归的显式通道，后者只接受 1 ≤ g ≤ K）")
+        g = LEGACY_G0
+    else:
+        g = (int(args.graph_share) if getattr(args, "graph_share", None) is not None
+             else int(config.require_fixed("graph_retention_share")))
+        try:
+            g = config.check_graph_share(g, k, "pipeline.resolve_k_n_budget")
+        except ValueError as exc:
+            raise SystemExit("[pipeline] 失败：%s" % exc)
     return {"k": k, "n": n, "budget": budget, "g": g}
 
 
@@ -954,6 +971,24 @@ def trim_to_budget(records, path_records, graph, chunks, budget: int, g: int,
 # ---------------------------------------------------------------------------
 # 七、第④步：保留 K 个文本块（先于 D／E 分组排序）
 # ---------------------------------------------------------------------------
+def _check_low_level_g(k: int, g: int) -> int:
+    """低层排序键的 g 校验（B-16）：`0 ≤ g ≤ K`，越界即抛错，**不静默夹取**。
+
+    与运行入口的区别只在**下限**：入口（`PipelineRunner.run()`／命令行）要求 `1 ≤ g ≤ K`，
+    而低层排序键额外接受 `g = 0`——那是《02》第12.7节 与《19》「已知限制」登记的**原字面
+    口径退化值**，只由 `run_legacy_g0()`／`assert_g0_degenerates()`／预实验的 g 曲线使用。
+    修订前这里是 `g = max(0, int(g))`：负值被静默当成 0、`g > K` 被静默当成"图谱侧优先"，
+    两者都会把"越界"伪装成"正常读数"。
+    """
+    g, k = int(g), int(k)
+    if g < 0 or g > k:
+        raise ValueError(
+            "[pipeline] g 越界：收到 g=%d、K=%d；低层排序键的取值域是 0 ≤ g ≤ K"
+            "（g=0 只作「原字面口径」的退化回归值），运行入口另要求 1 ≤ g ≤ K。"
+            "越界一律抛错，不静默夹取。" % (g, k))
+    return g
+
+
 def evidence_priority_key(record, k: int, g: int, layer2_positions=None) -> tuple:
     """"分层保留顺序"的排序键（第③步裁剪、第④步截取、第⑤步呈现共用；2026-09-27 裁定）。
 
@@ -971,7 +1006,7 @@ def evidence_priority_key(record, k: int, g: int, layer2_positions=None) -> tupl
     修订前的实现）逐题同序；这是"g=0 退化为原口径"这一自查的依据。裁剪从尾部往前、
     第④步取前 K 个、第⑤步 D 组的呈现顺序都用本键。
     """
-    g = max(0, int(g))
+    g = _check_low_level_g(k, g)
     cut = int(k) - g
     rank = record.get("vector_rank")
     if rank is not None:
@@ -1009,7 +1044,7 @@ def plan_graph_layer(records, k: int, g: int) -> dict:
     不新增模型、不新增外部调用；取不到分数的块按确定性规则排到最后（理论上不会出现——检索池
     与文本块表同为 5018 条）。
     """
-    g = max(0, int(g))
+    g = _check_low_level_g(k, g)
     graph_only = [rec for rec in records if rec.get("vector_rank") is None]
 
     def order_of(rec):
@@ -1028,7 +1063,7 @@ def plan_graph_layer(records, k: int, g: int) -> dict:
 
 def retention_key(k: int, g: int, layer2_positions=None):
     """第③／④／⑤步共用的**同一个**排序键（绑定 K／g 与第二层名额后的可调用对象）。"""
-    return functools.partial(evidence_priority_key, k=int(k), g=int(g),
+    return functools.partial(evidence_priority_key, k=int(k), g=_check_low_level_g(k, g),
                              layer2_positions=layer2_positions or {})
 
 
@@ -1389,6 +1424,22 @@ class PipelineRunner:
         return self.searcher
 
     def run(self, questions, switches, n: int, k: int, budget: int, g: int) -> dict:
+        """**第 8 阶段直接调用的库入口**。g 一律按 `1 ≤ g ≤ K` 显式校验（B-16 整改）：
+        越界即抛 `ValueError`，在任何加载／检索动作之前发生，绝不静默夹取。"""
+        config.check_graph_share(g, k, "PipelineRunner.run")
+        return self._run(questions, switches, n, k, budget, g)
+
+    def run_legacy_g0(self, questions, switches, n: int, k: int, budget: int) -> dict:
+        """**显式命名的 g = 0 退化回归通道**（原字面口径），仅供：
+
+        * `--selftest` 的「g = 0 退化为原字面口径」自查与 `assert_g0_degenerates()`；
+        * `pre_experiment.py` 的 g 曲线与预算灵敏度对照（两条都是"与 g=0 比"的读数）。
+
+        它不是运行入口：第 8 阶段的正常调用一律走 `run()`（1 ≤ g ≤ K）。
+        """
+        return self._run(questions, switches, n, k, budget, LEGACY_G0)
+
+    def _run(self, questions, switches, n: int, k: int, budget: int, g: int) -> dict:
         self.ensure_searcher()
         switch_values = dict(switches["switches"])
         switch_values["_group"] = switches["group"]
@@ -1706,9 +1757,12 @@ def parse_args(argv=None):
                         help="Context Token Budget；缺省取 config.require_fixed("
                              "'context_token_budget')")
     parser.add_argument("--graph-share", type=int, default=None,
-                        help="g：图谱侧新增块在最终证据集合中的全局固化份额（0 ≤ g ≤ K；"
+                        help="g：图谱侧新增块在最终证据集合中的全局固化份额（**1 ≤ g ≤ K**；"
                              "与三个开关无关、A～E 五组同值）；缺省取 "
                              "config.require_fixed('graph_retention_share')")
+    parser.add_argument("--legacy-g0-degeneration", action="store_true",
+                        help="【只用于退化回归】显式把 g 置 0（原字面口径），复现「g = 0 退化」"
+                             "这一登记性质；正常运行值一律 1 ≤ g ≤ K（与 --graph-share 互斥）")
     parser.add_argument("--time-lo", default=None, help="单题的时间闭区间下界（可选）")
     parser.add_argument("--time-hi", default=None, help="单题的时间闭区间上界（可选）")
     parser.add_argument("--limit", type=int, default=None,
@@ -1989,12 +2043,55 @@ def cmd_selftest(args) -> int:
                  len(row["graph_only_in_legacy_keep"])))
     check("自查（g=0 退化）：分层键（g=0）与原字面口径的升序／降序／前 K 个逐题逐元素相同",
           a5["ok"], "不一致题数 %d" % sum(1 for row in a5["per_question"] if not row["ok"]))
-    g0_run = runner.run(questions, switches_d, sizes["n"], sizes["k"], sizes["budget"], 0)
+    # B-16：g=0 不再走运行入口（run() 只接受 1 ≤ g ≤ K），改用显式命名的退化通道
+    g0_run = runner.run_legacy_g0(questions, switches_d, sizes["n"], sizes["k"], sizes["budget"])
     g0_summary = summarize(g0_run["records"])
     print("      g=0 实跑（D 组，与修订前同口径）：图谱侧新增块进入最终证据集合 %d 个"
           "（涉及 %d／%d 题）；四项指标与修订前的逐字节比对见交付报告"
           % (g0_summary["graph_evidence_total"], g0_summary["graph_evidence_questions"],
              g0_summary["questions"]))
+
+    # ---- 自查 6（B-16）：g 的取值域 1 ≤ g ≤ K —— 库入口越界即抛错（不静默夹取）
+    print("\n九、自查（g 边界）：运行入口只接受 1 ≤ g ≤ K（越界即抛错），g=0 只走显式退化通道")
+    boundary = []
+    for label, bad in (("g=0（下限以下）", LEGACY_G0), ("g=-1（负数）", -1),
+                       ("g=K+1（上限以上）", int(sizes["k"]) + 1)):
+        try:
+            runner.run([], switches_d, sizes["n"], sizes["k"], sizes["budget"], bad)
+            raised, error = False, "未抛错（不合格）"
+        except (ValueError, SystemExit) as exc:
+            raised, error = True, str(exc).split("\n")[0][:160]
+        boundary.append({"case": label, "g": int(bad), "raised": bool(raised), "error": error})
+    example_ok, example_detail = False, ""
+    try:
+        example = runner.run(questions[:1], switches_d, sizes["n"], sizes["k"], sizes["budget"],
+                             sizes["g"])
+        example_ok = len(example["records"]) == 1 and int(example["g"]) == int(sizes["g"])
+        example_detail = ("调用方示例：PipelineRunner.run(questions[:1], switches, n, k, budget, "
+                          "g=%d) 正常返回（%d 题）" % (sizes["g"], len(example["records"])))
+    except Exception as exc:                                  # noqa: BLE001
+        example_detail = "调用方示例抛错：%r" % exc
+    legacy_ok, legacy_detail = False, ""
+    try:
+        legacy = runner.run_legacy_g0(questions[:1], switches_d, sizes["n"], sizes["k"],
+                                      sizes["budget"])
+        legacy_ok = len(legacy["records"]) == 1 and int(legacy["g"]) == LEGACY_G0
+        legacy_detail = ("退化通道示例：run_legacy_g0(questions[:1], …) 返回 g=%d，"
+                         "该题图谱侧新增块入集 %d 个（原字面口径下的结构性读数）"
+                         % (int(legacy["g"]),
+                            int(legacy["records"][0]["graph_evidence_in_final_count"])))
+    except Exception as exc:                                  # noqa: BLE001
+        legacy_detail = "退化通道示例抛错：%r" % exc
+    for row in boundary:
+        print("      %s → %s：%s"
+              % (row["case"], "抛错" if row["raised"] else "未抛错", row["error"]))
+    print("      " + example_detail)
+    print("      " + legacy_detail)
+    check("自查（B-16 g 边界）：g=0／g=-1／g=K+1 三个越界值在库入口一律抛错；"
+          "1 ≤ g ≤ K 的调用方示例正常返回；g=0 只在显式退化通道里可用",
+          all(row["raised"] for row in boundary) and example_ok and legacy_ok,
+          "越界抛错 %d／%d；调用方示例 ok=%s；退化通道 ok=%s"
+          % (sum(1 for row in boundary if row["raised"]), len(boundary), example_ok, legacy_ok))
 
     # ---- 四条断言的原始输出留痕（确定性：不含耗时与时间戳，可逐字节复跑比对）
     report = {
@@ -2010,6 +2107,14 @@ def cmd_selftest(args) -> int:
         "assertion_3b_constructed_dual_hit": a3b,
         "assertion_4_precision_denominator": a4,
         "assertion_5_g0_degenerates": a5,
+        "assertion_6_g_boundary": {
+            "ok": bool(all(row["raised"] for row in boundary) and example_ok and legacy_ok),
+            "legal_domain": "1 ≤ g ≤ K（config.GRAPH_SHARE_FLOOR ≤ g ≤ K）",
+            "cases": boundary, "example_ok": bool(example_ok), "legacy_g0_ok": bool(legacy_ok),
+            "example": example_detail, "legacy_channel": legacy_detail,
+            "note": "运行入口 PipelineRunner.run()／命令行 --graph-share 越界即抛错；g=0 只走 "
+                    "run_legacy_g0()／--legacy-g0-degeneration（原字面口径退化回归）",
+        },
         "retention_layers": {"g": sizes["g"], "totals": layer_totals,
                              "per_question_D": [rec["_retention"] for rec in runs["D"]["records"]],
                              "g0_run_graph_evidence_total": g0_summary["graph_evidence_total"]},
