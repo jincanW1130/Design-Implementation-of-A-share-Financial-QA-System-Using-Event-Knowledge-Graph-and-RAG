@@ -1,0 +1,6 @@
+===== 验收第6阶段.py
+  chk calls total(text-match)=107, inside conditional replay block=26
+===== 验收第7阶段.py
+  chk calls total(text-match)=74, inside conditional replay block=28
+===== 验收第5阶段数据.py
+  chk calls total(text-match)=79, inside conditional replay block=6

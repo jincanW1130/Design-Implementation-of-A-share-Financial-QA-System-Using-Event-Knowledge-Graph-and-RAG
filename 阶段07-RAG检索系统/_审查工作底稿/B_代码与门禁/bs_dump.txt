@@ -1,0 +1,30 @@
+type= list len= 5
+{
+ "context_token_budget": 3200,
+ "g0_metrics": {
+  "complete_evidence_recall_at_k": 0.56666667,
+  "mrr": 0.65555556,
+  "precision_at_k": 0.13333333,
+  "recall_at_k": 0.6547619
+ },
+ "g2_metrics": {
+  "complete_evidence_recall_at_k": 0.56666667,
+  "mrr": 0.65555556,
+  "precision_at_k": 0.14333333,
+  "recall_at_k": 0.67730159
+ },
+ "g2_not_worse_than_g0": true,
+ "g2_vs_g0_flags": {
+  "complete_evidence_recall_at_k": "=",
+  "mrr": "=",
+  "precision_at_k": "+",
+  "recall_at_k": "+"
+ },
+ "margin": 0.0
+}
+--- rows ---
+ margin=0.0 budget=None flags={}
+ margin=0.05 budget=None flags={}
+ margin=0.1 budget=None flags={}
+ margin=0.15 budget=None flags={}
+ margin=0.2 budget=None flags={}

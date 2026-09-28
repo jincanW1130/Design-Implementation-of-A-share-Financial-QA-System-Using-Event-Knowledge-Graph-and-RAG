@@ -1,0 +1,24 @@
+== round1_cer_curve_note 自洽性 ==
+note 原文: 第一轮（非约束预算）下 CER@K 随 K 单调上升：K=5 → K=10 → K=15 的提升分别为 0.1667 与 0.1000；因此「预算不构成约束时 K 在网格内并未饱和」——这正是必须先把预算定死、再在预算下判饱和的原因
+  N=20: K5→K10 = 0.16666667 ; K10→K15 = 0.06666666
+  N=50: K5→K10 = 0.16666667 ; K10→K15 = 0.06666666
+  N=100: K5→K10 = 0.16666667 ; K10→K15 = 0.03333333
+  note 声称的提升：0.1667 与 0.1000
+  实际 K10→K15 最大提升 = 0.06666666（N=20/50）
+
+== config.py 第213~219行「敏感性」叙述 vs 现行产物 ==
+  余量   0% 预算 3200 : g0_mrr=0.65555556 g2_mrr=0.65555556  g2_not_worse=True  flags.mrr==
+  余量   5% 预算 3400 : g0_mrr=0.65555556 g2_mrr=0.65925926  g2_not_worse=True  flags.mrr=+
+  余量  10% 预算 3600 : g0_mrr=0.65555556 g2_mrr=0.65925926  g2_not_worse=True  flags.mrr=+
+  余量  15% 预算 3700 : g0_mrr=0.65888889 g2_mrr=0.65925926  g2_not_worse=True  flags.mrr=+
+  余量  20% 预算 3900 : g0_mrr=0.65888889 g2_mrr=0.65925926  g2_not_worse=True  flags.mrr=+
+  config.py 声称：余量 ≥15%（预算 ≥3700）时 g=2 的 MRR 被拉低（0.6556 < 0.6589）
+
+== K=15 在预算下的实测 ==
+  rows[K=15].median_text_tokens（第一轮非约束）= 4826 预算= 3600 → budget_feasible= False
+  scan[15].median_text_tokens（预算下复跑）= 3268 → 实际 ≤ 预算? True
+  scan[15].questions_holding_K_blocks = 0 /30（0 题真正保住 15 块）
+
+== 现行产物中是否存在机器可读的「已知限制」标记 ==
+  含「已知限制」字样次数 = 2 （均出现在 criterion/g_rule 的说明串里）
+  顶层/任意层级是否有键名含 known_limitation/floor_applied = False

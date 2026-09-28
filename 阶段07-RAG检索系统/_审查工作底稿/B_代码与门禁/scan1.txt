@@ -1,0 +1,14 @@
+=== 全部 .py 文件逐个扫描（W1 只扫 6 个）===
+build_questions.py       on_chain=False -
+check_inputs.py          on_chain=True  -
+config.py                on_chain=False api_key=1
+graph_query.py           on_chain=True  -
+metrics.py               on_chain=True  -
+pipeline.py              on_chain=True  -
+pre_experiment.py        on_chain=True  -
+run_query.py             on_chain=False -
+third_party_review.py    on_chain=False api_key=3、API_KEY=4
+vector_search.py         on_chain=True  -
+
+=== 逐行定位 config.py 里的 api_key ===
+5 也不需要密钥；`api_key` 一类读取方式**刻意不提供**，以免第 8 阶段之前被误用）。

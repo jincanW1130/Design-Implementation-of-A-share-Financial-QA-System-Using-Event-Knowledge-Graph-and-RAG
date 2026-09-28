@@ -1,0 +1,19 @@
+[1] nodes.csv 逐行复算
+    行数=2802  列数=33
+    label={'Company': 116, 'Document': 692, 'Event': 1100, 'Industry': 73, 'Institution': 316, 'Person': 403, 'Policy': 102}
+    Event=1100  其中 event_time 为空=544
+    Company=116  无 stock_code=12  HCONF=12
+[2] edges.csv 逐行复算
+    行数=2736  关系分布={'PARTICIPATES_IN': 1252, 'EVIDENCED_BY': 1111, 'HAS_EXECUTIVE': 143, 'ISSUED_BY': 124, 'RELATED_TO': 87, 'BELONGS_TO': 14, 'CUSTOMER_OF': 4, 'COMPETES_WITH': 1}
+    语义边=1625  带 source_chunk_id=1625
+    BELONGS_TO=14  valid_from 非空=0  valid_to 非空=0
+    SUPPLIES=0 COMPETES_WITH=1 CUSTOMER_OF=4
+[3] graph_stats.json
+    isolated_nodes.count=435（类型 int）ids 条数=435；unresolved.relations_skipped=878；event_time_null=544
+    graph_check: checks=20 passed=18 failed_must=[]
+[4] 消歧产物（待消歧 1070）
+    counts.unresolved=1070 by_reason={'distinct_entity_marker': 7, 'no_alias_match': 1063}
+    unresolved.jsonl 行数=1070
+[5] 时间可过滤性 66／49／40（自建 doc→event_time 映射复算）
+    含>=2 个不同日期=66  含>=2 个自然月=49  跨度>=31 天=40
+    产物字段同口径=66／49／40（另：字面口径 docs_with_ge2_nonnull_events=117）

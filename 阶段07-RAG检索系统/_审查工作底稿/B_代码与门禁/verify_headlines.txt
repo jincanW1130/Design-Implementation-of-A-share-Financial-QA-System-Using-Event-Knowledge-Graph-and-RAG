@@ -1,0 +1,26 @@
+== B-18 复核：round1_curve_note 硬编码数字 vs 同产物 round1_cer_curve ==
+  含 0.1000 的字段： ('round1_curve_note', '第一轮（非约束预算）下 CER@K 随 K 单调上升：K=5 → K=10 → K=15 的提升分别为 0.1667 与 0.1000；因此「预算不构成约束时 K 在网格内并未饱和」——这正是必须先把预算定死、再在预算下判饱和的原因')
+  round1_cer_curve 键 = ['10', '15', '5']
+  delta K=5->10 : [('20', 0.16666667), ('50', 0.16666667), ('100', 0.16666667)]
+  delta K=10->15 : [('20', 0.06666666), ('50', 0.06666666), ('100', 0.03333333)]
+
+== B-19 复核：config 敏感性叙述 vs 同产物 budget_sensitivity ==
+  budget_sensitivity 存在 = True
+  结构键 = (list)
+   margin=0.0 budget=None g0_mrr=None g2_mrr=None nw=True
+   margin=0.05 budget=None g0_mrr=None g2_mrr=None nw=True
+   margin=0.1 budget=None g0_mrr=None g2_mrr=None nw=True
+   margin=0.15 budget=None g0_mrr=None g2_mrr=None nw=True
+   margin=0.2 budget=None g0_mrr=None g2_mrr=None nw=True
+
+== B-21/B-22 复核：budget_feasible 读数与预算下 scan 的矛盾 ==
+  K=5 median_text_tokens=1603.5 budget=3600 budget_feasible=True gold_feasible=False
+  K=10 median_text_tokens=3191.5 budget=3600 budget_feasible=True gold_feasible=True
+  K=15 median_text_tokens=4826 budget=3600 budget_feasible=False gold_feasible=True
+
+== B-20 复核：预算由 K=10 基准格推出，再判 K=10 饱和 ==
+  budget_rule = {'anchor_cell': {'K': 10, 'N': 20}, 'context_token_budget': 3600, 'graph_share_note': '图谱路径与事件三元组不单独预留额度、与文本块共用同一上限；超限先裁与问题实体无关的远端图谱路径', 'margin': 1.1, 'median_graph_tokens': 426.5, 'median_text_tokens': 3191.5, 'median_total_tokens': 3630, 'raw_value': 3510.65, 'round_to': 100, 'rule': 'B ＝ ceil100( 1.10 × 基准格（网格中满足 gold 约束的最小 K 及其最小可行 N）在第一轮非约束预算下逐题**文本块 token** 的中位数 )；图谱路径与事件三元组不单独预留额度、与文本块共用同一上限（超限先裁与问题实体无关的远端图谱路径）'}
+  rules.budget_margin = 1.1
+
+== 行 22/V 复核：selected 值 ==
+  selected = {'K': 10, 'N': 20, 'context_token_budget': 3600, 'g': 2, 'group': 'C', 'note': '四项与《02》第12.4节 固定表、第12.7节 第一步 登记值一致；K／N 满足 N ≥ K；g 为全局固化量（A～E 同值、不进任何开关）'}

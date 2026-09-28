@@ -1,0 +1,62 @@
+172 def pipeline_paths(profile, work_root=None, export_dir=None):
+218 def _emit(status, label, detail=""):
+223 def chk(ok, label, detail=""):
+232 def skip(label, detail=""):
+237 def note(label, detail=""):
+242 def br(seq, limit=4):
+254 def _exit_guard():
+272 def read_text(path, default=None):
+279 def read_json(path, default=None):
+286 def read_jsonl(path):
+297 def read_csv_rows(path):
+314 def sha256_file(path):
+324 def sha256_text(text):
+328 def same_bytes(path_a, path_b):
+334 def cell(row, key):
+338 def parse_date(value):
+354 def dup_groups(values):
+359 def to_int(value):
+366 def to_float(value):
+373 def norm_ws(text):
+377 def strip_ws(text):
+381 def line_no(text, needle):
+391 def headings(text):
+400 def find_heading(text, name):
+408 def find_line(text, *keywords, negate=()):
+421 def scan_terms(terms, targets, ignore_negation=False):
+434 def iter_files(dirpath):
+442 def rel_to_root(path):
+449 def gitignore_rules(path):
+459 def gitignore_match(pattern, relpath):
+536 def ontology_from_p10(text):
+578 def p10_line(needle):
+761 def absence_word(line):
+771 def b10_registration(text, name):
+823 def b11_registration(text, name):
+839 def b11_zero_claim(text, name):
+1267 REPLAY = None
+1268 REPLAY_KEYS = ("nodes", "edges", "replay_cypher", "graph_stats", "alias_table",
+1273 def extract_table(profile):
+1277 def cache_dir_for_profile(profile):
+1291 def mirror_items():
+1313 def build_mirror():
+1329 def run_cmd(cmd, cwd, timeout=1800):
+1333     缓存未命中时仍可能偷偷打接口。`STAGE6_FORBID_MODEL_CALLS=1` 让它在取密钥前就抛错，
+1339     env["STAGE6_FORBID_MODEL_CALLS"] = "1"
+1348 def drop_exports(export_dir):
+1355 def json_equal_without_fields(path_a, path_b, drop):
+1366 def ensure_replay():
+1385         REPLAY["mirror"] = mirror_paths
+1389         REPLAY["hash_after_run_all"] = {k: sha256_file(mirror_paths[k]) for k in REPLAY_KEYS}
+1402         REPLAY["hash_after_run_all_2"] = {k: sha256_file(mirror_paths[k]) for k in REPLAY_KEYS}
+1411         REPLAY["mirror_hash"] = {k: sha256_file(v) for k, v in REPLAY["mirror"].items()}
+1413                                     and REPLAY["orig_hash"][k] == REPLAY["mirror_hash"][k])
+1417             PATHS["graph_stats"], REPLAY["mirror"]["graph_stats"], drop)
+1430         st_path = REPLAY["mirror"]["dedup_self_test"]
+1432         merged_path = REPLAY["mirror"]["events_merged"]
+1440 def replay_or_skip(prefix, labels):
+1450 def mirror_note(R, tail=3):
+1905 def thin_registration(text, name):
+2357 def code_lines(src):
+2443 def git_readonly(*args):
+2457 def scan_key_hits(targets):

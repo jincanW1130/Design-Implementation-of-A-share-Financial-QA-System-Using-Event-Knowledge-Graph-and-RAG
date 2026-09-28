@@ -1,0 +1,84 @@
+改前复现 vs 现行 k_selection.json：差异键数 = 72 / 628
+  [数值] /artifacts/matrix 现行=阶段07-RAG检索系统/检索产出/pre_experiment_matrix.jsonl 改前=阶段07-RAG检索系统/_工作底稿/_收口_重绑/改前复现/pre_experiment_matrix.jsonl
+  [文本/哈希] /artifacts/matrix_sha256
+      现行=df9c05ad56b021df3cbdced3610adc58edbcf7587b646b4ca9ec0a0f7f321731
+      改前=b23f067d429b016f34337dc58173678e7db65b2add31353f0cd51f06bc28dd6f
+  [数值] /artifacts/selection 现行=阶段07-RAG检索系统/检索产出/k_selection.json 改前=阶段07-RAG检索系统/_工作底稿/_收口_重绑/改前复现/k_selection.json
+  [数值] /evidence/N_curve/[0]/metrics/mrr 现行=0.65925926 改前=0.65555556
+  [数值] /evidence/N_curve/[0]/metrics/precision_at_k 现行=0.15 改前=0.14666667
+  [数值] /evidence/N_curve/[0]/metrics/recall_at_k 现行=0.69230159 改前=0.68396825
+  [数值] /evidence/budget_sensitivity/[1]/g2_metrics/mrr 现行=0.65925926 改前=0.65555556
+  [数值] /evidence/budget_sensitivity/[1]/g2_metrics/precision_at_k 现行=0.14666667 改前=0.14333333
+  [数值] /evidence/budget_sensitivity/[1]/g2_metrics/recall_at_k 现行=0.68563492 改前=0.67730159
+  [数值] /evidence/budget_sensitivity/[1]/g2_vs_g0_flags/mrr 现行=+ 改前==
+  [数值] /evidence/budget_sensitivity/[2]/g2_metrics/mrr 现行=0.65925926 改前=0.65555556
+  [数值] /evidence/budget_sensitivity/[2]/g2_metrics/precision_at_k 现行=0.15 改前=0.14666667
+  [数值] /evidence/budget_sensitivity/[2]/g2_metrics/recall_at_k 现行=0.69230159 改前=0.68396825
+  [数值] /evidence/budget_sensitivity/[2]/g2_vs_g0_flags/mrr 现行=+ 改前==
+  [数值] /evidence/budget_sensitivity/[3]/g2_metrics/mrr 现行=0.65925926 改前=0.65555556
+  [数值] /evidence/budget_sensitivity/[3]/g2_metrics/precision_at_k 现行=0.15 改前=0.14666667
+  [数值] /evidence/budget_sensitivity/[3]/g2_metrics/recall_at_k 现行=0.69230159 改前=0.68396825
+  [数值] /evidence/budget_sensitivity/[3]/g2_not_worse_than_g0 现行=True 改前=False
+  [数值] /evidence/budget_sensitivity/[3]/g2_vs_g0_flags/mrr 现行=+ 改前=-
+  [数值] /evidence/budget_sensitivity/[4]/g2_metrics/mrr 现行=0.65925926 改前=0.65555556
+  [数值] /evidence/budget_sensitivity/[4]/g2_metrics/precision_at_k 现行=0.15 改前=0.14666667
+  [数值] /evidence/budget_sensitivity/[4]/g2_metrics/recall_at_k 现行=0.69230159 改前=0.68396825
+  [数值] /evidence/budget_sensitivity/[4]/g2_not_worse_than_g0 现行=True 改前=False
+  [数值] /evidence/budget_sensitivity/[4]/g2_vs_g0_flags/mrr 现行=+ 改前=-
+  [数值] /evidence/g_curve/primary_rows/[1]/metrics/mrr 现行=0.65888889 改前=0.65555556
+  [数值] /evidence/g_curve/primary_rows/[1]/metrics/precision_at_k 现行=0.14666667 改前=0.14333333
+  [数值] /evidence/g_curve/primary_rows/[1]/metrics/recall_at_k 现行=0.68563492 改前=0.67730159
+  [数值] /evidence/g_curve/primary_rows/[1]/vs_g0_flags/mrr 现行=+ 改前==
+  [数值] /evidence/g_curve/primary_rows/[2]/metrics/mrr 现行=0.65925926 改前=0.65555556
+  [数值] /evidence/g_curve/primary_rows/[2]/metrics/precision_at_k 现行=0.15 改前=0.14666667
+  [数值] /evidence/g_curve/primary_rows/[2]/metrics/recall_at_k 现行=0.69230159 改前=0.68396825
+  [数值] /evidence/g_curve/primary_rows/[2]/vs_g0_flags/mrr 现行=+ 改前==
+  [数值] /evidence/g_curve/primary_rows/[3]/metrics/mrr 现行=0.65972222 改前=0.65555556
+  [数值] /evidence/g_curve/primary_rows/[3]/metrics/precision_at_k 现行=0.14333333 改前=0.14
+  [数值] /evidence/g_curve/primary_rows/[3]/metrics/recall_at_k 现行=0.67563492 改前=0.66730159
+  [数值] /evidence/g_curve/primary_rows/[3]/vs_g0_flags/mrr 现行=+ 改前==
+  [数值] /evidence/g_curve/primary_rows/[4]/metrics/mrr 现行=0.65555556 改前=0.65
+  [数值] /evidence/g_curve/primary_rows/[4]/metrics/precision_at_k 现行=0.13 改前=0.12666667
+  [数值] /evidence/g_curve/primary_rows/[4]/metrics/recall_at_k 现行=0.62896825 改前=0.62063492
+  [数值] /evidence/g_curve/primary_rows/[4]/vs_g0_flags/mrr 现行== 改前=-
+  [数值] /evidence/round1_cer_curve/15/100 现行=0.6 改前=0.63333333
+  [数值] /evidence/round1_cer_curve/15/20 现行=0.63333333 改前=0.66666667
+  [数值] /evidence/round1_cer_curve/15/50 现行=0.63333333 改前=0.66666667
+  [数值] /evidence/round1_vs_round2/round1/metrics/mrr 现行=0.65925926 改前=0.65555556
+  [数值] /evidence/round1_vs_round2/round1/metrics/precision_at_k 现行=0.15 改前=0.14666667
+  [数值] /evidence/round1_vs_round2/round1/metrics/recall_at_k 现行=0.69230159 改前=0.68396825
+  [数值] /evidence/round1_vs_round2/round2/metrics/mrr 现行=0.65925926 改前=0.65555556
+  [数值] /evidence/round1_vs_round2/round2/metrics/precision_at_k 现行=0.15 改前=0.14666667
+  [数值] /evidence/round1_vs_round2/round2/metrics/recall_at_k 现行=0.69230159 改前=0.68396825
+  [数值] /evidence/saturation_under_budget/rows/[0]/round1_metrics/mrr 现行=0.65833333 改前=0.65
+  [数值] /evidence/saturation_under_budget/rows/[0]/round1_metrics/precision_at_k 现行=0.24 改前=0.23333333
+  [数值] /evidence/saturation_under_budget/rows/[0]/round1_metrics/recall_at_k 现行=0.58730159 改前=0.57896825
+  [数值] /evidence/saturation_under_budget/rows/[0]/under_budget_metrics/mrr 现行=0.65833333 改前=0.65
+  [数值] /evidence/saturation_under_budget/rows/[0]/under_budget_metrics/precision_at_k 现行=0.24 改前=0.23333333
+  [数值] /evidence/saturation_under_budget/rows/[0]/under_budget_metrics/recall_at_k 现行=0.58730159 改前=0.57896825
+  [数值] /evidence/saturation_under_budget/rows/[1]/round1_metrics/mrr 现行=0.65925926 改前=0.65555556
+  [数值] /evidence/saturation_under_budget/rows/[1]/round1_metrics/precision_at_k 现行=0.15 改前=0.14666667
+  [数值] /evidence/saturation_under_budget/rows/[1]/round1_metrics/recall_at_k 现行=0.69230159 改前=0.68396825
+  [数值] /evidence/saturation_under_budget/rows/[1]/under_budget_metrics/mrr 现行=0.65925926 改前=0.65555556
+  [数值] /evidence/saturation_under_budget/rows/[1]/under_budget_metrics/precision_at_k 现行=0.15 改前=0.14666667
+  [数值] /evidence/saturation_under_budget/rows/[1]/under_budget_metrics/recall_at_k 现行=0.69230159 改前=0.68396825
+  [数值] /evidence/saturation_under_budget/rows/[2]/round1_complete_evidence_recall_at_k 现行=0.63333333 改前=0.66666667
+  [数值] /evidence/saturation_under_budget/rows/[2]/round1_metrics/complete_evidence_recall_at_k 现行=0.63333333 改前=0.66666667
+  [数值] /evidence/saturation_under_budget/rows/[2]/round1_metrics/precision_at_k 现行=0.12 改前=0.11777778
+  [数值] /evidence/saturation_under_budget/rows/[2]/round1_metrics/recall_at_k 现行=0.78896825 改前=0.79730159
+  [数值] /evidence/saturation_under_budget/scan/10/metrics/mrr 现行=0.65925926 改前=0.65555556
+  [数值] /evidence/saturation_under_budget/scan/10/metrics/precision_at_k 现行=0.15 改前=0.14666667
+  [数值] /evidence/saturation_under_budget/scan/10/metrics/recall_at_k 现行=0.69230159 改前=0.68396825
+  [数值] /evidence/saturation_under_budget/scan/5/metrics/mrr 现行=0.65833333 改前=0.65
+  [数值] /evidence/saturation_under_budget/scan/5/metrics/precision_at_k 现行=0.24 改前=0.23333333
+  [数值] /evidence/saturation_under_budget/scan/5/metrics/recall_at_k 现行=0.58730159 改前=0.57896825
+  [数值] /gold_constraint/per_question/[25]/n_gold 现行=4 改前=2
+
+现行 selected = {'K': 10, 'N': 20, 'context_token_budget': 3600, 'g': 2, 'group': 'C', 'note': '四项与《02》第12.4节 固定表、第12.7节 第一步 登记值一致；K／N 满足 N ≥ K；g 为全局固化量（A～E 同值、不进任何开关）'}
+改前 selected = {'K': 10, 'N': 20, 'context_token_budget': 3600, 'g': 2, 'group': 'C', 'note': '四项与《02》第12.4节 固定表、第12.7节 第一步 登记值一致；K／N 满足 N ≥ K；g 为全局固化量（A～E 同值、不进任何开关）'}
+现行 anchor = 10 20  改前 anchor = 10 20
+
+budget_sensitivity(margin=0.10).budget = 3600  (g_curve 用的预算= 3600 )
+  bs.g0_metrics == g_curve(C) g=0 metrics ? True
+  bs.g2_metrics == g_curve(C) g=2 metrics ? True
+  -> 说明 D 组（后跑）未污染 C 组缓存，C 组在 D 组之后复跑逐值一致

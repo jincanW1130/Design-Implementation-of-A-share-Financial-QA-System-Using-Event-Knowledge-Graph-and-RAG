@@ -1,0 +1,2 @@
+未知参数：--bogus
+用法：python 工具\跨文档核验.py [工作区路径] [--strict-citations]

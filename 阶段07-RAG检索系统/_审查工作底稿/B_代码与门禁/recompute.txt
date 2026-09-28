@@ -1,0 +1,23 @@
+matrix rows: 10
+  round=round1_nonbinding K=5 N=20 budget=1593125 g=2
+  round=round1_nonbinding K=5 N=50 budget=1593125 g=2
+  round=round1_nonbinding K=5 N=100 budget=1593125 g=2
+  round=round1_nonbinding K=10 N=20 budget=1593125 g=2
+  round=round1_nonbinding K=10 N=50 budget=1593125 g=2
+  round=round1_nonbinding K=10 N=100 budget=1593125 g=2
+  round=round1_nonbinding K=15 N=20 budget=1593125 g=2
+  round=round1_nonbinding K=15 N=50 budget=1593125 g=2
+  round=round1_nonbinding K=15 N=100 budget=1593125 g=2
+  round=round2_selected K=10 N=20 budget=3600 g=2
+BUDGET recompute: ceil100(3191.5*1.1)=3600  json=3600  ok=True
+  raw_value json=3510.65 recompute=3510.65
+  anchor={'K': 10, 'N': 20, 'note': '预算规则的基准格＝网格中满足 gold 约束的最小 K 及其最小可行 N；它同时是甲案 g 的参考格'} selected.K/N=10/20
+max_gold=7
+  K=5 gold_feasible json=False calc=False | budget_feasible json=True calc=True | selected json=False
+  K=10 gold_feasible json=True calc=True | budget_feasible json=True calc=True | selected json=True
+  K=15 gold_feasible json=True calc=True | budget_feasible json=False calc=False | selected json=False
+feasible_K json=[10] calc=[10]
+  K=5 delta json=None calc=None (prev=None)
+  K=10 delta json=None calc=None (prev=None)
+  K=15 delta json=0.0 calc=0.0 (prev=10)
+K* json=10 calc=10  k_grid_missing_in_json=k_grid/n_grid 未写入 json

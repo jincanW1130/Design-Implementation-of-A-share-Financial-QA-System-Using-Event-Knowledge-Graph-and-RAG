@@ -1,0 +1,30 @@
+225 | **表 18-F　图谱查询层的接口清单与 Cypher 对应（T3 的交付物，七个接口一一对应）**
+226 | 
+227 | | 编号 | 接口 | 入参 → 出参 | 等效 Cypher（内存图实现逐条对应） |
+228 | | --- | --- | --- | --- |
+229 | | G1 | 一跳邻居 | 节点标识（`node_id`；公司可用 `stock_code`，也可按 name／short_name／aliases 匹配，**HCONF 节点只有名称、没有 stock_code**） → 直接相连的关系与对端节点 | MATCH (a {node_id:$id})-[r]-(b) RETURN a, r, b |
+230 | | G2 | 两跳邻居（**结果包含一跳**） | 同上 → 深度不超过 2 的路径集合 | MATCH (a {node_id:$id})-[r1]-(b)-[r2]-(c) RETURN a, r1, b, r2, c |
+231 | | G3 | 按事件类型取事件 | event_type（8 种之一） → Event 节点集合与六项核心属性 | MATCH (e:Event) WHERE e.event_type = $type RETURN e |
+232 | | G4 | 按公司取参与事件 | 公司标识（`stock_code` 或名称） → 该公司参与的事件集合（`PARTICIPATES_IN` 的方向是 Company → Event） | MATCH (c:Company {stock_code:$code})-[:PARTICIPATES_IN]->(e:Event) RETURN e |
+233 | | G5 | 事件到证据块 | Event 标识 → 该事件关联的 `source_chunk_id` 集合与来源文档编号 | MATCH (e:Event {node_id:$id})-[r]-(x) WHERE r.source_chunk_id IS NOT NULL RETURN type(r), r.source_doc_id, r.source_chunk_id |
+234 | | G6 | 时间过滤 | 事件集合 ＋ 时间闭区间（由"最新／最近／近期"或显式区间解析而来） → 通过过滤的事件集合、被剔除路径携带的 `chunk_id` 差集；**`event_time` 为空的一并剔除** | MATCH (e:Event) WHERE e.node_id IN $ids AND e.event_time IS NOT NULL AND e.event_time >= $lo AND e.event_time <= $hi RETURN e |
+235 | | G7 | 路径枚举 | 起点标识、终点节点标识、最大深度（不超过 2） → 路径列表：起点、关系序列、终点；每条关系项含关系名、方向、对端节点标识，以及**除 EVIDENCED_BY 外**的三项证据属性 | MATCH p = (a {node_id:$from})-[r*1..2]-(b {node_id:$to}) RETURN p |
+236 | 
+237 | 两点必须随接口清单一起写明：**一是 G5 的边界**——事件侧候选只能经带 `source_chunk_id` 的八条语义边入池；`EVIDENCED_BY`（1111 条）指向 Document 节点、不带 `source_chunk_id`，只用于展示来源文档，**不产生文本块级候选**（与硬约束 14 一致）。**二是 G6 与 G5 的先后**——G6 在候选合并之前调用，其"被剔除路径携带的 `chunk_id`"正是逐题差集的来源；差集为空的题只能判定为"在该题上不可测"（《16》第9.4节）。接口清单与 Cypher 对应表随《19》一起交付，换真实例时只替换这一层的后端，上层的合并、裁剪、截取与指标代码不动。
+238 | 
+239 | ### 4.3 检索产出与预实验记录
+240 | 
+241 | 落在 `阶段07-RAG检索系统\检索产出\`（目录待创建，属 T1 的产出之一）；结构化结果一律**一行一条的 JSONL／CSV**（UTF-8，不带 BOM）：
+242 | 
+243 | | 产出（待产出） | 内容 |
+244 | | --- | --- |
+245 | | pre_experiment_matrix.jsonl | **K ∈ {5, 10, 15} × N ∈ {20, 50, 100}** 共 9 格的读数：四项指标、候选数、预算占用与是否满足 N ≥ K |
+======================================================================
+graph_query.CYPHER:
+  G1 = 'MATCH (a {node_id:$id})-[r]-(b) RETURN a, r, b'
+  G2 = 'MATCH (a {node_id:$id})-[r1]-(b)-[r2]-(c) RETURN a, r1, b, r2, c'
+  G3 = 'MATCH (e:Event) WHERE e.event_type = $type RETURN e'
+  G4 = 'MATCH (c:Company {stock_code:$code})-[:PARTICIPATES_IN]->(e:Event) RETURN e'
+  G5 = 'MATCH (e:Event {node_id:$id})-[r]-(x) WHERE r.source_chunk_id IS NOT NULL RETURN type(r), r.source_doc_id, r.source_chunk_id'
+  G6 = 'MATCH (e:Event) WHERE e.node_id IN $ids AND e.event_time IS NOT NULL AND e.event_time >= $lo AND e.event_time <= $hi RETURN e'
+  G7 = 'MATCH p = (a {node_id:$from})-[r*1..2]-(b {node_id:$to}) RETURN p'

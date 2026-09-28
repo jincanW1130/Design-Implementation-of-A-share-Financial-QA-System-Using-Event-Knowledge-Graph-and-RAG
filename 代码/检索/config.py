@@ -30,6 +30,8 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
+import sys
 
 # --------------------------------------------------------------------------
 # 1. 路径
@@ -183,7 +185,10 @@ RETRIEVAL = {
     # 定位：**全局固化量**——A～E 五组取**同一值**、**不进任何开关**（不在 GROUPS、不在
     #   SWITCH_DOMAINS）、不随组变化，因此不破坏"三开关只差一个变量"的单变量归因；它只决定
     #   第③／④步「分层保留顺序」的第二层名额（第一层＝向量侧候选按原始排名升序取前 K−g 个，
-    #   第二层＝图谱侧新增块按对问题的向量相似度降序至多 g 个，第三层＝向量侧剩余候选回填）。
+    #   第二层＝图谱侧新增块按对问题的向量相似度降序（**并列按 chunk_id 升序**）至多 g 个，
+    #   第三层＝向量侧剩余候选回填）。并列规则是确定性（逐字节可复现）的必要条件：
+    #   相似度打平时只有 `chunk_id` 升序能给出唯一顺序（《02》第12.4节 与 第12.7节 第三步／
+    #   第四步；《10》第4.6.4节 与 第4.6.6节；《18》第2.3节 与 硬约束 10）。
     # 选择规则（2026-09-27 v3.2 加固：含下限 1）：取满足「四项指标均不劣于 g=0」的 g 中的最大值，
     #   **且不低于下限 1**（g ≥ 1）——四项指标 ＝ Recall@K／Precision@K／MRR／Complete Evidence Recall@K。
     #   下限 1 的意义：**保证图谱侧证据在每道题上至少有一个名额**，从而维持 H1／H2 的可检验性
@@ -260,6 +265,47 @@ DATA_CUTOFF_TIME = "2026-09-25T23:59:59+08:00"
 
 # 第 7 阶段不做任何大语言模型调用（硬约束 16）；此开关供 T11 在摘除密钥的环境下自证
 MODEL_CALLS_ALLOWED = 0
+
+# --------------------------------------------------------------------------
+# 6. 验收硬守卫：镜像重跑期间拒绝任何网络路径与凭据路径（《18》硬约束 16）
+# --------------------------------------------------------------------------
+# 只摘环境变量不够：只要链上任何一处（含将来新加的脚本、第三方依赖的回退分支）去取密钥或
+# 直接发请求，「0 次调用」就只是**声明**而不是**保证**。`工具\验收第7阶段.py` 的镜像重跑会置
+# `STAGE7_FORBID_MODEL_CALLS=1`，本文件在 **import 时**就把它变成硬约束（照第 6 阶段
+# `代码\抽取与图谱\config.py` 的 `STAGE6_FORBID_MODEL_CALLS` 哨兵做法）：
+#   ① 凭据路径：环境里只要还残留任何凭据类变量名（只匹配名字、不读取取值）→ 直接抛错；
+#   ② 网络路径：装一个审计钩子，任何 socket／HTTP 连接尝试 → 直接抛错。
+# 哨兵未置位时（正常运行、第 8 阶段接答案生成模型之前）本守卫整体不生效。
+FORBID_MODEL_CALLS_ENV = "STAGE7_FORBID_MODEL_CALLS"
+_CRED_NAME_PAT = re.compile(
+    r"(API[_-]?KEY|SECRET|ACCESS[_-]?TOKEN|AUTH[_-]?TOKEN|MOONSHOT|DASHSCOPE|ZHIPU|OPENAI|"
+    r"DEEPSEEK|QIANFAN|KIMI|GLM|BAIDU|ERNIE|ANTHROPIC|GEMINI)", re.IGNORECASE)
+_NET_AUDIT_EVENTS = ("socket.connect", "socket.getaddrinfo", "socket.gethostbyname",
+                     "urllib.Request", "http.client.connect", "ftplib.connect",
+                     "smtplib.connect", "imaplib.open", "poplib.connect", "telnetlib.Telnet")
+
+
+def _guard_forbidden_model_calls() -> None:
+    """哨兵：镜像重跑期间把「0 次大语言模型／外部接口调用」从声明变成硬保证。"""
+    if (os.environ.get(FORBID_MODEL_CALLS_ENV) or "").strip() != "1":
+        return
+    cred = sorted(name for name in os.environ if _CRED_NAME_PAT.search(name))
+    if cred:
+        raise RuntimeError(
+            "%s=1：子进程环境里仍残留凭据类变量 %s（只报变量名、不读任何取值）——"
+            "镜像重跑**拒绝凭据路径**，验收脚本必须先把它们摘掉。"
+            % (FORBID_MODEL_CALLS_ENV, "、".join(cred)))
+
+    def _audit_hook(event, _args):
+        if event in _NET_AUDIT_EVENTS:
+            raise RuntimeError(
+                "%s=1：拦截到网络路径 %s —— 第 7 阶段检索链必须 0 次大语言模型／外部接口调用，"
+                "镜像重跑**拒绝网络路径**。" % (FORBID_MODEL_CALLS_ENV, event))
+
+    sys.addaudithook(_audit_hook)
+
+
+_guard_forbidden_model_calls()
 
 
 def sha256_file(path: str) -> str:

@@ -35,7 +35,8 @@ r"""《18-第7阶段任务书（RAG检索系统）》第 7 阶段交付物的阶
                                                   # 快速定位；**这个 profile 不作为收口判定**）
     python 工具\验收第7阶段.py --keep-tmp         # 保留镜像重跑用的临时目录
 
-退出码：0 = 全部检查通过（SKIP 不影响退出码）；1 = 存在失败项或输入缺失。
+退出码：0 = full 档全部检查通过且无 SKIP；1 = 存在失败项、环境／链上失败或输入缺失；
+        2 = `--profile static` 未执行需要镜像重跑的检查项（不得作为收口判定）。
 
 纪律：**参数一律取 `代码\检索\config.py`**（路径、K／N／预算、g、模型与 revision、组开关都在
 那里）；本脚本自带常量的部分只有两类，均已就地注释：① 数据集的表名白名单与禁用词形态
@@ -45,11 +46,13 @@ r"""《18-第7阶段任务书（RAG检索系统）》第 7 阶段交付物的阶
 from __future__ import annotations
 
 import argparse
+import ast
 import atexit
 import csv
 import hashlib
 import io
 import json
+import math
 import os
 import re
 import shutil
@@ -85,16 +88,73 @@ import graph_query as gqlayer  # noqa: E402  七个接口的现场调用入口
 
 # 拼串构造：本文件源码内不出现被禁用的四字连写术语，也不出现敏感凭证字样。
 BANNED_VDB = "向量" + "数据库"
-KEY_PATTERNS = ["api" + "_key", "API" + "_KEY", "access" + "_token", "sec" + "ret",
-                "requests" + ".", "urllib" + ".request", "socket" + "."]
-HTTP_PATTERNS = ["http" + "://", "https" + "://"]
+FORBIDDEN_IMPORT_ROOTS = {"aiohttp", "anthropic", "dashscope", "google.generativeai",
+                          "http", "httpx", "openai", "requests", "socket", "urllib",
+                          "zhipuai"}
 ANSWER_MODEL_PAT = re.compile(
     r"(gpt-?\d|claude|gemini|qwen|ernie|chatglm|glm-\d|kimi|deepseek|llama|moonshot|文心|通义)",
     re.IGNORECASE)
-MODEL_ALLOW_MARKS = ("第三方", "复核", "盲标", "留痕", "剥离", "非答案生成", "抽检")
+MODEL_ALLOW_MARKS = ("第三方", "复核", "盲标", "留痕", "剥离", "非答案生成", "抽检",
+                     "抽取模型", "上游数据生产参数")
 DDL_PAT = re.compile(r"CREATE\s+TABLE|ALTER\s+TABLE|DROP\s+TABLE", re.IGNORECASE)
+SQL_TABLE_REF_PAT = re.compile(
+    r"\b(?:FROM|JOIN|INTO|UPDATE|DELETE\s+FROM)\s+[`\"]?([A-Za-z_][A-Za-z0-9_]*)[`\"]?")
+SIX_TABLE_NAMES = {"user", "document", "document_chunk", "question", "answer",
+                   "answer_evidence"}
 DEPLOY_ASSERT = re.compile(r"(已部署|部署了|已经部署|已上线|已运行)")
-DEPLOY_NEG = re.compile(r"(未|不得|没有|无|非|禁止|不写|不接入)")
+DEPLOY_NEG = re.compile(r"(未|不得|没有|无|非|禁止|不写|不接入|误读)")
+PROHIBIT_NEG = re.compile(r"(不得|不新增|不出现|不产|禁止|没有|未|非)")
+CREDENTIAL_NAME_PAT = re.compile(
+    r"(API[_-]?KEY|SECRET|ACCESS[_-]?TOKEN|AUTH[_-]?TOKEN|MOONSHOT|DASHSCOPE|"
+    r"ZHIPU|OPENAI|DEEPSEEK|QIANFAN|KIMI|GLM|BAIDU|ERNIE|ANTHROPIC|GEMINI)",
+    re.IGNORECASE)
+
+# C／I 两组的“开工指纹”是验收基线，必须独立于被检对象：下面 11 条取自
+# 《18》第三节的冻结输入与第 5／6 阶段已入库的指纹记录，不在运行时读取
+# `检索产出\input_manifest.json` 作为期望值。
+FROZEN_INPUT_FINGERPRINTS = [
+    ("documents", "阶段05-数据准备/数据集/v2.1/clean/documents.jsonl",
+     4496547, "c838c608c20060adb1366d5c6f7566f9de25016110dc368f7f92fcb8a10f9eea"),
+    ("chunks", "阶段05-数据准备/数据集/v2.1/chunks/chunks.jsonl",
+     5322875, "2202cbf8e3915598fc9fa57a9fe6d32577705f59ce7bfdfab822903d949e8e44"),
+    ("faiss_index", "阶段05-数据准备/数据集/v2.1/index/faiss.index",
+     10276909, "4052ed9a251eb0c8276a2bb5fd81e7ced5e4ccdc6cc03c126c0740d68368ef87"),
+    ("vector_map", "阶段05-数据准备/数据集/v2.1/index/vector_map.jsonl",
+     284916, "e11569c8ba67e63d9af81bd959f0da10d80db0844e7e29fcc04165f17726614b"),
+    ("build_meta", "阶段05-数据准备/数据集/v2.1/index/build_meta.json",
+     964, "5d886d080d103088e99d9a76ebe0ec34bf9e4dbf81127d364a89389928dea9ee"),
+    ("dataset_meta", "阶段05-数据准备/数据集/v2.1/meta/dataset.json",
+     3108, "41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988"),
+    ("nodes_csv", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/nodes.csv",
+     708043, "04f2ac227e9595e2df7eefd1f14892edc3327d2b10e950b4f92e4d536c8cb524"),
+    ("edges_csv", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/edges.csv",
+     131275, "e86f86d99bb1b227364bc09b05a46db00adfe114ed5f9b04820e82258252b3f0"),
+    ("replay_cypher", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/replay.cypher",
+     727503, "8cdb68d0782b04a852614dbbfee51efe81885f059d957b2a96c9655746b6c9ae"),
+    ("graph_stats", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/graph_stats.json",
+     24818, "443f437aa3f164ab76618029382f277be52828186d21d6f468ec29f2b5ac2b4a"),
+    ("human_confirmation", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/人工确认清单.json",
+     6428, "a17268f8c0694e6b9b38c0c1db1ba89eb6a637b6f3674dd39f3d35ef380f6083"),
+]
+FROZEN_GRAPH_KEYS = ("nodes_csv", "edges_csv", "replay_cypher", "graph_stats",
+                     "human_confirmation")
+FROZEN_BY_KEY = {row[0]: row for row in FROZEN_INPUT_FINGERPRINTS}
+
+# 固定结构：28 组、full 档 71 条内容检查 ＋ AB3 汇总 = 72 项；
+# static 档未执行的正是 13 个镜像块内的 28 条内容检查。
+EXPECTED_GROUP_ORDER = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
+                        "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X",
+                        "Y", "Z", "AA", "AB"]
+EXPECTED_CONTENT_CHECKS = 71
+EXPECTED_TOTAL_CHECKS = 72
+EXPECTED_STATIC_UNRUN = 28
+
+# U 组独立探针的常量取自《18》第2.3／2.4节与《02》第12.4节，不读
+# `k_selection.json` 作为期望值。
+GATE_CELL = {"K": 10, "N": 20, "context_token_budget": 3600, "g": 2}
+GATE_K_GRID = (5, 10, 15)
+GATE_N_GRID = (20, 50, 100)
+GATE_G_PROBE = (0, 1, 2, 3, 5)
 
 _ap = argparse.ArgumentParser(
     description="第 7 阶段（RAG 检索系统）：阶段级验收（《18》第八节 28 行逐行）")
@@ -112,6 +172,10 @@ ARGS = _ap.parse_args()
 results = []          # [(status, label, detail)]
 fails = []
 fail_evidence = []
+env_fails = []
+env_fail_evidence = []
+unrun_count = 0
+unrun_evidence = []
 
 
 def _emit(status, label, detail=""):
@@ -131,6 +195,23 @@ def chk(ok, label, detail=""):
 
 def skip(label, detail=""):
     _emit("SKIP", label, detail)
+
+
+def envfail(label, detail=""):
+    """环境／链上失败：与内容失败分开记账，但同样使 full 档非零退出。"""
+    print("  [ENV ] 环境／链上失败（非内容失败）：%s%s"
+          % (label, ("  " + detail) if detail else ""))
+    env_fails.append(label)
+    env_fail_evidence.append((label, detail))
+
+
+def mark_unrun(label, count, detail=""):
+    """static 档的未执行项：既不伪装成通过，也不伪装成 SKIP。"""
+    global unrun_count
+    unrun_count += int(count)
+    unrun_evidence.append((label, int(count), detail))
+    print("  [UNRUN] %s：未执行 %d 项%s"
+          % (label, int(count), ("  " + detail) if detail else ""))
 
 
 def note(label, detail=""):
@@ -203,6 +284,18 @@ def line_index(text, needle):
     return None
 
 
+def py_function_source(text, name):
+    """取顶层函数的精确源码片段；解析失败或函数不存在时返回空串。"""
+    try:
+        tree = ast.parse(text)
+    except SyntaxError:
+        return ""
+    for node in tree.body:
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name == name:
+            return ast.get_source_segment(text, node) or ""
+    return ""
+
+
 def section_text(text, start_heading, end_heading=None):
     """取 start_heading 起、end_heading 前的正文（标题行按整行精确匹配）。"""
     lines = text.split("\n")
@@ -224,9 +317,15 @@ def section_text(text, start_heading, end_heading=None):
 # ---------------------------------------------------------------------------
 # 镜像重跑（唯一一次进程链，供 4／7／8／10～24／27／28 组共用）
 # ---------------------------------------------------------------------------
-REPLAY = {"error": None}
+REPLAY = {"error": None, "error_kind": None}
 MIRROR_OUTPUTS = ["input_manifest.json", "pre_experiment_matrix.jsonl", "k_selection.json",
                   "per_question_trace.jsonl", "metrics_pre.jsonl"]
+MIRROR_SCRATCH = ["pipeline_assertions.json", "pipeline_trace_D.jsonl",
+                  "pipeline_trace_E.jsonl"]
+
+
+class ChainFailure(RuntimeError):
+    """环境／链上失败：在镜像链退出码非零或产物新鲜度不成立时立即抛出。"""
 
 
 def mirror_items():
@@ -261,6 +360,30 @@ def build_mirror():
     return tmp, copied, skipped
 
 
+def drop_mirror_outputs(tmp):
+    """照第 6 阶段 `drop_exports()` 的做法，先删镜像里的旧产物并留下缺失态证据。"""
+    out_dir = os.path.join(tmp, "阶段07-RAG检索系统", "检索产出")
+    work_dir = os.path.join(tmp, "阶段07-RAG检索系统", "_工作底稿")
+    os.makedirs(out_dir, exist_ok=True)
+    os.makedirs(work_dir, exist_ok=True)
+    state = {}
+    for name in MIRROR_OUTPUTS:
+        path = os.path.join(out_dir, name)
+        state[name] = {"exists_before_drop": os.path.isfile(path)}
+        if os.path.isfile(path):
+            os.remove(path)
+        state[name]["absent_after_drop"] = not os.path.exists(path)
+        state[name]["exists_after_run"] = False
+    for name in MIRROR_SCRATCH:
+        path = os.path.join(work_dir, name)
+        state["_工作底稿/" + name] = {"exists_before_drop": os.path.isfile(path)}
+        if os.path.isfile(path):
+            os.remove(path)
+        state["_工作底稿/" + name]["absent_after_drop"] = not os.path.exists(path)
+        state["_工作底稿/" + name]["exists_after_run"] = False
+    return state
+
+
 def stripped_env():
     """摘掉凭据类环境变量（只摘名字命中的；不打印任何取值），并置离线加载开关。"""
     pat = re.compile(r"(API[_-]?KEY|SECRET|ACCESS[_-]?TOKEN|AUTH[_-]?TOKEN|MOONSHOT|DASHSCOPE|"
@@ -273,35 +396,97 @@ def stripped_env():
     env["PYTHONIOENCODING"] = "utf-8"
     env["HF_HUB_OFFLINE"] = "1"
     env["TRANSFORMERS_OFFLINE"] = "1"
+    # 降低 OpenBLAS／OpenMP 的线程峰值，避免镜像内的本地 Embedding 前向在内存偏紧时
+    # 因多线程分配失败而把环境问题误显示成内容问题。
+    env["OPENBLAS_NUM_THREADS"] = "1"
+    env["OMP_NUM_THREADS"] = "1"
+    env["MKL_NUM_THREADS"] = "1"
     return env, removed
 
 
-def run_cmd(argv, cwd, tag, timeout=7200):
-    env, _removed = stripped_env()
+def run_cmd(argv, cwd, tag, timeout=7200, write_log=True):
+    env, removed = stripped_env()
+    env[config.FORBID_MODEL_CALLS_ENV] = "1"
     log_dir = os.path.join(cwd, "_accept_logs")
     os.makedirs(log_dir, exist_ok=True)
     t0 = time.time()
     proc = subprocess.run([sys.executable] + list(argv), cwd=cwd, capture_output=True, text=True,
                           encoding="utf-8", errors="replace", env=env, timeout=timeout)
     seconds = round(time.time() - t0, 3)
-    log_path = os.path.join(log_dir, tag + ".log")
-    with open(log_path, "w", encoding="utf-8", newline="\n") as f:
-        f.write("$ python " + " ".join(argv) + "\n--- stdout ---\n" + (proc.stdout or "")
-                + "\n--- stderr ---\n" + (proc.stderr or "")
-                + "\n--- exit_code = %d / %.3fs ---\n" % (proc.returncode, seconds))
+    log_path = os.path.join(log_dir, tag + ".log") if write_log else None
+    if write_log:
+        with open(log_path, "w", encoding="utf-8", newline="\n") as f:
+            f.write("$ python " + " ".join(argv) + "\n--- stdout ---\n" + (proc.stdout or "")
+                    + "\n--- stderr ---\n" + (proc.stderr or "")
+                    + "\n--- stripped env (names only) = %d: %s ---\n"
+                    % (len(removed), "、".join(removed) if removed else "无")
+                    + "\n--- exit_code = %d / %.3fs ---\n" % (proc.returncode, seconds))
     return {"tag": tag, "argv": list(argv), "code": proc.returncode, "seconds": seconds,
-            "stdout": proc.stdout or "", "stderr": proc.stderr or "", "log": log_path}
+            "stdout": proc.stdout or "", "stderr": proc.stderr or "", "log": log_path,
+            "env_removed": removed,
+            "forbid_model_calls": env.get(config.FORBID_MODEL_CALLS_ENV) == "1"}
+
+
+def require_zero(result, label):
+    if result["code"] == 0:
+        return result
+    stderr_tail = (result.get("stderr") or "").strip().splitlines()[-3:]
+    raise ChainFailure("%s 退出码 %d%s" % (
+        label, result["code"], "；stderr：" + " / ".join(stderr_tail) if stderr_tail else ""))
+
+
+INDEPENDENT_PROBE_CODE = r'''
+import json
+import os
+import sys
+
+sys.path.insert(0, os.path.join(os.getcwd(), "代码", "检索"))
+import metrics
+import pipeline
+
+questions = pipeline.load_questions(pipeline.config.QUESTION_FILES["questions"])
+runner = pipeline.PipelineRunner(verbose=False)
+
+
+def cell(k, n, g):
+    run = runner.run(questions, pipeline.normalize_switches("C"), int(n), int(k),
+                     3600, int(g))
+    rows = [metrics.evaluate_question_chunk_level(
+        rec["evidence"], q.get("gold_evidence_chunk_ids") or [], int(k), qid=rec["qid"])
+        for rec, q in zip(run["records"], questions)]
+    avg = metrics.aggregate_chunk_level(rows, "gate7 independent probe", int(k))
+    return {
+        "K": int(k), "N": int(n), "g": int(g), "n_questions": len(rows),
+        "metrics": {key: avg[key] for key in metrics.CHUNK_METRIC_KEYS},
+        "graph_evidence_in_final_total": sum(
+            int(rec.get("graph_evidence_in_final_count") or 0) for rec in run["records"]),
+    }
+
+
+cells = {}
+for k in (5, 10, 15):
+    cells["K%d_N20" % k] = cell(k, 20, 2)
+for n in (50, 100):
+    cells["K10_N%d" % n] = cell(10, n, 2)
+g_curve = {str(g): cell(10, 20, g) for g in (0, 1, 2, 3, 5)}
+print("GATE7_INDEPENDENT=" + json.dumps(
+    {"cells": cells, "g_curve": g_curve}, ensure_ascii=False, sort_keys=True))
+'''.strip()
 
 
 WORKSPACE_WATCH = None
 
 
 def workspace_snapshot():
-    """工作区只读证据的指纹集合：11 个输入 ＋ 5 个产出 ＋ 三份关键文档 ＋ 本脚本自身。"""
+    """工作区只读证据：输入、交付代码／文档／产出、题集与本脚本自身。"""
     paths = [p for _k, p in config.INPUT_FILES]
-    paths += [os.path.join(OUT, n) for n in MIRROR_OUTPUTS if os.path.isfile(os.path.join(OUT, n))]
+    paths += [os.path.join(OUT, n) for n in MIRROR_OUTPUTS + ["run_manifest.json"]
+              if os.path.isfile(os.path.join(OUT, n))]
     paths += [P18, P19, P00, P02, os.path.abspath(__file__)]
-    return {rel(p): sha256_file(p) for p in paths if os.path.isfile(p)}
+    paths += [os.path.join(CODE, n) for n in os.listdir(CODE)
+              if n.endswith(".py") or n == "README.md"]
+    paths += [os.path.join(QS, n) for n in ("questions.jsonl", "说明.md", "题目模板.md")]
+    return {rel(p): sha256_file(p) for p in sorted(set(paths)) if os.path.isfile(p)}
 
 
 def ensure_replay():
@@ -310,11 +495,13 @@ def ensure_replay():
         return REPLAY
     if ARGS.profile == "static":
         REPLAY["error"] = "--profile static：跳过镜像重跑（仅供快速定位，不作为收口判定）"
+        REPLAY["error_kind"] = "static"
         return REPLAY
     try:
         WORKSPACE_WATCH = workspace_snapshot()
         tmp, copied, skipped = build_mirror()
         REPLAY.update({"tmp": tmp, "copied": copied, "skipped": skipped})
+        REPLAY["freshness"] = drop_mirror_outputs(tmp)
         m = lambda *parts: os.path.join(tmp, *parts)
         code_dir = m("代码", "检索")
         steps = [
@@ -325,22 +512,56 @@ def ensure_replay():
         ]
         REPLAY["chain"] = []
         for tag, argv in steps:
-            REPLAY["chain"].append(run_cmd(argv, tmp, "chain_" + tag))
+            result = run_cmd(argv, tmp, "chain_" + tag)
+            REPLAY["chain"].append(result)
+            require_zero(result, "链上步骤 " + tag)
         cyc = []
         for cycle in ("run1", "run2"):
             r = {}
             r["pipeline"] = run_cmd([os.path.join(code_dir, "pipeline.py"), "--group", "C", "--out",
                                      m("阶段07-RAG检索系统", "检索产出", "per_question_trace.jsonl")],
                                     tmp, "cycle_%s_pipeline" % cycle)
+            require_zero(r["pipeline"], "链上 %s pipeline" % cycle)
             r["pre_experiment"] = run_cmd([os.path.join(code_dir, "pre_experiment.py"), "--quiet"],
                                           tmp, "cycle_%s_pre_experiment" % cycle)
+            require_zero(r["pre_experiment"], "链上 %s pre_experiment" % cycle)
             r["metrics"] = run_cmd([os.path.join(code_dir, "metrics.py")],
                                    tmp, "cycle_%s_metrics" % cycle)
+            require_zero(r["metrics"], "链上 %s metrics" % cycle)
             r["sha"] = {n: sha256_file(m("阶段07-RAG检索系统", "检索产出", n))
                         for n in ("pre_experiment_matrix.jsonl", "k_selection.json",
                                   "per_question_trace.jsonl", "metrics_pre.jsonl")}
             cyc.append(r)
         REPLAY["cycles"] = cyc
+        probe = run_cmd(["-c", INDEPENDENT_PROBE_CODE], tmp, "independent_metric_probe",
+                        write_log=False)
+        require_zero(probe, "U 组独立指标探针")
+        probe_line = next((line for line in (probe.get("stdout") or "").splitlines()
+                           if line.startswith("GATE7_INDEPENDENT=")), None)
+        if probe_line is None:
+            raise ChainFailure("U 组独立指标探针没有输出 GATE7_INDEPENDENT= 结果行")
+        REPLAY["independent"] = json.loads(probe_line.split("=", 1)[1])
+        fresh_bad = []
+        for name in MIRROR_OUTPUTS:
+            path = m("阶段07-RAG检索系统", "检索产出", name)
+            row = REPLAY["freshness"][name]
+            row["exists_after_run"] = os.path.isfile(path)
+            if row["exists_after_run"]:
+                row["sha256"] = sha256_file(path)
+            if not row["absent_after_drop"] or not row["exists_after_run"]:
+                fresh_bad.append(name)
+        for name in MIRROR_SCRATCH:
+            key = "_工作底稿/" + name
+            path = m("阶段07-RAG检索系统", "_工作底稿", name)
+            row = REPLAY["freshness"][key]
+            row["exists_after_run"] = os.path.isfile(path)
+            if row["exists_after_run"]:
+                row["sha256"] = sha256_file(path)
+            if not row["absent_after_drop"] or not row["exists_after_run"]:
+                fresh_bad.append(key)
+        if fresh_bad:
+            raise ChainFailure("镜像产物新鲜度不成立（删除后不存在→运行后出现）：%s"
+                               % "、".join(fresh_bad))
         REPLAY["assertions"] = read_json(
             m("阶段07-RAG检索系统", "_工作底稿", "pipeline_assertions.json"), default={})
         REPLAY["matrix"] = read_jsonl(m("阶段07-RAG检索系统", "检索产出",
@@ -353,23 +574,41 @@ def ensure_replay():
         REPLAY["trace_D"] = read_jsonl(m("阶段07-RAG检索系统", "_工作底稿", "pipeline_trace_D.jsonl"))
         REPLAY["trace_E"] = read_jsonl(m("阶段07-RAG检索系统", "_工作底稿", "pipeline_trace_E.jsonl"))
         REPLAY["mirror_files"] = sum(len(files) for _r, _d, files in os.walk(tmp))
-        REPLAY["env_removed"], _ = stripped_env()
+        _env, removed = stripped_env()
+        removed_seen = set(removed)
+        for item in REPLAY.get("chain") or []:
+            removed_seen.update(item.get("env_removed") or [])
+        for cyc in REPLAY.get("cycles") or []:
+            for item in cyc.values():
+                if isinstance(item, dict):
+                    removed_seen.update(item.get("env_removed") or [])
+        REPLAY["env_removed"] = sorted(removed_seen)
         after = workspace_snapshot()
         REPLAY["workspace_unchanged"] = (WORKSPACE_WATCH == after)
         REPLAY["workspace_changed"] = sorted(
             k for k in set(WORKSPACE_WATCH) | set(after)
             if WORKSPACE_WATCH.get(k) != after.get(k))
         REPLAY["done"] = True
+    except ChainFailure as exc:
+        REPLAY["error"] = str(exc)
+        REPLAY["error_kind"] = "environment_chain"
     except Exception as exc:
         REPLAY["error"] = "%s: %s" % (type(exc).__name__, exc)
+        REPLAY["error_kind"] = "environment_chain"
     return REPLAY
 
 
-def mirror_or_skip(prefix, labels):
+def mirror_or_skip(prefix, labels, planned_checks):
     R = ensure_replay()
     if R.get("error"):
-        for lab in labels:
-            skip("%s %s" % (prefix, lab), "镜像重跑未执行：%s" % R["error"])
+        if R.get("error_kind") == "environment_chain":
+            for lab in labels:
+                envfail("%s %s" % (prefix, lab), R["error"])
+        else:
+            for lab in labels:
+                skip("%s %s" % (prefix, lab), "镜像重跑未执行：%s" % R["error"])
+            mark_unrun(prefix, planned_checks,
+                       "static 档未执行镜像块内的 %d 条内容检查" % planned_checks)
         return None
     return R
 
@@ -407,18 +646,22 @@ print("B、《18》第八节 第 2 行：输入齐备：数据集 v2.1 六个 �
 print("=" * 78)
 t18 = read_text(P18, "")
 input_rows = [(key, os.path.relpath(path, ROOT)) for key, path in config.INPUT_FILES]
-dataset_rows = [r for r in input_rows if r[0] in
-                ("documents", "chunks", "faiss_index", "vector_map", "build_meta", "dataset_meta")]
-graph_rows = [r for r in input_rows if r[0] not in
-              ("documents", "chunks", "faiss_index", "vector_map", "build_meta", "dataset_meta")]
+sec3_input = section_text(t18, "## 三、输入清单（已冻结，本阶段只引用、不改动）",
+                          "## 四、产出清单")
+dataset_rows = [r for r in FROZEN_INPUT_FINGERPRINTS[:6]]
+graph_rows = [r for r in FROZEN_INPUT_FINGERPRINTS[6:]]
 exist_bad = [r[1] for r in input_rows if not os.path.isfile(os.path.join(ROOT, r[1]))]
-listed_bad = [r[1] for r in input_rows if r[1] not in t18]
-chk(len(input_rows) == 11 and len(dataset_rows) == 6 and len(graph_rows) == 5,
+listed_bad = [row[1] for row in FROZEN_INPUT_FINGERPRINTS
+              if row[1].replace("/", "\\") not in sec3_input]
+chk([r[0] for r in input_rows] == [row[0] for row in FROZEN_INPUT_FINGERPRINTS]
+    and len(FROZEN_INPUT_FINGERPRINTS) == 11
+    and len(dataset_rows) == 6 and len(graph_rows) == 5,
     "B1 输入清单恰为 11 个（数据集 6 ＋ 图谱 5）",
     "实测 %d 个：数据集 %d、图谱 %d" % (len(input_rows), len(dataset_rows), len(graph_rows)))
 chk(not exist_bad, "B2 11 个输入文件全部存在", "缺失 %d 个%s"
     % (len(exist_bad), "：" + br(exist_bad) if exist_bad else ""))
-chk(not listed_bad, "B3 11 条相对路径与《18》第三节 的输入清单逐条一致", "未在《18》中逐字命中 %d 条%s"
+chk(not listed_bad, "B3 11 条相对路径与《18》第三节 的输入清单逐条一致",
+    "未在第三节 逐字命中 %d 条%s"
     % (len(listed_bad), "：" + br(listed_bad) if listed_bad else ""))
 
 
@@ -430,18 +673,30 @@ print("C、《18》第八节 第 3 行：输入只读：T11 结束时数据集 v
 print("=" * 78)
 manifest = read_json(config.INPUT_MANIFEST_PATH, default={})
 mrows = manifest.get("files") or []
+manifest_by_key = {str(row.get("key")): row for row in mrows}
 m_bad = []
-for row in mrows:
-    p = os.path.join(ROOT, row["path"].replace("/", os.sep))
-    if not os.path.isfile(p) or sha256_file(p) != row["sha256"] \
-            or os.path.getsize(p) != row["bytes"]:
-        m_bad.append(row["key"])
-chk(len(mrows) == 11 and [r["key"] for r in mrows] == [k for k, _p in config.INPUT_FILES],
-    "C1 指纹清单含 11 条且键序与 config.INPUT_FILES 一致",
-    "实测 %d 条：%s" % (len(mrows), "、".join(r["key"] for r in mrows)))
-chk(not m_bad, "C2 11 个输入逐个重算 SHA-256 与字节数，与 T1 记录一致",
-    "不一致 %d 条%s；manifest.all_ok=%s" % (len(m_bad), "：" + br(m_bad) if m_bad else "",
-                                            manifest.get("all_ok")))
+manifest_bad = []
+for key, rel_path, expected_bytes, expected_sha in FROZEN_INPUT_FINGERPRINTS:
+    p = os.path.join(ROOT, rel_path.replace("/", os.sep))
+    if (not os.path.isfile(p) or os.path.getsize(p) != expected_bytes
+            or sha256_file(p) != expected_sha):
+        m_bad.append(key)
+    row = manifest_by_key.get(key) or {}
+    if (row.get("path") != rel_path or int(row.get("bytes") or -1) != expected_bytes
+            or row.get("sha256") != expected_sha):
+        manifest_bad.append(key)
+frozen_keys = [row[0] for row in FROZEN_INPUT_FINGERPRINTS]
+chk([r["key"] for r in mrows] == frozen_keys
+    and [k for k, _p in config.INPUT_FILES] == frozen_keys,
+    "C1 指纹清单含 11 条且键序与独立冻结基线一致",
+    "冻结基线 %d 条：%s；manifest 实测键=%s"
+    % (len(frozen_keys), "、".join(frozen_keys), "、".join(str(r.get("key")) for r in mrows)))
+chk(not m_bad and not manifest_bad,
+    "C2 11 个输入逐个重算 SHA-256 与字节数，并与写死在脚本内的 T1 基线及 manifest 双重一致",
+    "实际文件不一致 %d 条%s；manifest 不一致 %d 条%s；manifest.all_ok=%s"
+    % (len(m_bad), "：" + br(m_bad) if m_bad else "",
+       len(manifest_bad), "：" + br(manifest_bad) if manifest_bad else "",
+       manifest.get("all_ok")))
 
 
 # ==========================================================================
@@ -467,6 +722,7 @@ chk(not bad_read and control, "D2 链上代码不调用向量索引库自带的�
     "命中 %d 个文件%s；正对照命中=%s；config.read_faiss_index 用 deserialize_index=%s"
     % (len(bad_read), "：" + br(bad_read) if bad_read else "", control,
        "deserialize_index" in (code_texts.get("config.py") or "")))
+del index  # 释放镜像重跑前父进程持有的索引内存
 
 
 # ==========================================================================
@@ -574,6 +830,7 @@ chk(not miss_cy, "H2 《19》第 5 节 列出同一张表（七条 Cypher 与接
 iface_kw = ["一跳邻居", "两跳邻居", "按事件类型取事件", "按公司取参与事件", "事件到证据块", "时间过滤", "路径枚举"]
 chk(all(k in t19 for k in iface_kw), "H3 《19》的接口清单含七个接口的名称（与表 18-F 一致）",
     "命中的接口名 %d／7" % sum(1 for k in iface_kw if k in t19))
+del gq  # G／H 已完成；M2 需要时再按需加载，避免与镜像子进程争内存
 
 
 # ==========================================================================
@@ -582,17 +839,17 @@ print("=" * 78)
 print("I、《18》第八节 第 9 行：图谱导出物未被改动（五个文件与开工指纹一致）；交付物中不出现"
       "「已部署 Neo4j 服务」一类表述")
 print("=" * 78)
-graph_keys = ("nodes_csv", "edges_csv", "replay_cypher", "graph_stats", "human_confirmation")
 g_bad = []
-for row in mrows:
-    if row["key"] in graph_keys:
-        p = os.path.join(ROOT, row["path"].replace("/", os.sep))
-        if not os.path.isfile(p) or sha256_file(p) != row["sha256"]:
-            g_bad.append(row["key"])
-chk(len([r for r in mrows if r["key"] in graph_keys]) == 5 and not g_bad,
-    "I1 图谱导出物五个文件与 T1 指纹一致",
+for key in FROZEN_GRAPH_KEYS:
+    _key, rel_path, expected_bytes, expected_sha = FROZEN_BY_KEY[key]
+    p = os.path.join(ROOT, rel_path.replace("/", os.sep))
+    if (not os.path.isfile(p) or os.path.getsize(p) != expected_bytes
+            or sha256_file(p) != expected_sha):
+        g_bad.append(key)
+chk(len(FROZEN_GRAPH_KEYS) == 5 and not g_bad,
+    "I1 图谱导出物五个文件与写死在脚本内的独立开工指纹一致",
     "实测 %d 个文件、不一致 %d 个%s"
-    % (len([r for r in mrows if r["key"] in graph_keys]), len(g_bad),
+    % (len(FROZEN_GRAPH_KEYS), len(g_bad),
        "：" + br(g_bad) if g_bad else ""))
 
 
@@ -600,22 +857,34 @@ def scan_deploy_claims(targets):
     hits = []
     for name, text in targets:
         for i, line in enumerate(text.split("\n"), 1):
-            if "Neo4j" in line and DEPLOY_ASSERT.search(line) and not DEPLOY_NEG.search(line):
+            if DEPLOY_ASSERT.search(line) and not DEPLOY_NEG.search(line):
                 hits.append("%s:%d %s" % (name, i, line.strip()[:80]))
     return hits
 
 
-deploy_targets = [("《19》", t19)]
-for n in sorted(code_texts):
-    deploy_targets.append(("代码/检索/" + n, code_texts[n]))
-deploy_targets.append(("代码/检索/README.md", read_text(os.path.join(CODE, "README.md"), "")))
-deploy_hits = scan_deploy_claims(deploy_targets)
-deploy_ctrl = bool(scan_deploy_claims([("CTRL", "本系统已部署 Neo4j 服务。")]))
+def collect_delivery_texts():
+    targets = [("《18》", t18), ("《19》", t19)]
+    for n in sorted(os.listdir(CODE)):
+        p = os.path.join(CODE, n)
+        if os.path.isfile(p) and (n.endswith(".py") or n.endswith(".md")):
+            targets.append(("代码/检索/" + n, read_text(p, "")))
+    for base in (OUT, QS):
+        for n in sorted(os.listdir(base)):
+            p = os.path.join(base, n)
+            if os.path.isfile(p):
+                targets.append((rel(p), read_text(p, "")))
+    return targets
+
+
+delivery_targets = collect_delivery_texts()
+deploy_hits = scan_deploy_claims(delivery_targets)
+deploy_ctrl = bool(scan_deploy_claims([("CTRL-A", "本系统已部署知识图谱服务并对外提供查询。")])) \
+    and bool(scan_deploy_claims([("CTRL-B", "本系统已部署 Neo4j 服务。")]))
 chk(not deploy_hits and deploy_ctrl,
-    "I2 第 7 阶段交付物不出现「已部署 Neo4j 服务」一类的肯定表述（正对照必须命中）",
-    "命中 %d 处%s；正对照命中=%s；《19》含「未部署」=%s"
-    % (len(deploy_hits), "：" + br(deploy_hits) if deploy_hits else "", deploy_ctrl,
-       "未部署" in t19))
+    "I2 第 7 阶段交付物不出现「已部署图谱服务」一类的肯定表述（含不带 Neo4j 字面的正对照）",
+    "扫描 %d 个文本、命中 %d 处%s；正对照命中=%s；《19》含「未部署」=%s"
+    % (len(delivery_targets), len(deploy_hits), "：" + br(deploy_hits) if deploy_hits else "",
+       deploy_ctrl, "未部署" in t19))
 
 
 # ==========================================================================
@@ -682,7 +951,7 @@ dual_bad = [r["qid"] for r in trace_rows
 chk(not k_bad and not dual_bad, "K1 逐题 chunk_id 无重复、别名集合一致、两路同命中只出现一次",
     "异常题 %d 个；双命中入集题数 %d／30"
     % (len(set(k_bad + dual_bad)), sum(1 for r in trace_rows if r.get("dual_hit_in_final"))))
-R = mirror_or_skip("K2", ["构造用例与镜像重跑产物"])
+R = mirror_or_skip("K2", ["构造用例与镜像重跑产物"], 1)
 if R:
     a3 = (R["assertions"] or {}).get("assertion_3a_unique_chunk") or {}
     a3b = (R["assertions"] or {}).get("assertion_3b_constructed_dual_hit") or {}
@@ -711,7 +980,7 @@ chk(i_filt and i_merge and i_filt < i_merge and i_filt_dummy < i_merge_dummy,
     "L1 代码级顺序断言：时间过滤的调用行号 < 合并去重的调用行号（含正对照）",
     "实测 apply_time_filter 第 %s 行、merge_candidates 第 %s 行；正对照 %s < %s"
     % (i_filt, i_merge, i_filt_dummy, i_merge_dummy))
-R = mirror_or_skip("L2", ["一次运行日志与 D 组 trace 的段次序"])
+R = mirror_or_skip("L2", ["一次运行日志与 D 组 trace 的段次序"], 1)
 if R:
     selftest_log = ""
     for item in R["chain"]:
@@ -747,6 +1016,7 @@ chk(len(event_nodes) == 1100 and len(null_ids) == 544,
     "M1 全量重算节点表：Event 1100 个、event_time 为空 544 个",
     "实测 Event=%d、空值=%d（%.1f%%）" % (len(event_nodes), len(null_ids),
                                         100.0 * len(null_ids) / max(1, len(event_nodes))))
+gq = gqlayer.default_graph()
 g6_null = gq.g6_time_filter(null_ids, "2000-01-01", "2030-12-31")
 chk(g6_null.get("code") in ("OK", "EMPTY") and not g6_null.get("passed_ids")
     and len(g6_null.get("removed_null_ids") or []) == 544
@@ -761,7 +1031,8 @@ chk(config.RETRIEVAL.get("time_filter_null_policy") == "exclude"
     "实测 config=%r、pipeline.py 引用=%s"
     % (config.RETRIEVAL.get("time_filter_null_policy"),
        "time_filter_null_policy" in src_pipe))
-R = mirror_or_skip("M4", ["D 组 trace 的空值剔除逐题留痕"])
+del gq  # 七个接口的静态调用已完成；释放内存图给镜像子进程
+R = mirror_or_skip("M4", ["D 组 trace 的空值剔除逐题留痕"], 1)
 if R:
     d_rows = R["trace_D"]
     null_total = sum(len((r["time_filter"] or {}).get("removed_by_reason", {})
@@ -779,7 +1050,7 @@ print("=" * 78)
 print("N、《18》第八节 第 14 行：保留 K 先于 D／E 分组排序（同一输入 D 与 E 的最终证据集合"
       "逐题完全相同）")
 print("=" * 78)
-R = mirror_or_skip("N1", ["镜像重跑的断言 1 与 D／E trace"])
+R = mirror_or_skip("N1", ["镜像重跑的断言 1 与 D／E trace"], 2)
 if R:
     a1 = (R["assertions"] or {}).get("assertion_1_d_equals_e") or {}
     per = a1.get("per_question") or []
@@ -805,7 +1076,7 @@ print("=" * 78)
 print("O、《18》第八节 第 15 行：C 与 D 可以不同（逐题双向差集与条数；差集为空的题"
       "不得进入后续对比统计）")
 print("=" * 78)
-R = mirror_or_skip("O1", ["镜像重跑的断言 2"])
+R = mirror_or_skip("O1", ["镜像重跑的断言 2"], 3)
 if R:
     a2 = (R["assertions"] or {}).get("assertion_2_c_vs_d_diff") or {}
     per = a2.get("per_question") or []
@@ -819,10 +1090,27 @@ if R:
         "O2 差集为空的题必须标记「在该题上不可测」、不得进入后续对比统计",
         "断言记录的 rule 文本含「不可测」=%s；《19》含标记与排除语句=%s"
         % ("不可测" in (a2.get("rule") or ""), ("在该题上不可测" in t19 and "不得计入" in t19)))
-    unclear = [r["qid"] for r in per if not r["measurable"]]
-    chk(unclear == ["PE-11", "PE-20"],
-        "O3 不可测题恰好是 PE-11 与 PE-20（逐题留痕）",
-        "实测不可测题：%s" % (",".join(unclear) or "无"))
+    unclear_record = {r["qid"] for r in per if not r["measurable"]}
+    all_qids = {str(r["qid"]) for r in R["trace_D"]}
+    c_filtered = {str(r["qid"]): {str(x) for x in r.get("candidates_filtered") or []}
+                  for r in R["trace"]}
+    unclear_ind = set()
+    for row in R["trace_D"]:
+        qid = str(row["qid"])
+        # 与 pipeline.make_assertion_2() 同一口径：C 的过滤后候选 vs D 的过滤后候选
+        set_c = c_filtered.get(qid, set())
+        set_d = {str(x) for x in row.get("candidates_filtered") or []}
+        if not (set_c - set_d or set_d - set_c):
+            unclear_ind.add(qid)
+    o3_ok = (len(all_qids) == 30 and unclear_ind == unclear_record
+             and 1 <= len(unclear_ind) < len(all_qids))
+    chk(o3_ok,
+        "O3 不可测集由 C／D 两份 trace 独立重算且与断言 2 一致（至少 1 题可测、至少 1 题不可测）",
+        "独立重算：可测 %d／%d、不可测 %s；断言记录不可测 %s；集合一致=%s"
+        % (len(all_qids - unclear_ind), len(all_qids),
+           ",".join(sorted(unclear_ind)) or "无",
+           ",".join(sorted(unclear_record)) or "无",
+           unclear_ind == unclear_record))
 
 
 # ==========================================================================
@@ -835,9 +1123,36 @@ src_p = src_pipe
 i_trim = line_index(src_p, "trimmed = trim_to_budget(")
 i_keep = line_index(src_p, "kept = keep_top_k(")
 i_order = line_index(src_p, "ordered = order_evidence(")
-layers = [line_index(src_p, '"layer1_vector_top"'), line_index(src_p, '"layer2_graph_new"'),
-          line_index(src_p, '"layer3_vector_fill"')]
-layers_ok = all(layers)
+retention_body = py_function_source(src_p, "retention_breakdown")
+layers = [retention_body.find('"layer1_vector_top"'), retention_body.find('"layer2_graph_new"'),
+          retention_body.find('"layer3_vector_fill"')]
+layer_lines = [line_index(retention_body, '"layer1_vector_top"'),
+               line_index(retention_body, '"layer2_graph_new"'),
+               line_index(retention_body, '"layer3_vector_fill"')]
+layers_ok = all(pos >= 0 for pos in layers) and layers[0] < layers[1] < layers[2]
+trim_body = py_function_source(src_p, "trim_to_budget")
+trim_no_order_result = bool(trim_body) and "order_evidence(" not in trim_body
+# 三层顺序的行为级复核（不只查字符串位置）：用构造记录直接调用 evidence_priority_key，
+# 断言 第一层 < 第二层 < 第三层 < 尾部 四档键严格递增（把三层定义搬错位置即失败）。
+try:
+    import pipeline as _pl
+    _probe_records = [
+        {"chunk_id": 101, "vector_rank": 1},                            # 第一层
+        {"chunk_id": 102, "vector_rank": None, "first_path_key": (1, 0)},  # 第二层（在 plan 里）
+        {"chunk_id": 103, "vector_rank": 10},                           # 第三层（rank > K−g）
+        {"chunk_id": 104, "vector_rank": None, "first_path_key": (2, 0)},  # 尾部
+    ]
+    _probe_tiers = [_pl.evidence_priority_key(r, 10, 1, {102: 0}) for r in _probe_records]
+    tier_behavior_ok = (
+        _probe_tiers[0][0] == _pl.LAYER1_VECTOR_TIER
+        and _probe_tiers[1][0] == _pl.LAYER2_GRAPH_TIER
+        and _probe_tiers[2][0] == _pl.LAYER3_VECTOR_FILL_TIER
+        and _probe_tiers[3][0] == _pl.LEFTOVER_GRAPH_TIER
+        and _pl.LAYER1_VECTOR_TIER < _pl.LAYER2_GRAPH_TIER
+        < _pl.LAYER3_VECTOR_FILL_TIER < _pl.LEFTOVER_GRAPH_TIER)
+except Exception as _exc:  # noqa: BLE001
+    tier_behavior_ok = False
+    _probe_tiers = ["%s: %s" % (type(_exc).__name__, _exc)]
 pri_region = src_p[src_p.find("def priority_rule_text("):
                    src_p.find("# ---------------------------------------------------------------------------\n"
                               "# 一、开关与口径校验")]
@@ -847,17 +1162,22 @@ pri_ok = (all(x >= 0 for x in pri_order) and pri_order[0] < pri_order[1] < pri_o
 legacy_ok = ("LEGACY_PRIORITY_RULE" in src_p and "固定原始顺序" in src_p
              and re.search(r"if int\(g\) <= 0:\s*\n\s*return LEGACY_PRIORITY_RULE", src_p)
              is not None)
-chk(i_trim and i_keep and i_order and i_trim < i_keep < i_order and layers_ok,
-    "P1 代码级顺序断言：裁剪 → 保留 K → 分组排序；三层的实现标记按 1→2→3 排列（含正对照）",
-    "实测 trim 第 %s 行、keep 第 %s 行、order 第 %s 行；layer1/2/3 行号=%s；"
-    "口径文字的三层次序正确=%s；g<=0 返回原字面口径=%s"
-    % (i_trim, i_keep, i_order, layers, pri_ok, legacy_ok))
+chk(i_trim and i_keep and i_order and i_trim < i_keep < i_order and layers_ok
+    and trim_no_order_result and tier_behavior_ok,
+    "P1 代码级顺序断言：裁剪 → 保留 K → 分组排序；三层实现标记严格递增；"
+    "裁剪函数不使用分组排序结果；evidence_priority_key 的四档键行为级递增",
+    "实测 trim 第 %s 行、keep 第 %s 行、order 第 %s 行；layer1/2/3 字符位=%s、行号=%s；"
+    "口径文字的三层次序正确=%s；g<=0 返回原字面口径=%s；裁剪体存在=%s、"
+    "不含 order_evidence=%s；四档行为键=%s、行为级递增=%s"
+    % (i_trim, i_keep, i_order, layers, layer_lines, pri_ok, legacy_ok, bool(trim_body),
+       "order_evidence(" not in trim_body,
+       [t[0] if isinstance(t, tuple) else t for t in _probe_tiers], tier_behavior_ok))
 chk("先" in src_p and "远端图谱路径" in src_p and "分层保留顺序" in src_p
     and "K−g" in src_p and "至多取 g 个" in src_p and "回填" in src_p,
     "P2 代码内的裁剪与保留顺序含「先裁远端图谱路径」与三层定义（K−g／至多 g／回填）",
     "实测 关键短语齐备=%s"
     % all(k in src_p for k in ("先", "远端图谱路径", "分层保留顺序", "K−g", "至多取 g 个", "回填")))
-R = mirror_or_skip("P3", ["镜像重跑的裁剪运行日志与 g = 0 退化"])
+R = mirror_or_skip("P3", ["镜像重跑的裁剪运行日志与 g = 0 退化"], 2)
 if R:
     a5 = (R["assertions"] or {}).get("assertion_5_g0_degenerates") or {}
     ret = (R["assertions"] or {}).get("retention_layers") or {}
@@ -888,7 +1208,7 @@ print("=" * 78)
 print("Q、《18》第八节 第 17 行：候选不足 K 不删题（M < K 的构造用例：题目保留、"
       "空缺记未命中）")
 print("=" * 78)
-R = mirror_or_skip("Q1", ["镜像重跑的断言 4 与 metrics 行数"])
+R = mirror_or_skip("Q1", ["镜像重跑的断言 4 与 metrics 行数"], 3)
 if R:
     a4 = (R["assertions"] or {}).get("assertion_4_precision_denominator") or {}
     chk(bool(a4.get("ok")) and a4.get("questions_in") == 30 and a4.get("questions_out") == 30,
@@ -914,7 +1234,7 @@ print("R、《18》第八节 第 18 行：四项指标可重算（与 第2.3节 
 print("=" * 78)
 questions = read_jsonl(os.path.join(QS, "questions.jsonl"))
 qmap = {str(q["qid"]): q for q in questions}
-R = mirror_or_skip("R1", ["镜像重跑的 metrics 产物"])
+R = mirror_or_skip("R1", ["镜像重跑的 metrics 产物"], 2)
 if R:
     m_rows = R["metrics"]
     meta = next((r for r in m_rows if r.get("record_type") == "metrics_meta"), {})
@@ -960,7 +1280,7 @@ print()
 print("=" * 78)
 print("S、《18》第八节 第 19 行：指标口径不混算（四项只接受 chunk_id；Precision@K 分母恒为 K）")
 print("=" * 78)
-R = mirror_or_skip("S1", ["镜像重跑的 metrics 产物"])
+R = mirror_or_skip("S1", ["镜像重跑的 metrics 产物"], 3)
 if R:
     m_rows = R["metrics"]
     rows_ok = all(r.get("level") == "chunk" for r in m_rows if r.get("qid"))
@@ -974,13 +1294,16 @@ if R:
         "逐题行 chunk=%s、含 document 行=%s、precision_denominator=%s"
         % (rows_ok, not no_doc, meta.get("precision_denominator")))
     src_m = read_text(os.path.join(CODE, "metrics.py"), "")
-    chk("recall_at_k_doc_level_diagnostic" in src_m
-        and "def cmd_write" in src_m,
-        "S2 文档级诊断函数存在但只在诊断函数里；写盘路径只输出 chunk 级",
-        "实测 诊断函数存在=%s、写盘入口 cmd_write 存在=%s、"
-        "文件中出现 document 级写入调用=%s"
-        % ("recall_at_k_doc_level_diagnostic" in src_m, "def cmd_write" in src_m,
-           bool(re.search(r"recall_at_k_doc_level_diagnostic\s*\(", src_m))))
+    cmd_write_body = py_function_source(src_m, "cmd_write")
+    doc_call_in_write = bool(re.search(r"recall_at_k_doc_level_diagnostic\s*\(",
+                                       cmd_write_body))
+    chk("recall_at_k_doc_level_diagnostic" in src_m and bool(cmd_write_body)
+        and not doc_call_in_write,
+        "S2 文档级诊断函数存在，但写盘函数 cmd_write 的函数体内不调用它；写盘路径只输出 chunk 级",
+        "实测 诊断函数存在=%s、cmd_write 函数体字节=%d、"
+        "cmd_write 内文档级调用=%s"
+        % ("recall_at_k_doc_level_diagnostic" in src_m, len(cmd_write_body),
+           doc_call_in_write))
     prec_ok = all(r["precision_at_k"] == round(r["n_hit"] / float(r["K"]), 8)
                   for r in m_rows if r.get("qid"))
     chk(prec_ok, "S3 逐题数值复核：Precision@K 的实际分母是 K（不是 M）",
@@ -993,7 +1316,7 @@ print("=" * 78)
 print("T、《18》第八节 第 20 行：预实验网格齐备（K ∈ {5,10,15} × N ∈ {20,50,100} 九格，"
       "四项指标与预算占用齐备，且每格 N ≥ K）")
 print("=" * 78)
-R = mirror_or_skip("T1", ["镜像重跑的网格产物"])
+R = mirror_or_skip("T1", ["镜像重跑的网格产物"], 2)
 if R:
     rows = R["matrix"]
     r1 = [r for r in rows if r.get("round") == "round1_nonbinding"]
@@ -1022,7 +1345,7 @@ print("=" * 78)
 print("U、《18》第八节 第 21 行：定值符合选择规则（在满足预算的前提下 Complete Evidence "
       "Recall@K 饱和的最小 K；记录里有各档读数与饱和判定）")
 print("=" * 78)
-R = mirror_or_skip("U1", ["镜像重跑的 k_selection 产物"])
+R = mirror_or_skip("U1", ["镜像重跑的 k_selection 产物"], 3)
 if R:
     sel = R["selection"]
     selected = sel.get("selected") or {}
@@ -1031,43 +1354,110 @@ if R:
     rows_sat = sat.get("rows") or []
     k_sel = selected.get("K")
     feasible = sat.get("feasible_K") or []
-    sat_ok = ("饱和" in (rules.get("K_rule") or "")) and k_sel in feasible \
-        and sat.get("selected_K") == k_sel
-    deltas = {r["K"]: r.get("delta_cer_vs_prev_under_budget") for r in rows_sat}
-    next_delta = None
-    ks = sorted(r["K"] for r in rows_sat)
-    if k_sel in ks:
-        upper = [k for k in ks if k > k_sel]
-        next_delta = deltas.get(upper[0]) if upper else None
-    minimal_ok = (next_delta is None or next_delta <= 0)
-    gold_excl = any(r["K"] == 5 and not r.get("gold_feasible") for r in rows_sat)
-    budget_excl = any(r["K"] == 15 and not r.get("budget_feasible") for r in rows_sat)
-    chk(sat_ok and minimal_ok and gold_excl and budget_excl,
-        "U1 K 的选择规则执行证据：gold 约束排除 K=5、预算排除 K=15、K=10 处相邻档 Δ ≤ 0",
-        "实测 规则含饱和=%s、选定 K=%s 在可行集 %s 内=%s、K=15 的 Δ=%s、gold 排除=%s、预算排除=%s"
-        % ("饱和" in (rules.get("K_rule") or ""), k_sel, feasible, k_sel in feasible,
-           next_delta, gold_excl, budget_excl))
+    probe = R.get("independent") or {}
+    cells = probe.get("cells") or {}
+    g_probe = probe.get("g_curve") or {}
+    max_gold = max(len(set(str(x) for x in (q.get("gold_evidence_chunk_ids") or [])))
+                   for q in questions)
+    r1_rows = [r for r in R["matrix"] if r.get("round") == "round1_nonbinding"]
+    median_by_k = {int(r["K"]): r["occupancy"]["text_tokens"]["median"]
+                   for r in r1_rows if int(r["N"]) == 20}
+    anchor_k = min(k for k in GATE_K_GRID if k >= max_gold)
+    anchor_n = min(n for n in GATE_N_GRID if n >= anchor_k)
+    budget_ind = int(math.ceil(float(median_by_k[anchor_k]) * 1.10 / 100.0) * 100)
+    feasible_ind = [k for k in GATE_K_GRID
+                    if k >= max_gold and float(median_by_k[k]) <= budget_ind]
+    cer_under_ind = {k: float(cells["K%d_N20" % k]["metrics"]
+                              ["complete_evidence_recall_at_k"]) for k in GATE_K_GRID}
+    k_star_ind = feasible_ind[0]
+    for current, nxt in zip(feasible_ind, feasible_ind[1:]):
+        if cer_under_ind[nxt] > cer_under_ind[current] + 1e-12:
+            k_star_ind = nxt
+        else:
+            break
+    delta15_ind = round(cer_under_ind[15] - cer_under_ind[10], 8)
+    delta15_recorded = next((r.get("delta_cer_vs_prev_under_budget") for r in rows_sat
+                             if r.get("K") == 15), None)
+    gold_excl_ind = (5 < max_gold) and (5 not in feasible_ind)
+    budget_excl_ind = (float(median_by_k[15]) > budget_ind) and (15 not in feasible_ind)
+    u1_ok = (k_sel == k_star_ind == GATE_CELL["K"]
+             and int(selected.get("N") or -1) == GATE_CELL["N"]
+             and int(selected.get("context_token_budget") or -1) == budget_ind
+             and budget_ind == GATE_CELL["context_token_budget"]
+             and feasible == feasible_ind
+             and sat.get("selected_K") == k_sel
+             and delta15_recorded is not None
+             and abs(float(delta15_recorded) - delta15_ind) <= 1e-8
+             and delta15_ind <= 0
+             and gold_excl_ind and budget_excl_ind
+             and "饱和" in (rules.get("K_rule") or ""))
+    chk(u1_ok,
+        "U1 K 的选择规则执行证据由独立探针重算：gold 排除 K=5、预算排除 K=15、"
+        "K=10 处 Δ ≤ 0 且所选 K 为饱和最小可行档",
+        "独立重算：max_gold=%d、预算=%d、可行集=%s、选定 K*=%d、Δ(K10→K15)=%+.8f；"
+        "产物记录：选定 K=%s、可行集=%s、Δ=%s"
+        % (max_gold, budget_ind, feasible_ind, k_star_ind, delta15_ind,
+           k_sel, feasible, delta15_recorded))
     ncurve = (sel.get("evidence") or {}).get("N_curve") or []
-    n_rows = [r for r in ncurve if r["K"] == k_sel]
-    max_cer = max((r["metrics"]["complete_evidence_recall_at_k"] for r in n_rows), default=None)
-    min_n = min((r["N"] for r in n_rows
-                 if r["metrics"]["complete_evidence_recall_at_k"] == max_cer), default=None)
-    chk(min_n == selected.get("N") and "最小" in (rules.get("N_rule") or ""),
-        "U2 N 的选择规则执行证据：取使 CER 达到该档最大值的**最小** N",
-        "实测 N 曲线 %s；最大 CER=%s 对应最小 N=%s；选定 N=%s"
-        % ([r["N"] for r in n_rows], max_cer, min_n, selected.get("N")))
+    n_rows = [r for r in ncurve if r.get("K") == k_sel]
+    n_cells_ind = [cells["K10_N%d" % n] for n in GATE_N_GRID]
+    max_cer_ind = max(float(row["metrics"]["complete_evidence_recall_at_k"])
+                      for row in n_cells_ind)
+    min_n_ind = min(int(row["N"]) for row in n_cells_ind
+                    if abs(float(row["metrics"]["complete_evidence_recall_at_k"])
+                           - max_cer_ind) <= 1e-12)
+    n_values_match = all(
+        any(int(r.get("N") or -1) == int(row["N"])
+            and abs(float(r["metrics"]["complete_evidence_recall_at_k"])
+                    - float(row["metrics"]["complete_evidence_recall_at_k"])) <= 1e-12
+            and all(abs(float(r["metrics"][key]) - float(row["metrics"][key])) <= 1e-12
+                    for key in ("recall_at_k", "precision_at_k", "mrr"))
+            for r in n_rows)
+        for row in n_cells_ind)
+    chk(min_n_ind == selected.get("N") and n_values_match
+        and "最小" in (rules.get("N_rule") or ""),
+        "U2 N 的选择规则执行证据由独立探针重算：取使 CER 达到最大值的**最小** N",
+        "独立重算 N=%s、最大 CER=%.8f、最小 N=%d；产物 N 曲线题数=%d、选定 N=%s"
+        % ([row["N"] for row in n_cells_ind], max_cer_ind, min_n_ind,
+           len(n_rows), selected.get("N")))
     gcurve = (sel.get("evidence") or {}).get("g_curve") or {}
     g_rows = gcurve.get("primary_rows") or []
     adopted = gcurve.get("adopted_g")
-    g_ok = adopted == selected.get("g") and adopted >= 1 \
-        and "不低于下限 1" in (gcurve.get("criterion") or "") \
-        and [r["g"] for r in g_rows] == [0, 1, 2, 3, 5] \
-        and all(r.get("not_worse_than_g0") for r in g_rows if r["g"] in (1, 2)) \
-        and not any(r.get("not_worse_than_g0") for r in g_rows if r["g"] in (3, 5))
-    chk(g_ok, "U3 g 的选择规则执行证据：探针点齐全、g=2 不劣于 g=0、g=3／5 劣化、含下限 1",
-        "实测 探针点=%s、采用 g=%s、选定 g=%s、判据含下限 1=%s"
-        % ([r["g"] for r in g_rows], adopted, selected.get("g"),
-           "不低于下限 1" in (gcurve.get("criterion") or "")))
+    metric_keys = ("recall_at_k", "precision_at_k", "mrr",
+                   "complete_evidence_recall_at_k")
+    base_g0 = g_probe["0"]["metrics"]
+    worse_by_probe = {
+        g: any(float(g_probe[str(g)]["metrics"][key]) + 1e-12
+               < float(base_g0[key]) for key in metric_keys)
+        for g in GATE_G_PROBE if g > 0}
+    not_worse_ind = {g: not worse_by_probe[g] for g in worse_by_probe}
+    not_worse_ind[0] = True
+    adopted_ind = max([g for g in GATE_G_PROBE if g >= 1 and not_worse_ind.get(g)],
+                      default=1)
+    g_rows_ind_ok = len(g_rows) == len(GATE_G_PROBE)
+    for row in g_rows:
+        expected = g_probe.get(str(row.get("g")))
+        if expected is None:
+            g_rows_ind_ok = False
+            continue
+        if any(abs(float(row["metrics"][key]) - float(expected["metrics"][key])) > 1e-12
+               for key in metric_keys):
+            g_rows_ind_ok = False
+        if bool(row.get("not_worse_than_g0")) != bool(not_worse_ind.get(int(row["g"]))):
+            g_rows_ind_ok = False
+    g_ok = (g_rows_ind_ok and adopted == adopted_ind == selected.get("g") == GATE_CELL["g"]
+            and adopted_ind >= 1
+            and ("不低于下限 1" in (gcurve.get("criterion") or "")
+                 or "g ≥ 1" in (gcurve.get("criterion") or ""))
+            and int(g_probe["0"]["graph_evidence_in_final_total"]) == 0)
+    chk(g_ok,
+        "U3 g 的选择规则执行证据由独立探针重算：五点曲线、g=2 不劣于 g=0、"
+        "g=3／5 劣化、含下限 1",
+        "独立重算探针=%s、采用 g=%d；产物探针=%s、采用 g=%s、选定 g=%s；"
+        "判据含下限 1=%s；g=0 图谱侧入集=%d"
+        % (list(GATE_G_PROBE), adopted_ind, [r.get("g") for r in g_rows], adopted,
+           selected.get("g"), ("不低于下限 1" in (gcurve.get("criterion") or "")),
+           int(g_probe["0"]["graph_evidence_in_final_total"])))
 
 
 # ==========================================================================
@@ -1082,10 +1472,15 @@ cfg = {k: config.RETRIEVAL.get(k) for k in ("K", "N", "context_token_budget",
                                             "graph_retention_share")}
 sel_ok = (sel.get("K") == 10 and sel.get("N") == 20
           and sel.get("context_token_budget") == 3600 and sel.get("g") == 2)
+g_range_ok = (isinstance(cfg["graph_retention_share"], int)
+              and 1 <= cfg["graph_retention_share"] <= cfg["K"])
 chk(sel_ok and cfg["K"] == 10 and cfg["N"] == 20
-    and cfg["context_token_budget"] == 3600 and cfg["graph_retention_share"] == 2,
-    "V1 config 与 k_selection 的选定值一致：K=10／N=20／3600／g=2（三项非 TBD）",
-    "实测 config=%s；k_selection.selected=%s" % (cfg, sel))
+    and cfg["context_token_budget"] == 3600 and cfg["graph_retention_share"] == 2
+    and g_range_ok,
+    "V1 config 与 k_selection 的选定值一致：K=10／N=20／3600／g=2，"
+    "且 g 位于硬下限 1 与 K 之间（越界即失败）",
+    "实测 config=%s；k_selection.selected=%s；g 合法域 1..K=%s"
+    % (cfg, sel, g_range_ok))
 p19_ok = all(x in sec1 for x in ("**10**", "**20**", "**3600**", "**2**"))
 chk(p19_ok, "V2 《19》的「检索口径与配置」写出四个取值（每个都带来源）",
     "实测 命中 **10**／**20**／**3600**／**2**=%s" % p19_ok)
@@ -1110,34 +1505,95 @@ print("=" * 78)
 chain_files = ["check_inputs.py", "vector_search.py", "graph_query.py", "pipeline.py",
                "pre_experiment.py", "metrics.py"]
 chain_text = {n: read_text(os.path.join(CODE, n), "") for n in chain_files}
-key_hits = []
-for n, text in chain_text.items():
-    for pat in KEY_PATTERNS + HTTP_PATTERNS:
+
+
+def _forbidden_module(name):
+    name = str(name or "")
+    return any(name == root or name.startswith(root + ".") for root in FORBIDDEN_IMPORT_ROOTS)
+
+
+def _credential_literal(value):
+    return isinstance(value, str) and bool(CREDENTIAL_NAME_PAT.search(value))
+
+
+def scan_forbidden_paths(files):
+    """扫描网络／凭据路径：import 根、getenv／environ 凭据名、URL 字面量。"""
+    hits = []
+    for name, text in files.items():
+        try:
+            tree = ast.parse(text)
+        except SyntaxError:
+            hits.append("%s:无法解析" % name)
+            continue
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    if _forbidden_module(alias.name):
+                        hits.append("%s:%d:import %s" % (name, node.lineno, alias.name))
+            elif isinstance(node, ast.ImportFrom):
+                if _forbidden_module(node.module):
+                    hits.append("%s:%d:from %s" % (name, node.lineno, node.module))
+            elif isinstance(node, ast.Call):
+                func = node.func
+                attr = func.attr if isinstance(func, ast.Attribute) else (
+                    func.id if isinstance(func, ast.Name) else "")
+                if attr in ("getenv", "get") and node.args \
+                        and _credential_literal(getattr(node.args[0], "value", None)):
+                    hits.append("%s:%d:%s(凭据名)" % (name, node.lineno, attr))
+            elif isinstance(node, ast.Subscript):
+                value = node.value
+                if isinstance(value, ast.Attribute) and value.attr == "environ" \
+                        and _credential_literal(getattr(node.slice, "value", None)):
+                    hits.append("%s:%d:environ[凭据名]" % (name, node.lineno))
         for i, line in enumerate(text.split("\n"), 1):
-            if pat in line:
-                key_hits.append("%s:%d:%s" % (n, i, pat))
-ctrl_text = read_text(os.path.join(CODE, "third_party_review.py"), "")
-ctrl_hits = sum(1 for pat in KEY_PATTERNS + HTTP_PATTERNS if pat in ctrl_text)
-chk(not key_hits and ctrl_hits > 0 and config.MODEL_CALLS_ALLOWED == 0,
-    "W1 链上六个脚本的密钥／网络字样 0 处（正对照：链外脚本命中 > 0）；"
-    "config.MODEL_CALLS_ALLOWED = 0",
-    "链上命中 %d 处%s；正对照命中 %d 种；MODEL_CALLS_ALLOWED=%r"
-    % (len(key_hits), "：" + br(key_hits) if key_hits else "", ctrl_hits,
-       config.MODEL_CALLS_ALLOWED))
-R = mirror_or_skip("W2", ["摘除密钥的镜像全链路运行记录"])
+            if re.search(r"https?://", line, re.IGNORECASE):
+                hits.append("%s:%d:URL 字面量" % (name, i))
+    return hits
+
+
+scan_files = dict(chain_text)
+scan_files["run_query.py"] = read_text(os.path.join(CODE, "run_query.py"), "")
+key_hits = scan_forbidden_paths(scan_files)
+ctrl_text = (
+    "import httpx\n"
+    "import os\n"
+    "TOKEN = os.getenv(\"OPENAI_API_KEY\")\n"
+    "URL = \"https://example.invalid/v1\"\n"
+)
+ctrl_hits = scan_forbidden_paths({"CTRL": ctrl_text})
+ctrl_ok = (any("import httpx" in h for h in ctrl_hits)
+           and any("凭据名" in h for h in ctrl_hits)
+           and any("URL 字面量" in h for h in ctrl_hits))
+guard_declared = (getattr(config, "FORBID_MODEL_CALLS_ENV", "") == "STAGE7_FORBID_MODEL_CALLS")
+chk(not key_hits and ctrl_ok and config.MODEL_CALLS_ALLOWED == 0 and guard_declared,
+    "W1 链上六个脚本与 run_query.py 的网络／凭据路径 0 处；"
+    "config 硬守卫已声明且正对照三类命中",
+    "扫描文件 %d 个、命中 %d 处%s；正对照命中 %d 处%s；MODEL_CALLS_ALLOWED=%r；"
+    "硬守卫=%s"
+    % (len(scan_files), len(key_hits), "：" + br(key_hits) if key_hits else "",
+       len(ctrl_hits), "：" + br(ctrl_hits) if ctrl_hits else "",
+       config.MODEL_CALLS_ALLOWED, guard_declared))
+R = mirror_or_skip("W2", ["摘除密钥的镜像全链路运行记录"], 2)
 if R:
     codes = [c["code"] for c in R["chain"]]
     cycle_codes = [s["code"] for cyc in R["cycles"] for s in cyc.values()
                    if isinstance(s, dict) and "code" in s]
     all_zero = all(c == 0 for c in codes + cycle_codes)
+    all_guarded = all(c.get("forbid_model_calls") for c in R["chain"]) and all(
+        s.get("forbid_model_calls") for cyc in R["cycles"] for s in cyc.values()
+        if isinstance(s, dict) and "code" in s)
     texts = [c["stdout"] for c in R["chain"]] + \
             [cyc["pre_experiment"]["stdout"] for cyc in R["cycles"]] + \
             [cyc["pipeline"]["stdout"] for cyc in R["cycles"]]
     claim = sum(t.count("0 次大语言模型／外部接口调用") for t in texts)
-    chk(all_zero and claim >= 1,
-        "W2 镜像里摘除密钥后全链路（六步 ＋ 两次三轮）退出码全 0，运行记录打印 0 次调用",
-        "实测 退出码全 0=%s（%d 条命令）；打印 0 次调用 %d 处；摘除的凭据类环境变量 %d 个"
-        % (all_zero, len(codes) + len(cycle_codes), claim, len(R.get("env_removed") or [])))
+    removed = list(R.get("env_removed") or [])
+    chk(all_zero and all_guarded,
+        "W2 摘除密钥并启用运行时硬哨兵后全链路（六步 ＋ 两次三轮＋独立探针）退出码全 0；"
+        "调用次数由“无网络／凭据路径即零调用”保证，不再以固定字面量为判据",
+        "实测 退出码全 0=%s（%d 条命令）；硬哨兵生效=%s；真实摘除凭据类变量 %d 个：%s；"
+        "stdout 打印 0 次调用 %d 处（仅作留痕）"
+        % (all_zero, len(codes) + len(cycle_codes), all_guarded, len(removed),
+           "、".join(removed) if removed else "无", claim))
     chk(("本地 Embedding 前向" in t19) and ("不计入「模型调用」" in t19)
         and ("全程未跑模型" in t19),
         "W3 《19》写明口径区分：本地 Embedding 前向不计入模型调用，但不得写成全程未跑模型",
@@ -1151,7 +1607,7 @@ print("=" * 78)
 print("X、《18》第八节 第 24 行：重放逐字节一致（同一输入两次运行，网格结果、逐题 trace "
       "与指标输出逐字节一致）")
 print("=" * 78)
-R = mirror_or_skip("X1", ["两次运行的 SHA-256 比对"])
+R = mirror_or_skip("X1", ["两次运行的 SHA-256 比对"], 3)
 if R:
     files = ["pre_experiment_matrix.jsonl", "k_selection.json",
              "per_question_trace.jsonl", "metrics_pre.jsonl"]
@@ -1204,11 +1660,15 @@ no_260 = "未复用第 6 阶段的 260 条抽取参照集" in readme_q
 refset = "模型参照集" in readme_q
 text_all = readme_q + "\n" + "\n".join(json.dumps(q, ensure_ascii=False) for q in questions)
 forbid = ["人工" + "金标准", "人工" + "一致率"]
-forb_hits = [w for w in forbid if w in text_all]
-ref_ctrl = ("人工" + "金标准") in ("这是人工" + "金标准")
+forb_hits = []
+for i, line in enumerate(text_all.split("\n"), 1):
+    if any(w in line for w in forbid) and not DEPLOY_NEG.search(line):
+        forb_hits.append("第%d行:%s" % (i, line.strip()[:80]))
+ctrl_sentence = "这是人工" + "金标准"
+ref_ctrl = any(w in ctrl_sentence for w in forbid) and not DEPLOY_NEG.search(ctrl_sentence)
 chk(no_formal and no_260 and refset and not forb_hits and ref_ctrl,
-    "Y2 题集声明为非正式测试集、未复用 260 条参照集；题集文本不出现「人工金标准／人工一致率」"
-    "（正对照必须命中）",
+    "Y2 题集声明为非正式测试集、未复用 260 条参照集；题集文本不出现肯定的"
+    "「人工金标准／人工一致率」（否定语境不计；正对照必须命中）",
     "实测 非正式声明=%s、未复用声明=%s、模型参照集定性=%s、禁用表述命中 %d 处、正对照=%s"
     % (no_formal, no_260, refset, len(forb_hits), ref_ctrl))
 
@@ -1240,35 +1700,56 @@ print("=" * 78)
 print("AA、《18》第八节 第 27 行：术语与边界（无禁用四字连写术语；不新增第七张表、"
       "不产出 DDL、不出现六张表以外的表名；不出现答案生成模型型号）")
 print("=" * 78)
-aa_targets = [("《19》", t19),
-              ("代码/检索/README.md", read_text(os.path.join(CODE, "README.md"), ""))]
-for n, text in chain_text.items():
-    aa_targets.append(("代码/检索/" + n, text))
-aa_targets.append(("代码/检索/build_questions.py",
-                   read_text(os.path.join(CODE, "build_questions.py"), "")))
-for n in MIRROR_OUTPUTS:
-    p = os.path.join(OUT, n)
-    if os.path.isfile(p):
-        aa_targets.append(("检索产出/" + n, read_text(p, "")))
-for n in ("questions.jsonl", "说明.md", "题目模板.md"):
-    aa_targets.append(("预实验问题集/" + n, read_text(os.path.join(QS, n), "")))
+aa_targets = list(delivery_targets)
 vdb_hits = [name for name, text in aa_targets if BANNED_VDB in text]
-vdb_ctrl = BANNED_VDB in ("这里写" + BANNED_VDB + "一次")
+vdb_ctrl = BANNED_VDB in ("外部样本：" + BANNED_VDB + "。")
 chk(not vdb_hits and vdb_ctrl,
     "AA1 交付物中不含被禁用的四字连写术语（一律写「向量索引」或「向量检索组件」；正对照必须命中）",
-    "命中文件 %d 个%s；正对照=%s；《19》用「向量索引」=%d 次"
-    % (len(vdb_hits), "：" + br(vdb_hits) if vdb_hits else "", vdb_ctrl,
-       t19.count("向量索引")))
+    "扫描 %d 个交付文本、命中文件 %d 个%s；正对照=%s；《19》用「向量索引」=%d 次"
+    % (len(aa_targets), len(vdb_hits), "：" + br(vdb_hits) if vdb_hits else "",
+       vdb_ctrl, t19.count("向量索引")))
 ddl_hits = [name for name, text in aa_targets if DDL_PAT.search(text)]
 ddl_ctrl = bool(DDL_PAT.search("CREATE TABLE question (id INT);"))
-seventh = [name for name, text in aa_targets
-           if re.search(r"第七张表|七张表|7 张表|新增表", text)]
-chk(not ddl_hits and ddl_ctrl and not seventh and "六张表" in t19,
-    "AA2 不产出 DDL、不新增第七张表；《19》写明六张表恒为六张（正对照必须命中 DDL 形态）",
-    "DDL 命中 %d 个文件%s；正对照=%s；第七张表表述 %d 处；《19》含六张表=%s"
-    % (len(ddl_hits), "：" + br(ddl_hits) if ddl_hits else "", ddl_ctrl, len(seventh),
+seventh = []
+for name, text in aa_targets:
+    for i, line in enumerate(text.split("\n"), 1):
+        if re.search(r"第七张表|七张表|7 张表|新增表", line) \
+                and not PROHIBIT_NEG.search(line):
+            seventh.append("%s:%d" % (name, i))
+
+
+def scan_foreign_table_names(targets):
+    hits = []
+    for name, text in targets:
+        for match in SQL_TABLE_REF_PAT.finditer(text):
+            table = match.group(1)
+            if table not in SIX_TABLE_NAMES:
+                line = text.count("\n", 0, match.start()) + 1
+                hits.append("%s:%d:%s" % (name, line, table))
+    return hits
+
+
+table_hits = scan_foreign_table_names(aa_targets)
+table_ctrl = bool(scan_foreign_table_names([("CTRL", "SELECT * FROM secret_table;")]))
+chk(not ddl_hits and ddl_ctrl and not seventh and not table_hits and table_ctrl
+    and "六张表" in t19,
+    "AA2 不产出 DDL、不新增第七张表、SQL 表名引用都在六张表白名单内；"
+    "《19》写明六张表恒为六张（DDL 与越界表名两类正对照都必须命中）",
+    "DDL 命中 %d 个文件%s；第七张表表述 %d 处；越界表名 %d 处%s；"
+    "六张表白名单=%s；正对照 DDL=%s、表名=%s；《19》含六张表=%s"
+    % (len(ddl_hits), "：" + br(ddl_hits) if ddl_hits else "", len(seventh),
+       len(table_hits), "：" + br(table_hits) if table_hits else "",
+       "、".join(sorted(SIX_TABLE_NAMES)), ddl_ctrl, table_ctrl,
        "六张表" in t19))
-model_targets = [(n, t) for n, t in aa_targets if n != "代码/检索/build_questions.py"]
+MODEL_SCAN_EXEMPT = {
+    "代码/检索/build_questions.py": "题集构造与第三方复核登记",
+    "代码/检索/config.py": "唯一参数来源；仅含硬守卫凭据名正则，不含答案生成模型型号",
+    "代码/检索/third_party_review.py": "第三方复核执行脚本",
+    "阶段07-RAG检索系统/预实验问题集/第三方复核报告.md": "第三方复核报告",
+    "阶段07-RAG检索系统/预实验问题集/第三方复核台账.json": "第三方复核台账",
+    "阶段07-RAG检索系统/预实验问题集/收口报告（千帆剥离与T8重绑）.md": "第三方复核留痕",
+}
+model_targets = [(n, t) for n, t in aa_targets if n not in MODEL_SCAN_EXEMPT]
 model_hits = []
 for name, text in model_targets:
     for i, line in enumerate(text.split("\n"), 1):
@@ -1277,11 +1758,11 @@ for name, text in model_targets:
 model_ctrl = bool(ANSWER_MODEL_PAT.search("答案生成侧模型：" + "deep" + "seek-v9"))
 chk(not model_hits and model_ctrl,
     "AA3 交付物不出现答案生成模型型号（第三方复核语境除外；正对照必须命中）",
-    "未豁免命中 %d 处%s；正对照=%s；扫描范围 %d 个交付文本（build_questions.py 与 "
-    "third_party_review.py 是第三方复核的登记与执行脚本、按职责保留复核通道模型名，"
-    "已在本次扫描中单列，不计入答案生成侧型号）"
+    "未豁免命中 %d 处%s；正对照=%s；扫描范围 %d 个交付文本；显式排除 %d 个第三方"
+    "复核文件（%s）"
     % (len(model_hits), "：" + br(model_hits) if model_hits else "", model_ctrl,
-       len(model_targets)))
+       len(model_targets), len(MODEL_SCAN_EXEMPT),
+       "；".join("%s（%s）" % item for item in MODEL_SCAN_EXEMPT.items())))
 
 
 # ==========================================================================
@@ -1302,41 +1783,103 @@ chk(cross.returncode == 0, "AB1 跨文档核验（--strict-citations）退出码
     "实测 退出码=%d；%s；%s" % (cross.returncode, n2_line, concl))
 R = ensure_replay()
 if R.get("tmp"):
+    removed = list(R.get("env_removed") or [])
     note("AB2 本脚本的只读证据（镜像根目录）",
          "镜像根目录 %s（文件 %d 个）；copied=%d、skipped=%d；工作区交付目录零写入；"
-         "工作区指纹前后一致=%s%s；子进程环境摘除凭据类变量 %d 个"
-         % (R["tmp"], R.get("mirror_files"), R.get("copied"), R.get("skipped"),
+         "工作区指纹前后一致=%s%s；真实摘除凭据类变量 %d 个（%s）；"
+         "MIRROR_OUTPUTS 删除后缺失态→运行后出现态全成立=%s"
+         % (R["tmp"], R.get("mirror_files") or 0, R.get("copied") or 0,
+            R.get("skipped") or 0,
             R.get("workspace_unchanged"),
             "" if not R.get("workspace_changed") else "（变化：%s）" % br(R.get("workspace_changed")),
-            len(R.get("env_removed") or [])))
+            len(removed), "、".join(removed) if removed else "无",
+            all(row.get("absent_after_drop") and row.get("exists_after_run")
+                for row in (R.get("freshness") or {}).values())))
 else:
-    note("AB2 只读证据", "profile=%s：未建立镜像（%s）" % (ARGS.profile, R.get("error")))
-chk(not fails, "AB3 本脚本 28 组检查全部通过（任一失败即非零退出；SKIP 不影响退出码）",
-    "实测 失败 %d 项%s" % (len(fails), "：" + br(fails, limit=12) if fails else "无"))
+    if R.get("error_kind") == "environment_chain":
+        envfail("AB2 本脚本的只读证据", R.get("error"))
+    else:
+        note("AB2 只读证据", "profile=%s：未建立镜像（%s）" % (ARGS.profile, R.get("error")))
+
+
+def _result_group(label):
+    match = re.match(r"^([A-Z]{1,2})\d", str(label))
+    return match.group(1) if match else None
+
+
 if ARGS.profile == "static":
-    note("AB4 profile 声明", "--profile static 只做静态检查，不作为第 7 阶段的收口判定依据")
+    print("  [UNRUN] AB3 汇总不可判定：static 档有 %d 条内容检查未执行，"
+          "不得宣称 28 组全部通过" % unrun_count)
+    note("AB4 profile 声明",
+         "--profile static 只做静态检查；未执行 %d 项，退出码 2，不作为收口判定依据"
+         % unrun_count)
+else:
+    if env_fails:
+        print("  [ENV ] 环境／链上失败（非内容失败）：AB3 汇总不参与内容判定")
+    else:
+        completed_before_summary = sum(1 for st, _l, _d in results if st in ("OK", "FAIL"))
+        observed_groups = {_result_group(label) for st, label, _d in results
+                           if st in ("OK", "FAIL")}
+        observed_groups.discard(None)
+        workspace_ok = bool(R.get("workspace_unchanged"))
+        freshness_ok = bool(R.get("freshness")) and all(
+            row.get("absent_after_drop") and row.get("exists_after_run")
+            for row in R["freshness"].values())
+        structure_ok = (observed_groups == set(EXPECTED_GROUP_ORDER)
+                        and completed_before_summary == EXPECTED_CONTENT_CHECKS)
+        chk(not fails and not env_fails and workspace_ok and freshness_ok and structure_ok,
+            "AB3 本脚本 28 组检查全部通过（组结构与 71 条内容检查计数同时成立；"
+            "工作区零写入与产物新鲜度同时成立）",
+            "实测 失败 %d 项、环境／链上失败 %d 项；组 %d／%d、内容检查 %d／%d；"
+            "工作区透明=%s、产物新鲜=%s%s"
+            % (len(fails), len(env_fails), len(observed_groups), len(EXPECTED_GROUP_ORDER),
+               completed_before_summary, EXPECTED_CONTENT_CHECKS, workspace_ok, freshness_ok,
+               "；失败：" + br(fails, limit=12) if fails else ""))
 
 _SUMMARY_DONE = True
 print()
-print("  最终：检查项 %d 项，通过 %d，失败 %d"
-      % (len(results), sum(1 for st, _l, _d in results if st == "OK"), len(fails)))
-print("  另有 SKIP %d 项（镜像重跑未开启时相关检查项；原因见 [SKIP] 行，不计入失败）"
-      % sum(1 for st, _l, _d in results if st == "SKIP"))
+executed = sum(1 for st, _l, _d in results if st in ("OK", "FAIL"))
+passed = sum(1 for st, _l, _d in results if st == "OK")
+skipped = sum(1 for st, _l, _d in results if st == "SKIP")
+print("  最终：计划检查项 %d 项；已执行 %d、通过 %d、内容失败 %d、未执行 %d、SKIP %d；"
+      "环境／链上失败 %d"
+      % (EXPECTED_TOTAL_CHECKS, executed, passed, len(fails), unrun_count, skipped,
+         len(env_fails)))
 print("=" * 78)
-if not fails:
-    print("结论：全部通过（通过 %d 项／检查项 %d 项，另有 SKIP %d 项）。第 7 阶段验收通过，"
-          "退出码 0。" % (sum(1 for st, _l, _d in results if st == "OK"), len(results),
-                          sum(1 for st, _l, _d in results if st == "SKIP")))
-else:
-    print("结论：存在 %d 项失败（通过 %d 项／检查项 %d 项、SKIP %d 项）："
-          % (len(fails), sum(1 for st, _l, _d in results if st == "OK"), len(results),
-             sum(1 for st, _l, _d in results if st == "SKIP")))
+if ARGS.profile == "static":
+    print("结论：--profile static 未执行 %d 项（已列出上述 [UNRUN] 块），不得宣称全部通过；"
+          "退出码 2。" % unrun_count)
+    unrun_groups = {re.match(r"^([A-Z]{1,2})", lab).group(1)
+                    for lab, _c, _d in unrun_evidence if re.match(r"^([A-Z]{1,2})", lab)}
+    print("      静态档：28 组中仅 %d 组全部实际执行、其余 %d 组存在未执行项"
+          "（未执行共 %d 个检查项）。"
+          % (len(EXPECTED_GROUP_ORDER) - len(unrun_groups), len(unrun_groups), unrun_count))
+    print("      提示：镜像内的 pre_experiment 是内存敏感步骤，高内存压力下会因 OpenBLAS 分配失败"
+          "（Memory allocation still failed after 10 retries）非零退出——属已登记的环境脆弱性"
+          "（《19》已知限制第 11 条），复跑验收时应避免与其他重型任务并发。")
+elif env_fails:
+    print("结论：环境／链上失败（非内容失败）%d 项，已中止相关镜像链；"
+          "不能与真缺陷混判；退出码 1。" % len(env_fails))
+    print("      提示：链上非零退出的最常见原因是**内存压力**——镜像内的 pre_experiment 在并发"
+          "重型任务下会因 OpenBLAS 分配失败（Memory allocation still failed after 10 retries）"
+          "非零退出；这属已登记的环境脆弱性（《19》已知限制第 11 条），不是检索链的逻辑缺陷，"
+          "复跑时应避免并发。")
+    for _lab, _det in env_fail_evidence:
+        print("  - %s  %s" % (_lab, _det))
+elif fails:
+    print("结论：存在 %d 项内容失败（通过 %d 项、SKIP %d 项、未执行 %d 项）："
+          % (len(fails), passed, skipped, unrun_count))
     for _lab, _det in fail_evidence:
         print("  - %s  %s" % (_lab, _det))
+else:
+    print("结论：全部通过（通过 %d 项／计划检查项 %d 项，未执行 0、SKIP 0）。"
+          "第 7 阶段验收通过，退出码 0。" % (passed, EXPECTED_TOTAL_CHECKS))
 print("=" * 78)
 
 if REPLAY.get("tmp") and not ARGS.keep_tmp:
     shutil.rmtree(REPLAY["tmp"], ignore_errors=True)
 elif REPLAY.get("tmp"):
     print("镜像重跑目录保留在：%s" % REPLAY["tmp"])
-sys.exit(1 if fails else 0)
+if ARGS.profile == "static":
+    sys.exit(2)
+sys.exit(1 if (fails or env_fails) else 0)

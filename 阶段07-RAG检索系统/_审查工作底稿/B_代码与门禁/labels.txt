@@ -1,0 +1,279 @@
+===== 验收第6阶段.py chk-calls: 103
+    A1 从《15》第八节 解析出必备小节清单（不写死小节名）
+    A3 《16》存在且可读（T9 阶段交付文档）
+    A4 9 个必备小节逐节命中（二～四级标题，按《15》清单逐名）
+    A6 《16》二级标题数与必备小节数相称
+    A6 《16》二级标题数与必备小节数相称（《16》缺失，无法核验）
+    B1 《10》表 4-8 解析的 6 类实体 == config.ENTITY_TYPES
+    B2 《10》表 4-8 解析的 8 种事件类型 == config.EVENT_TYPES
+    B3 《10》第4.5.2节 cypher 块解析的 9 条核心关系 == config.RELATIONS
+    B4 无 Product／Location、无 INVOLVES（不复活已删除的关系）
+    B5 《15》声明的 6 类实体／8 种事件类型／9 条核心关系 == 实测
+    B6 导出物节点标签 ⊆ 6 类实体 ＋ Document（不多）
+    B7 导出物关系类型 ⊆ 9 条核心关系（不多）
+    B8 导出物 event_type 取值 ⊆ 8 种事件类型（不多）
+    B9 每条边的起止标签符合 config.RELATION_SCHEMA 的 domain／range
+    B10 第 18 行：8 种事件类型与 9 条核心关系在 Dev＋Test 中有标注条目或在《16》登记证据不足
+    实测 交付物导出缺失：%s；B11 固定核交付物导出（--export-dir 可覆盖）；%s
+    实测 交付物导出 %s：关系 %d 条、节点 %d 个（其中 Event %d 个）；逐类覆盖 %s；
+    C1 edges.csv 表头 == config.GRAPH[\
+    C2 除 EVIDENCED_BY 外的 %d 条关系都带齐 source_doc_id／source_chunk_id／confidence 且无空值
+    C3 非 EVIDENCED_BY 的关系取值都落在 config 的 8 条 from_model 关系内
+    C4 三项取值域：confidence ∈ [%s, %s]，source_doc_id／source_chunk_id 为整数
+    C5 EVIDENCED_BY 不携带 source_doc_id／source_chunk_id／confidence 三项
+    C6 EVIDENCED_BY 的终点必须是 Document 节点
+    D1 每个 source_chunk_id 都存在于 v2.1 chunks\\chunks.jsonl 中
+    D2 文本块所属 doc_id == 同一条事实的 source_doc_id
+    D3 source_doc_id 与 EVIDENCED_BY 的 Document 都能回溯到 v2.1 clean\\documents.jsonl
+    E1 nodes.csv 表头 == config.GRAPH[\
+    E2 《10》第4.5.1节 解析的六项核心属性 == config.EVENT_CORE_ATTRS
+    E3 每个 Event 节点六项核心属性齐全；除 event_time 外五项非空
+    E4 event_type ∈ 8 种事件类型；confidence ∈ [0,1]；event_id 形如 %s-<4 位>
+    E5 event_time 允许为空，但空值必须在 graph_stats.json 计数登记
+    E6 《16》报告 event_time 空值率
+    E6 《16》报告 event_time 空值率（《16》缺失，无法核验）
+    E7 《10》第4.5.2节 解析的 5 个合法 role == config.ROLES
+    E8 role 取值落在五个合法值内，且只出现在 PARTICIPATES_IN 上
+    E9 ISSUED_BY 只出现在政策事件与监管事件上
+    F1 edges.csv 带 valid_from／valid_to 两列（表 4-9 的额外属性）
+    F2 BELONGS_TO 的 valid_from／valid_to 可解析、区间有序（空值＝正文未给日期，逐条登记）
+    F4 data_cutoff_time 不出现在任何节点或关系上（图谱上只有 event_time／publish_time／
+    G1 node_id 无重复、无空值
+    G2 event_id／policy_id／institution_id／person_id 无重复、无空值（逐类检查）
+    G4 四类编号 == node_id，且形如 config.GRAPH[\
+    G5 导出物不含数据库自增字样（编号由本阶段一次性显式分配；重放可复现见 J 组）
+    H1 disambiguate.py 单独重跑退出码为 0
+    H2 消歧映射与待消歧清单逐字节一致（sha256 比对）
+    H3 重跑后的消歧读数与原产物一致（实体／已消歧／待消歧／公司身份）
+    I1 dedup_events.py 单独重跑退出码为 0
+    I2 合并日志 merge_log.jsonl 逐字节一致
+    I3 合并后事件集合、汇总与自检文件逐字节一致
+    I4 被合并事件保留全部证据文档（自检 ＋ 逐组证据并集校验）
+    J1 删掉导出物后 write_graph.py 重跑退出码为 0（两次：单独执行 ＋ 再删再跑）
+    %s %s 逐字节一致（sha256 比对）
+    J5 graph_stats.json 排除 %s 后一致
+    K1 重跑过程中模型调用次数为 0（上限 config.RUN_ALL[\
+    K2 缓存命中覆盖全部文档（cache_hits == 文档数、fetched == 0）
+    K3 重跑子进程显式摘掉 %s（缓存未命中即硬失败，不可能静默调用模型）
+    K4 disambiguate／dedup_events／write_graph 源码内无模型或 HTTP 客户端 import
+    L1 缓存根目录与数据集版本目录同级、且按版本分子目录（默认口径 <数据集根>\\_抽取缓存\\<数据集版本＋v1.2 后缀>\\）且存在
+    L2 .gitignore 覆盖抽取缓存与评测集目录（两处都不入公开仓库）
+    L3 图谱导出物放在数据集版本目录之外（硬约束 11；导出物可随仓库提交）
+    M1 导出物表头不含被禁字段（%s）
+    M2 抽样 %d 块 × 3 段 × %d 字符的正文子串，导出物文件内 0 命中
+    N1 评测集四件齐全（与数据集版本目录同级，落 %s）
+    N2 Dev 60 ＋ Test 200 ＝ 260 条，两段式（split 字段与文件归属一致）
+    N3 每条都带 chunk_id／doc_id 与 annotations 骨架（entities／events／relations／times／notes）
+    N5 文档集合重叠部分已在《标注说明.md》登记（实测交集为 0）
+    N5 文档集合重叠部分已在《标注说明.md》登记（%d 篇重叠）
+    N6 标注分层与表 15-E 的文本块级实测分布一致（类目／月份／公司三维度偏差在容差内）
+    N7 差异逐项登记且与现场重算一致（分层统计.json 的 delta_pp 逐项核对）
+    N8 《16》声明分层容差并逐项登记差异
+    N8 《16》声明分层容差并逐项登记差异（《16》缺失，无法核验）
+    N9 8 种事件类型与 9 条核心关系：要么有标注条目、要么在《16》显式登记为证据不足
+    N10 不得出现「按 8 类均衡」一类分层声明（含「9 条关系均等」；否定语境除外）
+    O1 表 15-C 重算 == 《15》声明（company_list ≥2 篇数、subject_companies ≥2 篇数）
+    O2 表 15-D 公告标题级 8 类重算 == 《15》声明（正则取自 config.EVENT_TYPE_TITLE_PATTERNS）
+    O3 表 15-D「公告外监管标题级」重算 == 《15》声明
+    O4 表 15-D 正文级 SUPPLIES／CUSTOMER_OF／COMPETES_WITH 重算 == 《15》声明
+    O5 证据不足类别的登记与实测值一致（重大合同／产品／三条公司间关系逐项）
+    P1 抽取配置四要素（模型、模型版本、Prompt 版本、temperature）齐备且非 TBD
+    P2 《16》写明的模型与默认口径 Prompt 版本 == config.LLM（v1.1 归档版本同时保留；
+    P1 抽取配置四要素齐备且非 TBD（《16》缺失，无法核验）
+    P2 《16》写明的模型与 Prompt 版本 == config.LLM（《16》缺失，无法核验）
+    P3 《02》第12.4节 的「大语言模型」行仍为 TBD（答案生成模型归第 8 阶段）
+    P5 《16》《10》、缓存与导出物中不出现答案生成模型型号（抽取型号写在抽取语境里是允许的）
+    Q1 交付物中无关系库 DDL（CREATE／ALTER／DROP TABLE、CREATE DATABASE／SCHEMA）
+    Q2 交付物中出现的表名 ⊆ 《10》的六张表（%s）
+    Q3 交付物中无「新增表／第七张表」的肯定式声明
+    R1 v2.1 目录指纹与开工基线一致（找不到基线，无法比对）
+    R1 v2.1 目录指纹与开工基线一致（%d 个文件逐文件 sha256 比对）
+    R2 每篇文档声明的 content_sha256_16 == 现场重算（数据集未被就地改动）
+    S1 连续两次整链重跑（run_all --force）导出物逐字节一致
+    S2 重跑不产生重复 event_id（编号集合与原始一致）
+    S3 中断后可续跑：run_all --from dedup_events 退出码 0
+    T1 四个环节脚本 ＋ 入口脚本 ＋ config.py ＋ README.md 齐全
+    T3 脚本内无写死的模型名／日期／绝对路径（config.py 作正对照，只写取值与读取方式）
+    T4 脚本内无写死的阈值（阈值名赋字面量的赋值扫描）
+    T5 五个脚本都接受 --profile（pilot／v21／v21_v1_2 三个取值，与 config.pipeline_paths 对齐）
+    U1 可提交文件内无密钥取值；被 .gitignore 排除的本地配置只列信息行、不判失败
+    U2 config.py 只写密钥读取方式（环境变量 %s），不写取值
+    V1 第 6 阶段交付物中不含「%s」（否定语境除外）
+    W%d 《00》索引登记 `%s`
+    X1 全部检查项通过（任一失败即非零退出；SKIP 不影响退出码）
+    X2 工作区跨文档核验脚本存在（本脚本不调用它，供操作者另行运行）
+===== 验收第7阶段.py chk-calls: 61
+    A1 《19》的 9 个必备小节逐字命中且顺序一致
+    A2 《19》非空且含实质内容
+    B1 输入清单恰为 11 个（数据集 6 ＋ 图谱 5）
+    B2 11 个输入文件全部存在
+    B3 11 条相对路径与《18》第三节 的输入清单逐条一致
+    C1 指纹清单含 11 条且键序与 config.INPUT_FILES 一致
+    C2 11 个输入逐个重算 SHA-256 与字节数，与 T1 记录一致
+    D1 现场加载向量索引：三要素实测
+    D1 现场加载向量索引：三要素实测
+    D2 链上代码不调用向量索引库自带的读／写函数（正对照必须命中）
+    E2 全量双向重算：正向错 0、反向漏 0
+    F1 config 与 build_meta 的模型名／revision／维度／度量／归一化与《02》一致
+    F2 dataset_version 与 data_cutoff_time 与 config 一致
+    F3 查询侧不加指令前缀
+    G1 七个接口逐个现场调用成功（含 EMPTY 语义，不抛异常）
+    G2 七个接口在 graph_query.py 中都有实现与调用入口
+    H1 cypher_table() 输出七个接口的等效 Cypher（逐条以 MATCH 开头）
+    H2 《19》第 5 节 列出同一张表（七条 Cypher 与接口清单逐行命中）
+    H3 《19》的接口清单含七个接口的名称（与表 18-F 一致）
+    I1 图谱导出物五个文件与 T1 指纹一致
+    I2 第 7 阶段交付物不出现「已部署 Neo4j 服务」一类的肯定表述（正对照必须命中）
+    J1 全量重算：语义边 1625 条全部带 source_chunk_id，chunk 未命中 0、doc_id 不一致 0
+    J2 逐题 trace 的 graph_audit 无效计数全 0（EVIDENCED_BY 的排除计数 > 0 为正面证据），
+    K1 逐题 chunk_id 无重复、别名集合一致、两路同命中只出现一次
+    L1 代码级顺序断言：时间过滤的调用行号 < 合并去重的调用行号（含正对照）
+    L2 一次运行日志：D 组段次序为 ①时间过滤（enabled＋g6_called）→ ②合并去重，
+    M1 全量重算节点表：Event 1100 个、event_time 为空 544 个
+    M3 空值分支是显式配置项（config.RETRIEVAL[
+    M4 镜像重跑的 D 组 trace：逐题记录空值／越界／无事件三类剔除原因，空值剔除总数 > 0
+    N2 镜像重跑的 D／E 两份 trace 独立复核：逐题集合相等、至少 1 题顺序不同
+    PE-20
+    P1 代码级顺序断言：裁剪 → 保留 K → 分组排序；三层的实现标记按 1→2→3 排列（含正对照）
+    P2 代码内的裁剪与保留顺序含「先裁远端图谱路径」与三层定义（K−g／至多 g／回填）
+    P4 《19》写明分层保留顺序的三层、g 的全局固化量定位与 g = 0 退化
+    Q2 metrics_pre.jsonl 行数：30 题逐题 ＋ 元数据 ＋ 平均值（没有因候选不足删题）
+    R1 独立重算：30 题的 R／P／MRR／CER 与平均值逐题一致（round 8 位）
+    R2 同一输入两次运行 metrics_pre.jsonl 逐字节一致（SHA-256 相同）
+    S1 metrics 产物的层级口径：逐题行全部 level=chunk；无文档级数值；分母恒为 K
+    S2 文档级诊断函数存在但只在诊断函数里；写盘路径只输出 chunk 级
+    S3 逐题数值复核：Precision@K 的实际分母是 K（不是 M）
+    T1 九格网格齐备：组合与 K×N 逐格一致、四项指标与预算分账三项齐备、每格 N ≥ K
+    T2 镜像重跑的网格产物与工作区交付产物逐字节一致（SHA-256 相同）
+    U1 K 的选择规则执行证据：gold 约束排除 K=5、预算排除 K=15、K=10 处相邻档 Δ ≤ 0
+    U3 g 的选择规则执行证据：探针点齐全、g=2 不劣于 g=0、g=3／5 劣化、含下限 1
+    V1 config 与 k_selection 的选定值一致：K=10／N=20／3600／g=2（三项非 TBD）
+    V2 《19》的「检索口径与配置」写出四个取值（每个都带来源）
+    V3 《02》第12.4节 固定表与 第12.7节 第一步 已登记四个取值
+    W1 链上六个脚本的密钥／网络字样 0 处（正对照：链外脚本命中 > 0）；
+    W2 镜像里摘除密钥后全链路（六步 ＋ 两次三轮）退出码全 0，运行记录打印 0 次调用
+    W3 《19》写明口径区分：本地 Embedding 前向不计入模型调用，但不得写成全程未跑模型
+    X1 四个文件两次运行 SHA-256 相同（逐字节一致）
+    X2 镜像重跑的四个文件与工作区交付产物逐字节一致
+    X3 参与比对的文件不含运行时间戳与耗时字段
+    Y2 题集声明为非正式测试集、未复用 260 条参照集；题集文本不出现「人工金标准／人工一致率」
+    Z1 《18》与《19》都在《00》第三节 编号表里
+    Z2 《18》与《19》都在《00》第四节 文件地图里
+    AA1 交付物中不含被禁用的四字连写术语（一律写「向量索引」或「向量检索组件」；正对照必须命中）
+    AA2 不产出 DDL、不新增第七张表；《19》写明六张表恒为六张（正对照必须命中 DDL 形态）
+    AA3 交付物不出现答案生成模型型号（第三方复核语境除外；正对照必须命中）
+    AB1 跨文档核验（--strict-citations）退出码为 0
+    AB3 本脚本 28 组检查全部通过（任一失败即非零退出；SKIP 不影响退出码）
+===== 验收第5阶段数据.py chk-calls: 76
+    A1 从《12》第八节 解析出必备小节清单（不写死小节名）
+    A3 7 个必备小节按小节名齐全（二级标题逐名命中）
+    A4 从《12》第4.1节 产出清单解析两个附加小节
+    A5 附加小节齐全（失败与跳过记录／对下游阶段的使用说明）
+    A6 小节顺序与《12》清单一致（按《13》行号递增）
+    A7 《13》二级标题数与结构相称
+    B1 六个一级子目录齐全（config.SUBDIRS）
+    B2 自包含：meta／clean／chunks／index／reports 的必需文件齐全
+    B3 raw\\ 含原始文档文件与抓取日志（采集侧可回溯）
+    B4 一级条目均属于六个子目录（自包含，不外溢）
+    C1 meta\\dataset.json 可读且非空
+    实测 %s；期望 %s（来源：%s）
+    C30 generated_at 存在且可按 ISO8601 解析
+    C31 generated_at 与 reports\\consistency_report.json 一致（读报告比对，不当作独立证据）
+    C32 生成时间不早于向量索引构建时间（build_meta.json）
+    D1 六个必需字段逐行非空（%s）
+    E1 url 唯一（同源同链接只入一次）
+    E2 规范化 title 唯一（规则取自 config.DEDUP[
+    E3 存储的 content_sha256_16 与正文重算值一致（sha256 前 %d 位）
+    E4 正文指纹（%s）全数据集唯一
+    E5 空 url 的口径已在《13》说明（硬约束 3 允许访问受限时为空）
+    F1 监管公开信息类别非空（标题规则的作用面）
+    F2 监管公开信息标题均为“原标题（当事人）”构造（全角括号＋非空当事人）
+    F3 当事人段不是占位词（未臆造标题）
+    F4 当事人逐段可在来源正文（raw\\）中找到（当事人来自来源，可复核）
+    F5 监管公开信息构造后标题唯一
+    F6 全库标题无机器生成痕迹（占位词／doc_id 数字／汉字过短／首尾空白）
+    G1 company_list 不得为 null／缺失
+    G2 company_list 类型为数组
+    G3 公告与财经新闻的 company_list 非空（config.CATEGORIES_REQUIRING_COMPANY）
+    G4 空数组只出现在允许为空的类别（政策文件／监管公开信息）
+    H1 company_list 并集 == config.COMPANIES（%d 家）
+    I1 每篇文档至少 1 个文本块
+    I2 chunk_index 在文档内从 0 连续递增
+    I3 同一文档内 chunk_index 不重复
+    I4 chunk_id == doc_id * DOC_ID_STRIDE + chunk_index（config.chunk_id_for）
+    J2 《13》声明的切分参数 == config.CHUNK（封版后不得更改）
+    J3 无文本块超过 max_chars=%d
+    J4 低于 min_chars 的块均为“整篇正文短于 target_chars”的豁免（读 reports\\chunk_stats.json 核对）
+    J5 相邻文本块重叠不超过声明上限
+    K1 无空 vector_id（且类型均为整数）
+    K2 vector_id 取值恰为 0..%d（无缺号／越界／重复）
+    K3 index\\vector_map.jsonl 行数与 vector_id 集合恰为 0..%d（读文件重算）
+    K4 向量条数（索引 ntotal）== 文本块条数 == 映射行数
+    K5 索引维度 == config.EMBEDDING[
+    K4 向量条数（索引 ntotal）== 文本块条数 == 映射行数
+    L1 全部 publish_time ≤ data_cutoff_time
+    L2 时间覆盖 ≥ %d 天（cutoff − publish_time_min）
+    L3 recent 桶非空且 ≥ config.MIN_DOCS_PER_TIME_BUCKET
+    L4 earlier 桶非空且 ≥ config.MIN_DOCS_PER_TIME_BUCKET
+    L5 全部文档落在两个相对时间桶内（两桶合起来覆盖采集窗）
+    M1 category 只取 config.CATEGORIES 四类
+    M2 source 取值均来自 config（四类来源），无股吧来源
+    M3 《13》与数据集内无股吧来源（排除“不进入／无股吧”一类否定语境）
+    N1 clean\\documents.jsonl 的 doc_id 唯一（数据集内无重复编号）
+    N2 raw\\ 的 doc_id 唯一且与文件名一致（重跑采集不会新增编号）
+    N3 重复执行的静态等价：clean 的 doc_id 集合 == raw − 去重淘汰 − 跳过
+    N4 chunks\\chunks.jsonl 的 chunk_id 唯一（重跑切分不产生重复记录）
+    N5a 真实重跑：dedup／clean／chunk 三个环节退出码均为 0
+    N6 真实重跑：clean.py 连跑两次不产生重复记录（行数与 doc_id 序列不变）
+    N7 真实重跑：重跑得到的 doc_id 集合与封版数据集一致
+    N8 真实重跑：chunk.py 产出的文本块条数与 chunk_id 集合与封版一致
+    O1 从《10》第4.4节 解析六张表清单（不写死表名）
+    O2 未引入六张表以外的表（表名候选 + 否定语境判定）
+    O3 无建表语句／DDL 痕迹／.sql 文件（本阶段不产出 DDL）
+    O4 「大语言模型」的每一处出现都在 TBD／登记语境（本阶段未选型、未写死型号）
+    O5 结构化文本中的“含字母且含数字”标识符均可由 config.py、编号／版本／哈希形状
+    P1 《13》与数据集内不出现该连写（否定语境除外）
+    P2 本脚本源码内不出现该连写（以拼接方式构造）
+    Q1 《13-数据准备（第五阶段）.md》已登记在《00-项目总览与索引.md》
+    Q2 登记行带状态（已产出／已完成／第 5 阶段产出）
+    S1 索引集中度：单篇 ≤ %.0f%%、前 5 篇合计 ≤ %.0f%%
+    S1 索引集中度：单篇 ≤ %.0f%%、前 5 篇合计 ≤ %.0f%%（守卫阈值，非 config）
+    S2 同一规范化标题不跨公司复用（company_list 集合相同才允许同名）
+    R1 全部检查项通过（任一失败即非零退出）
+    R2 工作区跨文档核验脚本存在（本脚本不调用它，供操作者另行运行）
+===== 验收第4阶段文档.py chk-calls: 35
+    《02》第15节 第四章给出 7 个小节
+    六层名称全部出现
+    六层顺序正确（用户交互层→…→数据知识层）
+    六个模块名称全部出现
+    六个模块顺序与《02》第6.2节 一致
+    6 类实体标签齐全
+    8 种核心事件类型齐全
+    9 条核心关系齐全
+    6／9 口径以加粗口径出现
+    证据属性出现：%s
+    user 表始终建立且保持为空
+    Method ＝ C 组逐字写入
+    Baseline 2 ＝ A 组逐字写入
+    Top-K 契约逐字：%s
+    未出现排除表述：%s
+    显式声明不采用
+    %s 在 4.2 与 4.7 都有落点
+    %s 在 4.3 有落点
+    %s 已对应（%s）
+    约束 4 无无限定的
+    约束 5 FAISS 未被称作向量数据库（%d 处出现，均在排除语境）
+    约束 6 session_id 归属 question 表
+    约束 6 history 表不复活
+    约束 7 data_cutoff_time 归属
+    约束 7 相对时间按 event_time 判定
+    约束 7 判定规则表含 %s
+    约束 8 0 跳显式标注与禁止虚构路径
+    约束 10 模型型号保持 TBD
+    约束 11 接口范围限于第一版
+    约束 12 来源标注充分（《02》第x.y节 引用 %d 处，《07》 %d 处）
+    Mermaid 图块 8 个
+    导言 第0.2节 图表编号陈述为 13 张
+    导言 第0.2节 图表数量说明为 8 图 13 表
+    附录交付说明为 8 图 13 表
+    无残留的旧图表数量陈述

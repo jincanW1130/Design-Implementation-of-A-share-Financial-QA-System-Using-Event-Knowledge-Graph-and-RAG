@@ -1,0 +1,8 @@
+  path /evidence/round1_vs_round2/round1/budget_checks/questions_holding_K_blocks = 30
+  path /evidence/round1_vs_round2/round2/budget_checks/questions_holding_K_blocks = 24
+  path /evidence/saturation_under_budget/scan/10/questions_holding_K_blocks = 24
+FOUND 3268 at /evidence/saturation_under_budget/scan/15/median_text_tokens
+  path /evidence/saturation_under_budget/scan/15/questions_holding_K_blocks = 0
+  path /evidence/saturation_under_budget/scan/5/questions_holding_K_blocks = 30
+top keys: ['anchor_cell', 'artifacts', 'evidence', 'gold_constraint', 'rules', 'schema', 'selected']
+has scan: False | has scans: False

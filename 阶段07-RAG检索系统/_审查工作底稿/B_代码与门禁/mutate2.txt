@@ -1,0 +1,3 @@
+M3" : selected.g/adopted_g=3，且 config 同步改成 3（g=3 的 CER 劣于 g=0）         rc=0 失败项=（无 → 检查恒真，漏报）
+M5" : selected.g/adopted_g=5，且 config 同步改成 5                           rc=0 失败项=（无 → 检查恒真，漏报）
+M8" : selected.g/adopted_g=1，且 config 同步改成 1                           rc=0 失败项=（无 → 检查恒真，漏报）

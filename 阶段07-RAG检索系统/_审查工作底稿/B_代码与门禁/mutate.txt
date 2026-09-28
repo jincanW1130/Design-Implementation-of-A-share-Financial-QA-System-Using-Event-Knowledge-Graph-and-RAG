@@ -1,0 +1,19 @@
+基线（未篡改）                                                          selftest_rc=0  捕获到的失败项=（无 → 漏报）
+M1 selected.K 10→15（K=15 被预算排除，违反规则3(b)）                         selftest_rc=0  捕获到的失败项=（无 → 漏报）
+M2 selected.N 20→100（违反规则4「取最小 N」）                               selftest_rc=0  捕获到的失败项=（无 → 漏报）
+M3 selected.g 2→3（g=3 的 CER 0.5333 劣于 g=0，违反规则5）                 selftest_rc=1  捕获到的失败项=['g 为全局固化量且与 config 现值一致', 'g 的取值满足「最大且不劣于 g=0」，且不低于下限 1（v3.2 加固：可检验性属设计约束）']
+M4 selected.context_token_budget 3600→9999                       selftest_rc=0  捕获到的失败项=（无 → 漏报）
+M5 删掉整个 evidence.saturation_under_budget                         selftest_rc=0  捕获到的失败项=（无 → 漏报）
+M6 删掉整个 evidence.budget_sensitivity                              selftest_rc=0  捕获到的失败项=（无 → 漏报）
+M7 删掉 evidence.round1_cer_curve                                  selftest_rc=0  捕获到的失败项=（无 → 漏报）
+M8 g_curve.adopted_g 与 selected.g 都改成 1（内部自洽但非最大）                selftest_rc=1  捕获到的失败项=['g 为全局固化量且与 config 现值一致']
+M9 g=1 行的 not_worse_than_g0 改成 False（与 vs_g0_flags 自相矛盾）         selftest_rc=0  捕获到的失败项=（无 → 漏报）
+M10 vs_g0_flags 全改成 "-"（与 metrics 矛盾）                            selftest_rc=0  捕获到的失败项=（无 → 漏报）
+M11 saturation rows 的 gold_feasible 全部改成 True                    selftest_rc=0  捕获到的失败项=（无 → 漏报）
+M12 N_curve 的 selected 挪到 N=100                                  selftest_rc=0  捕获到的失败项=（无 → 漏报）
+M13 矩阵某个四项指标值 +0.0001                                            selftest_rc=0  捕获到的失败项=（无 → 漏报）
+M14 矩阵某行 K 改成 999                                                selftest_rc=1  捕获到的失败项=['每格 N ≥ K']
+M15 矩阵删掉一行（9→8 格）                                                selftest_rc=1  捕获到的失败项=['网格行数 = 9（K×N）']
+M16 矩阵写入 timestamp 键                                             selftest_rc=1  捕获到的失败项=['产出不含时间戳与耗时字段']
+M17 矩阵写入 elapsed 键                                               selftest_rc=1  捕获到的失败项=['产出不含时间戳与耗时字段']
+M18 selected.g 2→5，adopted_g 也改 5                                selftest_rc=1  捕获到的失败项=['g 为全局固化量且与 config 现值一致']

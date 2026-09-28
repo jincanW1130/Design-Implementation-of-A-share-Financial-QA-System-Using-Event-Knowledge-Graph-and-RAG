@@ -1,0 +1,16 @@
+build_questions.py         网络       无
+build_questions.py         厂商SDK    无
+build_questions.py         模型调用     无
+build_questions.py         凭据读取     无
+run_query.py               网络       无
+run_query.py               厂商SDK    无
+run_query.py               模型调用     无
+run_query.py               凭据读取     无
+third_party_review.py      网络       无
+third_party_review.py      厂商SDK    [(416, 'OpenAI'), (416, 'openai'), (417, 'OpenAI')]
+third_party_review.py      模型调用     [(417, 'OpenAI('), (417, 'api_key='), (425, '.chat.completions.create')]
+third_party_review.py      凭据读取     [(33, 'API_KEY'), (98, 'api_key'), (99, 'API_KEY'), (109, 'api_key'), (110, 'API_KEY'), (206, 'credential'), (221, 'credential'), (417, 'api_key')]
+POSCTRL_poscontrol.py      网络       [(1, 'socket'), (2, 'requests'), (3, 'urllib')]
+POSCTRL_poscontrol.py      厂商SDK    [(5, 'OpenAI'), (5, 'openai')]
+POSCTRL_poscontrol.py      模型调用     [(4, 'API_KEY =')]
+POSCTRL_poscontrol.py      凭据读取     [(4, 'API_KEY')]

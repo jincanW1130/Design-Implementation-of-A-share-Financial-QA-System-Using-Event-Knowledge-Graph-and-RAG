@@ -1,0 +1,22 @@
+== 第一轮 9 格：预算是否真的非约束 ==
+  K= 5 N= 20 exceed=0 trimmed_blocks=0 trimmed_paths=0 holdK=30
+  K= 5 N= 50 exceed=0 trimmed_blocks=0 trimmed_paths=0 holdK=30
+  K= 5 N=100 exceed=0 trimmed_blocks=0 trimmed_paths=0 holdK=30
+  K=10 N= 20 exceed=0 trimmed_blocks=0 trimmed_paths=0 holdK=30
+  K=10 N= 50 exceed=0 trimmed_blocks=0 trimmed_paths=0 holdK=30
+  K=10 N=100 exceed=0 trimmed_blocks=0 trimmed_paths=0 holdK=30
+  K=15 N= 20 exceed=0 trimmed_blocks=0 trimmed_paths=0 holdK=30
+  K=15 N= 50 exceed=0 trimmed_blocks=0 trimmed_paths=0 holdK=30
+  K=15 N=100 exceed=0 trimmed_blocks=0 trimmed_paths=0 holdK=30
+
+== 第二轮（选定格）==
+  K=10 N=20 budget=3600 g=2
+  budget_checks= {'questions_exceeding_budget': 0, 'questions_holding_K_blocks': 24, 'questions_with_trimmed_blocks': 30, 'questions_with_trimmed_paths': 30}
+  gold_constraint= {'K_covers_all_gold': True, 'max_gold_evidence_count': 7, 'n_questions_gold_leq_K': 30}
+
+== 矩阵是否含 timings / 时间戳键 ==
+  命中键: 无
+  顶层键数(每行一致?): 1
+
+== 各格 K/N/g/budget 是否与 selected 一致（回填口径）==
+  config 侧回填 = K:10 N:20 budget:3600 g:2

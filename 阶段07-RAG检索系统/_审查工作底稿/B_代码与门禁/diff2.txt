@@ -1,0 +1,7 @@
+重跑产物 vs 仓库产物：差异键 = 2 / 628
+   /artifacts/matrix
+      仓库=阶段07-RAG检索系统/检索产出/pre_experiment_matrix.jsonl
+      重跑=../../AppData/Local/Temp/re7_B/runout/pre_experiment_matrix.jsonl
+   /artifacts/selection
+      仓库=阶段07-RAG检索系统/检索产出/k_selection.json
+      重跑=../../AppData/Local/Temp/re7_B/runout/k_selection.json

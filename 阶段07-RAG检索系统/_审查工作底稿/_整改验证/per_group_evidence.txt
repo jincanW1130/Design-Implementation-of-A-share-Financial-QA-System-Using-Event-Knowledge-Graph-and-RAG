@@ -1,0 +1,32 @@
+# per-group fidelity evidence (remediation re-run)
+command: python ??\???7??.py (from repo root)
+raw output (UTF-16 original): 阶段07-RAG检索系统\_审查工作底稿\_整改验证\验收第7阶段_full.txt
+utf-8 copy: 阶段07-RAG检索系统\_审查工作底稿\_整改验证\验收第7阶段_full.utf8.txt
+
+  [OK  ] B3 11 条相对路径与《18》第三节 的输入清单逐条一致  未在第三节 逐字命中 0 条
+  [OK  ] C1 指纹清单含 11 条且键序与独立冻结基线一致  冻结基线 11 条：documents、chunks、faiss_index、vector_map、build_meta、dataset_meta、nodes_csv、edges_csv、replay_cypher、graph_stats、human_confirmation；manifest 实测键=documents、chunks、faiss_index、vector_map、build_meta、dataset_meta、nodes_csv、edges_csv、replay_cypher、graph_stats、human_confirmation
+  [OK  ] C2 11 个输入逐个重算 SHA-256 与字节数，并与写死在脚本内的 T1 基线及 manifest 双重一致  实际文件不一致 0 条；manifest 不一致 0 条；manifest.all_ok=True
+  [OK  ] I1 图谱导出物五个文件与写死在脚本内的独立开工指纹一致  实测 5 个文件、不一致 0 个
+  [OK  ] I2 第 7 阶段交付物不出现「已部署图谱服务」一类的肯定表述（含不带 Neo4j 字面的正对照）  扫描 25 个文本、命中 0 处；正对照命中=True；《19》含「未部署」=True
+  [OK  ] O1 逐题双向差集：至少 1 题差集非空，可测标志与差集条数一致  ok=True、可测 28／30 题、标志一致=True
+  [OK  ] O2 差集为空的题必须标记「在该题上不可测」、不得进入后续对比统计  断言记录的 rule 文本含「不可测」=True；《19》含标记与排除语句=True
+  [OK  ] O3 不可测集由 C／D 两份 trace 独立重算且与断言 2 一致（至少 1 题可测、至少 1 题不可测）  独立重算：可测 28／30、不可测 PE-11,PE-20；断言记录不可测 PE-11,PE-20；集合一致=True
+  [OK  ] P1 代码级顺序断言：裁剪 → 保留 K → 分组排序；三层实现标记严格递增；裁剪函数不使用分组排序结果；evidence_priority_key 的四档键行为级递增  实测 trim 第 1243 行、keep 第 1248 行、order 第 1253 行；layer1/2/3 字符位=[197, 222, 260]、行号=[5, 5, 6]；口径文字的三层次序正确=True；g<=0 返回原字面口径=True；裁剪体存在=True、不含 order_evidence=True；四档行为键=[0, 1, 2, 3]、行为级递增=True
+  [OK  ] S1 metrics 产物的层级口径：逐题行全部 level=chunk；无文档级数值；分母恒为 K  逐题行 chunk=True、含 document 行=False、precision_denominator=K
+  [OK  ] S2 文档级诊断函数存在，但写盘函数 cmd_write 的函数体内不调用它；写盘路径只输出 chunk 级  实测 诊断函数存在=True、cmd_write 函数体字节=3234、cmd_write 内文档级调用=False
+  [OK  ] U1 K 的选择规则执行证据由独立探针重算：gold 排除 K=5、预算排除 K=15、K=10 处 Δ ≤ 0 且所选 K 为饱和最小可行档  独立重算：max_gold=7、预算=3600、可行集=[10]、选定 K*=10、Δ(K10→K15)=+0.00000000；产物记录：选定 K=10、可行集=[10]、Δ=0.0
+  [OK  ] U2 N 的选择规则执行证据由独立探针重算：取使 CER 达到最大值的**最小** N  独立重算 N=[20, 50, 100]、最大 CER=0.56666667、最小 N=20；产物 N 曲线题数=3、选定 N=20
+  [OK  ] U3 g 的选择规则执行证据由独立探针重算：五点曲线、g=2 不劣于 g=0、g=3／5 劣化、含下限 1  独立重算探针=[0, 1, 2, 3, 5]、采用 g=2；产物探针=[0, 1, 2, 3, 5]、采用 g=2、选定 g=2；判据含下限 1=True；g=0 图谱侧入集=0
+  [OK  ] W1 链上六个脚本与 run_query.py 的网络／凭据路径 0 处；config 硬守卫已声明且正对照三类命中  扫描文件 7 个、命中 0 处；正对照命中 3 处：CTRL:1:import httpx、CTRL:3:getenv(凭据名)、CTRL:4:URL 字面量；MODEL_CALLS_ALLOWED=0；硬守卫=True
+  [OK  ] W2 摘除密钥并启用运行时硬哨兵后全链路（六步 ＋ 两次三轮＋独立探针）退出码全 0；调用次数由“无网络／凭据路径即零调用”保证，不再以固定字面量为判据  实测 退出码全 0=True（10 条命令）；硬哨兵生效=True；真实摘除凭据类变量 0 个：无；stdout 打印 0 次调用 2 处（仅作留痕）
+  [OK  ] AA1 交付物中不含被禁用的四字连写术语（一律写「向量索引」或「向量检索组件」；正对照必须命中）  扫描 25 个交付文本、命中文件 0 个；正对照=True；《19》用「向量索引」=1 次
+  [OK  ] AA2 不产出 DDL、不新增第七张表、SQL 表名引用都在六张表白名单内；《19》写明六张表恒为六张（DDL 与越界表名两类正对照都必须命中）  DDL 命中 0 个文件；第七张表表述 0 处；越界表名 0 处；六张表白名单=answer、answer_evidence、document、document_chunk、question、user；正对照 DDL=True、表名=True；《19》含六张表=True
+  [OK  ] AA3 交付物不出现答案生成模型型号（第三方复核语境除外；正对照必须命中）  未豁免命中 0 处；正对照=True；扫描范围 19 个交付文本；显式排除 6 个第三方复核文件（代码/检索/build_questions.py（题集构造与第三方复核登记）；代码/检索/config.py（唯一参数来源；仅含硬守卫凭据名正则，不含答案生成模型型号）；代码/检索/third_party_review.py（第三方复核执行脚本）；阶段07-RAG检索系统/预实验问题集/第三方复核报告.md（第三方复核报告）；阶段07-RAG检索系统/预实验问题集/第三方复核台账.json（第三方复核台账）；阶段07-RAG检索系统/预实验问题集/收口报告（千帆剥离与T8重绑）.md（第三方复核留痕））
+  [OK  ] AB1 跨文档核验（--strict-citations）退出码为 0  实测 退出码=0；扫描到依据声明 28 处（已排除《02》自身与 05／06／08／11 记录类文件）；其中过期 0 处；结论：全部通过
+  [OK ] AB2 本脚本的只读证据（镜像根目录）  镜像根目录 C:\Users\15129\AppData\Local\Temp\stage7_accept_kr_qnca9（文件 54 个）；copied=29、skipped=0；工作区交付目录零写入；工作区指纹前后一致=True；真实摘除凭据类变量 0 个（无）；MIRROR_OUTPUTS 删除后缺失态→运行后出现态全成立=True
+  [OK  ] AB3 本脚本 28 组检查全部通过（组结构与 71 条内容检查计数同时成立；工作区零写入与产物新鲜度同时成立）  实测 失败 0 项、环境／链上失败 0 项；组 28／28、内容检查 71／71；工作区透明=True、产物新鲜=True
+
+# destruction tests (on a temporary copy of the repo)
+case1 chain step exits non-zero (metrics.py exit 3): [ENV] x13 + AB3, exit 1
+case2 chain runs but writes no artifact: [ENV] x13 + AB3, exit 1
+case3 g out of range (g=11 > K=10, --profile static): V1 [FAIL], exit 2

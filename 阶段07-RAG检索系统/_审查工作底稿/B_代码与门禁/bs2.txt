@@ -1,0 +1,5 @@
+margin=0.0   budget=3200  g0_mrr=0.65555556 g2_mrr=0.65555556 nw=True flags={'complete_evidence_recall_at_k': '=', 'mrr': '=', 'precision_at_k': '+', 'recall_at_k': '+'}
+margin=0.05  budget=3400  g0_mrr=0.65555556 g2_mrr=0.65925926 nw=True flags={'complete_evidence_recall_at_k': '=', 'mrr': '+', 'precision_at_k': '+', 'recall_at_k': '+'}
+margin=0.1   budget=3600  g0_mrr=0.65555556 g2_mrr=0.65925926 nw=True flags={'complete_evidence_recall_at_k': '=', 'mrr': '+', 'precision_at_k': '+', 'recall_at_k': '+'}
+margin=0.15  budget=3700  g0_mrr=0.65888889 g2_mrr=0.65925926 nw=True flags={'complete_evidence_recall_at_k': '=', 'mrr': '+', 'precision_at_k': '+', 'recall_at_k': '+'}
+margin=0.2   budget=3900  g0_mrr=0.65888889 g2_mrr=0.65925926 nw=True flags={'complete_evidence_recall_at_k': '=', 'mrr': '+', 'precision_at_k': '+', 'recall_at_k': '+'}

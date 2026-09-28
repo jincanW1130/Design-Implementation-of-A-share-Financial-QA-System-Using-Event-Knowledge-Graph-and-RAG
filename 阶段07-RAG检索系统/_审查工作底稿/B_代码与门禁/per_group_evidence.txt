@@ -1,0 +1,10 @@
+# per-group fidelity evidence (remediation re-run)
+command: python tool\verify_stage7.py  (run from repo root)
+raw output: 阶段07-RAG检索系统\_审查工作底稿\B_代码与门禁\full_run.txt
+
+  [OK ] AB2 本脚本的只读证据（镜像根目录）  镜像根目录 C:\Users\15129\AppData\Local\Temp\stage7_accept_96lnk9p7（文件 54 个）；copied=29、skipped=0；工作区交付目录零写入；工作区指纹前后一致=True；子进程环境摘除凭据类变量 93 个
+
+# destruction tests (temp copy of the repo)
+case1 chain step exits non-zero (metrics.py exit 3): [ENV] x13 + AB3, exit 1
+case2 chain runs but writes no artifact: [ENV] x13 + AB3, exit 1
+case3 g out of range (g=11 > K=10, --profile static): V1 [FAIL], exit 2

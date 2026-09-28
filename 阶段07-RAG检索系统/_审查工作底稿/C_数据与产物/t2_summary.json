@@ -1,0 +1,26 @@
+{
+ "per_question_trace.jsonl": {
+  "ws": "7839de9a1089404f9de2ac90c0003379ba93c6d590c943aa6a39b1ec2891024c",
+  "run1": "7839de9a1089404f9de2ac90c0003379ba93c6d590c943aa6a39b1ec2891024c",
+  "run2": "7839de9a1089404f9de2ac90c0003379ba93c6d590c943aa6a39b1ec2891024c",
+  "identical": true
+ },
+ "pre_experiment_matrix.jsonl": {
+  "ws": "df9c05ad56b021df3cbdced3610adc58edbcf7587b646b4ca9ec0a0f7f321731",
+  "run1": "df9c05ad56b021df3cbdced3610adc58edbcf7587b646b4ca9ec0a0f7f321731",
+  "run2": "df9c05ad56b021df3cbdced3610adc58edbcf7587b646b4ca9ec0a0f7f321731",
+  "identical": true
+ },
+ "k_selection.json": {
+  "ws": "ab62e0099a5878bc7b87698e4405f81f4170b5834d1223d0da728f812c00659d",
+  "run1": "ab62e0099a5878bc7b87698e4405f81f4170b5834d1223d0da728f812c00659d",
+  "run2": "ab62e0099a5878bc7b87698e4405f81f4170b5834d1223d0da728f812c00659d",
+  "identical": true
+ },
+ "metrics_pre.jsonl": {
+  "ws": "b33491f723cd33aa42b6cbe9cdd136e74c868b088e41103352aaff6fdedd9dd2",
+  "run1": "b33491f723cd33aa42b6cbe9cdd136e74c868b088e41103352aaff6fdedd9dd2",
+  "run2": "b33491f723cd33aa42b6cbe9cdd136e74c868b088e41103352aaff6fdedd9dd2",
+  "identical": true
+ }
+}

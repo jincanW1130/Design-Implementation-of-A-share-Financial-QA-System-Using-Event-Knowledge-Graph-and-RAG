@@ -1,0 +1,9 @@
+ledger_schema=stage7-thirdparty-review-ledger-1.1
+confirmed_lines=['kimi', 'zhipu']  excluded_lines=['qianfan']
+usage_totals_confirmation={'completion_tokens': 109317, 'prompt_tokens': 64262, 'reasoning_tokens': 102819, 'total_tokens': 173579}
+usage_totals_all_lines_trace={'completion_tokens': 132503, 'prompt_tokens': 101149, 'reasoning_tokens': 122376, 'total_tokens': 233652}
+cross_vendor.confirmed={'comparable_questions': 30, 'consistency_rate': 0.9667, 'consistent_questions': 29, 'scope': ['kimi', 'zhipu']}
+cross_vendor.trace={'comparable_questions': 30, 'consistency_rate': 0.9333, 'consistent_questions': 28, 'scope': ['kimi', 'zhipu', 'qianfan']}
+vendor kimi     model=kimi-k3        answered=30 failed=0 tokens=63602 excluded=False base=https://api.moonshot.cn/v1
+vendor zhipu    model=glm-5.3-flash  answered=30 failed=0 tokens=109977 excluded=False base=https://open.bigmodel.cn/api/paas/v4
+vendor qianfan  model=ernie-5.1      answered=30 failed=0 tokens=60073 excluded=True base=https://qianfan.baidubce.com/v2

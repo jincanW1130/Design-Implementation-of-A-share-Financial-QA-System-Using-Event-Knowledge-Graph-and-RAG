@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "<stdin>", line 26, in <module>
+  File "C:\Users\15129\AppData\Local\Programs\Python\Python312\Lib\ast.py", line 407, in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+  File "<stdin>", line 24, in generic_visit
+  File "C:\Users\15129\AppData\Local\Programs\Python\Python312\Lib\ast.py", line 415, in generic_visit
+    self.visit(item)
+  File "C:\Users\15129\AppData\Local\Programs\Python\Python312\Lib\ast.py", line 407, in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+  File "<stdin>", line 24, in generic_visit
+  File "C:\Users\15129\AppData\Local\Programs\Python\Python312\Lib\ast.py", line 417, in generic_visit
+    self.visit(value)
+  File "C:\Users\15129\AppData\Local\Programs\Python\Python312\Lib\ast.py", line 407, in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+  File "<stdin>", line 21, in generic_visit
+UnboundLocalError: cannot access local variable 'total' where it is not associated with a value

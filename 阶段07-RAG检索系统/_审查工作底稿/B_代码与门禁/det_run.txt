@@ -1,0 +1,18 @@
+=== 第 1 轮 ===
+  [pipeline] exit=0  8.6s  末行=耗时（只打印，不落盘）：总 7.70s（向量加载 6.06s、图谱加载 0.00s）；0 次大语言模型／外部接口调用
+  [pre_experiment] exit=0  20.8s  末行=选定值与依据已写入 阶段07-RAG检索系统\检索产出\k_selection.json；回填 config.RETRIEVAL 的三项 T
+  [metrics] exit=0  0.1s  末行=[metrics] 文档级诊断函数（recall_at_k_doc_level_diagnostic）存在但**未**参与本文件；两级不混算
+=== 第 2 轮 ===
+  [pipeline] exit=0  8.9s  末行=耗时（只打印，不落盘）：总 8.00s（向量加载 6.30s、图谱加载 0.00s）；0 次大语言模型／外部接口调用
+  [pre_experiment] exit=0  27.0s  末行=选定值与依据已写入 阶段07-RAG检索系统\检索产出\k_selection.json；回填 config.RETRIEVAL 的三项 T
+  [metrics] exit=0  0.1s  末行=[metrics] 文档级诊断函数（recall_at_k_doc_level_diagnostic）存在但**未**参与本文件；两级不混算
+
+文件                             轮1                 轮2                 工作区               
+pre_experiment_matrix.jsonl    df9c05ad56b021df   df9c05ad56b021df   df9c05ad56b021df    两轮同=True 与工作区同=True
+k_selection.json               ab62e0099a5878bc   ab62e0099a5878bc   ab62e0099a5878bc    两轮同=True 与工作区同=True
+per_question_trace.jsonl       7839de9a1089404f   7839de9a1089404f   7839de9a1089404f    两轮同=True 与工作区同=True
+metrics_pre.jsonl              b33491f723cd33aa   b33491f723cd33aa   b33491f723cd33aa    两轮同=True 与工作区同=True
+
+两轮逐字节一致 = True
+镜像产物 == 工作区交付产物 = True
+退出码 = [[0, 0, 0], [0, 0, 0]]
