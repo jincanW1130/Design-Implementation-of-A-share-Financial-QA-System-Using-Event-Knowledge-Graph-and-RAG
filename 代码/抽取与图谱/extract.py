@@ -85,6 +85,30 @@ def output_files_for(profile: str) -> dict:
         table = (config.FULL_OUTPUT_FILES_V1_1 if profile == "v21" else config.OUTPUT_FILES)
     return dict(table)
 
+
+def subset_redirect_subdir(args) -> str:
+    r"""子集运行（`--docs`／`--limit`）的落点子目录名；非子集运行返回 ""（M-3）。
+
+    子集跑与全量跑曾共用同一批落点，3 篇冒烟就会就地覆盖默认口径的全量产物
+    （`_全量\v2.1_v1_2\`）。这里给子集运行一个**物理隔离**的落点：同一目录下的
+    子目录，文件名不变。命名沿用既有的「冒烟」留痕习惯（`_冒烟3篇`）。
+    """
+    if args.limit is not None and args.docs:
+        return "_子集运行_limit%d_指定篇" % args.limit
+    if args.limit is not None:
+        return "_冒烟%d篇" % args.limit
+    if args.docs:
+        ids = [x for x in re.split(r"[,\s]+", (args.docs or "").strip()) if x]
+        return "_指定篇目%d篇" % len(ids)
+    return ""
+
+
+def redirect_output_files(table: dict, subdir: str) -> dict:
+    """把一批落点整体重定向到各自目录下的 subdir 子目录（文件名保持不变）。"""
+    return {key: os.path.join(os.path.dirname(path), subdir, os.path.basename(path))
+            for key, path in table.items()}
+
+
 # --------------------------------------------------------------------------
 # 提示词（与 `LLM.prompt_version` 绑定：改这里的任何一个字，必须同步升版本号）
 # --------------------------------------------------------------------------
@@ -1360,7 +1384,15 @@ def check_chunk_evidence(item, doc_id, chunk_by_id, chunk_ids_by_doc):
 
 
 def build_verify_payload(docs, chunks, records, rejects_all, selection):
-    """对已落盘的结果做独立核对；本文件不写时间，参与逐字节比对。"""
+    """对已落盘的结果做独立核对。
+
+    M-9（如实自述）：本文件**含**一个时间相关的 `reproducibility` 块（api_calls／
+    cache_hits／wall_clock_seconds／manifest_sha256 都是本次运行的读数），因此
+    **不参与**逐字节比对 —— `write_manifest()` 的清单只含缓存、selection／coverage／
+    extracted／rejected，从不含 verify.json。其余字段与时间无关、跨轮逐字节稳定。
+    （不把该块拆去 `verify_run.json` 是为兼顾既有消费者 `_全量/report_full_run.py`、
+    `_全量/v2.1_v1_2/_对照报告.py` 与《16》已登记的字段名。）
+    """
     doc_by_id = {d["doc_id"]: d for d in docs}
     chunk_by_id = {c["chunk_id"]: c for c in chunks}
     chunk_ids_by_doc = {}
@@ -1441,7 +1473,7 @@ def build_verify_payload(docs, chunks, records, rejects_all, selection):
     present_ids = [r["doc_id"] for r in records]
     missing_ids = [doc_id for doc_id in selected_ids if doc_id not in set(present_ids)]
     return {
-        "verified_at": None,      # 不写时间：本文件参与逐字节比对
+        "verified_at": None,      # 本块不写时间（时间相关读数集中在下面的 reproducibility）
         "dataset_version": config.DATASET_VERSION,
         "documents": len(records),
         "selected_doc_ids": selected_ids,
@@ -1668,6 +1700,9 @@ def main(argv=None) -> int:
     parser.add_argument("--limit", type=int, default=None, help="只跑选样结果的前 N 篇")
     parser.add_argument("--docs", default=None, help="只跑指定 doc_id，逗号或空格分隔")
     parser.add_argument("--force", action="store_true", help="忽略已有缓存，重新调用并重写缓存")
+    parser.add_argument("--allow-overwrite", dest="allow_overwrite", action="store_true",
+                        help="子集运行（--limit／--docs）时也写默认口径的全量落点（默认禁止，"
+                             "改写同一目录下的 _冒烟N篇／_指定篇目N篇 子目录，见 M-3）")
     parser.add_argument("--select-only", action="store_true",
                         help="只算选样与覆盖性重算，不调模型")
     parser.add_argument("--verify", action="store_true", help="只核对既有产物，不调模型")
@@ -1688,6 +1723,13 @@ def main(argv=None) -> int:
     set_ontology_defs(enabled)
     global OUT
     OUT = output_files_for(args.profile)
+    subset_dir = subset_redirect_subdir(args)
+    if subset_dir and not args.allow_overwrite:
+        # M-3：子集运行不覆盖默认口径全量产物，改写到同目录下的隔离子目录。
+        OUT = redirect_output_files(OUT, subset_dir)
+        print("[提示] 本次为子集运行（--docs／--limit 生效）：产物落到 %s，"
+              "不覆盖默认口径全量产物；要就地覆盖请显式加 --allow-overwrite。"
+              % os.path.dirname(OUT["selection"]))
     print("提示词变体：%s；有效 Prompt 版本=%s；模板 sha256=%s；缓存目录=%s"
           % ("v1.2（本体定义进提示词）" if enabled else "v1.1（默认）",
              effective_prompt_version(), prompt_template_sha256(), effective_cache_dir()))

@@ -29,7 +29,7 @@
     N1 《02》自身三处版本号一致（标题末尾／版本字段／第1.2节 修订记录末行）
     N2 其余文档引用《02》的版本是否等于当前基线（默认只报告；--strict-citations 门禁）
 """
-import os, re, sys, glob, io, fnmatch
+import os, re, sys, glob, io, fnmatch, collections
 
 try:
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -118,6 +118,33 @@ for name in sorted(D):
 print('  合计 %d 个表格块' % total_blocks)
 report(all(not any(len({len(r.strip('|').split('|')) for r in b}) > 1 for b in table_blocks(D[n])) for n in D),
        '所有表格列数一致')
+# B-29（C 线整改，2026-09-29，只增不减）：上面这条判据只比「同一块内各行分段数是否互相
+# 一致」，**没有任何期望列数**，于是「把一张表的所有行**一致地少写一列**」这种整块整体
+# 漂移照样过（纯自我实现）。低成本等价修法：
+#   ① 结构断言（门禁）：每个表格块的**表头行分段数 ≥3**——按竖线计数（`| a | b |` 记 3，
+#      即 ≥2 列），把「退化成单列表」的形态挡掉。实测现行工作区 315 块最小为 3（其中 70 个
+#      两列表也满足），本项对现状零新增失败，是「加牙不加噪」的回归断言。
+#   ② 整体漂移提示（**非门禁**，只报出）：块内一致判据对「全表一起少一列」结构性不可见，
+#      故另打印分段数分布，并点名「本文档所有表格块列数完全一致、且低于全工作区众数」的
+#      文档——那正是整体漂移的形态，交人工确认。
+_degen, _hdr_cols, _doc_cols = [], collections.Counter(), {}
+for _name in sorted(D):
+    _cs = []
+    for _b in table_blocks(D[_name]):
+        if _b[0].count('|') < 3:
+            _degen.append('%s 表头=%s' % (_name, _b[0][:56]))
+        _k = len(_b[0].strip('|').split('|')); _cs.append(_k); _hdr_cols[_k] += 1
+    _doc_cols[_name] = _cs
+for _x in _degen: print('    !! %s' % _x)
+report(not _degen, 'B-29 每个表格块的表头行分段数 ≥3（无单列退化表）', '%d 块退化' % len(_degen))
+_MODE = _hdr_cols.most_common(1)[0][0] if _hdr_cols else 0
+_drift = [n for n, cs in _doc_cols.items() if len(cs) >= 2 and len(set(cs)) == 1 and cs[0] < _MODE]
+print('  表头分段数分布（全文块数）：%s；众数 %d 段'
+      % ('、'.join('%d段×%d' % (k, _hdr_cols[k]) for k in sorted(_hdr_cols)), _MODE))
+for _n in _drift:
+    print('    ~  整体漂移待人工确认：%s 的 %d 个表格块全为 %d 段' % (_n, len(_doc_cols[_n]), _doc_cols[_n][0]))
+report(not _drift, 'B-29 无「全表一致地少写列」形态的整体漂移（非门禁，只报出）',
+       '%d 份文档待人工确认' % len(_drift), gating=False)
 
 # ---- C 跨文档节号引用可解析 --------------------------------------------
 print(); print('=' * 78); print('C 跨文档节号引用可解析性'); print('=' * 78)
@@ -202,6 +229,15 @@ if n7:
             frs['FR-' + mm.group(2)] = tr.group(1) if tr else ''
     mat = re.search(r'### 7\.2 需求追溯矩阵(.*?)\n## 八、', t7, re.S)
     mat = mat.group(1) if mat else ''
+    # E-前置（C 线整改，2026-09-29）：本节判据是「矩阵里的节号 ⊆ 条目追溯」，若
+    # `### 7.2 需求追溯矩阵` 被改名（或矩阵被删空），mat 变空串 → prob 为空 → 本组静默
+    # 报「0 处越界」**空转通过**（实测把标题改成 `### 7.2 需求来源矩阵` 后即如此，退出码 0）。
+    # 故补前置断言：第7.2节标题与矩阵 FR 数据行都必须真的存在；缺任一即本组 FAIL。
+    _mat_hdr = re.search(r'^### 7\.2 需求追溯矩阵', t7, re.M)
+    _mat_rows = [r for r in mat.split('\n') if re.match(r'\|\s*FR-0\d\s*\|', r)]
+    report(bool(_mat_hdr) and len(_mat_rows) > 0,
+           'E 前置：《07》第7.2节 标题与矩阵 FR 数据行均存在（否则本组空转）',
+           '标题%s；矩阵 FR 数据行 %d 行' % ('找到' if _mat_hdr else '**未找到**', len(_mat_rows)))
     prob = []
     for row in mat.strip().split('\n'):
         c = [x.strip() for x in row.strip('|').split('|')]
@@ -506,10 +542,20 @@ if n0:
 # ---- M 目录结构 ---------------------------------------------------------
 print(); print('=' * 78); print('M 目录结构（按阶段分目录）'); print('=' * 78)
 WANT_STAGES = ['阶段01-选题与项目规划', '阶段02-文献调研与开题', '阶段03-需求分析',
-               '阶段04-系统总体设计', '阶段05-数据准备']
+               '阶段04-系统总体设计', '阶段05-数据准备',
+               '阶段06-事件抽取与知识图谱', '阶段07-RAG检索系统']
 have = {os.path.basename(d) for d in STAGES}
 for s in WANT_STAGES:
     report(s in have, '阶段目录存在：%s' % s)
+# B-28（C 线整改，2026-09-29，只增不减）：上面是按期望表**单向**点名——只保证「表里的目录
+# 都在」，不管「工作区里多了计划外的阶段目录」。实测反例：新建 `阶段99-临时测试目录\` 后
+# 本组照样全绿、退出码 0（`STAGES` 由 `阶段*` 通配得到，多出来的目录直接被无视）。
+# 故补一条**反向断言**：实际 `阶段*` 目录集合不得超出期望表；多一个即 FAIL。
+extra_stages = sorted(have - set(WANT_STAGES))
+for s in extra_stages: print('    !! 计划外的阶段目录：%s' % s)
+report(not extra_stages, '实际阶段目录 ⊆ 期望表（反向断言，B-28：计划外目录即失败）',
+       '实测 %d 个阶段目录；计划外 %d 个%s'
+       % (len(have), len(extra_stages), '：' + '、'.join(extra_stages) if extra_stages else ''))
 report(os.path.isdir(SECDIR), '《10》的分节源文件目录存在：阶段04-系统总体设计\\_分节源文件')
 # 根目录只留入口《00》与基线《02》，其余带号文档一律进阶段目录
 stray = sorted(n for n in os.listdir(ROOT)

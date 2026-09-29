@@ -304,6 +304,9 @@ QUOTA_V1 = {
     "监管公开信息": 20,
 }
 ANNOUNCEMENT_PER_COMPANY = 8     # 8 × 50 家 = 400（第二版）
+# L-20：**未启用（占位）**。本键只被 profile()["target_docs"] 回显，全仓无消费方——实际采集量
+# 由 QUOTA_V1 与 ANNOUNCEMENT_PER_COMPANY 决定。且其值 500 与《13》第107行记的 100 不一致，
+# 两处口径待裁定，故此处不作为硬约束使用。
 TARGET_DOC_COUNT_V1 = 500
 
 # --------------------------------------------------------------------------
@@ -543,6 +546,8 @@ CLEAN = {
     # 字母、Ｕ＋３０００ 表意空格）折成半角，中文标点一律保持原样。
     "normalize_fullwidth_ascii": True,
     "normalize_unicode_nfkc": False,
+    # L-20：**未启用（占位）**。本键只被 clean.py 写入报告回显，未参与任何清洗计算——
+    # 中文标点的保留由下面的 normalize_fullwidth_ascii 逻辑与 drop_line_patterns 实际决定。
     "preserve_cjk_punctuation": True,
     "collapse_blank_lines": True,
     "strip_control_chars": True,
@@ -559,6 +564,7 @@ CLEAN = {
         r"^扫一扫.*$", r"^分享到.*$", r"^责任编辑[:：].*$",
         r"^上一篇[:：].*$", r"^下一篇[:：].*$",
     ],
+    # L-20：**未启用（占位）**。全仓无消费方；保留空表以表明「去模板之后没有二次保留规则」。
     "keep_line_patterns_after_drop": [],
 }
 
@@ -631,4 +637,6 @@ def profile_settings(profile: str) -> dict:
     }
 
 
-INGEST_TIME = None  # 由各脚本在运行时写入 UTC+8 的 ISO8601 时间戳
+# L-20：**未启用（占位）**。原注释称「由各脚本在运行时写入 UTC+8 的 ISO8601 时间戳」，但全仓
+# 无任何写入方；实际采集时间戳落在各产物自身的 generated_at／采集记录里。
+INGEST_TIME = None

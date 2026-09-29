@@ -819,6 +819,10 @@ def derive_candidate_chunks(inputs: Inputs, spec):
         for doc_id in rule["doc_ids"]:
             out |= set(inputs.chunks_by_doc.get(int(doc_id), ()))
         return out, "候选口径＝文档内全部文本块；gold＝经回原文核验后的子集（16 道文本型候选题中 15 道的 gold 是该文档全部块的真子集）"
+    # L-6：`event_evidence` 与 `company_events` 两个分支在冻结表 FROZEN_QUESTIONS 的 30 题里
+    # 从未被使用（现用的是 doc_chunks／company_events_match／company_persons／shared_events 等）。
+    # 保留理由：它们是规则词汇表的一部分，供后续扩题使用；删除会缩小可登记口径，
+    # 故只注明「当前未使用」，不做删除。
     if kind == "event_evidence":
         out = set()
         for ev in rule["event_ids"]:

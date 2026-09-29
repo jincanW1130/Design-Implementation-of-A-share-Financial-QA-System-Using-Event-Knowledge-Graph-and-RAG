@@ -57,8 +57,13 @@ r"""write_graph.py —— 第 6 阶段「图谱写入与导出」（T6）。
 
     python 代码\抽取与图谱\write_graph.py                      # 默认 --profile pilot
     python 代码\抽取与图谱\write_graph.py --profile v21
-    python 代码\抽取与图谱\write_graph.py --force              # 重算并重写
+    python 代码\抽取与图谱\write_graph.py --force              # 兼容 run_all 的传参（见下）
     python 代码\抽取与图谱\write_graph.py --verify-only        # 只对**已写出**的四件套做机检
+
+L-7（如实自述）：本脚本没有「命中已有产物就跳过」的路径 —— `run()` 每次都按输入指纹
+重算并重写四件套，`load_previous()` 只用于在指纹不一致时拒绝沿用旧消歧产物。因此
+`--force` **当前是无操作**，保留参数只为兼容 `run_all.py` 的统一传参（不实现另加行为，
+以免改变已冻结的图谱导出）。
 
 退出码：`0` 成功；`1` 前置缺失（未跑 T4／T5）或指纹不一致；`2` 机检不通过或数据异常。
 """
@@ -1321,7 +1326,9 @@ def main(argv=None) -> int:
                         choices=["pilot", "v21", "v21_v1_2"],
                         help="默认 v21_v1_2＝v1.2 口径（导出到 图谱导出\\v2.1_v1_2\\）；"
                              "v21＝v1.1 归档（图谱导出\\v2.1\\）；pilot＝试跑目录")
-    parser.add_argument("--force", action="store_true", help="重算并重写导出物")
+    parser.add_argument("--force", action="store_true",
+                        help="**当前无操作**（L-7）：本脚本没有跳过路径，每次运行都按输入"
+                             "指纹重算重写；保留该参数只为兼容 run_all.py 的统一传参")
     parser.add_argument("--verify-only", action="store_true",
                         help="只对已写出的导出物做机检，不重写")
     args = parser.parse_args(argv)

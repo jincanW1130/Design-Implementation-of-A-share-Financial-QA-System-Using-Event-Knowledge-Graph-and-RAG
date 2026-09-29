@@ -91,6 +91,7 @@ MAX_TOP5_CHUNK_SHARE = 0.60     # 守卫阈值：前 5 篇文档块数合计占�
 results = []          # [(ok, label, detail)]
 fails = []            # [label]
 fail_evidence = []    # [(label, detail)]
+skips = []            # [label] —— 未执行项（[SKIP]），既不算通过也不算失败
 
 
 def chk(ok, label, detail=''):
@@ -104,6 +105,28 @@ def chk(ok, label, detail=''):
 def note(label, detail=''):
     """只打印证据行（不计入通过／失败项数）。"""
     print('  [OK ] %s%s' % (label, ('  ' + detail) if detail else ''))
+
+
+def skip(label, detail=''):
+    """未执行项（C 线 B-30②③ 整改）：既**不冒充通过**，也不判为失败，而是记成 [SKIP] 并计数。
+
+    过去默认档（不加 --with-idempotence）下 N5a／N6／N7／N8 四项真实重跑检查**连占位都不打印**，
+    于是「99/99 项全部通过」里看不出有 4 项根本没跑；本函数把「未执行」显式化：打印 [SKIP]
+    并计入 `skips`，汇总行分别报「通过／失败／未执行」，收口结论在存在未执行项时一并写明。
+    """
+    print('  [SKIP] %s%s' % (label, ('  ' + detail) if detail else ''))
+    skips.append(label)
+
+
+SECS = []             # B-31 结构断言用：实际打印出的节标题顺序
+
+
+def sec(title):
+    """节标题：打印 ＋ 记账（B-31 结构断言据此验「节结构未缺」）。"""
+    SECS.append(title)
+    print(); print('=' * 78)
+    print(title)
+    print('=' * 78)
 
 
 def br(seq, limit=4):
@@ -277,10 +300,28 @@ def corpus_targets():
     return out
 
 
-def scan_term(term, targets, neg_markers=None):
-    """在文本范围里逐行找 term；返回 [(标签, 行号, 行内容, 是否否定语境)]。"""
-    neg_markers = neg_markers or ('不引入', '不采用', '不使用', '不进入', '不按', '排除', '避免',
-                                  '严禁', '禁止', '不得', '不再', '无', '未', '非', '之外', '而不')
+def scan_term(term, targets, neg_markers=None, window=18):
+    """在文本范围里逐行找 term；返回 [(标签, 行号, 行内容, 是否否定语境)]。
+
+    否定语境的判定（2026-09-29 C 线 B-30② 整改，只增不减）。旧判据是「**整行**只要出现任一
+    否定标记就豁免」，而默认标记集里还含裸「无」「未」「非」，于是**同一行里任何位置的一个
+    「无」都能把该行所有出现一律放行**（同一行里另有真实违规也会被掩护）。新判据两档：
+      ① **强否定短语**（不引入／不采用／不进入／不按／排除／严禁／禁止…）：须与该词出现在
+         **同一行、距离 ≤ window 字符**（前后均可）；
+      ② **单个否定字**（无／未／非）：仅当它**紧贴在该词前面**（距离 0，如「无股吧来源」）
+         才算否定——这正是真实语料里的写法；行内别处的「无」不再豁免。
+    例外：**调用方自带 neg_markers** 时按整行判定（`window` 视为 None）——O4 这类调用给的
+    「TBD／保持／登记／第 8 阶段」是**状态标记**（描述整行主题「本阶段未选型」），并不是对
+    该词的否定，套距离限制会把「大语言模型、N、K 与 Context Token Budget 保持 TBD」这类
+    正当写法误判为违规。
+    """
+    if neg_markers is None:
+        neg_markers = ('不引入', '不采用', '不使用', '不进入', '不按', '不称', '不把',
+                       '不作为', '不得', '不再', '不出现', '不含', '排除', '避免',
+                       '严禁', '禁止', '之外', '而不')
+        win, strict_single = window, True
+    else:
+        win, strict_single = None, False
     hits = []
     for label, path in targets:
         if not os.path.isfile(path):
@@ -290,8 +331,21 @@ def scan_term(term, targets, neg_markers=None):
         except OSError:
             continue
         for i, line in enumerate(text.split('\n'), 1):
-            if term in line:
-                hits.append((label, i, line.strip(), any(m in line for m in neg_markers)))
+            if term not in line:
+                continue
+            if win is None:
+                neg = any(k in line for k in neg_markers)
+            else:
+                neg = False
+                for m in re.finditer(re.escape(term), line):
+                    lo, hi = max(0, m.start() - win), min(len(line), m.end() + win)
+                    if any(k in line[lo:hi] for k in neg_markers):
+                        neg = True
+                        break
+                    if strict_single and line[max(0, m.start() - 1):m.start()] in ('无', '未', '非'):
+                        neg = True
+                        break
+            hits.append((label, i, line.strip(), neg))
     return hits
 
 
@@ -368,10 +422,22 @@ for _, d in doc_rows:
         covered.update(str(x) for x in cl)
 
 
+# --------------------------------------------------------------------------
+# 零行守卫（C 线 B-30③ 整改，只增不减）：0 篇文档的数据集此前会在 J3 的 `min()` 上抛
+# `ValueError: min() iterable argument is empty` **直接崩掉**（连一行报告都看不到），而且
+# I1～I4 在「0 篇／0 块」上按退化循环一律判 [OK ]。这里先立一条显式门禁：数据集为空即 FAIL，
+# 并把 I 组与 J 组的退化判据一并收口（见各组注释），使空数据集得到**可读的失败报告**而非堆栈。
+# --------------------------------------------------------------------------
+EMPTY_DATASET = (n_docs == 0 or n_chunks == 0)
+chk(not EMPTY_DATASET, 'Z0 数据集非空（零行守卫：0 篇文档／0 文本块不可验收）',
+    '实测 文档 %d 篇、文本块 %d 个%s'
+    % (n_docs, n_chunks,
+       '；clean\\documents.jsonl／chunks\\chunks.jsonl 为空，其余各组只能给不可判定结论'
+       if EMPTY_DATASET else ''))
+
+
 # ==========================================================================
-print(); print('=' * 78)
-print('A、《13》文档结构（《12》第八节 第 1 行：7 个必备小节 + 2 个附加小节）')
-print('=' * 78)
+sec('A、《13》文档结构（《12》第八节 第 1 行：7 个必备小节 + 2 个附加小节）')
 
 h2 = [(i, L[3:].strip()) for i, L in enumerate(t13.split('\n'), 1) if L.startswith('## ')]
 
@@ -426,9 +492,7 @@ chk(len(h2) >= exp_n, 'A7 《13》二级标题数与结构相称',
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('B、数据集目录结构（《12》第八节 第 2 行／第4.2节：6 个一级子目录、自包含）')
-print('=' * 78)
+sec('B、数据集目录结构（《12》第八节 第 2 行／第4.2节：6 个一级子目录、自包含）')
 
 miss_dirs = [d for d in config.SUBDIRS if not os.path.isdir(os.path.join(DATASET, d))]
 chk(not miss_dirs, 'B1 六个一级子目录齐全（config.SUBDIRS）',
@@ -460,9 +524,7 @@ chk(not extra_top, 'B4 一级条目均属于六个子目录（自包含，不外
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('C、meta\\dataset.json 的字段与取值（《12》第八节 第 3 行；逐项由数据集文件重新推导后比对）')
-print('=' * 78)
+sec('C、meta\\dataset.json 的字段与取值（《12》第八节 第 3 行；逐项由数据集文件重新推导后比对）')
 
 META_P = os.path.join(DATASET, 'meta', 'dataset.json')
 BM_P = os.path.join(DATASET, 'index', config.FAISS['meta_file'])
@@ -571,9 +633,7 @@ chk(ga is not None and bdt is not None and ga >= bdt,
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('D、document 必需字段无空值（《12》第八节 第 4 行；逐行检查）')
-print('=' * 78)
+sec('D、document 必需字段无空值（《12》第八节 第 4 行；逐行检查）')
 
 REQUIRED_DOC_FIELDS = ('title', 'content', 'source', 'category', 'publish_time', 'ingest_time')
 missing_by_field = Counter()
@@ -592,9 +652,7 @@ chk(not d_offenders, 'D1 六个必需字段逐行非空（%s）' % '／'.join(RE
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('E、三个判重键唯一（《12》第八节 第 5 行；url／规范化 title／正文 SHA-256 前 16 位）')
-print('=' * 78)
+sec('E、三个判重键唯一（《12》第八节 第 5 行；url／规范化 title／正文 SHA-256 前 16 位）')
 
 url_vals = [(d.get('url') or '').strip() for _, d in doc_rows if isinstance(d.get('url'), str)]
 blank_urls = ['doc_id=%s（第%d行）' % (d.get('doc_id'), ln) for ln, d in doc_rows
@@ -631,9 +689,7 @@ chk((not blank_urls) or ('为空' in t13 and 'url' in t13),
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('F、监管公开信息标题规则（《12》第八节 第 6 行 + v1.1 修订：原标题（当事人）、不臆造、不机器生成）')
-print('=' * 78)
+sec('F、监管公开信息标题规则（《12》第八节 第 6 行 + v1.1 修订：原标题（当事人）、不臆造、不机器生成）')
 
 reg_rows = [(ln, d) for ln, d in doc_rows if d.get('category') == '监管公开信息']
 chk(bool(reg_rows), 'F1 监管公开信息类别非空（标题规则的作用面）',
@@ -701,9 +757,7 @@ chk(not machine_hits, 'F6 全库标题无机器生成痕迹（占位词／doc_id
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('G、company_list 取值规则（《12》第八节 第 7 行 + v1.1 修订：公告／财经新闻非空；其余允许空数组但不得 null）')
-print('=' * 78)
+sec('G、company_list 取值规则（《12》第八节 第 7 行 + v1.1 修订：公告／财经新闻非空；其余允许空数组但不得 null）')
 
 null_cl, nonlist_cl, empty_required = [], [], []
 empty_by_cat = Counter()
@@ -735,9 +789,7 @@ chk(all(c in allow_empty for c in empty_by_cat),
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('H、覆盖公司集合（《12》第八节 第 8 行：恰好等于 T2 选定的公司，取自 config.COMPANIES）')
-print('=' * 78)
+sec('H、覆盖公司集合（《12》第八节 第 8 行：恰好等于 T2 选定的公司，取自 config.COMPANIES）')
 
 cfg_codes = sorted(c['code'] for c in config.COMPANIES)
 missing_codes = sorted(set(cfg_codes) - covered)
@@ -750,9 +802,7 @@ chk(not missing_codes and not extra_codes,
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('I、切分编号规则（《12》第八节 第 9 行：每篇 ≥1 块、chunk_index 从 0 连续无重复、chunk_id 公式）')
-print('=' * 78)
+sec('I、切分编号规则（《12》第八节 第 9 行：每篇 ≥1 块、chunk_index 从 0 连续无重复、chunk_id 公式）')
 
 by_doc = defaultdict(list)
 for ln, c in chunk_rows:
@@ -777,30 +827,39 @@ for ln, c in chunk_rows:
     if not ok:
         bad_formula.append('第%d行 chunk_id=%s doc_id=%s chunk_index=%s'
                            % (ln, c.get('chunk_id'), c.get('doc_id'), c.get('chunk_index')))
-chk(not zero_chunk_docs, 'I1 每篇文档至少 1 个文本块',
+chk((not zero_chunk_docs) and n_docs > 0, 'I1 每篇文档至少 1 个文本块（零行守卫：0 篇不可判为通过）',
     '实测 文档 %d 篇、无块文档 %d 篇%s'
-    % (n_docs, len(zero_chunk_docs), '：' + br(zero_chunk_docs) if zero_chunk_docs else ''))
-chk(not gap_docs, 'I2 chunk_index 在文档内从 0 连续递增',
+    % (n_docs, len(zero_chunk_docs),
+       '：' + br(zero_chunk_docs) if zero_chunk_docs else
+       ('；数据集为空，本项不可判定' if n_docs == 0 else '')))
+chk((not gap_docs) and n_docs > 0, 'I2 chunk_index 在文档内从 0 连续递增（零行守卫：0 篇不可判为通过）',
     '实测 涉及文档 %d 篇、不连续 %d 篇%s'
-    % (len(by_doc), len(gap_docs), '：' + br(gap_docs) if gap_docs else ''))
-chk(not dup_index_docs, 'I3 同一文档内 chunk_index 不重复',
-    '实测 重复 %d 篇%s' % (len(dup_index_docs), '：' + br(dup_index_docs) if dup_index_docs else ''))
-chk(not bad_formula, 'I4 chunk_id == doc_id * DOC_ID_STRIDE + chunk_index（config.chunk_id_for）',
+    % (len(by_doc), len(gap_docs),
+       '：' + br(gap_docs) if gap_docs else ('；数据集为空，本项不可判定' if n_docs == 0 else '')))
+chk((not dup_index_docs) and n_docs > 0, 'I3 同一文档内 chunk_index 不重复（零行守卫：0 篇不可判为通过）',
+    '实测 重复 %d 篇%s'
+    % (len(dup_index_docs),
+       '：' + br(dup_index_docs) if dup_index_docs else
+       ('；数据集为空，本项不可判定' if n_docs == 0 else '')))
+chk((not bad_formula) and n_docs > 0,
+    'I4 chunk_id == doc_id * DOC_ID_STRIDE + chunk_index（config.chunk_id_for；零行守卫）',
     '实测 %d 条文本块、公式不符 %d 条%s；步长 config.DOC_ID_STRIDE=%d'
-    % (n_chunks, len(bad_formula), '：' + br(bad_formula) if bad_formula else '',
+    % (n_chunks, len(bad_formula),
+       '：' + br(bad_formula) if bad_formula else ('；数据集为空，本项不可判定' if n_docs == 0 else ''),
        config.DOC_ID_STRIDE))
 per_doc_n = [len(cs) for cs in by_doc.values()]
-note('I5 每篇块数分布（证据项，不计入判定）',
-     '实测 每篇 %d～%d 块、均值 %.2f、恰好 1 块的文档 %d 篇、块数最多的文档 %s'
-     % (min(per_doc_n or [0]), max(per_doc_n or [0]), (n_chunks / n_docs) if n_docs else 0,
-        sum(1 for x in per_doc_n if x == 1),
-        max(by_doc.items(), key=lambda kv: len(kv[1]))[0] if by_doc else '无'))
+if per_doc_n:
+    note('I5 每篇块数分布（证据项，不计入判定）',
+         '实测 每篇 %d～%d 块、均值 %.2f、恰好 1 块的文档 %d 篇、块数最多的文档 %s'
+         % (min(per_doc_n), max(per_doc_n), (n_chunks / n_docs) if n_docs else 0,
+            sum(1 for x in per_doc_n if x == 1),
+            max(by_doc.items(), key=lambda kv: len(kv[1]))[0] if by_doc else '无'))
+else:
+    skip('I5 每篇块数分布（证据项）', '数据集无文档／无文本块，分布不可判定（零行守卫）')
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('J、文本块长度与重叠（《12》第八节 第 10 行：落在《13》固定区间内、重叠不超过声明上限）')
-print('=' * 78)
+sec('J、文本块长度与重叠（《12》第八节 第 10 行：落在《13》固定区间内、重叠不超过声明上限）')
 
 
 def declared_param(key):
@@ -818,10 +877,16 @@ chk(all(declared[k] == config.CHUNK[k] for k in declared if declared[k] is not N
 lens = [(ln, c, len(str(c.get('content') or ''))) for ln, c in chunk_rows]
 over = [t for t in lens if t[2] > config.CHUNK['max_chars']]
 under = [t for t in lens if t[2] < config.CHUNK['min_chars']]
-chk(not over, 'J3 无文本块超过 max_chars=%d' % config.CHUNK['max_chars'],
-    '实测 字符 min／mean／max = %d／%.2f／%d；超上限 %d 块%s'
-    % (min(t[2] for t in lens), sum(t[2] for t in lens) / len(lens), max(t[2] for t in lens),
-       len(over),
+# 零行守卫（C 线 B-30③）：`min()`／`max()`／均值在 0 块时要么抛 ValueError、要么除零崩掉；
+# 同时「没有块」也不能判成「没有超限块」通过。空集时判 FAIL 并给出可读证据。
+_lens_chars = [t[2] for t in lens]
+_j3_stat = ('字符 min／mean／max = %d／%.2f／%d'
+            % (min(_lens_chars), sum(_lens_chars) / len(_lens_chars), max(_lens_chars))) \
+    if _lens_chars else '文本块 0 个（不可判定）'
+chk((not over) and bool(lens), 'J3 无文本块超过 max_chars=%d（零行守卫：0 块不可判为通过）'
+    % config.CHUNK['max_chars'],
+    '实测 %s；超上限 %d 块%s'
+    % (_j3_stat, len(over),
        '：' + br(['chunk_id=%s 字符=%d' % (c.get('chunk_id'), n) for _, c, n in over]) if over else ''))
 exempt = {(e.get('doc_id'), e.get('chunk_index'))
           for e in (cstats.get('min_chars_exemptions') or []) if isinstance(e, dict)}
@@ -832,8 +897,9 @@ for ln, c, n in under:
     if key not in exempt or doc_len.get(c.get('doc_id'), 0) >= config.CHUNK['target_chars']:
         bad_under.append('chunk_id=%s doc_id=%s（第%d行）字符 %d'
                          % (c.get('chunk_id'), c.get('doc_id'), ln, n))
-chk(not bad_under,
-    'J4 低于 min_chars 的块均为“整篇正文短于 target_chars”的豁免（读 reports\\chunk_stats.json 核对）',
+chk((not bad_under) and bool(lens),
+    'J4 低于 min_chars 的块均为“整篇正文短于 target_chars”的豁免（读 reports\\chunk_stats.json '
+    '核对；零行守卫：0 块不可判为通过）',
     '实测 低于下限 %d 块%s；报告登记豁免 %d 条%s；不满足豁免条件或未登记 %d 块%s'
     % (len(under),
        '：' + br(['chunk_id=%s 字符=%d' % (c.get('chunk_id'), n) for _, c, n in under]) if under else '',
@@ -851,17 +917,15 @@ for did, cs in by_doc.items():
                 break
         if best > max_ov:
             max_ov, ov_at = best, (did, a.get('chunk_index'), b.get('chunk_index'))
-chk(max_ov <= config.CHUNK['overlap_chars'] and max_ov <= (declared['overlap_chars'] or 0),
-    'J5 相邻文本块重叠不超过声明上限',
+chk(max_ov <= config.CHUNK['overlap_chars'] and max_ov <= (declared['overlap_chars'] or 0) and bool(lens),
+    'J5 相邻文本块重叠不超过声明上限（零行守卫：0 块不可判为通过）',
     '实测 最大重叠 %d 字符（doc_id=%s 的第 %s／%s 块）；config.CHUNK.overlap_chars=%d；《13》声明 %s'
     % (max_ov, ov_at[0] if ov_at else '无', ov_at[1] if ov_at else '-', ov_at[2] if ov_at else '-',
        config.CHUNK['overlap_chars'], declared['overlap_chars']))
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('K、向量条数与编号（《12》第八节 第 11 行：向量条数 = 文本块条数、无空 vector_id、取值 0..N-1）')
-print('=' * 78)
+sec('K、向量条数与编号（《12》第八节 第 11 行：向量条数 = 文本块条数、无空 vector_id、取值 0..N-1）')
 
 vids = [c.get('vector_id') for _, c in chunk_rows]
 null_vid = ['chunk_id=%s（第%d行）' % (c.get('chunk_id'), ln)
@@ -909,9 +973,7 @@ else:
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('L、时间口径（《12》第八节 第 12、13 行：≤ cutoff、覆盖 ≥90 天、两个时间桶均非空）')
-print('=' * 78)
+sec('L、时间口径（《12》第八节 第 12、13 行：≤ cutoff、覆盖 ≥90 天、两个时间桶均非空）')
 
 unparsable = ['doc_id=%s（第%d行）' % (d.get('doc_id'), ln)
               for ln, d in doc_rows if parse_date(d.get('publish_time')) is None]
@@ -947,9 +1009,7 @@ chk(outside == 0, 'L5 全部文档落在两个相对时间桶内（两桶合起�
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('M、类目与来源（《12》第八节 第 14 行：只用四类 category、无股吧来源；第五节 硬约束 12）')
-print('=' * 78)
+sec('M、类目与来源（《12》第八节 第 14 行：只用四类 category、无股吧来源；第五节 硬约束 12）')
 
 cats = [d.get('category') for d in docs]
 cat_counts = Counter(cats)
@@ -975,9 +1035,7 @@ chk(not guba_bad, 'M3 《13》与数据集内无股吧来源（排除“不进�
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('N、幂等（《12》第八节 第 15 行：重复执行不产生重复 doc_id）')
-print('=' * 78)
+sec('N、幂等（《12》第八节 第 15 行：重复执行不产生重复 doc_id）')
 
 note('N0 幂等检查模式',
      '真实重跑（--with-idempotence：在系统临时目录复跑 T4a→T5，不写入封版数据集）'
@@ -1083,12 +1141,21 @@ if ARGS.with_idempotence:
 else:
     note('N5 真实重跑未执行（静态等价模式）',
          '如需真实重跑：python 工具\\验收第5阶段数据.py --with-idempotence')
+    # B-30②（C 线整改，只增不减）：默认档下 N5a／N6／N7／N8 四项真实重跑检查过去**连占位都不
+    # 打印**，于是「99/99 项全部通过」里看不出有 4 项根本没跑（默认档 99 项 vs 真实档 103 项）。
+    # 现在补 4 个 [SKIP] 占位：两档的检查项计数一致（103），汇总行单列「未执行」，不再冒充通过。
+    skip('N5a 真实重跑：dedup／clean／chunk 三个环节退出码均为 0',
+         '静态等价模式未执行（加 --with-idempotence 实跑）')
+    skip('N6 真实重跑：clean.py 连跑两次不产生重复记录（行数与 doc_id 序列不变）',
+         '静态等价模式未执行（加 --with-idempotence 实跑）')
+    skip('N7 真实重跑：重跑得到的 doc_id 集合与封版数据集一致',
+         '静态等价模式未执行（加 --with-idempotence 实跑）')
+    skip('N8 真实重跑：chunk.py 产出的文本块条数与 chunk_id 集合与封版一致',
+         '静态等价模式未执行（加 --with-idempotence 实跑）')
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('O、越界排除（《12》第八节 第 16 行：不引入六张表以外的表、不写死大语言模型型号）')
-print('=' * 78)
+sec('O、越界排除（《12》第八节 第 16 行：不引入六张表以外的表、不写死大语言模型型号）')
 
 m6 = re.search(r'恒为六张\**——\s*([^，。；]+)', t10)
 six_tables = [s.strip() for s in m6.group(1).split('、')] if m6 else []
@@ -1179,9 +1246,7 @@ chk(not suspect, 'O5 结构化文本中的“含字母且含数字”标识符�
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('P、禁用术语（《12》第八节 第 17 行：不出现「向量」与「数据库」的连写，否定语境除外）')
-print('=' * 78)
+sec('P、禁用术语（《12》第八节 第 17 行：不出现「向量」与「数据库」的连写，否定语境除外）')
 
 BANNED = '向量' + '数据库'      # 拼接构造：本脚本源码内不出现该连写，供 grep 复核
 term_hits = scan_term(BANNED, all_dataset_targets())
@@ -1199,9 +1264,7 @@ chk(BANNED not in self_src, 'P2 本脚本源码内不出现该连写（以拼接
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('Q、《13》在《00-项目总览与索引》中的登记（《12》第八节 第 18 行）')
-print('=' * 78)
+sec('Q、《13》在《00-项目总览与索引》中的登记（《12》第八节 第 18 行）')
 
 DOC_NAME = '13-数据准备（第五阶段）'
 q_hits = [(i, L.strip()) for i, L in enumerate(t00.split('\n'), 1) if DOC_NAME in L]
@@ -1215,9 +1278,7 @@ chk(bool(q_status), 'Q2 登记行带状态（已产出／已完成／第 5 阶�
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('S、索引集中度与跨公司同名标题（守卫项：单篇不得独占索引、同一标题不得跨公司复用）')
-print('=' * 78)
+sec('S、索引集中度与跨公司同名标题（守卫项：单篇不得独占索引、同一标题不得跨公司复用）')
 
 chunks_per_doc = Counter(c.get('doc_id') for _, c in chunk_rows)
 doc_by_id = {d.get('doc_id'): d for _, d in doc_rows}
@@ -1294,29 +1355,68 @@ else:
 
 
 # ==========================================================================
-print(); print('=' * 78)
-print('R、汇总与收口（《12》第八节 末行：全套检查通过才放行）')
-print('=' * 78)
+sec('R、汇总与收口（《12》第八节 末行：全套检查通过才放行）')
 
 _passed_before = sum(1 for ok, _, _ in results if ok)
-print('  检查项合计（A～S）：%d 项，其中通过 %d、失败 %d'
-      % (len(results), _passed_before, len(fails)))
-chk(not fails, 'R1 全部检查项通过（任一失败即非零退出）',
+print('  检查项合计（A～S）：%d 项，其中通过 %d、失败 %d、未执行 %d'
+      % (len(results), _passed_before, len(fails), len(skips)))
+chk(not fails, 'R1 全部检查项通过（任一失败即非零退出；未执行项另计，见汇总行）',
     '实测 失败 %d 项：%s' % (len(fails), br(fails, limit=30) if fails else '无'))
 chk(os.path.isfile(CROSS_DOC), 'R2 工作区跨文档核验脚本存在（本脚本不调用它，供操作者另行运行）',
     '实测 %s：%s；操作者应另行运行：python 工具\\跨文档核验.py'
     % (CROSS_DOC, '存在' if os.path.isfile(CROSS_DOC) else '缺失'))
+
+# B-31 结构断言（C 线整改，2026-09-29，仿《验收第7阶段.py》AB3）：汇总不得只判 `fails` 是否为空，
+# 还必须重数「节结构 ＋ 检查项计数」——这样「整组检查被删掉」「某项悄悄少一项」都会被抓出。
+# 恒定值不符即 FAIL；**增删检查项／改节标题时必须同步改这两个常量**（这正是「重数」的目的）。
+# 计数口径 = 已执行项（results）＋ 未执行项（skips），两档（默认／--with-idempotence）都应为同值。
+EXPECTED_ITEMS_5 = 104
+EXPECTED_SECS_5 = ['A、《13》文档结构（《12》第八节 第 1 行：7 个必备小节 + 2 个附加小节）',
+                   'B、数据集目录结构（《12》第八节 第 2 行／第4.2节：6 个一级子目录、自包含）',
+                   'C、meta\\dataset.json 的字段与取值（《12》第八节 第 3 行；逐项由数据集文件重新推导后比对）',
+                   'D、document 必需字段无空值（《12》第八节 第 4 行；逐行检查）',
+                   'E、三个判重键唯一（《12》第八节 第 5 行；url／规范化 title／正文 SHA-256 前 16 位）',
+                   'F、监管公开信息标题规则（《12》第八节 第 6 行 + v1.1 修订：原标题（当事人）、不臆造、不机器生成）',
+                   'G、company_list 取值规则（《12》第八节 第 7 行 + v1.1 修订：公告／财经新闻非空；其余允许空数组但不得 null）',
+                   'H、覆盖公司集合（《12》第八节 第 8 行：恰好等于 T2 选定的公司，取自 config.COMPANIES）',
+                   'I、切分编号规则（《12》第八节 第 9 行：每篇 ≥1 块、chunk_index 从 0 连续无重复、chunk_id 公式）',
+                   'J、文本块长度与重叠（《12》第八节 第 10 行：落在《13》固定区间内、重叠不超过声明上限）',
+                   'K、向量条数与编号（《12》第八节 第 11 行：向量条数 = 文本块条数、无空 vector_id、取值 0..N-1）',
+                   'L、时间口径（《12》第八节 第 12、13 行：≤ cutoff、覆盖 ≥90 天、两个时间桶均非空）',
+                   'M、类目与来源（《12》第八节 第 14 行：只用四类 category、无股吧来源；第五节 硬约束 12）',
+                   'N、幂等（《12》第八节 第 15 行：重复执行不产生重复 doc_id）',
+                   'O、越界排除（《12》第八节 第 16 行：不引入六张表以外的表、不写死大语言模型型号）',
+                   'P、禁用术语（《12》第八节 第 17 行：不出现「向量」与「数据库」的连写，否定语境除外）',
+                   'Q、《13》在《00-项目总览与索引》中的登记（《12》第八节 第 18 行）',
+                   'S、索引集中度与跨公司同名标题（守卫项：单篇不得独占索引、同一标题不得跨公司复用）',
+                   'R、汇总与收口（《12》第八节 末行：全套检查通过才放行）']
+_observed_items = len(results) + len(skips)      # 本项自身尚未记账
+chk(_observed_items == EXPECTED_ITEMS_5 and SECS == EXPECTED_SECS_5,
+    'B-31 结构断言：检查项计数与节结构同冻结期望一致（%d 项＝已执行＋未执行、%d 节，均不含本项自身）'
+    % (EXPECTED_ITEMS_5, len(EXPECTED_SECS_5)),
+    '实测 检查项 %d／%d（已执行 %d ＋ 未执行 %d）；节 %d／%d%s'
+    % (_observed_items, EXPECTED_ITEMS_5, len(results), len(skips),
+       len(SECS), len(EXPECTED_SECS_5),
+       '' if SECS == EXPECTED_SECS_5 else '（实测节序：%s）' % '、'.join(SECS)))
+
 print()
-print('  最终：检查项 %d 项，通过 %d，失败 %d'
-      % (len(results), sum(1 for ok, _, _ in results if ok), len(fails)))
+print('  最终：检查项 %d 项，通过 %d，失败 %d，未执行 %d'
+      % (len(results) + len(skips), sum(1 for ok, _, _ in results if ok), len(fails), len(skips)))
 
 print('=' * 78)
 if not fails:
-    print('结论：全部通过（%d/%d 项）。第 5 阶段数据侧验收通过，退出码 0。'
-          % (len(results), len(results)))
+    print('结论：全部通过（通过 %d／已执行 %d、未执行 %d，合计 %d 项）。'
+          % (sum(1 for ok, _, _ in results if ok), len(results), len(skips),
+             len(results) + len(skips)))
+    if skips:
+        print('      未执行 %d 项（%s）：未执行项**不计为通过**；'
+              '如需真实重跑：python 工具\\验收第5阶段数据.py --with-idempotence'
+              % (len(skips), '、'.join(_l.split(' ')[0] for _l in skips)))
+    print('      第 5 阶段数据侧验收通过，退出码 0。')
 else:
-    print('结论：存在 %d 项失败（通过 %d/%d 项）：'
-          % (len(fails), len(results) - len(fails), len(results)))
+    print('结论：存在 %d 项失败（通过 %d／已执行 %d、未执行 %d，合计 %d 项）：'
+          % (len(fails), sum(1 for ok, _, _ in results if ok), len(results), len(skips),
+             len(results) + len(skips)))
     for _lab, _det in fail_evidence:
         print('  - %s  %s' % (_lab, _det))
 print('=' * 78)

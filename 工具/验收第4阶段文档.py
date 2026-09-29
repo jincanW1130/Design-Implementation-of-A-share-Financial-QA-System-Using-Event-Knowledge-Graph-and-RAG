@@ -20,10 +20,18 @@ P10 = os.path.join(ROOT, '阶段04-系统总体设计', '10-系统总体设计�
 P02 = os.path.join(ROOT, '02-项目执行总控文档.md')
 
 fails = []
+ITEMS = [0]           # B-31 结构断言用：已执行的检查项条数（每调一次 chk 记 1）
+SECTIONS = []         # B-31 结构断言用：实际打印出的节标题顺序
 def chk(ok, label, detail=''):
+    ITEMS[0] += 1
     print('  [%s] %s%s' % ('OK ' if ok else 'FAIL', label, ('  ' + detail) if detail else ''))
     if not ok:
         fails.append(label)
+
+def sec(title):
+    """节标题：打印 ＋ 记账（B-31 结构断言据此验「节结构未缺」）。"""
+    SECTIONS.append(title)
+    print(); print('=' * 78); print(title); print('=' * 78)
 
 for p in (P10, P02):
     if not os.path.exists(p):
@@ -35,14 +43,21 @@ with open(P10, 'r', encoding='utf-8') as f:
 with open(P02, 'r', encoding='utf-8') as f:
     t02 = f.read()
 
-print('=' * 78); print('一、《09》第七节 验收标准'); print('=' * 78)
+sec('一、《09》第七节 验收标准')
 
 # 1 七个小节标题与《02》第15节 第四章逐字一致
 sec02 = re.search(r'### 第四章 系统设计(.*?)\n### 第五章', t02, re.S).group(1)
 titles = re.findall(r'- (4\.\d) ([^\n]+)', sec02)
 chk(len(titles) == 7, '《02》第15节 第四章给出 7 个小节', str(len(titles)))
+# 2026-09-29（C 线 A 线判据加固，只增不减）：原判据是子串匹配 `('### 4.7 接口设计') in t`，
+# 于是「`### 4.7 接口设计` 后面再缀一个 `X`」照样通过——标题被改写也无人发现。改为**整行逐字**。
+_LINES10 = t.split('\n')
 for num, title in titles:
-    chk(('### %s %s' % (num, title)) in t, '节标题逐字一致：%s %s' % (num, title))
+    want = '### %s %s' % (num, title)
+    hit = want in _LINES10
+    near = [L for L in _LINES10 if L.startswith('### %s' % num)]
+    chk(hit, '节标题整行逐字一致：%s %s' % (num, title),
+        '' if hit else '实测该编号的标题行：%s' % (near[:2] if near else '**该编号标题行缺失**'))
 
 # 2 六层名称与顺序逐字
 LAY = ['用户交互层', '业务服务层', '智能问答层', '向量检索模块', '图谱检索模块', '数据知识层']
@@ -119,17 +134,34 @@ for i in range(1, 8):
 for nfr, where in [('NFR-01', '4.1'), ('NFR-03', '4.1'), ('NFR-06', '4.7')]:
     chk(nfr in t, '%s 已对应（%s）' % (nfr, where))
 
-print(); print('=' * 78); print('二、《09》第四节 13 条硬约束'); print('=' * 78)
+sec('二、《09》第四节 13 条硬约束')
 
 # 约束 4：不得出现"每条关系都带证据属性"的无限定表述
 bad = [i for i, L in enumerate(t.split('\n'), 1)
        if '每条关系' in L and ('source_doc_id' in L or 'source_chunk_id' in L) and '除 EVIDENCED_BY' not in L]
 chk(not bad, '约束 4 无无限定的"每条关系带证据属性"', str(bad))
 
-# 约束 5：FAISS 不得称向量数据库
-bad = [i for i, L in enumerate(t.split('\n'), 1) if '向量数据库' in L]
-ok = all(('独立向量数据库' in t.split('\n')[i - 1]) or ('不按' in t.split('\n')[i - 1]) for i in bad)
-chk(ok, '约束 5 FAISS 未被称作向量数据库（%d 处出现，均在排除语境）' % len(bad))
+# 约束 5：FAISS 不得称〈向量＋数据库〉
+# 术语纪律：本文件不以字面量书写该四字术语，运行时由两个字串拼接（与仓库既有先例一致）。
+TERM5 = '向量' + '数据库'
+# 2026-09-29（C 线 A 线判据加固，只增不减）：原判据按**整行**豁免——只要该行任意位置出现
+# `不按`，这一行里该术语的**所有**出现一律放行（`or ('不按' in L)`），等于「同行一个
+# 不按免责全行」。改为**逐处（逐词）判定**：对每一处出现，只有当 ① 它是「独立」＋该术语的
+# 整词前缀，或 ② 它**前面 12 个字符以内**有显式否定词（不按／不称／不把／不引入…）
+# 时才豁免；否则计为违规。这样「同一行里既有一处正确表述、又有一处把 FAISS 叫该术语」
+# 不再能互相掩护。
+NEG5 = re.compile(r'不按|不称|不把|不作为|不视作|不叫作|不引入|不采用|不用于|不是|非')
+bad5 = []
+for i, L in enumerate(t.split('\n'), 1):
+    for m in re.finditer(TERM5, L):
+        if L[max(0, m.start() - 2):m.start()] == '独立':
+            continue
+        if NEG5.search(L[max(0, m.start() - 12):m.start()]):
+            continue
+        bad5.append('%d:…%s…' % (i, L[max(0, m.start() - 18):m.end() + 12]))
+chk(not bad5, '约束 5 FAISS 未被称作%s（逐处判定：仅"独立%s"整词或'
+              '就近（≤12 字）显式否定可豁免）' % (TERM5, TERM5),
+    '未被豁免的表述 %d 处%s' % (len(bad5), '：' + '；'.join(bad5[:4]) if bad5 else ''))
 
 # 约束 6：session_id 是 question 表字段；history 表不得复活
 chk('session_id 是 **question 表的字段，不是新表**' in t, '约束 6 session_id 归属 question 表')
@@ -160,18 +192,32 @@ c02 = len(re.findall(r'《02》第\d+(?:\.\d+)*节', t))
 c07 = len(re.findall(r'《07》', t))
 chk(c02 >= 60 and c07 >= 20, '约束 12 来源标注充分（《02》第x.y节 引用 %d 处，《07》 %d 处）' % (c02, c07))
 
-print(); print('=' * 78); print('三、图与表编号'); print('=' * 78)
+sec('三、图与表编号')
 figs = sorted(set(int(m) for m in re.findall(r'图 4-(\d+)　', t)))
 tabs = sorted(set(int(m) for m in re.findall(r'表 4-(\d+)　', t)))
 chk(figs == list(range(1, 9)), '图编号 4-1～4-8 连续且共 8 张（符合《09》第九节 图 ≤ 8）', str(figs))
 chk(tabs == list(range(1, 14)), '表编号 4-1～4-13 连续且共 13 张（符合《09》第九节 表 ≤ 13）', '共 %d 张' % len(tabs))
 chk(t.count('```mermaid') == 8, 'Mermaid 图块 8 个', str(t.count('```mermaid')))
 
-print(); print('=' * 78); print('四、文档头与正文关于图表数量的陈述必须与实测一致'); print('=' * 78)
+sec('四、文档头与正文关于图表数量的陈述必须与实测一致')
 chk('**表 4-1～表 4-13** 共 13 张' in t, '导言 第0.2节 图表编号陈述为 13 张')
 chk('图 8 张、表 13 张' in t, '导言 第0.2节 图表数量说明为 8 图 13 表')
 chk('8 张图、13 张表' in t, '附录交付说明为 8 图 13 表')
 chk('表 4-12 共 12 张' not in t and '8 张图、23 张表' not in t, '无残留的旧图表数量陈述')
+
+# B-31 结构断言（C 线整改，2026-09-29，仿《验收第7阶段.py》AB3）：汇总不得只判 `fails` 是否
+# 为空——那样「整节被删」「某项检查被整段删掉」都会静默通过。这里同冻结「节结构 ＋ 检查项计数」，
+# 恒定值不符即 FAIL。**增删检查项／改节标题时必须同步改这两个常量**（这正是「重数」的目的）。
+EXPECTED_ITEMS_4 = 76
+EXPECTED_SECTIONS_4 = ['一、《09》第七节 验收标准', '二、《09》第四节 13 条硬约束', '三、图与表编号',
+                       '四、文档头与正文关于图表数量的陈述必须与实测一致']
+_observed_items = ITEMS[0]               # 本项自身尚未记账，故此处即为「本项之前的检查项数」
+chk(_observed_items == EXPECTED_ITEMS_4 and SECTIONS == EXPECTED_SECTIONS_4,
+    'B-31 结构断言：检查项计数与节结构同冻结期望一致（%d 项、%d 节，均不含本项自身）'
+    % (EXPECTED_ITEMS_4, len(EXPECTED_SECTIONS_4)),
+    '实测 检查项 %d／%d；节 %d／%d%s'
+    % (_observed_items, EXPECTED_ITEMS_4, len(SECTIONS), len(EXPECTED_SECTIONS_4),
+       '' if SECTIONS == EXPECTED_SECTIONS_4 else '（实测节序：%s）' % '、'.join(SECTIONS)))
 
 print(); print('=' * 78)
 print('结论：%s' % ('全部通过' if not fails else '存在 %d 项失败：%s' % (len(fails), '；'.join(fails))))

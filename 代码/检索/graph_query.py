@@ -176,10 +176,12 @@ class GraphQuery:
                     key = _norm(alias)
                     if key:
                         self.by_name.setdefault(key, []).append(nid)
+        # M-1：同一个 nid 会因 name／short_name／aliases 三处都命中而重复 append，
+        # 只 sort 不去重会让 resolve_node 返回 ['000001','000001','000001']（污染交付 trace）。
         for lst in self.by_name.values():
-            lst.sort()
+            lst[:] = sorted(set(lst))
         for lst in self.by_code.values():
-            lst.sort()
+            lst[:] = sorted(set(lst))
 
         with open(self.edges_csv, "r", encoding="utf-8", newline="") as f:
             reader = csv.DictReader(f)

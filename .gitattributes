@@ -6,6 +6,14 @@
 *.html text eol=lf
 *.csv  text eol=lf
 *.json text eol=lf
+*.cypher text eol=lf
+*.jsonl  text eol=lf
+*.txt    text eol=lf
+*.tsv    text eol=lf
+
+# 仓库根控制文件（无扩展名，否则落到 * text=auto 上按 core.eol=native 检出为 CRLF）
+/.gitattributes text eol=lf
+/.gitignore    text eol=lf
 
 # 二进制文件不做行尾与编码转换
 *.pdf  -text

@@ -43,8 +43,17 @@ r"""extract_event_time.py —— 定向时间补抽（T3.5，两级抽取的第�
     python 代码\抽取与图谱\extract_event_time.py --profile v21_v1_2         # v1.2 候选版本：
                                                                              # 独立缓存与独立产物，不动 v2.1
 
-退出码：`0` 成功；`1` 阻断（缓存与当前输入不一致且未 `--force`／需要密钥但未就位）；
-`2` 复核不通过（`--verify` 与磁盘产物不一致，或缓存缺条）。
+**覆盖层落点与截断守卫（H-3）**：交付覆盖层 `_全量/v21_v1_2/event_time_backfill.json` 被
+`dedup_events.py` 只读消费，而下游只校验 `extract_records_sha256`、**不校验条数**——子集跑若写它，
+会把交付层静默截断且 sha256 不变，T5/T6 的 `event_time` 大面积回落为 null 而无人报错。因此：
+
+* 带 `--limit`／`--docs` 的子集跑**默认改写到独立落点** `*.partial.json`（覆盖层／报告／度量三件套），
+  交付层一个字节都不动；
+* 确要写交付层需显式加 `--allow-overlay`，而写前会校验「本次 cases 数 == 全量 null 事件数」，
+  不符即**阻断并非零退出**（截断跑无论加不加该开关都写不进交付层）。
+
+退出码：`0` 成功；`1` 阻断（缓存与当前输入不一致且未 `--force`／需要密钥但未就位／
+写交付层前 null 计数与全量不符）；`2` 复核不通过（`--verify` 与磁盘产物不一致，或缓存缺条）。
 """
 
 from __future__ import annotations
@@ -1001,8 +1010,57 @@ def finish(args, paths, overlay, report, results, stats, cases):
     return 0
 
 
+# --------------------------------------------------------------------------
+# H-3：子集跑不得静默截断交付覆盖层
+# --------------------------------------------------------------------------
+PARTIAL_SUFFIX = ".partial"
+
+
+def is_subset_run(args) -> bool:
+    """`--limit`／`--docs` 会截断 cases —— 这类子集跑默认不得写交付层。"""
+    return args.limit is not None or bool(args.docs)
+
+
+def resolve_paths(args):
+    """解析本次运行的落点：子集跑（且未显式 `--allow-overlay`）一律改到**独立落点**。
+
+    H-3：交付层 `_全量/v21_v1_2/event_time_backfill.json` 被 `dedup_events.py` 只读消费，
+    而下游只校验 `extract_records_sha256`、**不校验条数**——子集跑若写它，会把交付层静默
+    截断成 N 条且 sha256 不变，T5/T6 的 `event_time` 大面积回落为 null 而无人报错。
+    """
+    paths = dict(config.time_backfill_paths(args.profile))
+    if is_subset_run(args) and not getattr(args, "allow_overlay", False):
+        for key in ("overlay", "report", "measure"):
+            base, ext = os.path.splitext(paths[key])
+            paths[key] = base + PARTIAL_SUFFIX + ext
+    return paths
+
+
+def full_null_event_count(records) -> int:
+    """全量（不分文档、不截断）的 null 事件数——交付覆盖层必须覆盖到这个数。"""
+    return sum(1 for r in records for e in (r.get("events") or []) if not e.get("event_time"))
+
+
+def assert_delivery_overlay_complete(paths, args, records, cases):
+    """H-3 守卫：覆盖交付层前校验 null 计数；与预期不符即阻断（非零退出、不写盘）。
+
+    落点不是交付层（已是 `.partial.json`）时不做此校验——那本就不是交付产物。
+    """
+    delivery = config.time_backfill_paths(args.profile)["overlay"]
+    if os.path.normcase(os.path.abspath(paths["overlay"])) != \
+            os.path.normcase(os.path.abspath(delivery)):
+        return
+    expected = full_null_event_count(records)
+    if len(cases) != expected:
+        raise SystemExit(
+            "拒绝写入交付覆盖层 %s：本次 cases=%d 条，而全量 null 事件为 %d 条。"
+            "子集跑（--limit／--docs）截断交付层后 extract_records_sha256 不变，下游 dedup_events.py "
+            "会静默放行。请去掉 --allow-overlay 让落点自动改为 *.partial.json，或跑全量。"
+            % (os.path.basename(delivery), len(cases), expected))
+
+
 def run_backfill(args) -> int:
-    paths = config.time_backfill_paths(args.profile)
+    paths = resolve_paths(args)
     cache_dir = paths["cache_dir"]
     records_path = paths["extract_records"]
     if not os.path.isfile(records_path):
@@ -1016,6 +1074,11 @@ def run_backfill(args) -> int:
     events_total = sum(len(r.get("events") or []) for r in records)
     only_docs = {int(x) for x in re.split(r"[,\s]+", args.docs or "") if x.strip()} or None
     cases, notes = collect_cases(records, chunks_by_doc, only_docs, args.limit)
+    # H-3：先守卫（fail fast），再花钱调模型／写盘——子集跑绝不截断交付层。
+    assert_delivery_overlay_complete(paths, args, records, cases)
+    if is_subset_run(args) and paths["overlay"].endswith(PARTIAL_SUFFIX + ".json"):
+        print("[提示] 子集跑（--limit／--docs）：覆盖层改写到独立落点 %s（不动交付层）"
+              % rel(paths["overlay"]))
 
     stats = {"api_calls": 0, "cache_hits": 0, "fetched": 0, "retries": 0,
              "fallback_calls": 0, "cache_written": [],
@@ -1060,7 +1123,7 @@ def run_backfill(args) -> int:
 
 def run_verify(args) -> int:
     """只重算复核：零写入、零调用；与磁盘覆盖层逐字节比对（要求完全一致）。"""
-    paths = config.time_backfill_paths(args.profile)
+    paths = resolve_paths(args)
     cache_dir = paths["cache_dir"]
     if not os.path.isfile(paths["overlay"]):
         print("[阻断] 覆盖层不存在：%s" % rel(paths["overlay"]))
@@ -1118,7 +1181,7 @@ def run_verify(args) -> int:
 
 
 def run_measure(args) -> int:
-    paths = config.time_backfill_paths(args.profile)
+    paths = resolve_paths(args)
     records = read_jsonl(paths["extract_records"])
     chunks_by_doc = {}
     for chunk in read_jsonl(config.CHUNKS_PATH):
@@ -1167,6 +1230,10 @@ def main(argv=None) -> int:
     parser.add_argument("--measure", action="store_true",
                         help="只算时间覆盖／可过滤性指标（零调用）")
     parser.add_argument("--measure-output", default=None, help="度量产物落点（默认 config 登记值）")
+    parser.add_argument("--allow-overlay", action="store_true",
+                        help="显式允许子集跑（--limit／--docs）写**交付覆盖层**（H-3）；"
+                             "默认子集跑改写到 *.partial.json。注意：交付层的 null 计数必须与全量一致，"
+                             "故截断跑加了本开关也会被阻断")
     args = parser.parse_args(argv)
     try:
         if args.measure:

@@ -507,6 +507,10 @@ def main(argv=None) -> int:
         print(report)
         return 0
     path = args.out or os.path.join(out_dir(), REPORT_NAME)
+    # M-8：裸文件名（如 --out 对照报告.md）时 dirname 为 ""，本行与下游
+    # `handann.write_text_atomic()` 里的 os.makedirs(dirname(path)) 都会抛
+    # FileNotFoundError；这里统一把路径转成绝对路径，两处即都安全。
+    path = os.path.abspath(path)
     os.makedirs(os.path.dirname(path), exist_ok=True)
     handann.write_text_atomic(path, report)
     print("两版对照报告：%s（pro %d 条／flash %d 条）" % (path, len(pro_anns), len(flash_anns)))

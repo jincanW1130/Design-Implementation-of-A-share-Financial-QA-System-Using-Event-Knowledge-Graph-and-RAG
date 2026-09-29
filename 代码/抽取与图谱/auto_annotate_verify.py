@@ -105,7 +105,9 @@ def main(argv=None) -> int:
               % ("OK" if ok1 else "FAIL", split, len(auto_recs), len(bad_prefix),
                  "，且 %d 条在原件里找不到" % len(missing) if missing else ""))
         # ② provenance 完好
-        bad_prov, no_usage = [], []
+        # L-10：删除死代码 —— 原先还有一个 `no_usage` 列表与其 `elif not u` 分支，
+        # 但 `cond` 已含 `and u`（u 为真才可能 cond 为真），故该分支不可达，列表也无人读取。
+        bad_prov = []
         for rec in auto_recs:
             ann = rec.get("annotation") or {}
             prov = ann.get("provenance") or {}
@@ -118,8 +120,6 @@ def main(argv=None) -> int:
                 cond = False
             if not cond:
                 bad_prov.append(rec.get("item_id"))
-            elif not u:
-                no_usage.append(rec.get("item_id"))
         ok2 = not bad_prov
         failed += 0 if ok2 else 1
         prov_models = sorted({((r.get("annotation") or {}).get("provenance") or {}).get("model")
@@ -139,7 +139,9 @@ def main(argv=None) -> int:
                     ws_bad.append(rec["item_id"])
                     continue
                 ws_n += 1
-                text = open(p, encoding="utf-8").read()
+                # L-11：用 with 关闭句柄（原先 open(...).read() 依赖 CPython 引用计数回收）。
+                with open(p, encoding="utf-8") as fh:
+                    text = fh.read()
                 i = text.find("```json")
                 j = text.rfind("```")
                 blk = text[i + 7:j] if 0 <= i < j else ""

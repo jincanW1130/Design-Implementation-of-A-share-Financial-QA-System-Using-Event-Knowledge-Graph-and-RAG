@@ -15,10 +15,15 @@
     - 每条之间至少间隔 2 秒，最多处理 22 条。
 
 用法
-    python 工具\核验知网题录.py                 # 采集 22 条并写 JSONL 与证据
-    python 工具\核验知网题录.py --report-only   # 只读已有采集结果并生成报告
-    python 工具\核验知网题录.py --check-network # 只做公开站点连通性检查
-    python 工具\核验知网题录.py --probe 实体消歧综述
+    python 工具\核验知网题录.py --allow-network                 # 采集 22 条并写 JSONL 与证据
+    python 工具\核验知网题录.py --report-only                   # 只读已有采集结果并生成报告（离线）
+    python 工具\核验知网题录.py --allow-network --check-network # 只做公开站点连通性检查
+    python 工具\核验知网题录.py --allow-network --probe 实体消歧综述
+
+联网开关（2026-09-29 C 线裁定）
+    `--allow-network` **默认关闭**：任何会发起请求的路径（连通性预检、检索页渲染、
+    文章页抓取）在动手前都先过 `require_network()` 守卫，未显式打开即拒绝并退出（退出码 4）。
+    `--report-only` 与解析／指纹等离线函数不经过该守卫，可完全离线调用；**不引入任何凭据**。
 """
 from __future__ import annotations
 
@@ -76,6 +81,23 @@ UA = (
 
 # 以拼接方式声明阻断主机，脚本正文不出现主库完整域名。
 BLOCKED_HOSTS = ("kns." + "cnki.net", "pay." + "cnki.net")
+
+# ------------------------------------------------------------------ 联网开关（默认关闭）
+# 2026-09-29（C 线裁定）：本工具会访问知网公开站点。为杜绝「无意中的联网」，加显式开关
+# `--allow-network`（**默认关闭**）。**每一个会发起请求的函数**在动手前先过 `require_network()`；
+# 四个请求点即 `probes_network`（GET／POST 预检）、`render_search`（浏览器 goto）、
+# `fetch_article`（GET 文章页）——全部经此守卫，未开开关时**不可能发出任何请求**。
+# 解析、指纹、报告等离线函数**不经过**该守卫，保持可离线调用。**不引入任何凭据。**
+ALLOW_NETWORK = False
+
+
+def require_network(op: str) -> None:
+    """联网守卫：未显式打开 `--allow-network` 时拒绝发起任何请求（退出码 4）。"""
+    if not ALLOW_NETWORK:
+        print("拒绝联网：%s 需要访问知网公开站点，但未显式打开 --allow-network（默认关闭）。\n"
+              "       如确需联网核验，请显式加 `--allow-network`；离线解析与报告不受影响。"
+              % op)
+        raise SystemExit(4)
 
 REQUIRED_FIELDS = [
     "编号",
@@ -421,6 +443,7 @@ def make_playwright_route_handler(state: dict, seen: set):
 
 
 def probes_network() -> dict:
+    require_network("公开站点连通性检查（probes_network）")
     ensure_dirs()
     results = {}
     checks = [
@@ -530,6 +553,7 @@ def absolute_cnki_url(href: str) -> str:
 
 
 def render_search(page, item: dict, state: dict) -> dict:
+    require_network("检索页渲染（render_search）")
     search_url = SEARCH_PAGE.format(q=quote(item["题名"], safe=""))
     page.goto(search_url, wait_until="domcontentloaded", timeout=60000)
     page.wait_for_function("() => typeof Page0 === 'function'", timeout=20000)
@@ -705,6 +729,7 @@ def extract_page_meta(soup: BeautifulSoup, html: str) -> dict:
 
 
 def fetch_article(filename: str, item_id: str) -> dict:
+    require_network("文章页抓取（fetch_article）")
     url = ARTICLE_PAGE.format(fn=filename)
     r = SESSION.get(url, timeout=40, allow_redirects=True)
     log_plain_url(item_id, "GET", "article", url)
@@ -1506,6 +1531,7 @@ def build_report() -> str:
 
 # ------------------------------------------------------------------ 主流程
 def collect() -> int:
+    require_network("整库采集（collect）")  # 入口先把关：避免拒绝前在阶段目录留下副作用
     ensure_dirs()
     write_text(RUN_LOG_PATH, "")
     write_text(URL_LOG_PATH, "")
@@ -1583,6 +1609,7 @@ def collect() -> int:
 
 
 def probe_title(title: str) -> int:
+    require_network("单条探测（probe_title）")  # 入口先把关：避免拒绝前在阶段目录留下副作用
     ensure_dirs()
     items = load_library()
     target = None
@@ -1639,7 +1666,12 @@ def main() -> int:
     parser.add_argument("--report-only", action="store_true", help="只读已有结果并生成报告")
     parser.add_argument("--check-network", action="store_true", help="只做公开站点连通性检查")
     parser.add_argument("--probe", metavar="题名或编号", help="只探测一条题名")
+    parser.add_argument("--allow-network", action="store_true",
+                        help="显式允许访问知网公开站点（**默认关闭**）；离线解析与报告无需该开关")
     args = parser.parse_args()
+    # 2026-09-29（C 线裁定）：联网开关默认关闭，只有显式给出 --allow-network 才放行。
+    global ALLOW_NETWORK
+    ALLOW_NETWORK = bool(args.allow_network)
     if args.report_only:
         ensure_dirs()
         try:

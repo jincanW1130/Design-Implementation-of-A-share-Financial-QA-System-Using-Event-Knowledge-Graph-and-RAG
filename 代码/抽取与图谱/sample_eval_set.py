@@ -581,7 +581,10 @@ def make_item(split: str, seq: int, unit: dict, schema: dict) -> dict:
         "split": split,
         "chunk_id": int(chunk["chunk_id"]),
         "doc_id": unit["doc_id"],
-        "chunk_index": unit["chunk_index"],
+        # M-6：chunk_index 必须描述**实际选中的块**（chunk），不是 unit 的信号块
+        # （unit["chunk_index"] 是信号块的序号，choose_chunk 可能另选一块），
+        # 否则交付评测集里 chunk_index 与 chunk_id 自相矛盾。
+        "chunk_index": int(chunk["chunk_index"]),
         "chunk_count_in_doc": unit["chunk_count_in_doc"],
         "token_count": chunk.get("token_count"),
         "category": doc["category"],
@@ -1201,6 +1204,9 @@ def flatten_annotation(ann: dict, prefix: str = "") -> list:
 def verify(verbose: bool = True) -> dict:
     docs, chunks = load_inputs()
     chunk_index = {int(c["chunk_id"]): int(c["doc_id"]) for c in chunks}
+    # M-6：块序号表，用于核验条目里 chunk_id 与 chunk_index 是否自洽
+    # （此前 verify() 不含该一致性检查，矛盾永远发现不了）。
+    chunk_index_of = {int(c["chunk_id"]): int(c["chunk_index"]) for c in chunks}
     dev = read_jsonl(DEV_PATH)
     test = read_jsonl(TEST_PATH)
     with open(STATS_PATH, encoding="utf-8") as fh:
@@ -1210,7 +1216,7 @@ def verify(verbose: bool = True) -> dict:
     dev_docs = {int(r["doc_id"]) for r in dev}
     test_docs = {int(r["doc_id"]) for r in test}
     inter = sorted(set(dev_ids) & set(test_ids))
-    bad_ann, bad_chunk, bad_link = [], [], []
+    bad_ann, bad_chunk, bad_link, bad_idx = [], [], [], []
     for r in dev + test:
         for path, v in flatten_annotation(r.get("annotation") or {}):
             if path.endswith("status"):
@@ -1223,6 +1229,11 @@ def verify(verbose: bool = True) -> dict:
             bad_chunk.append(cid)
         elif chunk_index[cid] != did:
             bad_link.append({"chunk_id": cid, "item_doc_id": did, "dataset_doc_id": chunk_index[cid]})
+        # M-6：chunk_index 必须等于 chunk_id 在 chunks.jsonl 里的 chunk_index。
+        if cid in chunk_index_of and int(r.get("chunk_index", -1)) != chunk_index_of[cid]:
+            bad_idx.append({"item_id": r["item_id"], "chunk_id": cid,
+                            "item_chunk_index": r.get("chunk_index"),
+                            "dataset_chunk_index": chunk_index_of[cid]})
     cat_dev, cat_test = {}, {}
     for r in dev:
         cat_dev[r["category"]] = cat_dev.get(r["category"], 0) + 1
@@ -1237,6 +1248,8 @@ def verify(verbose: bool = True) -> dict:
         "annotation_slots_empty": not bad_ann, "annotation_violations": bad_ann[:10],
         "chunk_ids_resolvable_in_v21": not bad_chunk, "unresolved_chunk_ids": bad_chunk[:10],
         "chunk_doc_link_ok": not bad_link, "chunk_doc_link_violations": bad_link[:10],
+        # M-6：chunk_index 与 chunk_id 的自洽性（对 chunks.jsonl 重算）
+        "chunk_index_consistent": not bad_idx, "chunk_index_violations": bad_idx[:10],
         "category_counts": {"dev": cat_dev, "test": cat_test},
         "category_counts_match_stats": (
             {k: stats["achieved_vs_target"]["category"][i]["achieved_items"]
@@ -1252,7 +1265,8 @@ def verify(verbose: bool = True) -> dict:
     }
     report["ok"] = all([
         len(dev) == DEV_TOTAL, len(test) == TEST_TOTAL, not inter,
-        not bad_ann, not bad_chunk, not bad_link, report["category_counts_match_stats"],
+        not bad_ann, not bad_chunk, not bad_link, not bad_idx,
+        report["category_counts_match_stats"],
         report["protocol_file_exists"],
     ])
     if verbose:

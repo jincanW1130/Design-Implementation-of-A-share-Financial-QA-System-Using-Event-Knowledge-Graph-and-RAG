@@ -55,6 +55,7 @@ import argparse
 import hashlib
 import json
 import os
+import shutil
 import sys
 
 try:  # 控制台为 GBK 时也要能输出中文
@@ -733,6 +734,9 @@ def cmd_selftest(args) -> int:
     check("|final|>K：gold 落在前 K 内时 mrr 仍是首个命中的倒数（1/3）",
           row_in["n_hit"] == 1 and row_in["mrr"] == _r(1.0 / 3),
           "n_hit=%d  mrr=%s" % (row_in["n_hit"], row_in["mrr"]))
+
+    # L-5：自证用的 a.jsonl／b.jsonl 属临时产物，跑完即清，避免在 _工作底稿 里留垃圾。
+    shutil.rmtree(fixt, ignore_errors=True)
 
     ok_all = all(results)
     print("-" * 60)

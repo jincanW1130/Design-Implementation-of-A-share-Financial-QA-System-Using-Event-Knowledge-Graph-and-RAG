@@ -1,0 +1,15 @@
+=== 交付前最终复跑（只读门禁）===
+--- git --version / Python ---
+git version 2.55.0.windows.3
+Python 3.12.10
+
+--- 验收第4阶段文档.py ---
+exit=0
+--- 验收第5阶段数据.py（默认档）---
+exit=0
+--- 验收第5阶段数据.py --with-idempotence ---
+exit=0
+--- 跨文档核验.py ---
+exit=0
+--- 验收第7阶段.py --profile static（应 2=未运行）---
+exit=2

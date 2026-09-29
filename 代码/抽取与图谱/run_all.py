@@ -241,8 +241,9 @@ def run(args) -> int:
         status = {0: "成功", 1: "阻断（前置／参数）", 2: "数据异常"}.get(result["exit_code"],
                                                                       "退出码 %d"
                                                                       % result["exit_code"])
-        if result["exit_code"] == 1 and "跳过" in result["stdout"]:
-            status = "成功（命中已有产物，跳过）"
+        # L-8：原先还有一条「exit_code == 1 且 stdout 含『跳过』→ 记成功（命中已有产物，跳过）」，
+        # 但 extract.py 的 selection_assertion 保证「problems 非空 ⟺ 无『跳过』提示」，
+        # 且两个真正的跳过路径都 return 0 —— 该分支永远不可达，只会让日志说谎。故删除。
         print("      %s（%.3fs，退出码 %s）"
               % (status, result["seconds"], result["exit_code"]), flush=True)
         lines += ["-" * 78,

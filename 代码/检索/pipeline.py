@@ -227,8 +227,9 @@ def resolve_k_n_budget(args) -> dict:
 
     硬约束 10／22：四项在 T8 固化前是 TBD，读到即报错退出，**不用默认值兜底**。
     `g` 是**全局固化量**（A～E 五组同值、不进任何开关），由 T8 预实验按「在不劣于 g=0 的
-    四项指标的前提下，让图谱侧证据进入最终集合的最大 g」定值；取值域为 0…K（`g = K`
-    即"图谱侧优先"的极端口径，须由预实验裁定后才能使用）。
+    四项指标的前提下，让图谱侧证据进入最终集合的最大 g」定值；取值域为 **1 ≤ g ≤ K**
+    （`config.GRAPH_SHARE_FLOOR = 1` 强制下限 1，`g = K` 即"图谱侧优先"的极端口径；
+    g = 0 只能走显式的退化回归通道 `--legacy-g0-degeneration`，正常运行不接受）。
     """
     k = int(args.k) if args.k is not None else int(config.require_fixed("K"))
     n = int(args.n) if args.n is not None else int(config.require_fixed("N"))
@@ -1143,7 +1144,9 @@ def evidence_sort_factors(graph, record, seeds, documents, chunks) -> dict:
     doc = documents.get(int(record["doc_id"])) or {}
     company_text = "%s %s" % (doc.get("company_list") or "", doc.get("subject_companies") or "")
     chunk_text = str((chunks.get(record["chunk_id"]) or {}).get("content") or "")
-    entity_match = 0
+    # L-1：该因子对「图谱侧块」恒取 0 —— 其真实语义是「证据类型优先」，并非「实体匹配度」：
+    # 图谱侧块不看正文是否含问题实体名。**刻意保留原判定与数值**，只补注说明：
+    # 改成按正文判实体名会静默改变 E 组呈现顺序，而 E 组是非交付诊断组（交付 trace 取 C 组）。
     if record.get("graph_path_ordinals"):
         entity_match = 0
     elif any(name and (name in company_text or name in chunk_text) for name in seed_names):

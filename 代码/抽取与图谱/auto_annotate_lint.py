@@ -260,7 +260,9 @@ def fold_simp(text) -> str:
 
 
 def write_text_atomic(path: str, text: str) -> None:
-    handann.write_text_atomic(path, text)
+    # M-8：裸文件名（dirname == ""）会让下游 helper 的 os.makedirs 抛
+    # FileNotFoundError；在本函数统一转绝对路径，三个调用点一并安全。
+    handann.write_text_atomic(os.path.abspath(path), text)
 
 
 def read_jsonl(path: str) -> list:
@@ -598,7 +600,7 @@ def rule_r4_out_of_scope_logged(rec, ann):
     「名单内公司但 `stock_code` 留空」按 `entity_scope` 仍算名单内，不触发本规则。
     """
     ents = entities_by_ref(ann)
-    outside = []
+    outside = []                                   # [(端点描述, [端点公司的名面…])]
     for i, rel in enumerate(_dicts(ann.get("relations"))):
         for side in ("from", "to"):
             ref = rel.get(side + "_ref")
@@ -607,16 +609,29 @@ def rule_r4_out_of_scope_logged(rec, ann):
                 continue
             in_scope, why = entity_scope(ent)
             if not in_scope:
-                outside.append("relations[%d].%s_ref=%s（%s）" % (i, side, ref, why))
+                # 注意名字键是 company_name／short_name／aliases（**没有** `name` 键，
+                # 见 NAME_FIELDS_BY_TYPE）；用 entity_name_surfaces 取全部名面。
+                names = [v for _f, v in entity_name_surfaces(ent)]
+                outside.append(("relations[%d].%s_ref=%s（%s）" % (i, side, ref, why), names))
     if not outside:
         return []
     logged = [e for e in _dicts(ann.get("ontology_boundary_log"))
               if str(e.get("case_type") or "").strip() == "company_out_of_scope"]
-    if logged:
+    # M-7：登记必须**覆盖到具体端点公司**。原实现是「只要有任意一条 company_out_of_scope
+    # 登记，整条记录的所有名单外端点一律豁免」，于是登记了 A 公司就顺手放过了 B 公司
+    # （交付实测漏报 4 条）。改为按端点公司逐个核对：端点的**任一名面**出现在登记条目的
+    # summary／quote／suggested_handling／note 文本里即算覆盖。
+    logged_text = " ".join(
+        str(e.get(key) or "")
+        for e in logged for key in ("summary", "quote", "suggested_handling", "note"))
+    uncovered = [desc for desc, names in outside
+                 if not names or not any(n in logged_text for n in names)]
+    if not uncovered and logged:
         return []
     return [_mk("R4_out_of_scope_logged", rec, "relations[].{from,to}_ref",
-                "图谱端点里出现名单外公司（%s）但没有 `case_type=company_out_of_scope` 的登记"
-                % "；".join(outside[:4]), _joined_quotes(ann))]
+                "图谱端点里出现名单外公司但没有覆盖到它的 `case_type=company_out_of_scope` 登记"
+                "（%s）" % "；".join(uncovered[:4] or [d for d, _ in outside[:4]]),
+                _joined_quotes(ann))]
 
 
 def rule_r5_participants_relation_mirror(rec, ann):
@@ -1089,7 +1104,9 @@ def cmd_diff(args) -> int:
              "＋".join(after.get("splits_present") or []) or "无"),
           "", "生成时间：%s" % now_iso()]
     if args.out:
-        os.makedirs(os.path.dirname(args.out), exist_ok=True)
+        # M-8：裸文件名（如 --out 报告.md）时 os.path.dirname 返回 ""，os.makedirs("") 会抛
+        # FileNotFoundError；先转绝对路径再取目录名。
+        os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
         write_text_atomic(args.out, "\n".join(L) + "\n")
         print("对照表：%s（前 %d 处 → 后 %d 处）" % (args.out, tot_b, tot_a))
     else:

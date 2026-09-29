@@ -736,6 +736,7 @@ print("=" * 78)
 print("D、《18》第八节 第 4 行：向量索引可加载：ntotal = 5018、d = 512、metric_type 为内积；"
       "加载走字节流反序列化，不调用 read_index")
 print("=" * 78)
+index = None  # 缺索引时保持 None，供下面按需释放（见 del index 处的注释）
 try:
     index = config.read_faiss_index(config.INDEX_PATH)
     chk(int(index.ntotal) == 5018 and int(index.d) == 512 and int(index.metric_type) == 0,
@@ -753,7 +754,13 @@ chk(not bad_read and control, "D2 链上代码不调用向量索引库自带的�
     "命中 %d 个文件%s；正对照命中=%s；config.read_faiss_index 用 deserialize_index=%s"
     % (len(bad_read), "：" + br(bad_read) if bad_read else "", control,
        "deserialize_index" in (code_texts.get("config.py") or "")))
-del index  # 释放镜像重跑前父进程持有的索引内存
+# 2026-09-29（C 线 A 线判据加固，只增不减）：原为**无条件** `del index`。当上面
+# `read_faiss_index` 抛异常时 `index` 从未绑定，`del index` 会抛 `NameError` —— 整个脚本
+# 在 D 组就崩溃，其后的 E～AB 组（含 V／W／X／Y）全部不再执行、也没有降级报告。
+# 改为「先置 None、按需释放」：检查项与判定不变，只是把「缺索引 ⇒ 崩」改成
+# 「D1 已按失败记账、后续各组照常执行」。
+if index is not None:
+    del index  # 释放镜像重跑前父进程持有的索引内存
 
 
 # ==========================================================================
@@ -1388,107 +1395,136 @@ if R:
     probe = R.get("independent") or {}
     cells = probe.get("cells") or {}
     g_probe = probe.get("g_curve") or {}
-    max_gold = max(len(set(str(x) for x in (q.get("gold_evidence_chunk_ids") or [])))
-                   for q in questions)
-    r1_rows = [r for r in R["matrix"] if r.get("round") == "round1_nonbinding"]
-    median_by_k = {int(r["K"]): r["occupancy"]["text_tokens"]["median"]
-                   for r in r1_rows if int(r["N"]) == 20}
-    anchor_k = min(k for k in GATE_K_GRID if k >= max_gold)
-    anchor_n = min(n for n in GATE_N_GRID if n >= anchor_k)
-    budget_ind = int(math.ceil(float(median_by_k[anchor_k]) * 1.10 / 100.0) * 100)
-    feasible_ind = [k for k in GATE_K_GRID
-                    if k >= max_gold and float(median_by_k[k]) <= budget_ind]
-    cer_under_ind = {k: float(cells["K%d_N20" % k]["metrics"]
-                              ["complete_evidence_recall_at_k"]) for k in GATE_K_GRID}
-    k_star_ind = feasible_ind[0]
-    for current, nxt in zip(feasible_ind, feasible_ind[1:]):
-        if cer_under_ind[nxt] > cer_under_ind[current] + 1e-12:
-            k_star_ind = nxt
-        else:
-            break
-    delta15_ind = round(cer_under_ind[15] - cer_under_ind[10], 8)
-    delta15_recorded = next((r.get("delta_cer_vs_prev_under_budget") for r in rows_sat
-                             if r.get("K") == 15), None)
-    gold_excl_ind = (5 < max_gold) and (5 not in feasible_ind)
-    budget_excl_ind = (float(median_by_k[15]) > budget_ind) and (15 not in feasible_ind)
-    u1_ok = (k_sel == k_star_ind == GATE_CELL["K"]
-             and int(selected.get("N") or -1) == GATE_CELL["N"]
-             and int(selected.get("context_token_budget") or -1) == budget_ind
-             and budget_ind == GATE_CELL["context_token_budget"]
-             and feasible == feasible_ind
-             and sat.get("selected_K") == k_sel
-             and delta15_recorded is not None
-             and abs(float(delta15_recorded) - delta15_ind) <= 1e-8
-             and delta15_ind <= 0
-             and gold_excl_ind and budget_excl_ind
-             and "饱和" in (rules.get("K_rule") or ""))
+    # 2026-09-29（C 线 A 线判据加固，只增不减）：原代码在 `if R:` 内**裸算**——一旦
+    # max_gold 超出 K 网格上限（`min()` 空序列 ValueError）、镜像里缺某个 K 格
+    # （`median_by_k[k]`／`cells[...]` KeyError）或可行集为空（`feasible_ind[0]` IndexError），
+    # 异常会冒到顶层：U2／U3 以及其后的 V／W／X／Y… 全部不再执行、也没有降级报告。
+    # 改为把「独立重算」包进 try：重算失败时本项按 FAIL 记账并打印异常，
+    # 其余检查项（含 U2／U3 与后续各组）照常执行。**检查项条数不变**。
+    try:
+        max_gold = max(len(set(str(x) for x in (q.get("gold_evidence_chunk_ids") or [])))
+                       for q in questions)
+        r1_rows = [r for r in R["matrix"] if r.get("round") == "round1_nonbinding"]
+        median_by_k = {int(r["K"]): r["occupancy"]["text_tokens"]["median"]
+                       for r in r1_rows if int(r["N"]) == 20}
+        anchor_k = min(k for k in GATE_K_GRID if k >= max_gold)
+        anchor_n = min(n for n in GATE_N_GRID if n >= anchor_k)
+        budget_ind = int(math.ceil(float(median_by_k[anchor_k]) * 1.10 / 100.0) * 100)
+        feasible_ind = [k for k in GATE_K_GRID
+                        if k >= max_gold and float(median_by_k[k]) <= budget_ind]
+        cer_under_ind = {k: float(cells["K%d_N20" % k]["metrics"]
+                                  ["complete_evidence_recall_at_k"]) for k in GATE_K_GRID}
+        k_star_ind = feasible_ind[0]
+        for current, nxt in zip(feasible_ind, feasible_ind[1:]):
+            if cer_under_ind[nxt] > cer_under_ind[current] + 1e-12:
+                k_star_ind = nxt
+            else:
+                break
+        delta15_ind = round(cer_under_ind[15] - cer_under_ind[10], 8)
+        delta15_recorded = next((r.get("delta_cer_vs_prev_under_budget") for r in rows_sat
+                                 if r.get("K") == 15), None)
+        gold_excl_ind = (5 < max_gold) and (5 not in feasible_ind)
+        budget_excl_ind = (float(median_by_k[15]) > budget_ind) and (15 not in feasible_ind)
+        u1_ok = (k_sel == k_star_ind == GATE_CELL["K"]
+                 and int(selected.get("N") or -1) == GATE_CELL["N"]
+                 and int(selected.get("context_token_budget") or -1) == budget_ind
+                 and budget_ind == GATE_CELL["context_token_budget"]
+                 and feasible == feasible_ind
+                 and sat.get("selected_K") == k_sel
+                 and delta15_recorded is not None
+                 and abs(float(delta15_recorded) - delta15_ind) <= 1e-8
+                 and delta15_ind <= 0
+                 and gold_excl_ind and budget_excl_ind
+                 and "饱和" in (rules.get("K_rule") or ""))
+        u1_why = ("独立重算：max_gold=%d、预算=%d、可行集=%s、选定 K*=%d、Δ(K10→K15)=%+.8f；"
+                  "产物记录：选定 K=%s、可行集=%s、Δ=%s"
+                  % (max_gold, budget_ind, feasible_ind, k_star_ind, delta15_ind,
+                     k_sel, feasible, delta15_recorded))
+    except Exception as exc:  # noqa: BLE001
+        u1_ok = False
+        u1_why = ("独立探针重算异常（%s: %s）——K 网格越界／产物缺格／可行集为空，"
+                  "按失败记账；后续检查仍继续" % (type(exc).__name__, exc))
     chk(u1_ok,
         "U1 K 的选择规则执行证据由独立探针重算：gold 排除 K=5、预算排除 K=15、"
         "K=10 处 Δ ≤ 0 且所选 K 为饱和最小可行档",
-        "独立重算：max_gold=%d、预算=%d、可行集=%s、选定 K*=%d、Δ(K10→K15)=%+.8f；"
-        "产物记录：选定 K=%s、可行集=%s、Δ=%s"
-        % (max_gold, budget_ind, feasible_ind, k_star_ind, delta15_ind,
-           k_sel, feasible, delta15_recorded))
-    ncurve = (sel.get("evidence") or {}).get("N_curve") or []
-    n_rows = [r for r in ncurve if r.get("K") == k_sel]
-    n_cells_ind = [cells["K10_N%d" % n] for n in GATE_N_GRID]
-    max_cer_ind = max(float(row["metrics"]["complete_evidence_recall_at_k"])
-                      for row in n_cells_ind)
-    min_n_ind = min(int(row["N"]) for row in n_cells_ind
-                    if abs(float(row["metrics"]["complete_evidence_recall_at_k"])
-                           - max_cer_ind) <= 1e-12)
-    n_values_match = all(
-        any(int(r.get("N") or -1) == int(row["N"])
-            and abs(float(r["metrics"]["complete_evidence_recall_at_k"])
-                    - float(row["metrics"]["complete_evidence_recall_at_k"])) <= 1e-12
-            and all(abs(float(r["metrics"][key]) - float(row["metrics"][key])) <= 1e-12
-                    for key in ("recall_at_k", "precision_at_k", "mrr"))
-            for r in n_rows)
-        for row in n_cells_ind)
-    chk(min_n_ind == selected.get("N") and n_values_match
-        and "最小" in (rules.get("N_rule") or ""),
+        u1_why)
+    # 同 U1：N 网格独立重算也包进 try，缺格（KeyError）／空集（max/min 空序列 ValueError）
+    # 时本项按 FAIL 记账、后续检查继续。检查项条数不变。
+    try:
+        ncurve = (sel.get("evidence") or {}).get("N_curve") or []
+        n_rows = [r for r in ncurve if r.get("K") == k_sel]
+        n_cells_ind = [cells["K10_N%d" % n] for n in GATE_N_GRID]
+        max_cer_ind = max(float(row["metrics"]["complete_evidence_recall_at_k"])
+                          for row in n_cells_ind)
+        min_n_ind = min(int(row["N"]) for row in n_cells_ind
+                        if abs(float(row["metrics"]["complete_evidence_recall_at_k"])
+                               - max_cer_ind) <= 1e-12)
+        n_values_match = all(
+            any(int(r.get("N") or -1) == int(row["N"])
+                and abs(float(r["metrics"]["complete_evidence_recall_at_k"])
+                        - float(row["metrics"]["complete_evidence_recall_at_k"])) <= 1e-12
+                and all(abs(float(r["metrics"][key]) - float(row["metrics"][key])) <= 1e-12
+                        for key in ("recall_at_k", "precision_at_k", "mrr"))
+                for r in n_rows)
+            for row in n_cells_ind)
+        u2_ok = (min_n_ind == selected.get("N") and n_values_match
+                 and "最小" in (rules.get("N_rule") or ""))
+        u2_why = ("独立重算 N=%s、最大 CER=%.8f、最小 N=%d；产物 N 曲线题数=%d、选定 N=%s"
+                  % ([row["N"] for row in n_cells_ind], max_cer_ind, min_n_ind,
+                     len(n_rows), selected.get("N")))
+    except Exception as exc:  # noqa: BLE001
+        u2_ok = False
+        u2_why = ("独立探针重算异常（%s: %s）——N 网格越界／产物缺格／题集为空，"
+                  "按失败记账；后续检查仍继续" % (type(exc).__name__, exc))
+    chk(u2_ok,
         "U2 N 的选择规则执行证据由独立探针重算：取使 CER 达到最大值的**最小** N",
-        "独立重算 N=%s、最大 CER=%.8f、最小 N=%d；产物 N 曲线题数=%d、选定 N=%s"
-        % ([row["N"] for row in n_cells_ind], max_cer_ind, min_n_ind,
-           len(n_rows), selected.get("N")))
-    gcurve = (sel.get("evidence") or {}).get("g_curve") or {}
-    g_rows = gcurve.get("primary_rows") or []
-    adopted = gcurve.get("adopted_g")
-    metric_keys = ("recall_at_k", "precision_at_k", "mrr",
-                   "complete_evidence_recall_at_k")
-    base_g0 = g_probe["0"]["metrics"]
-    worse_by_probe = {
-        g: any(float(g_probe[str(g)]["metrics"][key]) + 1e-12
-               < float(base_g0[key]) for key in metric_keys)
-        for g in GATE_G_PROBE if g > 0}
-    not_worse_ind = {g: not worse_by_probe[g] for g in worse_by_probe}
-    not_worse_ind[0] = True
-    adopted_ind = max([g for g in GATE_G_PROBE if g >= 1 and not_worse_ind.get(g)],
-                      default=1)
-    g_rows_ind_ok = len(g_rows) == len(GATE_G_PROBE)
-    for row in g_rows:
-        expected = g_probe.get(str(row.get("g")))
-        if expected is None:
-            g_rows_ind_ok = False
-            continue
-        if any(abs(float(row["metrics"][key]) - float(expected["metrics"][key])) > 1e-12
-               for key in metric_keys):
-            g_rows_ind_ok = False
-        if bool(row.get("not_worse_than_g0")) != bool(not_worse_ind.get(int(row["g"]))):
-            g_rows_ind_ok = False
-    g_ok = (g_rows_ind_ok and adopted == adopted_ind == selected.get("g") == GATE_CELL["g"]
-            and adopted_ind >= 1
-            and ("不低于下限 1" in (gcurve.get("criterion") or "")
-                 or "g ≥ 1" in (gcurve.get("criterion") or ""))
-            and int(g_probe["0"]["graph_evidence_in_final_total"]) == 0)
+        u2_why)
+    # 同 U1／U2：g 五点曲线独立重算也包进 try，探针缺档（`g_probe["0"]` 等 KeyError）时
+    # 本项按 FAIL 记账、后续检查继续。检查项条数不变。
+    try:
+        gcurve = (sel.get("evidence") or {}).get("g_curve") or {}
+        g_rows = gcurve.get("primary_rows") or []
+        adopted = gcurve.get("adopted_g")
+        metric_keys = ("recall_at_k", "precision_at_k", "mrr",
+                       "complete_evidence_recall_at_k")
+        base_g0 = g_probe["0"]["metrics"]
+        worse_by_probe = {
+            g: any(float(g_probe[str(g)]["metrics"][key]) + 1e-12
+                   < float(base_g0[key]) for key in metric_keys)
+            for g in GATE_G_PROBE if g > 0}
+        not_worse_ind = {g: not worse_by_probe[g] for g in worse_by_probe}
+        not_worse_ind[0] = True
+        adopted_ind = max([g for g in GATE_G_PROBE if g >= 1 and not_worse_ind.get(g)],
+                          default=1)
+        g_rows_ind_ok = len(g_rows) == len(GATE_G_PROBE)
+        for row in g_rows:
+            expected = g_probe.get(str(row.get("g")))
+            if expected is None:
+                g_rows_ind_ok = False
+                continue
+            if any(abs(float(row["metrics"][key]) - float(expected["metrics"][key])) > 1e-12
+                   for key in metric_keys):
+                g_rows_ind_ok = False
+            if bool(row.get("not_worse_than_g0")) != bool(not_worse_ind.get(int(row["g"]))):
+                g_rows_ind_ok = False
+        g_ok = (g_rows_ind_ok and adopted == adopted_ind == selected.get("g") == GATE_CELL["g"]
+                and adopted_ind >= 1
+                and ("不低于下限 1" in (gcurve.get("criterion") or "")
+                     or "g ≥ 1" in (gcurve.get("criterion") or ""))
+                and int(g_probe["0"]["graph_evidence_in_final_total"]) == 0)
+        u3_why = ("独立重算探针=%s、采用 g=%d；产物探针=%s、采用 g=%s、选定 g=%s；"
+                  "判据含下限 1=%s；g=0 图谱侧入集=%d"
+                  % (list(GATE_G_PROBE), adopted_ind, [r.get("g") for r in g_rows], adopted,
+                     selected.get("g"), ("不低于下限 1" in (gcurve.get("criterion") or "")),
+                     int(g_probe["0"]["graph_evidence_in_final_total"])))
+    except Exception as exc:  # noqa: BLE001
+        g_ok = False
+        u3_why = ("独立探针重算异常（%s: %s）——g 曲线缺档／探针缺档，"
+                  "按失败记账；后续检查仍继续" % (type(exc).__name__, exc))
     chk(g_ok,
         "U3 g 的选择规则执行证据由独立探针重算：五点曲线、g=2 不劣于 g=0、"
         "g=3／5 劣化、含下限 1",
-        "独立重算探针=%s、采用 g=%d；产物探针=%s、采用 g=%s、选定 g=%s；"
-        "判据含下限 1=%s；g=0 图谱侧入集=%d"
-        % (list(GATE_G_PROBE), adopted_ind, [r.get("g") for r in g_rows], adopted,
-           selected.get("g"), ("不低于下限 1" in (gcurve.get("criterion") or "")),
-           int(g_probe["0"]["graph_evidence_in_final_total"])))
+        u3_why)
 
 
 # ==========================================================================

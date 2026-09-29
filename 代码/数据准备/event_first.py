@@ -32,6 +32,7 @@ import os
 import re
 import sys
 import time
+from datetime import datetime
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -41,7 +42,7 @@ if _HERE not in sys.path:
     sys.path.insert(0, _HERE)
 
 import config  # noqa: E402
-from fetch import FetchError, HttpClient, ms_to_date  # noqa: E402
+from fetch import FetchError, HttpClient, ms_to_date, TZ  # noqa: E402
 
 _RE_TAGS = re.compile(r"</?em>|<[^>]+>", re.I)
 
@@ -324,7 +325,10 @@ def probe(argv=None) -> int:
     existing = {str(c["code"]) for c in config.COMPANIES}
     evidence = {
         "report": "event_first_probe",
-        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%S+08:00"),
+        # L-18：原先 time.strftime("…+08:00") 把硬编码 +08:00 贴在**本地时间**上 —— 本机为
+        # CST 时恰好正确，换到别的时区（如 TZ=UTC）就整体错 8 小时且不留痕。改用带时区的
+        # datetime.now(TZ)（TZ 复用 fetch.py 的同一定义）。
+        "generated_at": datetime.now(TZ).isoformat(timespec="seconds"),
         "market_column": config.EVENT_FIRST["market_column"],
         "window": [config.WINDOW_START, config.WINDOW_END],
         "search_endpoint": config.ENDPOINTS["cninfo_query"],

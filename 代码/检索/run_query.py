@@ -128,7 +128,8 @@ def parse_args(argv=None):
 def resolve_params(args) -> dict:
     """K／N／Context Token Budget／g 的解析：命令行优先，缺省回落 `config.require_fixed(...)`。
 
-    直接在 `pipeline.resolve_k_n_budget()` 上取（同一份校验：正整数、N ≥ K、0 ≤ g ≤ K），
+    直接在 `pipeline.resolve_k_n_budget()` 上取（同一份校验：正整数、N ≥ K、1 ≤ g ≤ K，
+    其中 g 的下限由 `config.GRAPH_SHARE_FLOOR = 1` 强制；g = 0 只走显式退化通道），
     并额外记录每个量的来源，写进运行记录以便复核。
     """
     sizes = pipeline.resolve_k_n_budget(args)

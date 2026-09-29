@@ -242,11 +242,15 @@ def cell_row(round_tag: str, round_role: str, group: str, k: int, n: int, budget
 # 二、四条规则的执行
 # ---------------------------------------------------------------------------
 def run_grid(runner, questions, switches, k_grid, n_grid, budget, g, progress=True):
-    """第一轮：跑满 K × N 网格（N ≥ K 在代码里断言，不靠网格"恰好满足"）。"""
+    """第一轮：跑满 K × N 网格（N ≥ K 用显式守卫拦截，不靠网格"恰好满足"）。"""
     rows, readings = [], {}
     for k in k_grid:
         for n in n_grid:
-            assert int(n) >= int(k), "网格必须满足 N ≥ K（收到 N=%r K=%r）" % (n, k)
+            # L-2：用显式 raise 而非 assert —— assert 在 python -O 下会被整条剥离，
+            # 非法 N < K 网格将不再被拦截（与别处 raise SystemExit 风格统一）。
+            if int(n) < int(k):
+                raise SystemExit(
+                    "[pre_experiment] 失败：网格必须满足 N ≥ K（收到 N=%r K=%r）" % (n, k))
             run = runner.run(questions, switches, int(n), int(k), int(budget), int(g))
             records = run["records"]
             per_question, avg = evaluate(records, questions, int(k))
@@ -342,8 +346,10 @@ def pick_k(k_grid, readings, budget_readings, budget, max_gold, n_anchor):
         raise SystemExit("[pre_experiment] 失败：没有任何 K 同时满足 gold 约束与预算约束")
     # 饱和判定（预先写明的判据）：在同一预算 B 下，从最小可行档往上走，
     # 若相邻更大档的 CER 增量 Δ > 0 则继续上移；Δ ≤ 0 即判当前档已饱和。
-    k_star = candidates[0]
-    for current, nxt in zip(candidates, candidates[1:]):
+    # M-2：饱和判据的定义域是「可行档」（gold 与预算同时满足，即 feasible），
+    # 不是「仅 gold 可行」的 candidates —— 否则会选中一个违反预算的 K。
+    k_star = feasible[0]
+    for current, nxt in zip(feasible, feasible[1:]):
         delta = (float(budget_readings[nxt]["metrics"]["complete_evidence_recall_at_k"])
                  - float(budget_readings[current]["metrics"]["complete_evidence_recall_at_k"]))
         if delta > 1e-12:
@@ -352,10 +358,10 @@ def pick_k(k_grid, readings, budget_readings, budget, max_gold, n_anchor):
             k_star = current
             break
     else:
-        k_star = candidates[-1]
+        k_star = feasible[-1]
     for item in detail:
         item["selected"] = bool(item["K"] == k_star)
-        previous = [x for x in candidates if x < item["K"]]
+        previous = [x for x in feasible if x < item["K"]]
         if previous:
             prev = previous[-1]
             item["delta_cer_vs_prev_under_budget"] = round(
@@ -500,10 +506,20 @@ def build_selection(selected, readings, k_detail, k_feasible, k_budget_scan, n_d
         },
         "evidence": {
             "round1_cer_curve": curve,
-            "round1_curve_note": ("第一轮（非约束预算）下 CER@K 随 K 单调上升："
-                                  "K=5 → K=10 → K=15 的提升分别为 0.1667 与 0.1000；"
+            # B-18（2026-09-29 C 线裁定，只改文案生成、不改任何指标计算）：原为**手写常数**
+            # 「提升分别为 0.1667 与 0.1000」——第二个数与同一份产物的 round1_cer_curve
+            # 实测不符（N=20/50 实为 0.0667、N=100 实为 0.0333；0.1000 是重绑 gold 前的旧读数）。
+            # 改为**运行时**由 round1_cer_curve 现算并按 "%.4f" 格式化，并把参照的 N 一并写出，
+            # 使这句结论永不与产物数据脱节。**不改数值、不改选择结果。**
+            "round1_curve_note": ("第一轮（非约束预算）下 CER@K 随 K 单调上升：在 N=%s 这一格上，"
+                                  "K=5 → K=10 → K=15 的提升分别为 %.4f 与 %.4f；"
                                   "因此「预算不构成约束时 K 在网格内并未饱和」——"
-                                  "这正是必须先把预算定死、再在预算下判饱和的原因"),
+                                  "这正是必须先把预算定死、再在预算下判饱和的原因"
+                                  % (str(int(selected["N"])),
+                                     curve["10"][str(int(selected["N"]))]
+                                     - curve["5"][str(int(selected["N"]))],
+                                     curve["15"][str(int(selected["N"]))]
+                                     - curve["10"][str(int(selected["N"]))])),
             "budget_rule": budget_info,
             "budget_sensitivity": sensitivity,
             "saturation_under_budget": {"rows": k_detail, "feasible_K": k_feasible,
@@ -579,7 +595,10 @@ def run_once(args) -> int:
     g_config = int(g_config)
     for k in k_grid:
         for n in n_grid:
-            assert n >= k, "网格必须满足 N ≥ K（收到 N=%r K=%r）" % (n, k)
+            # L-2：同上，显式 raise 取代 assert（-O 下 assert 消失）。
+            if n < k:
+                raise SystemExit(
+                    "[pre_experiment] 失败：网格必须满足 N ≥ K（收到 N=%r K=%r）" % (n, k))
     max_gold = max(len(set(str(x) for x in (q.get("gold_evidence_chunk_ids") or [])))
                    for q in questions)
     group = config.DEFAULT_GROUP

@@ -24,11 +24,17 @@ r"""build_company_aliases.py —— 为 T4 消歧准备「公司注册全称」�
 
 用法（参数一律取自 `代码\数据准备\config.py` 与 `代码\抽取与图谱\config.py`）：
 
-    python 代码\抽取与图谱\build_company_aliases.py                # 接口优先，语料兜底
-    python 代码\抽取与图谱\build_company_aliases.py --no-network   # 只用语料兜底（离线复核）
-    python 代码\抽取与图谱\build_company_aliases.py --out <路径>    # 只改落点（自测用）
+    python 代码\抽取与图谱\build_company_aliases.py --out <路径>            # 接口优先，语料兜底
+    python 代码\抽取与图谱\build_company_aliases.py --no-network --out <路径>  # 只用语料兜底（离线复核）
 
-退出码：`0` 全部配置公司都有名字或已如实登记 unknown；`1` 输入缺失／配置异常。
+**落点必须显式给 `--out`**：本脚本同目录的 `company_registered_names.py` 是**被 git 跟踪的冻结
+数据模块**，隐式覆盖会污染源码树（离线口径下会有 83 家退化成 unknown），故无 `--out` 时一律
+拒绝写入；确要把冻结模块本身重建，需再显式加 `--force-frozen`。产出在写盘前会自检
+（Python 字面量渲染 ＋ `compile()` 语法自检 ＋ 真跑一次 `exec` 与内存表逐键比对；单靠 `compile()`
+拦不住 JSON 的 `null`/`true`/`false`，它们是合法标识符），自检不过即非零退出、不写盘。
+
+退出码：`0` 全部配置公司都有名字或已如实登记 unknown；`1` 输入缺失／配置异常；
+`2` 拒绝写入（未给 `--out`，或未加 `--force-frozen` 就想覆盖冻结模块）。
 本脚本是**离线建档工具**，不属于 T3～T6 管线，`run_all.py` 不会调用它，也不会被重跑触发；
 它不调用大模型（只发公司概况的 HTTP GET），不写数据集、不写抽取缓存。
 """
@@ -39,6 +45,7 @@ import argparse
 import importlib.util
 import json
 import os
+import pprint
 import re
 import sys
 import time
@@ -47,6 +54,8 @@ import urllib.request
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 if _HERE not in sys.path:
@@ -235,8 +244,41 @@ def build_table(companies, docs_rows, endpoint_url, allow_network):
     return table
 
 
+class RenderSelfCheckError(RuntimeError):
+    """产出模块未通过写盘前自检（不可 import，或与内存表不一致）。"""
+
+
+def _py_literal(obj):
+    """按 **Python 字面量** 渲染（`None`/`True`/`False`，而不是 JSON 的 `null`/`true`/`false`）。
+
+    H-1：`json.dumps` 渲染出的模块含 `null`，Python 里是未定义名，产出根本不能 import；
+    `pprint.pformat` 输出的是合法 Python 字面量，且键序固定（`sort_dicts=True`）→ 逐字节可复现。
+    """
+    return pprint.pformat(obj, sort_dicts=True)
+
+
+def _selfcheck_module_text(text, table):
+    """写盘前自检：产出必须是**可执行且与内存表逐键一致**的合法 Python 模块。
+
+    H-1 关键点：单靠 `compile()` 拦不住 `null`/`true`/`false`——它们在 Python 里是合法**标识符**，
+    语法能过、要到 `exec` 时才抛 `NameError`。故这里额外真跑一次 `exec`，把产出与内存表逐键比对，
+    任一环节不过即抛 `RenderSelfCheckError`（由 `main()` 转成非零退出、不写盘）。
+    """
+    compile(text, "<company_registered_names>", "exec")           # 语法自检
+    namespace = {}
+    try:
+        exec(text, namespace)                                     # 语义自检（null → NameError）
+    except Exception as exc:                                      # noqa: BLE001
+        raise RenderSelfCheckError("产出模块不可执行：%s: %s" % (type(exc).__name__, exc))
+    if namespace.get("REGISTERED_NAMES") != table:
+        raise RenderSelfCheckError("产出模块的 REGISTERED_NAMES 与内存表不一致")
+
+
 def render_module(table, endpoint_url):
-    """把冻结表写成 Python 数据模块（JSON 是合法 Python 字面量；键序固定 → 逐字节可复现）。"""
+    """把冻结表写成 Python 数据模块（Python 字面量；键序固定 → 逐字节可复现）。
+
+    H-1：返回前自检——自检失败即抛 `RenderSelfCheckError`，由 `main()` 转成非零退出、不写盘。
+    """
     counts = {}
     for row in table.values():
         counts[row["source"]] = counts.get(row["source"], 0) + 1
@@ -269,10 +311,12 @@ def render_module(table, endpoint_url):
            json.dumps(endpoint_url, ensure_ascii=False),
            json.dumps("data.records[0].basicInformation[0].ORGNAME", ensure_ascii=False),
            CORPUS_MIN_CORROBORATION,
-           json.dumps({k: counts[k] for k in sorted(counts)}, ensure_ascii=False)))
-    body = "REGISTERED_NAMES = " + json.dumps(table, ensure_ascii=False, sort_keys=True,
-                                              indent=4) + "\n"
-    return header + body
+           _py_literal({k: counts[k] for k in sorted(counts)})))
+    body = "REGISTERED_NAMES = " + _py_literal(table) + "\n"
+    text = header + body
+    # H-1：写盘前自检——产出必须是可 import 且与内存表一致的合法 Python 模块。
+    _selfcheck_module_text(text, table)
+    return text
 
 
 def main(argv=None) -> int:
@@ -280,8 +324,29 @@ def main(argv=None) -> int:
         description="建档：105 家配置公司的注册全称（巨潮公司概况接口优先，语料 ≥2 篇印证兜底）")
     parser.add_argument("--no-network", action="store_true",
                         help="不查接口，只用语料兜底（离线复核用；结果通常少于联网口径）")
-    parser.add_argument("--out", default=None, help="产出模块落点（默认与脚本同目录）")
+    parser.add_argument("--out", default=None,
+                        help="产出模块落点（**必填**；默认落点是被 git 跟踪的冻结模块，见 --force-frozen）")
+    parser.add_argument("--force-frozen", action="store_true",
+                        help="显式允许把产出写到冻结模块公司 company_registered_names.py（会污染源码树）")
     args = parser.parse_args(argv)
+
+    # H-2：默认落点是**被 git 跟踪的冻结数据模块**，绝不隐式覆盖（离线口径下 83 家会退化成 unknown）。
+    if args.out:
+        path = os.path.abspath(args.out)
+    else:
+        sys.stderr.write(
+            "[build_company_aliases] 拒绝写入：未提供 --out。\n"
+            "  默认落点 %s 是被 git 跟踪的冻结数据模块，隐式覆盖会污染源码树。\n"
+            "  如确需重建该冻结模块，请显式指定：--out \"%s\" --force-frozen\n"
+            % (OUTPUT_MODULE, OUTPUT_MODULE))
+        return 2
+    if os.path.normcase(path) == os.path.normcase(os.path.abspath(OUTPUT_MODULE)) \
+            and not args.force_frozen:
+        sys.stderr.write(
+            "[build_company_aliases] 拒绝写入：落点是被 git 跟踪的冻结数据模块 %s。\n"
+            "  确认要重建它时请加 --force-frozen（例如先看一眼来源分布是否有 unknown）。\n"
+            % OUTPUT_MODULE)
+        return 2
 
     stage5 = load_stage5_config()
     companies = configured_companies(stage5)
@@ -291,8 +356,13 @@ def main(argv=None) -> int:
     docs_rows = read_jsonl(config.DOCS_PATH)
 
     table = build_table(companies, docs_rows, endpoint_url, allow_network=not args.no_network)
-    path = os.path.abspath(args.out) if args.out else OUTPUT_MODULE
-    text = render_module(table, endpoint_url)
+    try:
+        text = render_module(table, endpoint_url)
+    except RenderSelfCheckError as exc:
+        # H-1：自检失败绝不写盘，且必须非零退出（此前是写出一份不可 import 的模块还退出 0）。
+        sys.stderr.write("[build_company_aliases] 产出模块自检失败，已中止写入：%s\n" % exc)
+        return 1
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     with open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(text)
 

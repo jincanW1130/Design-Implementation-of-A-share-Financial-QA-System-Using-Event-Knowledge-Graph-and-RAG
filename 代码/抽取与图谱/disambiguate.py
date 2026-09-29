@@ -53,6 +53,18 @@ r"""disambiguate.py —— 第 6 阶段「实体消歧」（T4）。
 
 退出码：`0` 成功（含「已是最新、跳过」）；`1` 输入缺失或缓存指纹与产物不一致；
 `2` 数据异常（配置公司集重复、枚举越界等）。全程不调用模型。
+
+**`in_doc_company_list` 与可选开关（M-5）**：`in_doc_company_list` 是 Company 实体上的一条
+**标注**（《15》硬约束 16：它的松口径不作判定依据；`grep` 显示无任何下游消费者）。本文件原先
+读抽取记录里的 `company_list` 键，而 T3 抽取记录**没有该键**，于是该标注恒为 `False`／`[]`——
+审查 M-5 把它记为「死判据」。修好的实现（`load_doc_company_lists()` 从权威来源
+`documents.jsonl` 取该 doc 的 company_list）保留在**开关后面**，但 `config.DISAMBIG
+["enable_doc_company_list"]` **默认 `False`**：**默认路径＝冻结行为**（逐字节复现当初落盘的
+消歧产物）。**默认关闭的原因**：开启会改变消歧产物的标注字段，使「用现行代码重放＝当初落盘的
+消歧产物」这条冻结链失效（第 6 阶段验收 H2 变红），并连带改变节点身份解析结果、使第 7 阶段的
+11 个冻结输入指纹与《19》读数、预实验九格全部作废——冻结链优先。**如需开启**（命令行
+`--enable-doc-company-list`），须**整链重跑**：阶段 6 图谱（本脚本 → dedup_events → write_graph）
+＋ 阶段 7 全部产物。该开关不是匹配规则、也不改身份键。
 """
 
 from __future__ import annotations
@@ -122,6 +134,26 @@ def sha256_file(path) -> str:
         for block in iter(lambda: fh.read(65536), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def load_doc_company_lists():
+    """读 `documents.jsonl` 的 `doc_id -> company_list`（M-5，**仅开关开启时调用**）。
+
+    抽取记录（T3 产物）里**没有** `company_list` 键（键是 entity_id／name／quote／…），
+    该字段只存在于数据准备阶段的 `documents.jsonl`。原先 `disambiguate_records` 直接读
+    抽取记录的 `company_list`，于是 `in_doc_company_list` 恒为 False／`[]`（死判据）。
+    本函数是 M-5 修好后的真实读法；但它**默认不生效**（见 `config.DISAMBIG
+    ["enable_doc_company_list"]` 与模块 docstring：开启须整链重跑），只由
+    `--enable-doc-company-list` 显式启用。文件缺失时退回空表并如实标注（不冒充「已核对」）。
+    """
+    path = config.DOCS_PATH
+    table, source = {}, "documents.jsonl(company_list)"
+    if os.path.isfile(path):
+        for row in read_jsonl(path):
+            table[int(row["doc_id"])] = [str(c) for c in (row.get("company_list") or [])]
+    else:
+        source = "documents.jsonl 缺失：in_doc_company_list 退回空表（未核对）"
+    return table, source
 
 
 def load_records(profile):
@@ -284,12 +316,23 @@ def match_company(name_norm, alias_table):
 # --------------------------------------------------------------------------
 # 逐条实体判身份
 # --------------------------------------------------------------------------
-def disambiguate_records(records, alias_table):
+def disambiguate_records(records, alias_table, doc_company_lists=None,
+                         enable_doc_company_list=False):
     entity_map, unresolved = {}, []
     companies_seen = {}
+    # M-5：`in_doc_company_list` 的两种读法由开关选择。
+    #   * 关闭（默认）＝**冻结行为**：照旧读抽取记录的 `company_list`（T3 记录无该键 → 空集），
+    #     从而与当初落盘的消歧产物**逐字节一致**（第 6 阶段验收 H2 依赖这一点）。
+    #   * 开启＝M-5 修好的真实读法：company_list 取自权威来源 `documents.jsonl`。
+    # 注意：两种读法只改**标注字段** `in_doc_company_list`，不改匹配规则与身份键。
+    if enable_doc_company_list and doc_company_lists is None:
+        doc_company_lists = load_doc_company_lists()[0]
     for record in sorted(records, key=lambda r: int(r["doc_id"])):
         doc_id = int(record["doc_id"])
-        doc_codes = {str(c) for c in (record.get("company_list") or [])}
+        if enable_doc_company_list:
+            doc_codes = set((doc_company_lists or {}).get(doc_id) or [])
+        else:
+            doc_codes = {str(c) for c in (record.get("company_list") or [])}
         for entity in sorted(record.get("entities") or [], key=lambda e: str(e["entity_id"])):
             local_id = str(entity["entity_id"])
             label = str(entity["type"])
@@ -409,7 +452,14 @@ def run(args) -> int:
 
     alias_table = build_alias_table()
     _registered_table, registered_meta = load_registered_names()
-    entity_map, unresolved, companies_seen = disambiguate_records(records, alias_table)
+    enable_dcl = bool(args.enable_doc_company_list)
+    entity_map, unresolved, companies_seen = disambiguate_records(
+        records, alias_table, enable_doc_company_list=enable_dcl)
+    if enable_dcl:
+        # 开启＝M-5 真实读法：会改变 in_doc_company_list 标注 → 必须整链重跑（见模块 docstring）。
+        print("[注意] 已开启 --enable-doc-company-list（M-5 真实读法）：in_doc_company_list 取 "
+              "documents.jsonl；此路径会改变消歧产物标注，须整链重跑阶段 6 图谱与阶段 7 全部产物，"
+              "否则第 7 阶段冻结输入指纹与《19》读数将失效。")
     unresolved.sort(key=lambda r: (r["doc_id"], r["entity_id"], r["reason"]))
     company_index = build_company_index(alias_table, companies_seen)
     industry_index = build_industry_index(alias_table, entity_map)
@@ -527,6 +577,11 @@ def main(argv=None) -> int:
                              "FULL_OUTPUT_FILES）；v21＝v1.1 归档全量 709 篇；pilot＝v1.1 归档"
                              "的 12 篇试跑")
     parser.add_argument("--force", action="store_true", help="忽略已有产物，重算并重写")
+    parser.add_argument("--enable-doc-company-list", action="store_true",
+                        default=bool(config.DISAMBIG["enable_doc_company_list"]),
+                        help="M-5 可选开关：in_doc_company_list 改从权威来源 documents.jsonl 取"
+                             "（默认关闭＝冻结行为）。开启会改变消歧产物标注、使第 6 阶段验收 H2 "
+                             "与第 7 阶段冻结输入指纹失效，须整链重跑阶段 6 图谱与阶段 7 全部产物。")
     args = parser.parse_args(argv)
     try:
         return run(args)

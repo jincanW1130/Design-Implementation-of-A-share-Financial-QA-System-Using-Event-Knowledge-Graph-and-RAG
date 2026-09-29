@@ -414,7 +414,9 @@ def _invoke(client, openai_mod, rec, problems, stats, item_id):
                 time.sleep(wait)
             started = time.time()
             _LAST_CALL_TS[0] = started
-        stats["api_calls"] += 1
+            # L-12：计数放进同一把锁内 —— 默认 --workers 4 共享同一个 stats，
+            # 读改写非原子会丢更新（该值写进自动标注台账与报告）。
+            stats["api_calls"] += 1
         try:
             response = client.chat.completions.create(**kwargs)
         except Exception as exc:  # noqa: BLE001
@@ -936,7 +938,11 @@ def write_auto_jsonl(rows, out_path: str) -> str:
         pos = orig_line.rindex(marker)
         head = orig_line[:pos + len(marker)]
         tail = orig_line[pos + len(marker):]
-        assert tail.endswith("}"), "原始行不以 annotation 结尾，手术式重写不适用"
+        # L-13：用显式 raise 而非 assert —— assert 在 python -O 下被剥离，守卫会消失，
+        # 失效时字节手术会切坏整行（不可恢复）。
+        if not tail.endswith("}"):
+            raise RuntimeError("原始行不以 annotation 结尾，手术式重写不适用"
+                               "（item 行号 %d）" % (len(lines) + 1))
         lines.append(head + json.dumps(annotation, ensure_ascii=False) + "}\n")
     text = "".join(lines)
     write_text_atomic(out_path, text)
@@ -958,6 +964,12 @@ def cmd_run(args) -> int:
     splits = ["dev", "test"] if args.split == "all" else [args.split]
     ed = eval_dir()
     od = out_dir()
+    if args.limit and not getattr(args, "allow_overwrite", False):
+        # M-4：--limit 是 docstring 明写的试跑用法，但曾就地重写正式产物（dev.auto.jsonl 等）。
+        # 这里给子集试跑一个隔离子目录，正式产物目录保持原样；要就地覆盖需显式开关。
+        od = os.path.join(od, "_子集运行_limit%d" % args.limit)
+        print("[提示] --limit=%d 是子集试跑：产物落到 %s，不覆盖正式产物；"
+              "要就地覆盖请加 --allow-overwrite。" % (args.limit, od))
     os.makedirs(os.path.join(od, CACHE_DIRNAME), exist_ok=True)
     os.makedirs(os.path.join(od, WORKSPACE_DIRNAME), exist_ok=True)
     os.makedirs(cache_dir(), exist_ok=True)
@@ -1059,7 +1071,9 @@ def cmd_run(args) -> int:
     for rec, line, split in records:
         record = results[rec["item_id"]]
         annotation = record["final_annotation"]
-        assert annotation is not None, "item_id=%s 没有可用的标注（不应到达）" % rec["item_id"]
+        # L-13：同上，显式 raise 取代 assert（-O 下 assert 消失会把 None 写盘）。
+        if annotation is None:
+            raise RuntimeError("item_id=%s 没有可用的标注（不应到达）" % rec["item_id"])
         rows_for_jl.append((rec, line, annotation))
         write_workspace_item(rec, annotation, eval_relpath, cfg)
     by_split = {}
@@ -1529,6 +1543,9 @@ def build_parser():
     p.add_argument("--limit", type=int, default=0, help="只跑前 N 条（试跑用；0 = 全部）")
     p.add_argument("--workers", type=int, default=4, help="并发度（默认 4；1 = 串行）")
     p.add_argument("--force", action="store_true", help="忽略已有缓存，重新调用并重写缓存")
+    p.add_argument("--allow-overwrite", dest="allow_overwrite", action="store_true",
+                   help="--limit 试跑时也写正式产物落点（默认禁止，改写 <out-dir>/_子集运行_limitN/，"
+                        "见 M-4）")
     p.add_argument("--replay", action="store_true", help="只从缓存重放，**0 次调用**")
     p.add_argument("--model", default=None,
                    help="标注模型（默认 %s；换模型必须同时换 --prompt-version 与落点）" % ANNOTATE_MODEL)

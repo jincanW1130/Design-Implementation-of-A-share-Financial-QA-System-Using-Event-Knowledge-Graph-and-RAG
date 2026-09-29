@@ -457,7 +457,14 @@ def process_item(rec, orig_line, base_annotation, hits, client, openai_mod, stat
         want = input_fingerprint(rec, base_annotation, hits, None, cached.get("model_requested"),
                                  cached.get("prompt_version"))
         first = (cached.get("attempts_detail") or [{}])[0]
-        if first.get("input_sha256") and first.get("input_sha256") != want:
+        stored = first.get("input_sha256")
+        # L-9：缓存记录若缺 attempts_detail[0].input_sha256，原先 `first` 退化成 {}、`stored` 为
+        # None，指纹校验被整体跳过 → 旧答案被静默复用。此类条目一律视为**不可用**：
+        # 本工具写出的缓存恒有 attempts_detail（见上方记录构造），缺失即说明来源可疑。
+        if not stored:
+            raise RuntimeError("item_id=%s 的提准缓存缺 attempts_detail[0].input_sha256，"
+                               "无法核对输入一致性（删去该缓存或加 --force 重跑）" % item_id)
+        if stored != want:
             raise RuntimeError("item_id=%s 的提准缓存与当前输入不一致（加 --force 重跑）" % item_id)
         with lock:
             stats["cache_hits"] += 1
@@ -805,7 +812,9 @@ def write_ledger_and_report(args, cfg, results, stats, wall, hard_by_item, hits_
     else:
         prev = ""
         if os.path.isfile(report_path):
-            prev = open(report_path, encoding="utf-8").read()
+            # L-11：用 with 关闭句柄（原先 open(...).read() 依赖 CPython 引用计数回收）。
+            with open(report_path, encoding="utf-8") as fh:
+                prev = fh.read()
         # 首轮报告的 `%s` 未格式化（历史缺陷），第二轮顺手修正引用文本；其余内容原样保留
         prev = prev.replace("修复模型 `%s` 与标注模型同源",
                             "修复模型 `%s` 与标注模型同源" % REPAIR_MODEL_DEFAULT)

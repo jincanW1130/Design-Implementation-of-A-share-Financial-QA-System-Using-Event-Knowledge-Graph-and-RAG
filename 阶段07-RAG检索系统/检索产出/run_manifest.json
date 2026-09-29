@@ -11,12 +11,12 @@
     "files": {
       "k_selection.json": {
         "identical": true,
-        "matches_t11": true,
-        "run1_sha256": "ab62e0099a5878bc7b87698e4405f81f4170b5834d1223d0da728f812c00659d",
-        "run2_sha256": "ab62e0099a5878bc7b87698e4405f81f4170b5834d1223d0da728f812c00659d",
+        "matches_t11": false,
+        "run1_sha256": "1fd88d11c17b0895efd60cc767e8a1f1a02dd2db6d8a7abd7b6406d1ce37ddce",
+        "run2_sha256": "1fd88d11c17b0895efd60cc767e8a1f1a02dd2db6d8a7abd7b6406d1ce37ddce",
         "t11_recorded_run1_sha256": "ab62e0099a5878bc7b87698e4405f81f4170b5834d1223d0da728f812c00659d",
         "t11_recorded_run2_sha256": "ab62e0099a5878bc7b87698e4405f81f4170b5834d1223d0da728f812c00659d",
-        "workspace_sha256": "ab62e0099a5878bc7b87698e4405f81f4170b5834d1223d0da728f812c00659d"
+        "workspace_sha256": "1fd88d11c17b0895efd60cc767e8a1f1a02dd2db6d8a7abd7b6406d1ce37ddce"
       },
       "metrics_pre.jsonl": {
         "identical": true,
@@ -29,12 +29,12 @@
       },
       "per_question_trace.jsonl": {
         "identical": true,
-        "matches_t11": true,
-        "run1_sha256": "7839de9a1089404f9de2ac90c0003379ba93c6d590c943aa6a39b1ec2891024c",
-        "run2_sha256": "7839de9a1089404f9de2ac90c0003379ba93c6d590c943aa6a39b1ec2891024c",
+        "matches_t11": false,
+        "run1_sha256": "2b1c0da16bc246e583c398a8c12a39a4dca11bc3a668e411da524fca32a29a72",
+        "run2_sha256": "2b1c0da16bc246e583c398a8c12a39a4dca11bc3a668e411da524fca32a29a72",
         "t11_recorded_run1_sha256": "7839de9a1089404f9de2ac90c0003379ba93c6d590c943aa6a39b1ec2891024c",
         "t11_recorded_run2_sha256": "7839de9a1089404f9de2ac90c0003379ba93c6d590c943aa6a39b1ec2891024c",
-        "workspace_sha256": "7839de9a1089404f9de2ac90c0003379ba93c6d590c943aa6a39b1ec2891024c"
+        "workspace_sha256": "2b1c0da16bc246e583c398a8c12a39a4dca11bc3a668e411da524fca32a29a72"
       },
       "pre_experiment_matrix.jsonl": {
         "identical": true,

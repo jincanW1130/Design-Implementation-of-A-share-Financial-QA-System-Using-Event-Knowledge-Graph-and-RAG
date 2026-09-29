@@ -139,7 +139,10 @@ def _skip_leading_blank(text: str, start: int, end: int) -> int:
 
 
 def chunk_document(content, params=None):
-    """按 config.CHUNK 切分单篇正文，返回文本块字符串列表（至少 1 块）。"""
+    """按 config.CHUNK 切分单篇正文，返回文本块字符串列表。
+
+    非空输入至少 1 块；**空（或全空白）输入返回空列表**——不得返回 `['']`。
+    """
     p = params if params is not None else config.CHUNK
     target = int(p["target_chars"])
     max_chars = int(p["max_chars"])
@@ -151,8 +154,11 @@ def chunk_document(content, params=None):
     if p.get("strip_rules"):
         text = text.strip()
     n = len(text)
+    # L-16：空/全空白输入直接返回 []，原先 `return [text]` 会返回 ['']，绕过末尾
+    # 「空块不得输出」的守卫（管线内 clean.py 已按 MIN_DOC_CHARS 拦住，但独立复用本
+    # 函数时该防御会失守）。
     if n <= max_chars:
-        return [text]
+        return [text] if text.strip() else []
 
     chunks = []
     start = 0
@@ -175,7 +181,9 @@ def chunk_document(content, params=None):
             cut = max(lo, min(start + target, hi))
         chunks.append(text[start:cut])
         start = cut - overlap
-    return [c for c in chunks if c != ""] or [text]
+    # L-16：兜底也不能返回 ['']（全空白文本走到这里时，[c for c in chunks if c != ""] 为空，
+    # 原先 `or [text]` 会把空白正文当成一块返回）。
+    return [c for c in chunks if c != ""] or ([text] if text.strip() else [])
 
 
 # --------------------------------------------------------------------------

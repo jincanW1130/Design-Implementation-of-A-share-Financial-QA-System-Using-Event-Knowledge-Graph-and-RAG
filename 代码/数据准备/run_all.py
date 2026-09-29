@@ -108,7 +108,9 @@ def main(argv=None) -> int:
             proc = subprocess.run(cmd, cwd=os.getcwd())
             code = proc.returncode
         except Exception as exc:                     # 子进程根本起不来
-            print("[run_all] 环节 %s 启动失败：%s: %s" % (name, type(ex).__name__, exc))
+            # M-11：原先写 type(ex).__name__（ex 是未定义名），子进程起不来时这里会抛
+            # NameError，把 code=126 与结果登记全变成死代码。应为 type(exc).__name__。
+            print("[run_all] 环节 %s 启动失败：%s: %s" % (name, type(exc).__name__, exc))
             code = 126
         elapsed = time.time() - t0
 

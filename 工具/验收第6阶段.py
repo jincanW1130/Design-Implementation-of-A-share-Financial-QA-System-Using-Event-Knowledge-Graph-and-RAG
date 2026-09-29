@@ -144,7 +144,8 @@ _ap.add_argument("--profile", default=config.GRAPH_PIPELINE["default_profile"],
 _ap.add_argument("--work-root", default=None, help="覆盖管线工作目录（负向自测用）")
 _ap.add_argument("--export-dir", default=None, help="覆盖图谱导出目录（负向自测用）")
 _ap.add_argument("--no-replay", action="store_true",
-                 help="跳过镜像重跑比对（H／I／J／K／S 组各项记为 SKIP）")
+                 help="跳过镜像重跑比对（H／I／J／K／S／T 组记为 [UNRUN] 未执行；"
+                      "X1 判 FAIL、退出码 2——不得据此宣称验收通过）")
 _ap.add_argument("--keep-tmp", action="store_true", help="保留镜像重跑用的临时目录")
 _ap.add_argument("--doc16", default=None,
                  help="覆盖《16》路径（默认 阶段06-…\\16-事件抽取与知识图谱（第六阶段）.md）；"
@@ -211,8 +212,12 @@ B11_EXPORT_DIR = (os.path.abspath(ARGS.export_dir) if ARGS.export_dir
 # 另加 [SKIP]（pilot 模式下不适用、不计入失败）与 note()（只打印证据，不计入项数）。
 # --------------------------------------------------------------------------
 results = []          # [(status, label, detail)]，status ∈ {OK, FAIL, SKIP}
-fails = []            # [label]
+fails = []            # [label]  —— 内容失败
 fail_evidence = []    # [(label, detail)]
+env_fails = []        # [label]  —— 环境／链上失败（非内容失败，同样非零退出）
+env_fail_evidence = []  # [(label, detail)]
+unrun_count = 0       # 显式跳过（--no-replay）导致的**未执行**项数
+unrun_evidence = []   # [(label, count, detail)]
 
 
 def _emit(status, label, detail=""):
@@ -232,6 +237,23 @@ def chk(ok, label, detail=""):
 def skip(label, detail=""):
     """pilot 模式下不适用、或按命令行显式跳过的项：打印原因，不计入失败。"""
     _emit("SKIP", label, detail)
+
+
+def envfail(label, detail=""):
+    """环境／链上失败（镜像重跑本身出错，非内容失败）：与内容失败分开记账，但同样使退出码非 0。"""
+    print("  [ENV ] 环境／链上失败（非内容失败）：%s%s"
+          % (label, ("  " + detail) if detail else ""))
+    env_fails.append(label)
+    env_fail_evidence.append((label, detail))
+
+
+def mark_unrun(label, count=1, detail=""):
+    """未执行项（--no-replay 显式跳过镜像重跑）：既不伪装成通过，也不伪装成 SKIP。"""
+    global unrun_count
+    unrun_count += int(count)
+    unrun_evidence.append((label, int(count), detail))
+    print("  [UNRUN] %s：未执行 %d 项%s"
+          % (label, int(count), ("  " + detail) if detail else ""))
 
 
 def note(label, detail=""):
@@ -486,7 +508,8 @@ print("  抽取结果：      %s" % PATHS["extract_records"])
 print("  冻结参数来源：  %s" % os.path.join(CODE_GRAPH, "config.py"))
 print("  《16》交付文档：%s%s" % (P16, "" if os.path.isfile(P16) else "   ← 尚未落盘（T9 产出）"))
 print("  重跑比对：      %s"
-      % ("关闭（--no-replay：H／I／J／K／S 组记 SKIP）" if ARGS.no_replay
+      % ("关闭（--no-replay：H／I／J／K／S／T 组记 [UNRUN] 未执行；X1 判 FAIL、退出码 2）"
+         if ARGS.no_replay
          else "在系统临时目录镜像重跑（只读交付物，绝不写入工作区）"))
 if ARGS.work_root or ARGS.export_dir:
     print("  目录覆盖：      work-root=%s、export-dir=%s（负向自测）"
@@ -1368,9 +1391,10 @@ def ensure_replay():
     global REPLAY
     if REPLAY is not None:
         return REPLAY
-    REPLAY = {"error": None, "key_removed": config.LLM["api_key_env"]}
+    REPLAY = {"error": None, "error_kind": None, "key_removed": config.LLM["api_key_env"]}
     if ARGS.no_replay:
         REPLAY["error"] = "--no-replay：命令行显式跳过镜像重跑"
+        REPLAY["error_kind"] = "explicit_skip"
         return REPLAY
     try:
         tmp, copied, skipped = build_mirror()
@@ -1433,16 +1457,33 @@ def ensure_replay():
         REPLAY["events_merged_new"] = [r for _, r in read_jsonl(merged_path)] \
             if os.path.isfile(merged_path) else []
     except Exception as exc:                  # 镜像／重跑本身的异常也要有证据，不能静默
+        # H-4：区分「未执行」与「环境失败」——后者是脚本自身／链上的错误，按环境失败记账并非零退出。
         REPLAY["error"] = "%s: %s" % (type(exc).__name__, exc)
+        REPLAY["error_kind"] = "environment_chain"
     return REPLAY
 
 
 def replay_or_skip(prefix, labels):
-    """给 H／I／J／K／S 组用：重跑不可用时逐个记 SKIP（原因写明），返回 (R, usable)。"""
+    """给 H／I／J／K／S／T 组用：重跑不可用时**不得静默放行**，返回 (R, usable)。
+
+    H-4：原先一律记 SKIP 且 SKIP 不影响退出码，20 条证据链可在从未执行的情况下满足放行条件。
+    现按三态记账（照《验收第7阶段.py》第 625-628、632-644 行）：
+      * `--no-replay`（显式跳过）→ `[UNRUN]` 未执行，计入 `unrun_count`，退出码 2；
+      * 其余异常（镜像／链上环境失败）→ `[ENV ]` 环境失败，计入 `env_fails`，退出码 1。
+    """
     R = ensure_replay()
     if R.get("error"):
-        for lab in labels:
-            skip("%s %s" % (prefix, lab), "镜像重跑未执行：%s" % R["error"])
+        if R.get("error_kind") == "environment_chain":
+            for lab in labels:
+                envfail("%s %s" % (prefix, lab),
+                        "镜像重跑失败（环境／链上，非内容失败）：%s" % R["error"])
+        else:
+            mark_unrun("%s 组" % prefix, len(labels),
+                       "镜像重跑未执行：%s；本组 %d 条**未验证**：%s"
+                       % (R["error"], len(labels), "、".join(labels)))
+            # 同时逐条打 [SKIP]：保持「检查项」分母与逐条明细不变（SKIP 与「未执行」是同一批项）。
+            for lab in labels:
+                skip("%s %s" % (prefix, lab), "镜像重跑未执行：%s" % R["error"])
         return R, False
     return R, True
 
@@ -1610,11 +1651,16 @@ if ok_replay:
         "K2 缓存命中覆盖全部文档（cache_hits == 文档数、fetched == 0）",
         "实测 cache_hits=%s、documents=%s、fetched=%s、retries=%s"
         % (last.get("cache_hits"), docs_n, last.get("fetched"), last.get("retries")))
-    chk(True, "K3 重跑子进程显式摘掉 %s（缓存未命中即硬失败，不可能静默调用模型）"
+    # M-12：原为 `chk(True, ...)`（恒定通过，掺进「通过项」而从不校验真实证据）。
+    # 现改为读真实读数：四次重跑子进程的 `key_removed` 都必须等于被摘掉的变量名。
+    _replays = [R["run_all"], R["run_all_2"], R["from_run"], R["write_graph_again"]]
+    _key_ok = all(r.get("key_removed") == config.LLM["api_key_env"] for r in _replays)
+    chk(_key_ok, "K3 重跑子进程显式摘掉 %s（缓存未命中即硬失败，不可能静默调用模型）"
         % config.LLM["api_key_env"],
         "实测 本脚本用 env.pop(\"%s\") 构造子进程环境，只打印变量名、不读取值；"
-        "重跑退出码：run_all=%s、run_all_2=%s、from=%s、write_graph=%s"
-        % (config.LLM["api_key_env"], R["run_all"]["code"], R["run_all_2"]["code"],
+        "四次重跑的 key_removed 均为 %s=%s；重跑退出码：run_all=%s、run_all_2=%s、from=%s、write_graph=%s"
+        % (config.LLM["api_key_env"], config.LLM["api_key_env"], _key_ok,
+           R["run_all"]["code"], R["run_all_2"]["code"],
            R["from_run"]["code"], R["write_graph_again"]["code"]))
     net_imports = []
     net_pat = re.compile(r"^\s*(?:import|from)\s+(openai|requests|urllib|httpx|aiohttp|http\.client)\b",
@@ -1772,9 +1818,36 @@ chk(not field_bad,
     "实测 检查 %d 条；缺字段 %d 处%s；标注状态分布 %s"
     % (n_dev + n_test, len(field_bad), "：" + br(field_bad) if field_bad else "",
        dict(statuses)))
-if set(statuses) == {"pending_human_annotation"}:
+
+# N3b（C 线头号假阴性补齐）：《16》第五节 冻结契约——260 条**交付槽位恒为
+# `pending_human_annotation` 且内容为空**。N3 过去只验「字段齐备」，不验「槽位是否为空」，
+# 于是「把 entities 填成非空、status 仍留 pending」这种违规能照样 98/101 通过。
+# 本项与 `工具\标注助手.py` 的 `status_pending_but_filled` 码同源（该码由 check 把守），
+# 槽位名与 `_annotation_status()` 的 `slots` 一致：entities／events／relations／times／
+# ontology_boundary_log ＋ notes。判据只增不减：既判「非空」，也判 status 不再是 pending。
+ANN_SLOTS = ["entities", "events", "relations", "times", "ontology_boundary_log"]
+pending_bad = []
+for name, rows in (("dev.jsonl", dev_rows), ("test.jsonl", test_rows)):
+    for ln, r in rows:
+        ann = r.get("annotation") or {}
+        non_empty = [s for s in ANN_SLOTS if isinstance(ann.get(s), list) and ann.get(s)]
+        _notes = ann.get("notes")
+        has_note = bool(_notes.strip()) if isinstance(_notes, str) else bool(_notes)
+        if ann.get("status") != "pending_human_annotation" or non_empty or has_note:
+            pending_bad.append("%s 第%d行 status=%s、非空槽位=%s、notes=%s"
+                               % (name, ln, ann.get("status"),
+                                  "／".join(non_empty) or "无", "非空" if has_note else "空"))
+chk(not pending_bad,
+    "N3b 260 条交付槽位恒为 pending_human_annotation 且内容为空（《16》第五节冻结契约；"
+    "填了内容就必须同步改 status）",
+    "实测 检查 %d 条；违背 %d 处%s"
+    % (n_dev + n_test, len(pending_bad),
+       "：" + br(pending_bad, limit=6) if pending_bad else ""))
+
+if set(statuses) == {"pending_human_annotation"} and not pending_bad:
     note("N3 证据（人工标注状态）",
-         "实测 %d 条全部为 pending_human_annotation：T8 的选点与配额已落盘，人工标注尚未填写；"
+         "实测 %d 条全部为 pending_human_annotation 且槽位为空：T8 的选点与配额已落盘，"
+         "人工标注尚未填写（N3b 已逐条核实槽位确实为空）；"
          "这正是 N9 与 O4 需要《16》登记证据不足清单的原因" % sum(statuses.values()))
 
 dev_ids = [r.get("chunk_id") for _, r in dev_rows]
@@ -1792,11 +1865,16 @@ dev_docs = {r.get("doc_id") for _, r in dev_rows}
 test_docs = {r.get("doc_id") for _, r in test_rows}
 doc_overlap = sorted(dev_docs & test_docs)
 if not doc_overlap:
-    chk(True, "N5 文档集合重叠部分已在《标注说明.md》登记（实测交集为 0）",
+    # M-12 同类：原先这里写死 `chk(True, ...)`，把「交集为空故无需登记」当成恒真通过项，
+    # 而登记读数 `document_overlap_size` 被打印却从不参与判定。现改为读真实读数：
+    # 实测交集必须为空（本分支前提）**且** 分层统计.json 登记的 document_overlap_size 必须同为 0，
+    # 二者不一致即为「登记与实测打架」，应当 FAIL。
+    _recorded_overlap = (eval_stats.get("keys") or {}).get("document_overlap_size")
+    chk(not doc_overlap and _recorded_overlap == 0,
+        "N5 文档集合重叠部分已在《标注说明.md》登记（实测交集为 0）",
         "实测 dev 文档 %d 个、test 文档 %d 个、交集 %d 个；交集为空故无需登记；"
-        "分层统计.json 登记 document_overlap_size=%s"
-        % (len(dev_docs), len(test_docs), len(doc_overlap),
-           (eval_stats.get("keys") or {}).get("document_overlap_size")))
+        "分层统计.json 登记 document_overlap_size=%s（实测与登记须同为 0）"
+        % (len(dev_docs), len(test_docs), len(doc_overlap), _recorded_overlap))
 else:
     unreg = [str(d) for d in doc_overlap if str(d) not in eval_note]
     chk(not unreg, "N5 文档集合重叠部分已在《标注说明.md》登记（%d 篇重叠）" % len(doc_overlap),
@@ -2616,40 +2694,96 @@ print("=" * 78)
 
 _passed_before = sum(1 for st, _l, _d in results if st == "OK")
 _skipped = sum(1 for st, _l, _d in results if st == "SKIP")
-print("  检查项合计（A～W）：%d 项，其中通过 %d、失败 %d、SKIP %d"
-      % (len(results), _passed_before, len(fails), _skipped))
-chk(not fails, "X1 全部检查项通过（任一失败即非零退出；SKIP 不影响退出码）",
-    "实测 失败 %d 项：%s" % (len(fails), br(fails, limit=30) if fails else "无"))
+print("  检查项合计（A～W）：%d 项，其中通过 %d、失败 %d、SKIP %d、未执行 %d、环境失败 %d"
+      % (len(results), _passed_before, len(fails), _skipped, unrun_count, len(env_fails)))
+# H-4：不得静默放行——镜像重跑未执行（--no-replay）或环境失败时，X1 必须为 FAIL、退出码非 0。
+X1_LABEL = "X1 全部检查项通过（内容失败／环境失败／未执行任一非零即 FAIL；pilot 不适用项可 SKIP）"
+chk(not fails and not env_fails and unrun_count == 0 and (_skipped == 0 or not ARGS.no_replay),
+    X1_LABEL,
+    "实测 内容失败 %d 项：%s；环境／链上失败 %d 项%s；未执行（--no-replay）%d 项%s"
+    % (len(fails), br(fails, limit=30) if fails else "无", len(env_fails),
+       "：" + br(env_fails, limit=30) if env_fails else "",
+       unrun_count, "（H/I/J/K/S/T 组未验证）" if unrun_count else ""))
 chk(os.path.isfile(CROSS_DOC), "X2 工作区跨文档核验脚本存在（本脚本不调用它，供操作者另行运行）",
     "实测 %s：%s；操作者应另行运行：python 工具\\跨文档核验.py（T9 要求两脚本退出码均为 0）"
     % (rel_to_root(CROSS_DOC), "存在" if os.path.isfile(CROSS_DOC) else "缺失"))
+
+# B-31 结构断言（仿《验收第7阶段.py》的 AB3）：汇总不得只判 `not fails`，必须重数
+# 「组结构 ＋ 检查项计数」——这样「某组整组消失」或「检查项悄悄缩水」不可能再静默通过。
+# 常量与实跑不符即 FAIL；**增删检查项时必须同步改这两个常量**（这正是「重数」的目的）。
+EXPECTED_GROUPS_6 = set("ABCDEFGHIJKLMNOPQRSTUVWX")   # A～W 二十四组 ＋ X 汇总
+EXPECTED_ITEMS_6_BEFORE_SUMMARY = 102                 # 汇总断言之前的检查项数（原 101 ＋ 新增 N3b）
+if ARGS.no_replay:
+    note("X1c 结构断言（B-31）本轮不适用",
+         "--no-replay 下 H/I/J/K/S/T 组按未执行处理，项数与组结构不参与判定；"
+         "镜像重跑后（不带 --no-replay）本项才生效")
+else:
+    # H-4 配套：环境／链上失败的项不进 results（它们是 [ENV ] 不是 [OK]/[FAIL]），
+    # 若不并入计数，一次环境失败会额外伪造出「整组消失＋检查项缩水」的 X1c 假失败。
+    # 故把 env_fails 的组前缀与条数一并计入（正常模式下 env_fails 为空，等价于原判据）。
+    _observed_groups = {re.match(r"^([A-Z]{1,2})\d", str(lab)).group(1)
+                        for st, lab, _d in results
+                        if st in ("OK", "FAIL") and re.match(r"^([A-Z]{1,2})\d", str(lab))}
+    _observed_groups |= {m.group(1) for m in
+                         (re.match(r"^([A-Z]{1,2})", str(lab)) for lab in env_fails) if m}
+    _observed_items = len(results) + len(env_fails)
+    _structure_ok = (_observed_groups == EXPECTED_GROUPS_6
+                     and _observed_items == EXPECTED_ITEMS_6_BEFORE_SUMMARY)
+    chk(_structure_ok,
+        "X1c 检查项计数与组结构同冻结期望一致（B-31 结构断言：%d 组、汇总前 %d 项）"
+        % (len(EXPECTED_GROUPS_6), EXPECTED_ITEMS_6_BEFORE_SUMMARY),
+        "实测 组 %d／%d（缺 %s、多 %s）；汇总前检查项 %d／%d（含环境失败 %d 项）"
+        % (len(_observed_groups), len(EXPECTED_GROUPS_6),
+           "".join(sorted(EXPECTED_GROUPS_6 - _observed_groups)) or "无",
+           "".join(sorted(_observed_groups - EXPECTED_GROUPS_6)) or "无",
+           _observed_items, EXPECTED_ITEMS_6_BEFORE_SUMMARY, len(env_fails)))
 if not ARGS.no_replay and REPLAY and not REPLAY.get("error"):
     note("X3 本脚本的只读性（证据）",
          "镜像根目录 %s（%d 个文件，--keep-tmp 可保留）；镜像内的重跑均以镜像为工作目录，"
          "工作区的交付目录一个字节都没写；子进程环境已摘掉 %s，全程不调用模型"
          % (REPLAY.get("tmp"), REPLAY.get("copied"), config.LLM["api_key_env"]))
 _SUMMARY_DONE = True
+_passed = sum(1 for st, _l, _d in results if st == "OK")
+_skipped = sum(1 for st, _l, _d in results if st == "SKIP")
+# H-4：X1 可能**仅因「未执行」或「环境失败」**而 FAIL——那种情况要按对应原因报结论与退出码，
+# 不要误报成内容缺陷。故先把 X1 自己那一条从内容失败里摘出来。
+_content_fails = [lab for lab in fails if lab != X1_LABEL]
 print()
-print("  最终：检查项 %d 项，通过 %d，失败 %d"
-      % (len(results), sum(1 for st, _l, _d in results if st == "OK"), len(fails)))
-print("  另有 SKIP %d 项（pilot 模式下不适用或按命令行跳过；原因见各组 [SKIP] 行，不计入失败）"
-      % sum(1 for st, _l, _d in results if st == "SKIP"))
-
+print("  最终：检查项 %d 项，通过 %d，内容失败 %d，环境／链上失败 %d，未执行 %d，SKIP %d"
+      % (len(results), _passed, len(_content_fails), len(env_fails), unrun_count, _skipped))
+print("  说明：未执行＝--no-replay 显式跳过的镜像重跑（%s），既不伪装成通过、也不计入失败；"
+      "这批项同时逐条打在各组 [SKIP] 行上（同一批项，非两倍）"
+      % ("／".join(l for l, _c, _d in unrun_evidence) or "无"))
+print("        SKIP＝pilot 模式下不适用（如 R1）或按命令行跳过的项")
 print("=" * 78)
-if not fails:
-    print("结论：全部通过（通过 %d 项／检查项 %d 项，另有 SKIP %d 项）。第 6 阶段验收通过，退出码 0。"
-          % (sum(1 for st, _l, _d in results if st == "OK"), len(results),
-             sum(1 for st, _l, _d in results if st == "SKIP")))
-else:
-    print("结论：存在 %d 项失败（通过 %d 项／检查项 %d 项、SKIP %d 项）："
-          % (len(fails), sum(1 for st, _l, _d in results if st == "OK"), len(results),
-             sum(1 for st, _l, _d in results if st == "SKIP")))
+if _content_fails:
+    print("结论：存在 %d 项内容失败（通过 %d 项／检查项 %d 项、SKIP %d 项、未执行 %d 项）："
+          % (len(_content_fails), _passed, len(results), _skipped, unrun_count))
     for _lab, _det in fail_evidence:
+        if _lab != X1_LABEL:
+            print("  - %s  %s" % (_lab, _det))
+elif env_fails:
+    print("结论：环境／链上失败（非内容失败）%d 项——镜像重跑未跑完，不能按「通过」放行；退出码 1。"
+          % len(env_fails))
+    for _lab, _det in env_fail_evidence:
         print("  - %s  %s" % (_lab, _det))
+elif unrun_count:
+    print("结论：**未执行 %d 项**（%s）——这 %d 条证据链从未验证，"
+          "不得宣称第 6 阶段验收通过；退出码 2。"
+          % (unrun_count, "／".join(l for l, _c, _d in unrun_evidence), unrun_count))
+    print("      如需真正放行，请去掉 --no-replay 重跑镜像链（会花时间但不调用模型）。")
+else:
+    print("结论：全部通过（通过 %d 项／检查项 %d 项，另有 SKIP %d 项）。第 6 阶段验收通过，退出码 0。"
+          % (_passed, len(results), _skipped))
 print("=" * 78)
 
 if REPLAY and REPLAY.get("tmp") and not ARGS.keep_tmp:
     shutil.rmtree(REPLAY["tmp"], ignore_errors=True)
 elif REPLAY and REPLAY.get("tmp"):
     print("镜像重跑目录保留在：%s" % REPLAY["tmp"])
-sys.exit(1 if fails else 0)
+# H-4：退出码——内容失败／环境失败 = 1（真问题）；未执行 = 2（不得静默放行）；否则 0。
+if _content_fails or env_fails:
+    sys.exit(1)
+if ARGS.no_replay or unrun_count:
+    sys.exit(2)
+sys.exit(0)

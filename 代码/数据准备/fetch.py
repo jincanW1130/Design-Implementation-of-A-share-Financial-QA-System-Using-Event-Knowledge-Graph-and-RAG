@@ -291,17 +291,17 @@ class HttpClient:
         attempts = 1 + max(0, self.max_retries)
         for attempt in range(attempts):
             self._throttle()
+            self._last_request_at = time.monotonic()
+            # L-15：一次真实尝试只计一次 —— 原先 try 内与 except 里各加 1，5xx/429 会让
+            # request_count 翻倍（真实只发了 1 次请求）；改成发请求前计数，成功与失败都恰好一次。
+            self.request_count += 1
             try:
                 resp = self.session.request(method, url, headers=headers, data=data,
                                             params=params, timeout=timeout or self.timeout)
-                self._last_request_at = time.monotonic()
-                self.request_count += 1
                 if resp.status_code >= 500 or resp.status_code == 429:
                     raise FetchError("HTTP %d" % resp.status_code)
                 return resp
             except Exception as exc:  # 网络异常与 5xx/429 都重试
-                self._last_request_at = time.monotonic()
-                self.request_count += 1
                 self.error_count += 1
                 last_exc = exc
                 if attempt + 1 < attempts:
@@ -891,14 +891,24 @@ def pick_stratified(cands, strata: dict, category: str = "", subject: str = ""):
 # ==========================================================================
 def cninfo_org_id(ctx: Context, company: dict):
     """代码 → orgId（README 第4.1节 第 1 条）。返回 (orgId, zwjc) 或 (None, None)。"""
-    resp = ctx.http.post(
-        CNINFO_TOPSEARCH_URL,
-        data={"keyWord": company["code"], "maxNum": 10},
-        headers={"Referer": CNINFO_HOME + "/"},
-    )
-    if resp.status_code != 200:
+    # L-19：公告路径原先没有请求／解析守卫（新闻、政策、监管路径都有），单家公司接口异常
+    # 会中断整轮采集；这里补齐 FetchError／ValueError，登记 ok=False 后继续。
+    try:
+        resp = ctx.http.post(
+            CNINFO_TOPSEARCH_URL,
+            data={"keyWord": company["code"], "maxNum": 10},
+            headers={"Referer": CNINFO_HOME + "/"},
+        )
+        if resp.status_code != 200:
+            return None, None
+        data = json_body(resp)
+    except (FetchError, ValueError) as exc:
+        ctx.log(doc_id=None, category="公告", source=config.SOURCES["公告"]["source"],
+                url=CNINFO_TOPSEARCH_URL, http_status=None, ok=False, chars=None,
+                byte_size=None, elapsed_ms=0,
+                note="巨潮 orgId 查询失败（%s：%s）：该公司本轮跳过，不中断整轮"
+                     % (type(exc).__name__, exc))
         return None, None
-    data = json_body(resp)
     if not isinstance(data, list):
         return None, None
     for item in data:
@@ -936,11 +946,22 @@ def cninfo_announcements(ctx: Context, company: dict, org_id: str):
             "isHLtitle": "true",
         }
         ctx.stats["公告"]["pages"] += 1        # 实际发出的列表页请求数（stdout 摘要用）
-        resp = ctx.http.post(CNINFO_QUERY_URL, data=form,
-                             headers={"Referer": CNINFO_HOME + "/"})
-        if resp.status_code != 200:
+        # L-19：列表页请求／解析补齐守卫（同 cninfo_org_id）；失败则停止翻页并登记，
+        # 不中断整轮采集。
+        try:
+            resp = ctx.http.post(CNINFO_QUERY_URL, data=form,
+                                 headers={"Referer": CNINFO_HOME + "/"})
+            if resp.status_code != 200:
+                break
+            payload = json_body(resp)
+        except (FetchError, ValueError) as exc:
+            ctx.log(doc_id=None, category="公告", source=config.SOURCES["公告"]["source"],
+                    url=CNINFO_QUERY_URL, http_status=None, ok=False, chars=None,
+                    byte_size=None, elapsed_ms=0,
+                    note="巨潮公告列表第 %d 页失败（%s：%s）：停止该公司的翻页，不中断整轮"
+                         % (page, type(exc).__name__, exc))
             break
-        items = json_body(resp).get("announcements") or []
+        items = (payload.get("announcements") if isinstance(payload, dict) else None) or []
         if not items:
             break
         oldest = None                      # 本页最旧一条（含被后续过滤丢弃的条目）
@@ -2395,7 +2416,10 @@ def plan_event_first_news(ctx: Context):
     budget = int(config.EVENT_FIRST.get("news_fetch_budget") or 0)
     seconds_budget = float(config.EVENT_FIRST.get("news_fetch_seconds_budget") or 0)
     if not companies or min_docs <= 0:
-        return [], {}
+        # M-10：早返回也要带 exhausted／stop_reason —— run_event_first_news() 无条件读
+        # info.get("exhausted")，缺键会让「已完成标记」写不出去（重跑白跑一遍站内检索）。
+        return [], {"exhausted": True,
+                    "stop_reason": "无目标公司或补充下限非正：未发起站内检索"}
 
     def is_supplement(rec) -> bool:
         """该 raw 文档是否由补样新闻路径选入（基座 v2.0 的 50 篇新闻没有这个标记）。"""
@@ -2516,10 +2540,17 @@ def plan_event_first_news(ctx: Context):
             skipped_one += 1
     pool = list(have) + accepted
     if not pool:
+        # M-10：空池早返回同样必须带 exhausted／stop_reason（原实现缺这两个键，
+        # info.get("exhausted") 恒为 None，「已完成标记」永不写入
+        # raw\_fetch_log.jsonl，news_supplement_done() 永返 False）。
         return [], {"search_requests": search_requests, "candidates": len(cands),
                     "dup_title": dup_title, "dup_url": dup_url, "fetched": fetched,
                     "skipped_one_company": skipped_one, "skipped_by_cache": skipped_by_cache,
-                    "outside_window": outside_window, "scope": scope, "scope_label": scope_label}
+                    "outside_window": outside_window, "scope": scope, "scope_label": scope_label,
+                    "accepted_fresh": 0, "reused": len(have), "picked": 0,
+                    "target": min_docs, "exhausted": True,
+                    "stop_reason": "候选池为空（窗口内无候选）", "done_before": done_before,
+                    "seconds_used": round(time.monotonic() - fetch_started, 1)}
     # 达线候选**全部保留**：news_min_docs 是下限，不是上限（口径修正的目的就是让关系证据
     # 充分进入数据集；截断到 25 篇会把实测的 ~55 篇可用证据又丢掉一半）。
     picked, spread_notes = pick_balanced(pool, len(pool), category="财经新闻")
