@@ -3,7 +3,7 @@
 本目录是第 8 阶段的**答案生成层**：把第 7 阶段（RAG 检索系统）冻结的检索结果，经
 Prompt 组装 → 答案生成模型 → 带引用的四段答案，并落成可复现、可机检、可回看的产出。
 
-唯一规格是 `阶段08-智能问答系统\21-第8阶段任务书（智能问答系统）.md`（v1.3）。本目录
+唯一规格是 `阶段08-智能问答系统\21-第8阶段任务书（智能问答系统）.md`（v1.5）。本目录
 **只读**第 5／6／7 阶段的产出与代码，不改动其中任何一个字节（《21》第五节 硬约束 1）。
 
 ---
@@ -12,9 +12,9 @@ Prompt 组装 → 答案生成模型 → 带引用的四段答案，并落成可
 
 | 文件 | 子任务 | 状态 | 职责 |
 | --- | --- | --- | --- |
-| `config.py` | T1／T2 | 完成 | 配置与**唯一**取值入口：四项定值经 `代码\检索\config.py` 导入、答案侧冻结值、密钥读取（只判可用／不可用）、路径常量、ID 规则、JSONL 读写工具 |
+| `config.py` | T3 | 完成 | 配置与**唯一**取值入口：四项定值经 `代码\检索\config.py` 导入、答案侧冻结值、密钥读取（只判可用／不可用）、路径常量、ID 规则、JSONL 读写工具 |
 | `rules.py` | T5／T6 | 完成 | **判据单一来源**：日期来源可核 ＋ 禁词表 ＋ 引用编号正则；`model_selection.py` 与本目录共用，避免两套口径 |
-| `prompt.py` | T3 | 完成 | Prompt 模板（6 区块）、四段答案的拼装／切分、证据段与图谱段与时间段的渲染、Prompt 快照 |
+| `prompt.py` | T3 | 完成 | Prompt 模板（**七区块**，与 `prompt.py::BLOCK_TITLES` 及《10》表 4-12 一致）、四段答案的拼装／切分、证据段与图谱段与时间段的渲染、Prompt 快照 |
 | `assemble.py` | T4 | 完成 | 从第 7 阶段 trace 装配「本题输入」：证据集合、图谱载荷、时间说明、`graph_payload`；**不替换、不重排、不摘要**证据（《21》非目标 6／10） |
 | `answer.py` | T5／T6 | 完成 | 模型调用（`call_model`，标准库 `urllib`，空正文重试一次）＋ 机检门禁（`gate`）＋ 单题链路（`answer_case`） |
 | `history.py` | T7 | 完成 | 记录层（FR-06，六表语义的 JSONL 形态）：构造记录、落盘／读取、按会话查询、回看（**不重建路径**） |
@@ -98,7 +98,7 @@ Prompt 组装 → 答案生成模型 → 带引用的四段答案，并落成可
 ## 五、常用命令
 
 ```bat
-python 代码\问答\model_selection.py --recheck        :: 选型复检（rules.py 抽取后逐字节不变）
+python 代码\问答\model_selection.py --recheck        :: 选型复检（0 调用；重算机检＋逐行 prompt_sha256，幂等）
 python 代码\问答\answer.py --selftest                :: T5／T6 自检（PE-01 端到端 ＋ dry-run 0 调用）
 python 代码\问答\history.py --selftest               :: T7 自检（会话隔离／联合唯一／回看不重渲染）
 python 代码\问答\run_answer.py --qid PE-01           :: 单题端到端（写产出）
@@ -130,7 +130,7 @@ Remove-Item Env:\STAGE8_FORBID_MODEL_CALLS
 | 文件 | 内容 |
 | --- | --- |
 | `answer_trace.jsonl` | 每题一行：题号／问题／组别／四项定值／证据元数据（**不含正文**）／`graph_payload`／Token 账／Prompt SHA-256／`model`／`attempts`／`body_text`／`answer_text`／门禁读数；**无时间戳** |
-| `qa_records.jsonl` | 记录层：`question` ＋ `answer` ＋ `answer_evidence` 三表（字段名逐字取《10-系统总体设计》表 4-6） |
+| `qa_records.jsonl` | 记录层：`question` ＋ `answer` ＋ `answer_evidence` 三表（字段名逐字取《10-系统总体设计》表 4-6；`question` 8 字段含可空外键 `user_id`，第一版不启用登录故恒为 `null`） |
 | `prompt_snapshot.json` | Prompt 模板快照（版本、区块、指纹） |
 | `run_manifest.json` | 复跑命令、输入指纹、配置快照、产物 SHA-256、两次装配一致性、模型输出重复一致率、调用次数（含重试） |
 

@@ -6,8 +6,17 @@
 `questions.jsonl` 与 `dataset.json`。
 
 **确定性**：同一输入两次装配的 Prompt 文本 SHA-256 相同（《21》第五节 硬约束 17、
-验收 C6）。本模块不重排证据、不重新裁剪、不重算 token（《21》第五节 硬约束 5／6、
-第六节 格式决策 8）。
+验收 C6）。本模块不重排证据、不重新裁剪（《21》第五节 硬约束 5／6、第六节 格式决策 8）。
+
+**预算守卫必须由「重算分量」组成，而不是照抄上游**（《21》第五节 硬约束 6；全面审查
+B-02／C-06 与决策者反例 R2）：`token_account["total_tokens"]` **不再**直接取 trace 的读数，
+而一律由 `text_tokens + path_tokens + event_triple_tokens` **现场合成**（`text_tokens` 又是
+逐条 `token_count` 求和，即每个分量都是本层算出来的），`within_budget` 判在**合成值**上。
+反例 R2 的原貌是：`total_tokens` 照抄 trace、`text_tokens` 却逐条求和——把某个文本块的
+`token_count` 抬高后，`total_tokens` 仍是旧值、`within_budget` 仍为真，**守门数取自被守
+对象**，预算守卫形同虚设。修法是在现场合成之后**再断言**它与上游 trace 的 `total_tokens`
+相等，不等即 `SystemExit`（消息里给出两个数），把「上游与现场重算不一致」显式暴露出来
+——既不放过真实超预算，也不悄悄替上游改数（真实数据上 30 题两者本来相等，故登记值不变）。
 
 `from_graph` 的判据（题面给的判据**经实测不成立**，故改用 trace 已有的字段，见下方
 `_graph_side_ids` 的注释）。
@@ -156,12 +165,27 @@ def assemble_case(trace_row: dict, chunk_index: dict, doc_index: dict,
         })
 
     ta = trace_row["token_account"]
+    text_tokens = sum(item["token_count"] for item in evidence)        # 逐条求和（本层重算）
+    # 预算守卫的分子**现场合成**：total = text(逐条重算) + path + event_triple（后两项取 trace
+    # 读数——第 8 阶段不重新裁剪，故它们只在检索侧算过一次；见模块 docstring）。**不照抄**
+    # trace 的 total_tokens：照抄会让「抬高某个 token_count」不进 total，守门数取自被守对象
+    # （全面审查 B-02／C-06；决策者反例 R2）。
+    synth_total = text_tokens + ta["path_tokens"] + ta["event_triple_tokens"]
+    trace_total = ta["total_tokens"]
+    # 现场重算与上游登记不一致 → 显式报错退出（不得静默按其一继续）。真实数据 30 题相等，
+    # 故本断言不改变任何登记值；它只在「上游被改动／本层分量被改动」时触发。
+    if synth_total != trace_total:
+        raise SystemExit(
+            "%s：token 账现场重算与上游 trace 不一致——现场 text+path+event_triple=%d、"
+            "trace total_tokens=%d（《21》第五节 硬约束 6：预算守卫必须由重算分量组成，"
+            "不得照抄上游；审查 B-02／C-06）"
+            % (trace_row["qid"], synth_total, trace_total))
     token_account = {
-        "text_tokens": sum(item["token_count"] for item in evidence),   # 逐条求和
-        "path_tokens": ta["path_tokens"],                  # 以下四项取 trace 读数，不重算
+        "text_tokens": text_tokens,                        # 逐条求和
+        "path_tokens": ta["path_tokens"],                  # 以下三项取 trace 读数，不重算
         "event_triple_tokens": ta["event_triple_tokens"],
         "graph_tokens": ta["graph_tokens"],
-        "total_tokens": ta["total_tokens"],
+        "total_tokens": synth_total,                       # 现场合成（已断言 == trace 登记值）
     }
 
     # 图谱载荷**原样透传**（一个字段都不加工；《21》第五节 硬约束 7）

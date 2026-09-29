@@ -1,9 +1,9 @@
 {
   "artifacts_sha256": {
     "answer_trace": {
-      "bytes": 372113,
+      "bytes": 365825,
       "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段08-智能问答系统\\问答产出\\answer_trace.jsonl",
-      "sha256": "dbbd7dfcd0e1c50ce31d2a92ff6894de292b5f65fb29e9fd65f6536677c92480"
+      "sha256": "ac1cc22718772366c9f458047ff249d95f40a4a5ea4231069f6592af808e0e2f"
     },
     "input_manifest": {
       "bytes": 6663,
@@ -16,19 +16,19 @@
       "sha256": "702a23c62247dafa68e00243759231966961f3d3360585808fab2582f8b0bd5d"
     },
     "qa_records": {
-      "bytes": 249592,
+      "bytes": 246922,
       "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段08-智能问答系统\\问答产出\\qa_records.jsonl",
-      "sha256": "e0d3cf03fa696ae9834352d9f840bd56c7e3d5ff047f1aa372fbd9d1a553bfb2"
+      "sha256": "b1820ed83ebd4ad3a6b953b99ed99ca0add49c80ca91a8389fe1868d37628d72"
     },
     "selection_decision": {
-      "bytes": 11494,
+      "bytes": 12218,
       "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段08-智能问答系统\\问答产出\\selection_decision.json",
-      "sha256": "896d0ebfb63e8d4155580c45a9a7029439eabf3b075a7c4e15632f05148c0bf0"
+      "sha256": "b30a424a9b343fe8afee79a6082de2582f539b62301ee8ec7db0995100da677b"
     },
     "selection_matrix": {
-      "bytes": 583660,
+      "bytes": 591130,
       "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段08-智能问答系统\\问答产出\\selection_matrix.jsonl",
-      "sha256": "118dfe6962d2e8bdeb3286d232aeaaf9fd5ec0813520ff005bb56f627c7e811e"
+      "sha256": "9891377f9c6594067e5f81d382a845101114af833846934537e48a7a7c0b24cf"
     }
   },
   "assembly_determinism": {
@@ -90,7 +90,7 @@
   "gate_summary_from_cycle_1": {
     "citation_out_of_range_total": 0,
     "date_unverifiable_total": 0,
-    "dates_beyond_cutoff_total": 14,
+    "dates_beyond_cutoff_total": 15,
     "forbidden_hit_total": 0,
     "graph_section_bad": 0,
     "open_ended_applicable": 0,
@@ -221,7 +221,7 @@
     "rate": 0.0
   },
   "notice": "本文件只登记 30 题预实验集上的**原始读数**，不含人工评分，不构成正式实验结论（《21》第1.2节、非目标 4／5）；模型输出重复一致率只登记数值，**不作通过／失败判据**（验收 G3）。",
-  "now_injected": "2026-09-29T22:24:31+08:00",
+  "now_injected": "2026-09-29T22:54:12+08:00",
   "purpose": "T9：复跑命令、输入指纹、产出 SHA-256、两次运行的装配逐字节一致性、两次运行的模型输出重复一致率、模型调用次数（含重试）",
   "reproduce_commands": [
     "python 代码\\问答\\model_selection.py --recheck",

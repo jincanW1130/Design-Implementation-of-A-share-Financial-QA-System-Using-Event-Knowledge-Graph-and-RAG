@@ -7,7 +7,7 @@
 
 | 表 | 字段 |
 | --- | --- |
-| question | `question_id`／`session_id`／`question_text`／`task_type`／`gold_hop_depth`／`time_constraint`／`ask_time` |
+| question | `question_id`／`user_id`／`session_id`／`question_text`／`task_type`／`gold_hop_depth`／`time_constraint`／`ask_time` |
 | answer | `answer_id`／`question_id`／`answer_text`／`graph_path`／`model_name`／`prompt_version`／`is_graph_extended`／`create_time` |
 | answer_evidence | `answer_id`／`chunk_id`／`doc_id`／`rank`／`evidence_type` |
 
@@ -41,8 +41,11 @@ import assemble as asm        # noqa: E402
 import config                 # noqa: E402
 import prompt as prompt_mod   # noqa: E402
 
-# 三张表的字段名（**逐字取《10》表 4-6**；`--selftest` 与验收 F1 按这三份清单逐字段比对）
-QUESTION_FIELDS = ("question_id", "session_id", "question_text", "task_type",
+# 三张表的字段名（**逐字取《10》表 4-6**；`--selftest` 与验收 F1 按这三份清单逐字段比对）。
+# `user_id` 是《10》第4.4.1节 表 4-6 里 question 表的**可空外键**（`fk_question_user → user.user_id`，
+# 「登录未启用时为空」）；第一版不启用登录，故值恒为 `None`，但**字段必须保留**（全面审查 C-01：
+# 表 4-6 为 8 字段，此前实现只有 7 个）。字段顺序按表 4-6 的列序。
+QUESTION_FIELDS = ("question_id", "user_id", "session_id", "question_text", "task_type",
                    "gold_hop_depth", "time_constraint", "ask_time")
 ANSWER_FIELDS = ("answer_id", "question_id", "answer_text", "graph_path", "model_name",
                  "prompt_version", "is_graph_extended", "create_time")
@@ -81,6 +84,10 @@ def build_record(case: dict, answer_result: dict, *, session_id: str, question_i
 
     question = {
         "question_id": question_id,
+        # 表 4-6 的 question 表有 8 个字段，`user_id` 是其中的**可空外键**（外键
+        # `fk_question_user → user.user_id`，「登录未启用时为空」）。**第一版不启用登录**，
+        # 故恒取 `None`；但字段必须保留，不得省略（全面审查 C-01；《10》第4.4.1节 表 4-6）。
+        "user_id": None,
         "session_id": session_id,
         "question_text": case["question"],
         # 以下三个是题集标注字段；非测试集题目（题集里没有的题）留空

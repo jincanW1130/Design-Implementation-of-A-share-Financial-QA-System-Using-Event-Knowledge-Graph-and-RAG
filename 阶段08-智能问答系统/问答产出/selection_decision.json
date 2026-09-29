@@ -26,7 +26,7 @@
       "max_consecutive_failures": 0,
       "max_seconds": 32.657,
       "mean_seconds": 6.165,
-      "median_seconds": 4.005,
+      "median_seconds": 3.938,
       "n_calls": 30,
       "n_failures": 0,
       "n_questions": 30,
@@ -61,7 +61,7 @@
       "max_consecutive_failures": 0,
       "max_seconds": 96.997,
       "mean_seconds": 24.499,
-      "median_seconds": 16.627,
+      "median_seconds": 15.431,
       "n_calls": 30,
       "n_failures": 0,
       "n_questions": 30,
@@ -96,7 +96,7 @@
       "max_consecutive_failures": 0,
       "max_seconds": 264.903,
       "mean_seconds": 55.134,
-      "median_seconds": 44.071,
+      "median_seconds": 40.046,
       "n_calls": 30,
       "n_failures": 0,
       "n_questions": 30,
@@ -125,6 +125,11 @@
     "graph": "graph_used=1 ⇒ 系统拼装的图谱段有内容且不含固定标注；graph_used=0 ⇒ 系统段恰为该固定标注；模型正文出现该固定标注即 body_graph_marker_leak"
   },
   "max_tokens": 16384,
+  "median_definition": {
+    "definition": "常用中位数：把该候选 30 题的 seconds 升序排列，n 为偶数时取中间两数平均（＝statistics.median）；n 为奇数时取中位数本身。",
+    "field": "median_seconds（各候选 aggregates 内，及 selection_matrix.jsonl 逐行 seconds 之上）",
+    "previous_definition": "旧实现取上中位 sorted[n // 2]（n=30 时与常用定义不同），已按全面审查 A-02／C-03 更正常用定义。"
+  },
   "moonshot_exclusion": {
     "conclusion": "勘察实测 kimi-k3 只在 temperature=1 下可用（见 observed_rows），与《02》第12.4节 冻结的 temperature=0 冲突，故不进入三候选对照。",
     "endpoint": "https://api.moonshot.cn/v1",
@@ -187,6 +192,7 @@
     "PE-29": "6c396f87cb2593325fa07dd2692773c62e5d545e2fc73ccaa2b035703ec345b8",
     "PE-30": "6cbcb4ec7a49c5528b5fbca573f80b109bb9c6dac7841eebf28d54f275c97c88"
   },
+  "prompt_sha256_by_row": "selection_matrix.jsonl 每行含 prompt_sha256（该题装配后 Prompt 文本的 SHA-256；三候选共享同一份装配，同一 qid 三行相同）——使「只换模型」可从矩阵原样独立证明。",
   "purpose": "T2 三模型对照选型的判定与执行证据（《21》第2.5节 第 4 条改判规则）",
   "questions": 30,
   "rules": {

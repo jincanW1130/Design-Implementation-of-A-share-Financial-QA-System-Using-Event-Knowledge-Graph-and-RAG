@@ -1,0 +1,63 @@
+C:\Users\15129\Desktop\��ҵ���\�׶�08-�����ʴ�ϵͳ\_��鹤���׸�\C_���������\06_run_manifest����.py:10: SyntaxWarning: invalid escape sequence '\c'
+  6) config_snapshot �� ����\�ʴ�\config.py / ����\����\config.py ��ʵ��ȡֵ�Ƿ�һ��
+====================================================================================================
+项6  run_manifest.json 声明核验
+====================================================================================================
+
+[1] artifacts_sha256 现算复核
+   answer_trace       bytes=372113 sha=dbbd7dfcd0e1c50c OK
+   input_manifest     bytes=6663 sha=e9e155e8e1337521 OK
+   prompt_snapshot    bytes=3898 sha=702a23c62247dafa OK
+   qa_records         bytes=249592 sha=e0d3cf03fa696ae9 OK
+   selection_decision bytes=11494 sha=896d0ebfb63e8d41 OK
+   selection_matrix   bytes=583660 sha=118dfe6962d2e8bd OK
+   artifacts 不符数 = 0 / 6
+
+[2] input_fingerprints 可复算性
+   item1  per_question_trace     bytes=256704    OK
+   item2  stage7_input_manifest  bytes=7878      OK
+   item3  stage7_run_manifest    bytes=11834     OK
+   item4  documents              bytes=4496547   OK
+   item5  chunks                 bytes=5322875   OK
+   item6  dataset_meta           bytes=3108      OK
+   item7  nodes_csv              bytes=708043    OK
+   item7  edges_csv              bytes=131275    OK
+   item7  graph_stats            bytes=24818     OK
+   item8  questions              bytes=101879    OK
+   登记 count=10；现场不符 = 0；登记 recomputed_mismatched = []（应为空）
+
+[3] model_calls 自洽（total=60／retries=0）
+   登记 total=60 cycle_1=30 cycle_2=30 retries=0
+   answer_trace 行数=30；逐行 attempts 合计=30；retried 行数=0
+   total==cycle_1+cycle_2==60: True；cycle_1==trace行数==30: True；retries==0 且 trace 无重试: True
+   注：第1次运行写出的 answer_trace 只落 30 行；第2次运行不写盘，故其 30 次调用无法从产物点数。
+
+[4] assembly_determinism 独立复现（0 调用）
+   登记 repeats=2 questions=30 identical=30 all_identical=True model_calls=0
+   现场连装两次一致 = 30/30；与登记 prompt_sha256_by_qid 一致 = 30/30
+   结论 = OK
+
+[5] model_output_repeatability 可核性（0/30）
+   登记 questions=30 identical=0 rate=0.0 differing=30 identical_qids=0
+   盘面自洽（rate==identical/questions，diff∪ident==30）= True
+   !! 第2次运行的 body_text 未落盘：本项只可核「内部自洽」，无法独立复算重复一致率本身。
+
+[6] config_snapshot vs 代码实际取值
+   model_name             登记='deepseek-flash'           现取='deepseek-flash' OK
+   model_version          登记='deepseek-flash'           现取='deepseek-flash' OK
+   endpoint               登记='https://api.deepseek.com/v1' 现取='https://api.deepseek.com/v1' OK
+   temperature            登记=0                          现取=0 OK
+   max_tokens             登记=16384                      现取=16384 OK
+   prompt_version         登记='v1.0'                     现取='v1.0' OK
+   K                      登记=10                         现取=10 OK
+   N                      登记=20                         现取=20 OK
+   context_token_budget   登记=3600                       现取=3600 OK
+   g                      登记=2                          现取=2 OK
+   dataset_version        登记='v2.1'                     现取='v2.1' OK
+   data_cutoff_time       登记='2026-09-25T23:59:59+08:00' 现取='2026-09-25T23:59:59+08:00' OK
+   config_snapshot 不符 = 0
+
+--- 正对照（产物 SHA 比对器有效性）---
+  篡改 answer_trace 登记 SHA 末位 → 比对结论 = 不符（必须=不符）→ PASS
+
+结论：run_manifest 声明不符项合计 = 0

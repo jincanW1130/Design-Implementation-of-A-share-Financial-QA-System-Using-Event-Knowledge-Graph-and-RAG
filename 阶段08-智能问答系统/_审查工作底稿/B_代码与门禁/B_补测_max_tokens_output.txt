@@ -1,0 +1,4 @@
+期望 FAIL = B1
+实测 退出码=1  FAIL=['G6']  新增失败=∅
+判定：★漏判（假阴性）★
+B1 行：   [OK  ] B1 模型三值一致（《21》第五节 硬约束 2 ＋《02》第12.4节 登记）  model_name=deepseek-flash／model_version=deepseek-flash／temperature=0／endpoint=https://api.deepseek.com/v1（《21》原文解析；《21》第 185 行）；《02》12.4 已登记行 temperat

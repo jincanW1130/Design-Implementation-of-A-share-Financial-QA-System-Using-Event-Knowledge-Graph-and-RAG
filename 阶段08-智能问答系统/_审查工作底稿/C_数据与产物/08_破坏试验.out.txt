@@ -1,0 +1,83 @@
+====================================================================================================
+项8  破坏试验（镜像根在系统临时目录；门禁＝工具\验收第8阶段.py --root --profile full）
+====================================================================================================
+
+[基线] 原样副本：复制 34 文件（缺 0）、git=True、退出码 1
+   基线 FAIL 集 = G6、H1、H2、H3
+   基线 环境失败 = ∅
+   基线未执行 = G5
+   [正对照1] 第二个原样副本 FAIL 集 = G6、H1、H2、H3 → 与基线相同 = True
+
+----------------------------------------------------------------------------------------------------
+[case1-citation-oob] PE-02 正文 [证据1]→[证据99]（越界）
+   文件确实被改动 = True；退出码 = 1
+   期望新增 FAIL 行 = D2、E4、G4
+   实测新增 FAIL 行 = D2、E4、G4
+
+----------------------------------------------------------------------------------------------------
+[case2-evidence-order] PE-01 evidence 数组顺序反转
+   文件确实被改动 = True；退出码 = 1
+   期望新增 FAIL 行 = C3、G4
+   实测新增 FAIL 行 = C3、G4
+
+----------------------------------------------------------------------------------------------------
+[case3-graph-section] PE-03 图谱段→「本次回答未使用图谱扩展」（graph_used 仍真）
+   文件确实被改动 = True；退出码 = 1
+   期望新增 FAIL 行 = D4、E2、G4
+   实测新增 FAIL 行 = D4、E2、G4
+
+----------------------------------------------------------------------------------------------------
+[case4-budget-over] PE-04 token_account.total_tokens→3601（>3600）
+   文件确实被改动 = True；退出码 = 1
+   期望新增 FAIL 行 = C4、G4
+   实测新增 FAIL 行 = G4
+
+----------------------------------------------------------------------------------------------------
+[case5-evidence-type] 第1条记录 answer_evidence[0].evidence_type→「其它来源」
+   文件确实被改动 = True；退出码 = 1
+   期望新增 FAIL 行 = G4
+   实测新增 FAIL 行 = G4
+
+====================================================================================================
+破坏试验结果表
+====================================================================================================
+反例                     期望新增FAIL       退出码       实测新增FAIL                   实测未执行                      判定
+case1-citation-oob     D2、E4、G4       1         D2、E4、G4                   G5                         被捕获
+case2-evidence-order   C3、G4          1         C3、G4                      G5                         被捕获
+case3-graph-section    D4、E2、G4       1         D4、E2、G4                   G5                         被捕获
+case4-budget-over      C4、G4          1         G4                         G5                         被捕获
+case5-evidence-type    G4             1         G4                         G5                         被捕获
+
+[关键行状态明细]（每个反例，逐期望行给出实测状态）
+   case1-citation-oob     D2   = FAIL
+   case1-citation-oob     E4   = FAIL
+   case1-citation-oob     G4   = FAIL
+                          全部非 OK 行 = D2:FAIL、E4:FAIL、G4:FAIL、G5:UNRUN、G6:FAIL、H1:FAIL、H2:FAIL、H3:FAIL
+   case2-evidence-order   C3   = FAIL
+   case2-evidence-order   G4   = FAIL
+                          全部非 OK 行 = C3:FAIL、G4:FAIL、G5:UNRUN、G6:FAIL、H1:FAIL、H2:FAIL、H3:FAIL
+   case3-graph-section    D4   = FAIL
+   case3-graph-section    E2   = FAIL
+   case3-graph-section    G4   = FAIL
+                          全部非 OK 行 = D4:FAIL、E2:FAIL、G4:FAIL、G5:UNRUN、G6:FAIL、H1:FAIL、H2:FAIL、H3:FAIL
+   case4-budget-over      C4   = OK
+   case4-budget-over      G4   = FAIL
+                          全部非 OK 行 = G4:FAIL、G5:UNRUN、G6:FAIL、H1:FAIL、H2:FAIL、H3:FAIL
+   case5-evidence-type    G4   = FAIL
+                          全部非 OK 行 = G4:FAIL、G5:UNRUN、G6:FAIL、H1:FAIL、H2:FAIL、H3:FAIL
+
+漏网（假阴性）数 = 0
+未执行行（各反例）＝ {'case1-citation-oob': ['G5'], 'case2-evidence-order': ['G5'], 'case3-graph-section': ['G5'], 'case4-budget-over': ['G5'], 'case5-evidence-type': ['G5']}
+
+[临时镜像根] 将在本脚本退出时删除：
+   C:\Users\15129\AppData\Local\Temp\stage8_accept_baseline_kl1jvw3e
+   C:\Users\15129\AppData\Local\Temp\stage8_accept_baseline2_uojrte09
+   C:\Users\15129\AppData\Local\Temp\stage8_accept_case1-citation-oob_rudqnmbq
+   C:\Users\15129\AppData\Local\Temp\stage8_accept_case2-evidence-order_v63cquta
+   C:\Users\15129\AppData\Local\Temp\stage8_accept_case3-graph-section_0y5x_pmh
+   C:\Users\15129\AppData\Local\Temp\stage8_accept_case4-budget-over_khgjjm8n
+   C:\Users\15129\AppData\Local\Temp\stage8_accept_case5-evidence-type_4n4i7maa
+   已删除。
+
+  [FAIL] 验收脚本自身抛异常中断：详见上方 Traceback（按失败记账）
+==============================================================================

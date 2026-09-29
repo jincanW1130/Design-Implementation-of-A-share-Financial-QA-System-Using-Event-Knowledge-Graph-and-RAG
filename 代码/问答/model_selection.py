@@ -44,6 +44,18 @@
    **两次尝试都落进 `attempts`**（每次的时延／`finish_reason`／`prompt_tokens`／
    `completion_tokens`／是否空正文都能逐次看出），**两次都为空**才记 `empty_answer=1`。
    该规则对三个候选一律适用，故不引入新的实验变量。
+
+**全面审查 A-02／C-03／C-04 的两处整改（2026-09-29，只在 `--recheck` 档生效，零调用）**：
+
+* **中位时延改用常用中位数定义**：旧实现 `seconds_sorted[len // 2]` 取的是**上中位**，n=30
+  时与常用定义不同；现按「n 为偶数取中间两数平均」（`statistics.median`）计算，口径写在
+  `selection_decision.json` 的 `median_definition` 字段里；
+* **矩阵逐行补 `prompt_sha256`**：`selection_matrix.jsonl` 每行带该题装配后 Prompt 文本的
+  SHA-256（三候选共享同一份装配，故同一 qid 的三行该值相同），使「只换模型」可从矩阵**原样
+  独立证明**，不再只靠共享装配代码佐证。
+
+这两项都由 `--recheck` 在**零模型调用**下从「确定性装配 ＋ 已落盘的 `seconds`」补齐／重算，
+且**幂等**（跑两次逐字节相同）；矩阵里的模型原始输出一个字节都不改。
 """
 
 from __future__ import annotations
@@ -53,6 +65,7 @@ import collections
 import json
 import os
 import re
+import statistics
 import sys
 import time
 import urllib.error
@@ -218,7 +231,16 @@ def apply_machine_check(row: dict, case: dict) -> dict:
 
 
 def recheck() -> int:
-    """`--recheck`：只按已落盘的矩阵重算机检字段并重写矩阵与选型结论（**零模型调用**）。"""
+    """`--recheck`：只按已落盘的矩阵重算机检字段并重写矩阵与选型结论（**零模型调用**）。
+
+    两件事都在零调用下补齐／重算，且**幂等**（跑两次逐字节相同）：
+
+    * 逐行 `prompt_sha256`：Prompt 来自确定性装配（`assemble.assemble_case`），故可现场重算，
+      与本行落盘的模型输出无关（全面审查 C-04）；
+    * 中位时延：来自已落盘的 `seconds`，按**常用中位数定义**重算（A-02／C-03）。
+
+    模型原始输出（`answer_text`／`body_text`／`attempts`／`seconds` …）一个字节都不改。
+    """
     if not os.path.isfile(config.SELECTION_MATRIX_PATH):
         raise SystemExit("矩阵不存在，无法 --recheck：%s" % config.SELECTION_MATRIX_PATH)
     rows = [dict(r) for r in config.iter_jsonl(config.SELECTION_MATRIX_PATH)]
@@ -228,16 +250,23 @@ def recheck() -> int:
         raise SystemExit("矩阵里的 qid 在装配结果里找不到：%s" % "、".join(missing))
     for r in rows:
         apply_machine_check(r, cases[r["qid"]])
+        # 逐行补／重算 Prompt 指纹（三候选共享同一份装配，同一 qid 的三行该值相同）
+        r["prompt_sha256"] = cases[r["qid"]]["prompt"]["sha256"]
     rows.sort(key=lambda r: (r["qid"], r["candidate"]))
     config.write_jsonl(config.SELECTION_MATRIX_PATH, rows)
     calls = sum(len(r.get("attempts") or []) for r in rows)
     decision = build_decision(rows, list(cases.values()), calls, None)
     config.write_json(config.SELECTION_DECISION_PATH, decision)
-    print("--recheck：按已落盘的模型输出重算机检字段，重写 %s（%d 行）与 %s"
-          % (config.SELECTION_MATRIX_PATH, len(rows), config.SELECTION_DECISION_PATH))
+    print("--recheck：按已落盘的模型输出重算机检字段、补齐逐行 prompt_sha256，重写 %s（%d 行）"
+          "与 %s" % (config.SELECTION_MATRIX_PATH, len(rows), config.SELECTION_DECISION_PATH))
     print("未发出任何请求（调用计数 0）；模型输出未做任何改写。")
     print_summary(decision["aggregates"])
     print("\n选型结论：%s" % decision["verdict"])
+    # 落盘后的两份产物的新指纹（供报告／复核逐字引用）
+    for lab, path in (("selection_matrix.jsonl", config.SELECTION_MATRIX_PATH),
+                      ("selection_decision.json", config.SELECTION_DECISION_PATH)):
+        print("--recheck 后 %s：SHA-256=%s、字节=%d"
+              % (lab, config.sha256_file(path), os.path.getsize(path)))
     return 0
 
 
@@ -331,6 +360,10 @@ def run(limit: int = None, dry_run: bool = False) -> int:
                     # 请求失败**不是**「空答案」（v1.3 空答案只指「成功但正文为空」）——
                     # 失败由 `n_failures` 单列统计，两者不混计。
                     "empty_answer": False, "evidence_count": len(c["evidence"]),
+                    # 逐行留 Prompt 指纹：三候选共享同一份装配，故同一 qid 的三行该值相同
+                    # （全面审查 C-04：使「只换模型」可从矩阵原样独立证明）。本例请求失败，
+                    # 指纹仍照留（Prompt 是装配层产物，与调用成败无关）。
+                    "prompt_sha256": c["prompt"]["sha256"],
                 })
                 continue
 
@@ -378,6 +411,9 @@ def run(limit: int = None, dry_run: bool = False) -> int:
                 "body_section_header_leak": mc["body_section_header_leak"],
                 "empty_answer": mc["empty_answer"],
                 "evidence_count": len(c["evidence"]),
+                # 逐行留 Prompt 指纹（三候选共享同一份装配，同一 qid 的三行该值相同）——
+                # 全面审查 C-04：使「只换模型」可从矩阵原样独立证明，不必只靠共享装配代码佐证。
+                "prompt_sha256": c["prompt"]["sha256"],
             })
 
     # 固定排序：按 (qid, candidate) 升序；写盘用 sort_keys 固定键序
@@ -412,7 +448,7 @@ def print_summary(agg: dict) -> None:
     print("=" * 132)
     hdr = ("%-16s %5s %5s %5s %7s %9s %13s %14s %15s %9s %9s %9s  %s"
            % ("候选", "失败", "重试", "空答", "length截", "引用越界*", "date不可核*",
-              "dates超截止*", "正文图谱泄漏", "平均时延", "中位时延", "最大时延",
+              "dates超截止*", "正文图谱泄漏", "平均时延", "中位时延※", "最大时延",
               "finish_reason 分布"))
     print(hdr)
     print("-" * 132)
@@ -430,6 +466,8 @@ def print_summary(agg: dict) -> None:
     print("-" * 132)
     print("空答数＝「请求成功但正文为空」且**两次尝试都为空**的题数；失败数＝两次尝试均失败的题数。")
     print("标 * 的三项按「次数／出现处」计；其余按「题数」计。重试卷数见各行的「重试」列。")
+    print("标 ※ 的「中位时延」＝**常用中位数定义**（n 为偶数时取中间两数平均，"
+          "即 statistics.median；见 selection_decision.json 的 median_definition 字段）。")
     print("=" * 132)
 
 
@@ -497,7 +535,11 @@ def _aggregate(rows: list, cand_key: str, n_cases: int) -> dict:
         "graph_cases": sum(1 for r in sub if r["graph_used"]),
         # —— 时延与 token ——
         "mean_seconds": round(sum(secs) / len(secs), 3) if secs else None,
-        "median_seconds": (round(seconds_sorted[len(seconds_sorted) // 2], 3)
+        # 「中位时延」用**常用中位数定义**（《21》未另定口径）：n 为偶数时取中间两数平均，
+        # 即 `statistics.median`。旧实现 `sorted[n // 2]` 取的是**上中位**，n=30 时与常用
+        # 定义不同（全面审查 A-02／C-03），已按常用定义改（口径写在 selection_decision.json
+        # 的 `median_definition` 字段里）。
+        "median_seconds": (round(statistics.median(seconds_sorted), 3)
                            if seconds_sorted else None),
         "max_seconds": max(secs) if secs else None,
         "total_prompt_tokens": sum(r["prompt_tokens"] or 0 for r in sub),
@@ -578,6 +620,19 @@ def build_decision(rows: list, cases: list, calls: int, limit) -> dict:
         "only_thing_changed": "仅模型；装配结果、Prompt 文本、temperature、max_tokens 三候选全同",
         "temperature": config.require_fixed("temperature"),
         "max_tokens": config.require_fixed("max_tokens"),
+        # 「中位时延」的口径（全面审查 A-02／C-03）：改用**常用中位数定义**——n 为偶数时取
+        # 中间两数平均（`statistics.median`），不再取上中位 `sorted[n // 2]`。n=30 时两者不同。
+        "median_definition": {
+            "field": "median_seconds（各候选 aggregates 内，及 selection_matrix.jsonl 逐行 seconds 之上）",
+            "definition": "常用中位数：把该候选 30 题的 seconds 升序排列，n 为偶数时取中间两数"
+                          "平均（＝statistics.median）；n 为奇数时取中位数本身。",
+            "previous_definition": "旧实现取上中位 sorted[n // 2]（n=30 时与常用定义不同），已按"
+                                   "全面审查 A-02／C-03 更正常用定义。",
+        },
+        # 逐行 Prompt 指纹的落点（全面审查 C-04）：矩阵每行带 prompt_sha256，同一 qid 三候选相同。
+        "prompt_sha256_by_row": "selection_matrix.jsonl 每行含 prompt_sha256（该题装配后 Prompt "
+                                "文本的 SHA-256；三候选共享同一份装配，同一 qid 三行相同）——"
+                                "使「只换模型」可从矩阵原样独立证明。",
         "empty_body_retry_rule": "某次请求返回空正文（content 为空串）时，以**完全相同的配置**"
                                  "（同模型／同 temperature／同 max_tokens／同 Prompt 文本／同证据"
                                  "集合）再请求一次；两次尝试都落进 selection_matrix.jsonl 的"

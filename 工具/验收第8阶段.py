@@ -26,7 +26,7 @@ full 档必须能读出 39／39。
     python 工具\验收第8阶段.py                    # 默认 --profile full：39 行全执行（收口判定用）
     python 工具\验收第8阶段.py --profile static   # 只做静态检查：需要子进程／重算装配的检查项记
                                                   # 未执行（**这个档不作为收口判定**，退出码 2）
-    python 工具\验收第8阶段.py --selftest         # 负向校准：原样副本 ＋ 3 个反例（见 --help）
+    python 工具\验收第8阶段.py --selftest         # 负向校准：原样副本 ＋ 5 个反例（见 --help）
     python 工具\验收第8阶段.py --root PATH        # 对镜像根／被篡改副本运行（默认＝仓库根）
     python 工具\验收第8阶段.py --keep-tmp         # 保留临时目录
 
@@ -96,13 +96,47 @@ BLOCK_TABLE_LABELS = ("1", "2", "3", "4", "5", "6", "7")
 
 # 记录层字段名（《21》第五节 硬约束 13 逐字列出；与《10》第4.4.1节 表 4-6 同源）。
 # 运行时与 `代码\问答\history.py` 的三个字段元组逐项比对，两处都必须与下面一致。
+# `question.user_id` 是表 4-6 的**可空外键**（`fk_question_user`，「登录未启用时为空」）——
+# 《21》硬约束 13 的逐字列表漏了它，而表 4-6 为准绳，故 F1 的**必备字段集**含 `user_id`
+# （全面审查 C-01；第一版不启用登录，值恒为 `null`）。
 ROW13_FIELDS = {
-    "question": ("question_id", "session_id", "question_text", "task_type",
+    "question": ("question_id", "user_id", "session_id", "question_text", "task_type",
                  "gold_hop_depth", "time_constraint", "ask_time"),
     "answer": ("answer_id", "question_id", "answer_text", "graph_path", "model_name",
                "prompt_version", "is_graph_extended", "create_time"),
     "answer_evidence": ("answer_id", "chunk_id", "doc_id", "rank", "evidence_type"),
 }
+
+# `evidence_type` 的四类取值（《21》第五节 硬约束 15）＋ 由 **documents.jsonl 的 category**
+# 推得来源类型的**写死映射**（《10》表 4-6／prompt 同源口径）。F1 用它**独立重算**每条证据的
+# 期望来源类型，与 `qa_records.jsonl` 的登记值逐条比对——**不 import 被验对象的映射表**，否则
+# 就成了「用实现验实现」（全面审查 B-03／C-05）。判据顺序与 `prompt.source_type_label` 一致：
+# **图谱侧新增块优先**（`from_graph=true` → 相关事件），否则按 category 查表，missing／表外 → 回答来源。
+EVIDENCE_TYPE_SET = ("回答来源", "新闻来源", "公告来源", "相关事件")
+EVIDENCE_TYPE_BY_CATEGORY = {
+    "公告": "公告来源",
+    "政策文件": "公告来源",
+    "监管公开信息": "公告来源",
+    "财经新闻": "新闻来源",       # 键＝数据真实取值，不是近义词「新闻」
+}
+EVIDENCE_TYPE_DEFAULT = "回答来源"
+EVIDENCE_TYPE_GRAPH = "相关事件"
+
+
+def expected_evidence_type(category, from_graph) -> str:
+    """由文档 category ＋ 是否图谱侧新增块**独立重算**期望来源类型（门禁内部写死）。"""
+    if from_graph:
+        return EVIDENCE_TYPE_GRAPH
+    return EVIDENCE_TYPE_BY_CATEGORY.get(category, EVIDENCE_TYPE_DEFAULT)
+
+
+def _question_number(value):
+    """从 `Q-0nn` 或 `PE-nn` 里取题号整数（`Q-001`→1、`PE-01`→1）；取不到返回 None。
+
+    用题号（而非字符串）做匹配，避免 `Q-001`↔`PE-01` 这种位宽不一致的假失配。
+    """
+    m = re.fullmatch(r"(?:Q|PE)-0*(\d+)", str(value or "").strip())
+    return int(m.group(1)) if m else None
 
 # 《22》的 9 个必备小节（《21》第 137 行 逐字给出）。括号内为注解，比对时只取括号前的
 # 核心标题，并要求在《22》里以标题行形式**按序**出现。
@@ -147,7 +181,7 @@ _ap.add_argument("--profile", default="full", choices=["full", "static"],
                  help="full＝39 行全执行（默认，收口判定用）；static＝需要子进程／重算装配的"
                       "检查项记未执行（不作为收口判定，退出码 2）")
 _ap.add_argument("--selftest", action="store_true",
-                 help="负向校准：先跑原样副本（正向对照），再构造 3 个反例断言门禁真的 FAIL")
+                 help="负向校准：先跑原样副本（正向对照），再构造 5 个反例断言门禁真的 FAIL")
 _ap.add_argument("--keep-tmp", action="store_true", help="保留临时目录（镜像根）")
 _ap.add_argument("--emit-json", default=None,
                  help="把逐行状态写成 JSON（供 --selftest 判读；默认不写）")
@@ -629,6 +663,9 @@ def group_b(g):
     bad3 = {k: (frozen.get(k), answer_cfg.get(k)) for k in three
             if answer_cfg.get(k) != frozen.get(k)}
     ep_bad = answer_cfg.get("endpoint") != frozen.get("endpoint")
+    # `max_tokens`（硬约束 2 的冻结值，现场从《21》第五节 解析进 frozen["max_tokens"]）：
+    # 旧实现把它解析进来后**从未参与比较**，实测改成 8192 全档 39 行无一行报错（B-04）。
+    mt_bad = answer_cfg.get("max_tokens") != frozen.get("max_tokens")
 
     # 《02》第12.4节 已登记的行（temperature／Prompt 版本）逐字比对；大语言模型两行仍 TBD 时
     # 只登记口径（v3.3 登记属 T12），不作失败判据——这一点在输出里显式说明。
@@ -651,28 +688,36 @@ def group_b(g):
         if frozen["model_version"] not in t_llm_ver:
             llm_bad.append("《02》12.4 模型版本=%r 未含 %r" % (strip_emphasis(t_llm_ver),
                                                           frozen["model_version"]))
-    b1_ok = not bad3 and not ep_bad and not reg_bad and not llm_bad
+    b1_ok = not bad3 and not ep_bad and not mt_bad and not reg_bad and not llm_bad
     g.row("B1", b1_ok, "模型三值一致（《21》第五节 硬约束 2 ＋《02》第12.4节 登记）",
-          "model_name=%s／model_version=%s／temperature=%s／endpoint=%s（%s；《21》第 %s 行）；"
+          "model_name=%s／model_version=%s／temperature=%s／endpoint=%s／max_tokens=%s"
+          "（冻结值 max_tokens=%s；%s；《21》第 %s 行）；"
           "《02》12.4 已登记行 temperature=%r、Prompt 版本=%r，不一致 %d 处%s；"
           "大语言模型行=%s"
           % (answer_cfg.get("model_name"), answer_cfg.get("model_version"),
-             answer_cfg.get("temperature"), answer_cfg.get("endpoint"), src_note,
-             line_h2, t_temp, t_prompt, len(reg_bad) + len(llm_bad),
-             "" if not (reg_bad or llm_bad) else "：" + br(reg_bad + llm_bad, 3),
+             answer_cfg.get("temperature"), answer_cfg.get("endpoint"),
+             answer_cfg.get("max_tokens"), frozen.get("max_tokens"), src_note,
+             line_h2, t_temp, t_prompt, len(reg_bad) + len(llm_bad) + (1 if mt_bad else 0),
+             "" if not (reg_bad or llm_bad or mt_bad) else "：" + br(
+                 reg_bad + llm_bad + (["max_tokens config=%r／冻结=%r"
+                                       % (answer_cfg.get("max_tokens"), frozen.get("max_tokens"))]
+                                      if mt_bad else []), 3),
              "仍为 TBD（v3.3 登记属 T12，本行按《21》的裁定值比对，不以《02》尚未登记的"
              "行判失败）" if llm_tbd else strip_emphasis(t_llm)[:40]))
 
     # B2：四项定值由 代码\检索\config.py 导入；其余模块不得出现第二份字面量。
     ret = getattr(cfg, "RETRIEVAL", {}) or {}
     fixed_bad = {k: (v, ret.get(k)) for k, v in EXPECT_FIXED.items() if ret.get(k) != v}
-    imported = getattr(cfg, "K", None), getattr(cfg, "N", None)
     cfg_k = getattr(cfg, "K", None)
     cfg_n = getattr(cfg, "N", None)
     cfg_bud = getattr(cfg, "CONTEXT_TOKEN_BUDGET", None)
     cfg_g = getattr(cfg, "G", None)
-    if any(x is None for x in (cfg_k, cfg_n, cfg_bud, cfg_g)):
-        fixed_bad["import"] = ("config.K/N/CONTEXT_TOKEN_BUDGET/G 可读", "有缺失")
+    # ① 四个**导出值**必须分别等于冻结值（旧实现只判「不是 None」——写死 `K = 8` 也判 [OK]，
+    #    输出里「检索侧 K=10／config 导入 K=8」自相矛盾；全面审查 B-01、反例 R2 变体 case7）。
+    cfg_export = {"K": (cfg_k, EXPECT_FIXED["K"]), "N": (cfg_n, EXPECT_FIXED["N"]),
+                  "CONTEXT_TOKEN_BUDGET": (cfg_bud, EXPECT_FIXED["context_token_budget"]),
+                  "G": (cfg_g, EXPECT_FIXED["graph_retention_share"])}
+    export_bad = {k: (v[0], v[1]) for k, v in cfg_export.items() if v[0] != v[1]}
     # 其余模块：不得出现 3600／16384 字面量（四项里最具区分度的两个），不得顶层重声明这
     # 四个名字，且四项的**取用**必须经 config 走：`config.<名>` 属性访问、或
     # `config.require_fixed("<键>")`、或 `config.RETRIEVAL["<键>"]` 下标（AST 取证据）。
@@ -718,6 +763,46 @@ def group_b(g):
                                                                 "CONTEXT_TOKEN_BUDGET", "G"):
                         lit_bad.append("%s:%d 顶层赋值 %s" % (rel(path, g.root), node.lineno,
                                                           tgt.id))
+    # ② `config.py` 单独做 AST 检查：四个名字的**赋值右侧必须引用从检索侧加载的对象**
+    #    （`_need(...)`／`_RET`／`RETRIEVAL`），**不得是整数字面量**。旧实现用
+    #    `if ... or name == "config.py": continue` 把**唯一的参数来源文件本身**跳过了，
+    #    于是往 `config.py` 写一行 `K = 8` 也判 [OK]（B-01：第二份字面量恰恰藏在它声称设防
+    #    的那个文件里）。注意 `ANSWER["max_tokens"] = 16384` 不在这四个名字里，不误报。
+    src_bad = []
+    cfg_tree = None
+    try:
+        cfg_tree = ast.parse(read_text(os.path.join(g.code8, "config.py"), ""))
+    except SyntaxError as exc:
+        src_bad.append("config.py 解析失败：%s" % exc)
+    if cfg_tree is not None:
+        imported_names = {"_need", "_RET", "RETRIEVAL"}
+        assigned = {}
+        for node in cfg_tree.body:
+            tgt_names = []
+            if isinstance(node, ast.Assign):
+                tgt_names = [t.id for t in node.targets if isinstance(t, ast.Name)]
+            elif isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
+                tgt_names = [node.target.id]
+                node = ast.Assign(targets=[node.target], value=node.value)
+            for t in tgt_names:
+                if t in ("K", "N", "CONTEXT_TOKEN_BUDGET", "G"):
+                    assigned.setdefault(t, node)
+        for name in ("K", "N", "CONTEXT_TOKEN_BUDGET", "G"):
+            node = assigned.get(name)
+            if node is None or node.value is None:
+                src_bad.append("config.py 顶层未把 %s 赋成检索侧导入值" % name)
+                continue
+            ids = {n.id for n in ast.walk(node.value) if isinstance(n, ast.Name)}
+            ints = sorted({n.value for n in ast.walk(node.value)
+                           if isinstance(n, ast.Constant) and isinstance(n.value, int)
+                           and not isinstance(n.value, bool)})
+            if not (ids & imported_names):
+                src_bad.append("config.py:%d %s 的右侧未引用检索侧对象（%s）"
+                               % (node.lineno, name, br(sorted(ids), 3) or "无标识符"))
+            if ints:
+                src_bad.append("config.py:%d %s 的右侧含整数字面量 %s"
+                               % (node.lineno, name, br(ints, 3)))
+
     # 四项定值各自的取用证据（键名与 代码\检索\config.py 的字段名一致）。
     need_keys = {"K": ("K",), "N": ("N",),
                  "context_token_budget": ("CONTEXT_TOKEN_BUDGET", "context_token_budget"),
@@ -726,15 +811,19 @@ def group_b(g):
     for logical, aliases in need_keys.items():
         if not any(a in use_sites for a in aliases):
             missing_attrs.append(logical)
-    b2_ok = not fixed_bad and not lit_bad and not missing_attrs
+    b2_ok = not fixed_bad and not lit_bad and not missing_attrs and not export_bad and not src_bad
     g.row("B2", b2_ok, "参数无第二份字面量（四项由 代码\\检索\\config.py 导入）",
-          "检索侧四项实测 K=%s、N=%s、budget=%s、g=%s；config 导入 K=%s／N=%s／budget=%s／g=%s；"
-          "其余 %d 个模块的取用证据：%s%s"
+          "检索侧四项实测 K=%s、N=%s、budget=%s、g=%s；config 导出 K=%s／N=%s／budget=%s／g=%s"
+          "（应与冻结值逐项相等）；其余 %d 个模块的取用证据：%s；config.py 四名右侧均引用"
+          "检索侧对象=%s%s"
           % (ret.get("K"), ret.get("N"), ret.get("context_token_budget"),
              ret.get("graph_retention_share"), cfg_k, cfg_n, cfg_bud, cfg_g,
              len(used_modules),
              "；".join("%s←%s" % (k, br(v, 2)) for k, v in sorted(use_sites.items())) or "（无）",
+             not src_bad,
              "" if b2_ok else "；问题：" + br(list(fixed_bad) + lit_bad
+                                            + ["导出值与冻结值不符：%s" % (export_bad,)
+                                               if export_bad else ""] + src_bad
                                             + ["四项中未按名取用：%s" % x for x in
                                                sorted(missing_attrs)], 4)))
 
@@ -867,28 +956,55 @@ def group_c(g):
               % (checked, len(prod_bad), "" if not prod_bad else "：" + br(prod_bad, 2),
                  len(recomp_bad), "" if not recomp_bad else "：" + br(recomp_bad, 2)))
 
-    # C4：预算不突破；text_tokens 等于逐条 token_count 之和。
+    # C4：预算不突破（逐题）。**三项都要查**（全面审查 B-02／C-06：旧实现只查「现场重算的」
+    # 那一列，登记的登记值 `answer_trace.jsonl` 一字未查——把某题的 `total_tokens` 改成
+    # 3601 仍判 [OK]，因为超限看的是重算列；这就是 C-06 说的「行级假阴性」）：
+    #   ① 现场重算：text(逐条 Σ token_count) + path + event_triple == total（分量自洽）；
+    #   ② 现场重算值 ≤ 预算；
+    #   ③ 登记值（answer_trace.jsonl）== 现场重算值 且 ≤ 预算。
     if g.static_unrun("C4", "预算不突破（≤ 3600，逐题）", "static 档不重算装配"):
         pass
     elif not cases:
         g.envfail("C4 现场重算装配", "assemble_all 失败或不可用")
     else:
-        over, sum_bad = [], []
+        over, sum_bad, add_bad, reg_bad = [], [], [], []
         budget = None
+        traced = g.answered()
         for qid in sorted(cases):
             c = cases[qid]
             ta = c["token_account"]
             budget = c.get("context_token_budget")
-            if ta["total_tokens"] > budget:
-                over.append("%s total=%d > %d" % (qid, ta["total_tokens"], budget))
+            # ① 现场重算分量自洽：total 必须由 text(逐条重算) + path + event_triple 组成
             s = sum(e["token_count"] for e in c["evidence"])
             if ta["text_tokens"] != s:
                 sum_bad.append("%s text_tokens=%d ≠ Σ token_count=%d" % (qid, ta["text_tokens"], s))
+            live = s + ta["path_tokens"] + ta["event_triple_tokens"]
+            if ta["total_tokens"] != live:
+                add_bad.append("%s 现场 total=%d ≠ text+path+triple=%d"
+                               % (qid, ta["total_tokens"], live))
+            # ② 现场重算值 ≤ 预算
+            if ta["total_tokens"] > budget:
+                over.append("%s 现场 total=%d > %d" % (qid, ta["total_tokens"], budget))
+            # ③ 登记值（产物 answer_trace.jsonl）== 现场重算值，且 ≤ 预算
+            row = traced.get(qid)
+            if row is None:
+                reg_bad.append("%s 不在 answer_trace.jsonl 里" % qid)
+                continue
+            rta = row.get("token_account") or {}
+            r_total = rta.get("total_tokens")
+            if r_total != ta["total_tokens"]:
+                reg_bad.append("%s 登记 total=%s ≠ 现场重算=%d" % (qid, r_total, ta["total_tokens"]))
+            if isinstance(r_total, int) and r_total > budget:
+                reg_bad.append("%s 登记 total=%d > %d" % (qid, r_total, budget))
         worst = max((cases[q]["token_account"]["total_tokens"] for q in cases), default=None)
-        g.row("C4", not over and not sum_bad and budget == 3600, "预算不突破（≤ 3600，逐题）",
-              "预算=%s；30 题 total_tokens 最大值=%s；超限 %d 题%s；text_tokens 与逐条 "
-              "token_count 之和不一致的题 %d 题%s"
-              % (budget, worst, len(over), "" if not over else "：" + br(over, 3),
+        c4_ok = (not over and not sum_bad and not add_bad and not reg_bad and budget == 3600)
+        g.row("C4", c4_ok, "预算不突破（≤ 3600，逐题）",
+              "预算=%s；30 题现场重算 total_tokens 最大值=%s；① 现场 text+path+triple ≠ total %d 题%s；"
+              "② 现场超限 %d 题%s；③ 登记值 ≠ 现场重算或登记超限 %d 题%s；"
+              "text_tokens 与逐条 token_count 之和不一致 %d 题%s"
+              % (budget, worst, len(add_bad), "" if not add_bad else "：" + br(add_bad, 3),
+                 len(over), "" if not over else "：" + br(over, 3),
+                 len(reg_bad), "" if not reg_bad else "：" + br(reg_bad, 3),
                  len(sum_bad), "" if not sum_bad else "：" + br(sum_bad, 3)))
 
     # C5：未使用图谱扩展时的区块处理（单元级正反两向）。
@@ -1071,8 +1187,9 @@ def group_d(g):
     miss = []
     for qid in need:
         r = rows[qid]
-        cutoff = cutoff or (r.get("token_account") and None) or (
-            (cases.get(qid) or {}).get("data_cutoff_time"))
+        # 截止时间从现场重算的分区取（`answer_trace.jsonl` 的 token_account 里没有日期，
+        # 旧的 `(r.get("token_account") and None)` 恒为 None、是死代码；全面审查 B-05）。
+        cutoff = cutoff or (cases.get(qid) or {}).get("data_cutoff_time")
         date_part = (cutoff or "")[:10]
         secs = pm.split_answer_sections(r["answer_text"]) if pm else {}
         sec = secs.get("数据截至与判定区间")
@@ -1283,13 +1400,59 @@ def group_f(g):
                     extra.append("第%d行 %s 多 %s" % (i, key, br(sur, 3)))
     top_bad = [i for i, r in enumerate(records, 1) if set(r) != {"question", "answer",
                                                                  "answer_evidence"}]
-    g.row("F1", not missing and not extra and not tuple_bad and not top_bad,
-          "三表字段覆盖（逐条：无缺、无多余业务字段）",
-          "qa_records.jsonl %d 条；字段缺 %d 处、多 %d 处%s；顶层键异常的记录 %d 条%s；"
-          "history.py 三表元组与硬约束 13 一致=%s"
+
+    # F1 补充（全面审查 B-03／C-05）：`evidence_type` 的**取值**同样是字段覆盖的一部分。
+    # 旧实现只比字段名、不看值，把某条改成表外取值仍判 [OK]。这里做三件事：
+    #   ① 逐条断言 `evidence_type` ∈ 四类之一（表外取值即失败）；
+    #   ② 由 **documents.jsonl 的 category ＋ 是否图谱侧新增块独立重算**期望标签并逐条比对；
+    #   ③ 统计并打印四类各自的计数（让「新闻来源恒为 0」这类口径偏差可见）。
+    ev_type_bad, ev_type_counts = [], {t: 0 for t in EVIDENCE_TYPE_SET}
+    docs_idx, graph_side_by_qid = {}, {}
+    if mods:
+        try:
+            docs_idx = mods["assemble"].load_documents()
+        except BaseException as exc:                  # noqa: BLE001 环境失败而非内容失败
+            g.envfail("F1 加载 documents.jsonl", str(exc))
+    # 「图谱侧新增块」优先取现场重算的装配结果（`evidence[i].from_graph`）；装配不可用则退回
+    # 第 7 阶段 trace 的 `graph_evidence_in_final`（assemble 的同一判据来源）。按题分组，
+    # 避免「同一块在这题是图谱侧、在那题不是」被跨题并集误判。
+    for qid, c in (g.cases_by_qid() or {}).items():
+        graph_side_by_qid[qid] = {e["chunk_id"] for e in c["evidence"] if e.get("from_graph")}
+    if not graph_side_by_qid:
+        for qid, srow in (g.stage7_trace() or {}).items():
+            graph_side_by_qid[qid] = set(srow.get("graph_evidence_in_final") or [])
+    # 题号（整数）→ 题集 qid，作为记录 `question_id` 与装配 case 的桥（位宽无关）。
+    qid_by_num = {}
+    for q in (g.questions() or []):
+        num = _question_number(q.get("qid"))
+        if num is not None:
+            qid_by_num[num] = q.get("qid")
+    for i, r in enumerate(records, 1):
+        qid = qid_by_num.get(_question_number((r.get("question") or {}).get("question_id")))
+        gside = graph_side_by_qid.get(qid, set())
+        for j, e in enumerate((r.get("answer_evidence") or []), 1):
+            lab = e.get("evidence_type")
+            if lab not in ev_type_counts:
+                ev_type_bad.append("第%d行 answer_evidence[%d] 表外取值 %r" % (i, j, lab))
+                continue
+            ev_type_counts[lab] += 1
+            cat = (docs_idx.get(e.get("doc_id")) or {}).get("category")
+            exp = expected_evidence_type(cat, e.get("chunk_id") in gside)
+            if lab != exp:
+                ev_type_bad.append("第%d行 answer_evidence[%d] chunk=%s 记 %r ≠ 重算 %r"
+                                   "（category=%r，图谱侧=%s）"
+                                   % (i, j, e.get("chunk_id"), lab, exp, cat,
+                                      e.get("chunk_id") in gside))
+    f1_ok = (not missing and not extra and not tuple_bad and not top_bad and not ev_type_bad)
+    g.row("F1", f1_ok, "三表字段覆盖（逐条：无缺、无多余业务字段）",
+          "qa_records.jsonl %d 条；字段缺 %d 处、多 %d 处%s；顶层键异常 %d 条%s；"
+          "history.py 三表元组与硬约束 13 一致=%s；evidence_type 取值/重算不符 %d 处%s；"
+          "四类计数=%s"
           % (len(records), len(missing), len(extra),
              "" if not (missing or extra) else "：" + br(missing + extra, 3),
-             len(top_bad), "" if not top_bad else "：" + br(top_bad, 3), not tuple_bad))
+             len(top_bad), "" if not top_bad else "：" + br(top_bad, 3), not tuple_bad,
+             len(ev_type_bad), "" if not ev_type_bad else "：" + br(ev_type_bad, 3),
+             json.dumps(ev_type_counts, ensure_ascii=False)))
 
     # F2：同一 answer_id 下 chunk_id 不重复；rank 为 1..m 连续。
     f2 = []
@@ -1792,6 +1955,10 @@ MIRROR_FILES = (
     "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/edges.csv",
     "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/graph_stats.json",
     "阶段08-智能问答系统/21-第8阶段任务书（智能问答系统）.md",
+    # 《22》必须一起带进镜像：H1／H2／H3 判的就是它。少了它，H1／H2／H3 在**原样副本**上就
+    # 会 FAIL，「正向对照」失去意义（原本「3 个反例」里没有一条能覆盖 H 组；H 组的正控也是
+    # 空的）——加上它，正向对照才真的能证明 H 组判据在「文档齐全」时判 [OK]。
+    "阶段08-智能问答系统/22-第8阶段产出文档（智能问答系统）.md",
     "阶段08-智能问答系统/问答产出/input_manifest.json",
     "阶段08-智能问答系统/问答产出/prompt_snapshot.json",
     "阶段08-智能问答系统/问答产出/answer_trace.jsonl",
@@ -1805,6 +1972,7 @@ MIRROR_FILES = (
     "02-项目执行总控文档.md",
 )
 ANSWER_TRACE_REL = "阶段08-智能问答系统/问答产出/answer_trace.jsonl"
+QA_RECORDS_REL = "阶段08-智能问答系统/问答产出/qa_records.jsonl"
 
 
 def build_mirror(tag):
@@ -1889,6 +2057,46 @@ def tamper_graph_section(root):
     return "把 PE-03 的系统图谱段替换为「%s」，graph_used 仍为真" % pm.NO_GRAPH_MARKER
 
 
+def tamper_total_tokens(root):
+    """反例④：把 PE-04 的 `token_account.total_tokens` 抬到 3601（应触发 C4／G4）。
+
+    这是全面审查 C-06 的还原：旧 C4 只看「现场重算」那一列，登记值一字未查，于是把登记
+    的 `total_tokens` 改成超预算值也判 [OK]。修后的 C4 会把登记值与现场重算值逐题比对，
+    并对登记值判「≤ 预算」。
+    """
+    def fn(rows):
+        for r in rows:
+            if r.get("qid") == "PE-04":
+                ta = dict(r.get("token_account") or {})
+                ta["total_tokens"] = 3601           # > 预算 3600，且 ≠ 现场重算值
+                r["token_account"] = ta
+    rewrite_jsonl(os.path.join(root, ANSWER_TRACE_REL.replace("/", os.sep)), fn)
+    return "把 PE-04 的 token_account.total_tokens 改成 3601（> 预算 3600）"
+
+
+def tamper_evidence_type(root):
+    """反例⑤：把 qa_records.jsonl 首条 answer_evidence 的 `evidence_type` 改成表外取值
+    （应触发 F1／G4）。
+
+    这是全面审查 B-03／C-05 的还原：旧 F1 只比三表**字段名**、不看**取值**，把
+    `evidence_type` 改成「新闻稿倒查」这种表外串也判 [OK]。修后的 F1 会逐条断言取值 ∈ 四类，
+    并由 documents.jsonl 的 category ＋ 图谱侧标记**独立重算**再比对。
+    """
+    p = os.path.join(root, QA_RECORDS_REL.replace("/", os.sep))
+    rows = [json.loads(l) for l in read_text(p, "").split("\n") if l.strip()]
+    done = None
+    for r in rows:
+        ev = r.get("answer_evidence") or []
+        if ev:
+            ev[0]["evidence_type"] = "新闻稿倒查"        # 四类之外
+            done = "%s/%s" % ((r.get("answer") or {}).get("answer_id"), ev[0].get("chunk_id"))
+            break
+    with open(p, "w", encoding="utf-8", newline="\n") as f:
+        for r in rows:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    return "把 qa_records.jsonl 首条 answer_evidence（%s）的 evidence_type 改成表外取值「新闻稿倒查」" % done
+
+
 def run_mirror_gate(root, label, emit_path, keep):
     """在镜像根上跑一次门禁（子进程，避免模块缓存串味）。返回读出的 JSON。"""
     argv = [sys.executable, SCRIPT, "--root", root, "--profile", "full",
@@ -1916,23 +2124,27 @@ def run_mirror_gate(root, label, emit_path, keep):
 
 def selftest():
     print("=" * 78)
-    print("负向校准（--selftest）：原样副本必须全过；3 个反例必须被真的判 FAIL")
+    print("负向校准（--selftest）：原样副本必须全过；5 个反例必须被真的判 FAIL")
     print("=" * 78)
     print("镜像根：系统临时目录（只读要求：本脚本不写工作区；镜像只读于交付目录）")
     print("说明：镜像不含 阶段02 全工作区，故 G5（跨文档核验）在镜像里记未执行；"
-          "《22》尚未落盘，故 H1／H2／H3 与 G6 在**原样副本**上就应 FAIL——"
-          "这是如实的现状，不是脚本缺陷。")
+          "《22》已随镜像带入，故 H1／H2／H3 在**原样副本**上应判 [OK]（正向对照非空）。")
     print()
 
-    base_fail = {"H1", "H2", "H3", "G6"}
-    # 三个反例都改的是 `answer_trace.jsonl`，而它是 `run_manifest.json` 登记的六个产物之一
-    # ——G4 现场重算该文件的 SHA-256 必然对不上，于是 G4 一并 FAIL。这是**正确的连带失败**
-    # （恰好证明 G4 的产物指纹复算真的在跑），故写进期望集，不做特殊处理。
+    base_fail = {"G6"}
+    # 除反例①改的是 `answer_trace.jsonl`（`run_manifest.json` 登记的产物）外，反例④也改它、
+    # 反例⑤改的是同样被登记的 `qa_records.jsonl`——三者都会让 G4 现场重算的 SHA-256 对不上，
+    # 于是 G4 一并 FAIL。这是**正确的连带失败**（恰好证明 G4 的产物指纹复算真的在跑），故写进
+    # 期望集，不做特殊处理。
     cases = [("pristine", None), ("case1-evidence-order", tamper_evidence_order),
-             ("case2-citation", tamper_citation), ("case3-graph-section", tamper_graph_section)]
+             ("case2-citation", tamper_citation), ("case3-graph-section", tamper_graph_section),
+             ("case4-total-tokens", tamper_total_tokens),
+             ("case5-evidence-type", tamper_evidence_type)]
     expect_extra = {"pristine": set(), "case1-evidence-order": {"C3", "G4"},
                     "case2-citation": {"D2", "E4", "G4"},
-                    "case3-graph-section": {"D4", "E2", "G4"}}
+                    "case3-graph-section": {"D4", "E2", "G4"},
+                    "case4-total-tokens": {"C4", "G4"},
+                    "case5-evidence-type": {"F1", "G4"}}
     results = {}
     tmpdirs = []
     verdict = True
@@ -1961,10 +2173,10 @@ def selftest():
         new = sorted(got - base_fail)
         miss = sorted(expect_extra[tag] - got)
         print("  反例新增 FAIL：%s%s" % ("、".join(new) or "∅",
-                                     "（其中 G4 为连带：反例改的 answer_trace.jsonl "
-                                     "正是 run_manifest 登记的产物，G4 现场重算 SHA-256 "
-                                     "自然对不上）" if ("G4" in new and tag != "pristine")
-                                     else ""))
+                                     "（其中 G4 为连带：反例改的是 answer_trace.jsonl／"
+                                     "qa_records.jsonl，正是 run_manifest 登记的产物，"
+                                     "G4 现场重算 SHA-256 自然对不上）"
+                                     if ("G4" in new and tag != "pristine") else ""))
         if miss:
             print("  未捕获的期望行：%s" % "、".join(miss))
         if not ARGS.keep_tmp:
@@ -1982,7 +2194,7 @@ def selftest():
     else:
         print("镜像目录保留：%s" % "；".join(tmpdirs))
     print("=" * 78)
-    print("校准结论：%s" % ("正向对照（原样副本）与 3 个反例的实测 FAIL 集与期望一致，"
+    print("校准结论：%s" % ("正向对照（原样副本）与 5 个反例的实测 FAIL 集与期望一致，"
                         "守卫自身通过校准。" if verdict else
                         "存在与期望不一致的用例，守卫未通过校准（见上）。"))
     print("=" * 78)

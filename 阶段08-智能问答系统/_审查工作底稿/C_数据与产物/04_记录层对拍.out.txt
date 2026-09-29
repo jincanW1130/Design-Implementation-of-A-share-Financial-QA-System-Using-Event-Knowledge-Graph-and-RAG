@@ -1,0 +1,39 @@
+================================================================================================
+项4  记录层对拍（30 条记录 / 30 条 trace）
+================================================================================================
+
+[1] 一一对应
+   qa_records 覆盖题号 30 个；trace 缺失=[] 多余=[]；answer_text 不符=0
+
+[2] 字段名 vs 《10》表 4-6（列全字段名）
+   question         实际(7)=ask_time／gold_hop_depth／question_id／question_text／session_id／task_type／time_constraint
+                    表4-6(8)=question_id／user_id／session_id／question_text／task_type／gold_hop_depth／time_constraint／ask_time
+                    缺=['user_id'] 多=无
+   answer           实际(8)=answer_id／answer_text／create_time／graph_path／is_graph_extended／model_name／prompt_version／question_id
+                    表4-6(8)=answer_id／question_id／answer_text／graph_path／model_name／prompt_version／is_graph_extended／create_time
+                    缺=无 多=无
+   answer_evidence  实际(5)=answer_id／chunk_id／doc_id／evidence_type／rank
+                    表4-6(5)=answer_id／chunk_id／doc_id／rank／evidence_type
+                    缺=无 多=无
+   30 条键序/键集一致：question=True answer=True answer_evidence=True
+
+[3] (answer_id, chunk_id) 联合唯一 与 rank 1..m 连续
+   重复 chunk_id 的答案数=0；rank 不连续=0；answer_id 归属不符=0
+
+[4] evidence_type 四类 与 category 映射自洽
+   evidence_type 计数 = {'公告来源': 234, '相关事件': 53, '新闻来源': 6}
+   期望映射（写死）: 公告/政策文件/监管公开信息→公告来源; 财经新闻→新闻来源; 其它→回答来源; from_graph→相关事件
+   映射不符/表外 = 0 条
+   全语料 category 真实取值 = {'公告': 556, '财经新闻': 103, '政策文件': 30, '监管公开信息': 20}
+
+[5] graph_path 原样 JSON 文本 / 可 json.loads / graph_used=0 为 null
+   graph_used=1 题数=30（可 json.loads=30）；graph_used=0 题数=0（graph_path 为 null=0）
+   首个非空 graph_path 类型=list；元素0 键 = ['depth', 'end', 'nodes', 'relations', 'start']
+   relations[0] 键 = ['direction', 'evidence', 'neighbor', 'relation', 'role']
+   relations[0].evidence 键 = ['confidence', 'source_chunk_id', 'source_doc_id']
+
+--- 正对照（映射校验器有效性）---
+  植入 evidence_type='其它来源'（四类之外）→ 落在四类外 = True → PASS
+  映射非恒真自证：财经新闻→新闻来源，公告→公告来源（二者不同 = True）
+
+结论：记录层不符项合计 = 0

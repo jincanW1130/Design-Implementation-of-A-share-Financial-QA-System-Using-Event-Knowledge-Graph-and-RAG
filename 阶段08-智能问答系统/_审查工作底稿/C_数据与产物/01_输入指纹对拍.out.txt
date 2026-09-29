@@ -1,0 +1,23 @@
+================================================================================================
+项1  输入指纹重算（8 项 10 个文件）
+================================================================================================
+文件                         字节           SHA-256（实算）                                                      P8    P7    结论   
+item1 per_question_trace   256704       2b1c0da16bc246e583c398a8c12a39a4dca11bc3a668e411da524fca32a29a72 一致    —     OK   
+item2 stage7_input_manifest 7878         59233ad0093b469f41a2323aa5ffcbb3e335ba339d7b6d44c26707cfa53770e5 一致    —     OK   
+item3 stage7_run_manifest  11834        0e59c0df3dc1a1e1cb867ba8c4c973941de5510382083a057a550864be8241ec 一致    —     OK   
+item4 documents            4496547      c838c608c20060adb1366d5c6f7566f9de25016110dc368f7f92fcb8a10f9eea 一致    一致    OK   
+item5 chunks               5322875      2202cbf8e3915598fc9fa57a9fe6d32577705f59ce7bfdfab822903d949e8e44 一致    一致    OK   
+item6 dataset_meta         3108         41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988 一致    一致    OK   
+item7a nodes_csv           708043       04f2ac227e9595e2df7eefd1f14892edc3327d2b10e950b4f92e4d536c8cb524 一致    一致    OK   
+item7b edges_csv           131275       e86f86d99bb1b227364bc09b05a46db00adfe114ed5f9b04820e82258252b3f0 一致    一致    OK   
+item7c graph_stats         24818        443f437aa3f164ab76618029382f277be52828186d21d6f468ec29f2b5ac2b4a 一致    一致    OK   
+item8 questions            101879       12e579c09d7377ffe792930bbac29b6d374ad97562a8f65a49882bbb82b477e6 一致    —     OK   
+
+[覆盖] 问答产出/input_manifest 登记的 key = ['chunks', 'dataset_meta', 'documents', 'edges_csv', 'graph_stats', 'nodes_csv', 'per_question_trace', 'questions', 'stage7_input_manifest', 'stage7_run_manifest']
+[覆盖] 检索产出/input_manifest 登记的 key = ['build_meta', 'chunks', 'dataset_meta', 'documents', 'edges_csv', 'faiss_index', 'graph_stats', 'human_confirmation', 'nodes_csv', 'replay_cypher', 'vector_map']
+
+--- 正对照（比对器有效性）---
+  植入 bytes+1：比对结论 = 不符（必须=不符）→ PASS
+  植入 sha 篡改：比对结论 = 不符（必须=不符）→ PASS
+
+结论：逐项不一致数 = 0

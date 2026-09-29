@@ -1,0 +1,28 @@
+C:\Users\15129\Desktop\��ҵ���\�׶�08-�����ʴ�ϵͳ\_��鹤���׸�\C_���������\07_�׶ν������.py:5: SyntaxWarning: invalid escape sequence '\p'
+  1) prompt_snapshot.json �� ����\�ʴ�\prompt.py �� snapshot()/template_text() �Ƿ����ֽ�һ�£�
+====================================================================================================
+项7  与第5／6／7阶段交叉对拍
+====================================================================================================
+
+[1] prompt_snapshot.json vs prompt.py
+   snapshot() 与文件逐字节一致 = True
+   现算 template_sha256 = c4c351d0dd38f4e96a96a6fb35816e959489d8077edf709995264c79e0cff3f0
+   登记/《22》声称     = c4c351d0dd38f4e96a96a6fb35816e959489d8077edf709995264c79e0cff3f0 → OK
+   prompt_version=v1.0 block_order=['role_boundary', 'data_boundary', 'question', 'evidence', 'graph', 'time_note', 'output_format']
+
+[2] 30 题 k/n/budget vs 检索\config.py 冻结值
+   冻结值 K=10 N=20 budget=3600 g=2
+   30 题 k/n/budget 不符 = 0；evidence_size 分布 = {10: 24, 9: 5, 8: 1}；max=10 ≤ K
+
+[3] 图谱侧块（from_graph）计数交叉
+   k_selection C 组 g=2: graph_evidence_in_final_total=53 questions=29
+   answer_trace 重算 from_graph 合计 = 53（题数含图谱 = 29）；逐题与第7阶段不符 = 0
+   与 k_selection(53/29) 一致 = True
+   逐题 graph_payload 与第7阶段不符 = 0
+   单题图谱块最大值 = 2（g=2，优先级规则称「第二层至多取 g 个」；第三层回填可能超出）
+   PE-16 from_graph 重算 = 0
+
+--- 正对照（k 比对器有效性）---
+  植入 k=9（≠config.K=10）→ 结论=不一致 → PASS
+
+结论：交叉对拍不符项合计 = 0

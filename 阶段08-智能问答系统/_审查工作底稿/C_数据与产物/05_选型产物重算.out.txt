@@ -1,0 +1,44 @@
+====================================================================================================
+项5  选型产物重算（矩阵 90 行；候选 ['deepseek-flash', 'deepseek-v4-pro', 'glm-5.3-flash']）
+====================================================================================================
+
+[候选行数] {'deepseek-flash': 30, 'deepseek-v4-pro': 30, 'glm-5.3-flash': 30}（期望每候选 30）
+
+--- 候选 deepseek-flash ---
+   DIFF median_seconds                   重算=3.938 登记=4.005
+
+--- 候选 deepseek-v4-pro ---
+   DIFF median_seconds                   重算=15.431 登记=16.627
+
+--- 候选 glm-5.3-flash ---
+   DIFF median_seconds                   重算=40.046 登记=44.071
+
+聚合逐列不一致数 = 3
+
+[model_requested vs model_returned]
+   不一致数 = 0
+
+[正文图谱标记泄漏 / 小标题泄漏 逐候选]
+   deepseek-flash   图谱标记泄漏=0 小标题泄漏=0
+   deepseek-v4-pro  图谱标记泄漏=0 小标题泄漏=0
+   glm-5.3-flash    图谱标记泄漏=0 小标题泄漏=0
+
+[Prompt 文本（prompt_sha256）一致性 —— “只换模型”的成立条件]
+   装配层重算 vs decision.prompt_sha256_by_qid：不一致 0 / 30
+   decision 只有一份 prompt_sha256_by_qid（30 题），即三候选共用同一套 Prompt 文本
+   only_thing_changed 登记 = '仅模型；装配结果、Prompt 文本、temperature、max_tokens 三候选全同'
+   矩阵行内是否含 prompt_sha256 字段 = False
+
+[裁定规则逐条]
+   rule_1: {"frozen_value": 0, "threshold": 3, "triggered": false}
+   rule_2: margin=0.1 triggered=False
+      {"best_control": 0.0, "delta": 0.0, "frozen": 0.0, "metric": "citation_out_of_range_rate", "significant": false}
+      {"best_control": 0.0, "delta": 0.0, "frozen": 0.0, "metric": "date_unverifiable_rate", "significant": false}
+      {"best_control": 0.0, "delta": 0.0, "frozen": 0.0, "metric": "empty_answer_rate", "significant": false}
+      {"best_control": 0.0, "delta": 0.0, "frozen": 0.0, "metric": "graph_section_bad_rate", "significant": false}
+   rule_3: {"frozen_value": 6.165, "limit_seconds": 30.0, "triggered": false}
+   verdict='维持 deepseek-flash' triggered_rules=[] total_calls=90
+   矩阵重算总调用 = 90（登记 total_calls=90）
+
+--- 正对照（聚合比对器有效性）---
+  植入 dates_beyond_cutoff_total+1 → 结论=不一致（必须=不一致）→ PASS
