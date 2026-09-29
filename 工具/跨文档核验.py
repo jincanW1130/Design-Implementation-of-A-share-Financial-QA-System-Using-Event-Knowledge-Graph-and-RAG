@@ -377,39 +377,52 @@ WILDCARD = re.compile(r'[*?\[]')                          # 通配写法（按�
 # 因为第 9 阶段要新建三个代码目录）：**注意通用名登记的副作用**——`config.py`／`README.md`
 # 这类通用名一旦按路径登记，其后缀匹配会连带覆盖文档里的裸文件名写法；这是临时状态，
 # 落盘后逐条删除即恢复。登记范围与《23》第4节 的产出清单一一对应。
+#
+# 2026-09-29 T2（数据库落地）＋ T4（后端骨架）批次**已落盘 8 条，已逐条移出**：
+#   `代码/后端/config.py`、`db.py`、`errors.py`、`main.py`、`run.py`、`README.md`、
+#   `代码/后端/schema/六张表.sql`、`代码/后端/tools/import_data.py`。
+#       ——移出的依据是「文件确实存在」（编写约定 5），不是「本批计划做」。
+#   **仍未移出**：`阶段09-前后端系统集成/集成产出/db_counts.json` —— 它是真写库成功后才由
+#   `tools/import_data.py` 写出的留痕文件；本批 mysql_password 仍是占位串，真写库以明确的
+#   凭据错误退出，该文件**尚未落盘**，故继续留在这里（待凭据补齐、真写成功后移出）。
+#   `代码/后端/config.local.json` 同样未移出：它是作者建的本机配置（不是本批产出），
+#   且落盘早于本批。
+#
+# 2026-09-30 T3（图谱服务化：Neo4j 导入 ＋ 查询层后端切换）批次**已落盘 3 条，已逐条移出**：
+#   `代码/后端/tools/import_graph.py`、`代码/后端/services/graph_service.py`、
+#   `阶段09-前后端系统集成/集成产出/graph_counts.json`。
+#       ——移出的依据同样是「文件确实存在」（编写约定 5）。三条都**真的落盘了**：
+#       `import_graph.py --reset` 真写出 2802 节点／2736 关系、计数与 `graph_stats.json`
+#       逐项一致，并写出 `graph_counts.json`；`graph_service.py --selftest`／`--parity-check`
+#       两个入口都在两个后端上跑通。
+#   **仍未移出**：`代码/前端/*`、`部署/*` 等——它们尚未落盘，继续留在登记里。
+#
+# 2026-09-30 T5＋T6（问答/证据/历史三条接口 ＋ 问答业务层）批次**已落盘 4 条，已逐条移出**：
+#   `代码/后端/services/qa_service.py`、`代码/后端/api/qa.py`、`代码/后端/api/evidence.py`、
+#   `代码/后端/api/history.py`。——移出的依据同样是「文件确实存在」（编写约定 5）：四个文件
+#   都真的落盘，且经真实起服务 ＋ 真实问答链路（`POST /api/qa/ask` 约 12～13 s／题）
+#   跑通表 4-13 对应的 8 条接口后，才逐条移出。
+#   **已移出**：`代码/后端/api/graph.py`、`代码/后端/api/admin.py`（T7／T8 批次，
+#   两文件确已落盘并经真实起服务跑通，按编写约定 5 移出）。
+#
+# 2026-09-30 决策者补齐凭据后**真写库成功**：`tools/import_data.py --reset` 建库 `ashare_qa`＋
+#   六张表并导入 709／5018／30／30／293，与上游逐项一致，故
+#   `阶段09-前后端系统集成/集成产出/db_counts.json`（T3 批次留作未落盘的那条）**已真的落盘**，
+#   连同早已存在的 `代码/后端/config.local.json` 一并按编写约定 5 移出。
+#
+# 2026-09-30 T9＋T10（前端骨架／提问页 ＋ 答案与证据／图谱查看／历史记录三页）批次
+#   **已落盘 11 条，已逐条移出**：`代码/前端/` 的 `package.json`、`vite.config.js`、`index.html`、
+#   `README.md`、`package-lock.json`（npm 生成、随仓库提交，硬约束 23）、`src/api.js`、
+#   `src/App.vue` 与 `src/views/` 四页（`AskView`／`AnswerView`／`GraphView`／`HistoryView`）。
+#   移出的依据同样是「文件确实存在」（编写约定 5）：11 个文件都真的落盘，且经
+#   真实 `npm install`（33 包）＋ `npm run build`（41 模块，产 `dist\` 三件）＋ dev server 5173
+#   的 HTTP 200 与 `/api` 代理联通（13 个接口调用点逐个 200）后才逐条移出。
+#   **另落盘但未登记**（本就不在 PLANNED 里，无需移出）：`src/main.js` 与
+#   `src/components/` 三件（`AnswerSections.vue`／`EvidenceList.vue`／`GraphPathPanel.vue`）。
+#   **仍未移出**：`部署/*`、`工具/验收第9阶段.py`、《25》与 `集成产出/*` 的其余条目——
+#   它们尚未落盘，继续留在登记里。
 PLANNED = {
     '阶段09-前后端系统集成/25-第9阶段产出文档（前后端系统集成）.md',
-    '代码/后端/config.py',
-    '代码/后端/db.py',
-    '代码/后端/errors.py',
-    '代码/后端/main.py',
-    '代码/后端/run.py',
-    '代码/后端/README.md',
-    '代码/后端/api/qa.py',
-    '代码/后端/api/evidence.py',
-    '代码/后端/api/history.py',
-    '代码/后端/api/graph.py',
-    '代码/后端/api/admin.py',
-    '代码/后端/services/qa_service.py',
-    '代码/后端/services/graph_service.py',
-    '代码/后端/schema/六张表.sql',
-    '代码/后端/tools/import_data.py',
-    '代码/后端/tools/import_graph.py',
-    '代码/前端/package.json',
-    '代码/前端/vite.config.js',
-    '代码/前端/index.html',
-    '代码/前端/README.md',
-    # 两个**非交付物**但确实会落盘的文件，一并登记（落盘后按编写约定 5 移出）：
-    # `package-lock.json` 由 npm 生成并随仓库提交（硬约束 23）；`config.local.json` 由作者
-    # 填入本机 MySQL 凭据、被 `.gitignore` 覆盖、不入库（《23》第2.5节 与 4.7）。
-    '代码/前端/package-lock.json',
-    '代码/后端/config.local.json',
-    '代码/前端/src/api.js',
-    '代码/前端/src/App.vue',
-    '代码/前端/src/views/AskView.vue',
-    '代码/前端/src/views/AnswerView.vue',
-    '代码/前端/src/views/GraphView.vue',
-    '代码/前端/src/views/HistoryView.vue',
     '部署/Dockerfile',
     '部署/README.md',
     '部署/启动.ps1',
@@ -418,8 +431,6 @@ PLANNED = {
     '阶段09-前后端系统集成/集成产出/smoke_matrix.jsonl',
     '阶段09-前后端系统集成/集成产出/error_scenarios.jsonl',
     '阶段09-前后端系统集成/集成产出/latency_profile.json',
-    '阶段09-前后端系统集成/集成产出/db_counts.json',
-    '阶段09-前后端系统集成/集成产出/graph_counts.json',
     '阶段09-前后端系统集成/集成产出/run_manifest.json',
 }
 PLANNED_BARE = {p for p in PLANNED if '\\' not in p and '/' not in p}

@@ -1,0 +1,144 @@
+{
+  "all_match": true,
+  "charset": "utf8mb4",
+  "comparison": {
+    "answer": {
+      "db": 30,
+      "expected": 30,
+      "match": true
+    },
+    "answer_evidence": {
+      "db": 293,
+      "expected": 293,
+      "match": true
+    },
+    "document": {
+      "db": 709,
+      "expected": 709,
+      "match": true
+    },
+    "document_chunk": {
+      "db": 5018,
+      "expected": 5018,
+      "match": true
+    },
+    "question": {
+      "db": 30,
+      "expected": 30,
+      "match": true
+    }
+  },
+  "comparison_basis": "全量：与上游产物登记行数逐项对拍",
+  "counts": {
+    "answer": 30,
+    "answer_evidence": 293,
+    "document": 709,
+    "document_chunk": 5018,
+    "question": 30,
+    "user": 0
+  },
+  "database": "ashare_qa",
+  "generated_at": "2026-09-30T00:04:18+08:00",
+  "input_fields": {
+    "chunks": [
+      "chunk_id",
+      "chunk_index",
+      "content",
+      "doc_id",
+      "token_count",
+      "vector_id"
+    ],
+    "documents": [
+      "category",
+      "company_list",
+      "content",
+      "content_sha256_16",
+      "doc_id",
+      "ingest_time",
+      "publish_time",
+      "source",
+      "subject_companies",
+      "title",
+      "url"
+    ],
+    "qa_records.answer": [
+      "answer_id",
+      "answer_text",
+      "create_time",
+      "graph_path",
+      "is_graph_extended",
+      "model_name",
+      "prompt_version",
+      "question_id"
+    ],
+    "qa_records.answer_evidence": [
+      "answer_id",
+      "chunk_id",
+      "doc_id",
+      "evidence_type",
+      "rank"
+    ],
+    "qa_records.question": [
+      "ask_time",
+      "gold_hop_depth",
+      "question_id",
+      "question_text",
+      "session_id",
+      "task_type",
+      "time_constraint",
+      "user_id"
+    ],
+    "qa_records_top": [
+      "answer",
+      "answer_evidence",
+      "question"
+    ]
+  },
+  "inputs": {
+    "chunks": {
+      "bytes": 5322875,
+      "path": "阶段05-数据准备\\数据集\\v2.1\\chunks\\chunks.jsonl",
+      "rows": 5018,
+      "sha256": "2202cbf8e3915598fc9fa57a9fe6d32577705f59ce7bfdfab822903d949e8e44"
+    },
+    "dataset_meta": {
+      "bytes": 3108,
+      "path": "阶段05-数据准备\\数据集\\v2.1\\meta\\dataset.json",
+      "rows": null,
+      "sha256": "41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988"
+    },
+    "documents": {
+      "bytes": 4496547,
+      "path": "阶段05-数据准备\\数据集\\v2.1\\clean\\documents.jsonl",
+      "rows": 709,
+      "sha256": "c838c608c20060adb1366d5c6f7566f9de25016110dc368f7f92fcb8a10f9eea"
+    },
+    "qa_records": {
+      "bytes": 246922,
+      "path": "阶段08-智能问答系统\\问答产出\\qa_records.jsonl",
+      "rows": 30,
+      "sha256": "b1820ed83ebd4ad3a6b953b99ed99ca0add49c80ca91a8389fe1868d37628d72"
+    }
+  },
+  "limit": null,
+  "mode": "full",
+  "source_counts": {
+    "chunks": 5018,
+    "documents": 709,
+    "qa_records": 30
+  },
+  "stage": "第 9 阶段（前后端系统集成）",
+  "strategy": "reset-delete-then-insert",
+  "table_count": 6,
+  "tables": [
+    "user",
+    "document",
+    "document_chunk",
+    "question",
+    "answer",
+    "answer_evidence"
+  ],
+  "task": "T2 数据库落地与导入",
+  "user_empty_basis": "第一版不启用登录；user 表不写入任何行（B8）",
+  "user_rows": 0
+}

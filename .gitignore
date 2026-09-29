@@ -59,6 +59,8 @@ config.local.*
 代码/后端/config.local.json
 # 模板要入库（后者的 `config.local.*` 规则会连带忽略 `.example`，故显式取反）：
 !代码/后端/config.local.json.example
+# 容器形态的本机配置：含 Neo4j 口令，与开发配置同一纪律，不入库（`部署\README.md` 有说明）
+部署/config.docker.json
 代码/前端/node_modules/
 代码/前端/dist/
 阶段09-前后端系统集成/_工作底稿/

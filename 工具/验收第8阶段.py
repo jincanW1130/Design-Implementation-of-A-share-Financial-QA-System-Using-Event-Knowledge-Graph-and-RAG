@@ -600,6 +600,22 @@ def group_a(g):
         for fn in filenames:
             if fn.lower().endswith(DDL_EXT):
                 sql_files.append(rel(os.path.join(dirpath, fn), g.root))
+    # **时点限定（2026-09-30，第 9 阶段 T2 落地时按《24-第9阶段任务书（前后端系统集成）》
+    # 第4.7节 的登记调整）**：「仓库内无 *.sql／*.ddl」是**第 8 阶段收口时点**的判据——第 8 阶段
+    # 刻意不写 DDL、不建库（六张表只在文档里）。第 9 阶段的 T2 起，`代码\后端\schema\六张表.sql`
+    # 是**合法且必需**的产出（六张表的建表脚本），再把它判失败等于用一条会随时点失效的判据否掉
+    # 后续阶段。故改为：**只在第 9 阶段开工后豁免第 9 阶段的 DDL 所在目录**（`代码\后端\`），
+    # 其余任何位置出现 *.sql／*.ddl 仍然判失败；豁免项**在输出里逐条列出**（不是静默放过）。
+    # 判据不放宽：A4 的主体（`代码\问答\` 交付范围内无建表语句、无连接串；《02》六表口径可读）
+    # **一字未动**。
+    p9_marker = g.p(os.path.join("阶段09-前后端系统集成",
+                                 "24-第9阶段任务书（前后端系统集成）.md"))
+    stage9_started = os.path.isfile(p9_marker)
+    # 注意：`rel()` 返回的路径用**正斜杠**（POSIX 风格），故豁免前缀也用正斜杠比较。
+    exempt_prefix = "代码/后端"
+    sql_unexpected = [f for f in sql_files
+                      if not (stage9_started and f.lower().startswith(exempt_prefix))]
+    sql_exempt = [f for f in sql_files if f not in sql_unexpected]
     p02 = read_text(os.path.join(g.root, "02-项目执行总控文档.md"), "")
     six_names = ("user", "document", "document_chunk", "question", "answer",
                  "answer_evidence")
@@ -609,12 +625,17 @@ def group_a(g):
         sec91 = m.group(1)
     six_ok = bool(sec91) and all(n in sec91 for n in six_names) and ("六张" in sec91
                                                                     or "6 张" in sec91)
-    g.row("A4", not ddl_hits and not sql_files and six_ok,
-          "无数据库动作（无建表语句／无连接串／无 *.sql／六表口径）",
+    g.row("A4", not ddl_hits and not sql_unexpected and six_ok,
+          "无数据库动作（第 8 阶段交付范围内无建表语句／无连接串；"
+          "仓库内 *.sql 的时点限定见下）",
           "代码\\问答 下 DDL／连接串命中 %d 处%s；仓库内 *.sql／*.ddl %d 个%s；"
-          "《02》第9.1节 六表口径可读=%s"
+          "其中第 9 阶段开工后豁免 %d 个（豁免目录＝代码\\后端\\，标志文件%s）；"
+          "待判 *.sql／*.ddl %d 个%s；《02》第9.1节 六表口径可读=%s"
           % (len(ddl_hits), "" if not ddl_hits else "：" + br(ddl_hits, 3),
-             len(sql_files), "" if not sql_files else "：" + br(sql_files, 3), six_ok))
+             len(sql_files), "" if not sql_files else "：" + br(sql_files, 3),
+             len(sql_exempt), "存在" if stage9_started else "不存在",
+             len(sql_unexpected), "" if not sql_unexpected else "：" + br(sql_unexpected, 3),
+             six_ok))
 
 
 # ---------------------------------------------------------------------------

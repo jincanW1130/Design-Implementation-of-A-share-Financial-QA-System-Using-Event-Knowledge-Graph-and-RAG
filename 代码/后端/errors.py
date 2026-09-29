@@ -1,0 +1,297 @@
+# -*- coding: utf-8 -*-
+"""代码\\后端\\errors.py —— 第 9 阶段（前后端系统集成）后端的错误码表与统一响应封装。
+
+口径来源：《10-系统总体设计（第四阶段）》第 4.7.1 节（错误码与「detail 只进日志」）、
+第 4.7.2 节 表 4-13（各接口的错误码列）、《24-第9阶段任务书》第五节 硬约束 7／8 与
+第六节 格式决策 3。
+
+三条硬口径
+----------
+1. **响应体键集合恰为 `{code, message}`**：`detail` 面向调试，**只写后端日志、不进响应体**
+   （硬约束 7；机检方式＝检查响应体键集合）。
+2. **2002 是正常业务状态、不是错误**：图谱查询为空、历史记录为空返回 HTTP 200 与空结果，
+   不得返回 4xx／5xx（硬约束 6）。本文件把 2002 放进取值表并显式标注 `is_error=False`，
+   成功响应仍走 `ok()`，前端据空结果自行提示。
+3. **未捕获异常**回 HTTP 500 ＋ code 9999，响应体同样只有 `{code, message}`，
+   异常堆栈只进日志。
+
+新增登记
+--------
+**1004（HTTP 429）请求频率超出限制** 是第 9 阶段的**新增错误码**（《24》第六节 格式决策 9
+登记了新增接口 `/api/health`，此处是新增错误码）：表 4-13 与《10》第4.7.1节 的 11 个错误码里
+没有限流码，而《24》第八节 C9 要求限流「返回明确错误码或 429」，故取 1xxx（输入／客户端类）
+下的 1004 ＋ HTTP 429，语义单一、不与 1001（输入为空／超长）混用。**须在《25》登记为新增**。
+"""
+
+from __future__ import annotations
+
+import logging
+import sys
+
+from starlette.responses import JSONResponse
+
+import config
+
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        try:
+            _stream.reconfigure(encoding="utf-8")
+        except Exception:
+            pass
+
+logger = logging.getLogger("ashare_qa.backend")
+
+# --------------------------------------------------------------------------
+# 1. 错误码表（code → (message, http_status)）
+# --------------------------------------------------------------------------
+CODES = {
+    1001: ("输入为空或长度超出限制", 400),
+    1002: ("参数格式错误", 400),
+    1003: ("必填字段缺失", 400),
+    1004: ("请求频率超出限制", 429),          # 第 9 阶段新增（限流；须在《25》登记）
+    2001: ("资源不存在", 404),
+    2002: ("查询结果为空", 200),              # 正常业务状态，不是错误
+    2003: ("文档已被历史回答引用", 409),
+    3001: ("图谱服务不可用", 503),
+    3002: ("大模型接口超时", 504),
+    3003: ("向量索引不可用", 500),
+    4001: ("凭据无效", 401),
+    4002: ("无操作权限", 403),
+    9999: ("服务内部错误", 500),              # 未捕获异常（不是《10》登记码）
+}
+
+# 非错误的「正常业务状态码」：响应走 ok()，HTTP 200
+NORMAL_CODES = frozenset({2002})
+CODE_EMPTY_RESULT = 2002
+
+# HTTP 状态 → 错误码（Starlette 抛出的 HTTPException 与未匹配路由的归一化）
+HTTP_STATUS_TO_CODE = {
+    400: 1002, 401: 4001, 403: 4002, 404: 2001, 409: 2003,
+    429: 1004, 503: 3001, 504: 3002,
+}
+
+
+def message_of(code: int) -> str:
+    return CODES.get(int(code), CODES[9999])[0]
+
+
+def http_status_of(code: int) -> int:
+    return CODES.get(int(code), CODES[9999])[1]
+
+
+def is_normal(code: int) -> bool:
+    """是否为「不是错误」的正常业务状态（2002）。"""
+    return int(code) in NORMAL_CODES
+
+
+# --------------------------------------------------------------------------
+# 2. 统一异常类型与响应体构造（纯函数，便于自检）
+# --------------------------------------------------------------------------
+class ApiError(Exception):
+    """接口层唯一显式抛出的异常。
+
+    * `code`／`message`／`http_status` 进响应体；
+    * `detail` **只进后端日志**，绝不进响应体（硬约束 7）。
+
+    调用方建议用 `ApiError(1001, detail="question 为空")` 这类形式：message 取表中默认值，
+    detail 留作日志里的定位信息（不得写入口令、连接串等敏感取值）。
+    """
+
+    def __init__(self, code: int, detail: str | None = None, message: str | None = None,
+                 http_status: int | None = None):
+        try:
+            code = int(code)
+        except (TypeError, ValueError):
+            code = 9999
+        self.code = code
+        if code not in CODES:
+            logger.warning("构造了未登记的错误码 %r，按 9999 处理（响应体仍回该码，请核对《25》）", code)
+        self.message = message if message is not None else message_of(code)
+        self.http_status = int(http_status) if http_status is not None else http_status_of(code)
+        self.detail = detail
+        super().__init__("[%d] %s" % (self.code, self.message))
+
+    def payload(self) -> dict:
+        """响应体：**键集合恰为 {code, message}**。"""
+        return {"code": self.code, "message": self.message}
+
+
+def error_payload(code: int, message: str | None = None) -> dict:
+    return {"code": int(code), "message": message if message is not None else message_of(code)}
+
+
+def error_response(code: int, message: str | None = None,
+                   http_status: int | None = None, detail: str | None = None) -> JSONResponse:
+    """直接构造错误响应（**中间件用**：中间件在 ExceptionMiddleware 之外，抛 ApiError
+    不会被异常处理器接住，必须在中间件里自己返回 JSONResponse）。"""
+    if detail:
+        logger.warning("错误响应（detail 只进日志）：code=%s detail=%s", code, detail)
+    return JSONResponse(status_code=int(http_status) if http_status is not None
+                        else http_status_of(code),
+                        content=error_payload(code, message))
+
+
+UNCAUGHT_CODE = 9999
+
+
+def uncaught_payload() -> dict:
+    return error_payload(UNCAUGHT_CODE)
+
+
+# --------------------------------------------------------------------------
+# 3. 成功响应封装（《24》第六节 格式决策 3）
+# --------------------------------------------------------------------------
+def ok(data, meta: dict | None = None) -> dict:
+    """成功响应：`{"data": …, "meta": {"dataset_version": …, "data_cutoff_time": …}}`。
+
+    `meta` 缺省取数据集版本级属性（`meta\\dataset.json`）；传入的键会覆盖／补充默认值。
+    """
+    payload_meta = config.meta_fields()
+    if meta:
+        payload_meta.update(meta)
+    return {"data": data, "meta": payload_meta}
+
+
+def page_payload(total: int, items: list, page: int, page_size: int) -> dict:
+    """分页区块：`{"total": …, "items": […], "page": …, "page_size": …}`（放在 `data` 内）。"""
+    return {"total": int(total), "items": list(items),
+            "page": int(page), "page_size": int(page_size)}
+
+
+def ok_page(total: int, items: list, page: int, page_size: int,
+            meta: dict | None = None) -> dict:
+    """分页成功响应（`ok()` ＋ `page_payload()` 的组合，避免各接口各写一遍）。"""
+    return ok(page_payload(total, items, page, page_size), meta=meta)
+
+
+def ok_empty(meta: dict | None = None, page: int = 1, page_size: int = 0) -> dict:
+    """空结果的**正常**响应（HTTP 200；对应 2002 的语义，但响应体里不出现错误码）。"""
+    return ok_page(0, [], page, page_size, meta=meta)
+
+
+# --------------------------------------------------------------------------
+# 4. 日志
+# --------------------------------------------------------------------------
+def setup_logging(level: int = logging.INFO) -> None:
+    """配置后端日志（stderr，UTF-8）。detail 与未捕获异常堆栈只落这里。"""
+    handler = logging.StreamHandler(stream=sys.stderr)
+    handler.setFormatter(logging.Formatter(
+        "%(asctime)s %(levelname)s %(name)s %(message)s"))
+    root = logging.getLogger("ashare_qa")
+    root.handlers[:] = [handler]
+    root.setLevel(level)
+    root.propagate = False
+
+
+# --------------------------------------------------------------------------
+# 5. FastAPI 异常处理装配
+# --------------------------------------------------------------------------
+def install_exception_handlers(app) -> None:
+    """把 `ApiError` 与未捕获异常统一转成 `{"code": …, "message": …}`。
+
+    三类处理：
+    * `ApiError` → 按其 code／http_status；
+    * 请求校验错误（FastAPI 的 `RequestValidationError`）→ 缺必填＝1003、其余＝1002；
+    * 其余未捕获异常 → HTTP 500 ＋ code 9999，堆栈只进日志。
+    """
+    from fastapi.exceptions import RequestValidationError
+    from starlette.exceptions import HTTPException as StarletteHTTPException
+
+    @app.exception_handler(ApiError)
+    async def _handle_api_error(request, exc: ApiError):
+        logger.warning("ApiError %s %s → code=%s http=%s%s",
+                       request.method, request.url.path, exc.code, exc.http_status,
+                       ("；detail=%s" % exc.detail) if exc.detail else "")
+        return JSONResponse(status_code=exc.http_status, content=exc.payload())
+
+    @app.exception_handler(RequestValidationError)
+    async def _handle_validation(request, exc: RequestValidationError):
+        missing = any(str(e.get("type", "")).endswith("missing") for e in exc.errors())
+        code = 1003 if missing else 1002
+        logger.warning("请求校验失败 %s %s → code=%s；detail=%s",
+                       request.method, request.url.path, code, exc.errors())
+        return JSONResponse(status_code=http_status_of(code), content=error_payload(code))
+
+    @app.exception_handler(StarletteHTTPException)
+    async def _handle_http_exception(request, exc: StarletteHTTPException):
+        code = HTTP_STATUS_TO_CODE.get(int(exc.status_code), UNCAUGHT_CODE)
+        status = http_status_of(code) if code != UNCAUGHT_CODE else int(exc.status_code)
+        logger.warning("HTTPException %s %s → %s → code=%s",
+                       request.method, request.url.path, exc.status_code, code)
+        return JSONResponse(status_code=status, content=error_payload(code))
+
+    @app.exception_handler(Exception)
+    async def _handle_uncaught(request, exc: Exception):
+        # 堆栈只进日志，响应体只有 code／message（硬约束 7）
+        logger.exception("未捕获异常 %s %s → code=%s",
+                         request.method, request.url.path, UNCAUGHT_CODE)
+        return JSONResponse(status_code=http_status_of(UNCAUGHT_CODE),
+                            content=uncaught_payload())
+
+
+def register_request_id(app) -> None:
+    """预留：给每个请求打一个 request-id（日志用）。第一版只记方法＋路径，不落额外字段。"""
+    return None
+
+
+# --------------------------------------------------------------------------
+# 6. 自检：逐码构造一次，打印 HTTP 状态与响应体键集合
+# --------------------------------------------------------------------------
+def selftest() -> int:
+    line = "=" * 74
+    print(line)
+    print("errors.py 自检（逐码构造一次：HTTP 状态 ＋ 响应体键集合）")
+    print(line)
+    print("%-6s %-6s %-8s %s" % ("code", "http", "is_err", "message"))
+    print("-" * 74)
+
+    bad = 0
+    for code in sorted(CODES):
+        err = ApiError(code, detail="（示例调试信息：只进日志、不进响应体）")
+        body = err.payload()
+        keys = set(body.keys())
+        flag = "正常" if is_normal(code) else "错误"
+        print("%-6d %-6d %-8s %s" % (err.code, err.http_status, flag, err.message))
+        if keys != {"code", "message"}:
+            print("    !! 响应体键集合异常：%s" % sorted(keys))
+            bad += 1
+
+    print("-" * 74)
+    print("未捕获异常路径（模拟）：code=%d http=%d body=%s"
+          % (UNCAUGHT_CODE, http_status_of(UNCAUGHT_CODE), uncaught_payload()))
+    if set(uncaught_payload().keys()) != {"code", "message"}:
+        bad += 1
+        print("    !! 未捕获异常的响应体键集合异常")
+    print()
+
+    print("--- 三类统一响应形态 ---")
+    print("ok(data=…)              = %s"
+          % {k: (v if k != "data" else "<data>") for k, v in ok({"x": 1}).items()})
+    print("ok_page(total=3, …)     = %s"
+          % ok_page(3, [{"a": 1}], 1, 20)["data"])
+    print("ok_empty()              = %s" % ok_empty()["data"])
+    print("error_payload(2003)     = %s" % error_payload(2003))
+    print()
+
+    print("--- 关键判据 ---")
+    checks = [
+        ("2002 的 HTTP 状态为 200 且被标为「非错误」",
+         http_status_of(2002) == 200 and is_normal(2002)),
+        ("全部响应体键集合恰为 {code, message}", bad == 0),
+        ("1001／1002／1003 均为 HTTP 400",
+         all(http_status_of(c) == 400 for c in (1001, 1002, 1003))),
+        ("2001=404／2003=409／3001=503／3002=504／3003=500／4001=401／4002=403",
+         (http_status_of(2001), http_status_of(2003), http_status_of(3001),
+          http_status_of(3002), http_status_of(3003), http_status_of(4001),
+          http_status_of(4002)) == (404, 409, 503, 504, 500, 401, 403)),
+        ("1004 限流码为 HTTP 429（第 9 阶段新增，须在《25》登记）",
+         http_status_of(1004) == 429),
+    ]
+    for label, good in checks:
+        print("  [%s] %s" % ("OK " if good else "FAIL", label))
+    print(line)
+    return 0 if all(g for _, g in checks) and bad == 0 else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(selftest())

@@ -1,0 +1,20 @@
+{
+  "name": "ashare-qa-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A股信息披露问答系统前端（Vue 3 + Vite）：提问／答案与证据／图谱查看／历史记录四类页面。只调用后端 /api/*，不含任何密钥与模型地址。",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "3.5.13",
+    "vue-router": "4.5.0"
+  },
+  "devDependencies": {
+    "vite": "6.0.11",
+    "@vitejs/plugin-vue": "5.2.1"
+  }
+}
