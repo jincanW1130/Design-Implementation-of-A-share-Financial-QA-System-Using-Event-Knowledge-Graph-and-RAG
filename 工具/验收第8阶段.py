@@ -1774,14 +1774,29 @@ def group_h(g):
     git09 = [l for l in lines if "阶段09" in l]
     # 全仓库 *.sql／*.ddl 只在 A4 判；此处按《21》H4 的范围（本阶段交付物）判定，并在
     # 输出里如实注明范围，避免把既有的图表与文献 HTML 误判成第 8 阶段的前端产物。
-    g.row("H4", not fe and not ddl and not api and not stage09 and not git09,
-          "非目标未被越界（无前端／接口／DDL 产物；git status 无 阶段09-）",
+    #
+    # **时点限定（2026-09-29，第 9 阶段开工时按《24-第9阶段任务书（前后端系统集成）》
+    # 第4.7节 的登记调整）**：`阶段09-*` 目录与 git status 里的 `阶段09-` 条目是**第 8 阶段
+    # 收口时点**的判据——它要守的是「第 8 阶段没越界做第 9 阶段的事」。第 9 阶段一经开工，
+    # 该目录的存在就是**预期状态**，再把它判失败等于用一条会随时点失效的判据否掉后续阶段。
+    # 故改为：仅当 `阶段09-前后端系统集成\24-第9阶段任务书（前后端系统集成）.md`（第 9 阶段
+    # 开工的标志文件）**不存在**时，`阶段09-*` 才计入失败；存在则记 note 并说明。判据不放宽：
+    # 「第 8 阶段交付范围内无前端／接口／DDL 产物」这一条**一字未动**，仍逐文件扫描并硬判。
+    p9_marker = g.p(os.path.join("阶段09-前后端系统集成",
+                                 "24-第9阶段任务书（前后端系统集成）.md"))
+    stage9_started = os.path.isfile(p9_marker)
+    ok_h4 = (not fe) and (not ddl) and (not api) and (stage9_started or not stage09) \
+        and (stage9_started or not git09)
+    g.row("H4", ok_h4,
+          "非目标未被越界（第 8 阶段交付范围内无前端／接口／DDL 产物；"
+          "阶段09- 的出现按开工标志作时点限定）",
           "扫描范围＝阶段08-智能问答系统\\ 与 代码\\问答\\（本阶段交付范围）：前端类 %d 个%s、"
           "DDL 类 %d 个%s、接口框架 import %d 处%s；根目录 阶段09-* 目录 %d 个；"
-          "git status 中 阶段09- 条目 %d 条（git %s）"
+          "git status 中 阶段09- 条目 %d 条（git %s）；第 9 阶段开工标志＝%s"
           % (len(fe), "" if not fe else "：" + br(fe, 3), len(ddl),
              "" if not ddl else "：" + br(ddl, 3), len(api), "" if not api else "：" + br(api, 3),
-             len(stage09), len(git09), gdetail))
+             len(stage09), len(git09), gdetail,
+             "存在（按预期，不计失败）" if stage9_started else "不存在（按收口时点判定）"))
 
 
 # ---------------------------------------------------------------------------

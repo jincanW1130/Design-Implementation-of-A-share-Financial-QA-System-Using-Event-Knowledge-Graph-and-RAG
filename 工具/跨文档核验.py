@@ -372,7 +372,56 @@ WILDCARD = re.compile(r'[*?\[]')                          # 通配写法（按�
 #                `run_manifest.json`、`工具/验收第8阶段.py`；
 #   第三批 1 条：`阶段08-智能问答系统/22-第8阶段产出文档（智能问答系统）.md`。
 # 留着只会掩盖真正的悬空路径，故与第 6 阶段同一处理：**清空**。
-PLANNED = set()
+#
+# 2026-09-29 第 9 阶段开工登记（按编写约定 5，文件一旦落盘就立即移出；本次登记量较大，
+# 因为第 9 阶段要新建三个代码目录）：**注意通用名登记的副作用**——`config.py`／`README.md`
+# 这类通用名一旦按路径登记，其后缀匹配会连带覆盖文档里的裸文件名写法；这是临时状态，
+# 落盘后逐条删除即恢复。登记范围与《23》第4节 的产出清单一一对应。
+PLANNED = {
+    '阶段09-前后端系统集成/25-第9阶段产出文档（前后端系统集成）.md',
+    '代码/后端/config.py',
+    '代码/后端/db.py',
+    '代码/后端/errors.py',
+    '代码/后端/main.py',
+    '代码/后端/run.py',
+    '代码/后端/README.md',
+    '代码/后端/api/qa.py',
+    '代码/后端/api/evidence.py',
+    '代码/后端/api/history.py',
+    '代码/后端/api/graph.py',
+    '代码/后端/api/admin.py',
+    '代码/后端/services/qa_service.py',
+    '代码/后端/services/graph_service.py',
+    '代码/后端/schema/六张表.sql',
+    '代码/后端/tools/import_data.py',
+    '代码/后端/tools/import_graph.py',
+    '代码/前端/package.json',
+    '代码/前端/vite.config.js',
+    '代码/前端/index.html',
+    '代码/前端/README.md',
+    # 两个**非交付物**但确实会落盘的文件，一并登记（落盘后按编写约定 5 移出）：
+    # `package-lock.json` 由 npm 生成并随仓库提交（硬约束 23）；`config.local.json` 由作者
+    # 填入本机 MySQL 凭据、被 `.gitignore` 覆盖、不入库（《23》第2.5节 与 4.7）。
+    '代码/前端/package-lock.json',
+    '代码/后端/config.local.json',
+    '代码/前端/src/api.js',
+    '代码/前端/src/App.vue',
+    '代码/前端/src/views/AskView.vue',
+    '代码/前端/src/views/AnswerView.vue',
+    '代码/前端/src/views/GraphView.vue',
+    '代码/前端/src/views/HistoryView.vue',
+    '部署/Dockerfile',
+    '部署/README.md',
+    '部署/启动.ps1',
+    '工具/验收第9阶段.py',
+    '阶段09-前后端系统集成/集成产出/input_manifest.json',
+    '阶段09-前后端系统集成/集成产出/smoke_matrix.jsonl',
+    '阶段09-前后端系统集成/集成产出/error_scenarios.jsonl',
+    '阶段09-前后端系统集成/集成产出/latency_profile.json',
+    '阶段09-前后端系统集成/集成产出/db_counts.json',
+    '阶段09-前后端系统集成/集成产出/graph_counts.json',
+    '阶段09-前后端系统集成/集成产出/run_manifest.json',
+}
 PLANNED_BARE = {p for p in PLANNED if '\\' not in p and '/' not in p}
 PLANNED_PATH = {p.replace('/', '\\').lower() for p in PLANNED if ('\\' in p or '/' in p)}
 def is_planned(tok):
@@ -559,7 +608,9 @@ WANT_STAGES = ['阶段01-选题与项目规划', '阶段02-文献调研与开题
                '阶段06-事件抽取与知识图谱', '阶段07-RAG检索系统',
                # 2026-09-29 第 8 阶段开工：《21》落 `阶段08-智能问答系统\`，该目录必须进期望表，
                # 否则 B-28 的反向断言会把本阶段的工作区判成「计划外的阶段目录」。
-               '阶段08-智能问答系统']
+               '阶段08-智能问答系统',
+               # 2026-09-29 第 9 阶段开工：《23》落 `阶段09-前后端系统集成\`，同一处理。
+               '阶段09-前后端系统集成']
 have = {os.path.basename(d) for d in STAGES}
 for s in WANT_STAGES:
     report(s in have, '阶段目录存在：%s' % s)
