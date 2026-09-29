@@ -1,0 +1,244 @@
+{
+  "aggregates": {
+    "deepseek-flash": {
+      "body_date_unverifiable_total": 0,
+      "body_graph_marker_leak_cases": 0,
+      "body_section_header_leak_cases": 0,
+      "candidate": "deepseek-flash",
+      "citation_out_of_range_cases": 0,
+      "citation_out_of_range_rate": 0.0,
+      "citation_out_of_range_total": 0,
+      "date_unverifiable_cases": 0,
+      "date_unverifiable_rate": 0.0,
+      "date_unverifiable_total": 0,
+      "dates_beyond_cutoff_total": 17,
+      "empty_answer_cases": 0,
+      "empty_answer_rate": 0.0,
+      "expected_cases": 30,
+      "finish_length_cases": 0,
+      "finish_reason_distribution": {
+        "stop": 30
+      },
+      "finish_stop_cases": 30,
+      "graph_cases": 30,
+      "graph_section_bad_rate": 0.0,
+      "max_completion_tokens": 7458,
+      "max_consecutive_failures": 0,
+      "max_seconds": 32.657,
+      "mean_seconds": 6.165,
+      "median_seconds": 4.005,
+      "n_calls": 30,
+      "n_failures": 0,
+      "n_questions": 30,
+      "n_retried": 0,
+      "system_graph_section_bad_cases": 0,
+      "total_completion_tokens": 37913,
+      "total_prompt_tokens": 106481
+    },
+    "deepseek-v4-pro": {
+      "body_date_unverifiable_total": 0,
+      "body_graph_marker_leak_cases": 0,
+      "body_section_header_leak_cases": 0,
+      "candidate": "deepseek-v4-pro",
+      "citation_out_of_range_cases": 0,
+      "citation_out_of_range_rate": 0.0,
+      "citation_out_of_range_total": 0,
+      "date_unverifiable_cases": 0,
+      "date_unverifiable_rate": 0.0,
+      "date_unverifiable_total": 0,
+      "dates_beyond_cutoff_total": 12,
+      "empty_answer_cases": 0,
+      "empty_answer_rate": 0.0,
+      "expected_cases": 30,
+      "finish_length_cases": 0,
+      "finish_reason_distribution": {
+        "stop": 30
+      },
+      "finish_stop_cases": 30,
+      "graph_cases": 30,
+      "graph_section_bad_rate": 0.0,
+      "max_completion_tokens": 7279,
+      "max_consecutive_failures": 0,
+      "max_seconds": 96.997,
+      "mean_seconds": 24.499,
+      "median_seconds": 16.627,
+      "n_calls": 30,
+      "n_failures": 0,
+      "n_questions": 30,
+      "n_retried": 0,
+      "system_graph_section_bad_cases": 0,
+      "total_completion_tokens": 53149,
+      "total_prompt_tokens": 108071
+    },
+    "glm-5.3-flash": {
+      "body_date_unverifiable_total": 0,
+      "body_graph_marker_leak_cases": 0,
+      "body_section_header_leak_cases": 0,
+      "candidate": "glm-5.3-flash",
+      "citation_out_of_range_cases": 0,
+      "citation_out_of_range_rate": 0.0,
+      "citation_out_of_range_total": 0,
+      "date_unverifiable_cases": 0,
+      "date_unverifiable_rate": 0.0,
+      "date_unverifiable_total": 0,
+      "dates_beyond_cutoff_total": 16,
+      "empty_answer_cases": 0,
+      "empty_answer_rate": 0.0,
+      "expected_cases": 30,
+      "finish_length_cases": 0,
+      "finish_reason_distribution": {
+        "stop": 30
+      },
+      "finish_stop_cases": 30,
+      "graph_cases": 30,
+      "graph_section_bad_rate": 0.0,
+      "max_completion_tokens": 11262,
+      "max_consecutive_failures": 0,
+      "max_seconds": 264.903,
+      "mean_seconds": 55.134,
+      "median_seconds": 44.071,
+      "n_calls": 30,
+      "n_failures": 0,
+      "n_questions": 30,
+      "n_retried": 0,
+      "system_graph_section_bad_cases": 0,
+      "total_completion_tokens": 71838,
+      "total_prompt_tokens": 105473
+    }
+  },
+  "archived_config_2048_readings": {
+    "decision_path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段08-智能问答系统\\_工作底稿\\selection_decision_max2048.json",
+    "matrix_path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段08-智能问答系统\\_工作底稿\\selection_matrix_max2048.jsonl",
+    "note": "上一轮 max_tokens=2048 的选型读数（selection_matrix.jsonl／selection_decision.json）是**配置产物**而非模型能力读数（该档下三候选都出现「推理吃光预算、正文为空」的行），已按《21》v1.3 从正式产出移出，留痕于下方两份文件，仅作改动效果的对照，不作为选型依据。"
+  },
+  "control_candidates": [
+    "deepseek-v4-pro",
+    "glm-5.3-flash"
+  ],
+  "empty_body_retry_rule": "某次请求返回空正文（content 为空串）时，以**完全相同的配置**（同模型／同 temperature／同 max_tokens／同 Prompt 文本／同证据集合）再请求一次；两次尝试都落进 selection_matrix.jsonl 的`attempts`（逐次含时延、finish_reason、prompt/completion tokens、是否空正文）；**两次都为空**才记 empty_answer=1。该规则对三个候选一律适用，不引入新的实验变量。",
+  "frozen_candidate": "deepseek-flash",
+  "machine_check_scope": {
+    "citation_out_of_range": "作用域＝模型生成的「回答」正文（引用记法 [证据n]）",
+    "date_unverifiable": "作用域＝答案全文；允许来源＝证据正文／证据语料元数据（标题、发布时间）／data_cutoff_time 的日期部分／由窗口规则确定性推出的判定区间端点（最近 30 天、近期 90 天、最新＝基准日）＋ 题集 time_window 的 lo/hi",
+    "dates_beyond_cutoff": "作用域＝答案全文；**只统计、不计入失败**，用于如实登记「证据原文里明写的未来日期」（不算缺陷）",
+    "empty_answer": "**定义为模型生成的「回答」正文为空、且按 v1.3 空正文重试规则重试一次后仍为空**（四段里的其余三段由代码拼装，按构造非空）；请求失败不计入本项（单列 n_failures）。该情形通常与 finish_reason=length 同时出现，即 completion 预算被推理载荷占满导致正文未产出；max_tokens=16384 下应大幅减少。",
+    "graph": "graph_used=1 ⇒ 系统拼装的图谱段有内容且不含固定标注；graph_used=0 ⇒ 系统段恰为该固定标注；模型正文出现该固定标注即 body_graph_marker_leak"
+  },
+  "max_tokens": 16384,
+  "moonshot_exclusion": {
+    "conclusion": "勘察实测 kimi-k3 只在 temperature=1 下可用（见 observed_rows），与《02》第12.4节 冻结的 temperature=0 冲突，故不进入三候选对照。",
+    "endpoint": "https://api.moonshot.cn/v1",
+    "evidence_found": true,
+    "evidence_path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段08-智能问答系统\\_工作底稿\\勘察_答案生成模型_真实载荷.json",
+    "model": "kimi-k3",
+    "observed_rows": [
+      {
+        "model": "kimi-k3",
+        "ok": true,
+        "response_model": "kimi-k3",
+        "seconds": 9.94,
+        "temperature": 1
+      },
+      {
+        "model": "kimi-k2.6",
+        "ok": true,
+        "response_model": "kimi-k2.6",
+        "seconds": 12.02,
+        "temperature": 1
+      }
+    ],
+    "observed_temperatures": [
+      1
+    ],
+    "provider": "moonshot",
+    "reason": "该模型只接受 temperature=1，与《02》第12.4节 冻结的 temperature=0 直接冲突"
+  },
+  "notice": "本文件只登记 30 题预实验集上的**原始读数与机检读数**，不含人工评分，不构成正式实验结论（《21》第1.2节、非目标 4／5）。`dates_beyond_cutoff` 是证据原文里明写的未来日期（重试登记用），**不是缺陷**；判失败的只有 `date_unverifiable`。",
+  "only_thing_changed": "仅模型；装配结果、Prompt 文本、temperature、max_tokens 三候选全同",
+  "prompt_sha256_by_qid": {
+    "PE-01": "af0b07b3623e5cbd7b6908663b0f82503d68588b18fe83c4997eed0ef0c0d3f7",
+    "PE-02": "cab7f7570fc9d9e88ac29358db08106010daf6d9e694a1fef0945afb8fb53367",
+    "PE-03": "5e3d4d2b1972e2d240447c238f97621bd9f3c89db813ec96a4f4f57e2f37cb1c",
+    "PE-04": "2aed22b517e02c0de074f0f8dc46cd7403131d754f9e4f54fab95e9c02ce9026",
+    "PE-05": "7cfd1c195d7e201ab2c02426f7a0c1570a573e3af68b0dbdb879949fc2066f91",
+    "PE-06": "ca0975b44ac617e9d86c6494ac58bfc5bd7b3d367225646b9e5fc4de571b7fcb",
+    "PE-07": "f0a6670d6e79c8c4044263bb9f8ccbc3b98824b1e99d6a68cb2337b17090cd04",
+    "PE-08": "60760c70e56cb762041682ee50422f5e90ecc2105b12e982754f43fd8e4dc3f9",
+    "PE-09": "4438a82977e4bcae9cddea888f6c4ef49cebcd60c0626722b43871e1135be722",
+    "PE-10": "ab22b1fa96067f91e5476516bf1bec4ca07b6cfa7f107ab7b3e63fd7e43a68dc",
+    "PE-11": "665b06f375d579ba1859446180aa9154d8cfc5b7b1b1e26fa22bb2f4aa4a6dd6",
+    "PE-12": "14f87b00b06b15b3ee420887074452308b03d87097b2507b6eb9a411716ff6e3",
+    "PE-13": "db06365de1732b2d75266ce26763d84f6aa81fcd7705b76911ce7d2679666d64",
+    "PE-14": "8399a47bc3e809e74aeeab506eb5742f7057f2ee94fa88bca4f14ff0f6916f5d",
+    "PE-15": "afa46c91635c8ad6106164990f21365976d2e56cfeeac0c061a3369bc55f7f7f",
+    "PE-16": "d2f45ee682bdc97180cff53bdaec1009b5e46389cd716c233be8215fc9fad7b4",
+    "PE-17": "8ddff3d21cd7a52d589c205b309fc200bbd20827ac5c1eafc4abb6f45de003da",
+    "PE-18": "6683023054795a3a5462940f035a3284917f97966695e004753308c4df6eda00",
+    "PE-19": "1cd7278422c53fe032633b328917d02da30aef8014329eb42cfe26cc03562ace",
+    "PE-20": "bbe884ede6112cd367fa720a476135509e476d5b3526f3819ab2b8039693bc3a",
+    "PE-21": "f13f059fd4ccbfdb0f6b393ac34ffaa8c320c13d00e4e14c2d1e4e23cec44a31",
+    "PE-22": "6e1660e70f413958cfc9e0aa57b93323875f87fbb50c169823aefa51ba3e2dce",
+    "PE-23": "f77c4c4dbc21676ba9d3ea027d3c76b4a946b404d177e3a01832ee0eeaa566f9",
+    "PE-24": "082768647756fa7210e2f05f27637f6637fb9c2f747e22b873a6aee38aeec4bf",
+    "PE-25": "a6965821398a4484b70da76c83701ec3735c6dcbf5e265dc5ab104dfd510af84",
+    "PE-26": "56281de8b5b6128878368404be214b0c7c5de5d9c315d4a3e930a1edd3525454",
+    "PE-27": "2d0ed49bdea81da7de5a0d01508997d3e03dc38287fa10bce8adcf152815b7c6",
+    "PE-28": "ac37da154c67ed26aef065234f681d80117a7a7646089434140248518b41aaad",
+    "PE-29": "6c396f87cb2593325fa07dd2692773c62e5d545e2fc73ccaa2b035703ec345b8",
+    "PE-30": "6cbcb4ec7a49c5528b5fbca573f80b109bb9c6dac7841eebf28d54f275c97c88"
+  },
+  "purpose": "T2 三模型对照选型的判定与执行证据（《21》第2.5节 第 4 条改判规则）",
+  "questions": 30,
+  "rules": {
+    "rule_1_consecutive_failures": {
+      "frozen_value": 0,
+      "threshold": 3,
+      "triggered": false
+    },
+    "rule_2_machine_check_worse": {
+      "comparison": [
+        {
+          "best_control": 0.0,
+          "delta": 0.0,
+          "frozen": 0.0,
+          "metric": "citation_out_of_range_rate",
+          "significant": false
+        },
+        {
+          "best_control": 0.0,
+          "delta": 0.0,
+          "frozen": 0.0,
+          "metric": "date_unverifiable_rate",
+          "significant": false
+        },
+        {
+          "best_control": 0.0,
+          "delta": 0.0,
+          "frozen": 0.0,
+          "metric": "empty_answer_rate",
+          "significant": false
+        },
+        {
+          "best_control": 0.0,
+          "delta": 0.0,
+          "frozen": 0.0,
+          "metric": "graph_section_bad_rate",
+          "significant": false
+        }
+      ],
+      "margin": 0.1,
+      "triggered": false
+    },
+    "rule_3_mean_latency": {
+      "frozen_value": 6.165,
+      "limit_seconds": 30.0,
+      "triggered": false
+    }
+  },
+  "schema": "stage8-selection-decision-1.2",
+  "spec_version": "《21》v1.3（2026-09-29 修订：max_tokens 2048→16384，因该端点模型为推理型、推理与正文共用输出预算，2048 档的「空答案率」反映配置而非模型能力；并新增「空正文重试」规则——同配置重试一次，两次尝试都留痕，两次都空才判空答案）",
+  "temperature": 0,
+  "total_calls": 90,
+  "triggered_rules": [],
+  "verdict": "维持 deepseek-flash"
+}

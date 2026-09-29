@@ -359,6 +359,19 @@ WILDCARD = re.compile(r'[*?\[]')                          # 通配写法（按�
 #   * 带路径 —— 只匹配该路径。
 # 带路径这一类是 2026-09-25 加的：`代码\抽取与图谱\README.md` 若按裸名 `README.md`
 # 登记，会连带跳过全项目所有 README.md 的悬空判定，副作用大于收益。
+# 2026-09-29 第 8 阶段开工登记：任务书《21》按产出清单写明了本阶段**将要创建**的文件，
+# 它们在《21》落盘时必然还不存在。按编写约定 5 登记在案，**文件一旦落盘就立即移出**。
+# 登记的是带路径的形式（后缀匹配同时覆盖文档里的裸文件名写法）；README.md 这类通用名
+# 一律带路径登记，避免连带跳过全项目所有同名文件的悬空判定。
+# 2026-09-29 第 8 阶段开工登记 18 条，收口时按编写约定 5 **全部移出**（逐条都已真的落盘）：
+#   第一批 8 条：`代码/问答/config.py`、`check_inputs.py`、`prompt.py`、`assemble.py`、
+#                `model_selection.py`、`问答产出/input_manifest.json`、`selection_matrix.jsonl`、
+#                `selection_decision.json`；
+#   第二批 9 条：`代码/问答/answer.py`、`history.py`、`run_answer.py`、`README.md`、
+#                `问答产出/prompt_snapshot.json`、`answer_trace.jsonl`、`qa_records.jsonl`、
+#                `run_manifest.json`、`工具/验收第8阶段.py`；
+#   第三批 1 条：`阶段08-智能问答系统/22-第8阶段产出文档（智能问答系统）.md`。
+# 留着只会掩盖真正的悬空路径，故与第 6 阶段同一处理：**清空**。
 PLANNED = set()
 PLANNED_BARE = {p for p in PLANNED if '\\' not in p and '/' not in p}
 PLANNED_PATH = {p.replace('/', '\\').lower() for p in PLANNED if ('\\' in p or '/' in p)}
@@ -543,7 +556,10 @@ if n0:
 print(); print('=' * 78); print('M 目录结构（按阶段分目录）'); print('=' * 78)
 WANT_STAGES = ['阶段01-选题与项目规划', '阶段02-文献调研与开题', '阶段03-需求分析',
                '阶段04-系统总体设计', '阶段05-数据准备',
-               '阶段06-事件抽取与知识图谱', '阶段07-RAG检索系统']
+               '阶段06-事件抽取与知识图谱', '阶段07-RAG检索系统',
+               # 2026-09-29 第 8 阶段开工：《21》落 `阶段08-智能问答系统\`，该目录必须进期望表，
+               # 否则 B-28 的反向断言会把本阶段的工作区判成「计划外的阶段目录」。
+               '阶段08-智能问答系统']
 have = {os.path.basename(d) for d in STAGES}
 for s in WANT_STAGES:
     report(s in have, '阶段目录存在：%s' % s)
