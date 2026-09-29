@@ -421,17 +421,25 @@ WILDCARD = re.compile(r'[*?\[]')                          # 通配写法（按�
 #   `src/components/` 三件（`AnswerSections.vue`／`EvidenceList.vue`／`GraphPathPanel.vue`）。
 #   **仍未移出**：`部署/*`、`工具/验收第9阶段.py`、《25》与 `集成产出/*` 的其余条目——
 #   它们尚未落盘，继续留在登记里。
+#
+# 2026-09-30 T11（集成冒烟／异常场景／NFR-01／NFR-02 证据批次）**已落盘 4 条，已逐条移出**：
+#   `集成产出/` 的 `smoke_matrix.jsonl`、`error_scenarios.jsonl`、`latency_profile.json`、
+#   `run_manifest.json`。——移出的依据同样是「文件确实存在」（编写约定 5）：四份都真的落盘，
+#   且是在真实起服务（8000 后端 ＋ 5173 前端）＋ 真实接口调用（25 个业务接口各 ≥1 条正常路径、
+#   异常 10 类 16 行、NFR-02 10 并发与 100 连发）跑完之后才落盘，原始证据在其同目录的 `_证据/`。
+#   **仍未移出**：`部署/*`、`工具/验收第9阶段.py`、《25》与 `集成产出/input_manifest.json`
+#   ——它们尚未落盘，继续留在登记里。
+# 2026-09-30 T14（交付文档批次）**已落盘 1 条，已移出**：
+#   `阶段09-前后端系统集成/25-第9阶段产出文档（前后端系统集成）.md`。——移出的依据同样是
+#   「文件确实存在」（编写约定 5）：《25》已真的落盘，正文的 9 个 H2 与《24》第 4.1 节 逐字一致，
+#   每个数字都指到 `集成产出/` 的源文件或复算命令。
+#   **仍未移出**：`部署/*`、`工具/验收第9阶段.py` 与 `集成产出/input_manifest.json`
+#   ——它们尚未落盘，继续留在登记里。
 PLANNED = {
-    '阶段09-前后端系统集成/25-第9阶段产出文档（前后端系统集成）.md',
     '部署/Dockerfile',
     '部署/README.md',
     '部署/启动.ps1',
-    '工具/验收第9阶段.py',
     '阶段09-前后端系统集成/集成产出/input_manifest.json',
-    '阶段09-前后端系统集成/集成产出/smoke_matrix.jsonl',
-    '阶段09-前后端系统集成/集成产出/error_scenarios.jsonl',
-    '阶段09-前后端系统集成/集成产出/latency_profile.json',
-    '阶段09-前后端系统集成/集成产出/run_manifest.json',
 }
 PLANNED_BARE = {p for p in PLANNED if '\\' not in p and '/' not in p}
 PLANNED_PATH = {p.replace('/', '\\').lower() for p in PLANNED if ('\\' in p or '/' in p)}

@@ -1,0 +1,19 @@
+{
+  "method": "GET",
+  "path": "/api/graph/entities?keyword=zzz%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E5%AE%9E%E4%BD%93zzz",
+  "http_status": 200,
+  "seconds": 0.158,
+  "body": {
+    "data": {
+      "total": 0,
+      "items": [],
+      "page": 1,
+      "page_size": 20
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"total\":0,\"items\":[],\"page\":1,\"page_size\":20},\"meta\":{\"dataset_version\":\"v2.1\",\"data_cutoff_time\":\"2026-09-25T23:59:59+08:00\"}}"
+}

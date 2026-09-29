@@ -1,0 +1,108 @@
+{
+  "method": "GET",
+  "path": "/api/evidence/1/graph-path",
+  "http_status": 200,
+  "seconds": 0.024,
+  "body": {
+    "data": {
+      "answer_id": 1,
+      "is_graph_extended": 1,
+      "paths": [
+        {
+          "end": "EVT-0001",
+          "depth": 1,
+          "nodes": [
+            "601633",
+            "EVT-0001"
+          ],
+          "start": "601633",
+          "relations": [
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.9",
+                "source_doc_id": "1001",
+                "source_chunk_id": "1001000"
+              },
+              "neighbor": "EVT-0001",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "EVT-0001",
+          "depth": 1,
+          "nodes": [
+            "601633",
+            "EVT-0001"
+          ],
+          "start": "601633",
+          "relations": [
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.9",
+                "source_doc_id": "1001",
+                "source_chunk_id": "1001001"
+              },
+              "neighbor": "EVT-0001",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "EVT-0002",
+          "depth": 1,
+          "nodes": [
+            "601633",
+            "EVT-0002"
+          ],
+          "start": "601633",
+          "relations": [
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.9",
+                "source_doc_id": "1001",
+                "source_chunk_id": "1001001"
+              },
+              "neighbor": "EVT-0002",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "EVT-0498",
+          "depth": 1,
+          "nodes": [
+            "601633",
+            "EVT-0498"
+          ],
+          "start": "601633",
+          "relations": [
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.92",
+                "source_doc_id": "1375",
+                "source_chunk_id": "1375000"
+              },
+              "neighbor": "EVT-0498",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        }
+      ],
+      "display_mode": "path"
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"answer_id\":1,\"is_graph_extended\":1,\"paths\":[{\"end\":\"EVT-0001\",\"depth\":1,\"nodes\":[\"601633\",\"EVT-0001\"],\"start\":\"601633\",\"relations\":[{\"role\":\"主体\",\"evidence\":{\"confidence\":\"0.9\",\"source_doc_id\":\"1001\",\"source_chunk_id\":\"1001000\"},\"neighbor\":\"EVT-0001\",\"relation\":\"PARTICIPATES_IN\",\"direction\":\"out\"}]},{\"end\":\"EVT-0001\",\"depth\":1,\"nodes\":[\"601633\",\"EVT-0001\"],\"start\":\"601633\",\"relations\":[{\"role\":\"主体\",\"evidence\":{\"confidence\":\"0.9\",\"source_doc_id\":\"1001\",\"source_chunk_id\":\"1001001\"},\"neighbor\":\"EVT-0001\",\"relation\":\"PARTICIPATES_IN\",\"direction\":\"out\"}]},{\"end\":\"EVT-0002\",\"depth\":1,\"nodes\":[\"601633\",\"EVT-0002\"],\"start\":\"601633\",\"relations\":[{\"role\":\"主体\",\"evidence\":{\"confidence\":\"0.9\",\"source_doc_id\":\"1001\",\"source_chunk_id\":\"1001001\"},\"neighbor\":\"EVT-0002\",\"relation\":\"PARTICIPATES_IN\""
+}

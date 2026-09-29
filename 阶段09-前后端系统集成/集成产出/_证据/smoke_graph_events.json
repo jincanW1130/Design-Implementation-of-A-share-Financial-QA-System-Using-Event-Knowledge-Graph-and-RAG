@@ -1,0 +1,38 @@
+{
+  "method": "GET",
+  "path": "/api/graph/events?event_type=%E7%9B%91%E7%AE%A1&page_size=2",
+  "http_status": 200,
+  "seconds": 0.172,
+  "body": {
+    "data": {
+      "total": 53,
+      "items": [
+        {
+          "event_id": "EVT-0006",
+          "node_id": "EVT-0006",
+          "event_type": "监管",
+          "event_name": "保利发展获准注册50亿元中期票据",
+          "event_time": "",
+          "description": "中国银行间市场交易商协会出具《接受注册通知书》，保利发展控股集团股份有限公司获准注册中期票据，注册金额50亿元。",
+          "confidence": 0.9
+        },
+        {
+          "event_id": "EVT-0090",
+          "node_id": "EVT-0090",
+          "event_type": "监管",
+          "event_name": "国家市场监督管理总局对本次交易作出经营者集中反垄断审查不予禁止决定",
+          "event_time": "",
+          "description": "公司于近日取得国家市场监督管理总局关于本次交易的《经营者集中反垄断审查不予禁止决定书》。",
+          "confidence": 0.9
+        }
+      ],
+      "page": 1,
+      "page_size": 2
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"total\":53,\"items\":[{\"event_id\":\"EVT-0006\",\"node_id\":\"EVT-0006\",\"event_type\":\"监管\",\"event_name\":\"保利发展获准注册50亿元中期票据\",\"event_time\":\"\",\"description\":\"中国银行间市场交易商协会出具《接受注册通知书》，保利发展控股集团股份有限公司获准注册中期票据，注册金额50亿元。\",\"confidence\":0.9},{\"event_id\":\"EVT-0090\",\"node_id\":\"EVT-0090\",\"event_type\":\"监管\",\"event_name\":\"国家市场监督管理总局对本次交易作出经营者集中反垄断审查不予禁止决定\",\"event_time\":\"\",\"description\":\"公司于近日取得国家市场监督管理总局关于本次交易的《经营者集中反垄断审查不予禁止决定书》。\",\"confidence\":0.9}],\"page\":1,\"page_size\":2},\"meta\":{\"dataset_version\":\"v2.1\",\"data_cutoff_time\":\"2026-09-25T23:59:59+08:00\"}}"
+}

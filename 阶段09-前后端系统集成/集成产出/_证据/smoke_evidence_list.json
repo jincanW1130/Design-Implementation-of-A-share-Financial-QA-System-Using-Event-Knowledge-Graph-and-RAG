@@ -1,0 +1,125 @@
+{
+  "method": "GET",
+  "path": "/api/evidence/1",
+  "http_status": 200,
+  "seconds": 0.003,
+  "body": {
+    "data": {
+      "answer_id": 1,
+      "groups": {
+        "回答来源": 0,
+        "新闻来源": 0,
+        "公告来源": 8,
+        "相关事件": 2
+      },
+      "items": [
+        {
+          "rank": 1,
+          "doc_id": 1001,
+          "chunk_id": 1001001,
+          "evidence_type": "公告来源",
+          "title": "长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-25T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-25/1225581315.PDF"
+        },
+        {
+          "rank": 2,
+          "doc_id": 1001,
+          "chunk_id": 1001000,
+          "evidence_type": "公告来源",
+          "title": "长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-25T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-25/1225581315.PDF"
+        },
+        {
+          "rank": 3,
+          "doc_id": 1048,
+          "chunk_id": 1048011,
+          "evidence_type": "公告来源",
+          "title": "关于2023年第一期股票期权激励计划第三个行权期符合行权条件的公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-15T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-15/1225562971.PDF"
+        },
+        {
+          "rank": 4,
+          "doc_id": 1088,
+          "chunk_id": 1088001,
+          "evidence_type": "公告来源",
+          "title": "关于2023年股票期权激励计划首次授予部分第三个行权期采用自主行权模式的提示性公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-08T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-08/1225551449.PDF"
+        },
+        {
+          "rank": 5,
+          "doc_id": 1088,
+          "chunk_id": 1088017,
+          "evidence_type": "公告来源",
+          "title": "关于2023年股票期权激励计划首次授予部分第三个行权期采用自主行权模式的提示性公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-08T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-08/1225551449.PDF"
+        },
+        {
+          "rank": 6,
+          "doc_id": 1120,
+          "chunk_id": 1120015,
+          "evidence_type": "公告来源",
+          "title": "关于2023年股票期权激励计划首次授予部分第三个行权期行权条件成就的公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-01T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-01/1225536730.PDF"
+        },
+        {
+          "rank": 7,
+          "doc_id": 1088,
+          "chunk_id": 1088015,
+          "evidence_type": "公告来源",
+          "title": "关于2023年股票期权激励计划首次授予部分第三个行权期采用自主行权模式的提示性公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-08T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-08/1225551449.PDF"
+        },
+        {
+          "rank": 8,
+          "doc_id": 1048,
+          "chunk_id": 1048001,
+          "evidence_type": "公告来源",
+          "title": "关于2023年第一期股票期权激励计划第三个行权期符合行权条件的公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-15T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-15/1225562971.PDF"
+        },
+        {
+          "rank": 9,
+          "doc_id": 1375,
+          "chunk_id": 1375000,
+          "evidence_type": "相关事件",
+          "title": "长城汽车股份有限公司董事会薪酬委员会关于2026年限制性股票激励计划激励对象名单的核查意见及公示情况说明",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-06-19T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-06-19/1225378817.PDF"
+        },
+        {
+          "rank": 10,
+          "doc_id": 1375,
+          "chunk_id": 1375001,
+          "evidence_type": "相关事件",
+          "title": "长城汽车股份有限公司董事会薪酬委员会关于2026年限制性股票激励计划激励对象名单的核查意见及公示情况说明",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-06-19T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-06-19/1225378817.PDF"
+        }
+      ],
+      "total": 10
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"answer_id\":1,\"groups\":{\"回答来源\":0,\"新闻来源\":0,\"公告来源\":8,\"相关事件\":2},\"items\":[{\"rank\":1,\"doc_id\":1001,\"chunk_id\":1001001,\"evidence_type\":\"公告来源\",\"title\":\"长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告\",\"source\":\"巨潮资讯网\",\"publish_time\":\"2026-09-25T00:00:00\",\"url\":\"https://static.cninfo.com.cn/finalpage/2026-09-25/1225581315.PDF\"},{\"rank\":2,\"doc_id\":1001,\"chunk_id\":1001000,\"evidence_type\":\"公告来源\",\"title\":\"长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告\",\"source\":\"巨潮资讯网\",\"publish_time\":\"2026-09-25T00:00:00\",\"url\":\"https://static.cninfo.com.cn/finalpage/2026-09-25/1225581315.PDF\"},{\"rank\":3,\"doc_id\":1048,\"chunk_id\":1048011,\"evidence_type\":\"公告来源\",\"title\":\"关于2023年第一期股票期权激励计划第三个行权期符合行权条件的公告\",\"source\":\"巨潮资讯网\",\"publish_time\":\"2026-09-15T00:00:00\",\"url\":\"https://static.cninfo.com.cn/finalpage/2026-09-15/1225562971.PDF\"},{\"rank\":4,\"do"
+}

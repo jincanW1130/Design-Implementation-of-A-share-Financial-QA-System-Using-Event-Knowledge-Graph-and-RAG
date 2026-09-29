@@ -1,0 +1,14 @@
+{
+  "scenario": "模型侧超时（链路 2 秒超时）",
+  "payload": {
+    "question": "长城汽车《2023年股票期权激励计划》首次授予股票期权第二个行权期的行权期有效期是什么时间段？",
+    "session_id": "S-T11-MODEL"
+  },
+  "http_status": 504,
+  "code": 3002,
+  "seconds": 2.019,
+  "body": {
+    "code": 3002,
+    "message": "大模型接口超时"
+  }
+}

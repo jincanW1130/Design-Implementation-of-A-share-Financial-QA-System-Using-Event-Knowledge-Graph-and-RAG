@@ -1,0 +1,46 @@
+{
+  "method": "GET",
+  "path": "/api/graph/entities?keyword=%E5%B9%B3%E5%AE%89&page_size=2",
+  "http_status": 200,
+  "seconds": 0.3,
+  "body": {
+    "data": {
+      "total": 21,
+      "items": [
+        {
+          "node_id": "000001",
+          "label": "Company",
+          "name": "平安银行",
+          "stock_code": "000001",
+          "properties": {
+            "aliases": "平安银行",
+            "company_name": "平安银行股份有限公司",
+            "exchange": "深交所",
+            "short_name": "平安银行"
+          }
+        },
+        {
+          "node_id": "1037",
+          "label": "Document",
+          "name": "平安银行股份有限公司内部审计章程",
+          "stock_code": "",
+          "properties": {
+            "publish_time": "2026-09-17",
+            "source": "巨潮资讯网",
+            "category": "公告",
+            "title": "平安银行股份有限公司内部审计章程",
+            "doc_id": "1037",
+            "url": "https://static.cninfo.com.cn/finalpage/2026-09-17/1225568477.PDF"
+          }
+        }
+      ],
+      "page": 1,
+      "page_size": 2
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"total\":21,\"items\":[{\"node_id\":\"000001\",\"label\":\"Company\",\"name\":\"平安银行\",\"stock_code\":\"000001\",\"properties\":{\"aliases\":\"平安银行\",\"company_name\":\"平安银行股份有限公司\",\"exchange\":\"深交所\",\"short_name\":\"平安银行\"}},{\"node_id\":\"1037\",\"label\":\"Document\",\"name\":\"平安银行股份有限公司内部审计章程\",\"stock_code\":\"\",\"properties\":{\"publish_time\":\"2026-09-17\",\"source\":\"巨潮资讯网\",\"category\":\"公告\",\"title\":\"平安银行股份有限公司内部审计章程\",\"doc_id\":\"1037\",\"url\":\"https://static.cninfo.com.cn/finalpage/2026-09-17/1225568477.PDF\"}}],\"page\":1,\"page_size\":2},\"meta\":{\"dataset_version\":\"v2.1\",\"data_cutoff_time\":\"2026-09-25T23:59:59+08:00\"}}"
+}

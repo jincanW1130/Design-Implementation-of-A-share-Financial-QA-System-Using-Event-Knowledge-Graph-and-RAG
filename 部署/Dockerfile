@@ -25,10 +25,15 @@ ENV PYTHONUNBUFFERED=1 \
 WORKDIR /app
 
 # 依赖：与开发环境实测版本对齐（见 代码\后端\README.md）；不装 ORM、不装可视化/编排类组件。
+#
+# **版本号一律以发行版号为准**（`importlib.metadata.version()`），**不要**照抄包自报的
+# `__version__`：实测 PyMySQL 的发行版 **1.2.3** 会把 `pymysql.__version__` 报成 **2.2.8**，
+# 照抄会让 `pip install "pymysql==2.2.8"` 直接失败（PyPI 上不存在这个版本）——本镜像第一版
+# 就是这么构筑失败的，属实测踩坑留痕。
 RUN pip install --no-cache-dir \
         "fastapi==0.141.1" \
         "uvicorn[standard]==0.54.0" \
-        "pymysql==2.2.8" \
+        "pymysql==1.2.3" \
         "neo4j==6.3.1"
 
 # 后端代码 ＋ 上游只读代码（后端 import 复用检索与问答组件，故必须一起进镜像）

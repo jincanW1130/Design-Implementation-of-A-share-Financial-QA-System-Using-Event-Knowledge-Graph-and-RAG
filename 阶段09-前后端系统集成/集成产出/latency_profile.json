@@ -1,0 +1,590 @@
+{
+  "generated_by": "T11 集成冒烟测试、异常场景、系统指标证据（第 9 阶段）",
+  "notice": "本批读数在 Method（C 组）单次运行意义下有效，不是正式实验结论",
+  "nfr01_latency": {
+    "questions": [
+      {
+        "qid": "PE-01",
+        "question": "长城汽车《2023年股票期权激励计划》首次授予股票期权第二个行权期的行权期有效期是什么时间段？",
+        "answer_id": 40,
+        "http_status": 200
+      },
+      {
+        "qid": "PE-02",
+        "question": "特变电工控股公司特变电工新疆新能源股份有限公司2026年度第一期绿色科技创新债券的发行额度、期限与发行利率分别是多少？",
+        "answer_id": 41,
+        "http_status": 200
+      },
+      {
+        "qid": "PE-04",
+        "question": "工业富联披露的董事及高级管理人员包括哪些人？",
+        "answer_id": 43,
+        "http_status": 200
+      }
+    ],
+    "failed_questions": [
+      {
+        "qid": "PE-03",
+        "http_status": 503,
+        "code": 3001,
+        "message": "图谱服务不可用",
+        "chain_reason": "PE-03：token 账现场重算与上游 trace 不一致——现场 text+path+event_triple=3007、trace total_tokens=3333（《21》第五节 硬约束 6：预算守卫必须由重算分量组成，不得照抄上游；审查 B-02／C-06）",
+        "log": "_证据/ask_PE-03.log",
+        "reason_source": "_证据/pe03_repro.json（进程内复跑 2 次均复现；原文见 _证据/_pe03_console_1.log）"
+      }
+    ],
+    "segments": {
+      "vector_retrieval": {
+        "samples": [
+          0.03,
+          0.03,
+          0.03
+        ],
+        "n": 3,
+        "avg": 0.03,
+        "p95": 0.03,
+        "p95_method": "最近秩法（nearest-rank），n=3 时 P95＝最大值",
+        "source": "run_query.py stdout 的「问题向量化 %.2fs」（逐题见 _证据/run_query_PE-0x.stdout.txt）",
+        "caveat": "这是**一次性问题向量化**（本地 Embedding 前向）的打印值，不含模型加载与数据载入；同一次运行的打印「总计」远大于分项之和，见 graph_query 段的 caveat。"
+      },
+      "graph_query": {
+        "samples": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "n": 3,
+        "avg": 0.0,
+        "p95": 0.0,
+        "p95_method": "最近秩法（nearest-rank），n=3 时 P95＝最大值",
+        "source": "run_query.py stdout 的「图谱查询 %.2fs」（逐题见 _证据/run_query_PE-0x.stdout.txt）",
+        "caveat": "**该段没有可信的独立耗时**：打印值 0.00s，但同次运行记录 run_query_PE-0x.json 显示图谱确实跑了（`graph_used`: true、candidates.graph_returned=16、并集 33 里有 13 个只来自图谱侧）。同一次运行打印的分项合计 0.04s，而同一行的「总计」是 6.35～6.50s，差额 ≈6.3～6.5s 未进入任何分项——说明打印的分项只覆盖流水线的一小段（多半是本地 Embedding 加载／数据载入在计时之外）。故本批只登记打印值，**不把它当作图谱查询的真实耗时**。"
+      },
+      "llm_generation": {
+        "samples": [
+          1.941,
+          1.584,
+          6.48
+        ],
+        "n": 3,
+        "avg": 3.335,
+        "p95": 6.48,
+        "p95_method": "最近秩法（nearest-rank），n=3 时 P95＝最大值",
+        "source": "本次 ask 运行目录 answer_trace.jsonl 的 attempts[].seconds 之和（逐题见 _证据/ask_runs_index.json）"
+      },
+      "end_to_end": {
+        "samples": [
+          9.431,
+          9.168,
+          14.036
+        ],
+        "n": 3,
+        "avg": 10.878,
+        "p95": 14.036,
+        "p95_method": "最近秩法（nearest-rank），n=3 时 P95＝最大值",
+        "source": "POST /api/qa/ask 的客户端墙钟（_证据/ask_PE-0x.json 的 seconds 字段）"
+      },
+      "derived_overhead": {
+        "samples": [
+          7.46,
+          7.554,
+          7.526
+        ],
+        "n": 3,
+        "avg": 7.513,
+        "p95": 7.554,
+        "p95_method": "最近秩法（nearest-rank），n=3 时 P95＝最大值",
+        "source": "由端到端减去其余三段得出（含服务端拼装、落库、网络等未单独计时的部分）",
+        "caveat": "因「图谱查询」打印值为 0.00s、且向量段不含模型加载，该差额**不是**纯粹的「服务端拼装开销」，只作方向性参考。"
+      }
+    },
+    "notes": [
+      "分段口径：向量检索段与图谱查询段来自**另行单跑**的 run_query.py（同一题、同一 C 组、同一 K/N），因为 /api/qa/ask 路径不把分段耗时落盘（检索侧 pipeline 的 timings 只打印、写盘前被剥离）。端到端与向量／图谱段并非同一次进程内的同一次运行，故不能逐题相减成精确分段。",
+      "大模型生成段取自 ask 运行目录的 answer_trace.jsonl（attempts[].seconds），与端到端同一次运行。",
+      "3 个样本的 P95 采用最近秩法，n=3 时即最大值，**统计意义很弱**，只作占位读数；正式结论需更多样本。",
+      "本批不产生实验结论，不做 A～E 对比，不评准确性。",
+      "PE-03 经 /api/qa/ask 三次（汇总脚本 1 次、进程内复跑 2 次）稳定 HTTP 503／code 3001；真实原因不是图谱服务，而是第 8 阶段链路自身的「token 账现场重算与上游 trace 不一致」预算守卫（现场 text+path+event_triple=3007 ≠ 上游 trace total_tokens=3333）主动非零退出。响应 message 写「图谱服务不可用」只是 _classify_failure 默认分支的标签。该守卫属上游（阶段07／08）既有逻辑，本批只读上游、一个字节未改，原文见 _证据/pe03_repro.json。"
+    ],
+    "p95_method": "最近秩法（nearest-rank）：升序后取第 ceil(0.95×n) 个；n=3 时即最大值"
+  },
+  "nfr02_availability": {
+    "target": "/api/config/meta",
+    "note": "用轻量接口 GET /api/config/meta 替代问答接口，避免 100 次模型调用。限流为滑动窗口 60 秒 / 同一来源最多 60 次，仅 /api/health 豁免；连续 100 次必然触发 1004 限流，属可解释的预期行为，不是服务故障。",
+    "rounds": [
+      {
+        "round": "10 并发 1 轮",
+        "total": 10,
+        "success": 10,
+        "fail": 0,
+        "success_rate": 1.0,
+        "failure_kinds": {
+          "成功": 10
+        },
+        "raw": [
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          }
+        ]
+      },
+      {
+        "round": "连续 100 次 1 轮",
+        "total": 100,
+        "success": 60,
+        "fail": 40,
+        "success_rate": 0.6,
+        "failure_kinds": {
+          "成功": 60,
+          "限流（1004/429）": 40
+        },
+        "raw": [
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 200,
+            "code": 0
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          },
+          {
+            "http_status": 429,
+            "code": 1004
+          }
+        ]
+      }
+    ],
+    "raw_files": [
+      "_证据/nfr02_concurrent10.json",
+      "_证据/nfr02_sequential100.json"
+    ],
+    "success_rate_verdict": {
+      "concurrent_10": "10/10＝100%，达标",
+      "sequential_100": "60/100＝60%，**低于 95% 阈值**；40 次失败**全部**归入「限流（1004/429）」这一类（failure_kinds 中没有第二类失败），故该缺口**由 1004 限流造成**，不是服务故障、也不是其它错误。60 这个数正好等于「60 秒滑动窗口／同一来源最多 60 次」的窗口容量。",
+      "is_rate_limit_the_cause": true
+    }
+  }
+}

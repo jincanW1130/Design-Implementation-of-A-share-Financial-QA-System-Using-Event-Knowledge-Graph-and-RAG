@@ -1,0 +1,32 @@
+{
+  "method": "GET",
+  "path": "/api/health",
+  "http_status": 200,
+  "seconds": 0.056,
+  "body": {
+    "status": "ok",
+    "mysql": {
+      "ok": true,
+      "info": "8.4.9"
+    },
+    "neo4j": {
+      "ok": true,
+      "info": "bolt://127.0.0.1:7687 可连接"
+    },
+    "vector_index": {
+      "ok": true,
+      "info": "向量 5018 条，维度 512，IndexFlatIP／cosine"
+    },
+    "model_config": {
+      "ok": true,
+      "info": "模型 deepseek-flash／Prompt v1.0；K=10 N=20 预算=3600 g=2",
+      "model_name": "deepseek-flash",
+      "prompt_version": "v1.0",
+      "K": 10,
+      "N": 20,
+      "context_token_budget": 3600,
+      "graph_retention_share": 2
+    }
+  },
+  "raw_head": "{\"status\":\"ok\",\"mysql\":{\"ok\":true,\"info\":\"8.4.9\"},\"neo4j\":{\"ok\":true,\"info\":\"bolt://127.0.0.1:7687 可连接\"},\"vector_index\":{\"ok\":true,\"info\":\"向量 5018 条，维度 512，IndexFlatIP／cosine\"},\"model_config\":{\"ok\":true,\"info\":\"模型 deepseek-flash／Prompt v1.0；K=10 N=20 预算=3600 g=2\",\"model_name\":\"deepseek-flash\",\"prompt_version\":\"v1.0\",\"K\":10,\"N\":20,\"context_token_budget\":3600,\"graph_retention_share\":2}}"
+}

@@ -1,0 +1,214 @@
+{
+  "method": "POST",
+  "path": "/api/qa/ask",
+  "http_status": 200,
+  "seconds": 9.431,
+  "body": {
+    "data": {
+      "answer_id": 40,
+      "question_id": 40,
+      "answer_text": "【回答】\n长城汽车《2023年股票期权激励计划》首次授予股票期权（期权代码：1000000573）第二个行权期的行权期有效期为2026年9月11日至2027年1月25日，自2026年9月11日开始行权[证据1]。\n\n需要提示的是，该行权期内的限制行权期为2026年10月1日至2026年10月31日，在此期间全部激励对象将限制行权[证据1]。\n\n【证据来源】\n[证据1] chunk_id=1001001 doc_id=1001 来源类型=公告来源 发布时间=2026-09-25 标题：长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告\n[证据2] chunk_id=1001000 doc_id=1001 来源类型=公告来源 发布时间=2026-09-25 标题：长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告\n[证据3] chunk_id=1048011 doc_id=1048 来源类型=公告来源 发布时间=2026-09-15 标题：关于2023年第一期股票期权激励计划第三个行权期符合行权条件的公告\n[证据4] chunk_id=1088001 doc_id=1088 来源类型=公告来源 发布时间=2026-09-08 标题：关于2023年股票期权激励计划首次授予部分第三个行权期采用自主行权模式的提示性公告\n[证据5] chunk_id=1088017 doc_id=1088 来源类型=公告来源 发布时间=2026-09-08 标题：关于2023年股票期权激励计划首次授予部分第三个行权期采用自主行权模式的提示性公告\n[证据6] chunk_id=1120015 doc_id=1120 来源类型=公告来源 发布时间=2026-09-01 标题：关于2023年股票期权激励计划首次授予部分第三个行权期行权条件成就的公告\n[证据7] chunk_id=1088015 doc_id=1088 来源类型=公告来源 发布时间=2026-09-08 标题：关于2023年股票期权激励计划首次授予部分第三个行权期采用自主行权模式的提示性公告\n[证据8] chunk_id=1048001 doc_id=1048 来源类型=公告来源 发布时间=2026-09-15 标题：关于2023年第一期股票期权激励计划第三个行权期符合行权条件的公告\n[证据9] chunk_id=1375000 doc_id=1375 来源类型=相关事件 发布时间=2026-06-19 标题：长城汽车股份有限公司董事会薪酬委员会关于2026年限制性股票激励计划激励对象名单的核查意见及公示情况说明\n[证据10] chunk_id=1375001 doc_id=1375 来源类型=相关事件 发布时间=2026-06-19 标题：长城汽车股份有限公司董事会薪酬委员会关于2026年限制性股票激励计划激励对象名单的核查意见及公示情况说明\n\n【知识图谱路径】\ndepth=2\n事件三元组（event_id / event_type / event_time）：\n  EVT-0001 / 股权 / 2026-09-11\n  EVT-0002 / 股权 / 2026-10-01\n  EVT-0498 / 股权 / 2026-04-28\n图谱路径（start —关系（role, confidence, source_doc_id, source_chunk_id）→ end）：\n  601633 -PARTICIPATES_IN(role=主体, confidence=0.9, source_doc_id=1001, source_chunk_id=1001000)-> EVT-0001\n  601633 -PARTICIPATES_IN(role=主体, confidence=0.9, source_doc_id=1001, source_chunk_id=1001001)-> EVT-0001\n  601633 -PARTICIPATES_IN(role=主体, confidence=0.9, source_doc_id=1001, source_chunk_id=1001001)-> EVT-0002\n  601633 -PARTICIPATES_IN(role=主体, confidence=0.92, source_doc_id=1375, source_chunk_id=1375000)-> EVT-0498\n备注：路径列表与事件三元组计入 Context Token Budget，不计入 K\n\n【数据截至与判定区间】\n数据版本：v2.1\n数据截止时间：2026-09-25T23:59:59+08:00\n本题不含相对时间表述，无判定区间。",
+      "evidence": [
+        {
+          "rank": 1,
+          "doc_id": 1001,
+          "chunk_id": 1001001,
+          "evidence_type": "公告来源",
+          "title": "长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-25T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-25/1225581315.PDF"
+        },
+        {
+          "rank": 2,
+          "doc_id": 1001,
+          "chunk_id": 1001000,
+          "evidence_type": "公告来源",
+          "title": "长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-25T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-25/1225581315.PDF"
+        },
+        {
+          "rank": 3,
+          "doc_id": 1048,
+          "chunk_id": 1048011,
+          "evidence_type": "公告来源",
+          "title": "关于2023年第一期股票期权激励计划第三个行权期符合行权条件的公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-15T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-15/1225562971.PDF"
+        },
+        {
+          "rank": 4,
+          "doc_id": 1088,
+          "chunk_id": 1088001,
+          "evidence_type": "公告来源",
+          "title": "关于2023年股票期权激励计划首次授予部分第三个行权期采用自主行权模式的提示性公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-08T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-08/1225551449.PDF"
+        },
+        {
+          "rank": 5,
+          "doc_id": 1088,
+          "chunk_id": 1088017,
+          "evidence_type": "公告来源",
+          "title": "关于2023年股票期权激励计划首次授予部分第三个行权期采用自主行权模式的提示性公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-08T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-08/1225551449.PDF"
+        },
+        {
+          "rank": 6,
+          "doc_id": 1120,
+          "chunk_id": 1120015,
+          "evidence_type": "公告来源",
+          "title": "关于2023年股票期权激励计划首次授予部分第三个行权期行权条件成就的公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-01T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-01/1225536730.PDF"
+        },
+        {
+          "rank": 7,
+          "doc_id": 1088,
+          "chunk_id": 1088015,
+          "evidence_type": "公告来源",
+          "title": "关于2023年股票期权激励计划首次授予部分第三个行权期采用自主行权模式的提示性公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-08T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-08/1225551449.PDF"
+        },
+        {
+          "rank": 8,
+          "doc_id": 1048,
+          "chunk_id": 1048001,
+          "evidence_type": "公告来源",
+          "title": "关于2023年第一期股票期权激励计划第三个行权期符合行权条件的公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-15T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-15/1225562971.PDF"
+        },
+        {
+          "rank": 9,
+          "doc_id": 1375,
+          "chunk_id": 1375000,
+          "evidence_type": "相关事件",
+          "title": "长城汽车股份有限公司董事会薪酬委员会关于2026年限制性股票激励计划激励对象名单的核查意见及公示情况说明",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-06-19T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-06-19/1225378817.PDF"
+        },
+        {
+          "rank": 10,
+          "doc_id": 1375,
+          "chunk_id": 1375001,
+          "evidence_type": "相关事件",
+          "title": "长城汽车股份有限公司董事会薪酬委员会关于2026年限制性股票激励计划激励对象名单的核查意见及公示情况说明",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-06-19T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-06-19/1225378817.PDF"
+        }
+      ],
+      "graph_path": [
+        {
+          "end": "EVT-0001",
+          "depth": 1,
+          "nodes": [
+            "601633",
+            "EVT-0001"
+          ],
+          "start": "601633",
+          "relations": [
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.9",
+                "source_doc_id": "1001",
+                "source_chunk_id": "1001000"
+              },
+              "neighbor": "EVT-0001",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "EVT-0001",
+          "depth": 1,
+          "nodes": [
+            "601633",
+            "EVT-0001"
+          ],
+          "start": "601633",
+          "relations": [
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.9",
+                "source_doc_id": "1001",
+                "source_chunk_id": "1001001"
+              },
+              "neighbor": "EVT-0001",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "EVT-0002",
+          "depth": 1,
+          "nodes": [
+            "601633",
+            "EVT-0002"
+          ],
+          "start": "601633",
+          "relations": [
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.9",
+                "source_doc_id": "1001",
+                "source_chunk_id": "1001001"
+              },
+              "neighbor": "EVT-0002",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "EVT-0498",
+          "depth": 1,
+          "nodes": [
+            "601633",
+            "EVT-0498"
+          ],
+          "start": "601633",
+          "relations": [
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.92",
+                "source_doc_id": "1375",
+                "source_chunk_id": "1375000"
+              },
+              "neighbor": "EVT-0498",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        }
+      ],
+      "is_graph_extended": 1,
+      "time_interpretation": "数据版本：v2.1\n数据截止时间：2026-09-25T23:59:59+08:00\n本题不含相对时间表述，无判定区间。",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00",
+      "answer_type": "事实型"
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"answer_id\":40,\"question_id\":40,\"answer_text\":\"【回答】\\n长城汽车《2023年股票期权激励计划》首次授予股票期权（期权代码：1000000573）第二个行权期的行权期有效期为2026年9月11日至2027年1月25日，自2026年9月11日开始行权[证据1]。\\n\\n需要提示的是，该行权期内的限制行权期为2026年10月1日至2026年10月31日，在此期间全部激励对象将限制行权[证据1]。\\n\\n【证据来源】\\n[证据1] chunk_id=1001001 doc_id=1001 来源类型=公告来源 发布时间=2026-09-25 标题：长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告\\n[证据2] chunk_id=1001000 doc_id=1001 来源类型=公告来源 发布时间=2026-09-25 标题：长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告\\n[证据3] chunk_id=1048011 doc_id=1048 来源类型=公告来源 发布时间=2026-09-15 标题：关于2023年第一期股票期权激励计划第三个行权期符合行权条件的公告\\n[证据4] chunk_id=1088001 doc_id=1088 来源类型=公告来源 发布时间=2026-09-08 标题：关于2023年股票期权激励计划首次授予部分第三个行权期采用自主行权模式的提示性公告\\n[证据5] chunk_id=1088017 doc_id=1088 来源类型=公告来源 发布时间=2026-09-08 标题：关于2023年股票期权激励计划首次授予部分第三个行权期采用自主行权模式的提示性公告\\n[证据6] chunk_id=1120015 doc_id=1120 来源类型=公告来源 发布时间=202"
+}

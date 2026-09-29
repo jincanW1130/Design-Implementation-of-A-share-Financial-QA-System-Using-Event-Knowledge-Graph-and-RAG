@@ -1,0 +1,12 @@
+{
+  "method": "PUT",
+  "path": "/api/admin/documents/1307",
+  "http_status": 409,
+  "seconds": 0.003,
+  "body": {
+    "code": 2003,
+    "message": "文档 1307 已被历史回答引用，不执行原地修改；请以新 doc_id 重新导入新版本，旧版本已进入『不可再用于新检索』的处理状态",
+    "retained_for_history": true
+  },
+  "raw_head": "{\"code\":2003,\"message\":\"文档 1307 已被历史回答引用，不执行原地修改；请以新 doc_id 重新导入新版本，旧版本已进入『不可再用于新检索』的处理状态\",\"retained_for_history\":true}"
+}

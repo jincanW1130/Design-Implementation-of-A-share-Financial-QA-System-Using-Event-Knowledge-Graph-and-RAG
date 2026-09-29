@@ -1,0 +1,413 @@
+{
+  "round": "连续 100 次 1 轮",
+  "total": 100,
+  "success": 60,
+  "fail": 40,
+  "success_rate": 0.6,
+  "failure_kinds": {
+    "成功": 60,
+    "限流（1004/429）": 40
+  },
+  "raw": [
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    },
+    {
+      "http_status": 429,
+      "code": 1004
+    }
+  ]
+}

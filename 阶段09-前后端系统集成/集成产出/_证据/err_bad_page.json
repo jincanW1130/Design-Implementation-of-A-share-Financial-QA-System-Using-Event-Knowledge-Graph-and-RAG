@@ -1,0 +1,11 @@
+{
+  "method": "GET",
+  "path": "/api/history?session_id=S-T11-ERR&page=0",
+  "http_status": 400,
+  "seconds": 0.001,
+  "body": {
+    "code": 1002,
+    "message": "参数格式错误"
+  },
+  "raw_head": "{\"code\":1002,\"message\":\"参数格式错误\"}"
+}

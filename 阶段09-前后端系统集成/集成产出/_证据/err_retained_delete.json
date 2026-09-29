@@ -1,0 +1,12 @@
+{
+  "method": "DELETE",
+  "path": "/api/admin/documents/1307",
+  "http_status": 409,
+  "seconds": 0.018,
+  "body": {
+    "code": 2003,
+    "message": "文档 1307 已被历史回答引用，不执行物理删除；该文档已进入『不可再用于新检索』的处理状态，历史回答继续指向生成它的原始字节",
+    "retained_for_history": true
+  },
+  "raw_head": "{\"code\":2003,\"message\":\"文档 1307 已被历史回答引用，不执行物理删除；该文档已进入『不可再用于新检索』的处理状态，历史回答继续指向生成它的原始字节\",\"retained_for_history\":true}"
+}

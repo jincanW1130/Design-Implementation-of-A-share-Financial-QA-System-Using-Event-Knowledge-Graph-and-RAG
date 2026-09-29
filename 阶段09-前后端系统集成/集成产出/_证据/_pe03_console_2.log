@@ -1,0 +1,15 @@
+2026-09-30 01:28:59,431 INFO ashare_qa.backend 调用第 8 阶段问答链路：group=C session_id=S-T11-PE03REPRO out_dir=C:\Users\15129\Desktop\毕业设计\阶段09-前后端系统集成\_工作底稿\qa_runs\ask_C_ejvpn6dg 超时=300s
+2026-09-30 01:29:06,826 WARNING ashare_qa.backend 问答链路非零退出：exit=1 耗时=7.4s out_dir=C:\Users\15129\Desktop\毕业设计\阶段09-前后端系统集成\_工作底稿\qa_runs\ask_C_ejvpn6dg
+--- stdout 尾部 ---
+==============================================================================
+run_answer：自定义问题
+==============================================================================
+四项定值（config.require_fixed（四项定值从 代码\检索\config.py 导入））：K=10 N=20 预算=3600 g=2
+答案侧冻结：model=deepseek-flash temperature=0 max_tokens=16384 prompt_version=v1.0
+会话 session_id=S-T11-PE03REPRO；记录层时间注入 --now=2026-09-30T01:28:59+08:00
+[桥接] 调第 7 阶段既有链路（只读）：C:\Users\15129\AppData\Local\Programs\Python\Python312\python.exe C:\Users\15129\Desktop\毕业设计\代码\检索\run_query.py --group C --out C:\Users\15129\Desktop\毕业设计\阶段08-智能问答系统\_工作底稿\桥接\run_query_C_custom.json --question 最近30天（2026年8月26日至2026年9月25日）内，阳光电源控股子公司参与设立的苏州华旭新能股权投资合伙企业完成了哪项登记，备案编码是多少？
+
+--- stderr 尾部 ---
+PE-03：token 账现场重算与上游 trace 不一致——现场 text+path+event_triple=3007、trace total_tokens=3333（《21》第五节 硬约束 6：预算守卫必须由重算分量组成，不得照抄上游；审查 B-02／C-06）
+
+2026-09-30 01:29:06,828 WARNING ashare_qa.backend ApiError POST /api/qa/ask → code=3001 http=503；detail=run_answer 退出码 1（耗时 7.4s，out_dir=C:\Users\15129\Desktop\毕业设计\阶段09-前后端系统集成\_工作底稿\qa_runs\ask_C_ejvpn6dg）

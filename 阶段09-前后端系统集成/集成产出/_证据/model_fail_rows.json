@@ -1,0 +1,36 @@
+[
+  {
+    "_slug": "model_fail_timeout",
+    "_seconds": 2.019,
+    "scenario": "模型侧超时（链路 2 秒超时）",
+    "category": "⑩ 模型侧超时／失败",
+    "method": "POST",
+    "path": "/api/qa/ask",
+    "payload": {
+      "question": "长城汽车《2023年股票期权激励计划》首次授予股票期权第二个行权期的行权期有效期是什么时间段？",
+      "session_id": "S-T11-MODEL"
+    },
+    "expected_code": 3002,
+    "actual_code": 3002,
+    "http_status": 504,
+    "service_alive_after": null,
+    "evidence": "链路超时 2s 触发 3002（HTTP 504）；进程内构造，冻结配置未改"
+  },
+  {
+    "_slug": "model_fail_badmodel",
+    "_seconds": 8.431,
+    "scenario": "模型侧失败（模型 id 不存在，模型端点真实拒绝）",
+    "category": "⑩ 模型侧超时／失败",
+    "method": "POST",
+    "path": "/api/qa/ask",
+    "payload": {
+      "question": "长城汽车《2023年股票期权激励计划》首次授予股票期权第二个行权期的行权期有效期是什么时间段？",
+      "session_id": "S-T11-MODEL"
+    },
+    "expected_code": 3001,
+    "actual_code": 3001,
+    "http_status": 503,
+    "service_alive_after": null,
+    "evidence": "子进程非零退出，链路按 `_classify_failure` 判为 3001（HTTP 503）；子进程原始日志：问答链路非零退出：exit=1 耗时=8.4s out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\阶段09-前后端系统集成\\_工作底稿\\qa_runs\\ask_C_twksgyu8 --- stdout 尾部 --- ============================================================================== r（注意：响应 message 写「图谱服务不可用」是 `_classify_failure` 默认分支的标签，本例真实原因是模型端点拒绝该模型 id，见 _证据/model_fail_badmodel.log）"
+  }
+]

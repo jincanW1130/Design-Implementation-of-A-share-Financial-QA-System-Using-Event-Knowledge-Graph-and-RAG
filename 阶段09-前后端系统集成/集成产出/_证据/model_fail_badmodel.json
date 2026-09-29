@@ -1,0 +1,14 @@
+{
+  "scenario": "模型侧失败（模型 id 不存在，模型端点真实拒绝）",
+  "payload": {
+    "question": "长城汽车《2023年股票期权激励计划》首次授予股票期权第二个行权期的行权期有效期是什么时间段？",
+    "session_id": "S-T11-MODEL"
+  },
+  "http_status": 503,
+  "code": 3001,
+  "seconds": 8.431,
+  "body": {
+    "code": 3001,
+    "message": "图谱服务不可用"
+  }
+}

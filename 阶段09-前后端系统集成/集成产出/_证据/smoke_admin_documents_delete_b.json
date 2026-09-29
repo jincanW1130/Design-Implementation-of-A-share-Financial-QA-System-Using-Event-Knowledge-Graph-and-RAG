@@ -1,0 +1,22 @@
+{
+  "method": "DELETE",
+  "path": "/api/admin/documents/4022",
+  "http_status": 200,
+  "seconds": 0.011,
+  "body": {
+    "data": {
+      "doc_id": 4022,
+      "chunk_count_deleted": 1,
+      "reprocess_task_id": "RP-20260930-0019",
+      "status": "accepted",
+      "retained_for_history": false,
+      "reference_count": 0,
+      "note": "文档未被任何历史回答引用，已物理删除（含其文本块）。"
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"doc_id\":4022,\"chunk_count_deleted\":1,\"reprocess_task_id\":\"RP-20260930-0019\",\"status\":\"accepted\",\"retained_for_history\":false,\"reference_count\":0,\"note\":\"文档未被任何历史回答引用，已物理删除（含其文本块）。\"},\"meta\":{\"dataset_version\":\"v2.1\",\"data_cutoff_time\":\"2026-09-25T23:59:59+08:00\"}}"
+}

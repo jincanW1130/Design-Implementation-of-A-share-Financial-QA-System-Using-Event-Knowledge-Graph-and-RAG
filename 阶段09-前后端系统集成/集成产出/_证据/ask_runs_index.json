@@ -1,0 +1,60 @@
+{
+  "ask_samples": [
+    {
+      "qid": "PE-01",
+      "question": "长城汽车《2023年股票期权激励计划》首次授予股票期权第二个行权期的行权期有效期是什么时间段？",
+      "e2e_seconds": 9.431,
+      "llm_seconds": 1.941,
+      "trace_path": "qa_runs\\ask_C_csrp4yp3\\answer_trace.jsonl",
+      "answer_id": 40,
+      "http_status": 200
+    },
+    {
+      "qid": "PE-02",
+      "question": "特变电工控股公司特变电工新疆新能源股份有限公司2026年度第一期绿色科技创新债券的发行额度、期限与发行利率分别是多少？",
+      "e2e_seconds": 9.168,
+      "llm_seconds": 1.584,
+      "trace_path": "qa_runs\\ask_C_bqc4uer7\\answer_trace.jsonl",
+      "answer_id": 41,
+      "http_status": 200
+    },
+    {
+      "qid": "PE-04",
+      "question": "工业富联披露的董事及高级管理人员包括哪些人？",
+      "e2e_seconds": 14.036,
+      "llm_seconds": 6.48,
+      "trace_path": "qa_runs\\ask_C_3jd9_ih7\\answer_trace.jsonl",
+      "answer_id": 43,
+      "http_status": 200
+    }
+  ],
+  "run_query_samples": [
+    {
+      "qid": "PE-01",
+      "vector_seconds": 0.03,
+      "graph_seconds": 0.0,
+      "total_seconds": 6.41,
+      "exit": 0,
+      "wall_seconds": 7.265,
+      "source": "run_query_PE-01.stdout.txt（--out run_query_PE-01.json）"
+    },
+    {
+      "qid": "PE-02",
+      "vector_seconds": 0.03,
+      "graph_seconds": 0.0,
+      "total_seconds": 6.5,
+      "exit": 0,
+      "wall_seconds": 7.335,
+      "source": "run_query_PE-02.stdout.txt（--out run_query_PE-02.json）"
+    },
+    {
+      "qid": "PE-04",
+      "vector_seconds": 0.03,
+      "graph_seconds": 0.0,
+      "total_seconds": 6.35,
+      "exit": 0,
+      "wall_seconds": 7.214,
+      "source": "run_query_PE-04.stdout.txt（--out run_query_PE-04.json）"
+    }
+  ]
+}

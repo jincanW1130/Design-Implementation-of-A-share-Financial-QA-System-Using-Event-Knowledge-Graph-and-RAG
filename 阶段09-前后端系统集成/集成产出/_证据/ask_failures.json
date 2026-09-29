@@ -1,0 +1,11 @@
+[
+  {
+    "qid": "PE-03",
+    "http_status": 503,
+    "code": 3001,
+    "message": "图谱服务不可用",
+    "chain_reason": "PE-03：token 账现场重算与上游 trace 不一致——现场 text+path+event_triple=3007、trace total_tokens=3333（《21》第五节 硬约束 6：预算守卫必须由重算分量组成，不得照抄上游；审查 B-02／C-06）",
+    "log": "_证据/ask_PE-03.log",
+    "reason_source": "_证据/pe03_repro.json（进程内复跑 2 次均复现；原文见 _证据/_pe03_console_1.log）"
+  }
+]

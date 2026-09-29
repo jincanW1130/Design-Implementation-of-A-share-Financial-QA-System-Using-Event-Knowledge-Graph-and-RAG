@@ -1,0 +1,11 @@
+{
+  "method": "GET",
+  "path": "/api/graph/entities?page_size=2",
+  "http_status": 503,
+  "seconds": 2.016,
+  "body": {
+    "code": 3001,
+    "message": "图谱服务不可用"
+  },
+  "raw_head": "{\"code\":3001,\"message\":\"图谱服务不可用\"}"
+}

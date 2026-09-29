@@ -1,0 +1,27 @@
+$ C:\Users\15129\AppData\Local\Programs\Python\Python312\python.exe C:\Users\15129\Desktop\毕业设计\代码\检索\run_query.py --qid PE-04 --group C --out C:\Users\15129\Desktop\毕业设计\阶段09-前后端系统集成\集成产出\_证据\run_query_PE-04.json
+[exit=0] [wall=7.214s]
+==============================================================================
+run_query：单题完整运行（vector_search → graph_query → pipeline → metrics）
+==============================================================================
+[vector_search] 本地模型就绪：BAAI/bge-small-zh-v1.5 @ 7999e1d3359715c523056ef9478215996d62a620
+[vector_search]   快照目录 = D:\Cache\huggingface\hub\models--BAAI--bge-small-zh-v1.5\snapshots\7999e1d3359715c523056ef9478215996d62a620
+[vector_search]   维度=512  do_lower_case=True  max_length=512  L2归一化=True
+[vector_search]   分词器 normalizer 链含 Lowercase=True（与建索引同路）
+[vector_search]   查询侧指令前缀 = ''（空串＝不加前缀）
+[vector_search]   离线加载：local_files_only=True，HF_HUB_OFFLINE=1，TRANSFORMERS_OFFLINE=1
+[C] 工业富联披露的董事及高级管理人员包括哪些人？
+  三开关 {'graph_depth': 2, 'time_filter': False, 'evidence_sort': False}｜K=10 N=20 预算=3600 g=2
+  候选：向量 20 ＋ 图谱 17 → 并集 35（两路同命中 2、图谱侧新增 15）
+  过滤前后差集：−0／＋0（在该题上不可测）
+  裁剪：文本块 35 → 10（token 12805 → 3577／预算 3600）｜保留 K：10 → 10
+  最终证据 10 个：集合 [1133002, 1224005, 1224014, 1224025, 1269004, 1269012, 1339008, 1339011, 1339013, 1388092]｜呈现顺序 [1339011, 1224025, 1269004, 1388092, 1339013, 1269012, 1224014, 1133002, 1339008, 1224005]
+  graph_used=True（图谱载荷 已给出路径与事件三元组）
+  四项指标（K=10，gold 7 个、命中 2 个）：R 0.28571429／P 0.2／MRR 1.0／CER 0.0
+  耗时（只打印，不写进运行记录）：总计 6.35s（问题向量化 0.03s、图谱查询 0.00s、预算裁剪 0.01s、保留 K 0.00s、呈现 0.00s）
+  0 次大语言模型／外部接口调用（问题侧向量化为本地 Embedding 前向，不计入模型调用）
+  运行记录落盘：C:\Users\15129\Desktop\毕业设计\阶段09-前后端系统集成\集成产出\_证据\run_query_PE-04.json（sha256=b8f6998d5a188c125eca98fd904d0ffc68979c835a9967a239cdeb4edfa00a63）
+
+--- stderr ---
+
+Loading weights:   0%|          | 0/71 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 71/71 [00:00<00:00, 15846.93it/s]

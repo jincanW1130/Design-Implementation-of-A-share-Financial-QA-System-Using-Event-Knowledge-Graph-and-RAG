@@ -1,0 +1,12 @@
+{
+  "REF_DOC": 1307,
+  "REF_DOC_REFS": 18,
+  "FIRST_ANSWER": 1,
+  "DOC_A": 4021,
+  "DOC_B": 4022,
+  "TASK_ID": "RP-20260930-0020",
+  "ITEM_ID": "ENT-1010-002",
+  "graph_recovered": true,
+  "smoke_rows": 24,
+  "error_rows_live": 14
+}

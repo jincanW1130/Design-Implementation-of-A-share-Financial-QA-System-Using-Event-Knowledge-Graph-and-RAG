@@ -1,0 +1,24 @@
+{
+  "method": "PUT",
+  "path": "/api/admin/documents/4021",
+  "http_status": 200,
+  "seconds": 0.009,
+  "body": {
+    "data": {
+      "doc_id": 4022,
+      "old_doc_id": 4021,
+      "new_doc_id": 4022,
+      "chunk_count": 1,
+      "ingest_time": "2026-09-30T01:22:06",
+      "reprocess_task_id": "RP-20260930-0017",
+      "status": "accepted",
+      "retained_for_history": false,
+      "note": "旧版本未物理删除（历史回答仍指向它），但已置为不可再用于新检索；检索侧第一版读的是第 5 阶段冻结的向量索引文件，故该状态以落库标记 ＋ 任务台账记录，不重建索引（重建属第 5 阶段）。"
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"doc_id\":4022,\"old_doc_id\":4021,\"new_doc_id\":4022,\"chunk_count\":1,\"ingest_time\":\"2026-09-30T01:22:06\",\"reprocess_task_id\":\"RP-20260930-0017\",\"status\":\"accepted\",\"retained_for_history\":false,\"note\":\"旧版本未物理删除（历史回答仍指向它），但已置为不可再用于新检索；检索侧第一版读的是第 5 阶段冻结的向量索引文件，故该状态以落库标记 ＋ 任务台账记录，不重建索引（重建属第 5 阶段）。\"},\"meta\":{\"dataset_version\":\"v2.1\",\"data_cutoff_time\":\"2026-09-25T23:59:59+08:00\"}}"
+}

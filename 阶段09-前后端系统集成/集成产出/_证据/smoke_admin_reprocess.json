@@ -1,0 +1,22 @@
+{
+  "method": "POST",
+  "path": "/api/admin/reprocess",
+  "http_status": 200,
+  "seconds": 0.002,
+  "body": {
+    "data": {
+      "task_id": "RP-20260930-0020",
+      "status": "accepted",
+      "scope": "all",
+      "doc_ids": [],
+      "executed": false,
+      "note": "第一版：本接口只登记任务记录，不实际重新运行抽取与向量化（重跑需要模型调用与向量索引重建，属第 5／6 阶段能力，本阶段对上游只读）。台账落盘于 阶段09-前后端系统集成\\_工作底稿\\后台任务台账.jsonl。scope=all doc_ids=全量。",
+      "ledger": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段09-前后端系统集成\\_工作底稿\\后台任务台账.jsonl"
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"task_id\":\"RP-20260930-0020\",\"status\":\"accepted\",\"scope\":\"all\",\"doc_ids\":[],\"executed\":false,\"note\":\"第一版：本接口只登记任务记录，不实际重新运行抽取与向量化（重跑需要模型调用与向量索引重建，属第 5／6 阶段能力，本阶段对上游只读）。台账落盘于 阶段09-前后端系统集成\\\\_工作底稿\\\\后台任务台账.jsonl。scope=all doc_ids=全量。\",\"ledger\":\"C:\\\\Users\\\\15129\\\\Desktop\\\\毕业设计\\\\阶段09-前后端系统集成\\\\_工作底稿\\\\后台任务台账.jsonl\"},\"meta\":{\"dataset_version\":\"v2.1\",\"data_cutoff_time\":\"2026-09-25T23:59:59+08:00\"}}"
+}

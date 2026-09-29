@@ -1,0 +1,386 @@
+{
+  "method": "POST",
+  "path": "/api/qa/ask",
+  "http_status": 200,
+  "seconds": 9.168,
+  "body": {
+    "data": {
+      "answer_id": 41,
+      "question_id": 41,
+      "answer_text": "【回答】\n根据特变电工股份有限公司2026年6月30日发布的《控股公司特变电工新疆新能源股份有限公司2026年度第一期绿色科技创新债券发行结果的公告》，该期债券（简称：26特变新能GN001(科创债)，代码：132680072）的发行额度为10亿元人民币，期限为3+N年，发行利率为2.1%[证据1]。该期债券起息日为2026年6月29日，面值人民币100元，主承销商为中国建设银行股份有限公司，募集资金已于2026年6月29日全额到账[证据1]。同一公告的开头部分还说明，新能源公司于2026年6月10日收到中国银行间市场交易商协会出具的《接受注册通知书》（中市协注〔2026〕PDFI6号），该注册事项经公司十一届五次董事会审议通过，为统一注册30亿元债务融资工具（PDFI）[证据2]。\n\n【证据来源】\n[证据1] chunk_id=1342001 doc_id=1342 来源类型=公告来源 发布时间=2026-06-30 标题：特变电工股份有限公司控股公司特变电工新疆新能源股份有限公司2026年度第一期绿色科技创新债券发行结果的公告\n[证据2] chunk_id=1342000 doc_id=1342 来源类型=公告来源 发布时间=2026-06-30 标题：特变电工股份有限公司控股公司特变电工新疆新能源股份有限公司2026年度第一期绿色科技创新债券发行结果的公告\n[证据3] chunk_id=1021001 doc_id=1021 来源类型=公告来源 发布时间=2026-09-22 标题：关于2026年度第七期绿色科技创新债券发行完成的公告\n[证据4] chunk_id=1163001 doc_id=1163 来源类型=公告来源 发布时间=2026-08-27 标题：关于2026年度第六期绿色科技创新债券发行完成的公告\n[证据5] chunk_id=1021000 doc_id=1021 来源类型=公告来源 发布时间=2026-09-22 标题：关于2026年度第七期绿色科技创新债券发行完成的公告\n[证据6] chunk_id=1163000 doc_id=1163 来源类型=公告来源 发布时间=2026-08-27 标题：关于2026年度第六期绿色科技创新债券发行完成的公告\n[证据7] chunk_id=1396000 doc_id=1396 来源类型=公告来源 发布时间=2026-06-17 标题：宁德时代新能源科技股份有限公司2026年面向专业投资者公开发行科技创新公司债券（第二期）票面利率公告\n[证据8] chunk_id=1021002 doc_id=1021 来源类型=公告来源 发布时间=2026-09-22 标题：关于2026年度第七期绿色科技创新债券发行完成的公告\n[证据9] chunk_id=1233000 doc_id=1233 来源类型=相关事件 发布时间=2026-08-07 标题：特变电工股份有限公司关于延长向不特定对象发行可转换公司债券股东会决议有效期及相关授权期限的公告\n\n【知识图谱路径】\ndepth=2\n事件三元组（event_id / event_type / event_time）：\n  EVT-0027 / 重大经营 / 2026-09-21\n  EVT-0205 / 监管 / 2026-04-23\n  EVT-0206 / 重大经营 / 2026-08-26\n  EVT-0312 / 股权 / 2026-08-06\n  EVT-0450 / 监管 / 2026-06-10\n  EVT-0451 / 重大经营 / 2026-06-29\n  EVT-0525 / 股权 / 2026-02-05\n图谱路径（start —关系（role, confidence, source_doc_id, source_chunk_id）→ end）：\n  600089 -PARTICIPATES_IN(role=主体, confidence=0.95, source_doc_id=1233, source_chunk_id=1233000)-> EVT-0312\n  600089 -PARTICIPATES_IN(role=主体, confidence=0.9, source_doc_id=1342, source_chunk_id=1342000)-> EVT-0450\n  600089 -PARTICIPATES_IN(role=主体, confidence=0.9, source_doc_id=1342, source_chunk_id=1342001)-> EVT-0451\n  600089 -PARTICIPATES_IN(role=主体, confidence=0.85, source_doc_id=1232, source_chunk_id=1232001)-> 600089\n  600089 -PARTICIPATES_IN(role=主体, confidence=0.95, source_doc_id=1233, source_chunk_id=1233000)-> 600089\n  IND-0032 -BELONGS_TO(role=, confidence=0.7, source_doc_id=2102, source_chunk_id=2102003)-> EVT-0027\n  IND-0032 -PARTICIPATES_IN(role=主体, confidence=0.95, source_doc_id=1021, source_chunk_id=1021000)-> EVT-0027\n  IND-0032 -BELONGS_TO(role=, confidence=0.7, source_doc_id=2102, source_chunk_id=2102003)-> EVT-0205\n  IND-0032 -PARTICIPATES_IN(role=主体, confidence=0.95, source_doc_id=1021, source_chunk_id=1021000)-> EVT-0205\n  IND-0032 -BELONGS_TO(role=, confidence=0.7, source_doc_id=2102, source_chunk_id=2102003)-> EVT-0205\n  IND-0032 -PARTICIPATES_IN(role=主体, confidence=0.92, source_doc_id=1163, source_chunk_id=1163000)-> EVT-0205\n  IND-0032 -BELONGS_TO(role=, confidence=0.7, source_doc_id=2102, source_chunk_id=2102003)-> EVT-0206\n  IND-0032 -PARTICIPATES_IN(role=主体, confidence=0.93, source_doc_id=1163, source_chunk_id=1163001)-> EVT-0206\n  IND-0032 -BELONGS_TO(role=, confidence=0.7, source_doc_id=2102, source_chunk_id=2102003)-> EVT-0525\n  IND-0032 -PARTICIPATES_IN(role=主体, confidence=0.9, source_doc_id=1396, source_chunk_id=1396000)-> EVT-0525\n备注：路径列表与事件三元组计入 Context Token Budget，不计入 K\n\n【数据截至与判定区间】\n数据版本：v2.1\n数据截止时间：2026-09-25T23:59:59+08:00\n本题不含相对时间表述，无判定区间。",
+      "evidence": [
+        {
+          "rank": 1,
+          "doc_id": 1342,
+          "chunk_id": 1342001,
+          "evidence_type": "公告来源",
+          "title": "特变电工股份有限公司控股公司特变电工新疆新能源股份有限公司2026年度第一期绿色科技创新债券发行结果的公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-06-30T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-06-30/1225396172.PDF"
+        },
+        {
+          "rank": 2,
+          "doc_id": 1342,
+          "chunk_id": 1342000,
+          "evidence_type": "公告来源",
+          "title": "特变电工股份有限公司控股公司特变电工新疆新能源股份有限公司2026年度第一期绿色科技创新债券发行结果的公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-06-30T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-06-30/1225396172.PDF"
+        },
+        {
+          "rank": 3,
+          "doc_id": 1021,
+          "chunk_id": 1021001,
+          "evidence_type": "公告来源",
+          "title": "关于2026年度第七期绿色科技创新债券发行完成的公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-22T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-22/1225577258.PDF"
+        },
+        {
+          "rank": 4,
+          "doc_id": 1163,
+          "chunk_id": 1163001,
+          "evidence_type": "公告来源",
+          "title": "关于2026年度第六期绿色科技创新债券发行完成的公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-08-27T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225519101.PDF"
+        },
+        {
+          "rank": 5,
+          "doc_id": 1021,
+          "chunk_id": 1021000,
+          "evidence_type": "公告来源",
+          "title": "关于2026年度第七期绿色科技创新债券发行完成的公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-22T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-22/1225577258.PDF"
+        },
+        {
+          "rank": 6,
+          "doc_id": 1163,
+          "chunk_id": 1163000,
+          "evidence_type": "公告来源",
+          "title": "关于2026年度第六期绿色科技创新债券发行完成的公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-08-27T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225519101.PDF"
+        },
+        {
+          "rank": 7,
+          "doc_id": 1396,
+          "chunk_id": 1396000,
+          "evidence_type": "公告来源",
+          "title": "宁德时代新能源科技股份有限公司2026年面向专业投资者公开发行科技创新公司债券（第二期）票面利率公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-06-17T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-06-17/1225376442.PDF"
+        },
+        {
+          "rank": 8,
+          "doc_id": 1021,
+          "chunk_id": 1021002,
+          "evidence_type": "公告来源",
+          "title": "关于2026年度第七期绿色科技创新债券发行完成的公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-22T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-22/1225577258.PDF"
+        },
+        {
+          "rank": 9,
+          "doc_id": 1233,
+          "chunk_id": 1233000,
+          "evidence_type": "相关事件",
+          "title": "特变电工股份有限公司关于延长向不特定对象发行可转换公司债券股东会决议有效期及相关授权期限的公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-08-07T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-08-07/1225462091.PDF"
+        }
+      ],
+      "graph_path": [
+        {
+          "end": "EVT-0312",
+          "depth": 1,
+          "nodes": [
+            "600089",
+            "EVT-0312"
+          ],
+          "start": "600089",
+          "relations": [
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.95",
+                "source_doc_id": "1233",
+                "source_chunk_id": "1233000"
+              },
+              "neighbor": "EVT-0312",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "EVT-0450",
+          "depth": 1,
+          "nodes": [
+            "600089",
+            "EVT-0450"
+          ],
+          "start": "600089",
+          "relations": [
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.9",
+                "source_doc_id": "1342",
+                "source_chunk_id": "1342000"
+              },
+              "neighbor": "EVT-0450",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "EVT-0451",
+          "depth": 1,
+          "nodes": [
+            "600089",
+            "EVT-0451"
+          ],
+          "start": "600089",
+          "relations": [
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.9",
+                "source_doc_id": "1342",
+                "source_chunk_id": "1342001"
+              },
+              "neighbor": "EVT-0451",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "600089",
+          "depth": 2,
+          "nodes": [
+            "600089",
+            "EVT-0312",
+            "600089"
+          ],
+          "start": "600089",
+          "relations": [
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.85",
+                "source_doc_id": "1232",
+                "source_chunk_id": "1232001"
+              },
+              "neighbor": "EVT-0312",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            },
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.95",
+                "source_doc_id": "1233",
+                "source_chunk_id": "1233000"
+              },
+              "neighbor": "600089",
+              "relation": "PARTICIPATES_IN",
+              "direction": "in"
+            }
+          ]
+        },
+        {
+          "end": "EVT-0027",
+          "depth": 2,
+          "nodes": [
+            "IND-0032",
+            "300750",
+            "EVT-0027"
+          ],
+          "start": "IND-0032",
+          "relations": [
+            {
+              "role": "",
+              "evidence": {
+                "confidence": "0.7",
+                "source_doc_id": "2102",
+                "source_chunk_id": "2102003"
+              },
+              "neighbor": "300750",
+              "relation": "BELONGS_TO",
+              "direction": "in"
+            },
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.95",
+                "source_doc_id": "1021",
+                "source_chunk_id": "1021000"
+              },
+              "neighbor": "EVT-0027",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "EVT-0205",
+          "depth": 2,
+          "nodes": [
+            "IND-0032",
+            "300750",
+            "EVT-0205"
+          ],
+          "start": "IND-0032",
+          "relations": [
+            {
+              "role": "",
+              "evidence": {
+                "confidence": "0.7",
+                "source_doc_id": "2102",
+                "source_chunk_id": "2102003"
+              },
+              "neighbor": "300750",
+              "relation": "BELONGS_TO",
+              "direction": "in"
+            },
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.95",
+                "source_doc_id": "1021",
+                "source_chunk_id": "1021000"
+              },
+              "neighbor": "EVT-0205",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "EVT-0205",
+          "depth": 2,
+          "nodes": [
+            "IND-0032",
+            "300750",
+            "EVT-0205"
+          ],
+          "start": "IND-0032",
+          "relations": [
+            {
+              "role": "",
+              "evidence": {
+                "confidence": "0.7",
+                "source_doc_id": "2102",
+                "source_chunk_id": "2102003"
+              },
+              "neighbor": "300750",
+              "relation": "BELONGS_TO",
+              "direction": "in"
+            },
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.92",
+                "source_doc_id": "1163",
+                "source_chunk_id": "1163000"
+              },
+              "neighbor": "EVT-0205",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "EVT-0206",
+          "depth": 2,
+          "nodes": [
+            "IND-0032",
+            "300750",
+            "EVT-0206"
+          ],
+          "start": "IND-0032",
+          "relations": [
+            {
+              "role": "",
+              "evidence": {
+                "confidence": "0.7",
+                "source_doc_id": "2102",
+                "source_chunk_id": "2102003"
+              },
+              "neighbor": "300750",
+              "relation": "BELONGS_TO",
+              "direction": "in"
+            },
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.93",
+                "source_doc_id": "1163",
+                "source_chunk_id": "1163001"
+              },
+              "neighbor": "EVT-0206",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "EVT-0525",
+          "depth": 2,
+          "nodes": [
+            "IND-0032",
+            "300750",
+            "EVT-0525"
+          ],
+          "start": "IND-0032",
+          "relations": [
+            {
+              "role": "",
+              "evidence": {
+                "confidence": "0.7",
+                "source_doc_id": "2102",
+                "source_chunk_id": "2102003"
+              },
+              "neighbor": "300750",
+              "relation": "BELONGS_TO",
+              "direction": "in"
+            },
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.9",
+                "source_doc_id": "1396",
+                "source_chunk_id": "1396000"
+              },
+              "neighbor": "EVT-0525",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        }
+      ],
+      "is_graph_extended": 1,
+      "time_interpretation": "数据版本：v2.1\n数据截止时间：2026-09-25T23:59:59+08:00\n本题不含相对时间表述，无判定区间。",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00",
+      "answer_type": "事实型"
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"answer_id\":41,\"question_id\":41,\"answer_text\":\"【回答】\\n根据特变电工股份有限公司2026年6月30日发布的《控股公司特变电工新疆新能源股份有限公司2026年度第一期绿色科技创新债券发行结果的公告》，该期债券（简称：26特变新能GN001(科创债)，代码：132680072）的发行额度为10亿元人民币，期限为3+N年，发行利率为2.1%[证据1]。该期债券起息日为2026年6月29日，面值人民币100元，主承销商为中国建设银行股份有限公司，募集资金已于2026年6月29日全额到账[证据1]。同一公告的开头部分还说明，新能源公司于2026年6月10日收到中国银行间市场交易商协会出具的《接受注册通知书》（中市协注〔2026〕PDFI6号），该注册事项经公司十一届五次董事会审议通过，为统一注册30亿元债务融资工具（PDFI）[证据2]。\\n\\n【证据来源】\\n[证据1] chunk_id=1342001 doc_id=1342 来源类型=公告来源 发布时间=2026-06-30 标题：特变电工股份有限公司控股公司特变电工新疆新能源股份有限公司2026年度第一期绿色科技创新债券发行结果的公告\\n[证据2] chunk_id=1342000 doc_id=1342 来源类型=公告来源 发布时间=2026-06-30 标题：特变电工股份有限公司控股公司特变电工新疆新能源股份有限公司2026年度第一期绿色科技创新债券发行结果的公告\\n[证据3] chunk_id=1021001 doc_id=1021 来源类型=公告来源 发布时间=2026-09-22 标题：关于2026年度第七期绿色科技创新债券发行完成的公告\\n[证据4] chunk_id=1163001 doc_id=1163 来源类型=公告来源 发布时间=2026-"
+}

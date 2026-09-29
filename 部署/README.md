@@ -51,7 +51,7 @@ curl -s http://127.0.0.1:8000/api/health
 ```
 
 镜像内容：Python 3.12-slim ＋ 锁定版本的 `fastapi==0.141.1`／`uvicorn[standard]==0.54.0`／
-`pymysql==2.2.8`／`neo4j==6.3.1`；`代码\后端\`＋`代码\检索\`＋`代码\问答\`（后端 import 复用上游
+`pymysql==1.2.3`／`neo4j==6.3.1`；`代码\后端\`＋`代码\检索\`＋`代码\问答\`（后端 import 复用上游
 组件，必须一起进镜像）；数据集 v2.1 的索引与图谱导出物（后端运行期读取的只读输入）。
 构建上下文排除 `node_modules\`／`dist\`／`_工作底稿\`／**`config.local.json`**（见仓库根的 `.dockerignore`）。
 

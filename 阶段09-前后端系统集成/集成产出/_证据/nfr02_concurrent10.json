@@ -1,0 +1,52 @@
+{
+  "round": "10 并发 1 轮",
+  "total": 10,
+  "success": 10,
+  "fail": 0,
+  "success_rate": 1.0,
+  "failure_kinds": {
+    "成功": 10
+  },
+  "raw": [
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    },
+    {
+      "http_status": 200,
+      "code": 0
+    }
+  ]
+}

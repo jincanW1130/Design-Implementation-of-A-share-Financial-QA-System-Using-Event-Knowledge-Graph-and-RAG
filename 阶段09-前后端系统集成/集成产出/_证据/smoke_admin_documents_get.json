@@ -1,0 +1,38 @@
+{
+  "method": "GET",
+  "path": "/api/admin/documents?page_size=2",
+  "http_status": 200,
+  "seconds": 0.011,
+  "body": {
+    "data": {
+      "total": 710,
+      "items": [
+        {
+          "doc_id": 4021,
+          "title": "T11 冒烟临时文档（勿采信）",
+          "source": "T11 冒烟",
+          "publish_time": "2026-09-30T00:00:00",
+          "ingest_time": "2026-09-30T01:22:06",
+          "category": "公告",
+          "chunk_count": 1
+        },
+        {
+          "doc_id": 1005,
+          "title": "保利发展控股集团股份有限公司2026年度第一期中期票据发行结果公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-25T00:00:00",
+          "ingest_time": "2026-09-25T21:19:14",
+          "category": "公告",
+          "chunk_count": 2
+        }
+      ],
+      "page": 1,
+      "page_size": 2
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"total\":710,\"items\":[{\"doc_id\":4021,\"title\":\"T11 冒烟临时文档（勿采信）\",\"source\":\"T11 冒烟\",\"publish_time\":\"2026-09-30T00:00:00\",\"ingest_time\":\"2026-09-30T01:22:06\",\"category\":\"公告\",\"chunk_count\":1},{\"doc_id\":1005,\"title\":\"保利发展控股集团股份有限公司2026年度第一期中期票据发行结果公告\",\"source\":\"巨潮资讯网\",\"publish_time\":\"2026-09-25T00:00:00\",\"ingest_time\":\"2026-09-25T21:19:14\",\"category\":\"公告\",\"chunk_count\":2}],\"page\":1,\"page_size\":2},\"meta\":{\"dataset_version\":\"v2.1\",\"data_cutoff_time\":\"2026-09-25T23:59:59+08:00\"}}"
+}

@@ -1,0 +1,11 @@
+{
+  "method": "POST",
+  "path": "/api/qa/ask",
+  "http_status": 503,
+  "seconds": 7.448,
+  "body": {
+    "code": 3001,
+    "message": "图谱服务不可用"
+  },
+  "raw_head": "{\"code\":3001,\"message\":\"图谱服务不可用\"}"
+}

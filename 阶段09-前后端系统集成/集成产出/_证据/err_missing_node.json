@@ -1,0 +1,11 @@
+{
+  "method": "GET",
+  "path": "/api/graph/entities/ZZZ-NOT-EXIST/neighbors",
+  "http_status": 404,
+  "seconds": 0.165,
+  "body": {
+    "code": 2001,
+    "message": "资源不存在"
+  },
+  "raw_head": "{\"code\":2001,\"message\":\"资源不存在\"}"
+}

@@ -1,0 +1,116 @@
+{
+  "method": "GET",
+  "path": "/api/graph/events/EVT-0006",
+  "http_status": 200,
+  "seconds": 0.183,
+  "body": {
+    "data": {
+      "event": {
+        "event_id": "EVT-0006",
+        "node_id": "EVT-0006",
+        "label": "Event",
+        "event_type": "监管",
+        "event_name": "保利发展获准注册50亿元中期票据",
+        "event_time": "",
+        "description": "中国银行间市场交易商协会出具《接受注册通知书》，保利发展控股集团股份有限公司获准注册中期票据，注册金额50亿元。",
+        "confidence": 0.9
+      },
+      "participants": [
+        {
+          "node_id": "600048",
+          "label": "Company",
+          "name": "保利发展",
+          "role": "主体",
+          "relation": "PARTICIPATES_IN",
+          "source_doc_ids": [
+            1005
+          ],
+          "source_chunk_ids": [
+            1005000
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "issuer": {
+        "node_id": "INST-0069",
+        "label": "Institution",
+        "name": "中国银行间市场交易商协会",
+        "role": "",
+        "relation": "ISSUED_BY",
+        "source_doc_ids": [
+          1005
+        ],
+        "source_chunk_ids": [
+          1005000
+        ],
+        "confidence": 0.9
+      },
+      "issuers": [
+        {
+          "node_id": "INST-0069",
+          "label": "Institution",
+          "name": "中国银行间市场交易商协会",
+          "role": "",
+          "relation": "ISSUED_BY",
+          "source_doc_ids": [
+            1005
+          ],
+          "source_chunk_ids": [
+            1005000
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "policies": [],
+      "evidences": [
+        {
+          "doc_id": 1005,
+          "chunk_id": 1005000,
+          "evidence_type": "chunk",
+          "confidence": 0.9,
+          "relations": [
+            "ISSUED_BY",
+            "PARTICIPATES_IN"
+          ],
+          "roles": [
+            "主体"
+          ],
+          "chunk_index": 0,
+          "title": "保利发展控股集团股份有限公司2026年度第一期中期票据发行结果公告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-09-25T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-25/1225582458.PDF",
+          "token_count": 328,
+          "is_primary": true
+        }
+      ],
+      "evidence_total": 1,
+      "primary_evidence": {
+        "doc_id": 1005,
+        "chunk_id": 1005000,
+        "evidence_type": "chunk",
+        "confidence": 0.9,
+        "relations": [
+          "ISSUED_BY",
+          "PARTICIPATES_IN"
+        ],
+        "roles": [
+          "主体"
+        ],
+        "chunk_index": 0,
+        "title": "保利发展控股集团股份有限公司2026年度第一期中期票据发行结果公告",
+        "source": "巨潮资讯网",
+        "publish_time": "2026-09-25T00:00:00",
+        "url": "https://static.cninfo.com.cn/finalpage/2026-09-25/1225582458.PDF",
+        "token_count": 328,
+        "is_primary": true
+      },
+      "primary_source_doc_id": 1005
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"event\":{\"event_id\":\"EVT-0006\",\"node_id\":\"EVT-0006\",\"label\":\"Event\",\"event_type\":\"监管\",\"event_name\":\"保利发展获准注册50亿元中期票据\",\"event_time\":\"\",\"description\":\"中国银行间市场交易商协会出具《接受注册通知书》，保利发展控股集团股份有限公司获准注册中期票据，注册金额50亿元。\",\"confidence\":0.9},\"participants\":[{\"node_id\":\"600048\",\"label\":\"Company\",\"name\":\"保利发展\",\"role\":\"主体\",\"relation\":\"PARTICIPATES_IN\",\"source_doc_ids\":[1005],\"source_chunk_ids\":[1005000],\"confidence\":0.9}],\"issuer\":{\"node_id\":\"INST-0069\",\"label\":\"Institution\",\"name\":\"中国银行间市场交易商协会\",\"role\":\"\",\"relation\":\"ISSUED_BY\",\"source_doc_ids\":[1005],\"source_chunk_ids\":[1005000],\"confidence\":0.9},\"issuers\":[{\"node_id\":\"INST-0069\",\"label\":\"Institution\",\"name\":\"中国银行间市场交易商协会\",\"role\":\"\",\"relation\":\"ISSUED_BY\",\"source_doc_ids\":[1005],\"source_chunk_ids\":[1005000],\"confidence\":0.9}],\"policies\":[],\"evidenc"
+}

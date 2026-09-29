@@ -1,0 +1,40 @@
+{
+  "method": "GET",
+  "path": "/api/admin/extraction/events?page_size=2",
+  "http_status": 200,
+  "seconds": 0.778,
+  "body": {
+    "data": {
+      "total": 1100,
+      "items": [
+        {
+          "event_id": "EVT-0006",
+          "node_id": "EVT-0006",
+          "event_type": "监管",
+          "event_name": "保利发展获准注册50亿元中期票据",
+          "event_time": "",
+          "description": "中国银行间市场交易商协会出具《接受注册通知书》，保利发展控股集团股份有限公司获准注册中期票据，注册金额50亿元。",
+          "confidence": 0.9,
+          "evidence_doc_count": 1
+        },
+        {
+          "event_id": "EVT-0009",
+          "node_id": "EVT-0009",
+          "event_type": "重大经营",
+          "event_name": "中国神华独立非执行董事变更",
+          "event_time": "",
+          "description": "本次股东会选举叶礼德、张梦娇为独立非执行董事，袁国强、陈汉文自本次股东会结束时起不再担任公司独立非执行董事。",
+          "confidence": 0.75,
+          "evidence_doc_count": 1
+        }
+      ],
+      "page": 1,
+      "page_size": 2
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"total\":1100,\"items\":[{\"event_id\":\"EVT-0006\",\"node_id\":\"EVT-0006\",\"event_type\":\"监管\",\"event_name\":\"保利发展获准注册50亿元中期票据\",\"event_time\":\"\",\"description\":\"中国银行间市场交易商协会出具《接受注册通知书》，保利发展控股集团股份有限公司获准注册中期票据，注册金额50亿元。\",\"confidence\":0.9,\"evidence_doc_count\":1},{\"event_id\":\"EVT-0009\",\"node_id\":\"EVT-0009\",\"event_type\":\"重大经营\",\"event_name\":\"中国神华独立非执行董事变更\",\"event_time\":\"\",\"description\":\"本次股东会选举叶礼德、张梦娇为独立非执行董事，袁国强、陈汉文自本次股东会结束时起不再担任公司独立非执行董事。\",\"confidence\":0.75,\"evidence_doc_count\":1}],\"page\":1,\"page_size\":2},\"meta\":{\"dataset_version\":\"v2.1\",\"data_cutoff_time\":\"2026-09-25T23:59:59+08:00\"}}"
+}

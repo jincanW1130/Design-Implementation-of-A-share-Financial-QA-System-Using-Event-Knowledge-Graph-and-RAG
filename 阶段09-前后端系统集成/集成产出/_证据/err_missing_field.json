@@ -1,0 +1,11 @@
+{
+  "method": "POST",
+  "path": "/api/qa/ask",
+  "http_status": 400,
+  "seconds": 0.016,
+  "body": {
+    "code": 1003,
+    "message": "必填字段缺失"
+  },
+  "raw_head": "{\"code\":1003,\"message\":\"必填字段缺失\"}"
+}

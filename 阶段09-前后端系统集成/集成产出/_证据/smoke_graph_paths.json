@@ -1,0 +1,420 @@
+{
+  "method": "GET",
+  "path": "/api/graph/paths?from_node=000001&relation=PARTICIPATES_IN&hop=1",
+  "http_status": 200,
+  "seconds": 0.276,
+  "body": {
+    "data": {
+      "paths": [
+        {
+          "start": "000001",
+          "end": "EVT-0029",
+          "depth": 1,
+          "nodes": [
+            {
+              "node_id": "000001",
+              "label": "Company",
+              "name": "平安银行",
+              "stock_code": "000001"
+            },
+            {
+              "node_id": "EVT-0029",
+              "label": "Event",
+              "name": "平安银行2026年金融债券（第一期）发行完毕",
+              "stock_code": ""
+            }
+          ],
+          "edges": [
+            {
+              "relation": "PARTICIPATES_IN",
+              "direction": "out",
+              "neighbor": "EVT-0029",
+              "role": "主体",
+              "source_doc_id": 1023,
+              "source_chunk_id": 1023000,
+              "confidence": 0.9,
+              "evidence_doc_id": null,
+              "neighbor_label": "Event"
+            }
+          ],
+          "node_ids": [
+            "000001",
+            "EVT-0029"
+          ]
+        },
+        {
+          "start": "000001",
+          "end": "EVT-0045",
+          "depth": 1,
+          "nodes": [
+            {
+              "node_id": "000001",
+              "label": "Company",
+              "name": "平安银行",
+              "stock_code": "000001"
+            },
+            {
+              "node_id": "EVT-0045",
+              "label": "Event",
+              "name": "平安银行制定并实施《内部审计章程（7.0版，2026年）》",
+              "stock_code": ""
+            }
+          ],
+          "edges": [
+            {
+              "relation": "PARTICIPATES_IN",
+              "direction": "out",
+              "neighbor": "EVT-0045",
+              "role": "主体",
+              "source_doc_id": 1037,
+              "source_chunk_id": 1037019,
+              "confidence": 0.9,
+              "evidence_doc_id": null,
+              "neighbor_label": "Event"
+            }
+          ],
+          "node_ids": [
+            "000001",
+            "EVT-0045"
+          ]
+        },
+        {
+          "start": "000001",
+          "end": "EVT-0046",
+          "depth": 1,
+          "nodes": [
+            {
+              "node_id": "000001",
+              "label": "Company",
+              "name": "平安银行",
+              "stock_code": "000001"
+            },
+            {
+              "node_id": "EVT-0046",
+              "label": "Event",
+              "name": "平安银行2026年半年度权益分派实施",
+              "stock_code": ""
+            }
+          ],
+          "edges": [
+            {
+              "relation": "PARTICIPATES_IN",
+              "direction": "out",
+              "neighbor": "EVT-0046",
+              "role": "主体",
+              "source_doc_id": 1038,
+              "source_chunk_id": 1038000,
+              "confidence": 0.95,
+              "evidence_doc_id": null,
+              "neighbor_label": "Event"
+            }
+          ],
+          "node_ids": [
+            "000001",
+            "EVT-0046"
+          ]
+        },
+        {
+          "start": "000001",
+          "end": "EVT-0236",
+          "depth": 1,
+          "nodes": [
+            {
+              "node_id": "000001",
+              "label": "Company",
+              "name": "平安银行",
+              "stock_code": "000001"
+            },
+            {
+              "node_id": "EVT-0236",
+              "label": "Event",
+              "name": "交易商协会接受伊利股份债务融资工具注册",
+              "stock_code": ""
+            }
+          ],
+          "edges": [
+            {
+              "relation": "PARTICIPATES_IN",
+              "direction": "out",
+              "neighbor": "EVT-0236",
+              "role": "合作方",
+              "source_doc_id": 1183,
+              "source_chunk_id": 1183001,
+              "confidence": 0.8,
+              "evidence_doc_id": null,
+              "neighbor_label": "Event"
+            }
+          ],
+          "node_ids": [
+            "000001",
+            "EVT-0236"
+          ]
+        },
+        {
+          "start": "000001",
+          "end": "EVT-0260",
+          "depth": 1,
+          "nodes": [
+            {
+              "node_id": "000001",
+              "label": "Company",
+              "name": "平安银行",
+              "stock_code": "000001"
+            },
+            {
+              "node_id": "EVT-0260",
+              "label": "Event",
+              "name": "国家金融监督管理总局核准高鹏平安银行董事任职资格",
+              "stock_code": ""
+            }
+          ],
+          "edges": [
+            {
+              "relation": "PARTICIPATES_IN",
+              "direction": "out",
+              "neighbor": "EVT-0260",
+              "role": "涉及方",
+              "source_doc_id": 1200,
+              "source_chunk_id": 1200000,
+              "confidence": 0.9,
+              "evidence_doc_id": null,
+              "neighbor_label": "Event"
+            }
+          ],
+          "node_ids": [
+            "000001",
+            "EVT-0260"
+          ]
+        },
+        {
+          "start": "000001",
+          "end": "EVT-0310",
+          "depth": 1,
+          "nodes": [
+            {
+              "node_id": "000001",
+              "label": "Company",
+              "name": "平安银行",
+              "stock_code": "000001"
+            },
+            {
+              "node_id": "EVT-0310",
+              "label": "Event",
+              "name": "召开2026年半年度业绩说明会",
+              "stock_code": ""
+            }
+          ],
+          "edges": [
+            {
+              "relation": "PARTICIPATES_IN",
+              "direction": "out",
+              "neighbor": "EVT-0310",
+              "role": "主体",
+              "source_doc_id": 1231,
+              "source_chunk_id": 1231000,
+              "confidence": 0.85,
+              "evidence_doc_id": null,
+              "neighbor_label": "Event"
+            }
+          ],
+          "node_ids": [
+            "000001",
+            "EVT-0310"
+          ]
+        },
+        {
+          "start": "000001",
+          "end": "EVT-0358",
+          "depth": 1,
+          "nodes": [
+            {
+              "node_id": "000001",
+              "label": "Company",
+              "name": "平安银行",
+              "stock_code": "000001"
+            },
+            {
+              "node_id": "EVT-0358",
+              "label": "Event",
+              "name": "平安银行与方正证券开展债券买卖交易",
+              "stock_code": ""
+            }
+          ],
+          "edges": [
+            {
+              "relation": "PARTICIPATES_IN",
+              "direction": "out",
+              "neighbor": "EVT-0358",
+              "role": "主体",
+              "source_doc_id": 1274,
+              "source_chunk_id": 1274003,
+              "confidence": 0.9,
+              "evidence_doc_id": null,
+              "neighbor_label": "Event"
+            }
+          ],
+          "node_ids": [
+            "000001",
+            "EVT-0358"
+          ]
+        },
+        {
+          "start": "000001",
+          "end": "EVT-0466",
+          "depth": 1,
+          "nodes": [
+            {
+              "node_id": "000001",
+              "label": "Company",
+              "name": "平安银行",
+              "stock_code": "000001"
+            },
+            {
+              "node_id": "EVT-0466",
+              "label": "Event",
+              "name": "国家金融监督管理总局核准吴雷鸣平安银行副行长任职资格",
+              "stock_code": ""
+            }
+          ],
+          "edges": [
+            {
+              "relation": "PARTICIPATES_IN",
+              "direction": "out",
+              "neighbor": "EVT-0466",
+              "role": "主体",
+              "source_doc_id": 1355,
+              "source_chunk_id": 1355000,
+              "confidence": 0.95,
+              "evidence_doc_id": null,
+              "neighbor_label": "Event"
+            }
+          ],
+          "node_ids": [
+            "000001",
+            "EVT-0466"
+          ]
+        },
+        {
+          "start": "000001",
+          "end": "EVT-0840",
+          "depth": 1,
+          "nodes": [
+            {
+              "node_id": "000001",
+              "label": "Company",
+              "name": "平安银行",
+              "stock_code": "000001"
+            },
+            {
+              "node_id": "EVT-0840",
+              "label": "Event",
+              "name": "中国银联与15家商业银行推出AI智能体银行卡产品",
+              "stock_code": ""
+            }
+          ],
+          "edges": [
+            {
+              "relation": "PARTICIPATES_IN",
+              "direction": "out",
+              "neighbor": "EVT-0840",
+              "role": "合作方",
+              "source_doc_id": 2025,
+              "source_chunk_id": 2025001,
+              "confidence": 0.85,
+              "evidence_doc_id": null,
+              "neighbor_label": "Event"
+            }
+          ],
+          "node_ids": [
+            "000001",
+            "EVT-0840"
+          ]
+        },
+        {
+          "start": "000001",
+          "end": "EVT-0860",
+          "depth": 1,
+          "nodes": [
+            {
+              "node_id": "000001",
+              "label": "Company",
+              "name": "平安银行",
+              "stock_code": "000001"
+            },
+            {
+              "node_id": "EVT-0860",
+              "label": "Event",
+              "name": "中国银联联合平安银行、腾讯云推出\"AI智算卡\"",
+              "stock_code": ""
+            }
+          ],
+          "edges": [
+            {
+              "relation": "PARTICIPATES_IN",
+              "direction": "out",
+              "neighbor": "EVT-0860",
+              "role": "合作方",
+              "source_doc_id": 2039,
+              "source_chunk_id": 2039000,
+              "confidence": 0.95,
+              "evidence_doc_id": null,
+              "neighbor_label": "Event"
+            }
+          ],
+          "node_ids": [
+            "000001",
+            "EVT-0860"
+          ]
+        },
+        {
+          "start": "000001",
+          "end": "EVT-0861",
+          "depth": 1,
+          "nodes": [
+            {
+              "node_id": "000001",
+              "label": "Company",
+              "name": "平安银行",
+              "stock_code": "000001"
+            },
+            {
+              "node_id": "EVT-0861",
+              "label": "Event",
+              "name": "平安银行将于7月推出AI主题信用卡",
+              "stock_code": ""
+            }
+          ],
+          "edges": [
+            {
+              "relation": "PARTICIPATES_IN",
+              "direction": "out",
+              "neighbor": "EVT-0861",
+              "role": "主体",
+              "source_doc_id": 2039,
+              "source_chunk_id": 2039005,
+              "confidence": 0.8,
+              "evidence_doc_id": null,
+              "neighbor_label": "Event"
+            }
+          ],
+          "node_ids": [
+            "000001",
+            "EVT-0861"
+          ]
+        }
+      ],
+      "hop": 1,
+      "is_graph_extended": true,
+      "from_node": "000001",
+      "to_node": null,
+      "relation": "PARTICIPATES_IN",
+      "start_time": null,
+      "end_time": null
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"paths\":[{\"start\":\"000001\",\"end\":\"EVT-0029\",\"depth\":1,\"nodes\":[{\"node_id\":\"000001\",\"label\":\"Company\",\"name\":\"平安银行\",\"stock_code\":\"000001\"},{\"node_id\":\"EVT-0029\",\"label\":\"Event\",\"name\":\"平安银行2026年金融债券（第一期）发行完毕\",\"stock_code\":\"\"}],\"edges\":[{\"relation\":\"PARTICIPATES_IN\",\"direction\":\"out\",\"neighbor\":\"EVT-0029\",\"role\":\"主体\",\"source_doc_id\":1023,\"source_chunk_id\":1023000,\"confidence\":0.9,\"evidence_doc_id\":null,\"neighbor_label\":\"Event\"}],\"node_ids\":[\"000001\",\"EVT-0029\"]},{\"start\":\"000001\",\"end\":\"EVT-0045\",\"depth\":1,\"nodes\":[{\"node_id\":\"000001\",\"label\":\"Company\",\"name\":\"平安银行\",\"stock_code\":\"000001\"},{\"node_id\":\"EVT-0045\",\"label\":\"Event\",\"name\":\"平安银行制定并实施《内部审计章程（7.0版，2026年）》\",\"stock_code\":\"\"}],\"edges\":[{\"relation\":\"PARTICIPATES_IN\",\"direction\":\"out\",\"neighbor\":\"EVT-0045\",\"role\":\"主体\",\"source_doc"
+}

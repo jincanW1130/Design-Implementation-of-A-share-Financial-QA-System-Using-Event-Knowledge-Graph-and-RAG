@@ -1,0 +1,19 @@
+调用第 8 阶段问答链路：group=C session_id=S-T11-MODEL out_dir=C:\Users\15129\Desktop\毕业设计\阶段09-前后端系统集成\_工作底稿\qa_runs\ask_C_twksgyu8 超时=300s
+问答链路非零退出：exit=1 耗时=8.4s out_dir=C:\Users\15129\Desktop\毕业设计\阶段09-前后端系统集成\_工作底稿\qa_runs\ask_C_twksgyu8
+--- stdout 尾部 ---
+==============================================================================
+run_answer：自定义问题
+==============================================================================
+四项定值（config.require_fixed（四项定值从 代码\检索\config.py 导入））：K=10 N=20 预算=3600 g=2
+答案侧冻结：model=deepseek-flash temperature=0 max_tokens=16384 prompt_version=v1.0
+会话 session_id=S-T11-MODEL；记录层时间注入 --now=2026-09-30T01:23:21+08:00
+[桥接] 调第 7 阶段既有链路（只读）：C:\Users\15129\AppData\Local\Programs\Python\Python312\python.exe C:\Users\15129\Desktop\毕业设计\代码\检索\run_query.py --group C --out C:\Users\15129\Desktop\毕业设计\阶段08-智能问答系统\_工作底稿\桥接\run_query_C_custom.json --question 长城汽车《2023年股票期权激励计划》首次授予股票期权第二个行权期的行权期有效期是什么时间段？
+装配完成：1 题（Prompt 文本已固定，可逐字节复现）
+  [生成] PE-01    0.5s 尝试1 引用0(越界0) 日期不可核0(未来0) 图谱段BAD 泄漏无 禁词0 空是 通过=None
+     调用失败：HTTP 400: {"error":{"message":"The supported API model names are deepseek-flash, deepseek-v4-pro, but you passed t11-no-such-model. (request_id: 95670b3d-05d7-44d0-8ce0-e4f20fccf11a)","type":"invalid_request_error","param":null,"code":"invalid_request_error"}}
+调用失败：PE-01 → HTTP 400: {"error":{"message":"The supported API model names are deepseek-flash, deepseek-v4-pro, but you passed t11-no-such-model. (request_id: 95670b3d-05d7-44d0-8ce0-e4f20fccf11a)","type":"invalid_request_error","param":null,"code":"invalid_request_error"}}
+
+--- stderr 尾部 ---
+有题的调用未成功（1 题）——不得写入空答案，非零退出。
+
+ApiError POST /api/qa/ask → code=3001 http=503；detail=run_answer 退出码 1（耗时 8.4s，out_dir=C:\Users\15129\Desktop\毕业设计\阶段09-前后端系统集成\_工作底稿\qa_runs\ask_C_twksgyu8）

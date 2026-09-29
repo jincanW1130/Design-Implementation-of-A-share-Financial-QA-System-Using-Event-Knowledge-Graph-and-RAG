@@ -1,0 +1,226 @@
+{
+  "method": "POST",
+  "path": "/api/qa/ask",
+  "http_status": 200,
+  "seconds": 14.036,
+  "body": {
+    "data": {
+      "answer_id": 43,
+      "question_id": 43,
+      "answer_text": "【回答】\n根据现有证据，无法给出工业富联董事及高级管理人员的完整名单。证据中仅出现以下人员，且均来自2026年第一次临时股东会会议资料中的候选人简历，并非完整任职名单：\n\n郑弘孟，公司第三届董事会董事长、总经理[证据9]。\n\n黄德才，被列为非独立董事候选人[证据9]；该条简历在证据中未完整显示其现任董事或高级管理人员职务。\n\n许兴仁，被列为候选人（简历编号为4，归入非独立董事候选人部分），现任公司高端精密机构件产品群（包含智能手机、个人穿戴）总经理，并任富联裕展科技（河南）有限公司董事、富联裕展科技（深圳）有限公司董事、深圳市富联凌云光科技有限公司董事长、凌云光技术股份有限公司董事、富联智能工坊（郑州）有限公司董事长、富联精密科技（赣州）有限公司董事长及总经理[证据1]。\n\n李昕，公司第三届董事会独立董事[证据5]。\n\n模型分析（非公开事实）：上述人员均出自股东会会议资料中的董事候选人简历，证据仅覆盖候选人名单中的部分条目，既未披露全部董事，也未系统列示高级管理人员，因此不能据此认定这是工业富联董事及高级管理人员的完整名单；在证据不足的情况下，不作进一步补全或推测。\n\n【证据来源】\n[证据1] chunk_id=1339011 doc_id=1339 来源类型=公告来源 发布时间=2026-07-01 标题：富士康工业互联网股份有限公司2026年第一次临时股东会会议资料\n[证据2] chunk_id=1224025 doc_id=1224 来源类型=公告来源 发布时间=2026-08-12 标题：富士康工业互联网股份有限公司2026年半年度募集资金存放、管理与实际使用情况的专项报告\n[证据3] chunk_id=1269004 doc_id=1269 来源类型=公告来源 发布时间=2026-08-01 标题：青海盐湖工业股份有限公司关联交易管理办法\n[证据4] chunk_id=1388092 doc_id=1388 来源类型=公告来源 发布时间=2026-06-18 标题：公司章程\n[证据5] chunk_id=1339013 doc_id=1339 来源类型=公告来源 发布时间=2026-07-01 标题：富士康工业互联网股份有限公司2026年第一次临时股东会会议资料\n[证据6] chunk_id=1269012 doc_id=1269 来源类型=公告来源 发布时间=2026-08-01 标题：青海盐湖工业股份有限公司关联交易管理办法\n[证据7] chunk_id=1224014 doc_id=1224 来源类型=公告来源 发布时间=2026-08-12 标题：富士康工业互联网股份有限公司2026年半年度募集资金存放、管理与实际使用情况的专项报告\n[证据8] chunk_id=1133002 doc_id=1133 来源类型=公告来源 发布时间=2026-08-29 标题：上汽集团重大信息内部报告制度\n[证据9] chunk_id=1339008 doc_id=1339 来源类型=相关事件 发布时间=2026-07-01 标题：富士康工业互联网股份有限公司2026年第一次临时股东会会议资料\n[证据10] chunk_id=1224005 doc_id=1224 来源类型=相关事件 发布时间=2026-08-12 标题：富士康工业互联网股份有限公司2026年半年度募集资金存放、管理与实际使用情况的专项报告\n\n【知识图谱路径】\ndepth=2\n事件三元组（event_id / event_type / event_time）：\n  EVT-0300 / 投资并购 / 2018-08-13\n图谱路径（start —关系（role, confidence, source_doc_id, source_chunk_id）→ end）：\n  601138 -HAS_EXECUTIVE(role=, confidence=0.9, source_doc_id=1339, source_chunk_id=1339011)-> PER-0307\n  601138 -HAS_EXECUTIVE(role=, confidence=0.9, source_doc_id=1339, source_chunk_id=1339008)-> PER-0327\n  601138 -PARTICIPATES_IN(role=主体, confidence=0.9, source_doc_id=1224, source_chunk_id=1224005)-> EVT-0300\n  601138 -HAS_EXECUTIVE(role=, confidence=0.9, source_doc_id=1279, source_chunk_id=1279014)-> 601138\n  601138 -HAS_EXECUTIVE(role=, confidence=0.9, source_doc_id=1339, source_chunk_id=1339011)-> 601138\n备注：路径列表与事件三元组计入 Context Token Budget，不计入 K\n\n【数据截至与判定区间】\n数据版本：v2.1\n数据截止时间：2026-09-25T23:59:59+08:00\n本题不含相对时间表述，无判定区间。",
+      "evidence": [
+        {
+          "rank": 1,
+          "doc_id": 1339,
+          "chunk_id": 1339011,
+          "evidence_type": "公告来源",
+          "title": "富士康工业互联网股份有限公司2026年第一次临时股东会会议资料",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-07-01T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-07-01/1225398422.PDF"
+        },
+        {
+          "rank": 2,
+          "doc_id": 1224,
+          "chunk_id": 1224025,
+          "evidence_type": "公告来源",
+          "title": "富士康工业互联网股份有限公司2026年半年度募集资金存放、管理与实际使用情况的专项报告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-08-12T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-08-12/1225468096.PDF"
+        },
+        {
+          "rank": 3,
+          "doc_id": 1269,
+          "chunk_id": 1269004,
+          "evidence_type": "公告来源",
+          "title": "青海盐湖工业股份有限公司关联交易管理办法",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-08-01T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-08-01/1225451232.PDF"
+        },
+        {
+          "rank": 4,
+          "doc_id": 1388,
+          "chunk_id": 1388092,
+          "evidence_type": "公告来源",
+          "title": "公司章程",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-06-18T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-06-18/1225377020.PDF"
+        },
+        {
+          "rank": 5,
+          "doc_id": 1339,
+          "chunk_id": 1339013,
+          "evidence_type": "公告来源",
+          "title": "富士康工业互联网股份有限公司2026年第一次临时股东会会议资料",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-07-01T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-07-01/1225398422.PDF"
+        },
+        {
+          "rank": 6,
+          "doc_id": 1269,
+          "chunk_id": 1269012,
+          "evidence_type": "公告来源",
+          "title": "青海盐湖工业股份有限公司关联交易管理办法",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-08-01T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-08-01/1225451232.PDF"
+        },
+        {
+          "rank": 7,
+          "doc_id": 1224,
+          "chunk_id": 1224014,
+          "evidence_type": "公告来源",
+          "title": "富士康工业互联网股份有限公司2026年半年度募集资金存放、管理与实际使用情况的专项报告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-08-12T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-08-12/1225468096.PDF"
+        },
+        {
+          "rank": 8,
+          "doc_id": 1133,
+          "chunk_id": 1133002,
+          "evidence_type": "公告来源",
+          "title": "上汽集团重大信息内部报告制度",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-08-29T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225526666.PDF"
+        },
+        {
+          "rank": 9,
+          "doc_id": 1339,
+          "chunk_id": 1339008,
+          "evidence_type": "相关事件",
+          "title": "富士康工业互联网股份有限公司2026年第一次临时股东会会议资料",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-07-01T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-07-01/1225398422.PDF"
+        },
+        {
+          "rank": 10,
+          "doc_id": 1224,
+          "chunk_id": 1224005,
+          "evidence_type": "相关事件",
+          "title": "富士康工业互联网股份有限公司2026年半年度募集资金存放、管理与实际使用情况的专项报告",
+          "source": "巨潮资讯网",
+          "publish_time": "2026-08-12T00:00:00",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-08-12/1225468096.PDF"
+        }
+      ],
+      "graph_path": [
+        {
+          "end": "PER-0307",
+          "depth": 1,
+          "nodes": [
+            "601138",
+            "PER-0307"
+          ],
+          "start": "601138",
+          "relations": [
+            {
+              "role": "",
+              "evidence": {
+                "confidence": "0.9",
+                "source_doc_id": "1339",
+                "source_chunk_id": "1339011"
+              },
+              "neighbor": "PER-0307",
+              "relation": "HAS_EXECUTIVE",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "PER-0327",
+          "depth": 1,
+          "nodes": [
+            "601138",
+            "PER-0327"
+          ],
+          "start": "601138",
+          "relations": [
+            {
+              "role": "",
+              "evidence": {
+                "confidence": "0.9",
+                "source_doc_id": "1339",
+                "source_chunk_id": "1339008"
+              },
+              "neighbor": "PER-0327",
+              "relation": "HAS_EXECUTIVE",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "EVT-0300",
+          "depth": 1,
+          "nodes": [
+            "601138",
+            "EVT-0300"
+          ],
+          "start": "601138",
+          "relations": [
+            {
+              "role": "主体",
+              "evidence": {
+                "confidence": "0.9",
+                "source_doc_id": "1224",
+                "source_chunk_id": "1224005"
+              },
+              "neighbor": "EVT-0300",
+              "relation": "PARTICIPATES_IN",
+              "direction": "out"
+            }
+          ]
+        },
+        {
+          "end": "601138",
+          "depth": 2,
+          "nodes": [
+            "601138",
+            "PER-0307",
+            "601138"
+          ],
+          "start": "601138",
+          "relations": [
+            {
+              "role": "",
+              "evidence": {
+                "confidence": "0.9",
+                "source_doc_id": "1279",
+                "source_chunk_id": "1279014"
+              },
+              "neighbor": "PER-0307",
+              "relation": "HAS_EXECUTIVE",
+              "direction": "out"
+            },
+            {
+              "role": "",
+              "evidence": {
+                "confidence": "0.9",
+                "source_doc_id": "1339",
+                "source_chunk_id": "1339011"
+              },
+              "neighbor": "601138",
+              "relation": "HAS_EXECUTIVE",
+              "direction": "in"
+            }
+          ]
+        }
+      ],
+      "is_graph_extended": 1,
+      "time_interpretation": "数据版本：v2.1\n数据截止时间：2026-09-25T23:59:59+08:00\n本题不含相对时间表述，无判定区间。",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00",
+      "answer_type": "事实型"
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"answer_id\":43,\"question_id\":43,\"answer_text\":\"【回答】\\n根据现有证据，无法给出工业富联董事及高级管理人员的完整名单。证据中仅出现以下人员，且均来自2026年第一次临时股东会会议资料中的候选人简历，并非完整任职名单：\\n\\n郑弘孟，公司第三届董事会董事长、总经理[证据9]。\\n\\n黄德才，被列为非独立董事候选人[证据9]；该条简历在证据中未完整显示其现任董事或高级管理人员职务。\\n\\n许兴仁，被列为候选人（简历编号为4，归入非独立董事候选人部分），现任公司高端精密机构件产品群（包含智能手机、个人穿戴）总经理，并任富联裕展科技（河南）有限公司董事、富联裕展科技（深圳）有限公司董事、深圳市富联凌云光科技有限公司董事长、凌云光技术股份有限公司董事、富联智能工坊（郑州）有限公司董事长、富联精密科技（赣州）有限公司董事长及总经理[证据1]。\\n\\n李昕，公司第三届董事会独立董事[证据5]。\\n\\n模型分析（非公开事实）：上述人员均出自股东会会议资料中的董事候选人简历，证据仅覆盖候选人名单中的部分条目，既未披露全部董事，也未系统列示高级管理人员，因此不能据此认定这是工业富联董事及高级管理人员的完整名单；在证据不足的情况下，不作进一步补全或推测。\\n\\n【证据来源】\\n[证据1] chunk_id=1339011 doc_id=1339 来源类型=公告来源 发布时间=2026-07-01 标题：富士康工业互联网股份有限公司2026年第一次临时股东会会议资料\\n[证据2] chunk_id=1224025 doc_id=1224 来源类型=公告来源 发布时间=2026-08-12 标题：富士康工业互联网股份有限公司2026年半年度募集资金存放、管理与实际使用情况的专项报告\\n[证据3] chunk_id=1269004 do"
+}

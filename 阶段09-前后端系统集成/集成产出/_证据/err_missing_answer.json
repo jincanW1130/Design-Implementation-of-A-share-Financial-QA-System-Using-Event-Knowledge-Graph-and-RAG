@@ -1,0 +1,11 @@
+{
+  "method": "GET",
+  "path": "/api/qa/answers/999999",
+  "http_status": 404,
+  "seconds": 0.002,
+  "body": {
+    "code": 2001,
+    "message": "资源不存在"
+  },
+  "raw_head": "{\"code\":2001,\"message\":\"资源不存在\"}"
+}

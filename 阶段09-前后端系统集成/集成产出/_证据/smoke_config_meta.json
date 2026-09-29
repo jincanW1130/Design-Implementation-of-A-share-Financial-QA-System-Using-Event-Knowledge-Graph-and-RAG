@@ -1,0 +1,22 @@
+{
+  "method": "GET",
+  "path": "/api/config/meta",
+  "http_status": 200,
+  "seconds": 0.013,
+  "body": {
+    "data": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00",
+      "prompt_version": "v1.0",
+      "k": 10,
+      "n": 20,
+      "context_token_budget": 3600,
+      "model_name": "deepseek-flash"
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"dataset_version\":\"v2.1\",\"data_cutoff_time\":\"2026-09-25T23:59:59+08:00\",\"prompt_version\":\"v1.0\",\"k\":10,\"n\":20,\"context_token_budget\":3600,\"model_name\":\"deepseek-flash\"},\"meta\":{\"dataset_version\":\"v2.1\",\"data_cutoff_time\":\"2026-09-25T23:59:59+08:00\"}}"
+}

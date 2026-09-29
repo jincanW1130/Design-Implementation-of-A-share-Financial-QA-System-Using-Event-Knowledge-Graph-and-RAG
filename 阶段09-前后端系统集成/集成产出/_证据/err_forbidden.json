@@ -1,0 +1,11 @@
+{
+  "method": "GET",
+  "path": "/api/admin/documents?page_size=2",
+  "http_status": 403,
+  "seconds": 0.002,
+  "body": {
+    "code": 4002,
+    "message": "无操作权限"
+  },
+  "raw_head": "{\"code\":4002,\"message\":\"无操作权限\"}"
+}

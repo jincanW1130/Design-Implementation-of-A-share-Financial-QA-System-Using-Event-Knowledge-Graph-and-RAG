@@ -1,0 +1,44 @@
+{
+  "method": "POST",
+  "path": "/api/admin/documents",
+  "http_status": 200,
+  "seconds": 0.025,
+  "body": {
+    "data": {
+      "doc_id": 4021,
+      "chunk_count": 1,
+      "ingest_time": "2026-09-30T01:22:06",
+      "reprocess_task_id": "RP-20260930-0016",
+      "status": "accepted",
+      "title": "T11 冒烟临时文档（勿采信）",
+      "vectorized": false,
+      "chunk_params": {
+        "target_chars": 400,
+        "max_chars": 512,
+        "min_chars": 128,
+        "overlap_chars": 50,
+        "boundary_priority": [
+          "\n\n",
+          "\n",
+          "。",
+          "！",
+          "？",
+          "；",
+          "…",
+          ".",
+          "!",
+          "?",
+          ";"
+        ],
+        "strip_rules": true
+      },
+      "token_count_method": "transformers.AutoTokenizer(add_special_tokens=False)（local_files_only=True）",
+      "note": "第一版：向量化属第 5 阶段能力，本接口只入库文本与文本块（vector_id 一律为空），不重建向量索引。"
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"doc_id\":4021,\"chunk_count\":1,\"ingest_time\":\"2026-09-30T01:22:06\",\"reprocess_task_id\":\"RP-20260930-0016\",\"status\":\"accepted\",\"title\":\"T11 冒烟临时文档（勿采信）\",\"vectorized\":false,\"chunk_params\":{\"target_chars\":400,\"max_chars\":512,\"min_chars\":128,\"overlap_chars\":50,\"boundary_priority\":[\"\\n\\n\",\"\\n\",\"。\",\"！\",\"？\",\"；\",\"…\",\".\",\"!\",\"?\",\";\"],\"strip_rules\":true},\"token_count_method\":\"transformers.AutoTokenizer(add_special_tokens=False)（local_files_only=True）\",\"note\":\"第一版：向量化属第 5 阶段能力，本接口只入库文本与文本块（vector_id 一律为空），不重建向量索引。\"},\"meta\":{\"dataset_version\":\"v2.1\",\"data_cutoff_time\":\"2026-09-25T23:59:59+08:00\"}}"
+}

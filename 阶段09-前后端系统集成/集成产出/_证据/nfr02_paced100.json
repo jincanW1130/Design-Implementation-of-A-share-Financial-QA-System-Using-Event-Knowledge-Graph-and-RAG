@@ -1,0 +1,615 @@
+{
+  "summary": {
+    "mode": "paced",
+    "interval_seconds": 1.2,
+    "requests": 100,
+    "ok": 100,
+    "failed": 0,
+    "success_rate": 1.0,
+    "failure_kinds": {},
+    "elapsed_seconds": 120.7,
+    "note": "按正常使用节奏（≈50 次／分钟）测；与背靠背测得的 60/100 是两个不同口径的读数，背靠背那轮的低成功率由限流（60 次／60 秒窗口）造成，已在 latency_profile 里如实登记。"
+  },
+  "rows": [
+    {
+      "n": 1,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.023
+    },
+    {
+      "n": 2,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 3,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 4,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 5,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.001
+    },
+    {
+      "n": 6,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.02
+    },
+    {
+      "n": 7,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 8,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 9,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.014
+    },
+    {
+      "n": 10,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.022
+    },
+    {
+      "n": 11,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.017
+    },
+    {
+      "n": 12,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 13,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 14,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 15,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.001
+    },
+    {
+      "n": 16,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 17,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 18,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 19,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.012
+    },
+    {
+      "n": 20,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 21,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 22,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 23,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 24,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 25,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 26,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 27,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.018
+    },
+    {
+      "n": 28,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.016
+    },
+    {
+      "n": 29,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 30,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.016
+    },
+    {
+      "n": 31,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.001
+    },
+    {
+      "n": 32,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 33,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 34,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 35,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 36,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.019
+    },
+    {
+      "n": 37,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 38,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.011
+    },
+    {
+      "n": 39,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.013
+    },
+    {
+      "n": 40,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 41,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 42,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 43,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.014
+    },
+    {
+      "n": 44,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 45,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.012
+    },
+    {
+      "n": 46,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.021
+    },
+    {
+      "n": 47,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.012
+    },
+    {
+      "n": 48,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 49,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.013
+    },
+    {
+      "n": 50,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.016
+    },
+    {
+      "n": 51,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 52,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.017
+    },
+    {
+      "n": 53,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 54,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 55,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.011
+    },
+    {
+      "n": 56,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 57,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 58,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 59,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 60,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.019
+    },
+    {
+      "n": 61,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.017
+    },
+    {
+      "n": 62,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.018
+    },
+    {
+      "n": 63,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 64,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 65,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.012
+    },
+    {
+      "n": 66,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 67,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 68,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 69,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 70,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 71,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 72,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 73,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 74,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 75,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 76,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 77,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.013
+    },
+    {
+      "n": 78,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 79,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 80,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.014
+    },
+    {
+      "n": 81,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 82,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 83,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.015
+    },
+    {
+      "n": 84,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 85,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 86,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 87,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 88,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 89,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 90,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 91,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 92,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.001
+    },
+    {
+      "n": 93,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 94,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 95,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 96,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 97,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 98,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.0
+    },
+    {
+      "n": 99,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.002
+    },
+    {
+      "n": 100,
+      "http": 200,
+      "code": 0,
+      "seconds": 0.019
+    }
+  ]
+}

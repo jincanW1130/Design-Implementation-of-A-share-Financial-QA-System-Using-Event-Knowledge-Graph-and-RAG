@@ -1,0 +1,11 @@
+{
+  "method": "GET",
+  "path": "/api/graph/paths?from_node=000001&relation=PARTICIPATES_IN&hop=3",
+  "http_status": 400,
+  "seconds": 0.023,
+  "body": {
+    "code": 1002,
+    "message": "参数格式错误"
+  },
+  "raw_head": "{\"code\":1002,\"message\":\"参数格式错误\"}"
+}

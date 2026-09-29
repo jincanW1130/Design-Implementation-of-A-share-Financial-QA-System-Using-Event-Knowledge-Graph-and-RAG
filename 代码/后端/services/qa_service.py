@@ -255,11 +255,21 @@ def _summary(answer_text) -> str:
 # 2. 链路调用（复用第 8 阶段入口，不重写检索与生成）
 # --------------------------------------------------------------------------
 def _classify_failure(text: str) -> int:
-    """子进程非零退出时，按日志尾部判错误码：向量索引不可用(3003)／图谱服务不可用(3001)。"""
+    """子进程非零退出时，按日志尾部判错误码。
+
+    判定顺序（**先判守卫，再判索引／图谱**）：上游第 8 阶段的「装配账目守卫」会打印
+    「token 账现场重算与上游 trace 不一致……预算守卫必须由重算分量组成」，它既不是图谱故障也不是
+    模型故障——2026-09-30 实测 PE-03 就落在这条上，早期版本会落到默认分支被**误标成 3001
+    （图谱服务不可用）**，与事实不符。故先认这一条并返回新增的 **3004**；其余按原判据：
+    向量索引不可用(3003)／图谱服务不可用(3001)。
+    """
     low = (text or "").lower()
+    guard_marks = ("token 账现场重算与上游 trace 不一致", "预算守卫", "现场 text+path+event_triple")
     index_marks = ("faiss", "向量索引", "索引文件", "vector_map", "build_meta",
                    "vector index", "向量检索")
     graph_marks = ("neo4j", "bolt", "7687", "graphdatabase", "图谱")
+    if any(mark in low for mark in guard_marks):
+        return 3004
     if any(mark in low for mark in index_marks):
         return 3003
     if any(mark in low for mark in graph_marks):

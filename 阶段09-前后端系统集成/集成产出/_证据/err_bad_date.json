@@ -1,0 +1,11 @@
+{
+  "method": "GET",
+  "path": "/api/graph/events?start_time=2026-13-99",
+  "http_status": 400,
+  "seconds": 0.001,
+  "body": {
+    "code": 1002,
+    "message": "参数格式错误"
+  },
+  "raw_head": "{\"code\":1002,\"message\":\"参数格式错误\"}"
+}

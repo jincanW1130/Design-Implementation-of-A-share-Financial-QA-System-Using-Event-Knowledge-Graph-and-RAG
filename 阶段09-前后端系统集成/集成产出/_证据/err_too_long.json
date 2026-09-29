@@ -1,0 +1,11 @@
+{
+  "method": "POST",
+  "path": "/api/qa/ask",
+  "http_status": 400,
+  "seconds": 0.001,
+  "body": {
+    "code": 1001,
+    "message": "输入为空或长度超出限制"
+  },
+  "raw_head": "{\"code\":1001,\"message\":\"输入为空或长度超出限制\"}"
+}
