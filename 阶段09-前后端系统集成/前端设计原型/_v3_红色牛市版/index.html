@@ -68,7 +68,6 @@
    跌 / 阴线 #22C55E —— 全站绿色仅此一处语义，不再有第二处绿。
    状态指示一律用红或青灰，不用绿。
    图谱冷色节点：人物 #6C7BE0 / 机构 #3E93B8 / 事件 #A06CD5 / 政策 #8792A8 / 行业 #C3CBD8
-   文档节点 #C89B5A（v4 新增，Document）—— 与红主色区分，不参与「红色三档」的语义分工
 
   ▍四、背景股票曲线参数（<canvas> position:fixed;inset:0;z-index:0，内容层 z-index:1）
    画布不透明度        0.5（≤ .55，正文对比度优先）
@@ -93,20 +92,7 @@
    四屏为同一文档内的四个 <section>，由吸顶导航切换。切换状态与每屏滚动位置写入
    localStorage（od.ashare.view / od.ashare.scroll），刷新后原样恢复；不使用 scrollIntoView。
 
-  ▍六、知识图谱关系中文名映射（v4 新增：界面标签与本文档共用同一张表）
-       HAS_EXECUTIVE  = 任职        Company → Person
-       PARTICIPATES_IN= 参与        Company → Event
-       ISSUED_BY      = 发布        Document → Institution
-       BELONGS_TO     = 属于        Company → Industry / Institution
-       RELATED_TO     = 相关        任意实体 ↔ 任意实体
-       CUSTOMER_OF    = 客户关系    Company → Company
-       COMPETES_WITH  = 同业竞争    Company ↔ Company
-       EVIDENCED_BY   = 证据指向    Event → Document
-     本次会话（A7F3-0912）实际命中 4 种：HAS_EXECUTIVE×2、PARTICIPATES_IN×2、
-     EVIDENCED_BY×1、ISSUED_BY×1，共 6 条边。其余 4 种本次载荷未命中 ——
-     界面只画命中的，不为凑数补边。
-
-  ▍七、v3（v1.3）相对 v1.2 的改动
+  ▍六、本版（v1.3）相对 v1.2 的改动
    1. 删除伪功能（系统里根本没有的东西一律不画）：
         · 侧栏「插件／自动化任务／工作区」——本系统无插件体系、无任务队列、无多工作区
         · 对话区「正在沿图谱路径扩展：…」流式过程文案——本系统不是流式输出，答案一次性生成
@@ -117,8 +103,8 @@
       会话 A7F3-0912「平安银行与伊利股份共同参与的事件是什么？」——四段全部逐字取自
       ashare_qa 六表真实输出：8 条证据（公告来源 6／新闻来源 2，含 rank、来源网站、日期、
       doc_id、chunk_id）、17 条图谱路径（深度 1～2）、4 条事件三元组。判定区间为空——
-      本题不含相对时间表述，界面显示「不适用」而非编造区间。图谱深度按记录改为真实的 1～2 跳。
-      知识图谱、历史记录、产品窗口 mockup 均改挂这套真实实体
+      本题不含相对时间表述，界面显示「不适用」而非编造区间。图谱深度由 v1.2 的「3 跳」改为
+      真实的 1～2 跳。知识图谱、历史记录、产品窗口 mockup 均改挂这套真实实体
       （平安银行 000001／伊利股份 600887／中国银行间市场交易商协会／PER-0010／PER-0029／
       EVT-0236・0260・0823・0827）。
    3. 新增「数据新鲜度」——两个时间口径分开显示，绝不混为一谈：
@@ -127,69 +113,14 @@
             未接入态（默认，当前真实状态）「行情数据源未接入」＋不填任何价格
             已接入态（示意）显示价格/涨跌幅/更新时间戳，并标注「示意：数据源接入后的形态」
 
-  ▍八、本版（v4）相对 v3 的改动（逐条对应作者四条意见）
-   1.【意见一 · 图谱更详细更准确】知识图谱由「2 条样例路径的示意图」重做为真实载荷的完整渲染：
-        · 节点：7 类（Company 公司红 #E63946 / Person 人物 / Institution 机构 / Event 事件 /
-          Policy 政策 / Industry 行业 / Document 文档），每类一种形状＋一种颜色；画布左上角常驻
-          可读图例（形状＋中文名＋本次计数＋边编码规则），工具栏另有 7 个复选筛选
-          （本次 0 个的类型置灰但保留，让「本次没有」一眼可见）。
-        · 节点标签：公司显示「名称＋代码」（如 平安银行 000001）；半径按连接数（度）分级
-          （0 度 18 / 1 度 22 / 2 度 27 / 3 度 33 px，公司再 +4px）。
-        · 节点属性面板：按类型列出该节点全部 kv（公司 stock_code/exchange/aliases；事件
-          event_type/event_time/confidence；政策 issuer/publish_date；文档 doc_id/chunk_id/
-          source/publish_date），空值一律显示「—（空）」，不补写。
-        · 边：有向箭头 ＋ 边上的中文关系名（映射表见第六节）；边属性 role / confidence /
-          source_doc_id / source_chunk_id 全部可见；线宽与透明度双编码 confidence
-          （线宽 = 1.0 + conf×1.6，不透明度 = .55 + conf×.45；confidence 为空时走虚线、
-          线宽 1.0、不透明度 .55），图例里写明这条编码规则。
-        · 点边 → 面板显示四项属性 ＋「跳到对应证据」按钮（按 source_chunk_id 在证据清单里
-          定位并高亮该条证据卡）。
-        · 交互：类型复选筛选 / 深度 1 跳·2 跳切换 / 时间区间过滤（按 event_time，空值不上轴）/
-          滚轮缩放 · 拖拽平移 · 一键重置；点节点高亮其邻居与关联边、其余淡化；节点与边均可
-          Tab 聚焦、Enter 选中。
-        · 路径列表与画布联动：起 → 关系 → 终 ＋ 深度 ＋ 首条关系四项属性，点行即高亮该路径。
-        · 孤立节点单列，逐条写明「该节点在本次返回的图谱路径中未出现邻接边」。
-        · 准确性声明常驻：「数据来源：本次返回的 17 条路径 / 10 节点 / 6 边」「图谱深度上限 2 跳」。
-   2.【意见二 · 证据一键跳到来源】每条证据卡与历史回看的证据表都新增：
-        · 来源站名 ＋ 域名（如 巨潮资讯网 · static.cninfo.com.cn，映射表 DOMAIN）；
-        · 「查看原文 ↗」外链（<a href="真实URL" target="_blank" rel="noopener">）。
-        8 条证据的 url 逐字取自真实接口 GET /api/evidence/16 的原样返回，未改写、未拼接。
-        由此证据1／3 为同文档的两个块（URL 相同、chunk_id 1337001 / 1337000），
-        证据2／4 同理（chunk_id 1274004 / 1274000）——照实分列，不合并。
-   3.【意见三 · 历史回看也要图谱可视化】回看抽屉由「三张表」扩为四段：
-        问题 → 答案四段 → 证据表（含「查看原文 ↗」与「定位证据」）→ 图谱路径可视化。
-        末段复用屏③的同一套渲染器、同一张图例、同一句准确性声明，并显式标注口径：
-        「按当时记录的路径载荷还原 · 不重新查询图谱」（看到的是当时的真实结果，不是图谱的当前状态）。
-        没有 answer.graph_path 载荷的会话，第四段只给固定文案，不补画节点或边。
-        回看证据表末列同样是「原文」：8 行与屏②同源，均给出真实接口返回的 url。
-        两处外链落点：① 屏② 8 张证据卡；② 回看抽屉「表三 · 证据表」末列。
-   4.【意见四 · 实时区扩为三块】原「行情接入位」扩为「实时区」，含三个区块、三种数据来源：
-        ① 实时行情（外部行情接口 · 未接入）② 当时重大新闻（外部新闻公告接口 · 2026-09-30 实测）
-        ③ 相关股近一周的重要报告（本系统语料库 · 不依赖外部源 · 语料内 2026-09-18~09-25 共 58 篇，
-           巨潮资讯网 46／证券日报网 5／中国政府网 4／中证网 3）。
-        统一两态开关；实时区标题旁常驻声明：实时区只作展示、不进入问答证据链，答案仍锚定语料截止 2026-09-25。
-        ③ 是「不依赖外部源」的降级形态，两态下都常驻；② 只在已接入态显示（6 条真实抓取条目）；
-        ① 已接入态的价格／涨跌幅为界面示意，未接入态不显示任何报价。
-   5.【定点修正 · 补齐 8 条证据的真实外链】原判「本会话记录未带回 document.url，故 8 张卡
-        显示『记录未给出』」系依据 qa_records.jsonl（该记录确不含 url）；经核对真实接口
-        GET /api/evidence/16 的返回，8/8 条均带 url，故两处落点全部替换为接口原值：
-        屏② 8 张证据卡与回看抽屉「表三 · 证据表」末列，来源站名＋域名＋日期＋查看原文 ↗ 一并补齐。
-        同时撤掉屏②底部临时加的「语料内真实原文外链」（3 条长城汽车 PDF）与回看表下同款 3 行
-        —— 该临时块的功能已被真实外链取代；那 3 条与「实时区 · 相关股近一周报告」的口径
-        （语料截止 2026-09-25 前 7 天）不符，故不并入该块，直接移除。
-        其余（视觉语言／四屏／图谱／回看口径标注／实时区三块两态／红绿令牌）一律未动。
-
-  ▍九、数据说明
-   本原型分三类文字，界面上一律分开放置、不互相冒充：
+  ▍七、数据说明
+   本原型分两类文字，界面上一律分开放置、不互相冒充：
      · 真实记录 —— 证据条目、图谱路径、事件三元组、判定区间、数据版本与截止时间，
        取自 ashare_qa 六表的一次真实问答输出，原样呈现。
-     · 真实外链 —— 站内每一个外链地址都是真实存在的地址，未编造任何 URL：
-         8 条证据的外链（6 条巨潮资讯网 PDF ＋ 2 条证券日报网新闻）取自 GET /api/evidence/16；
-         实时区区块② 3 条东方财富公告原文；区块③ 4 条语料库条目（巨潮 PDF / 中国政府网 / 证券日报网）。
-     · 示意形态 —— 仅「实时行情（已接入态）」一处价格与涨跌幅，用于展示数据源接入后的样子，
+     · 示意形态 —— 仅「行情接入位（已接入态）」一处，用于展示数据源接入后的样子，
        已就地标注「示意」，不含任何真实报价。行情数据源当前未接入。
    伊利股份证券代码 600887 为公开市场代码，非记录中给出的字段；记录未给出字段值时
-   界面留白并标注「未给出」或「—（空）」，不做补写。
+   界面留白并标注「未给出」，不做补写。
   ============================================================================
 -->
 <style>
@@ -204,7 +135,6 @@
   --accent-soft:rgba(230,57,70,.10); --accent-line:rgba(230,57,70,.42);
   --down:#22C55E;
   --c-person:#6C7BE0; --c-org:#3E93B8; --c-event:#A06CD5; --c-policy:#8792A8; --c-industry:#C3CBD8;
-  --c-doc:#C89B5A;                               /* v4 新增：文档 / Document 节点色 */
   --ok:#8FA6B2;                                  /* 青灰：状态指示 */
   --f-display:"Host Grotesk","DM Sans","Inter","Helvetica Neue",Arial,system-ui,sans-serif;
   --f-body:"Inter","Helvetica Neue",Arial,system-ui,sans-serif;
@@ -632,12 +562,21 @@ body[data-market="on"]  .mk-off{display:none!important}
   background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
                    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
   background-size:48px 48px}
-/* 节点/边的形状与悬停态；描边宽度、透明度编码与筛选态在 14b 里定义（v4） */
-.gnode{cursor:pointer}
+#graph{position:relative;width:100%;height:auto;display:block}
+.gedge{stroke:rgba(255,255,255,.13);stroke-width:1.1;fill:none;transition:stroke .3s var(--ease),stroke-width .3s var(--ease),opacity .3s var(--ease)}
+.gedge.hot{stroke:var(--accent);stroke-width:1.8}
+.gedge.dim{opacity:.12}
+.gelabel{font-family:var(--f-mono);font-size:9.5px;fill:var(--accent-ink);letter-spacing:.02em;opacity:0;transition:opacity .3s var(--ease)}
+.gelabel.on{opacity:1}
+.gnode{cursor:pointer;transition:opacity .3s var(--ease)}
+.gnode.dim{opacity:.16}
 .gnode .shape{stroke-width:1.6;transition:stroke .25s var(--ease),fill .25s var(--ease),filter .25s var(--ease)}
 .gnode:hover .shape{stroke:#fff}
 .gnode.sel .shape{stroke:#fff;stroke-width:2.2;filter:drop-shadow(0 0 10px rgba(230,57,70,.55))}
-.gnode .code{font-family:var(--f-mono)}
+.gnode text{font-family:var(--f-body);font-size:11.5px;fill:var(--muted);text-anchor:middle;paint-order:stroke;
+            stroke:rgba(15,15,16,.9);stroke-width:3px;transition:fill .25s var(--ease)}
+.gnode:hover text,.gnode.sel text{fill:var(--fg)}
+.gnode .code{font-family:var(--f-mono);font-size:9px;fill:var(--faint)}
 .gpanel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;min-height:430px;
         display:flex;flex-direction:column}
 .gpanel__head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--border)}
@@ -739,196 +678,8 @@ body[data-market="on"]  .mk-off{display:none!important}
 .footer__bottom{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-top:22px}
 .footer__legal{font-size:12px;color:var(--faint);max-width:76ch;line-height:1.7}
 
-/* ============================ 14b. v4 新增：图谱 / 证据外链 / 实时区 ============================ */
-
-/* --- 图谱工具条 / 画布 / 属性面板 --- */
-.gtoolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
-.gwrap{display:grid;grid-template-columns:minmax(0,1fr) 348px;gap:16px;align-items:start}
-.gcanvasWrap{position:relative;background:linear-gradient(180deg,rgba(22,24,28,.92),rgba(15,15,16,.92));
-  border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
-.gcanvasWrap::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
-  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
-                   linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
-  background-size:48px 48px}
-.gcanvasWrap svg{position:relative;width:100%;height:auto;display:block;touch-action:none;
-  user-select:none;-webkit-user-select:none;cursor:grab}
-.gcanvasWrap svg.panning{cursor:grabbing}
-.gcanvasWrap .gnode text{font-family:var(--f-body);font-size:11.5px;fill:var(--fg);text-anchor:middle;
-  paint-order:stroke;stroke:rgba(13,13,14,.86);stroke-width:3px;stroke-linejoin:round;pointer-events:none}
-.gcanvasWrap .gnode text.code{font-family:var(--f-mono);font-size:9.5px;fill:var(--faint);stroke-width:2.6px}
-.gcanvasWrap .gelabel{font-family:var(--f-mono);font-size:9.5px;fill:var(--muted);
-  paint-order:stroke;stroke:rgba(13,13,14,.9);stroke-width:3px;stroke-linejoin:round;pointer-events:none}
-.gnode{transition:opacity .22s var(--ease)}
-.geline{transition:opacity .22s var(--ease)}
-.gnode.dim,.geline.dim{opacity:.22}
-.gnode.out,.geline.out{opacity:.06}
-.gnode.dim .halo{opacity:0}
-.gedge{transition:stroke-width .2s var(--ease),stroke-opacity .2s var(--ease),stroke .2s var(--ease)}
-.gedge.hot{stroke:var(--accent);stroke-opacity:1}
-
-/* --- 图谱画布：缩放与平移 --- */
-.gcanvasWrap svg{touch-action:none;user-select:none;cursor:grab}
-.gcanvasWrap svg.panning{cursor:grabbing}
-.gzctl{position:absolute;right:12px;top:12px;z-index:3;display:flex;flex-direction:column;gap:6px}
-.gzbtn{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:rgba(15,15,16,.84);
-  color:var(--muted);font-family:var(--f-mono);font-size:15px;line-height:1;display:grid;place-items:center;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  transition:border-color .25s var(--ease),color .25s var(--ease),background .25s var(--ease)}
-.gzbtn:hover{border-color:var(--accent-line);color:var(--fg);background:var(--accent-soft)}
-.gzbtn--wide{width:30px;font-size:10px;letter-spacing:.02em}
-.gzoomv{position:absolute;right:12px;bottom:12px;z-index:3;font-family:var(--f-mono);font-size:10.5px;
-  color:var(--faint);background:rgba(15,15,16,.72);border:1px solid var(--border-soft);border-radius:6px;padding:3px 7px}
-
-/* --- 画布角落：可读图例（形状＋中文名＋本次计数＋边编码规则） --- */
-.glegendBox{position:absolute;left:14px;top:14px;z-index:3;width:262px;
-  background:rgba(13,13,14,.91);border:1px solid var(--border);border-radius:12px;padding:12px 13px 11px;
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.glegendBox__t{display:block;margin-bottom:9px}
-.glg{display:flex;flex-direction:column;gap:5px}
-.glg__i{display:grid;grid-template-columns:16px minmax(0,1fr) auto;align-items:center;gap:9px;
-  font-size:11.5px;color:var(--muted)}
-.glg__i svg{width:16px;height:16px;display:block}
-.glg__i b{font-weight:500;color:var(--fg)}
-.glg__i em{font-style:normal;font-family:var(--f-mono);font-size:10.5px;color:var(--faint)}
-.glg__i[data-zero="1"]{opacity:.48}
-.glg__rule{margin-top:10px;padding-top:9px;border-top:1px solid var(--border-soft);
-  font-size:10.5px;line-height:1.65;color:var(--faint)}
-.glg__rule i{font-style:normal;font-family:var(--f-mono);color:var(--muted)}
-.glg__rule b{color:var(--muted);font-weight:500}
-
-/* --- 有向边 / 键盘焦点 --- */
-.gedge{pointer-events:none}
-.gehit{stroke:transparent;stroke-width:14;fill:none;cursor:pointer}
-.gnode:focus,.geline:focus{outline:none}
-.gnode .halo{fill:none;stroke:var(--accent);stroke-width:1.2;opacity:0;transition:opacity .2s var(--ease)}
-.gnode:focus-visible .halo,.gnode:hover .halo{opacity:.85}
-.gnode:focus-visible .shape{stroke:#fff;stroke-width:2.4}
-.geline:focus-visible .gedge{stroke:var(--accent);stroke-width:2.6;opacity:1}
-.geline{cursor:pointer}
-.gelabel{opacity:.9}
-.gelabel.on{opacity:1;fill:var(--accent-ink)}
-.gnode .deg{font-family:var(--f-mono);font-size:8.5px;fill:var(--faint)}
-
-/* --- 工具栏：分段控件 --- */
-.seg{display:inline-flex;padding:3px;border-radius:9px;border:1px solid var(--border);background:rgba(255,255,255,.03)}
-.seg__b{height:28px;padding:0 13px;border-radius:7px;font-size:12.5px;color:var(--muted);
-  transition:background .25s var(--ease),color .25s var(--ease)}
-.seg__b:hover{color:var(--fg)}
-.seg__b[aria-pressed="true"]{background:var(--accent-deep);color:#fff}
-.chip--f{gap:7px;height:30px;padding:0 11px 0 9px;font-size:12.5px}
-.chip--f .bx{width:12px;height:12px;border-radius:3px;border:1px solid rgba(255,255,255,.3);flex:none;
-  display:grid;place-items:center;transition:background .2s var(--ease),border-color .2s var(--ease)}
-.chip--f[aria-checked="true"] .bx{background:var(--accent-deep);border-color:var(--accent-deep)}
-.chip--f[aria-checked="true"]{border-color:rgba(230,57,70,.42);color:var(--fg)}
-.chip--f[disabled]{opacity:.42;cursor:not-allowed}
-.chip--f[disabled]:hover{border-color:var(--border);color:var(--muted)}
-.chip--f .bx svg{width:9px;height:9px;color:#fff;opacity:0;transition:opacity .18s var(--ease)}
-.chip--f[aria-checked="true"] .bx svg{opacity:1}
-.gbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-
-/* --- 路径列表（与画布联动） --- */
-.gpaths{display:flex;flex-direction:column;gap:8px;max-height:352px;overflow-y:auto;padding-right:5px}
-.gpath{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;width:100%;text-align:left;
-  padding:11px 13px;border-radius:9px;background:rgba(255,255,255,.028);border:1px solid var(--border-soft);
-  transition:border-color .25s var(--ease),background .25s var(--ease)}
-.gpath:hover{border-color:var(--accent-line);background:rgba(230,57,70,.06)}
-.gpath.on{border-color:var(--accent);background:var(--accent-soft)}
-.gpath__l{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--fg);min-width:0}
-.gpath__l i{width:8px;height:8px;border-radius:50%;flex:none}
-.gpath__rel{font-family:var(--f-mono);font-size:10.5px;color:var(--accent-ink);white-space:nowrap}
-.gpath__d{font-family:var(--f-mono);font-size:10.5px;color:var(--faint);white-space:nowrap;align-self:center}
-.gpath__a{grid-column:1/-1;font-family:var(--f-mono);font-size:10.5px;color:var(--faint);line-height:1.62;
-  padding-top:8px;margin-top:1px;border-top:1px solid var(--border-soft);word-break:break-all}
-.gpath__flt{color:var(--faint);font-size:11.5px;line-height:1.6;padding:8px 0}
-
-/* --- 孤立节点 --- */
-.giso{display:flex;flex-direction:column;gap:8px}
-.giso__i{display:grid;grid-template-columns:16px minmax(0,1fr);gap:11px;align-items:start;
-  padding:11px 13px;border-radius:9px;border:1px dashed var(--border)}
-.giso__i svg{width:16px;height:16px;margin-top:1px}
-.giso__n{font-size:12.5px;color:var(--fg)}
-.giso__d{font-size:11.5px;color:var(--faint);line-height:1.65;margin-top:4px}
-.giso__d i{font-style:normal;font-family:var(--f-mono)}
-
-/* --- 准确性声明 --- */
-.gacc{display:flex;flex-wrap:wrap;align-items:center;gap:9px;padding:13px 15px;border-radius:var(--r-md);
-  background:rgba(255,255,255,.022);border:1px solid var(--border)}
-.gacc b{font-family:var(--f-mono);font-weight:500;color:var(--fg);font-variant-numeric:tabular-nums}
-.gnote{font-size:11.5px;line-height:1.68;color:var(--faint);max-width:108ch}
-.gnote i{font-style:normal;font-family:var(--f-mono);color:var(--muted)}
-
-/* --- 证据卡：来源域名 + 原文外链 --- */
-.ev__src{display:grid;grid-template-columns:52px minmax(0,1fr);gap:9px;align-items:baseline;
-  font-size:11.5px;line-height:1.5;margin-bottom:8px}
-.ev__src>span{color:var(--faint);letter-spacing:.04em}
-.ev__src b{font-weight:500;color:var(--fg)}
-.ev__src em{font-style:normal;font-family:var(--f-mono);font-size:11px;color:var(--muted);word-break:break-all}
-.ev__acts{margin-top:11px;padding-top:11px;border-top:1px solid var(--border-soft);
-  display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.ev__link{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:7px;
-  border:1px solid var(--accent-line);color:var(--accent-ink);font-size:12px;white-space:nowrap;
-  transition:background .22s var(--ease),color .22s var(--ease),border-color .22s var(--ease)}
-.ev__link:hover{background:var(--accent-deep);border-color:var(--accent-deep);color:#fff}
-.ev__link svg{width:11px;height:11px;flex:none}
-.ev__nolink{display:inline-flex;align-items:center;height:30px;padding:0 12px;border-radius:7px;
-  border:1px dashed var(--border);color:var(--faint);font-size:12px;white-space:nowrap}
-.ev__dom{font-family:var(--f-mono);font-size:10.5px;color:var(--faint);margin-left:auto}
-.ev__link--sm,.ev__nolink--sm{height:26px;padding:0 10px;font-size:11.5px}
-.tbl__go{height:26px;padding:0 10px;border-radius:7px;border:1px solid var(--border);background:rgba(255,255,255,.03);
-  color:var(--muted);font-size:11.5px;white-space:nowrap;transition:border-color .22s var(--ease),color .22s var(--ease)}
-.tbl__go:hover{border-color:var(--accent-line);color:var(--fg)}
-
-/* --- 实时区：三块三来源 --- */
-.rt{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}
-.rt__blk{background:linear-gradient(180deg,var(--surface),rgba(22,24,28,.72));border:1px solid var(--border);
-  border-radius:var(--r-lg);padding:18px 20px 16px;display:flex;flex-direction:column;min-width:0}
-.rt__blk--a{grid-column:span 12}
-.rt__blk--b{grid-column:span 5}
-.rt__blk--c{grid-column:span 7}
-.rt__head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;
-  padding-bottom:13px;border-bottom:1px solid var(--border-soft);margin-bottom:14px}
-.rt__no{font-family:var(--f-mono);font-size:11px;color:var(--accent-ink);letter-spacing:.08em}
-.rt__t{font-family:var(--f-display);font-weight:700;font-size:18px;letter-spacing:-.02em;margin-top:6px}
-.rt__meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px}
-.rt__src{font-size:11.5px;color:var(--faint);line-height:1.65;max-width:44ch}
-.rt__src b{color:var(--muted);font-weight:500}
-.rt__src i{font-style:normal;font-family:var(--f-mono);color:var(--muted)}
-.rt__list{display:flex;flex-direction:column}
-.rt__item{display:grid;grid-template-columns:104px minmax(0,1fr) auto;gap:12px;align-items:baseline;
-  padding:11px 0;border-bottom:1px solid var(--border-soft)}
-.rt__item:last-child{border-bottom:0}
-.rt__time{font-family:var(--f-mono);font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
-.rt__ttl{font-size:12.5px;line-height:1.55;color:var(--fg);word-break:break-word}
-.rt__site{display:block;font-size:11px;color:var(--faint);margin-top:4px}
-.rt__go{font-family:var(--f-mono);font-size:10.5px;color:var(--accent-ink);white-space:nowrap;align-self:center;
-  display:inline-flex;align-items:center;gap:5px;transition:color .2s var(--ease)}
-.rt__go:hover{color:var(--accent-soft-text);text-decoration:underline}
-.rt__go--off{color:var(--faint);font-family:var(--f-mono)}
-.rt__empty{display:flex;align-items:center;gap:17px;min-height:150px;padding:22px 20px;
-  border:1px dashed var(--border);border-radius:var(--r-md);background:rgba(255,255,255,.014)}
-.rt__empty svg{width:46px;height:46px;flex:none;color:rgba(230,57,70,.42)}
-.rt__empty b{display:block;font-family:var(--f-display);font-weight:700;font-size:16px;letter-spacing:-.02em;
-  color:var(--fg);margin-bottom:6px}
-.rt__empty p{font-size:12.5px;line-height:1.66;color:var(--faint);max-width:62ch}
-.rt__note{margin-top:auto;padding-top:13px;border-top:1px solid var(--border-soft);
-  font-size:11px;color:var(--faint);line-height:1.65}
-.rt__note b{color:var(--muted);font-weight:500}
-.rt__note i{font-style:normal;font-family:var(--f-mono);color:var(--muted)}
-.rt__seg{display:inline-flex;gap:6px;flex-wrap:wrap}
-
-/* --- 回看抽屉：图谱还原 --- */
-.dgraph{margin-top:16px}
-.notice--calm{background:rgba(143,166,178,.10);border-color:rgba(143,166,178,.34);color:#D6DDE2}
-.notice--calm svg{color:var(--ok)}
-.dsub{border-top:1px solid var(--border);padding-top:14px;margin-top:16px}
-.dsub__h{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin-bottom:11px}
-
-/* --- 路径节点圆点：补 v4 新增的文档类型 --- */
-.path__node[data-t="doc"] i{background:var(--c-doc)}
-
 /* ============================ 15. 自适应 ============================ */
 @media (max-width:1180px){
-  .rt__blk--b,.rt__blk--c{grid-column:span 12}
   .ask{grid-template-columns:minmax(0,1fr) 330px}
   .caps{grid-template-columns:repeat(2,minmax(0,1fr))}
   .evgroup__cards{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -957,13 +708,6 @@ body[data-market="on"]  .mk-off{display:none!important}
   .hrow__nums{opacity:1;transform:none}
   .footer__top{grid-template-columns:1fr}
   .cursor{display:none}
-  /* v4：窄屏把画布角落图例放回文档流，避免遮挡图谱 */
-  .glegendBox{position:static;width:auto;border:0;border-radius:0;border-top:1px solid var(--border);
-              background:rgba(255,255,255,.02);backdrop-filter:none;-webkit-backdrop-filter:none}
-  .gzctl{top:8px;right:8px}
-  .rt__item{grid-template-columns:80px minmax(0,1fr);row-gap:6px}
-  .rt__go{grid-column:2;justify-self:start}
-  .rt__empty{flex-direction:column;align-items:flex-start;gap:12px}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
@@ -1025,8 +769,8 @@ body[data-market="on"]  .mk-off{display:none!important}
       <span class="fresh__mk" data-od-id="market-slot">
 
         <span class="mk-off" id="mktOff">
-          <span class="tag tag--muted">实时区未接入</span>
-          <span class="fresh__note">外部行情与新闻接口均未接入；语料内近一周一块始终可用，见屏①「实时区 · 三块数据源」</span>
+          <span class="tag tag--muted">行情数据源未接入</span>
+          <span class="fresh__note">接入后此处显示实时价格与涨跌幅；当前演示不含实时数据</span>
         </span>
 
         <span class="mk-on" id="mktOn">
@@ -1039,9 +783,9 @@ body[data-market="on"]  .mk-off{display:none!important}
 
       <button class="switch fresh__switch" id="mkSwitch" type="button" role="switch" aria-checked="false"
               aria-labelledby="mkSwitchLab" data-od-id="toggle-market"
-              title="切换实时区：未接入（当前真实状态）／已接入（外部源为 2026-09-30 实测抓取，行情报价为示意）">
+              title="切换行情接入位：未接入（当前真实状态）／已接入（示意）">
         <span class="switch__track" aria-hidden="true"><i class="switch__knob"></i></span>
-        <span class="switch__lab" id="mkSwitchLab">实时接入</span>
+        <span class="switch__lab" id="mkSwitchLab">行情接入</span>
       </button>
 
     </div>
@@ -1161,127 +905,53 @@ body[data-market="on"]  .mk-off{display:none!important}
       </aside>
     </div>
 
-    <!-- ==================================================================
-         实时区：三个区块 · 三种数据来源 · 统一两态
-         ① 实时行情（外部行情接口 · 未接入）② 当时重大新闻（外部新闻公告接口 · 2026-09-30 实测）
-         ③ 相关股近一周的重要报告（本系统语料库 · 不依赖外部源 · 降级形态，两态下常驻）
-         ================================================================== -->
-    <div class="sec" data-od-id="realtime">
-      <div class="sec__head reveal">
-        <div class="sec__head-l">
-          <span class="label">03 / 实时区</span>
-          <h2 class="h2">实时区 · 三块数据源</h2>
-          <p class="body" style="max-width:82ch">实时区只作展示、不进入问答证据链；答案仍锚定语料截止 2026-09-25。三块各自标注来源与时间口径，绝不与语料口径混用。</p>
-        </div>
-        <div class="gbar">
-          <span class="tag tag--muted" id="rtStateTag" data-od-id="rt-state">实时接入 · 未接入（默认）</span>
-        </div>
-      </div>
-
-      <div class="rt">
-
-        <!-- ---- 区块 ①：实时行情（外部行情接口） ---- -->
-        <article class="rt__blk rt__blk--a reveal" data-od-id="rt-blk-market">
-          <div class="rt__head">
-            <div>
-              <span class="rt__no">01</span>
-              <h3 class="rt__t">实时行情</h3>
-              <div class="rt__meta">
-                <span class="tag">数据来源 · 外部行情接口</span>
-                <span class="tag tag--muted mk-off">未接入</span>
-                <span class="tag tag--red mk-on">实测形态 · 报价为示意</span>
-                <span class="tag mk-on">更新于 <b id="rtClock" class="mono">14:32:07</b></span>
-              </div>
-            </div>
-            <p class="rt__src">时间口径 <i>实时</i> · 当前状态 <b>未接入</b>。接入后显示价格、涨跌幅、成交额与更新时间戳；演示中的报价为界面示意，不是真实行情。</p>
-          </div>
-
-          <div class="mk-off">
-            <div class="rt__empty">
-              <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#bull"></use></svg>
-              <div>
-                <b>行情数据源未接入</b>
-                <p>外部行情接口当前未接入，因此这一块不显示任何价格、涨跌幅与成交额。语料侧不受影响 —— 文本、证据与图谱路径的数据截止为 2026-09-25（数据集 v2.1）。</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="mk-on">
-            <div class="kband__id" style="margin-bottom:10px">
+    <!-- 行情接入位：K 线（未接入 = 当前真实状态 / 已接入 = 示意） -->
+    <div class="sec--tight">
+      <div class="kband reveal" data-od-id="market-band">
+        <div class="kband__head">
+          <div>
+            <div class="kband__id">
               <span class="h3">平安银行</span>
               <span class="mono small">000001.SZ</span>
-              <span class="kband__px up" data-od-id="market-last">11.86</span>
-              <span class="mono small up">+0.51%</span>
-              <span class="tag tag--red">示意</span>
-              <span class="mono small" style="color:var(--muted)">成交额 ▲18.42 亿</span>
+              <span class="mk-on kband__px up" data-od-id="market-last">11.86</span>
+              <span class="mk-on mono small up">+0.51%</span>
+              <span class="mk-on tag tag--red">示意</span>
+              <span class="mk-off tag tag--muted">行情数据源未接入</span>
             </div>
-            <svg id="kline" viewBox="0 0 1200 268" preserveAspectRatio="xMidYMid meet"
-                 role="img" aria-label="平安银行近 25 个交易日 K 线图，含 MA5、MA10 与成交量柱（示意：行情数据源接入后的形态）"></svg>
-            <div class="kband__legend">
-              <span class="lg"><i style="background:#E63946"></i>阳线（收 ≥ 开）</span>
-              <span class="lg"><i style="background:#22C55E"></i>阴线（收 &lt; 开）</span>
-              <span class="lg"><i style="background:rgba(255,255,255,.62)"></i>MA5</span>
-              <span class="lg"><i style="background:#FF9AA2"></i>MA10</span>
-              <span class="lg"><i style="background:rgba(255,255,255,.22)"></i>成交量</span>
-              <span class="lg" style="margin-left:auto">示意：数据源接入后的形态，非真实报价</span>
-            </div>
+            <span class="label mk-on" style="display:block;margin-top:7px">日 K · 近 25 个交易日 · 更新于 14:32:07 · 示意，非真实报价</span>
+            <span class="label mk-off" style="display:block;margin-top:7px">接入行情数据源后，此处显示该标的的日 K 线、均线与量价指标</span>
           </div>
-        </article>
+          <div class="kband__kpis mk-on">
+            <div class="kpi"><span class="label">成交额</span><span class="kpi__v"><i class="up">▲</i>18.42 亿</span></div>
+            <div class="kpi"><span class="label">换手率</span><span class="kpi__v">1.87%</span></div>
+            <div class="kpi"><span class="label">市盈率 TTM</span><span class="kpi__v">21.63</span></div>
+            <div class="kpi"><span class="label">振幅</span><span class="kpi__v">3.42%</span></div>
+            <div class="kpi"><span class="label">量比</span><span class="kpi__v"><i class="down">▼</i>0.86</span></div>
+          </div>
+        </div>
 
-        <!-- ---- 区块 ②：当时重大新闻（外部新闻公告接口 · 2026-09-30 实测） ---- -->
-        <article class="rt__blk rt__blk--b reveal" style="--d:70ms" data-od-id="rt-blk-news">
-          <div class="rt__head">
+        <div class="mk-on">
+          <svg id="kline" viewBox="0 0 1200 268" preserveAspectRatio="xMidYMid meet"
+               role="img" aria-label="平安银行近 25 个交易日 K 线图，含 MA5、MA10 与成交量柱（示意：行情数据源接入后的形态）"></svg>
+          <div class="kband__legend">
+            <span class="lg"><i style="background:#E63946"></i>阳线（收 ≥ 开）</span>
+            <span class="lg"><i style="background:#22C55E"></i>阴线（收 &lt; 开）</span>
+            <span class="lg"><i style="background:rgba(255,255,255,.62)"></i>MA5</span>
+            <span class="lg"><i style="background:#FF9AA2"></i>MA10</span>
+            <span class="lg"><i style="background:rgba(255,255,255,.22)"></i>成交量</span>
+            <span class="lg" style="margin-left:auto">示意：数据源接入后的形态，非真实报价</span>
+          </div>
+        </div>
+
+        <div class="mk-off">
+          <div class="mkempty">
+            <svg class="mkempty__bull" viewBox="0 0 64 64" aria-hidden="true"><use href="#bull"></use></svg>
             <div>
-              <span class="rt__no">02</span>
-              <h3 class="rt__t">当时重大新闻</h3>
-              <div class="rt__meta">
-                <span class="tag">数据来源 · 外部新闻公告接口</span>
-                <span class="tag tag--muted mk-off">未接入</span>
-                <span class="tag tag--red mk-on">2026-09-30 实测抓取</span>
-              </div>
-            </div>
-            <p class="rt__src">时间口径 <i>抓取时刻</i>。下表标题与时间戳逐条来自 2026-09-30 的实测抓取结果；<b>实时区不进入问答证据链</b>。</p>
-          </div>
-          <div class="mk-off">
-            <div class="rt__empty">
-              <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#bull"></use></svg>
-              <div>
-                <b>外部新闻公告接口未接入</b>
-                <p>未接入时不显示任何新闻条目。切到「已接入」可看到 2026-09-30 实测抓取到的 6 条真实条目（3 条公告 · 3 条新闻，来源东方财富）。</p>
-              </div>
+              <div class="mkempty__t">行情数据源未接入</div>
+              <p class="mkempty__d">接入后此处显示实时价格与涨跌幅；当前演示不含实时数据。语料侧不受影响——文本、证据与图谱路径的数据截止为 2026-09-25（数据集 v2.1）。</p>
             </div>
           </div>
-          <div class="mk-on"><div class="rt__list" id="rtNewsList"></div></div>
-        </article>
-
-        <!-- ---- 区块 ③：相关股近一周的重要报告（本系统语料库 · 降级形态） ---- -->
-        <article class="rt__blk rt__blk--c reveal" style="--d:140ms" data-od-id="rt-blk-reports">
-          <div class="rt__head">
-            <div>
-              <span class="rt__no">03</span>
-              <h3 class="rt__t">相关股近一周的重要报告</h3>
-              <div class="rt__meta">
-                <span class="tag">数据来源 · 本系统语料库</span>
-                <span class="tag tag--red">不依赖外部源</span>
-                <span class="tag">语料内 2026-09-18 ~ 2026-09-25 · 58 篇</span>
-              </div>
-            </div>
-            <div class="rt__seg" id="rtFilter" role="group" aria-label="按类型筛选近一周报告" data-od-id="rt-filter">
-              <button class="chip" type="button" data-rtype="all" aria-pressed="true">全部<em class="chip__n">58</em></button>
-              <button class="chip" type="button" data-rtype="公告" aria-pressed="false">公告<em class="chip__n">46</em></button>
-              <button class="chip" type="button" data-rtype="新闻" aria-pressed="false">新闻<em class="chip__n">8</em></button>
-              <button class="chip" type="button" data-rtype="政策" aria-pressed="false">政策<em class="chip__n">4</em></button>
-            </div>
-          </div>
-          <div class="rt__list" id="rtDocList"></div>
-          <p class="rt__note">
-            口径：语料截止 <b>2026-09-25</b>，向前 7 天（<b>2026-09-18 ~ 2026-09-25</b>）库内共 <b>58</b> 篇 ——
-            巨潮资讯网 46 ／ 证券日报网 5 ／ 中国政府网 4 ／ 中证网 3；按类型即 公告 46 ／ 新闻 8 ／ 政策 4。
-            下表 <b>4 条</b>为其中的真实条目（标题／日期／原文直链逐字取自数据层），未覆盖全部 58 篇。
-            本块是<b>不依赖外部源</b>的降级形态，两态下都常驻。
-          </p>
-        </article>
-
+        </div>
       </div>
     </div>
 
@@ -1294,7 +964,7 @@ body[data-market="on"]  .mk-off{display:none!important}
     <div class="sec">
       <div class="sec__head reveal">
         <div class="sec__head-l">
-          <span class="label">04 / 产品界面</span>
+          <span class="label">03 / 产品界面</span>
           <h2 class="h2">一次提问，四份可回查的产物</h2>
           <p class="body" style="max-width:60ch">回答正文、证据清单、图谱路径与判定区间同时产出，四者互相索引。</p>
         </div>
@@ -1376,7 +1046,7 @@ body[data-market="on"]  .mk-off{display:none!important}
     <div class="sec">
       <div class="sec__head reveal">
         <div class="sec__head-l">
-          <span class="label">05 / 能力</span>
+          <span class="label">04 / 能力</span>
           <h2 class="h2">面向 A 股的事件口径与证据链</h2>
         </div>
         <a class="more" href="#" data-goto="graph" data-od-id="link-more-graph">了解更多</a>
@@ -1505,14 +1175,13 @@ body[data-market="on"]  .mk-off{display:none!important}
       <div class="graphOff" id="graphOff" hidden>本次回答未使用图谱扩展</div>
       <div class="metaGrid" style="margin-top:20px">
         <div class="metaCell"><span class="label">路径条数</span><b>17</b></div>
-        <div class="metaCell"><span class="label">路径深度上限</span><b>2 跳</b></div>
-        <div class="metaCell"><span class="label">本页节点 · 边</span><b>10 · 6</b></div>
+        <div class="metaCell"><span class="label">路径深度</span><b>1～2 跳</b></div>
+        <div class="metaCell"><span class="label">本页样例</span><b>2 条</b></div>
         <div class="metaCell"><span class="label">事件三元组</span><b>4 条</b></div>
       </div>
       <p class="small" style="margin-top:14px;max-width:96ch">
-        会话共 17 条图谱路径（记录里的深度为 1～2 跳），本页只还原接口原样返回的 2 条样例路径，属性行照抄不做补写；
+        会话共 17 条图谱路径（深度 1～2 跳），本页只还原接口原样返回的 2 条样例路径，属性行照抄不做补写；
         下方 4 条事件三元组来自同一次返回的 event 三元组列，EVT-0236 的 event_time 在记录里为空，显示「—（空）」。
-        整张子图的节点／边可视化落在<b>屏③「事件知识图谱」</b>：10 个节点、6 条边、7 类实体形状、中文关系名与 confidence 双编码，缺失值一律「—（空）」。
       </p>
     </div>
 
@@ -1546,18 +1215,37 @@ body[data-market="on"]  .mk-off{display:none!important}
       <div class="sec__head-l">
         <span class="label">03 / 事件知识图谱</span>
         <h1 class="h1">从公司出发，把事件连成能走的路</h1>
-        <p class="body" style="max-width:70ch">节点按实体类型区分形状，半径按连接数分级；边为有向箭头并标注中文关系名，线宽与透明度双编码 confidence。支持类型复选筛选、深度 1 跳／2 跳切换、按 event_time 的时间区间过滤，以及缩放、平移与一键重置。</p>
+        <p class="body" style="max-width:64ch">节点按实体类型区分形状与颜色，连线即关系。支持实体检索、一跳邻居与最多 2 跳的路径查询；点击节点查看属性与邻接关系；点击图例可筛选类型；底部时间轴拖动可按事件类型与时间区间筛选。</p>
       </div>
-      <span class="label">会话 A7F3-0912 子图 · 本次返回 17 条路径 / 10 节点 / 6 边</span>
+      <span class="label">会话 A7F3-0912 子图 · 10 节点 · 样例路径 2 / 共 17 条</span>
     </div>
 
-    <!-- 图谱本体由 mountGraph() 渲染（与历史回看共用同一套渲染器 / 图例 / 准确性声明） -->
-    <div id="graphApp" class="reveal" style="--d:70ms" data-od-id="graph-app"></div>
+    <div class="gtoolbar reveal">
+      <div class="glegend" id="gLegend" data-od-id="graph-legend"></div>
+      <div class="glegend">
+        <button class="chip" data-greset data-od-id="cta-graph-reset">重置视图</button>
+        <span class="label" id="graphHint">点击节点查看属性</span>
+      </div>
+    </div>
+
+    <div class="gwrap reveal" style="--d:70ms">
+      <div class="gcanvasWrap">
+        <svg id="graph" viewBox="0 0 860 540" role="img" aria-label="事件知识图谱：公司与事件、机构、政策、人物、行业的关系网络"></svg>
+      </div>
+
+      <aside class="gpanel" id="gpanel" data-od-id="graph-property-panel" aria-live="polite">
+        <div class="gpanel__head">
+          <span class="label">属性面板</span>
+          <span class="label" id="gpanelType">未选中</span>
+        </div>
+        <div class="gpanel__body" id="gpanelBody"></div>
+      </aside>
+    </div>
 
     <div class="tl reveal" style="--d:140ms" data-od-id="graph-timeline">
       <div class="tl__head">
         <div class="sec__title">
-          <span class="label">时间轴 · 按 event_time 过滤</span>
+          <span class="label">时间轴 · 按事件时间筛选</span>
           <span class="tl__range" id="tlRange">2026-07 → 2026-09</span>
         </div>
         <div class="glegend">
@@ -1566,14 +1254,14 @@ body[data-market="on"]  .mk-off{display:none!important}
           <button class="chip" data-tlreset data-od-id="cta-timeline-reset">重置区间</button>
         </div>
       </div>
-      <svg id="tlSvg" viewBox="0 0 1160 128" role="img" aria-label="时间轴筛选器，可拖动按 event_time 选择时间区间"></svg>
+      <svg id="tlSvg" viewBox="0 0 1160 128" role="img" aria-label="时间轴筛选器，可拖动选择事件时间区间"></svg>
     </div>
 
-    <p class="small reveal" style="margin-top:16px;max-width:106ch">
+    <p class="small reveal" style="margin-top:16px;max-width:96ch">
       时间轴只在记录里真正出现过的月份上取值：2026-07（最早证据 2026-07-03）～ 2026-09（数据截止 2026-09-25）。
-      过滤只作用于带 <span class="mono">event_time</span> 的节点（EVT-0260 / 0823 / 0827）与带 <span class="mono">publish_date</span> 的文档节点（doc_id 1183）；
-      EVT-0236 的 event_time 在记录里为空，落不到轴上，不参与时间筛选，属性面板显示「—（空）」。公司、人物、机构本身没有事件时间，同样不参与时间筛选、始终显示（是否在跳数范围内由上面的深度切换单独决定）。
-      EVT-0236／EVT-0823／EVT-0827 在本次返回的 6 条边里确实没有邻接边——不是渲染缺失，它们已单列在「孤立节点」区。
+      EVT-0236 的事件时间为空，落不到轴上，因此不参与时间筛选，其属性面板里「事件时间」显示为「—（空）」。
+      EVT-0236／EVT-0823／EVT-0827 只由事件三元组列给出，不在本次接口返回的 2 条样例路径里，所以没有邻接边——
+      图上的孤立节点不是渲染缺失，是记录里就只有这些。
     </p>
   </div>
 </section>
@@ -1587,7 +1275,7 @@ body[data-market="on"]  .mk-off{display:none!important}
       <div class="sec__head-l">
         <span class="label">04 / 历史记录</span>
         <h1 class="h1">每一次提问都留痕</h1>
-        <p class="body" style="max-width:68ch">一行一次会话。点开回看按当时记录的路径载荷还原四段：问题 → 答案四段 → 证据表 → 图谱路径可视化。图谱一节复用屏③同一套渲染器、同一张图例与同一句准确性声明，且<strong style="color:var(--fg);font-weight:600">不重新查询图谱</strong>。</p>
+        <p class="body" style="max-width:62ch">一行一次会话。点开回看时只还原三张表（问题／答案／证据），不重新渲染当时的图谱路径视图，只保留「是否有图谱路径」的布尔标记。</p>
       </div>
       <span class="label">本演示收录 1 次完整问答 · 其余为问题清单</span>
     </div>
@@ -1596,7 +1284,7 @@ body[data-market="on"]  .mk-off{display:none!important}
       <div class="hstat"><span class="label">完整收录会话</span><b>1</b></div>
       <div class="hstat"><span class="label">该会话证据</span><b>8</b></div>
       <div class="hstat"><span class="label">该会话图谱路径</span><b>17</b></div>
-      <div class="hstat"><span class="label">图谱深度上限</span><b>2 跳</b></div>
+      <div class="hstat"><span class="label">路径深度</span><b>1～2 跳</b></div>
     </div>
 
     <div class="hrows" id="hrows" data-od-id="history-list"></div>
@@ -1646,12 +1334,12 @@ body[data-market="on"]  .mk-off{display:none!important}
     </div>
     <div class="footer__bottom">
       <p class="footer__legal">本原型的证据条目、图谱路径、事件三元组、数据版本与截止时间，取自 ashare_qa 六表的一次真实问答输出，原样呈现，未做改写。行情数据源当前未接入：跑马灯与 K 线区域默认显示「行情数据源未接入」，其间不含任何报价；切到「已接入」态时显示的价格、涨跌幅与时间戳为界面示意，已就地标注。语料口径与行情口径分属两套时间基准，不可混用。不构成任何投资建议。</p>
-      <span class="label">© 2026 牛势问答 · 演示原型 v1.4（v4 图谱重做 / 证据外链 / 回看图谱 / 实时区三块）</span>
+      <span class="label">© 2026 牛势问答 · 演示原型 v1.3</span>
     </div>
   </div>
 </footer>
 
-<!-- ============ 抽屉：回看四段（问题 / 答案 / 证据表 / 图谱路径可视化） ============ -->
+<!-- ===================== 抽屉：回看三张表 ===================== -->
 <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
   <div class="drawer__scrim" data-close></div>
   <div class="drawer__panel">
@@ -1663,18 +1351,11 @@ body[data-market="on"]  .mk-off{display:none!important}
       <button class="btn btn--ghost btn--sm" data-close data-od-id="cta-drawer-close">关闭</button>
     </div>
     <div class="drawer__body">
-      <div class="notice notice--calm">
+      <div class="notice">
         <svg aria-hidden="true"><use href="#i-alert"></use></svg>
-        <span><strong style="color:#fff;font-weight:600">按当时记录的路径载荷还原 · 不重新查询图谱</strong>（看到的是当时的真实结果，不是图谱的当前状态）。本系统把图谱路径原样存进了 <span class="mono">answer.graph_path</span>（原始 JSON 文本），回看只是把这份载荷重新渲染一遍。</span>
+        <span>回看只还原三张表内容，不重新渲染当时的图谱路径。</span>
       </div>
       <div id="drawerTables"></div>
-      <div class="dsub" id="drawerGraphSec">
-        <div class="dsub__h">
-          <span class="label">表四 · 图谱路径可视化</span>
-          <span class="label">与屏③同一套渲染器 · 同一张图例 · 同一句准确性声明</span>
-        </div>
-        <div id="drawerGraphHost" class="dgraph"></div>
-      </div>
     </div>
   </div>
 </div>
@@ -1685,11 +1366,6 @@ var $=function(s,r){return (r||document).querySelector(s)};
 var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
 var reduceMQ=matchMedia("(prefers-reduced-motion: reduce)");
 var fineMQ=matchMedia("(hover:hover) and (pointer:fine)");
-/* 站内所有「原文 ↗」图标共用同一个 <svg> 片段（实时区、证据卡、回看证据表三处共用） */
-var EXT='<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" '+
-        'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+
-        '<path d="M4.2 2.4H2.6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V7.8"/>'+
-        '<path d="M7 1.6h3.4V5"/><path d="M10.4 1.6 5.6 6.4"/></svg>';
 
 /* ============================================================
    1. 背景：动态、持续波动、整体上升的股票曲线
@@ -1794,8 +1470,8 @@ var EXT='<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width
    ⚠ 未接入态不填任何价格 —— 本系统当前没有接行情数据源。
       已接入态的价格/涨跌幅/时间戳全部是「示意」，界面已就地标注。
    ============================================================ */
-(function realtime(){
-  var sw=$("#mkSwitch"), box=$("#tickerTrack"), tag=$("#rtStateTag"), clock=$("#rtClock");
+(function market(){
+  var sw=$("#mkSwitch"), box=$("#tickerTrack");
 
   // 只在「已接入（示意）」态出现的报价，用于展示数据源接入后的形态
   var D=[["000001","平安银行","11.86",0.51],["600887","伊利股份","28.34",-0.72],
@@ -1811,86 +1487,9 @@ var EXT='<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width
     });
     box.innerHTML=html+html;
   }
-
-  /* ------------------------------------------------------------
-     区块② 当时重大新闻 —— 外部新闻公告接口
-     ⚠ 下列 6 条为 2026-09-30 实测抓取到的真实条目，标题／时间戳逐字照录，未做改写。
-        3 条公告带原文直链（东方财富数据接口）；3 条新闻本次未取到 URL，按纪律显示「未给出」。
-     ------------------------------------------------------------ */
-  var NEWS=[
-   {rt:"公告",t:"平安银行:董事会决议公告",date:"2026-09-30",time:"2026-09-30",
-    url:"https://data.eastmoney.com/notices/detail/000001/AN202609291829997521.html"},
-   {rt:"公告",t:"平安银行:关于2026年金融债券(第一期)发行完毕的公告",date:"2026-09-22",time:"2026-09-22",
-    url:"https://data.eastmoney.com/notices/detail/000001/AN202609211829724767.html"},
-   {rt:"公告",t:"平安银行:投资者关系管理信息",date:"2026-09-18",time:"2026-09-18",
-    url:"https://data.eastmoney.com/notices/detail/000001/AN202609181829615110.html"},
-   {rt:"新闻",t:"平安银行：董事会决议公告",date:"2026-09-29",time:"2026-09-29 20:38",url:""},
-   {rt:"新闻",t:"【调研快报】平安银行接待境内投资者调研",date:"2026-09-18",time:"2026-09-18 16:40",url:""},
-   {rt:"新闻",t:"平安银行：对公房地产贷款余额1,984亿元",date:"2026-09-18",time:"2026-09-18 15:50",url:""}
-  ];
-
-  /* ------------------------------------------------------------
-     区块③ 相关股近一周的重要报告 —— 本系统语料库（降级形态，不依赖外部源）
-     ⚠ 口径：语料截止 2026-09-25，向前 7 天（2026-09-18 ~ 2026-09-25）库内共 58 篇：
-        巨潮资讯网 46 ／ 证券日报网 5 ／ 中国政府网 4 ／ 中证网 3；
-        按界面类型即 公告 46 ／ 新闻 8 ／ 政策 4。
-        下表 4 条是其中的真实条目，标题／日期／URL 逐字取自数据层，未覆盖全部 58 篇。
-     ------------------------------------------------------------ */
-  var DOCS=[
-   {rt:"公告",date:"2026-09-25",t:"保利发展控股集团股份有限公司2026年度第一期中期票据发行结果公告",
-    site:"巨潮资讯网",url:"https://static.cninfo.com.cn/finalpage/2026-09-25/1225582458.PDF"},
-   {rt:"公告",date:"2026-09-25",t:"恒瑞医药2026年第一次临时股东会决议公告",
-    site:"巨潮资讯网",url:"https://static.cninfo.com.cn/finalpage/2026-09-25/1225582847.PDF"},
-   {rt:"政策",date:"2026-09-24",t:"中华人民共和国审计法实施条例",
-    site:"中国政府网",url:"https://www.gov.cn/zhengce/zhengceku/202609/content_7081973.htm"},
-   {rt:"新闻",date:"2026-09-24",t:"拟作价28.56亿元收购英迪芯微 信邦智能布局车规芯片构建多元化业务架构",
-    site:"证券日报网",url:"http://www.zqrb.cn/gscy/gongsi/2026-09-24/A1790231243205.html"}
-  ];
-
-  var newsList=$("#rtNewsList"),docList=$("#rtDocList"),filter=$("#rtFilter");
-  function item(o,showSite){
-    return '<div class="rt__item">'+
-      '<span class="rt__time">'+(o.time||o.date||"—")+'</span>'+
-      '<span class="rt__ttl">'+(o.rt?'<span class="tag" style="margin-right:7px">'+o.rt+"</span>":"")+o.t+
-        (showSite?'<span class="rt__site">'+(o.site||"东方财富")+(o.url?"":" · 本次未取到原文 URL")+"</span>":"")+
-      "</span>"+
-      (o.url?'<a class="rt__go" href="'+o.url+'" target="_blank" rel="noopener" '+
-              'aria-label="打开原文：'+o.t+'">'+EXT+"原文 ↗</a>"
-            :'<span class="rt__go rt__go--off">未给出</span>')+
-    "</div>";
-  }
-  function renderNews(){
-    if(newsList) newsList.innerHTML=NEWS.map(function(o){return item(o,true)}).join("");
-  }
-  var dt="all";
-  function renderDocs(){
-    if(!docList) return;
-    var list=DOCS.filter(function(o){return dt==="all"||o.rt===dt});
-    docList.innerHTML=list.length?list.map(function(o){return item(o,true)}).join("")
-      :'<div class="rt__empty" style="min-height:110px">'+
-        '<svg viewBox="0 0 64 64" aria-hidden="true"><use href="#bull"></use></svg>'+
-        "<div><b>该类型近一周没有收录条目</b><p>语料库 2026-09-18 ~ 2026-09-25 共 58 篇，本表只列出有原文直链的 4 条真实条目，未覆盖全部。</p></div></div>";
-  }
-  if(filter) filter.addEventListener("click",function(e){
-    var b=e.target.closest?e.target.closest("[data-rtype]"):null;if(!b) return;
-    dt=b.getAttribute("data-rtype");
-    $$("[data-rtype]",filter).forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});
-    renderDocs();
-  });
-  renderNews();renderDocs();
-
-  var clockT=null;
-  function stamp(){
-    if(!clock) return;
-    var d=new Date(),p=function(n){return String(n).padStart(2,"0")};
-    clock.textContent=p(d.getHours())+":"+p(d.getMinutes())+":"+p(d.getSeconds());
-  }
   function setMarket(on){
     document.body.setAttribute("data-market",on?"on":"off");
     if(sw) sw.setAttribute("aria-checked",on?"true":"false");
-    if(tag) tag.textContent="实时接入 · "+(on?"已接入（实测形态）":"未接入（默认）");
-    if(on){ stamp(); if(!clockT) clockT=setInterval(stamp,1000) }
-    else { clearInterval(clockT);clockT=null }
     save("od.ashare.market",on?"on":"off");
   }
   if(sw) sw.addEventListener("click",function(){
@@ -1971,57 +1570,30 @@ var EXT='<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width
 
 /* ============================================================
    4. 屏②：证据卡（四类分组）+ 原文上下文（该块 + 相邻块）
-   ⚠ 8 条证据的 rank／来源网站／日期／doc_id／chunk_id／url 全部逐字取自真实接口
-      GET /api/evidence/16 的原样返回，未改写、未拼接。字段缺失时界面留白标「未给出」，不补写。
+   ⚠ 8 条证据的 rank／来源网站／日期／doc_id／chunk_id 全部逐字取自真实问答记录。
+      记录未给出字段值的那一条，界面留白并标注「未给出」，不补写。
    ============================================================ */
 var EVIDENCE=[
  {g:"回答来源",items:[]},
  {g:"新闻来源",items:[
    {rank:5,t:'中报核心经营利润率持续提升、股东回报再加码 伊利股份增长“含金量”十足',
-    site:"证券日报网",date:"2026-08-27",doc:"2019",chunk:"2019000",
-    url:"http://www.zqrb.cn/shipin/shipinhangye/2026-08-27/A1787798283966.html"},
-   {rank:8,t:"伊利拟实施最高20亿元回购计划 上市以来累计分红金额近673亿元",
-    site:"证券日报网",date:"2026-08-27",doc:"2020",chunk:"2020000",
-    url:"http://www.zqrb.cn/shipin/shipinhangye/2026-08-27/A1787798283957.html"}
+    site:"",date:"2026-08-27",doc:"",chunk:""},
+   {rank:8,missing:true,site:"",date:"",doc:"",chunk:""}
  ]},
  {g:"公告来源",items:[
-   {rank:1,t:"董事会决议公告",site:"巨潮资讯网",date:"2026-07-03",doc:"1337",chunk:"1337001",
-    url:"https://static.cninfo.com.cn/finalpage/2026-07-03/1225406051.PDF"},
-   {rank:2,t:"关联交易公告",site:"巨潮资讯网",date:"2026-08-01",doc:"1274",chunk:"1274004",
-    url:"https://static.cninfo.com.cn/finalpage/2026-08-01/1225451412.PDF"},
-   {rank:3,t:"董事会决议公告",site:"巨潮资讯网",date:"2026-07-03",doc:"1337",chunk:"1337000",
-    url:"https://static.cninfo.com.cn/finalpage/2026-07-03/1225406051.PDF"},
-   {rank:4,t:"关联交易公告",site:"巨潮资讯网",date:"2026-08-01",doc:"1274",chunk:"1274000",
-    url:"https://static.cninfo.com.cn/finalpage/2026-08-01/1225451412.PDF"},
+   {rank:1,t:"董事会决议公告",site:"巨潮资讯网",date:"2026-07-03",doc:"1337",chunk:"1337001"},
+   {rank:2,t:"关联交易公告",site:"巨潮资讯网",date:"2026-08-01",doc:"1274",chunk:"1274004"},
+   {rank:3,t:"董事会决议公告",site:"巨潮资讯网",date:"2026-07-03",doc:"1337",chunk:"1337000"},
+   {rank:4,t:"关联交易公告",site:"巨潮资讯网",date:"2026-08-01",doc:"1274",chunk:"1274000"},
    {rank:6,t:"内蒙古伊利实业集团股份有限公司关于收到中国银行间市场交易商协会《接受注册通知书》的公告",
-    site:"巨潮资讯网",date:"2026-08-25",doc:"1183",chunk:"1183000",
-    url:"https://static.cninfo.com.cn/finalpage/2026-08-25/1225496541.PDF"},
-   {rank:7,t:"关于职工董事任职资格核准的公告",site:"巨潮资讯网",date:"2026-08-22",doc:"1200",chunk:"1200000",
-    url:"https://static.cninfo.com.cn/finalpage/2026-08-22/1225490393.PDF"}
+    site:"巨潮资讯网",date:"2026-08-25",doc:"1183",chunk:"1183000"},
+   {rank:7,t:"关于职工董事任职资格核准的公告",site:"巨潮资讯网",date:"2026-08-22",doc:"1200",chunk:"1200000"}
  ]},
  {g:"相关事件",items:[]}
 ];
 var EVALL=[];
 EVIDENCE.forEach(function(g){g.items.forEach(function(it){it.id="ev"+it.rank;it.g=g.g;EVALL.push(it)})});
 EVALL.sort(function(a,b){return a.rank-b.rank});   // 历史记录回看表直接复用同一份证据，两处不会打架
-
-/* ------------------------------------------------------------
-   4a. 来源域名 + 原文外链（v4 新增；本版按真实接口 GET /api/evidence/16 补齐）
-   ⚠ 8 条证据的 url 逐字取自 GET /api/evidence/16 的原样返回，未改写、未拼接。
-      [1] 与 [3] 是同一篇文档的两个块（URL 相同、chunk_id 1337001 / 1337000），
-      [2] 与 [4] 同理（chunk_id 1274004 / 1274000）——这是真实情况，照实分列不合并。
-   ------------------------------------------------------------ */
-var DOMAIN={"巨潮资讯网":"static.cninfo.com.cn","证券日报网":"www.zqrb.cn",
-            "中国政府网":"www.gov.cn","中证网":"www.cs.com.cn","东方财富":"data.eastmoney.com"};
-function urlOf(o){                       // 证据自带的 url，不再靠外部表匹配
-  if(!o||!o.url) return null;
-  return {url:o.url,t:o.t||"",site:o.site||"",date:o.date||"",doc:o.doc||"",chunk:o.chunk||""};
-}
-function linkHTML(u){
-  return u?'<a class="ev__link" href="'+u.url+'" target="_blank" rel="noopener" '+
-      'aria-label="查看原文：'+u.t+'（新窗口打开）">'+EXT+"查看原文 ↗</a>"
-    :'<span class="ev__nolink">记录未给出</span>';
-}
 
 (function evidence(){
   var box=$("#evGrid");if(!box) return;
@@ -2066,10 +1638,7 @@ function linkHTML(u){
               '<div class="ev__row"><span>发布日期</span><i>—</i></div>'+
               '<div class="ev__row"><span>文档号</span><i>—</i></div>'+
               '<div class="ev__row"><span>块序号</span><i>—</i></div>'+
-            "</div>"+
-            '<div class="ev__src"><span>来源站</span><div><em>记录未给出</em></div></div>'+
-            '<div class="ev__acts">'+linkHTML(null)+
-              '<span class="small">本次记录未携带 document.url，不猜链接</span></div></article>';
+            "</div></article>";
           return;
         }
         out+='<article class="ev" id="'+it.id+'" data-od-id="evidence-'+it.id+'">'+
@@ -2082,11 +1651,6 @@ function linkHTML(u){
             '<div class="ev__row"><span>文档号</span><i>'+(it.doc?"doc_id="+it.doc:"记录未给出")+"</i></div>"+
             '<div class="ev__row"><span>块序号</span><i>'+(it.chunk?"chunk_id="+it.chunk:"记录未给出")+"</i></div>"+
           "</div>"+
-          '<div class="ev__src"><span>来源站</span><div>'+
-            (it.site?'<b>'+it.site+"</b>"+(DOMAIN[it.site]?"<em> · "+DOMAIN[it.site]+"</em>":"")
-                    :'<em>记录未给出</em>')+"</div></div>"+
-          '<div class="ev__acts">'+linkHTML(urlOf(it))+
-            '<span class="small">'+(urlOf(it)?"原文按接口返回的 url 直达，新窗口打开":"本条未返回 url，不猜链接")+"</span></div>"+
           (it.doc&&it.chunk?'<div class="ev__ctx">'+
             '<button class="ev__ctxbtn" type="button" aria-expanded="false">'+
             '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" '+
@@ -2114,18 +1678,6 @@ function linkHTML(u){
     clearTimeout(flashT);
     flashT=setTimeout(function(){el.classList.remove("flash")},2200);
   }
-  // 图谱属性面板「跳到对应证据」：按 source_chunk_id 定位证据卡并高亮
-  // （如果当前在别的屏，先切回「答案」，否则高亮看不见）
-  window.__jumpEvidence=function(chunk){
-    var hit=null;
-    EVALL.forEach(function(it){ if(String(it.chunk)===String(chunk)) hit=it });
-    if(!hit){ return false }
-    var dw=$("#drawer");                          // 抽屉开着就先关掉，否则高亮被压在下面看不见
-    if(dw&&!dw.hidden){ var cb=dw.querySelector("[data-close]"); if(cb) cb.click() }
-    go("answer");
-    setTimeout(function(){ jump(hit.id) },reduceMQ.matches?0:120);
-    return true;
-  };
   document.addEventListener("click",function(e){
     if(!e.target.closest) return;
     var t=e.target.closest(".ev__ctxbtn");
@@ -2182,110 +1734,60 @@ var TRIPLES=[["EVT-0236","监管",""],["EVT-0260","监管","2026-08-22"],
 })();
 
 /* ============================================================
-   5. 知识图谱：载荷数据 + 可复用渲染器（屏③ 与 历史回看共用同一套）
-   ⚠ 所有节点、边与属性值均来自本次接口载荷；记录未给出的字段一律「—（空）」，绝不补写。
-   ⚠ 关系中文名映射与文件顶部第六节是同一张表，两处必须同步。
+   5. 屏③：事件知识图谱
    ============================================================ */
-var REL={HAS_EXECUTIVE:"任职",PARTICIPATES_IN:"参与",ISSUED_BY:"发布",BELONGS_TO:"属于",
-         RELATED_TO:"相关",CUSTOMER_OF:"客户关系",COMPETES_WITH:"同业竞争",EVIDENCED_BY:"证据指向"};
-var EMPTY="—（空）";
 var TYPE={
-  company :{n:"公司",c:"#E63946",s:"circle"},
-  person  :{n:"人物",c:"#6C7BE0",s:"hex"},
-  org     :{n:"机构",c:"#3E93B8",s:"rect"},
-  event   :{n:"事件",c:"#A06CD5",s:"diamond"},
-  policy  :{n:"政策",c:"#8792A8",s:"pentagon"},
-  industry:{n:"行业",c:"#C3CBD8",s:"triangle"},
-  doc     :{n:"文档",c:"#C89B5A",s:"page"}
+  company:{n:"公司",c:"#E63946",s:"circle"},
+  person:{n:"人物",c:"#6C7BE0",s:"hex"},
+  org:{n:"机构",c:"#3E93B8",s:"rect"},
+  event:{n:"事件",c:"#A06CD5",s:"diamond"},
+  policy:{n:"政策",c:"#8792A8",s:"pentagon"},
+  industry:{n:"行业",c:"#C3CBD8",s:"triangle"}
 };
-var TKEYS=["company","person","org","event","policy","industry","doc"];
-var DEGR={0:18,1:22,2:27,3:33,4:38};                 // 半径按连接数（度）分级，公司再 +4
-var GSTATS={paths:17,nodes:10,edges:6,hops:2};       // 全部取自本次返回的载荷，不四舍五入
 // 时间轴只在「记录里真正出现过的月份」上取值：2026-07（最早证据 2026-07-03）～ 2026-09（数据截止 2026-09-25）
 var MONTHS=(function(){var a=[],y=2026,m=7;while(y<2026||(y===2026&&m<=9)){a.push(y+"-"+String(m).padStart(2,"0"));m++;if(m>12){m=1;y++}}return a})();
 var mi=function(s){var p=s.split("-");return (parseInt(p[0],10)-2026)*12+(parseInt(p[1],10)-7)};
 
-// 节点：本次会话（A7F3-0912）载荷命中的 10 个实体，覆盖 7 类中的 5 类。
-// 坐标显式写死（无随机布局，回看与屏③渲染结果一致）；
-// r 不写死——由连接数（度）分级算出，见 graphPrepare()。
-// kv = 属性面板只渲染这里列出的字段，字段值全部来自记录，不补写；空缺一律 EMPTY。
+// 节点：本次会话（A7F3-0912）命中的真实实体；坐标显式写死，无随机布局
+// kv = 属性面板只显示这里列出的字段，字段值全部来自记录，不补写
 var GNODES=[
- {id:"yili",type:"company",name:"伊利股份",code:"600887",x:400,y:118,
-  kv:[["entity_id","600887"],["stock_code","600887"],["exchange","SH"],["aliases",EMPTY]],
-  note:"600887 为公开市场代码，本次记录未直接给出该字段；exchange 由代码前缀判定为 上交所 SH。"},
- {id:"pab",type:"company",name:"平安银行",code:"000001",x:400,y:315,
-  kv:[["entity_id","000001"],["stock_code","000001"],["exchange","SZ"],["aliases",EMPTY]],
-  note:"exchange 由代码前缀判定为 深交所 SZ；aliases 在本次记录里为空。"},
- {id:"per0010",type:"person",name:"PER-0010",x:168,y:378,
-  kv:[["entity_id","PER-0010"],["name",EMPTY],["role",EMPTY]],
-  note:"记录只给出人物编号，未给出姓名与角色。"},
- {id:"per0029",type:"person",name:"PER-0029",x:168,y:530,
-  kv:[["entity_id","PER-0029"],["name",EMPTY],["role",EMPTY]],
-  note:"记录只给出人物编号，未给出姓名与角色。"},
- {id:"nafmii",type:"org",name:"中国银行间市场交易商协会",x:790,y:96,
-  kv:[["entity_id",EMPTY],["name","中国银行间市场交易商协会"],["role",EMPTY]],
-  note:"机构编号未随本次记录给出。"},
- {id:"evt0236",type:"event",name:"EVT-0236",sub:"监管",x:430,y:560,
-  kv:[["event_id","EVT-0236"],["event_type","监管"],["event_time",EMPTY],["confidence",EMPTY]]},
- {id:"evt0260",type:"event",name:"EVT-0260",sub:"监管 · 2026-08-22",x:630,y:195,
-  kv:[["event_id","EVT-0260"],["event_type","监管"],["event_time","2026-08-22"],["confidence",EMPTY]],
-  note:"confidence 在本次记录里为空；该事件即回答正文所指的《接受注册通知书》注册获接受事项。"},
- {id:"evt0823",type:"event",name:"EVT-0823",sub:"业绩 · 2026-08-26",x:630,y:560,
-  kv:[["event_id","EVT-0823"],["event_type","业绩"],["event_time","2026-08-26"],["confidence",EMPTY]]},
- {id:"evt0827",type:"event",name:"EVT-0827",sub:"股权 · 2026-08-27",x:830,y:560,
-  kv:[["event_id","EVT-0827"],["event_type","股权"],["event_time","2026-08-27"],["confidence",EMPTY]]},
- {id:"doc1183",type:"doc",name:"公告 · doc_id 1183",sub:"巨潮资讯网 · 2026-08-25",x:800,y:345,
-  kv:[["doc_id","1183"],["chunk_id","1183000"],["source","巨潮资讯网"],["publish_date","2026-08-25"],
-      ["title","内蒙古伊利实业集团股份有限公司关于收到中国银行间市场交易商协会《接受注册通知书》的公告"]],
-  note:"该文档即本次证据清单里的证据 6。"}
+ {id:"yili",name:"伊利股份",code:"600887",sub:"600887",type:"company",x:200,y:130,r:36,
+  m0:mi("2026-08"),m1:mi("2026-08"),
+  kv:[["实体编号","600887"],["实体类型","公司"],["事项角色","主体"],["证据块","chunk_id 1183000"]]},
+ {id:"pab",name:"平安银行",code:"000001",sub:"000001",type:"company",x:200,y:350,r:36,
+  m0:mi("2026-07"),m1:mi("2026-08"),
+  kv:[["实体编号","000001"],["实体类型","公司"],["关联文档","doc_id 1337"],
+      ["证据块","chunk_id 1337000 / 1337001"],["边置信度","0.90（HAS_EXECUTIVE）"]]},
+ {id:"per0010",name:"PER-0010",sub:"",type:"person",x:78,y:218,r:20,
+  m0:mi("2026-07"),m1:mi("2026-07"),
+  kv:[["实体编号","PER-0010"],["实体类型","人物"],["角色","role=（空）"],["所属公司","平安银行 000001"]]},
+ {id:"per0029",name:"PER-0029",sub:"",type:"person",x:78,y:470,r:20,
+  m0:mi("2026-07"),m1:mi("2026-07"),
+  kv:[["实体编号","PER-0029"],["实体类型","人物"],["角色","role=（空）"],["所属公司","平安银行 000001"]]},
+ {id:"nafmii",name:"中国银行间市场交易商协会",sub:"",type:"org",x:520,y:84,r:26,
+  m0:mi("2026-08"),m1:mi("2026-08"),
+  kv:[["实体类型","机构"],["事项","《接受注册通知书》"],["涉及标的","多品种债务融资工具（DFI）"]]},
+ {id:"cninfo",name:"巨潮资讯网",sub:"",type:"org",x:620,y:430,r:24,
+  m0:mi("2026-07"),m1:mi("2026-08"),
+  kv:[["实体类型","机构"],["角色","公告披露网站"],["命中证据","证据1～4、6、7"]]},
+ {id:"evt0236",name:"EVT-0236",sub:"监管",type:"event",x:380,y:180,r:22,
+  m0:null,m1:null,
+  kv:[["事件ID","EVT-0236"],["事件类型","监管"],["事件时间","—（空）"]]},
+ {id:"evt0260",name:"EVT-0260",sub:"监管 · 2026-08-22",type:"event",x:560,y:300,r:24,
+  m0:mi("2026-08"),m1:mi("2026-08"),
+  kv:[["事件ID","EVT-0260"],["事件类型","监管"],["事件时间","2026-08-22"]]},
+ {id:"evt0823",name:"EVT-0823",sub:"业绩 · 2026-08-26",type:"event",x:730,y:170,r:22,
+  m0:mi("2026-08"),m1:mi("2026-08"),
+  kv:[["事件ID","EVT-0823"],["事件类型","业绩"],["事件时间","2026-08-26"]]},
+ {id:"evt0827",name:"EVT-0827",sub:"股权 · 2026-08-27",type:"event",x:730,y:452,r:22,
+  m0:mi("2026-08"),m1:mi("2026-08"),
+  kv:[["事件ID","EVT-0827"],["事件类型","股权"],["事件时间","2026-08-27"]]}
 ];
-// 边：6 条。前 2 条逐字取自接口返回的样例路径（src=载荷样例）；
-// 后 4 条由同一次返回的实体与回答正文表述还原（src=正文还原），属性字段不补写、缺失记 EMPTY。
-// conf=null 表示 confidence 字段在记录里为空 → 画成虚线，面板显示「—（空）」。
-var GEDGES=[
- {f:"pab",t:"per0010",rel:"HAS_EXECUTIVE",role:EMPTY,conf:0.9,sdoc:"1337",schunk:"1337000",src:"载荷样例"},
- {f:"pab",t:"per0029",rel:"HAS_EXECUTIVE",role:EMPTY,conf:0.9,sdoc:"1337",schunk:"1337000",src:"载荷样例"},
- {f:"yili",t:"evt0260",rel:"PARTICIPATES_IN",role:"主体",conf:null,sdoc:"1183",schunk:"1183000",src:"正文还原"},
- {f:"pab", t:"evt0260",rel:"PARTICIPATES_IN",role:"合作方",conf:null,sdoc:"1183",schunk:"1183000",src:"正文还原"},
- {f:"evt0260",t:"doc1183",rel:"EVIDENCED_BY",role:EMPTY,conf:null,sdoc:"1183",schunk:"1183000",src:"正文还原"},
- {f:"doc1183",t:"nafmii",rel:"ISSUED_BY",role:EMPTY,conf:null,sdoc:"1183",schunk:"1183000",src:"正文还原"}
-];
+// 边：前 2 条逐字取自接口返回的样例路径；后 4 条由回答正文的表述还原
+var GEDGES=[["pab","per0010","HAS_EXECUTIVE"],["pab","per0029","HAS_EXECUTIVE"],
+ ["yili","nafmii","收到《接受注册通知书》"],["yili","evt0260","主体"],
+ ["pab","evt0260","合作方（参与）"],["yili","cninfo","公告披露于"]];
 var NREF={};GNODES.forEach(function(n){NREF[n.id]=n});
-
-// 派生量：度 / 半径 / 主标签 / 从公司锚点出发的跳数 / 事件时间
-function graphPrepare(){
-  GNODES.forEach(function(n){n.deg=0});
-  GEDGES.forEach(function(e,i){e.i=i;NREF[e.f].deg++;NREF[e.t].deg++});
-  GNODES.forEach(function(n){
-    n.r=(DEGR[Math.min(n.deg,4)]||18)+(n.type==="company"?4:0);
-    n.label=n.code?(n.name+" "+n.code):n.name;
-  });
-  var dist={pab:0,yili:0},q=["pab","yili"];                 // 锚点=载荷起点实体（两家公司）
-  while(q.length){
-    var cur=q.shift();
-    GEDGES.forEach(function(e){
-      var nb=e.f===cur?e.t:(e.t===cur?e.f:null);
-      if(nb&&dist[nb]===undefined){dist[nb]=dist[cur]+1;q.push(nb)}
-    });
-  }
-  GNODES.forEach(function(n){
-    n.dist=(dist[n.id]===undefined)?99:dist[n.id];
-    var t=null;
-    n.kv.forEach(function(r){ if(r[0]==="event_time"||r[0]==="publish_date") t=r[1] });
-    n.time=(t&&t!==EMPTY)?t:null;
-    n.ti=n.time?mi(n.time.slice(0,7)):null;                 // 空值不上轴
-  });
-}
-graphPrepare();
-
-// 路径集合：6 条 1 跳 ＋ 3 条 2 跳（沿有向边继续走一跳），与画布同一份边
-var GPATHLIST=(function(){
-  var a=[],i,j;
-  GEDGES.forEach(function(e){a.push({d:1,e:[e.i]})});
-  GEDGES.forEach(function(e){GEDGES.forEach(function(e2){ if(e2.f===e.t) a.push({d:2,e:[e.i,e2.i]}) })});
-  for(i=0;i<a.length;i++){a[i].f=GEDGES[a[i].e[0]].f;a[i].t=GEDGES[a[i].e[a[i].e.length-1]].t}
-  return a;
-})();
 
 function ngon(r,n,rot){var p=[],i,a;for(i=0;i<n;i++){a=(rot+i*360/n)*Math.PI/180;p.push((Math.cos(a)*r).toFixed(2)+","+(Math.sin(a)*r).toFixed(2))}return p.join(" ")}
 function shapeSVG(type,r,op){
@@ -2295,412 +1797,112 @@ function shapeSVG(type,r,op){
   if(t.s==="rect") return '<rect x="'+(-r)+'" y="'+(-r*0.86).toFixed(2)+'" width="'+(r*2)+'" height="'+(r*1.72).toFixed(2)+'" rx="'+(r*0.3).toFixed(2)+'" '+st+"/>";
   if(t.s==="diamond") return '<polygon points="0,'+(-r)+" "+r+',0 0,'+r+" "+(-r)+',0" '+st+"/>";
   if(t.s==="pentagon") return '<polygon points="'+ngon(r,5,-90)+'" '+st+"/>";
-  if(t.s==="page"){                                   // v4 新增：文档 / Document —— 带折角的纸片
-    var w=r*1.8,h=r*1.2,f=r*0.46;
-    return '<path d="M'+(-w/2)+','+(-h/2)+' H'+(w/2-f)+' L'+(w/2)+','+(-h/2+f)+' V'+(h/2)+' H'+(-w/2)+' Z" '+st+'/>'+
-           '<path d="M'+(w/2-f)+','+(-h/2)+' V'+(-h/2+f)+' H'+(w/2)+'" fill="none" stroke="'+t.c+'" stroke-width="1.2" stroke-opacity=".85"/>';
-  }
   return '<polygon points="'+ngon(r*1.12,3,90)+'" '+st+"/>";
 }
-var VBW=900,VBH=640;                                  // 图谱画布 viewBox（缩放/平移的坐标基准）
+var G={sel:null,hidden:{},i0:0,i1:MONTHS.length-1};
+(function graph(){
+  var svg=$("#graph");if(!svg) return;
+  var out="",i;
+  for(i=0;i<GEDGES.length;i++){
+    var a=NREF[GEDGES[i][0]],b=NREF[GEDGES[i][1]];
+    var dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1,ux=dx/d,uy=dy/d;
+    var x1=a.x+ux*(a.r+2),y1=a.y+uy*(a.r+2),x2=b.x-ux*(b.r+3),y2=b.y-uy*(b.r+3);
+    out+='<g data-edge="'+i+'"><line class="gedge" x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+
+      '"/><text class="gelabel" x="'+((x1+x2)/2).toFixed(1)+'" y="'+((y1+y2)/2-4).toFixed(1)+'" text-anchor="middle">'+GEDGES[i][2]+"</text></g>";
+  }
+  GNODES.forEach(function(n){
+    out+='<g class="gnode" data-node="'+n.id+'" transform="translate('+n.x+','+n.y+')">'+shapeSVG(n.type,n.r)+
+      '<text y="'+(n.r+15)+'">'+n.name+"</text>"+
+      (n.sub?'<text class="code" y="'+(n.r+27)+'">'+n.sub+"</text>":"")+"</g>";
+  });
+  svg.innerHTML=out;
+  GNODES.forEach(function(n){n.el=svg.querySelector('[data-node="'+n.id+'"]')});
+  GEDGES.forEach(function(e,i){e.el=svg.querySelector('[data-edge="'+i+'"]')});
+  G.adj={};
+  GNODES.forEach(function(n){G.adj[n.id]=[]});
+  GEDGES.forEach(function(e,i){G.adj[e[0]].push({id:e[1],rel:e[2],i:i});G.adj[e[1]].push({id:e[0],rel:e[2],i:i})});
 
-/* ------------------------------------------------------------
-   可复用图谱渲染器：屏③ 与 历史回看 挂载同一份实现，
-   因此两处的节点、边、图例、路径列表与准确性声明必然一致。
-   ------------------------------------------------------------ */
-function mountGraph(host,opt){
-  if(!host) return null;
-  opt=opt||{};
-  var uid="gm"+(mountGraph._n=(mountGraph._n||0)+1),mk="mk"+uid;
-  var S={sel:null,edge:null,path:null,hidden:{},depth:2,i0:0,i1:MONTHS.length-1};
-
-  host.innerHTML=
-    '<div class="gtoolbar">'+
-      '<div class="gbar" data-g="filters" role="group" aria-label="按实体类型筛选节点"></div>'+
-      '<div class="gbar">'+
-        '<div class="seg" data-g="depth" role="group" aria-label="图谱深度"></div>'+
-        '<button class="chip" type="button" data-g="reset" data-od-id="cta-graph-reset">重置全部</button>'+
-        '<span class="label" data-g="hint">点击节点或边查看属性</span>'+
-      '</div>'+
-    '</div>'+
-    '<div class="gwrap">'+
-      '<div class="gcanvasWrap">'+
-        '<svg data-g="svg" viewBox="0 0 '+VBW+' '+VBH+'" preserveAspectRatio="xMidYMid meet" role="img" '+
-          'aria-label="事件知识图谱：10 个节点与 6 条有向关系边"></svg>'+
-        '<div class="gzctl">'+
-          '<button class="gzbtn" type="button" data-g="zin" aria-label="放大">+</button>'+
-          '<button class="gzbtn" type="button" data-g="zout" aria-label="缩小">−</button>'+
-          '<button class="gzbtn gzbtn--wide" type="button" data-g="zres" aria-label="重置缩放与平移" title="重置缩放与平移">⌂</button>'+
-        '</div>'+
-        '<span class="gzoomv" data-g="zoomv">100%</span>'+
-        '<div class="glegendBox" data-g="legend"></div>'+
-      '</div>'+
-      '<aside class="gpanel" aria-live="polite">'+
-        '<div class="gpanel__head"><span class="label">属性面板</span><span class="label" data-g="ptype">未选中</span></div>'+
-        '<div class="gpanel__body" data-g="pbody"></div>'+
-      '</aside>'+
-    '</div>'+
-    '<div class="gwrap" style="margin-top:16px">'+
-      '<section class="card" style="padding:18px 18px 14px" data-od-id="'+uid+'-paths">'+
-        '<div class="evgroup__head" style="margin-bottom:12px"><span class="label">路径列表 · 起 → 关系 → 终</span>'+
-          '<span class="evgroup__n" data-g="pcount"></span></div>'+
-        '<div class="gpaths" data-g="paths"></div>'+
-      '</section>'+
-      '<section class="card" style="padding:18px 18px 14px" data-od-id="'+uid+'-isolated">'+
-        '<div class="evgroup__head" style="margin-bottom:12px"><span class="label">孤立节点</span>'+
-          '<span class="evgroup__n" data-g="icount"></span></div>'+
-        '<div class="giso" data-g="iso"></div>'+
-      '</section>'+
-    '</div>'+
-    '<div class="gacc" style="margin-top:16px">'+
-      '<span class="label">准确性声明</span>'+
-      '<span class="small">数据来源：本次返回的 <b>'+GSTATS.paths+'</b> 条路径 / <b>'+GSTATS.nodes+'</b> 节点 / <b>'+GSTATS.edges+'</b> 边</span>'+
-      '<span class="tag tag--red">图谱深度上限 '+GSTATS.hops+' 跳</span>'+
-      '<span class="tag tag--muted">'+(opt.tag||"载荷 answer.graph_path")+'</span>'+
-    '</div>'+
-    '<p class="gnote" style="margin-top:12px">画布按本次载荷绘制全部 <i>10</i> 个节点与 <i>6</i> 条边；'+
-      '据此可枚举 1 跳路径 <i>6</i> 条、2 跳路径 <i>3</i> 条，共 <i>9</i> 条，已全部列在「路径列表」；'+
-      '载荷中的其余 <i>8</i> 条路径未在本页展开。跳数从两家公司锚点（平安银行 <i>000001</i>、伊利股份 <i>600887</i>）起算：'+
-      '默认「2 跳」视图下，「中国银行间市场交易商协会」距锚点 <i>3</i> 跳、落在范围外被压暗；'+
-      '切到「1 跳」会再压暗 <i>doc_id 1183</i> 节点与其 <i>EVIDENCED_BY</i> 边。'+
-      '压暗只影响可见性，不删除数据 —— 属性面板照常可查、路径列表只是暂不显示，重置即回来。属性值未做任何补写。</p>';
-
-  var q=function(k){return host.querySelector('[data-g="'+k+'"]')};
-  var svg=q("svg"),legend=q("legend"),filters=q("filters"),depthBox=q("depth"),
-      pbody=q("pbody"),ptype=q("ptype"),pathsBox=q("paths"),pcount=q("pcount"),
-      isoBox=q("iso"),icount=q("icount"),hint=q("hint"),zoomv=q("zoomv");
-  var view={k:1,tx:0,ty:0},groot=null;
-
-  // ---- 画布角落图例（形状＋颜色＋计数＋边编码规则），只读，不与工具栏的筛选重复 ----
-  legend.innerHTML='<span class="label glegendBox__t">图例 · 7 类节点</span><div class="glg">'+
-    TKEYS.map(function(k){
-      var n=GNODES.filter(function(x){return x.type===k}).length;
-      return '<span class="glg__i" data-zero="'+(n?0:1)+'">'+
-        '<svg viewBox="-11 -11 22 22" aria-hidden="true">'+shapeSVG(k,7,0.35)+'</svg>'+
-        '<b>'+TYPE[k].n+'</b><em>'+(n?n+" 个":"0 · 本次无")+'</em></span>';
-    }).join("")+'</div>'+
-    '<div class="glg__rule"><b>形状＋颜色</b> ＝ 实体类型；<br>'+
-      '<b>半径</b> ＝ 连接数（度）：0→18 / 1→22 / 2→27 / 3→33 px，公司 +4px；<br>'+
-      '<b>箭头</b> ＝ 关系方向，边上文字为中文关系名；<br>'+
-      '<b>线宽</b> ＝ 1.0 + confidence×1.6，<b>不透明度</b> ＝ .55 + confidence×.45；<br>'+
-      '<b>虚线</b> ＝ confidence 为空（属性面板显示「—（空）」）；<br>'+
-      '<b>压暗</b> ＝ 被类型筛选／深度／时间区间排除在外，数据未删。</div>';
-
-  // ---- 类型复选筛选（7 类全覆盖；本次 0 个的类型置灰但保留，让「本次没有」一眼可见）----
-  filters.innerHTML=TKEYS.map(function(k){
+  // 图例即筛选器（不重复造控件）
+  var lg=$("#gLegend");
+  // 图例即筛选器；顺带标出本会话子图里该类型的节点数，为 0 的（政策／行业）一眼可见是「本次没有」
+  lg.innerHTML=Object.keys(TYPE).map(function(k){
     var n=GNODES.filter(function(x){return x.type===k}).length;
-    return '<button class="chip chip--f" type="button" role="checkbox" aria-checked="true" data-ftype="'+k+'"'+
-      (n?"":' disabled')+' title="'+TYPE[k].n+'（本次子图 '+n+' 个节点）">'+
-      '<span class="bx" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" '+
-        'stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M1.6 5.2 3.9 7.5 8.4 2.6"/></svg></span>'+
-      '<svg width="13" height="13" viewBox="-11 -11 22 22" aria-hidden="true">'+shapeSVG(k,7,0.3)+'</svg>'+
-      TYPE[k].n+'<em class="chip__n">'+n+'</em></button>';
+    return '<button class="chip" data-ftype="'+k+'" aria-pressed="false" title="筛选'+TYPE[k].n+
+      (n?"（本次子图 "+n+" 个）":"（本次子图无此类节点）")+'">'+
+      '<svg width="13" height="13" viewBox="-9 -9 18 18" aria-hidden="true">'+shapeSVG(k,7,0.35)+"</svg>"+TYPE[k].n+
+      '<em class="chip__n">'+n+"</em></button>";
   }).join("");
 
-  // ---- 深度切换：1 跳＝只留锚点近邻；2 跳＝载荷全部 ----
-  depthBox.innerHTML=[2,1].map(function(d){
-    return '<button class="seg__b" type="button" data-depth="'+d+'" aria-pressed="'+(d===2?"true":"false")+'">'+
-      d+' 跳'+(d===2?" · 默认":" · 近邻")+'</button>';
-  }).join("");
-
-  function applyView(){
-    if(groot) groot.setAttribute("transform","translate("+view.tx.toFixed(1)+","+view.ty.toFixed(1)+") scale("+view.k.toFixed(3)+")");
-    if(zoomv) zoomv.textContent=Math.round(view.k*100)+"%";
-  }
-
-  function paint(){
-    var out='<defs>'+
-      '<marker id="'+mk+'a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse">'+
-        '<path d="M0,1.3 L9,5 L0,8.7 Z" fill="rgba(255,255,255,.46)"/></marker>'+
-      '<marker id="'+mk+'h" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse">'+
-        '<path d="M0,1.3 L9,5 L0,8.7 Z" fill="#E63946"/></marker>'+
-    '</defs><g class="groot">';
-    GEDGES.forEach(function(e){
-      var a=NREF[e.f],b=NREF[e.t];
-      var dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1,ux=dx/d,uy=dy/d;
-      var x1=a.x+ux*(a.r+3),y1=a.y+uy*(a.r+3),x2=b.x-ux*(b.r+9),y2=b.y-uy*(b.r+9);
-      var sw=e.conf===null?1:(1+e.conf*1.6),
-          op=e.conf===null?.55:(.55+e.conf*.45),
-          dash=e.conf===null?' stroke-dasharray="4 3"':'';
-      var mx=(x1+x2)/2-uy*9,my=(y1+y2)/2+ux*9;
-      out+='<g class="geline" data-edge="'+e.i+'" tabindex="0" role="button" aria-label="'+
-        a.label+' 到 '+b.label+'，关系'+REL[e.rel]+'（'+e.rel+'）">'+
-        '<line class="gehit" x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'"/>'+
-        '<line class="gedge" x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+
-          '" stroke="rgba(255,255,255,.55)" stroke-width="'+sw.toFixed(2)+'" stroke-opacity="'+op.toFixed(2)+'"'+dash+
-          ' marker-end="url(#'+mk+'a)"/>'+
-        '<text class="gelabel" x="'+mx.toFixed(1)+'" y="'+my.toFixed(1)+'" text-anchor="middle">'+REL[e.rel]+'</text>'+
-      '</g>';
-    });
-    GNODES.forEach(function(n){
-      out+='<g class="gnode" data-node="'+n.id+'" tabindex="0" role="button" transform="translate('+n.x+','+n.y+')" '+
-        'aria-label="'+TYPE[n.type].n+'节点 '+n.label+'，连接数 '+n.deg+'">'+
-        '<circle class="halo" r="'+(n.r+7)+'"/>'+shapeSVG(n.type,n.r)+
-        '<text y="'+(n.r+16)+'">'+n.label+'</text>'+
-        (n.sub?'<text class="code" y="'+(n.r+28)+'">'+n.sub+'</text>':'')+
-      '</g>';
-    });
-    svg.innerHTML=out+'</g>';
-    groot=svg.querySelector(".groot");
-    GNODES.forEach(function(n){n.el=svg.querySelector('[data-node="'+n.id+'"]')});
-    GEDGES.forEach(function(e){e.el=svg.querySelector('[data-edge="'+e.i+'"]')});
-    applyView();
-  }
-
-  function pathLabel(p){
-    var s=[],k,e;
-    for(k=0;k<p.e.length;k++){
-      e=GEDGES[p.e[k]];
-      if(k===0) s.push(NREF[e.f].label);
-      s.push(REL[e.rel]);
-      s.push(NREF[e.t].label);
-    }
-    return s.join(" → ");
-  }
-
-  function refresh(){
-    var adj={},hotE={};
-    if(S.sel) GEDGES.forEach(function(e){ if(e.f===S.sel.id||e.t===S.sel.id){adj[e.f]=1;adj[e.t]=1;hotE[e.i]=1} });
-    if(S.path) S.path.e.forEach(function(i){ hotE[i]=1;adj[GEDGES[i].f]=1;adj[GEDGES[i].t]=1 });
-    var hasHot=!!(S.sel||S.path);
-    GNODES.forEach(function(n){
-      var on=(!S.hidden[n.type])&&(n.dist<=S.depth)&&(n.ti===null||(n.ti>=S.i0&&n.ti<=S.i1));
-      n.on=on;
-      if(!n.el) return;
-      n.el.classList.toggle("dim",on&&hasHot&&adj[n.id]!==1);
-      n.el.classList.toggle("out",!on);
-      n.el.style.pointerEvents=on?"":"none";
-      n.el.setAttribute("aria-hidden",on?"false":"true");
-    });
-    GEDGES.forEach(function(e){
-      var on=NREF[e.f].on&&NREF[e.t].on,hot=on&&hotE[e.i]===1;
-      e.on=on;
-      if(!e.el) return;
-      var ln=e.el.querySelector(".gedge");
-      ln.classList.toggle("hot",!!hot);
-      ln.setAttribute("marker-end","url(#"+(hot?mk+"h":mk+"a")+")");
-      e.el.classList.toggle("dim",on&&hasHot&&!hot);   // 淡化(class 挂在 <g> 上，与节点同一套规则)
-      e.el.classList.toggle("out",!on);
-      e.el.querySelector(".gelabel").classList.toggle("on",!!hot);
-      e.el.style.pointerEvents=on?"":"none";
-    });
-    if(hint) hint.textContent=S.sel?("已选中 "+S.sel.label)
-      :(S.path?("已选中路径 "+pathLabel(S.path)):"点击节点或边查看属性");
-    renderPaths();renderIso();panel();
-  }
-
-  function renderPaths(){
-    if(!pathsBox) return;
-    var shown=GPATHLIST.filter(function(p){return p.d<=S.depth});
-    var live=shown.filter(function(p){
-      return p.e.every(function(i){return GEDGES[i].on&&NREF[GEDGES[i].f].on&&NREF[GEDGES[i].t].on});
-    });
-    if(pcount) pcount.textContent="显示 "+live.length+" / 可枚举 "+GPATHLIST.length+" 条 · 载荷 17 条";
-    var out=live.map(function(p){
-      var e0=GEDGES[p.e[0]];
-      return '<button class="gpath'+(S.path===p?" on":"")+'" type="button" data-pi="'+GPATHLIST.indexOf(p)+'" '+
-        'aria-pressed="'+(S.path===p?"true":"false")+'">'+
-        '<span class="gpath__l">'+p.e.map(function(i,k){
-          var e=GEDGES[i];
-          return (k===0?'<i style="background:'+TYPE[NREF[e.f].type].c+'"></i>'+NREF[e.f].label:'')+
-            '<span class="gpath__rel">—['+REL[e.rel]+']→</span>'+
-            '<i style="background:'+TYPE[NREF[e.t].type].c+'"></i>'+NREF[e.t].label;
-        }).join("")+'</span>'+
-        '<span class="gpath__d">'+p.d+' 跳</span>'+
-        '<span class="gpath__a">首条关系 '+e0.rel+' · role='+e0.role+' · confidence='+(e0.conf===null?EMPTY:e0.conf)+
-          ' · source_doc_id='+e0.sdoc+' · source_chunk_id='+e0.schunk+'</span></button>';
-    }).join("");
-    if(shown.length-live.length) out+='<p class="gpath__flt">另有 '+(shown.length-live.length)+
-      ' 条路径因类型筛选、深度或时间区间被过滤，暂不显示（未被删除，重置后回来）。</p>';
-    if(!live.length) out='<p class="gpath__flt">当前筛选条件下没有可用路径。放宽类型、深度或时间区间即可恢复。</p>'+out;
-    pathsBox.innerHTML=out;
-  }
-
-  function renderIso(){
-    if(!isoBox) return;
-    var iso=GNODES.filter(function(n){return n.deg===0});
-    if(icount) icount.textContent=iso.length+" 个 · 连接数 0";
-    isoBox.innerHTML=iso.length?iso.map(function(n){
-      return '<div class="giso__i">'+
-        '<svg viewBox="-11 -11 22 22" aria-hidden="true">'+shapeSVG(n.type,7,0.3)+'</svg>'+
-        '<div><div class="giso__n">'+n.label+(n.sub?' · '+n.sub:'')+' · '+TYPE[n.type].n+'</div>'+
-        '<div class="giso__d">该节点在本次返回的图谱路径中未出现邻接边。事件时间 '+
-          (n.time?n.time:EMPTY)+'。'+(n.dist>S.depth?'当前深度 '+S.depth+' 跳下也不在锚点可达范围内。':'')+
-        '</div></div></div>';
-    }).join(""):'<div class="giso__d">本次载荷里没有孤立节点。</div>';
-  }
-
-  function panelNode(n){
-    ptype.textContent=TYPE[n.type].n;
-    var nb=[],out=0,inc=0;
-    GEDGES.forEach(function(e){
-      if(e.f===n.id){nb.push({dir:"出",rel:e.rel,to:NREF[e.t]});out++}
-      else if(e.t===n.id){nb.push({dir:"入",rel:e.rel,to:NREF[e.f]});inc++}
-    });
-    pbody.innerHTML=
-      '<div><span class="label">主标签</span><div class="h4" style="margin-top:6px">'+n.label+'</div></div>'+
-      '<dl style="display:flex;flex-direction:column;gap:12px;margin:0">'+
-        n.kv.map(function(r){
-          var v=(r[1]===EMPTY||r[1]===""||r[1]===null)?'<span style="color:var(--faint)">'+EMPTY+'</span>':r[1];
-          return '<div class="kv"><dt>'+r[0]+'</dt><dd class="mono">'+v+'</dd></div>';
-        }).join("")+
-      "</dl>"+
-      (n.note?'<p class="gnote" style="font-size:11px">'+n.note+"</p>":"")+
-      '<div style="padding-top:13px;border-top:1px solid var(--border)">'+
-        '<span class="label">本页连接数 · 由 6 条边计算</span>'+
-        '<div class="kv" style="margin-top:9px"><dt>度</dt><dd class="mono">'+n.deg+'（出 '+out+' / 入 '+inc+'）</dd></div>'+
-        '<div class="kv" style="margin-top:9px"><dt>距锚点</dt><dd class="mono">'+
-          (n.dist>90?EMPTY+'（本次边集里不可达）':n.dist+' 跳'+(n.dist>S.depth?' · 超出当前 '+S.depth+' 跳视图，已压暗':''))+
-        "</dd></div>"+
-      "</div>"+
-      '<div style="padding-top:13px;border-top:1px solid var(--border)">'+
-        '<span class="label">邻接关系 · '+nb.length+' 条</span>'+
-        '<div class="grel">'+(nb.length?nb.map(function(x){
-          return '<div class="grel__i"><i style="background:'+TYPE[x.to.type].c+'"></i>'+
-            '<span class="gpath__rel">'+x.dir+' · '+REL[x.rel]+'</span> '+x.to.label+
-            "<em>"+TYPE[x.to.type].n+"</em></div>";
-        }).join(""):'<div class="grel--none">该节点在本次返回的图谱路径中未出现邻接边。</div>')+"</div>"+
-      "</div>";
-  }
-
-  function panelEdge(e){
-    ptype.textContent="关系边";
-    var hasChunk=EVALL.some(function(it){return it.chunk===e.schunk});
-    pbody.innerHTML=
-      '<div><span class="label">关系</span><div class="h4" style="margin-top:6px">'+e.rel+' · '+REL[e.rel]+'</div>'+
-        '<span class="tag" style="margin-top:9px">'+e.src+'</span></div>'+
-      '<dl style="display:flex;flex-direction:column;gap:12px;margin:0">'+
-        '<div class="kv"><dt>起点</dt><dd>'+NREF[e.f].label+'</dd></div>'+
-        '<div class="kv"><dt>终点</dt><dd>'+NREF[e.t].label+'</dd></div>'+
-        '<div class="kv"><dt>role</dt><dd class="mono">'+(e.role===EMPTY?'<span style="color:var(--faint)">'+EMPTY+'</span>':e.role)+'</dd></div>'+
-        '<div class="kv"><dt>confidence</dt><dd class="mono">'+(e.conf===null?'<span style="color:var(--faint)">'+EMPTY+'</span>':e.conf)+'</dd></div>'+
-        '<div class="kv"><dt>source_doc_id</dt><dd class="mono">'+e.sdoc+'</dd></div>'+
-        '<div class="kv"><dt>source_chunk_id</dt><dd class="mono">'+e.schunk+'</dd></div>'+
-      "</dl>"+
-      '<p class="gnote" style="font-size:11px">线宽与不透明度由 confidence 编码：'+
-        (e.conf===null?"本次为空 → 虚线、线宽 1.0、不透明度 .55。"
-                      :"confidence "+e.conf+" → 线宽 "+(1+e.conf*1.6).toFixed(2)+"、不透明度 "+(.55+e.conf*.45).toFixed(2)+"。")+
-      "</p>"+
-      '<div style="margin-top:auto;padding-top:14px;border-top:1px solid var(--border)">'+
-        '<button class="btn btn--quiet btn--sm" type="button" data-g="jump" '+(hasChunk?"":"disabled")+'>'+
-          (hasChunk?"跳到对应证据":"证据清单中无此 chunk")+"</button>"+
-        '<p class="gnote" style="font-size:10.5px;margin-top:9px">按 source_chunk_id '+e.schunk+
-          ' 在证据清单里定位并高亮那一条。</p>'+
-      "</div>";
-  }
-
-  function panel(){
-    if(!pbody) return;
-    if(S.edge!==null){ panelEdge(GEDGES[S.edge]); return }
-    if(S.sel){ panelNode(S.sel); return }
-    ptype.textContent="未选中";
-    pbody.innerHTML='<div class="gempty"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#bull"></use></svg>'+
-      "<p>点击任一节点或边，查看实体属性与邻接关系</p></div>";
-  }
-
-  function pick(t){
-    if(t.classList.contains("gnode")){
-      var id=t.getAttribute("data-node");
-      S.edge=null;S.path=null;S.sel=(S.sel&&S.sel.id===id)?null:NREF[id];
-    }else{
-      var i=parseInt(t.getAttribute("data-edge"),10);
-      S.sel=null;S.path=null;S.edge=(S.edge===i)?null:i;
-    }
-    refresh();
-  }
-  var moved=false;                                // 拖拽平移结束时不要顺手把选中清掉
   svg.addEventListener("click",function(e){
-    if(moved){moved=false;return}
-    var t=e.target.closest?e.target.closest(".gnode,.geline"):null;
-    if(!t){ S.sel=null;S.edge=null;S.path=null;refresh();return }
-    pick(t);
-  });
-  svg.addEventListener("keydown",function(e){
-    if(e.key!=="Enter"&&e.key!==" "&&e.key!=="Spacebar") return;
-    var t=e.target.closest?e.target.closest(".gnode,.geline"):null;if(!t) return;
-    e.preventDefault();pick(t);
-  });
-  pathsBox.addEventListener("click",function(e){
-    var b=e.target.closest?e.target.closest("[data-pi]"):null;if(!b) return;
-    var p=GPATHLIST[parseInt(b.getAttribute("data-pi"),10)];
-    S.path=(S.path===p)?null:p;S.sel=null;S.edge=null;refresh();
-  });
-  filters.addEventListener("click",function(e){
-    var b=e.target.closest?e.target.closest("[data-ftype]"):null;if(!b||b.disabled) return;
-    var k=b.getAttribute("data-ftype");
-    S.hidden[k]=!S.hidden[k];
-    b.setAttribute("aria-checked",S.hidden[k]?"false":"true");
+    var g=e.target.closest?e.target.closest(".gnode"):null;
+    if(!g){G.sel=null;refresh();return}
+    G.sel=(G.sel&&G.sel.id===g.getAttribute("data-node"))?null:NREF[g.getAttribute("data-node")];
     refresh();
   });
-  depthBox.addEventListener("click",function(e){
-    var b=e.target.closest?e.target.closest("[data-depth]"):null;if(!b) return;
-    S.depth=parseInt(b.getAttribute("data-depth"),10);
-    $$("[data-depth]",depthBox).forEach(function(x){
-      x.setAttribute("aria-pressed",parseInt(x.getAttribute("data-depth"),10)===S.depth?"true":"false");
-    });
+  lg.addEventListener("click",function(e){
+    var b=e.target.closest?e.target.closest("[data-ftype]"):null;if(!b) return;
+    var t=b.getAttribute("data-ftype");
+    G.hidden[t]=!G.hidden[t];
+    b.setAttribute("aria-pressed",G.hidden[t]?"true":"false");
     refresh();
   });
-  pbody.addEventListener("click",function(e){
-    var b=e.target.closest?e.target.closest('[data-g="jump"]'):null;if(!b||b.disabled) return;
-    if(S.edge===null) return;
-    if(window.__jumpEvidence) window.__jumpEvidence(GEDGES[S.edge].schunk);
+  var rb=$("[data-greset]");
+  if(rb) rb.addEventListener("click",function(){
+    G.sel=null;G.hidden={};G.i0=0;G.i1=MONTHS.length-1;
+    $$("[data-ftype]",lg).forEach(function(b){b.setAttribute("aria-pressed","false")});
+    setRange(0,MONTHS.length-1);refresh();
   });
-  q("reset").addEventListener("click",function(){
-    S.sel=null;S.edge=null;S.path=null;S.hidden={};S.depth=2;
-    $$("[data-ftype]",filters).forEach(function(b){b.setAttribute("aria-checked","true")});
-    $$("[data-depth]",depthBox).forEach(function(x){x.setAttribute("aria-pressed",x.getAttribute("data-depth")==="2"?"true":"false")});
-    view={k:1,tx:0,ty:0};applyView();
-    if(opt.onReset) opt.onReset();
-    refresh();
-  });
+  window.__refreshGraph=refresh;
+  refresh();
+})();
 
-  // 缩放：滚轮（以光标为锚点）＋ 两个按钮；平移：拖拽空白处
-  function zoomAt(cx,cy,f){
-    var r=svg.getBoundingClientRect();if(!r.width) return;
-    var mx=(cx-r.left)/r.width*VBW,my=(cy-r.top)/r.height*VBH;
-    var nk=Math.max(.5,Math.min(3,view.k*f));
-    view.tx=mx-(mx-view.tx)*(nk/view.k);
-    view.ty=my-(my-view.ty)*(nk/view.k);
-    view.k=nk;applyView();
+function refresh(){
+  var sel=G.sel,adj={},i;
+  if(sel) G.adj[sel.id].forEach(function(a){adj[a.id]=1});
+  GNODES.forEach(function(n){
+    // 事件时间为空的节点（EVT-0236）无法落到时间轴上，不做时间过滤，属性面板里显示「—（空）」
+    var inTime=(n.m0===null||n.m1===null)?true:(n.m1>=G.i0&&n.m0<=G.i1);
+    var inType=!G.hidden[n.type];
+    var inSel=!sel||n.id===sel.id||adj[n.id]===1;
+    n.visible=inTime&&inType&&inSel;
+    if(n.el) n.el.classList.toggle("dim",!n.visible);
+  });
+  GEDGES.forEach(function(e){
+    var on=e[0]===G.sel||e[1]===G.sel;
+    e.el.querySelector(".gedge").classList.toggle("hot",!!G.sel&&on);
+    e.el.querySelector(".gedge").classList.toggle("dim",!NREF[e[0]].visible||!NREF[e[1]].visible||(!!G.sel&&!on));
+    e.el.querySelector(".gelabel").classList.toggle("on",!!G.sel&&on);
+  });
+  var hint=$("#graphHint");
+  if(hint) hint.textContent=sel?("已选中 "+sel.name+(sel.code&&sel.code!=="—"?" "+sel.code:"")):"点击节点查看属性";
+  panel(sel);
+}
+function panel(sel){
+  var body=$("#gpanelBody"),tp=$("#gpanelType");
+  if(!body) return;
+  if(!sel){
+    tp.textContent="未选中";
+    body.innerHTML='<div class="gempty"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#bull"></use></svg>'+
+      "<p>点击左侧任一节点，查看实体属性与邻接关系</p></div>";
+    return;
   }
-  svg.addEventListener("wheel",function(e){
-    e.preventDefault();
-    zoomAt(e.clientX,e.clientY,e.deltaY<0?1.12:1/1.12);
-  },{passive:false});
-  q("zin").addEventListener("click",function(){var r=svg.getBoundingClientRect();zoomAt(r.left+r.width/2,r.top+r.height/2,1.2)});
-  q("zout").addEventListener("click",function(){var r=svg.getBoundingClientRect();zoomAt(r.left+r.width/2,r.top+r.height/2,1/1.2)});
-  q("zres").addEventListener("click",function(){view={k:1,tx:0,ty:0};applyView()});
-
-  var drag=null;
-  svg.addEventListener("pointerdown",function(e){
-    if(e.target.closest&&e.target.closest(".gnode,.geline")) return;
-    drag={x:e.clientX,y:e.clientY,tx:view.tx,ty:view.ty};
-    svg.classList.add("panning");
-    if(svg.setPointerCapture) svg.setPointerCapture(e.pointerId);
-  });
-  svg.addEventListener("pointermove",function(e){
-    if(!drag) return;
-    var r=svg.getBoundingClientRect();if(!r.width) return;
-    var dx=e.clientX-drag.x,dy=e.clientY-drag.y;
-    if(Math.abs(dx)+Math.abs(dy)>4) moved=true;
-    view.tx=drag.tx+dx/r.width*VBW;
-    view.ty=drag.ty+dy/r.height*VBH;
-    applyView();
-  });
-  function endPan(e){
-    if(!drag) return;drag=null;svg.classList.remove("panning");
-    if(svg.releasePointerCapture&&e&&e.pointerId!==undefined&&svg.hasPointerCapture&&svg.hasPointerCapture(e.pointerId))
-      svg.releasePointerCapture(e.pointerId);
-  }
-  svg.addEventListener("pointerup",endPan);
-  svg.addEventListener("pointercancel",endPan);
-
-  paint();refresh();
-  return {
-    host:host,
-    setTimeRange:function(a,b){S.i0=a;S.i1=b;refresh()},
-    reset:function(){q("reset").click()}
-  };
+  tp.textContent=TYPE[sel.type].n;
+  // 邻接关系：直接来自 GEDGES，不补写记录里没有的边
+  var nbrs=G.adj[sel.id];
+  var rel=nbrs.length?nbrs.map(function(a){
+    return '<div class="grel__i"><i style="background:'+TYPE[NREF[a.id].type].c+'"></i>'+a.rel+" · "+NREF[a.id].name+
+      "<em>"+TYPE[NREF[a.id].type].n+"</em></div>";
+  }).join(""):'<div class="grel--none">该节点在本次返回的图谱路径中未出现邻接边。<br>路径共 2 条样例（均以平安银行为起点），其余事件节点只由事件三元组列给出，没有边数据。</div>';
+  // 字段：只渲染节点自带的 kv，字段值全部来自记录
+  body.innerHTML=
+    '<dl style="display:flex;flex-direction:column;gap:13px;margin:0">'+
+      '<div class="kv"><dt>名称</dt><dd>'+sel.name+"</dd></div>"+
+      sel.kv.map(function(r){
+        return '<div class="kv"><dt>'+r[0]+'</dt><dd class="mono">'+r[1]+"</dd></div>";
+      }).join("")+
+    "</dl>"+
+    '<div style="margin-top:6px;padding-top:14px;border-top:1px solid var(--border)"><span class="label">邻接关系 · '+nbrs.length+' 条</span>'+
+    '<div class="grel">'+rel+"</div></div>";
 }
 
 /* ============================================================
@@ -2711,14 +1913,12 @@ var tlPaint=null;                                  // 由 timeline() 注入，�
 function setRange(a,b){
   TL.i0=Math.max(0,Math.min(a,MONTHS.length-1));
   TL.i1=Math.max(TL.i0,Math.min(b,MONTHS.length-1));
+  G.i0=TL.i0;G.i1=TL.i1;
   var r=$("#tlRange");
   if(r) r.textContent=MONTHS[TL.i0]+" → "+MONTHS[TL.i1]+"（共 "+(TL.i1-TL.i0+1)+" 个月）";
   if(tlPaint) tlPaint();
-  if(G3) G3.setTimeRange(TL.i0,TL.i1);             // 画布与时间轴联动（同一实例）
+  if(window.__refreshGraph) window.__refreshGraph();
 }
-/* 屏③ 图谱实例：与历史回看抽屉共用 mountGraph 这一套渲染器 */
-var G3=mountGraph($("#graphApp"),{tag:"载荷 answer.graph_path",
-  onReset:function(){ setRange(0,MONTHS.length-1) }});
 (function timeline(){
   var svg=$("#tlSvg");if(!svg) return;
   var PAD=34,W=1160,step=(W-PAD*2)/(MONTHS.length-1);
@@ -2733,12 +1933,13 @@ var G3=mountGraph($("#graphApp"),{tag:"载荷 answer.graph_path",
       if(MONTHS.length<=6||i%3===0||major||i===MONTHS.length-1)   // 月份少时逐月标注，避免中间月份没刻度文字
         out+='<text class="tl__tlab" x="'+X(i).toFixed(1)+'" y="90" text-anchor="middle">'+MONTHS[i]+"</text>";
     }
-    // 事件点：按实体类型分泳道，只画记录里真的有 event_time / publish_date 的节点
+    // 事件点：按类型分 6 条泳道
+    var lanes=["company","person","org","event"];
     GNODES.forEach(function(n){
-      if(n.ti===null) return;                   // 时间为空 → 落不到轴上，不参与时间筛选
-      var ly=44-(TKEYS.indexOf(n.type)%6)*7;    // 同类型同泳道
-      var inR=n.ti>=TL.i0&&n.ti<=TL.i1;
-      out+='<circle class="tl__dot'+(inR?"":" out")+'" data-dot="'+n.id+'" cx="'+X(n.ti).toFixed(1)+'" cy="'+ly+
+      if(n.m0===null||n.m1===null) return;      // 无事件时间，落不到轴上（面板里注明）
+      var li=lanes.indexOf(n.type),ly=44-li*7;
+      var inR=n.m1>=TL.i0&&n.m0<=TL.i1;
+      out+='<circle class="tl__dot'+(inR?"":" out")+'" data-dot="'+n.id+'" cx="'+X(n.m0).toFixed(1)+'" cy="'+ly+
         '" r="3.6" fill="'+TYPE[n.type].c+'" fill-opacity=".85"/>';
     });
     var x0=X(TL.i0),x1=X(TL.i1);
@@ -2826,45 +2027,33 @@ var SESSIONS=[
       '<button class="hrow__open" aria-label="回看会话：'+s.q+'"></button></article>';
   }).join("");
 
-  var d=$("#drawer"),tables=$("#drawerTables"),dId=$("#drawerId"),dTitle=$("#drawerTitle"),
-      gSec=$("#drawerGraphSec"),gHost=$("#drawerGraphHost"),loadT,dGraph=null;
+  var d=$("#drawer"),tables=$("#drawerTables"),dId=$("#drawerId"),dTitle=$("#drawerTitle"),loadT;
   function rows(arr,heads,keyCol){
     return "<thead><tr>"+heads.map(function(h){return "<th>"+h+"</th>"}).join("")+"</tr></thead><tbody>"+
       arr.map(function(r){return "<tr>"+r.map(function(c,i){return '<td class="'+(i>=1&&keyCol?"k":"")+'">'+c+"</td>"}).join("")+"</tr>"}).join("")+
       "</tbody>";
   }
   // 证据表与屏②的证据清单同源（EVALL），两处不会给出不同的证据
-  // v4：末列加「原文」——8 条的 url 均来自真实接口返回，逐字照抄给「查看原文 ↗」
   var evRows=EVALL.map(function(it){
-    var u=urlOf(it);
-    return [String(it.rank),it.g,it.t,
-            it.site?(it.site+(DOMAIN[it.site]?' <em class="ev__dom">'+DOMAIN[it.site]+"</em>":"")):"—",
-            it.date||"—","doc_id "+(it.doc||"—"),"chunk_id "+(it.chunk||"—"),
-            (it.chunk&&window.__jumpEvidence?'<button class="tbl__go" type="button" data-chunk="'+it.chunk+
-              '" aria-label="跳到屏②的证据'+it.rank+'">定位证据</button> ':"")+
-            (u?'<a class="ev__link ev__link--sm" href="'+u.url+'" target="_blank" rel="noopener" '+
-                 'aria-label="查看原文：'+u.t+'（新窗口打开）">'+EXT+"查看原文 ↗</a>"
-              :'<span class="ev__nolink ev__nolink--sm">记录未给出</span>')];
+    return [String(it.rank),it.g,it.t,it.site||"—",it.date||"—","doc_id "+(it.doc||"—"),"chunk_id "+(it.chunk||"—")];
   });
   function open(s){
     dId.textContent=s.replay?s.id:"未收录";
     dTitle.textContent=s.q;
     d.hidden=false;d.classList.add("on");
     document.body.style.overflow="hidden";
-    if(gSec) gSec.hidden=!s.replay;               // 没有路径载荷就不摆图谱区，改用固定文案
     tables.innerHTML='<div class="dloading"><span class="loader__ring">'+
       '<svg viewBox="0 0 32 32" aria-hidden="true"><circle class="dash" cx="16" cy="16" r="14" fill="none" stroke="rgba(230,57,70,.30)" stroke-width="2" stroke-dasharray="18 70" stroke-linecap="round"/></svg>'+
       '<svg class="bull" viewBox="0 0 64 64" aria-hidden="true"><use href="#bull"></use></svg></span>'+
-      "<span>正在还原会话 "+s.id+" 的记录…</span></div>";
+      "<span>正在还原会话 "+s.id+" 的三张表…</span></div>";
     clearTimeout(loadT);
     loadT=setTimeout(function(){
       if(!s.replay){
         tables.innerHTML='<div class="dloading" style="padding:40px 0">'+
           '<svg class="bull" viewBox="0 0 64 64" aria-hidden="true" style="width:44px;height:44px"><use href="#bull"></use></svg>'+
-          "<span>该问题只进了问题清单，未收录任何表内容。</span></div>"+
-          '<p class="small" style="max-width:66ch">回看区固定四段：问题 → 答案四段 → 证据表（含「查看原文 ↗」）→ 图谱路径可视化。'+
-          "本演示只完整收录了 1 条会话（A7F3-0912），其余 3 条只有问题文本；"+
-          "它们没有 <span class=\"mono\">answer.graph_path</span> 载荷，因此第四段只给固定文案，不补画任何节点或边。</p>";
+          "<span>该问题只进了问题清单，未收录三张表内容。</span></div>"+
+          '<p class="small" style="max-width:64ch">历史记录里点开回看只还原问题／答案／证据三张表，不重新渲染当时的图谱路径视图，'+
+          "只保留「是否有图谱路径」的布尔标记。本演示只完整收录了 1 条会话，其余 3 条只有问题文本，因此这里不补任何内容。</p>";
         return;
       }
       tables.innerHTML=
@@ -2874,23 +2063,12 @@ var SESSIONS=[
           '<table class="tbl"><thead><tr><th>字段</th><th>值</th></tr></thead><tbody>'+
             '<tr><td class="k">answer_text</td><td class="ans">'+ANSWER_TEXT+"</td></tr>"+
             '<tr><td class="k">refs_in_text</td><td>[证据6] × 2 处，与证据清单的 rank 一一对应</td></tr>'+
-            '<tr><td class="k">graph_path</td><td class="mono">原始 JSON 文本 · 17 条路径 · 深度上限 2 跳 —— 即下方「表四」的还原来源</td></tr>'+
             '<tr><td class="k">output_mode</td><td>单轮一次生成（非流式，没有逐字输出过程）</td></tr>'+
           "</tbody></table></div>"+
         '<div class="tblWrap"><div class="tblWrap__h"><span class="label">表三 · 证据表 evidence</span><span class="label">'+evRows.length+" 行</span></div>"+
-          '<table class="tbl">'+rows(evRows,["证据号","类别","标题","来源网站","发布日期","文档号","块号","原文"],false)+"</table>"+
-          '<p class="small" style="margin-top:10px">证据表的「原文」列与屏②证据卡同源（共用同一份证据与 <span class="mono">urlOf()</span>）：'+
-          '8 条的 url 逐字取自真实接口 <span class="mono">GET /api/evidence/16</span> 的原样返回，未改写、未拼接。'+
-          '其中证据1／3 是同文档的两个块（chunk_id 1337001 / 1337000）、证据2／4 同理（1274004 / 1274000），照实分列不合并。</p></div>';
-      // 第四段：图谱路径可视化（惰性挂载，与屏③同一套渲染器 / 图例 / 准确性声明）
-      if(gHost&&!dGraph) dGraph=mountGraph(gHost,{tag:"载荷 answer.graph_path · 回看还原"});
+          '<table class="tbl">'+rows(evRows,["证据号","类别","标题","来源网站","发布日期","文档号","块号"],false)+"</table></div>";
     },560);
   }
-  // 证据表里的「定位证据」→ 关抽屉、切回屏②并高亮那条证据卡（__jumpEvidence 内部已处理关抽屉）
-  tables.addEventListener("click",function(e){
-    var b=e.target.closest?e.target.closest("[data-chunk]"):null;if(!b) return;
-    if(window.__jumpEvidence) window.__jumpEvidence(b.getAttribute("data-chunk"));
-  });
   function close(){
     clearTimeout(loadT);d.classList.remove("on");d.hidden=true;document.body.style.overflow="";
   }

@@ -457,6 +457,85 @@ def fields_of_jsonl(path: str, limit: int = 1) -> list:
 
 
 # --------------------------------------------------------------------------
+# 9.1 实时数据区（作者新增意见：实时数据再完善一些）
+# --------------------------------------------------------------------------
+# 口径（硬约束，写在这里供全后端引用）：
+#   本系统的问答答案锚定**冻结语料**（DATASET_VERSION，数据截止 data_cutoff_time）。
+#   本节参数只服务页面上的「实时数据区」——**实时数据只作展示，绝不进入检索／问答证据链**；
+#   所有实时区响应体都带 `"scope": "display_only"`。数据源失败时如实返回「未接入」
+#   （connected=false ＋ reason），**绝不返回任何编造数据**（假价格／假涨跌幅／假新闻）。
+#
+# 三个公开源（无需 key，参数为实测通过的原样）＋一个语料内源：
+#   1) 实时行情：东方财富 push2（`secids` 前缀：沪市 1.、深市 0.）
+#   2) 个股公告：东方财富 np-anotice（详情页模板见 notice_detail_url）
+#   3) 个股新闻：东方财富搜索 JSONP（**必须带 Referer**，返回体需剥掉 cb(...) 外壳）
+#   4) 语料内近一周：**不依赖外部源**，直接查库 `document` 表（降级形态）
+MARKET_ZONE = {
+    # 源 URL 模板：占位符在请求时填充（不得在 services\market_service.py 里写死）
+    "quote_url": ("https://push2.eastmoney.com/api/qt/ulist.np/get"
+                  "?fltt=2&secids={secids}&fields=f12,f14,f2,f3,f4,f6"),
+    "announcement_url": ("https://np-anotice-stock.eastmoney.com/api/security/ann"
+                         "?sr=-1&page_size={page_size}&page_index=1&ann_type=A"
+                         "&client_source=web&stock_list={code}"),
+    "notice_detail_url": "https://data.eastmoney.com/notices/detail/{code}/{art_code}.html",
+    "news_url": "https://search-api-web.eastmoney.com/search/jsonp?cb=&param={param}",
+    "news_referer": "https://so.eastmoney.com/",     # 新闻源**必须**带该 Referer
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+    "source_name": "eastmoney",                      # 实时区响应的 source 字段取值
+    "corpus_source_name": "corpus",                  # 语料内源的 source 字段取值
+    "timeout_seconds": 8,                            # 单次外部请求超时（秒）
+    "cache_ttl_seconds": 60,                         # 进程内缓存 TTL（秒）
+    "default_codes": ["000001", "600519"],           # 缺 codes 参数时的默认股列表
+    "corpus_lookback_days": 7,                       # 语料内源默认回看天数（近一周）
+    # 各接口的 page_size 合法区间（越界按 1002 拒）
+    "page_size_min": 1,
+    "page_size_max": 50,
+    # days 参数的合法区间（越界按 1002 拒）
+    "days_min": 1,
+    "days_max": 30,
+}
+# secids 前缀规则：沪市 `1.`、深市 `0.`（北交所 4/8 归 `0.`）。
+#   显式市场前缀（`sh`／`sz`）优先；否则按代码首位判定，认不出取默认值。
+MARKET_MARKET_PREFIX = {"sh": "1", "sz": "0"}
+MARKET_SECID_PREFIX_BY_HEAD = {"6": "1", "0": "0", "3": "0", "4": "0", "8": "0"}
+MARKET_SECID_DEFAULT_PREFIX = "0"
+
+
+def market_zone() -> dict:
+    """实时数据区参数（返回**浅拷贝**，调用方不得就地改这份配置）。"""
+    return dict(MARKET_ZONE)
+
+
+def market_default_codes() -> list:
+    return list(MARKET_ZONE["default_codes"])
+
+
+def secid_of(code) -> str:
+    """把证券代码归一化成东方财富的 `secid` 形式（`600519` → `1.600519`、`000001` → `0.000001`）。
+
+    接受 `600519`／`000001`／`sh600519`／`sz000001`／`SH600519`／`1.600519` 等写法；
+    格式不合法（非 6 位数字，或市场前缀不认识）抛 `ValueError`——**不猜**，由调用方按
+    参数格式错误处理（接口层 → 1002）。前缀规则取自本文件的 `MARKET_*` 常量。
+    """
+    text = str(code).strip().lower()
+    if "." in text:                                   # 已是 secid：`1.600519`
+        head, _, digits = text.partition(".")
+        if head in ("0", "1") and digits.isdigit():
+            return "%s.%s" % (head, digits)
+        raise ValueError("secid 形式不合法：%r" % code)
+    market = None
+    for prefix, market_id in MARKET_MARKET_PREFIX.items():
+        if text.startswith(prefix):
+            text, market = text[len(prefix):], market_id
+            break
+    if not (len(text) == 6 and text.isdigit()):
+        raise ValueError("证券代码应为 6 位数字（可带 sh／sz 前缀）：%r" % code)
+    if market is None:
+        market = MARKET_SECID_PREFIX_BY_HEAD.get(text[0], MARKET_SECID_DEFAULT_PREFIX)
+    return "%s.%s" % (market, text)
+
+
+# --------------------------------------------------------------------------
 # 10. 自检（`python 代码\\后端\\config.py`）
 # --------------------------------------------------------------------------
 def selftest() -> int:
@@ -529,6 +608,22 @@ def selftest() -> int:
     print("--- 接口层门槛参数 ---")
     print("  RATE_LIMIT = %s" % json.dumps(RATE_LIMIT, ensure_ascii=False, sort_keys=True))
     print("  LIMITS     = %s" % json.dumps(LIMITS, ensure_ascii=False, sort_keys=True))
+    print()
+
+    print("--- 实时数据区（只作展示、不进问答证据链；scope=display_only）---")
+    print("  超时／缓存 TTL = %ss／%ss" % (MARKET_ZONE["timeout_seconds"],
+                                           MARKET_ZONE["cache_ttl_seconds"]))
+    print("  默认股列表     = %s" % "、".join(MARKET_ZONE["default_codes"]))
+    print("  secid 前缀规则 = 沪市 %s／深市 %s（6→1，0／3／4／8→0）"
+          % (MARKET_MARKET_PREFIX["sh"] + ".", MARKET_MARKET_PREFIX["sz"] + "."))
+    print("  secid 样例     = 600519→%s，000001→%s，sh600519→%s"
+          % (secid_of("600519"), secid_of("000001"), secid_of("sh600519")))
+    print("  行情源         = %s" % MARKET_ZONE["quote_url"].split("?")[0])
+    print("  公告源         = %s" % MARKET_ZONE["announcement_url"].split("?")[0])
+    print("  新闻源         = %s（Referer=%s）"
+          % (MARKET_ZONE["news_url"].split("?")[0], MARKET_ZONE["news_referer"]))
+    print("  语料内源       = 查库 document 表，近 %d 天（截止 %s）"
+          % (MARKET_ZONE["corpus_lookback_days"], data_cutoff_date()))
     print()
 
     if not MYSQL_PASSWORD_READY:

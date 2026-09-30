@@ -32,6 +32,19 @@ param(
 )
 
 $ErrorActionPreference = "Continue"
+
+# **控制台编码自设（不要依赖调用方的代码页）**：本脚本要读子进程输出并做中文比对
+# （例如 `python 代码\后端\db.py` 打印的「六张表行数」）。后端脚本自身会把 stdout 切到 UTF-8，
+# 而 Windows PowerShell 5.1 默认按 **系统 ANSI（本机 gb2312）** 解码原生命令输出 —— 两者不一致时
+# 中文比对会落空，出现「六张表可读=False」这类**假失败**（第 9 阶段门禁 H1 行实测抓到过：
+# 同一份脚本在 UTF-8 控制台下通过、在 gb2312 控制台下失败）。故在此显式把控制台输出编码设为 UTF-8。
+try {
+    [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding($false)
+    $OutputEncoding = New-Object System.Text.UTF8Encoding($false)
+} catch {
+    Write-Host "[ !! ] 控制台编码设置失败（继续执行，中文比对可能不准）：$($_.Exception.Message)"
+}
+
 $Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 $Distro = "Ubuntu"
 $Container = "ashare-neo4j"

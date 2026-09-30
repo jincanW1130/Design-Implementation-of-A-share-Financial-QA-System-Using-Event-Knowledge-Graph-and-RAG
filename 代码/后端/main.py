@@ -70,6 +70,7 @@ OPTIONAL_ROUTERS = [
     ("history", "/api/history"),
     ("graph", "/api/graph"),
     ("admin", "/api/admin"),
+    ("market", "/api/market"),
 ]
 
 

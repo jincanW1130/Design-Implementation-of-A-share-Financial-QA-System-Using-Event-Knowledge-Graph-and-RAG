@@ -23,6 +23,8 @@ T2（数据库落地）与 T4（后端骨架）两件；表 4-13 的 27 个业�
 | `tools\import_data.py` | 数据集与问答记录导入六张表（**幂等**；`--dry-run`／`--reset`／`--limit N`） |
 | `tools\import_graph.py` | 图谱导出物导入 **Neo4j**（**幂等**；`--dry-run`／`--reset`／`--verify-only`；计数对拍 2802／2736） |
 | `services\graph_service.py` | 图谱查询服务：`neo4j`（默认）／`memory` **两个可切换后端**，同一套 G1～G7 语义；`--selftest`／`--parity-check` |
+| `services\market_service.py` | **实时数据区**取数服务（三个外部源 ＋ 一个语料内源）；进程内 60 s 缓存；源失败降级为「未接入」；`--selftest`。见 §3.2 |
+| `api\market.py` | 实时数据区四条只读接口 `/api/market/{quote,announcements,news,reports}`（**只作展示、不进证据链**）。见 §3.2 |
 
 ## 2. 约定（后续批次请照此对齐）
 
@@ -89,9 +91,16 @@ python "代码\后端\tools\import_data.py" --limit 100
 python "代码\后端\tools\import_data.py"              # 全量 upsert（幂等）
 python "代码\后端\tools\import_data.py" --reset      # 清空五表后全量重导
 
+# 实时数据区取数服务自检（真连三个源各一次 ＋ 降级路径 ＋ 缓存）
+python "代码\后端\services\market_service.py" --selftest
+
 # 起服务（后台）→ 探活 → 停服务
 python "代码\后端\run.py" &
 curl -s http://127.0.0.1:8000/api/health
+curl -s "http://127.0.0.1:8000/api/market/quote?codes=000001,600519"
+curl -s "http://127.0.0.1:8000/api/market/announcements?code=000001&days=7"
+curl -s "http://127.0.0.1:8000/api/market/news?keyword=%E5%B9%B3%E5%AE%89%E9%93%B6%E8%A1%8C"
+curl -s "http://127.0.0.1:8000/api/market/reports?days=7"
 taskkill //F //PID <pid>
 
 # 跨文档核验
@@ -176,6 +185,63 @@ G6 的九组集合…）。当前覆盖 **17 组**：3 家公司的 G1 与 G2（
   N 次调用）。这是「行为一致优先」，登记为已知限制。
 * **不开的开关**：本阶段不交付编排文件（无 compose／K8s），不引入容器编排（硬约束 18）。
 
+## 3.2 实时数据区（作者新增意见：实时数据再完善一些）
+
+> **口径（先读这一条）**：问答答案锚定**冻结语料**（数据集 v2.1，**数据截止 2026-09-25**）。
+> 实时区取到的数据**只作页面展示，绝不进入检索／问答证据链**——不参与向量检索、不进图谱
+> 扩展、不进最终证据集合、不写任何表；每个响应体都带 **`"scope": "display_only"`**。
+> 页面上「实时区」与「问答答案（截至语料截止日）」**必须分开显示**。
+
+### 四个接口（`api\market.py`，全部只读）
+
+| 方法 | 路径 | 参数 | 错误码 | 取数源 |
+| --- | --- | --- | --- | --- |
+| GET | `/api/market/quote` | `codes`（逗号分隔，缺省取 `config` 默认股列表） | 1002 | 外部①实时行情 |
+| GET | `/api/market/announcements` | `code`（必填）、`days`（1～30，默认 7）、`page_size`（1～50，默认 20） | 1002／1003 | 外部②个股公告 |
+| GET | `/api/market/news` | `keyword`（必填）、`page_size` | 1002／1003 | 外部③个股新闻 |
+| GET | `/api/market/reports` | `days`（1～30，默认 7）、`page_size` | 1002 | **语料内④查 `document` 表** |
+
+### 三个外部源 ＋ 一个语料内源（URL 模板、超时、TTL、`secids` 前缀规则**全在 `config.MARKET_ZONE`**）
+
+| 源 | 主机（公开接口，无需 key） | 关键点 |
+| --- | --- | --- |
+| ① 实时行情 | `push2.eastmoney.com/api/qt/ulist.np/get` | `secids` 前缀：**沪市 `1.`、深市 `0.`**；取 `data.diff[]` 的 `f12/f14/f2/f3/f4/f6` |
+| ② 个股公告 | `np-anotice-stock.eastmoney.com/api/security/ann` | 取 `data.list[]` 的 `title/notice_date/art_code`；详情页模板见 `notice_detail_url` |
+| ③ 个股新闻 | `search-api-web.eastmoney.com/search/jsonp` | 返回是 **JSONP**（剥 `cb(...)` 外壳）；标题含 `<em>` 需清掉；**必须带 `Referer: https://so.eastmoney.com/`** |
+| ④ 语料内近一周 | **查库 `document` 表** | **不依赖外部源**；窗口＝「语料截止日往前 N 天」到截止日（`publish_time`），响应附 `corpus_cutoff` 与 `note` |
+
+### 缓存
+
+进程内 `dict` ＋ TTL（默认 **60 s**，取 `config.MARKET_ZONE["cache_ttl_seconds"]`），
+键为「接口名 ＋ 参数」；命中时响应标 `cached: true`，且 **`updated_at` 保持不变**
+（`updated_at` 是「该次取数的时间」）。缓存是**进程内**的：多进程／多实例不共享（已知限制）。
+**失败结果不入缓存**，源恢复后下一次请求即可拿到数据。
+
+### 降级行为（**界面上不许编造数据**）
+
+任何外部源失败（超时／非 200／解析失败／网络不通）都**不向接口层抛异常**，而是返回
+`connected: false` ＋ 一句简短 `reason` ＋ `items: []`；`reason` 只给「类别 ＋ 异常名」
+（完整信息含 URL 只进后端日志，**不含口令、不含内网地址**）。
+
+**「未接入」不是错误**：`connected: false` 仍走 `errors.ok(...)` 信封、**HTTP 200**——
+与错误码 **2002**（查询结果为空是**正常业务状态**）同一语义，不用 4xx／5xx 表达。
+页面据 `connected` 如实显示「未接入」，**绝不显示假价格、假涨跌幅、假新闻**。
+外部源全部不可用时，④「语料内近一周」仍可用——这是**不依赖外部源**的降级形态。
+
+### 新增登记
+
+四条 `/api/market/*` 接口**不在表 4-13 的 27 个之内**（作者新增意见下的新增接口），
+连同 `/api/health` 一并**须在《25》登记为新增**。
+
+### 与「答案口径」的边界（如实登记）
+
+* 实时区是**展示层**数据，**不参与**任何问答判定；问答的「数据截至」始终是
+  `data_cutoff_time`（**2026-09-25**），与实时区的时间戳是两套口径，页面分开显示。
+* ④ 的「近一周」是**语料内**发布时间的近一周（如 2026-09-18～2026-09-25），
+  与 ② 的「实时公告近一周」（以**当天**为基准）**不是同一时间基准**，两者不可混用比较。
+* 外部源字段可能随上游调整而变；字段名一旦变化，本层按「解析失败」降级为「未接入」，
+  **不会返回半真半假的数据**。
+
 ## 4. 已知限制（第一版）
 
 1. **MySQL 连接不池化**：单进程内单例连接，`ping()` 掉线重连。单机演示够用。
@@ -185,3 +251,10 @@ G6 的九组集合…）。当前覆盖 **17 组**：3 家公司的 G1 与 G2（
    以入库时间作为记录创建时间，理由见 `tools\import_data.py` 头部。
 5. **凭据待填**：`config.local.json` 的 `mysql_password` 由作者填入；未填时真写库必然
    以明确的凭据错误退出，`--dry-run` 不受影响。
+6. **实时区外部源有频率限制、且字段可能变**：三个东方财富源均为公开接口、**无 SLA**。
+   实测在短时间内连续探测后，行情源会**临时拒绝**本机请求（同一时刻 `curl` 与 Python
+   都收不到响应），隔一段时间自行恢复。故本层默认 60 s 缓存、失败不写缓存，并把此类
+   情况如实降级为「未接入」；**不重试、不绕过、不编造**。字段名如随上游调整，按解析
+   失败降级（见 §3.2）。
+7. **实时区数据不进证据链**：它只服务页面展示；问答判定用的一律是冻结语料
+   （`data_cutoff_time`），两者页面分开显示（见 §3.2）。
