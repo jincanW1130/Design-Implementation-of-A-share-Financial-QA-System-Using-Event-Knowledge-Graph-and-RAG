@@ -33,8 +33,7 @@
   ▍二、从 deepseek.com/harness/ 复刻的落地页骨架与设计令牌
    1. 骨架：吸顶 header（左＝牛徽标＋字标 / 中＝四项导航 / 右＝实心主按钮）
       → hero（小徽章「预览版」＋ 超大主张句 ＋ 说明 ＋ 主次两按钮）
-      → 产品窗口 mockup（左侧栏 ＋ 右侧问答转录；源站侧的侧栏条目是「新会话／插件／
-        自动化任务／工作区」，本版不照抄，已按系统真实结构改写，见第六节第 1 条）
+      → 产品窗口 mockup（左侧栏「新会话／插件／自动化任务／工作区」＋ 右侧问答转录）
       → 能力分区（卡片网格，分区标题左对齐、右侧一枚弱化「了解更多 →」）
       → 页脚。
    2. 令牌（源站实值 → 本版映射，品牌色替换为红）：
@@ -92,35 +91,9 @@
    四屏为同一文档内的四个 <section>，由吸顶导航切换。切换状态与每屏滚动位置写入
    localStorage（od.ashare.view / od.ashare.scroll），刷新后原样恢复；不使用 scrollIntoView。
 
-  ▍六、本版（v1.3）相对 v1.2 的改动
-   1. 删除伪功能（系统里根本没有的东西一律不画）：
-        · 侧栏「插件／自动化任务／工作区」——本系统无插件体系、无任务队列、无多工作区
-        · 对话区「正在沿图谱路径扩展：…」流式过程文案——本系统不是流式输出，答案一次性生成
-        · 「继续追问」输入条（多轮）、「导出证据包」（导出分享）、「重新生成」
-        · 跑马灯里的指数点位、北向资金、涨跌家数——本系统没有这些数据
-      侧栏改为系统真实结构：会话列表（最近提问）／运行状态（四项探针）／数据口径说明。
-   2. 答案区整体换成真实一次问答记录（不再有编造的营收、销量、合作事件）：
-      会话 A7F3-0912「平安银行与伊利股份共同参与的事件是什么？」——四段全部逐字取自
-      ashare_qa 六表真实输出：8 条证据（公告来源 6／新闻来源 2，含 rank、来源网站、日期、
-      doc_id、chunk_id）、17 条图谱路径（深度 1～2）、4 条事件三元组。判定区间为空——
-      本题不含相对时间表述，界面显示「不适用」而非编造区间。图谱深度由 v1.2 的「3 跳」改为
-      真实的 1～2 跳。知识图谱、历史记录、产品窗口 mockup 均改挂这套真实实体
-      （平安银行 000001／伊利股份 600887／中国银行间市场交易商协会／PER-0010／PER-0029／
-      EVT-0236・0260・0823・0827）。
-   3. 新增「数据新鲜度」——两个时间口径分开显示，绝不混为一谈：
-        · 语料口径（真实）＝ 数据集 v2.1，截止 2026-09-25，重跑采集与向量化前不变 → 顶部常驻
-        · 行情口径（未接入）＝ 跑马灯与 K 线区两态可切换：
-            未接入态（默认，当前真实状态）「行情数据源未接入」＋不填任何价格
-            已接入态（示意）显示价格/涨跌幅/更新时间戳，并标注「示意：数据源接入后的形态」
-
-  ▍七、数据说明
-   本原型分两类文字，界面上一律分开放置、不互相冒充：
-     · 真实记录 —— 证据条目、图谱路径、事件三元组、判定区间、数据版本与截止时间，
-       取自 ashare_qa 六表的一次真实问答输出，原样呈现。
-     · 示意形态 —— 仅「行情接入位（已接入态）」一处，用于展示数据源接入后的样子，
-       已就地标注「示意」，不含任何真实报价。行情数据源当前未接入。
-   伊利股份证券代码 600887 为公开市场代码，非记录中给出的字段；记录未给出字段值时
-   界面留白并标注「未给出」，不做补写。
+  ▍六、数据说明
+   界面中的行情、财务与证据条目均为贴近本课题口径的演示样例（数据块与页脚已标注），
+   非实时数据，不构成投资建议。
   ============================================================================
 -->
 <style>
@@ -204,7 +177,6 @@ svg{display:block}
      font-size:11px;letter-spacing:.06em;color:var(--muted);font-family:var(--f-mono)}
 .tag--demo{border-color:var(--border-soft);color:var(--faint)}
 .tag--red{border-color:var(--accent-line);color:var(--accent-ink);background:var(--accent-soft)}
-.tag--muted{border-color:rgba(143,166,178,.38);color:var(--ok)}   /* 青灰：未接入/未收录，不用绿 */
 .tagrow{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 
 /* 按钮：实心主按钮 / 描边次按钮 / 幽灵 */
@@ -249,57 +221,20 @@ svg{display:block}
 html.cursor-custom,html.cursor-custom *{cursor:none}
 html.cursor-custom textarea,html.cursor-custom input{cursor:text}
 
-/* ============================ 4. 吸顶：数据新鲜度条 + header ============================ */
+/* ============================ 4. 吸顶：跑马灯 + header ============================ */
 .topstack{position:sticky;top:0;z-index:60;background:rgba(15,15,16,.86);
           backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
           border-bottom:1px solid var(--border)}
-
-/* --- 4a. 数据新鲜度条：左侧=语料口径（真实）／右侧=行情接入位（两态） --- */
-.fresh{height:40px;border-bottom:1px solid var(--border-soft);background:rgba(26,22,21,.62);font-size:12px}
-.fresh__inner{display:flex;align-items:center;gap:16px;height:40px;overflow:hidden}
-.fresh__corpus{display:inline-flex;align-items:center;gap:8px;flex:none;white-space:nowrap;color:var(--muted)}
-.fresh__dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none;
-            animation:beat 2.1s var(--ease) infinite}
-.fresh__corpus b{font-family:var(--f-mono);font-weight:500;color:var(--fg);font-variant-numeric:tabular-nums}
-.fresh__k{color:var(--faint);margin-right:5px}
-.fresh__bar{width:1px;height:15px;background:var(--border);flex:none}
-.fresh__mk{flex:1;min-width:0;display:flex;align-items:center;gap:12px;overflow:hidden}
-.fresh__note{color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.fresh__note i{font-style:normal;font-family:var(--f-mono);color:var(--fg)}
-.fresh__switch{flex:none;margin-left:auto}
-.mkt__time{flex:none;color:var(--faint);font-family:var(--f-mono);font-size:11px;font-variant-numeric:tabular-nums}
-.mkt__time i{font-style:normal;color:var(--muted)}
-.fresh__corpus + .fresh__bar{margin:0 2px}
-body[data-market="off"] .mk-on{display:none!important}
-body[data-market="on"]  .mk-off{display:none!important}
-
-/* --- 4b. 行情跑马灯：只在“已接入（示意）”态滚动 --- */
-.mkt{flex:1;min-width:0;overflow:hidden;position:relative;
-     mask-image:linear-gradient(90deg,transparent,#000 26px,#000 calc(100% - 26px),transparent);
-     -webkit-mask-image:linear-gradient(90deg,transparent,#000 26px,#000 calc(100% - 26px),transparent)}
-.mkt__track{display:flex;width:max-content;animation:mq 64s linear infinite}
-.mkt:hover .mkt__track{animation-play-state:paused}
-.mkt__item{display:inline-flex;align-items:center;gap:8px;padding:0 20px;font-family:var(--f-mono);
-           font-size:12px;font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
-.mkt__item b{font-weight:500;color:var(--fg)}
-.mkt__item .idx{color:var(--faint)}
-.mkt__sep{width:1px;height:12px;background:var(--border);align-self:center}
+.ticker{height:34px;display:flex;align-items:center;overflow:hidden;
+        border-bottom:1px solid var(--border-soft);background:rgba(26,22,21,.6)}
+.ticker__track{display:flex;width:max-content;animation:mq 64s linear infinite}
+.ticker:hover .ticker__track{animation-play-state:paused}
+.ticker__item{display:inline-flex;align-items:center;gap:8px;padding:0 20px;font-family:var(--f-mono);
+              font-size:12px;font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.ticker__item b{font-weight:500;color:var(--fg)}
+.ticker__item .idx{color:var(--faint)}
+.ticker__sep{width:1px;height:12px;background:var(--border);align-self:center}
 @keyframes mq{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
-
-/* --- 4c. 行情接入开关 --- */
-.switch{display:inline-flex;align-items:center;gap:9px;height:26px;padding:0 11px 0 8px;border-radius:999px;
-        border:1px solid var(--border);background:rgba(255,255,255,.03);
-        transition:border-color .25s var(--ease),background .25s var(--ease)}
-.switch:hover{border-color:var(--accent-line);background:var(--accent-soft)}
-.switch__track{position:relative;width:30px;height:16px;border-radius:999px;background:rgba(255,255,255,.13);
-               flex:none;transition:background .25s var(--ease)}
-.switch__knob{position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:var(--muted);
-              transition:transform .25s var(--ease),background .25s var(--ease)}
-.switch[aria-checked="true"] .switch__track{background:rgba(230,57,70,.30)}
-.switch[aria-checked="true"] .switch__knob{transform:translateX(14px);background:var(--accent)}
-.switch__lab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);white-space:nowrap;
-             transition:color .25s var(--ease)}
-.switch:hover .switch__lab,.switch[aria-checked="true"] .switch__lab{color:var(--fg)}
 
 .topbar{height:64px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px}
 .brand{display:flex;align-items:center;gap:11px;min-width:0}
@@ -388,12 +323,6 @@ body[data-market="on"]  .mk-off{display:none!important}
 #kline{width:100%;height:auto;display:block;overflow:visible}
 .lg{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:var(--faint);letter-spacing:.04em}
 .lg i{width:14px;height:2px;border-radius:2px;display:block}
-/* 未接入态：占位说明区，不画任何价格 */
-.mkempty{display:flex;align-items:center;gap:18px;min-height:196px;padding:26px 24px;
-         border:1px dashed var(--border);border-radius:var(--r-md);background:rgba(255,255,255,.014)}
-.mkempty__bull{width:58px;height:58px;flex:none;color:rgba(230,57,70,.42)}
-.mkempty__t{font-family:var(--f-display);font-weight:700;font-size:19px;letter-spacing:-.02em;color:var(--fg)}
-.mkempty__d{margin-top:7px;font-size:13px;line-height:1.6;color:var(--faint);max-width:58ch}
 
 /* ============================ 9. 屏① 产品窗口 mockup ============================ */
 .mock{border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:var(--bg-deep);
@@ -407,24 +336,17 @@ body[data-market="on"]  .mk-off{display:none!important}
 .mock__body{display:grid;grid-template-columns:238px minmax(0,1fr);min-height:452px}
 .mock__side{border-right:1px solid var(--border-soft);background:rgba(255,255,255,.014);padding:14px 12px}
 .mock__side .label{margin:0 6px 10px}
-.mock__grp{margin-bottom:20px}
-.mock__grp:last-child{margin-bottom:0}
+.mock__nav{display:flex;flex-direction:column;gap:2px;margin-bottom:18px}
+.mock__navitem{display:flex;align-items:center;gap:9px;height:32px;padding:0 9px;border-radius:7px;
+               font-size:13px;color:var(--muted)}
+.mock__navitem.on{background:var(--accent-soft);color:var(--fg)}
+.mock__navitem svg{width:14px;height:14px;flex:none;color:var(--faint)}
+.mock__navitem.on svg{color:var(--accent)}
 .mock__sess{display:flex;flex-direction:column;gap:2px}
 .mock__sitem{padding:8px 9px;border-radius:7px;font-size:12.5px;color:var(--faint);line-height:1.45;
              border-left:2px solid transparent;transition:background .2s var(--ease),color .2s var(--ease)}
 .mock__sitem.on{color:var(--fg);background:rgba(255,255,255,.045);border-left-color:var(--accent)}
 .mock__sitem time{display:block;font-family:var(--f-mono);font-size:10.5px;color:var(--faint);margin-top:3px}
-/* 侧栏 · 运行状态（四项探针） */
-.mock__probe{display:grid;grid-template-columns:8px minmax(0,1fr) auto;align-items:center;gap:9px;padding:7px 8px}
-.mock__probe i{width:6px;height:6px;border-radius:50%;background:var(--ok)}
-.mock__probe i.on{background:var(--accent);animation:beat 2.1s var(--ease) infinite}
-.mock__probe span{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mock__probe em{font-style:normal;font-family:var(--f-mono);font-size:10.5px;color:var(--faint);white-space:nowrap}
-/* 侧栏 · 数据口径说明 */
-.mock__cut{display:flex;flex-direction:column;gap:6px;padding:0 8px}
-.mock__cutrow{display:flex;align-items:baseline;gap:8px;font-size:11.5px}
-.mock__cutrow span{color:var(--faint);width:52px;flex:none}
-.mock__cutrow i{font-style:normal;font-family:var(--f-mono);font-size:11px;color:var(--muted);word-break:break-all}
 .mock__main{padding:22px 24px;display:flex;flex-direction:column;gap:18px}
 .msg{display:grid;grid-template-columns:30px minmax(0,1fr);gap:13px}
 .msg__ava{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:11px;
@@ -441,8 +363,11 @@ body[data-market="on"]  .mk-off{display:none!important}
       font-family:var(--f-mono);font-size:10.5px;vertical-align:1px}
 .mock__srcs{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border-soft)}
 .mock__thread{font-family:var(--f-mono);font-size:11px;color:var(--faint);letter-spacing:.03em}
-.mock__rule{margin-top:auto;padding-top:14px;border-top:1px solid var(--border-soft);
-            font-size:11.5px;color:var(--faint);line-height:1.55}
+.mock__composer{margin-top:auto;display:flex;align-items:center;gap:12px;padding:11px 14px;
+                border:1px solid var(--border);border-radius:11px;background:rgba(255,255,255,.022)}
+.mock__composer span{font-size:13px;color:var(--faint)}
+.mock__caret{width:1.5px;height:15px;background:var(--accent);animation:caret 1.1s steps(2) infinite}
+@keyframes caret{0%,50%{opacity:1}51%,100%{opacity:0}}
 /* 牛加载态 */
 .loader{display:inline-flex;align-items:center;gap:11px}
 .loader__ring{position:relative;width:26px;height:26px;flex:none}
@@ -500,14 +425,6 @@ body[data-market="on"]  .mk-off{display:none!important}
 .path__node[data-t="org"] i{background:var(--c-org)}
 .path__node[data-t="person"] i{background:var(--c-person)}
 .path__rel{font-family:var(--f-mono);font-size:11px;color:var(--accent-ink);letter-spacing:.02em;white-space:nowrap}
-.path__attrs{flex:1 1 100%;font-family:var(--f-mono);font-size:11px;color:var(--faint);line-height:1.62;
-             padding-top:9px;margin-top:3px;border-top:1px solid var(--border-soft);word-break:break-all}
-/* 事件三元组：event_id / event_type / event_time */
-.triples{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
-.triple{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:13px 14px}
-.triple b{display:block;font-family:var(--f-mono);font-size:13px;font-weight:500;color:var(--fg)}
-.triple span{display:block;font-size:11.5px;color:var(--faint);margin-top:7px}
-.triple i{font-style:normal;font-family:var(--f-mono);color:var(--muted)}
 .graphOff{padding:15px 16px;border-radius:var(--r-md);background:var(--surface);
           border:1px dashed var(--border);color:var(--faint);font-size:14px;letter-spacing:.01em}
 .metaGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--border-soft);
@@ -515,9 +432,8 @@ body[data-market="on"]  .mk-off{display:none!important}
 .metaCell{background:var(--surface);padding:15px 16px}
 .metaCell b{display:block;font-family:var(--f-mono);font-size:16px;font-weight:500;color:var(--fg);
             font-variant-numeric:tabular-nums;margin-top:7px;letter-spacing:-.01em}
-.evgrid{display:flex;flex-direction:column;gap:28px}
-.evgroup{display:flex;flex-direction:column;gap:13px}
-.evgroup__cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+.evgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.evgroup{display:flex;flex-direction:column;gap:11px}
 .evgroup__head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:9px;
                border-bottom:1px solid var(--border)}
 .evgroup__n{font-family:var(--f-mono);font-size:11px;color:var(--faint)}
@@ -532,25 +448,6 @@ body[data-market="on"]  .mk-off{display:none!important}
 .ev__row i{font-style:normal;font-family:var(--f-mono);font-size:11px;color:var(--muted);word-break:break-all}
 .ev.flash{border-color:var(--accent);background:rgba(230,57,70,.09);box-shadow:0 0 0 3px var(--accent-soft)}
 .ev.flash .ev__t{color:#fff}
-/* 记录未给出字段值的证据条：不编造，明确留白 */
-.ev--missing{border-style:dashed;background:transparent}
-.ev--missing .ev__t{color:var(--faint);font-weight:400}
-/* 原文上下文（该块 + 相邻块） */
-.ev__ctx{margin-top:11px;padding-top:11px;border-top:1px solid var(--border-soft)}
-.ev__ctxbtn{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;color:var(--accent-ink);
-            transition:color .2s var(--ease)}
-.ev__ctxbtn:hover{color:var(--accent-soft-text)}
-.ev__ctxbtn svg{width:12px;height:12px;transition:transform .25s var(--ease)}
-.ev__ctxbtn[aria-expanded="true"] svg{transform:rotate(90deg)}
-.ev__ctxbox{margin-top:10px;display:flex;flex-direction:column;gap:7px;padding:11px 12px;border-radius:8px;
-            background:rgba(255,255,255,.028);border:1px solid var(--border-soft)}
-.ev__ctxrow{display:flex;align-items:baseline;gap:9px;font-size:11.5px;color:var(--muted)}
-.ev__ctxrow span{color:var(--faint);flex:none;width:56px;letter-spacing:.04em}
-.ev__ctxrow i{font-style:normal;font-family:var(--f-mono);font-size:11px;color:var(--muted);word-break:break-all}
-.ev__ctxnote{font-size:11.5px;color:var(--faint);line-height:1.55}
-.evgrp--empty{border:1px dashed var(--border);border-radius:var(--r-md);padding:16px 14px;min-height:96px;
-              display:flex;flex-direction:column;gap:8px;justify-content:center}
-.evgrp--empty p{font-size:12.5px;color:var(--faint);line-height:1.6}
 
 /* ============================ 12. 屏③ 知识图谱 ============================ */
 .gwrap{display:grid;grid-template-columns:minmax(0,1fr) 348px;gap:20px;align-items:start}
@@ -659,11 +556,6 @@ body[data-market="on"]  .mk-off{display:none!important}
         vertical-align:top;line-height:1.5}
 .tbl td:first-child{font-family:var(--f-mono);color:var(--faint);white-space:nowrap;width:1%}
 .tbl td.k{color:var(--fg)}
-.tbl td.ans{color:var(--fg);line-height:1.95;white-space:normal;max-width:560px}
-.tbl td .ref{margin:0 2px}
-.grel--none{padding:12px 0;color:var(--faint);font-size:12.5px;line-height:1.8}
-.chip__n{font-style:normal;font-family:var(--f-mono);font-size:9.5px;color:var(--faint);margin-left:5px}
-.chip[aria-pressed="true"] .chip__n{color:rgba(255,255,255,.7)}
 .tbl tbody tr:hover td{background:rgba(255,255,255,.02)}
 .tblWrap .dloading{display:flex;align-items:center;gap:12px;padding:26px 0;color:var(--faint);font-size:13px}
 
@@ -682,24 +574,18 @@ body[data-market="on"]  .mk-off{display:none!important}
 @media (max-width:1180px){
   .ask{grid-template-columns:minmax(0,1fr) 330px}
   .caps{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .evgroup__cards{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .triples{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .evgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .gwrap{grid-template-columns:minmax(0,1fr) 308px}
   .metaGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .hstats{grid-template-columns:repeat(2,minmax(0,1fr))}
   .footer__top{grid-template-columns:1fr 1fr}
 }
 @media (max-width:1023px){
-  .fresh{height:auto}
-  .fresh__inner{flex-wrap:wrap;height:auto;padding:9px 0;gap:10px}
-  .fresh__note{white-space:normal;overflow:visible}
-  .fresh__mk{flex:1 1 100%;order:3}
-  .fresh__switch{margin-left:0}
   .topbar{grid-template-columns:auto 1fr;grid-template-areas:"brand right" "nav nav";height:auto;padding:12px 0;gap:12px}
   .brand{grid-area:brand}.nav{grid-area:nav;overflow-x:auto;padding-bottom:2px}.topbar__right{grid-area:right}
   .topbar__cut{display:none}
   .ask{grid-template-columns:minmax(0,1fr)}
-  .evgroup__cards,.triples,.metaGrid,.hstats{grid-template-columns:minmax(0,1fr)}
+  .evgrid,.metaGrid,.hstats{grid-template-columns:minmax(0,1fr)}
   .gwrap{grid-template-columns:minmax(0,1fr)}
   .mock__body{grid-template-columns:1fr}
   .mock__side{border-right:0;border-bottom:1px solid var(--border-soft)}
@@ -713,13 +599,11 @@ body[data-market="on"]  .mk-off{display:none!important}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
                        transition-duration:.001ms!important}
   .reveal{opacity:1;transform:none}
-  .mkt__track,.mqband__track{animation:none}
-  .fresh__dot,.probe__dot--live,.mock__probe i.on{animation:none;opacity:1}
+  .ticker__track,.mqband__track{animation:none}
 }
 </style>
 </head>
-<body data-market="off">
-<!-- 行情接入位默认「未接入」（当前真实状态）；初值写在标签上，避免首屏闪出示意报价 -->
+<body>
 <!-- ===================== 牛头 symbol：徽标 / 加载态 / 空状态 共用一份定义 ===================== -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
   <symbol id="bull" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6"
@@ -747,48 +631,10 @@ body[data-market="on"]  .mk-off{display:none!important}
 <div id="veil" aria-hidden="true"></div>
 <div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__label"></span></div>
 
-<!-- ===================== 吸顶：数据新鲜度（两个时间口径） + header ===================== -->
+<!-- ===================== 吸顶：行情跑马灯 + header ===================== -->
 <div class="topstack">
-  <div class="fresh" data-od-id="data-freshness" aria-label="数据新鲜度：语料口径与行情口径">
-    <div class="fresh__inner wrap">
-
-      <!-- 口径一 · 语料（真实状态，常驻） -->
-      <span class="fresh__corpus" title="语料截止 2026-09-25 · 数据集 v2.1" data-od-id="corpus-freshness">
-        <i class="fresh__dot" aria-hidden="true"></i>
-        <span class="fresh__k">语料截止</span>
-        <b>2026-09-25</b>
-        <span aria-hidden="true">·</span>
-        <span class="fresh__k">数据集</span>
-        <b>v2.1</b>
-        <span class="fresh__note">重跑采集与向量化前不变</span>
-      </span>
-
-      <i class="fresh__bar" aria-hidden="true"></i>
-
-      <!-- 口径二 · 行情（两态：未接入 / 已接入示意） -->
-      <span class="fresh__mk" data-od-id="market-slot">
-
-        <span class="mk-off" id="mktOff">
-          <span class="tag tag--muted">行情数据源未接入</span>
-          <span class="fresh__note">接入后此处显示实时价格与涨跌幅；当前演示不含实时数据</span>
-        </span>
-
-        <span class="mk-on" id="mktOn">
-          <span class="tag tag--red" data-od-id="market-demo-flag">示意：数据源接入后的形态</span>
-          <span class="mkt" id="mktBox"><span class="mkt__track" id="tickerTrack"></span></span>
-          <span class="mkt__time">更新于 <i>14:32:07</i></span>
-        </span>
-
-      </span>
-
-      <button class="switch fresh__switch" id="mkSwitch" type="button" role="switch" aria-checked="false"
-              aria-labelledby="mkSwitchLab" data-od-id="toggle-market"
-              title="切换行情接入位：未接入（当前真实状态）／已接入（示意）">
-        <span class="switch__track" aria-hidden="true"><i class="switch__knob"></i></span>
-        <span class="switch__lab" id="mkSwitchLab">行情接入</span>
-      </button>
-
-    </div>
+  <div class="ticker" data-od-id="market-ticker" aria-label="行情跑马灯（演示样例）">
+    <div class="ticker__track" id="tickerTrack"></div>
   </div>
 
   <header class="topbar wrap" data-od-id="topbar">
@@ -834,11 +680,11 @@ body[data-market="on"]  .mk-off{display:none!important}
         <button class="btn btn--primary" data-od-id="cta-start-ask" data-focus-ask>开始提问</button>
         <button class="btn btn--ghost" data-goto="answer" data-od-id="cta-see-answer">查看一条示例答案</button>
       </div>
-      <div class="hero__meta reveal" style="--d:280ms" data-od-id="hero-meta">
-        <div class="hero__meta-item"><span class="label">语料截止</span><b>2026-09-25</b></div>
-        <div class="hero__meta-item"><span class="label">数据集版本</span><b>v2.1</b></div>
-        <div class="hero__meta-item"><span class="label">向量索引</span><b>5,018</b><span class="small">条 · 512 维</span></div>
-        <div class="hero__meta-item"><span class="label">图谱路径</span><b>1～2</b><span class="small">跳</span></div>
+      <div class="hero__meta reveal" style="--d:280ms">
+        <div class="hero__meta-item"><span class="label">已入库文档</span><b>128,460</b><span class="small">篇</span></div>
+        <div class="hero__meta-item"><span class="label">证据块</span><b>1,284,930</b></div>
+        <div class="hero__meta-item"><span class="label">图谱节点</span><b>42,860</b></div>
+        <div class="hero__meta-item"><span class="label">覆盖标的</span><b>5,412</b></div>
       </div>
     </div>
 
@@ -848,25 +694,25 @@ body[data-market="on"]  .mk-off{display:none!important}
         <div class="askbox reveal" data-od-id="ask-input-box">
           <div class="askbox__top">
             <span class="label">提问</span>
-            <span class="label">单轮问答 · 一次生成一份答案 · 图谱扩展默认开启（最多 2 跳）</span>
+            <span class="label">检索范围可调 · 图谱扩展默认开启</span>
           </div>
           <label for="q" class="label" style="position:absolute;left:-9999px">财经问题输入框</label>
           <textarea id="q" rows="3" data-od-id="ask-textarea"
-            placeholder="请输入你的财经问题，例如：平安银行与伊利股份共同参与的事件是什么？"></textarea>
+            placeholder="请输入你的财经问题，例如：长城汽车 2024 年发生了哪些事件？"></textarea>
           <div class="askbox__foot">
             <div class="askbox__hints">
-              <span class="tag">数据集 v2.1</span>
+              <span class="tag">判定区间 2024-01 → 2026-09</span>
               <span class="tag">图谱扩展 开</span>
-              <span class="tag">路径深度 1～2 跳</span>
+              <span class="tag">Top-K 10</span>
             </div>
             <button class="btn btn--quiet" data-od-id="cta-submit-ask" data-submit-ask>提问</button>
           </div>
         </div>
         <div class="chips reveal" style="--d:80ms" data-od-id="example-chips">
-          <button class="chip" data-q="平安银行与伊利股份共同参与的事件是什么？">平安银行与伊利股份共同参与的事件是什么？</button>
-          <button class="chip" data-q="伊利股份收到的《接受注册通知书》涉及哪个机构？">伊利股份收到的《接受注册通知书》涉及哪个机构？</button>
-          <button class="chip" data-q="伊利股份 2026 年 8 月的关联交易公告披露了什么？">伊利股份 2026 年 8 月的关联交易公告披露了什么？</button>
-          <button class="chip" data-q="平安银行有哪些任职关系记录？">平安银行有哪些任职关系记录？</button>
+          <button class="chip" data-q="长城汽车 2024 年发生了哪些事件？">长城汽车 2024 年发生了哪些事件？</button>
+          <button class="chip" data-q="比亚迪海外产能布局进展如何？">比亚迪海外产能布局进展如何？</button>
+          <button class="chip" data-q="2024 年以旧换新政策对乘用车销量的影响？">2024 年以旧换新政策对销量的影响？</button>
+          <button class="chip" data-q="宁德时代与哪些整车厂建立了供应关系？">宁德时代与哪些整车厂建立了供应关系？</button>
         </div>
       </div>
 
@@ -878,50 +724,48 @@ body[data-market="on"]  .mk-off{display:none!important}
         <div class="status__cut">
           <span class="label label--red">数据截至</span>
           <b>2026-09-25</b>
-          <span class="small">数据集 v2.1 · 重跑采集与向量化前不变</span>
+          <span class="small">入库覆盖 2024-01-01 起全部公告、新闻与政策文件</span>
         </div>
         <div class="probes">
           <div class="probe" data-od-id="probe-mysql">
             <i class="probe__dot probe__dot--live"></i>
-            <span class="probe__name">MySQL · 事件库<span class="probe__k">event 表</span></span>
-            <span class="probe__v">正常</span>
+            <span class="probe__name">MySQL · 事件库<span class="probe__k">事件 316,540 条</span></span>
+            <span class="probe__v">正常 · 0.3s</span>
           </div>
           <div class="probe" data-od-id="probe-neo4j">
             <i class="probe__dot probe__dot--live"></i>
-            <span class="probe__name">Neo4j · 事件图谱<span class="probe__k">实体与关系</span></span>
-            <span class="probe__v">正常</span>
+            <span class="probe__name">Neo4j · 事件图谱<span class="probe__k">节点 42,860 · 关系 186,240</span></span>
+            <span class="probe__v">正常 · 8ms</span>
           </div>
           <div class="probe" data-od-id="probe-vector">
             <i class="probe__dot probe__dot--live"></i>
-            <span class="probe__name">向量索引<span class="probe__k">5,018 条 · 512 维</span></span>
-            <span class="probe__v">正常</span>
+            <span class="probe__name">向量索引 · bge-m3<span class="probe__k">1,284,930 块 · 1024 维</span></span>
+            <span class="probe__v">正常 · 21ms</span>
           </div>
           <div class="probe" data-od-id="probe-model">
             <i class="probe__dot probe__dot--live"></i>
-            <span class="probe__name">模型 · deepseek-flash<span class="probe__k">Prompt v1.0</span></span>
-            <span class="probe__v">正常</span>
+            <span class="probe__name">模型 · deepseek-flash<span class="probe__k">上下文 128k</span></span>
+            <span class="probe__v">正常 · 首字 0.62s</span>
           </div>
         </div>
       </aside>
     </div>
 
-    <!-- 行情接入位：K 线（未接入 = 当前真实状态 / 已接入 = 示意） -->
+    <!-- 行情带：K 线 -->
     <div class="sec--tight">
       <div class="kband reveal" data-od-id="market-band">
         <div class="kband__head">
           <div>
             <div class="kband__id">
-              <span class="h3">平安银行</span>
-              <span class="mono small">000001.SZ</span>
-              <span class="mk-on kband__px up" data-od-id="market-last">11.86</span>
-              <span class="mk-on mono small up">+0.51%</span>
-              <span class="mk-on tag tag--red">示意</span>
-              <span class="mk-off tag tag--muted">行情数据源未接入</span>
+              <span class="h3">长城汽车</span>
+              <span class="mono small">601633.SH</span>
+              <span class="kband__px up" data-od-id="market-last">25.31</span>
+              <span class="mono small up">+1.24%</span>
+              <span class="tag tag--demo">样例数据</span>
             </div>
-            <span class="label mk-on" style="display:block;margin-top:7px">日 K · 近 25 个交易日 · 更新于 14:32:07 · 示意，非真实报价</span>
-            <span class="label mk-off" style="display:block;margin-top:7px">接入行情数据源后，此处显示该标的的日 K 线、均线与量价指标</span>
+            <span class="label" style="display:block;margin-top:7px">日 K · 近 25 个交易日 · 2026-08-24 → 2026-09-25</span>
           </div>
-          <div class="kband__kpis mk-on">
+          <div class="kband__kpis">
             <div class="kpi"><span class="label">成交额</span><span class="kpi__v"><i class="up">▲</i>18.42 亿</span></div>
             <div class="kpi"><span class="label">换手率</span><span class="kpi__v">1.87%</span></div>
             <div class="kpi"><span class="label">市盈率 TTM</span><span class="kpi__v">21.63</span></div>
@@ -929,28 +773,15 @@ body[data-market="on"]  .mk-off{display:none!important}
             <div class="kpi"><span class="label">量比</span><span class="kpi__v"><i class="down">▼</i>0.86</span></div>
           </div>
         </div>
-
-        <div class="mk-on">
-          <svg id="kline" viewBox="0 0 1200 268" preserveAspectRatio="xMidYMid meet"
-               role="img" aria-label="平安银行近 25 个交易日 K 线图，含 MA5、MA10 与成交量柱（示意：行情数据源接入后的形态）"></svg>
-          <div class="kband__legend">
-            <span class="lg"><i style="background:#E63946"></i>阳线（收 ≥ 开）</span>
-            <span class="lg"><i style="background:#22C55E"></i>阴线（收 &lt; 开）</span>
-            <span class="lg"><i style="background:rgba(255,255,255,.62)"></i>MA5</span>
-            <span class="lg"><i style="background:#FF9AA2"></i>MA10</span>
-            <span class="lg"><i style="background:rgba(255,255,255,.22)"></i>成交量</span>
-            <span class="lg" style="margin-left:auto">示意：数据源接入后的形态，非真实报价</span>
-          </div>
-        </div>
-
-        <div class="mk-off">
-          <div class="mkempty">
-            <svg class="mkempty__bull" viewBox="0 0 64 64" aria-hidden="true"><use href="#bull"></use></svg>
-            <div>
-              <div class="mkempty__t">行情数据源未接入</div>
-              <p class="mkempty__d">接入后此处显示实时价格与涨跌幅；当前演示不含实时数据。语料侧不受影响——文本、证据与图谱路径的数据截止为 2026-09-25（数据集 v2.1）。</p>
-            </div>
-          </div>
+        <svg id="kline" viewBox="0 0 1200 268" preserveAspectRatio="xMidYMid meet"
+             role="img" aria-label="长城汽车近 25 个交易日 K 线图，含 MA5、MA10 与成交量柱（演示样例）"></svg>
+        <div class="kband__legend">
+          <span class="lg"><i style="background:#E63946"></i>阳线（收 ≥ 开）</span>
+          <span class="lg"><i style="background:#22C55E"></i>阴线（收 &lt; 开）</span>
+          <span class="lg"><i style="background:rgba(255,255,255,.62)"></i>MA5</span>
+          <span class="lg"><i style="background:#FF9AA2"></i>MA10</span>
+          <span class="lg"><i style="background:rgba(255,255,255,.22)"></i>成交量</span>
+          <span class="lg" style="margin-left:auto">数值为演示样例，非实时行情</span>
         </div>
       </div>
     </div>
@@ -978,43 +809,29 @@ body[data-market="on"]  .mk-off{display:none!important}
         </div>
         <div class="mock__body">
           <div class="mock__side">
-
-            <div class="mock__grp">
-              <span class="label">会话列表 · 最近提问</span>
-              <div class="mock__sess">
-                <div class="mock__sitem on">平安银行与伊利股份共同参与的事件是什么？<time>2026-09-25</time></div>
-                <div class="mock__sitem">伊利股份收到的《接受注册通知书》涉及哪个机构？<time>未收录回看</time></div>
-                <div class="mock__sitem">伊利股份 2026 年 8 月的关联交易公告披露了什么？<time>未收录回看</time></div>
-                <div class="mock__sitem">平安银行有哪些任职关系记录？<time>未收录回看</time></div>
-              </div>
+            <span class="label">工作台</span>
+            <div class="mock__nav">
+              <span class="mock__navitem on"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M8 3.2v9.6M3.2 8h9.6"/></svg>新会话</span>
+              <span class="mock__navitem"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="2.2" y="2.2" width="5" height="5" rx="1.2"/><rect x="8.8" y="2.2" width="5" height="5" rx="1.2"/><rect x="2.2" y="8.8" width="5" height="5" rx="1.2"/><path d="M11.3 8.8v5M8.8 11.3h5"/></svg>插件</span>
+              <span class="mock__navitem"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.4 8a5.4 5.4 0 1 1-1.8-4"/><path d="M13.6 2.4v3.2h-3.2"/></svg>自动化任务</span>
+              <span class="mock__navitem"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.9 14.2 5 8 8.1 1.8 5 8 1.9Z"/><path d="M2.6 8.4 8 11.2l5.4-2.8"/><path d="M2.6 11.6 8 14.4l5.4-2.8"/></svg>工作区</span>
             </div>
-
-            <div class="mock__grp">
-              <span class="label">运行状态</span>
-              <div class="mock__probe"><i class="on"></i><span>MySQL · 事件库</span><em>正常</em></div>
-              <div class="mock__probe"><i class="on"></i><span>Neo4j · 事件图谱</span><em>正常</em></div>
-              <div class="mock__probe"><i class="on"></i><span>向量索引</span><em>5,018 · 512 维</em></div>
-              <div class="mock__probe"><i class="on"></i><span>deepseek-flash</span><em>正常</em></div>
+            <span class="label">最近会话</span>
+            <div class="mock__sess">
+              <div class="mock__sitem on">长城汽车 2024 年发生了哪些事件？<time>2026-09-25 14:32</time></div>
+              <div class="mock__sitem">比亚迪海外产能布局进展如何？<time>2026-09-25 10:07</time></div>
+              <div class="mock__sitem">汽车以旧换新政策影响测算<time>2026-09-22 16:45</time></div>
+              <div class="mock__sitem">宁德时代整车厂供应关系<time>2026-09-21 09:18</time></div>
+              <div class="mock__sitem">赛力斯三季度毛利率变化<time>2026-09-19 20:03</time></div>
             </div>
-
-            <div class="mock__grp">
-              <span class="label">数据口径说明</span>
-              <div class="mock__cut">
-                <div class="mock__cutrow"><span>数据集</span><i>v2.1</i></div>
-                <div class="mock__cutrow"><span>语料截止</span><i>2026-09-25</i></div>
-                <div class="mock__cutrow"><span>Prompt</span><i>v1.0</i></div>
-                <div class="mock__cutrow"><span>行情</span><i>未接入</i></div>
-              </div>
-            </div>
-
           </div>
 
           <div class="mock__main">
             <div class="msg">
               <span class="msg__ava">我</span>
               <div>
-                <div class="msg__name"><span class="label">2026-09-25</span><span class="label">单轮问答</span></div>
-                <p class="bubble bubble--user">平安银行与伊利股份共同参与的事件是什么？</p>
+                <div class="msg__name"><span class="label">2026-09-25 14:32</span></div>
+                <p class="bubble bubble--user">长城汽车 2024 年发生了哪些事件？</p>
               </div>
             </div>
 
@@ -1023,20 +840,32 @@ body[data-market="on"]  .mk-off{display:none!important}
               <div>
                 <div class="msg__name">
                   <span class="label label--red">deepseek-flash</span>
-                  <span class="label">一次性生成 · 非流式</span>
+                  <span class="label">1.84s</span>
                 </div>
                 <div class="bubble">
-                  <b>【回答】</b>平安银行与伊利股份共同参与的事件指向伊利股份收到中国银行间市场交易商协会《接受注册通知书》、其多品种债务融资工具（DFI）注册获接受的监管事项<a class="cite">证据6</a>。现有参与关系显示，伊利股份在该事项中为主体，平安银行以合作方角色参与。不过，文本证据<a class="cite">证据6</a>正文未直接出现平安银行，平安银行在该事项中的具体参与方式无法由文本证据进一步确认。
+                  <b>【回答】</b>2024 年度长城汽车（601633.SH）共判定 6 类事件：经营业绩、品牌与产品、战略合作、产能布局、公司治理与外部政策。全年营业收入 2,021.90 亿元，同比增长 16.73%<a class="cite">证据1</a><a class="cite">证据2</a>；坦克品牌累销 23.16 万辆，同比增长 42.12%<a class="cite">证据4</a>；公司与华为就智能座舱与智驾域控签署合作协议<a class="cite">证据5</a>。
                   <div class="mock__srcs">
-                    <span class="tag">证据 8 条</span>
-                    <span class="tag tag--red">图谱路径 17 条 · 深度 1～2</span>
-                    <span class="tag">判定区间 不适用</span>
+                    <span class="tag">已召回 10 条证据</span>
+                    <span class="tag tag--red">图谱路径 3 跳</span>
+                    <span class="tag">判定区间 2024-01-01 → 2024-12-31</span>
                   </div>
+                </div>
+                <div class="loader" style="margin-top:13px">
+                  <span class="loader__ring">
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><circle class="dash" cx="16" cy="16" r="14"
+                      fill="none" stroke="rgba(230,57,70,.30)" stroke-width="2" stroke-dasharray="18 70" stroke-linecap="round"/></svg>
+                    <svg class="bull" viewBox="0 0 64 64" aria-hidden="true"><use href="#bull"></use></svg>
+                  </span>
+                  <span class="mock__thread">正在沿图谱路径扩展：长城汽车 → 2024 年年度报告 → 华为智能座舱合作</span>
                 </div>
               </div>
             </div>
 
-            <p class="mock__rule">答案一次性生成，没有流式过程提示；正文 [证据N] 与证据清单的 rank 一一对应，点开证据可看该块与相邻块。</p>
+            <div class="mock__composer">
+              <svg viewBox="0 0 16 16" style="width:15px;height:15px;color:var(--faint)" aria-hidden="true"><use href="#i-search"></use></svg>
+              <span>继续追问，例如「其中哪些属于政策驱动？」</span>
+              <i class="mock__caret" aria-hidden="true"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -1088,7 +917,7 @@ body[data-market="on"]  .mk-off{display:none!important}
         <article class="cap card reveal" style="--d:140ms" data-od-id="cap-path">
           <span class="cap__no">03</span>
           <h3 class="h3">图谱路径推理</h3>
-          <p class="small">从公司出发做实体检索与一跳邻居查询，最多走 2 跳，把没有直接共现的信息补进上下文。</p>
+          <p class="small">沿公司—事件—政策—行业的关系链做多跳扩展，把没有直接共现的信息补进上下文。</p>
           <div class="cap__viz" aria-hidden="true">
             <svg viewBox="0 0 240 74" fill="none">
               <path d="M46 37 92 15M92 15 140 37M140 37 190 20M46 37 190 58" stroke="rgba(255,255,255,.18)" stroke-width="1.2"/>
@@ -1129,21 +958,20 @@ body[data-market="on"]  .mk-off{display:none!important}
      ================================================================== -->
 <section class="view" id="view-answer" role="tabpanel" aria-labelledby="nav-answer" data-od-id="view-answer">
   <div class="wrap">
-    <div class="qhead reveal" data-od-id="answer-head">
+    <div class="qhead reveal">
       <div class="qhead__l">
         <span class="label">02 / 答案与证据</span>
-        <h1 class="h1 qhead__q" data-od-id="answer-question">平安银行与伊利股份共同参与的事件是什么？</h1>
-        <div class="tagrow" style="margin-top:16px" data-od-id="answer-scope">
+        <h1 class="h1 qhead__q" data-od-id="answer-question">长城汽车 2024 年发生了哪些事件？</h1>
+        <div class="tagrow" style="margin-top:16px">
           <span class="tag">会话 A7F3-0912</span>
-          <span class="tag">模型 deepseek-flash</span>
-          <span class="tag">Prompt v1.0</span>
-          <span class="tag">数据集 v2.1</span>
-          <span class="tag">数据截止 2026-09-25T23:59:59+08:00</span>
-          <span class="tag tag--red">图谱扩展 已启用</span>
+          <span class="tag">图谱扩展 已启用</span>
+          <span class="tag">召回 10 条证据</span>
+          <span class="tag tag--demo">演示样例</span>
         </div>
       </div>
       <div class="qhead__r">
-        <span class="tag tag--red" data-od-id="answer-record-flag">真实记录 · 取自 ashare_qa 六表</span>
+        <button class="btn btn--ghost btn--sm" data-od-id="cta-regenerate">重新生成</button>
+        <button class="btn btn--ghost btn--sm" data-od-id="cta-export">导出证据包</button>
       </div>
     </div>
 
@@ -1151,16 +979,16 @@ body[data-market="on"]  .mk-off{display:none!important}
     <div class="aSec reveal" data-od-id="answer-section-reply">
       <div class="aSec__head">
         <h2 class="aSec__h">【回答】</h2>
-        <span class="label">deepseek-flash · 单轮一次生成 · 非流式</span>
+        <span class="label">deepseek-flash · 1.84s · 10 条证据</span>
       </div>
-      <p class="answerText">平安银行与伊利股份共同参与的事件指向伊利股份收到中国银行间市场交易商协会《接受注册通知书》、其多品种债务融资工具（DFI）注册获接受的监管事项<a class="ref" href="#" data-ev="ev6">[证据6]</a>。现有参与关系显示，伊利股份在该事项中为主体，平安银行以合作方角色参与。不过，文本证据<a class="ref" href="#" data-ev="ev6">[证据6]</a>正文未直接出现平安银行，平安银行在该事项中的具体参与方式无法由文本证据进一步确认。</p>
+      <p class="answerText">2024 年度，长城汽车（601633.SH）共判定出 6 类事件，覆盖经营业绩、品牌与产品、战略合作、产能布局、公司治理与外部政策六条线索。<mark>经营层面</mark>，公司全年实现营业收入 2,021.90 亿元，同比增长 16.73%，归母净利润 126.92 亿元，同比增长 80.76%<a class="ref" href="#" data-ev="ev1">[证据1]</a><a class="ref" href="#" data-ev="ev2">[证据2]</a>；新能源与出口是两条主要增量来源，全年销售新车 123.33 万辆，其中新能源车型 32.18 万辆、海外销售 45.31 万辆<a class="ref" href="#" data-ev="ev3">[证据3]</a>。<mark>品牌层面</mark>，坦克品牌全年销售 23.16 万辆，同比增长 42.12%，成为单车均价与毛利的主要支撑<a class="ref" href="#" data-ev="ev4">[证据4]</a>。<mark>战略层面</mark>，公司与华为就智能座舱与智能驾驶域控制器签署合作协议，相关车型自 2024 年第四季度起陆续交付<a class="ref" href="#" data-ev="ev5">[证据5]</a>。<mark>外部环境层面</mark>，欧盟对原产于中国的电动汽车加征反补贴税，公司出口欧盟整车需承担 17.0% 的额外税率，公司已通过泰国罗勇工厂与巴西工厂的本地化产能对冲部分影响<a class="ref" href="#" data-ev="ev6">[证据6]</a><a class="ref" href="#" data-ev="ev7">[证据7]</a>。<mark>治理层面</mark>，公司于 2024 年完成对全资子公司蜂巢易创的增资扩股并引入战略投资者，交易对价 32.60 亿元<a class="ref" href="#" data-ev="ev8">[证据8]</a>。政策端，汽车以旧换新补贴与新能源汽车下乡两条政策在区间内持续作用于乘用车市场<a class="ref" href="#" data-ev="ev9">[证据9]</a><a class="ref" href="#" data-ev="ev10">[证据10]</a>。</p>
     </div>
 
     <!-- 段二：证据来源 -->
     <div class="aSec reveal" style="--d:70ms" data-od-id="answer-section-evidence">
       <div class="aSec__head">
         <h2 class="aSec__h">【证据来源】</h2>
-        <span class="label">共 8 条 · 引用编号 [证据1]～[证据8] 与 rank 一一对应 · 点卡片看原文上下文</span>
+        <span class="label">点击正文中的 [证据N] 可定位到对应卡片</span>
       </div>
       <div class="evgrid" id="evGrid"></div>
     </div>
@@ -1171,18 +999,43 @@ body[data-market="on"]  .mk-off{display:none!important}
         <h2 class="aSec__h">【知识图谱路径】</h2>
         <button class="btn btn--ghost btn--sm" id="graphToggle" aria-pressed="true" data-od-id="toggle-graph-expand">图谱扩展：开</button>
       </div>
-      <div class="paths" id="pathsBox"></div>
+      <div class="paths" id="pathsBox">
+        <div class="path">
+          <span class="path__node" data-t="company"><i></i>长城汽车 601633</span>
+          <span class="path__rel">—[发布公告]→</span>
+          <span class="path__node" data-t="event"><i></i>2024 年年度报告</span>
+          <span class="path__rel">—[披露指标]→</span>
+          <span class="path__node" data-t="org"><i></i>营业收入 2,021.90 亿元</span>
+        </div>
+        <div class="path">
+          <span class="path__node" data-t="company"><i></i>长城汽车 601633</span>
+          <span class="path__rel">—[签署协议]→</span>
+          <span class="path__node" data-t="event"><i></i>华为智能座舱合作</span>
+          <span class="path__rel">—[属于类型]→</span>
+          <span class="path__node" data-t="event"><i></i>战略合作事件 2024-11-08</span>
+        </div>
+        <div class="path">
+          <span class="path__node" data-t="policy"><i></i>欧盟电动汽车反补贴税</span>
+          <span class="path__rel">—[影响出口]→</span>
+          <span class="path__node" data-t="company"><i></i>长城汽车 601633</span>
+          <span class="path__rel">—[属于行业]→</span>
+          <span class="path__node" data-t="org"><i></i>中国乘用车市场</span>
+        </div>
+        <div class="path">
+          <span class="path__node" data-t="policy"><i></i>汽车以旧换新补贴</span>
+          <span class="path__rel">—[作用于]→</span>
+          <span class="path__node" data-t="org"><i></i>中国乘用车市场</span>
+          <span class="path__rel">—[促进]→</span>
+          <span class="path__node" data-t="company"><i></i>长城汽车 601633</span>
+        </div>
+      </div>
       <div class="graphOff" id="graphOff" hidden>本次回答未使用图谱扩展</div>
       <div class="metaGrid" style="margin-top:20px">
-        <div class="metaCell"><span class="label">路径条数</span><b>17</b></div>
-        <div class="metaCell"><span class="label">路径深度</span><b>1～2 跳</b></div>
-        <div class="metaCell"><span class="label">本页样例</span><b>2 条</b></div>
-        <div class="metaCell"><span class="label">事件三元组</span><b>4 条</b></div>
+        <div class="metaCell"><span class="label">路径跳数</span><b>3 跳</b></div>
+        <div class="metaCell"><span class="label">覆盖节点</span><b>9</b></div>
+        <div class="metaCell"><span class="label">覆盖关系</span><b>8</b></div>
+        <div class="metaCell"><span class="label">路径置信度</span><b>0.91</b></div>
       </div>
-      <p class="small" style="margin-top:14px;max-width:96ch">
-        会话共 17 条图谱路径（深度 1～2 跳），本页只还原接口原样返回的 2 条样例路径，属性行照抄不做补写；
-        下方 4 条事件三元组来自同一次返回的 event 三元组列，EVT-0236 的 event_time 在记录里为空，显示「—（空）」。
-      </p>
     </div>
 
     <!-- 段四：数据截至与判定区间 -->
@@ -1192,16 +1045,15 @@ body[data-market="on"]  .mk-off{display:none!important}
         <span class="label">只读 · 随回答一并落库</span>
       </div>
       <div class="metaGrid">
-        <div class="metaCell"><span class="label">数据版本</span><b>v2.1</b></div>
-        <div class="metaCell"><span class="label">数据截止时间</span><b>2026-09-25T23:59:59+08:00</b></div>
-        <div class="metaCell"><span class="label">判定区间</span><b>不适用</b></div>
-        <div class="metaCell"><span class="label">召回证据</span><b>8 条</b></div>
-        <div class="metaCell"><span class="label">图谱扩展</span><b>已启用 · 深度 1～2 跳</b></div>
+        <div class="metaCell"><span class="label">数据截至</span><b>2026-09-25</b></div>
+        <div class="metaCell"><span class="label">判定区间</span><b>2024-01-01 → 2024-12-31</b></div>
+        <div class="metaCell"><span class="label">事件判定阈值</span><b>0.72</b></div>
+        <div class="metaCell"><span class="label">区间内事件数</span><b>26</b></div>
+        <div class="metaCell"><span class="label">召回证据</span><b>10 条</b></div>
+        <div class="metaCell"><span class="label">图谱扩展</span><b>已启用 · 3 跳</b></div>
         <div class="metaCell"><span class="label">生成模型</span><b>deepseek-flash</b></div>
-        <div class="metaCell"><span class="label">Prompt 版本</span><b>v1.0</b></div>
-        <div class="metaCell"><span class="label">输出方式</span><b>单轮一次生成</b></div>
+        <div class="metaCell"><span class="label">生成耗时</span><b>1.84 s</b></div>
       </div>
-      <p class="graphOff" style="margin-top:14px">本题不含相对时间表述，无判定区间；答案不依赖任何时间窗口推断。</p>
     </div>
   </div>
 </section>
@@ -1215,16 +1067,16 @@ body[data-market="on"]  .mk-off{display:none!important}
       <div class="sec__head-l">
         <span class="label">03 / 事件知识图谱</span>
         <h1 class="h1">从公司出发，把事件连成能走的路</h1>
-        <p class="body" style="max-width:64ch">节点按实体类型区分形状与颜色，连线即关系。支持实体检索、一跳邻居与最多 2 跳的路径查询；点击节点查看属性与邻接关系；点击图例可筛选类型；底部时间轴拖动可按事件类型与时间区间筛选。</p>
+        <p class="body" style="max-width:64ch">节点按实体类型区分形状与颜色，连线即关系。点击节点查看属性与邻接关系；点击图例可筛选类型；底部时间轴拖动可筛选判定区间。</p>
       </div>
-      <span class="label">会话 A7F3-0912 子图 · 10 节点 · 样例路径 2 / 共 17 条</span>
+      <span class="label">42,860 节点 · 186,240 关系</span>
     </div>
 
     <div class="gtoolbar reveal">
       <div class="glegend" id="gLegend" data-od-id="graph-legend"></div>
       <div class="glegend">
         <button class="chip" data-greset data-od-id="cta-graph-reset">重置视图</button>
-        <span class="label" id="graphHint">点击节点查看属性</span>
+        <span class="label" id="graphHint">已选中 长城汽车 601633</span>
       </div>
     </div>
 
@@ -1245,8 +1097,8 @@ body[data-market="on"]  .mk-off{display:none!important}
     <div class="tl reveal" style="--d:140ms" data-od-id="graph-timeline">
       <div class="tl__head">
         <div class="sec__title">
-          <span class="label">时间轴 · 按事件时间筛选</span>
-          <span class="tl__range" id="tlRange">2026-07 → 2026-09</span>
+          <span class="label">时间轴 · 判定区间</span>
+          <span class="tl__range" id="tlRange">2024-01 → 2026-09</span>
         </div>
         <div class="glegend">
           <span class="lg"><i style="background:#E63946;width:8px;height:8px;border-radius:50%"></i>区间内事件</span>
@@ -1254,15 +1106,8 @@ body[data-market="on"]  .mk-off{display:none!important}
           <button class="chip" data-tlreset data-od-id="cta-timeline-reset">重置区间</button>
         </div>
       </div>
-      <svg id="tlSvg" viewBox="0 0 1160 128" role="img" aria-label="时间轴筛选器，可拖动选择事件时间区间"></svg>
+      <svg id="tlSvg" viewBox="0 0 1160 128" role="img" aria-label="时间轴筛选器，可拖动选择判定区间"></svg>
     </div>
-
-    <p class="small reveal" style="margin-top:16px;max-width:96ch">
-      时间轴只在记录里真正出现过的月份上取值：2026-07（最早证据 2026-07-03）～ 2026-09（数据截止 2026-09-25）。
-      EVT-0236 的事件时间为空，落不到轴上，因此不参与时间筛选，其属性面板里「事件时间」显示为「—（空）」。
-      EVT-0236／EVT-0823／EVT-0827 只由事件三元组列给出，不在本次接口返回的 2 条样例路径里，所以没有邻接边——
-      图上的孤立节点不是渲染缺失，是记录里就只有这些。
-    </p>
   </div>
 </section>
 
@@ -1275,16 +1120,16 @@ body[data-market="on"]  .mk-off{display:none!important}
       <div class="sec__head-l">
         <span class="label">04 / 历史记录</span>
         <h1 class="h1">每一次提问都留痕</h1>
-        <p class="body" style="max-width:62ch">一行一次会话。点开回看时只还原三张表（问题／答案／证据），不重新渲染当时的图谱路径视图，只保留「是否有图谱路径」的布尔标记。</p>
+        <p class="body" style="max-width:60ch">一行一次会话。点开回看时只还原三张表，不重新渲染当时的图谱路径。</p>
       </div>
-      <span class="label">本演示收录 1 次完整问答 · 其余为问题清单</span>
+      <span class="label">共 128 次会话 · 保留 180 天</span>
     </div>
 
     <div class="hstats reveal" data-od-id="history-stats">
-      <div class="hstat"><span class="label">完整收录会话</span><b>1</b></div>
-      <div class="hstat"><span class="label">该会话证据</span><b>8</b></div>
-      <div class="hstat"><span class="label">该会话图谱路径</span><b>17</b></div>
-      <div class="hstat"><span class="label">路径深度</span><b>1～2 跳</b></div>
+      <div class="hstat"><span class="label">会话总数</span><b>128</b></div>
+      <div class="hstat"><span class="label">覆盖标的</span><b>96</b></div>
+      <div class="hstat"><span class="label">平均证据条数</span><b>11.4</b></div>
+      <div class="hstat"><span class="label">图谱路径命中率</span><b>78.1%</b></div>
     </div>
 
     <div class="hrows" id="hrows" data-od-id="history-list"></div>
@@ -1333,8 +1178,8 @@ body[data-market="on"]  .mk-off{display:none!important}
       </div>
     </div>
     <div class="footer__bottom">
-      <p class="footer__legal">本原型的证据条目、图谱路径、事件三元组、数据版本与截止时间，取自 ashare_qa 六表的一次真实问答输出，原样呈现，未做改写。行情数据源当前未接入：跑马灯与 K 线区域默认显示「行情数据源未接入」，其间不含任何报价；切到「已接入」态时显示的价格、涨跌幅与时间戳为界面示意，已就地标注。语料口径与行情口径分属两套时间基准，不可混用。不构成任何投资建议。</p>
-      <span class="label">© 2026 牛势问答 · 演示原型 v1.3</span>
+      <p class="footer__legal">本原型中出现的行情报价、财务指标、文档号与证据条目均为贴近本课题口径的演示样例，用于说明界面结构与交互，非实时数据，不构成任何投资建议。</p>
+      <span class="label">© 2026 牛势问答 · 演示原型 v1.1</span>
     </div>
   </div>
 </footer>
@@ -1346,7 +1191,7 @@ body[data-market="on"]  .mk-off{display:none!important}
     <div class="drawer__head">
       <div style="min-width:0">
         <span class="label">回看 · 会话 <span id="drawerId">A7F3-0912</span></span>
-        <h2 class="h2" id="drawerTitle" style="margin-top:10px">平安银行与伊利股份共同参与的事件是什么？</h2>
+        <h2 class="h2" id="drawerTitle" style="margin-top:10px">长城汽车 2024 年发生了哪些事件？</h2>
       </div>
       <button class="btn btn--ghost btn--sm" data-close data-od-id="cta-drawer-close">关闭</button>
     </div>
@@ -1466,36 +1311,25 @@ var fineMQ=matchMedia("(hover:hover) and (pointer:fine)");
 })();
 
 /* ============================================================
-   2. 数据新鲜度：行情接入位（两态） + 文字 marquee
-   ⚠ 未接入态不填任何价格 —— 本系统当前没有接行情数据源。
-      已接入态的价格/涨跌幅/时间戳全部是「示意」，界面已就地标注。
+   2. 顶部行情跑马灯 + 文字 marquee
    ============================================================ */
-(function market(){
-  var sw=$("#mkSwitch"), box=$("#tickerTrack");
-
-  // 只在「已接入（示意）」态出现的报价，用于展示数据源接入后的形态
-  var D=[["000001","平安银行","11.86",0.51],["600887","伊利股份","28.34",-0.72],
-    ["600519","贵州茅台","1,486.00",2.31],["000858","五粮液","132.60",0.94],
-    ["601398","工商银行","6.42",-0.16],["600036","招商银行","36.51",0.19],
-    ["000333","美的集团","71.05",1.28],["601318","中国平安","48.77",-0.35]];
-  if(box){
-    var html="";
-    D.forEach(function(d){
-      var cls=d[3]>=0?"up":"down",sign=d[3]>=0?"+":"−";
-      html+='<span class="mkt__item"><span class="idx">'+d[0]+'</span><b>'+d[1]+'</b><span>'+d[2]+
-        '</span><span class="'+cls+'">'+sign+Math.abs(d[3]).toFixed(2)+'%</span></span><i class="mkt__sep"></i>';
-    });
-    box.innerHTML=html+html;
-  }
-  function setMarket(on){
-    document.body.setAttribute("data-market",on?"on":"off");
-    if(sw) sw.setAttribute("aria-checked",on?"true":"false");
-    save("od.ashare.market",on?"on":"off");
-  }
-  if(sw) sw.addEventListener("click",function(){
-    setMarket(sw.getAttribute("aria-checked")!=="true");
+(function ticker(){
+  var box=$("#tickerTrack");if(!box) return;
+  var D=[["000001.SH","上证指数","3,284.66",0.62],["399001.SZ","深证成指","10,412.35",-0.28],
+    ["399006.SZ","创业板指","2,136.02",1.13],["600519","贵州茅台","1,486.00",2.31],
+    ["601633","长城汽车","25.31",1.24],["002594","比亚迪","268.40",3.08],
+    ["300750","宁德时代","186.55",-0.87],["601127","赛力斯","96.72",5.12],
+    ["000625","长安汽车","13.41",1.06],["600104","上汽集团","15.28",-0.42],
+    ["601238","广汽集团","8.16",0.73],["002460","赣锋锂业","31.05",-2.15],
+    ["600741","华域汽车","17.63",0.55],["000550","江铃汽车","21.09",-3.27],
+    ["601012","隆基绿能","14.72",2.77],["600036","招商银行","36.51",0.19]];
+  var html="";
+  D.forEach(function(d){
+    var cls=d[3]>=0?"up":"down",sign=d[3]>=0?"+":"−";
+    html+='<span class="ticker__item"><span class="idx">'+d[0]+'</span><b>'+d[1]+'</b><span>'+d[2]+
+      '</span><span class="'+cls+'">'+sign+Math.abs(d[3]).toFixed(2)+'%</span></span><i class="ticker__sep"></i>';
   });
-  window.__setMarket=setMarket;          // 初值在脚本末尾的 boot() 里恢复
+  box.innerHTML=html+html;
 
   var mq=$("#mqTrack");if(!mq) return;
   var T=["事件知识图谱","证据可追溯","路径可视化","判定区间可回查","多源数据治理","A 股财经问答"];
@@ -1505,24 +1339,22 @@ var fineMQ=matchMedia("(hover:hover) and (pointer:fine)");
 })();
 
 /* ============================================================
-   3. 行情接入位：25 根 K 线 + MA5/MA10 + 成交量
-   ⚠ 整块只在「已接入（示意）」态可见；未接入态由 .mk-off 占位说明接管。
-      数字为界面示意，用于展示数据源接入后的形态，不是真实报价。
+   3. 行情带：25 根 K 线 + MA5/MA10 + 成交量
    ============================================================ */
 (function kline(){
   var svg=$("#kline");if(!svg) return;
   var DATES=["08-24","08-25","08-26","08-27","08-28","08-31","09-01","09-02","09-03","09-04","09-07","09-08",
     "09-09","09-10","09-11","09-14","09-15","09-16","09-17","09-18","09-21","09-22","09-23","09-24","09-25"];
   var s=20260925,rnd=function(){s=(s*1664525+1013904223)%4294967296;return s/4294967296};
-  var px=11.62,bars=[],i;
+  var px=25.55,bars=[],i;
   for(i=0;i<25;i++){
-    var o=px,c=o+(rnd()-0.5)*0.34;
-    if(i===24) c=o*1.0051;                            // 最后一根：对齐标头的 +0.51%
-    var hi=Math.max(o,c)+rnd()*0.13, lo=Math.min(o,c)-rnd()*0.13;
+    var o=px,c=o+0.05+(rnd()-0.5)*0.72;
+    if(i===24) c=o*1.0124;                            // 最后一根：当日 +1.24%
+    var hi=Math.max(o,c)+rnd()*0.26, lo=Math.min(o,c)-rnd()*0.26;
     bars.push({o:o,c:c,h:hi,l:lo,v:0.32+rnd()*0.95});
     px=c;
   }
-  var k=11.86/bars[24].c;
+  var k=25.31/bars[24].c;
   bars.forEach(function(b){b.o*=k;b.c*=k;b.h*=k;b.l*=k});
   var ma=function(n){var out=[],sum=0;for(var j=0;j<bars.length;j++){sum+=bars[j].c;if(j>=n) sum-=bars[j-n].c;out.push(j>=n-1?sum/n:null)}return out};
   var ma5=ma(5),ma10=ma(10);
@@ -1564,102 +1396,47 @@ var fineMQ=matchMedia("(hover:hover) and (pointer:fine)");
   };
   out+=lineOf(ma10,"#FF9AA2",1.3)+lineOf(ma5,"rgba(255,255,255,.62)",1.3);
   out+='<text x="44" y="11" class="tl__tlab">MA5 '+ma5[24].toFixed(2)+' · MA10 '+ma10[24].toFixed(2)+"</text>";
-  out+='<text x="1150" y="11" class="tl__tlab" text-anchor="end">单位：元 / 成交量：手 · 示意：数据源接入后的形态</text>';
+  out+='<text x="1150" y="11" class="tl__tlab" text-anchor="end">单位：元 / 成交量：手（演示样例）</text>';
   svg.innerHTML=out;
 })();
 
 /* ============================================================
-   4. 屏②：证据卡（四类分组）+ 原文上下文（该块 + 相邻块）
-   ⚠ 8 条证据的 rank／来源网站／日期／doc_id／chunk_id 全部逐字取自真实问答记录。
-      记录未给出字段值的那一条，界面留白并标注「未给出」，不补写。
+   4. 屏②：证据卡（四类分组）
    ============================================================ */
 var EVIDENCE=[
- {g:"回答来源",items:[]},
- {g:"新闻来源",items:[
-   {rank:5,t:'中报核心经营利润率持续提升、股东回报再加码 伊利股份增长“含金量”十足',
-    site:"",date:"2026-08-27",doc:"",chunk:""},
-   {rank:8,missing:true,site:"",date:"",doc:"",chunk:""}
- ]},
- {g:"公告来源",items:[
-   {rank:1,t:"董事会决议公告",site:"巨潮资讯网",date:"2026-07-03",doc:"1337",chunk:"1337001"},
-   {rank:2,t:"关联交易公告",site:"巨潮资讯网",date:"2026-08-01",doc:"1274",chunk:"1274004"},
-   {rank:3,t:"董事会决议公告",site:"巨潮资讯网",date:"2026-07-03",doc:"1337",chunk:"1337000"},
-   {rank:4,t:"关联交易公告",site:"巨潮资讯网",date:"2026-08-01",doc:"1274",chunk:"1274000"},
-   {rank:6,t:"内蒙古伊利实业集团股份有限公司关于收到中国银行间市场交易商协会《接受注册通知书》的公告",
-    site:"巨潮资讯网",date:"2026-08-25",doc:"1183",chunk:"1183000"},
-   {rank:7,t:"关于职工董事任职资格核准的公告",site:"巨潮资讯网",date:"2026-08-22",doc:"1200",chunk:"1200000"}
- ]},
- {g:"相关事件",items:[]}
+ {g:"回答来源",n:1,items:[
+   {id:"ev1",t:"长城汽车（601633.SH）2024 年年度报告 · 事件抽取与回答生成",site:"上海证券交易所",date:"2025-03-28",doc:"doc_SH601633_AR2024_0007",chunk:"chunk-012"}]},
+ {g:"新闻来源",n:3,items:[
+   {id:"ev4",t:"坦克品牌 2024 年累销 23.16 万辆，同比增长 42.12%",site:"中国证券报",date:"2025-01-07",doc:"doc_news_CS_20250107_0088",chunk:"chunk-002"},
+   {id:"ev5",t:"长城汽车与华为签署智能座舱合作协议，首批车型四季度交付",site:"第一财经",date:"2024-11-08",doc:"doc_news_YICAI_20241108_0317",chunk:"chunk-005"},
+   {id:"ev7",t:"长城汽车泰国罗勇工厂产能爬坡，巴西工厂进入设备安装阶段",site:"上海证券报",date:"2024-12-19",doc:"doc_news_CNSTOCK_20241219_0210",chunk:"chunk-007"}]},
+ {g:"公告来源",n:3,items:[
+   {id:"ev2",t:"2024 年年度业绩预增公告：预计归母净利润同比增长 80.76%",site:"巨潮资讯网",date:"2025-01-24",doc:"doc_CNINFO_20250124_0009",chunk:"chunk-001"},
+   {id:"ev3",t:"2024 年 12 月产销快报：全年销售新车 123.33 万辆",site:"巨潮资讯网",date:"2025-01-06",doc:"doc_CNINFO_20250106_0003",chunk:"chunk-003"},
+   {id:"ev8",t:"关于全资子公司蜂巢易创增资扩股引入战略投资者的公告",site:"巨潮资讯网",date:"2024-09-24",doc:"doc_CNINFO_20240924_0041",chunk:"chunk-002"}]},
+ {g:"相关事件",n:3,items:[
+   {id:"ev6",t:"欧盟对原产于中国的电动汽车加征反补贴税，税率 17.0%–35.3%",site:"商务部",date:"2024-10-30",doc:"doc_policy_MOFCOM_20241030_0009",chunk:"chunk-004"},
+   {id:"ev9",t:"汽车以旧换新补贴政策延续至 2024 年 12 月 31 日",site:"国家发展改革委",date:"2024-07-25",doc:"doc_policy_NDRC_20240725_0012",chunk:"chunk-001"},
+   {id:"ev10",t:"2024 年新能源汽车下乡活动第二批车型目录发布",site:"工业和信息化部",date:"2024-06-14",doc:"doc_policy_MIIT_20240614_0026",chunk:"chunk-003"}]}
 ];
-var EVALL=[];
-EVIDENCE.forEach(function(g){g.items.forEach(function(it){it.id="ev"+it.rank;it.g=g.g;EVALL.push(it)})});
-EVALL.sort(function(a,b){return a.rank-b.rank});   // 历史记录回看表直接复用同一份证据，两处不会打架
-
 (function evidence(){
   var box=$("#evGrid");if(!box) return;
-  // 四类来源的稳定 slug（中文分组名不能直接进 id）
-  var GSLUG={"回答来源":"answer","新闻来源":"news","公告来源":"notice","相关事件":"event"};
-
-  // 原文上下文：该块 + 相邻块（同 doc 且 chunk 序号相差 1 才算「相邻」，其余只称「同文档」）
-  function ctxHTML(it){
-    if(!it.doc||!it.chunk) return "";
-    var n=parseInt(it.chunk,10),adj=[],same=[];
-    EVALL.forEach(function(o){
-      if(o===it||o.doc!==it.doc||!o.chunk) return;
-      (Math.abs(parseInt(o.chunk,10)-n)===1?adj:same).push(o);
-    });
-    var rows='<div class="ev__ctxrow"><span>该块</span><i>doc_id '+it.doc+' / chunk_id '+it.chunk+'</i></div>';
-    rows+='<div class="ev__ctxrow"><span>相邻块</span><i>'+
-      (adj.length?adj.map(function(o){return "chunk_id "+o.chunk+"（证据"+o.rank+"）"}).join("、"):"未收录")+'</i></div>';
-    if(same.length) rows+='<div class="ev__ctxrow"><span>同文档</span><i>'+
-      same.map(function(o){return "chunk_id "+o.chunk+"（证据"+o.rank+"）"}).join("、")+'</i></div>';
-    rows+='<p class="ev__ctxnote">原文上下文按「该块＋相邻块」定位还原；本演示未收录语料原文正文。</p>';
-    return '<div class="ev__ctxbox" hidden>'+rows+"</div>";
-  }
-
-  var out="";
+  var idx={},out="";
   EVIDENCE.forEach(function(grp){
-    var key=GSLUG[grp.g]||"grp";
-    out+='<div class="evgroup" data-od-id="evgroup-'+key+'">'+
-      '<div class="evgroup__head"><span class="label">'+grp.g+
+    out+='<div class="evgroup" data-od-id="evgroup-'+grp.items[0].id+'"><div class="evgroup__head"><span class="label">'+grp.g+
       '</span><span class="evgroup__n">'+grp.items.length+' 条</span></div>';
-    if(!grp.items.length){
-      out+='<div class="evgrp--empty"><p>本次回答未命中该来源类别。</p>'+
-        '<p>证据清单按回答来源／新闻来源／公告来源／相关事件四类归集，本条会话只命中后两类。</p></div>';
-    } else {
-      out+='<div class="evgroup__cards">';
-      grp.items.forEach(function(it){
-        if(it.missing){
-          out+='<article class="ev ev--missing" id="'+it.id+'" data-od-id="evidence-'+it.id+'">'+
-            '<span class="ev__no">证据'+it.rank+"</span>"+
-            '<h4 class="ev__t">该条字段值未在记录中给出</h4>'+
-            '<div class="ev__meta">'+
-              '<div class="ev__row"><span>来源网站</span><i>—</i></div>'+
-              '<div class="ev__row"><span>发布日期</span><i>—</i></div>'+
-              '<div class="ev__row"><span>文档号</span><i>—</i></div>'+
-              '<div class="ev__row"><span>块序号</span><i>—</i></div>'+
-            "</div></article>";
-          return;
-        }
-        out+='<article class="ev" id="'+it.id+'" data-od-id="evidence-'+it.id+'">'+
-          '<span class="ev__no">证据'+it.rank+"</span>"+
-          '<h4 class="ev__t">'+it.t+"</h4>"+
-          '<div class="ev__meta">'+
-            (it.site?'<div class="ev__row"><span>来源网站</span>'+it.site+"</div>":
-                     '<div class="ev__row"><span>来源网站</span><i>记录未给出</i></div>')+
-            '<div class="ev__row"><span>发布日期</span><i>'+it.date+"</i></div>"+
-            '<div class="ev__row"><span>文档号</span><i>'+(it.doc?"doc_id="+it.doc:"记录未给出")+"</i></div>"+
-            '<div class="ev__row"><span>块序号</span><i>'+(it.chunk?"chunk_id="+it.chunk:"记录未给出")+"</i></div>"+
-          "</div>"+
-          (it.doc&&it.chunk?'<div class="ev__ctx">'+
-            '<button class="ev__ctxbtn" type="button" aria-expanded="false">'+
-            '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" '+
-            'stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg>'+
-            "查看原文上下文（该块＋相邻块）</button>"+ctxHTML(it)+"</div>":"")+
-          "</article>";
-      });
-      out+="</div>";
-    }
+    grp.items.forEach(function(it){
+      idx[it.id]=it.id.replace("ev","");
+      out+='<article class="ev" id="'+it.id+'" data-od-id="evidence-'+it.id+'">'+
+        '<span class="ev__no">证据'+idx[it.id]+"</span>"+
+        '<h4 class="ev__t">'+it.t+"</h4>"+
+        '<div class="ev__meta">'+
+          '<div class="ev__row"><span>来源网站</span>'+it.site+"</div>"+
+          '<div class="ev__row"><span>发布日期</span><i>'+it.date+"</i></div>"+
+          '<div class="ev__row"><span>文档号</span><i>'+it.doc+"</i></div>"+
+          '<div class="ev__row"><span>块序号</span><i>'+it.chunk+"</i></div>"+
+        "</div></article>";
+    });
     out+="</div>";
   });
   box.innerHTML=out;
@@ -1679,57 +1456,17 @@ EVALL.sort(function(a,b){return a.rank-b.rank});   // 历史记录回看表直�
     flashT=setTimeout(function(){el.classList.remove("flash")},2200);
   }
   document.addEventListener("click",function(e){
-    if(!e.target.closest) return;
-    var t=e.target.closest(".ev__ctxbtn");
-    if(t){                                     // 展开/收起原文上下文
-      var box2=t.parentNode.querySelector(".ev__ctxbox");
-      var open=t.getAttribute("aria-expanded")==="true";
-      t.setAttribute("aria-expanded",open?"false":"true");
-      if(box2) box2.hidden=open;
-      return;
-    }
-    var a=e.target.closest(".ref");
+    var a=e.target.closest?e.target.closest(".ref"):null;
     if(!a) return;
     e.preventDefault();jump(a.getAttribute("data-ev"));
   });
-})();
 
-/* ============================================================
-   4b. 屏②：知识图谱路径（2 条接口样例 + 4 条事件三元组）
-   ⚠ 样例路径的属性逐字取自记录；会话共 17 条，本页只还原接口原样返回的 2 条。
-   ============================================================ */
-var GPATHS=[
- {a:"平安银行 000001",ta:"company",rel:"HAS_EXECUTIVE",b:"PER-0010",tb:"person",
-  attrs:"role=（空） · confidence=0.9 · source_doc_id=1337 · source_chunk_id=1337000"},
- {a:"平安银行 000001",ta:"company",rel:"HAS_EXECUTIVE",b:"PER-0029",tb:"person",
-  attrs:"role=（空） · confidence=0.9 · source_doc_id=1337 · source_chunk_id=1337000"}
-];
-var TRIPLES=[["EVT-0236","监管",""],["EVT-0260","监管","2026-08-22"],
-             ["EVT-0823","业绩","2026-08-26"],["EVT-0827","股权","2026-08-27"]];
-(function paths(){
-  var box=$("#pathsBox");if(!box) return;
-  var out=GPATHS.map(function(p){
-    return '<div class="path">'+
-      '<span class="path__node" data-t="'+p.ta+'"><i></i>'+p.a+"</span>"+
-      '<span class="path__rel">—['+p.rel+']→</span>'+
-      '<span class="path__node" data-t="'+p.tb+'"><i></i>'+p.b+"</span>"+
-      '<span class="path__attrs">'+p.attrs+"</span></div>";
-  }).join("");
-  out+='<div class="evgroup__head" style="margin-top:8px"><span class="label">事件三元组</span>'+
-       '<span class="evgroup__n">4 条 · event_id / event_type / event_time</span></div>'+
-    '<div class="triples">'+TRIPLES.map(function(t){
-      return '<div class="triple"><b>'+t[0]+"</b>"+
-        "<span>event_type <i>"+t[1]+"</i></span>"+
-        "<span>event_time <i>"+(t[2]||"—（空）")+"</i></span></div>";
-    }).join("")+"</div>";
-  box.innerHTML=out;
-
-  var tg=$("#graphToggle"),off=$("#graphOff");
+  var tg=$("#graphToggle"),pb=$("#pathsBox"),off=$("#graphOff");
   if(tg) tg.addEventListener("click",function(){
     var on=tg.getAttribute("aria-pressed")==="true";
     tg.setAttribute("aria-pressed",on?"false":"true");
     tg.textContent="图谱扩展："+(on?"关":"开");
-    box.hidden=on;off.hidden=!on;
+    pb.hidden=on;off.hidden=!on;
   });
 })();
 
@@ -1744,49 +1481,37 @@ var TYPE={
   policy:{n:"政策",c:"#8792A8",s:"pentagon"},
   industry:{n:"行业",c:"#C3CBD8",s:"triangle"}
 };
-// 时间轴只在「记录里真正出现过的月份」上取值：2026-07（最早证据 2026-07-03）～ 2026-09（数据截止 2026-09-25）
-var MONTHS=(function(){var a=[],y=2026,m=7;while(y<2026||(y===2026&&m<=9)){a.push(y+"-"+String(m).padStart(2,"0"));m++;if(m>12){m=1;y++}}return a})();
-var mi=function(s){var p=s.split("-");return (parseInt(p[0],10)-2026)*12+(parseInt(p[1],10)-7)};
+var MONTHS=(function(){var a=[],y=2024,m=1;while(y<2026||(y===2026&&m<=9)){a.push(y+"-"+String(m).padStart(2,"0"));m++;if(m>12){m=1;y++}}return a})();
+var mi=function(s){var p=s.split("-");return (parseInt(p[0],10)-2024)*12+(parseInt(p[1],10)-1)};
 
-// 节点：本次会话（A7F3-0912）命中的真实实体；坐标显式写死，无随机布局
-// kv = 属性面板只显示这里列出的字段，字段值全部来自记录，不补写
+// 节点：坐标全部显式写死，无随机布局
 var GNODES=[
- {id:"yili",name:"伊利股份",code:"600887",sub:"600887",type:"company",x:200,y:130,r:36,
-  m0:mi("2026-08"),m1:mi("2026-08"),
-  kv:[["实体编号","600887"],["实体类型","公司"],["事项角色","主体"],["证据块","chunk_id 1183000"]]},
- {id:"pab",name:"平安银行",code:"000001",sub:"000001",type:"company",x:200,y:350,r:36,
-  m0:mi("2026-07"),m1:mi("2026-08"),
-  kv:[["实体编号","000001"],["实体类型","公司"],["关联文档","doc_id 1337"],
-      ["证据块","chunk_id 1337000 / 1337001"],["边置信度","0.90（HAS_EXECUTIVE）"]]},
- {id:"per0010",name:"PER-0010",sub:"",type:"person",x:78,y:218,r:20,
-  m0:mi("2026-07"),m1:mi("2026-07"),
-  kv:[["实体编号","PER-0010"],["实体类型","人物"],["角色","role=（空）"],["所属公司","平安银行 000001"]]},
- {id:"per0029",name:"PER-0029",sub:"",type:"person",x:78,y:470,r:20,
-  m0:mi("2026-07"),m1:mi("2026-07"),
-  kv:[["实体编号","PER-0029"],["实体类型","人物"],["角色","role=（空）"],["所属公司","平安银行 000001"]]},
- {id:"nafmii",name:"中国银行间市场交易商协会",sub:"",type:"org",x:520,y:84,r:26,
-  m0:mi("2026-08"),m1:mi("2026-08"),
-  kv:[["实体类型","机构"],["事项","《接受注册通知书》"],["涉及标的","多品种债务融资工具（DFI）"]]},
- {id:"cninfo",name:"巨潮资讯网",sub:"",type:"org",x:620,y:430,r:24,
-  m0:mi("2026-07"),m1:mi("2026-08"),
-  kv:[["实体类型","机构"],["角色","公告披露网站"],["命中证据","证据1～4、6、7"]]},
- {id:"evt0236",name:"EVT-0236",sub:"监管",type:"event",x:380,y:180,r:22,
-  m0:null,m1:null,
-  kv:[["事件ID","EVT-0236"],["事件类型","监管"],["事件时间","—（空）"]]},
- {id:"evt0260",name:"EVT-0260",sub:"监管 · 2026-08-22",type:"event",x:560,y:300,r:24,
-  m0:mi("2026-08"),m1:mi("2026-08"),
-  kv:[["事件ID","EVT-0260"],["事件类型","监管"],["事件时间","2026-08-22"]]},
- {id:"evt0823",name:"EVT-0823",sub:"业绩 · 2026-08-26",type:"event",x:730,y:170,r:22,
-  m0:mi("2026-08"),m1:mi("2026-08"),
-  kv:[["事件ID","EVT-0823"],["事件类型","业绩"],["事件时间","2026-08-26"]]},
- {id:"evt0827",name:"EVT-0827",sub:"股权 · 2026-08-27",type:"event",x:730,y:452,r:22,
-  m0:mi("2026-08"),m1:mi("2026-08"),
-  kv:[["事件ID","EVT-0827"],["事件类型","股权"],["事件时间","2026-08-27"]]}
+ {id:"gwm",name:"长城汽车",code:"601633",type:"company",x:420,y:288,r:38,m0:0,m1:32,ev:26,doc:1284,conf:0.94,first:"2019-04-12",last:"2026-09-25"},
+ {id:"byd",name:"比亚迪",code:"002594",type:"company",x:196,y:148,r:26,m0:0,m1:32,ev:31,doc:1536,conf:0.92,first:"2018-06-30",last:"2026-09-24"},
+ {id:"ca",name:"长安汽车",code:"000625",type:"company",x:148,y:322,r:24,m0:0,m1:32,ev:19,doc:902,conf:0.9,first:"2019-01-08",last:"2026-09-18"},
+ {id:"sls",name:"赛力斯",code:"601127",type:"company",x:214,y:452,r:24,m0:0,m1:32,ev:22,doc:764,conf:0.89,first:"2020-03-11",last:"2026-09-19"},
+ {id:"wei",name:"魏建军",code:"董事长",type:"person",x:322,y:132,r:22,m0:0,m1:32,ev:14,doc:318,conf:0.96,first:"2018-09-04",last:"2026-08-30"},
+ {id:"wang",name:"王传福",code:"董事长",type:"person",x:96,y:214,r:22,m0:0,m1:32,ev:17,doc:402,conf:0.95,first:"2018-07-25",last:"2026-09-12"},
+ {id:"hw",name:"华为",code:"—",type:"org",x:612,y:118,r:28,m0:0,m1:32,ev:29,doc:1180,conf:0.93,first:"2019-05-22",last:"2026-09-20"},
+ {id:"sse",name:"上海证券交易所",code:"—",type:"org",x:566,y:328,r:22,m0:0,m1:32,ev:0,doc:1284,conf:0.99,first:"2018-01-02",last:"2026-09-25"},
+ {id:"cninfo",name:"巨潮资讯网",code:"—",type:"org",x:470,y:462,r:22,m0:0,m1:32,ev:0,doc:2416,conf:0.99,first:"2018-01-02",last:"2026-09-25"},
+ {id:"caam",name:"中国汽车工业协会",code:"—",type:"org",x:742,y:252,r:22,m0:0,m1:32,ev:9,doc:246,conf:0.91,first:"2019-03-15",last:"2026-09-08"},
+ {id:"ev_ar",name:"2024 年年度报告",code:"—",type:"event",x:512,y:214,r:26,m0:mi("2025-03"),m1:mi("2025-03"),ev:1,doc:12,conf:0.98,first:"2025-03-28",last:"2025-03-28"},
+ {id:"ev_tank",name:"坦克品牌销量增长",code:"—",type:"event",x:596,y:424,r:22,m0:mi("2025-01"),m1:mi("2025-01"),ev:1,doc:8,conf:0.87,first:"2025-01-07",last:"2025-01-07"},
+ {id:"ev_hw",name:"华为智能座舱合作",code:"—",type:"event",x:700,y:172,r:24,m0:mi("2024-11"),m1:mi("2024-11"),ev:1,doc:14,conf:0.93,first:"2024-11-08",last:"2024-11-08"},
+ {id:"ev_fc",name:"蜂巢易创增资扩股",code:"—",type:"event",x:330,y:480,r:22,m0:mi("2024-09"),m1:mi("2024-09"),ev:1,doc:6,conf:0.9,first:"2024-09-24",last:"2024-09-24"},
+ {id:"po_trade",name:"汽车以旧换新补贴",code:"—",type:"policy",x:772,y:352,r:24,m0:mi("2024-07"),m1:mi("2024-12"),ev:5,doc:38,conf:0.94,first:"2024-07-25",last:"2025-01-08"},
+ {id:"po_rural",name:"新能源汽车下乡",code:"—",type:"policy",x:776,y:444,r:22,m0:mi("2024-06"),m1:mi("2024-06"),ev:4,doc:26,conf:0.92,first:"2024-06-14",last:"2024-06-14"},
+ {id:"po_eu",name:"欧盟反补贴税",code:"—",type:"policy",x:700,y:60,r:24,m0:mi("2024-10"),m1:mi("2024-10"),ev:3,doc:44,conf:0.95,first:"2024-10-30",last:"2025-04-17"},
+ {id:"in_pv",name:"中国乘用车市场",code:"—",type:"industry",x:296,y:58,r:24,m0:0,m1:32,ev:18,doc:512,conf:0.88,first:"2018-01-10",last:"2026-09-22"},
+ {id:"in_nev",name:"新能源汽车",code:"—",type:"industry",x:92,y:470,r:22,m0:0,m1:32,ev:24,doc:836,conf:0.9,first:"2018-02-14",last:"2026-09-16"}
 ];
-// 边：前 2 条逐字取自接口返回的样例路径；后 4 条由回答正文的表述还原
-var GEDGES=[["pab","per0010","HAS_EXECUTIVE"],["pab","per0029","HAS_EXECUTIVE"],
- ["yili","nafmii","收到《接受注册通知书》"],["yili","evt0260","主体"],
- ["pab","evt0260","合作方（参与）"],["yili","cninfo","公告披露于"]];
+var GEDGES=[["gwm","byd","同业竞争"],["gwm","ca","同业竞争"],["gwm","sls","同业竞争"],
+ ["gwm","wei","任职"],["byd","wang","任职"],["gwm","ev_ar","发布公告"],["gwm","ev_tank","披露销量"],
+ ["gwm","ev_hw","签署协议"],["gwm","ev_fc","完成增资"],["ev_ar","sse","披露于"],["ev_ar","cninfo","归档"],
+ ["ev_tank","caam","统计口径"],["ev_hw","hw","合作方"],["gwm","po_eu","受影响"],["po_trade","in_pv","作用于"],
+ ["po_rural","in_nev","促进"],["in_pv","gwm","属于"],["in_nev","byd","属于"],["ev_fc","cninfo","公告披露"],
+ ["po_eu","ev_hw","间接影响"],["in_pv","ca","属于"],["in_nev","sls","属于"]];
 var NREF={};GNODES.forEach(function(n){NREF[n.id]=n});
 
 function ngon(r,n,rot){var p=[],i,a;for(i=0;i<n;i++){a=(rot+i*360/n)*Math.PI/180;p.push((Math.cos(a)*r).toFixed(2)+","+(Math.sin(a)*r).toFixed(2))}return p.join(" ")}
@@ -1813,7 +1538,7 @@ var G={sel:null,hidden:{},i0:0,i1:MONTHS.length-1};
   GNODES.forEach(function(n){
     out+='<g class="gnode" data-node="'+n.id+'" transform="translate('+n.x+','+n.y+')">'+shapeSVG(n.type,n.r)+
       '<text y="'+(n.r+15)+'">'+n.name+"</text>"+
-      (n.sub?'<text class="code" y="'+(n.r+27)+'">'+n.sub+"</text>":"")+"</g>";
+      (n.type==="company"?'<text class="code" y="'+(n.r+27)+'">'+n.code+"</text>":"")+"</g>";
   });
   svg.innerHTML=out;
   GNODES.forEach(function(n){n.el=svg.querySelector('[data-node="'+n.id+'"]')});
@@ -1824,13 +1549,9 @@ var G={sel:null,hidden:{},i0:0,i1:MONTHS.length-1};
 
   // 图例即筛选器（不重复造控件）
   var lg=$("#gLegend");
-  // 图例即筛选器；顺带标出本会话子图里该类型的节点数，为 0 的（政策／行业）一眼可见是「本次没有」
   lg.innerHTML=Object.keys(TYPE).map(function(k){
-    var n=GNODES.filter(function(x){return x.type===k}).length;
-    return '<button class="chip" data-ftype="'+k+'" aria-pressed="false" title="筛选'+TYPE[k].n+
-      (n?"（本次子图 "+n+" 个）":"（本次子图无此类节点）")+'">'+
-      '<svg width="13" height="13" viewBox="-9 -9 18 18" aria-hidden="true">'+shapeSVG(k,7,0.35)+"</svg>"+TYPE[k].n+
-      '<em class="chip__n">'+n+"</em></button>";
+    return '<button class="chip" data-ftype="'+k+'" aria-pressed="false" title="筛选'+TYPE[k].n+'">'+
+      '<svg width="13" height="13" viewBox="-9 -9 18 18" aria-hidden="true">'+shapeSVG(k,7,0.35)+"</svg>"+TYPE[k].n+"</button>";
   }).join("");
 
   svg.addEventListener("click",function(e){
@@ -1860,8 +1581,7 @@ function refresh(){
   var sel=G.sel,adj={},i;
   if(sel) G.adj[sel.id].forEach(function(a){adj[a.id]=1});
   GNODES.forEach(function(n){
-    // 事件时间为空的节点（EVT-0236）无法落到时间轴上，不做时间过滤，属性面板里显示「—（空）」
-    var inTime=(n.m0===null||n.m1===null)?true:(n.m1>=G.i0&&n.m0<=G.i1);
+    var inTime=n.m1>=G.i0&&n.m0<=G.i1;
     var inType=!G.hidden[n.type];
     var inSel=!sel||n.id===sel.id||adj[n.id]===1;
     n.visible=inTime&&inType&&inSel;
@@ -1887,21 +1607,22 @@ function panel(sel){
     return;
   }
   tp.textContent=TYPE[sel.type].n;
-  // 邻接关系：直接来自 GEDGES，不补写记录里没有的边
-  var nbrs=G.adj[sel.id];
-  var rel=nbrs.length?nbrs.map(function(a){
+  var rel=G.adj[sel.id].slice(0,6).map(function(a){
     return '<div class="grel__i"><i style="background:'+TYPE[NREF[a.id].type].c+'"></i>'+a.rel+" · "+NREF[a.id].name+
       "<em>"+TYPE[NREF[a.id].type].n+"</em></div>";
-  }).join(""):'<div class="grel--none">该节点在本次返回的图谱路径中未出现邻接边。<br>路径共 2 条样例（均以平安银行为起点），其余事件节点只由事件三元组列给出，没有边数据。</div>';
-  // 字段：只渲染节点自带的 kv，字段值全部来自记录
+  }).join("");
   body.innerHTML=
     '<dl style="display:flex;flex-direction:column;gap:13px;margin:0">'+
       '<div class="kv"><dt>名称</dt><dd>'+sel.name+"</dd></div>"+
-      sel.kv.map(function(r){
-        return '<div class="kv"><dt>'+r[0]+'</dt><dd class="mono">'+r[1]+"</dd></div>";
-      }).join("")+
+      '<div class="kv"><dt>类型</dt><dd>'+TYPE[sel.type].n+"</dd></div>"+
+      '<div class="kv"><dt>证券代码</dt><dd class="mono">'+sel.code+"</dd></div>"+
+      '<div class="kv"><dt>首次出现</dt><dd class="mono">'+sel.first+"</dd></div>"+
+      '<div class="kv"><dt>最近更新</dt><dd class="mono">'+sel.last+"</dd></div>"+
+      '<div class="kv"><dt>关联事件</dt><dd class="mono">'+sel.ev+" 条</dd></div>"+
+      '<div class="kv"><dt>关联文档</dt><dd class="mono">'+sel.doc.toLocaleString("zh-CN")+" 篇</dd></div>"+
+      '<div class="kv"><dt>判定置信度</dt><dd class="mono">'+sel.conf.toFixed(2)+"</dd></div>"+
     "</dl>"+
-    '<div style="margin-top:6px;padding-top:14px;border-top:1px solid var(--border)"><span class="label">邻接关系 · '+nbrs.length+' 条</span>'+
+    '<div style="margin-top:6px;padding-top:14px;border-top:1px solid var(--border)"><span class="label">邻接关系</span>'+
     '<div class="grel">'+rel+"</div></div>";
 }
 
@@ -1930,13 +1651,13 @@ function setRange(a,b){
     for(i=0;i<MONTHS.length;i++){
       var major=MONTHS[i].slice(5)==="01";
       out+='<line class="tl__tick" x1="'+X(i).toFixed(1)+'" y1="'+(major?58:62)+'" x2="'+X(i).toFixed(1)+'" y2="72"/>';
-      if(MONTHS.length<=6||i%3===0||major||i===MONTHS.length-1)   // 月份少时逐月标注，避免中间月份没刻度文字
+      if(i%3===0||major||i===MONTHS.length-1)
         out+='<text class="tl__tlab" x="'+X(i).toFixed(1)+'" y="90" text-anchor="middle">'+MONTHS[i]+"</text>";
     }
     // 事件点：按类型分 6 条泳道
-    var lanes=["company","person","org","event"];
+    var lanes=["company","person","org","event","policy","industry"];
     GNODES.forEach(function(n){
-      if(n.m0===null||n.m1===null) return;      // 无事件时间，落不到轴上（面板里注明）
+      if(n.type==="org"&&n.ev===0) return;
       var li=lanes.indexOf(n.type),ly=44-li*7;
       var inR=n.m1>=TL.i0&&n.m0<=TL.i1;
       out+='<circle class="tl__dot'+(inR?"":" out")+'" data-dot="'+n.id+'" cx="'+X(n.m0).toFixed(1)+'" cy="'+ly+
@@ -1987,26 +1708,62 @@ function setRange(a,b){
 /* ============================================================
    7. 屏④：历史记录（大行列表）+ 回看抽屉
    ============================================================ */
-// 只收录 1 条完整问答（A7F3-0912）；其余为问题清单，未收录三张表内容
-var ANSWER_TEXT="平安银行与伊利股份共同参与的事件指向伊利股份收到中国银行间市场交易商协会《接受注册通知书》、"+
- "其多品种债务融资工具（DFI）注册获接受的监管事项[证据6]。现有参与关系显示，伊利股份在该事项中为主体，"+
- "平安银行以合作方角色参与。不过，文本证据[证据6]正文未直接出现平安银行，平安银行在该事项中的具体参与方式"+
- "无法由文本证据进一步确认。";
 var SESSIONS=[
- {id:"A7F3-0912",q:"平安银行与伊利股份共同参与的事件是什么？",date:"2026-09-25 14:32",replay:true,
-  ev:8,paths:17,hop:"1～2",
-  qRows:[["session_id","A7F3-0912"],
-         ["user_query","平安银行与伊利股份共同参与的事件是什么？"],
-         ["created_at","2026-09-25 14:32"],
-         ["model","deepseek-flash"],["prompt_version","v1.0"],["dataset_version","v2.1"],
-         ["data_cutoff","2026-09-25T23:59:59+08:00"],
-         ["time_window","不适用（本题不含相对时间表述）"],
-         ["graph_expand","已启用 · 深度 1～2 跳 · 路径 17 条"],
-         ["evidence_count","8（公告来源 6 · 新闻来源 2）"],
-         ["output_mode","单轮一次生成（非流式）"]]},
- {id:"U-01",q:"伊利股份收到的《接受注册通知书》涉及哪个机构？",date:"2026-09-25 11:06",replay:false},
- {id:"U-02",q:"伊利股份 2026 年 8 月的关联交易公告披露了什么？",date:"2026-09-24 17:20",replay:false},
- {id:"U-03",q:"平安银行有哪些任职关系记录？",date:"2026-09-24 09:48",replay:false}
+ {id:"A7F3-0912",q:"长城汽车 2024 年发生了哪些事件？",date:"2026-09-25 14:32",code:"601633.SH",ev:10,hop:3,
+  evRows:[["ev1","长城汽车 2024 年年度报告 · 事件抽取","上海证券交易所","2025-03-28","doc_SH601633_AR2024_0007"],
+          ["ev3","2024 年 12 月产销快报：全年销售 123.33 万辆","巨潮资讯网","2025-01-06","doc_CNINFO_20250106_0003"],
+          ["ev5","长城汽车与华为签署智能座舱合作协议","第一财经","2024-11-08","doc_news_YICAI_20241108_0317"],
+          ["ev6","欧盟对华电动汽车加征反补贴税","商务部","2024-10-30","doc_policy_MOFCOM_20241030_0009"]],
+  evtRows:[["E-2024-0417","战略合作","与华为签署智能座舱与智驾域控合作协议","2024-11-08","0.93"],
+           ["E-2024-0392","公司治理","蜂巢易创增资扩股引入战略投资者，对价 32.60 亿元","2024-09-24","0.90"],
+           ["E-2024-0401","外部政策","欧盟对原产于中国的电动汽车加征反补贴税","2024-10-30","0.95"],
+           ["E-2024-0366","品牌与产品","坦克品牌全年累销 23.16 万辆，同比增长 42.12%","2025-01-07","0.87"]]},
+ {id:"B2C8-0911",q:"比亚迪海外产能布局进展如何？",date:"2026-09-25 10:07",code:"002594.SZ",ev:9,hop:2,
+  evRows:[["ev1","比亚迪 2024 年年度报告 · 海外业务章节","深圳证券交易所","2025-03-26","doc_SZ002594_AR2024_0021"],
+          ["ev2","比亚迪泰国罗勇工厂投产，年产能 15 万辆","证券时报网","2024-07-04","doc_news_STCN_20240704_0087"],
+          ["ev3","比亚迪巴西工厂奠基，规划年产能 30 万辆","中国证券报","2024-03-06","doc_news_CS_20240306_0032"]],
+  evtRows:[["E-2024-0288","产能布局","泰国罗勇工厂投产，规划年产能 15 万辆","2024-07-04","0.94"],
+           ["E-2024-0117","产能布局","巴西卡马萨里工厂奠基，规划年产能 30 万辆","2024-03-06","0.92"],
+           ["E-2024-0455","经营业绩","2024 年海外销量 41.72 万辆，同比增长 71.9%","2025-03-26","0.89"]]},
+ {id:"C91D-0908",q:"汽车以旧换新政策对乘用车销量的影响？",date:"2026-09-22 16:45",code:"—",ev:15,hop:3,
+  evRows:[["ev1","关于加力支持大规模设备更新和消费品以旧换新的若干措施","国家发展改革委","2024-07-25","doc_policy_NDRC_20240725_0012"],
+          ["ev2","2024 年乘用车零售 2,289.4 万辆，同比增长 5.5%","中国汽车工业协会","2025-01-13","doc_CAAM_20250113_0004"],
+          ["ev3","以旧换新补贴申请量突破 500 万份","商务部","2024-12-20","doc_policy_MOFCOM_20241220_0031"]],
+  evtRows:[["P-2024-0021","补贴政策","汽车以旧换新补贴延续至 2024-12-31","2024-07-25","0.94"],
+           ["P-2024-0044","行业数据","乘用车零售 2,289.4 万辆，同比 +5.5%","2025-01-13","0.90"],
+           ["P-2024-0039","补贴政策","以旧换新申请量突破 500 万份","2024-12-20","0.91"]]},
+ {id:"D4E6-0905",q:"宁德时代与哪些整车厂建立了供应关系？",date:"2026-09-21 09:18",code:"300750.SZ",ev:21,hop:2,
+  evRows:[["ev1","宁德时代 2024 年年度报告 · 主要客户","深圳证券交易所","2025-03-15","doc_SZ300750_AR2024_0018"],
+          ["ev2","宁德时代神行电池落地多家整车厂","上海证券报","2024-04-25","doc_news_CNSTOCK_20240425_0141"],
+          ["ev3","宁德时代与长安汽车签署深化战略合作协议","第一财经","2024-08-19","doc_news_YICAI_20240819_0226"]],
+  evtRows:[["E-2024-0203","供应链","神行电池批量供货，覆盖 12 家整车厂","2024-04-25","0.88"],
+           ["E-2024-0355","战略合作","与长安汽车签署深化战略合作协议","2024-08-19","0.92"],
+           ["E-2024-0410","产能布局","洛阳基地一期投产，规划产能 30GWh","2024-10-12","0.86"]]},
+ {id:"E77A-0901",q:"赛力斯 2024 年第三季度毛利率变化原因？",date:"2026-09-19 20:03",code:"601127.SH",ev:7,hop:0,
+  evRows:[["ev1","赛力斯 2024 年第三季度报告","上海证券交易所","2024-10-30","doc_SH601127_Q3_2024_0006"],
+          ["ev2","赛力斯三季度毛利率 25.5%，环比提升 2.1 个百分点","证券时报网","2024-10-31","doc_news_STCN_20241031_0198"],
+          ["ev3","问界 M9 累计交付突破 10 万辆","中国证券报","2024-09-20","doc_news_CS_20240920_0114"]],
+  evtRows:[["E-2024-0408","经营业绩","三季度毛利率 25.5%，环比 +2.1pct","2024-10-31","0.91"],
+           ["E-2024-0377","品牌与产品","问界 M9 累计交付突破 10 万辆","2024-09-20","0.93"]]},
+ {id:"F0B3-0830",q:"欧盟对华电动汽车反补贴税的判定区间？",date:"2026-09-18 11:26",code:"—",ev:11,hop:3,
+  evRows:[["ev1","欧盟委员会对原产于中国的电动汽车反补贴调查终裁","商务部","2024-10-30","doc_policy_MOFCOM_20241030_0009"],
+          ["ev2","欧盟正式对中国电动汽车加征反补贴税，为期五年","第一财经","2024-10-30","doc_news_YICAI_20241030_0402"],
+          ["ev3","中欧就电动汽车反补贴案启动磋商","商务部","2024-11-05","doc_policy_MOFCOM_20241105_0017"]],
+  evtRows:[["P-2024-0041","贸易政策","欧盟终裁加征反补贴税，税率 17.0%–35.3%","2024-10-30","0.95"],
+           ["P-2024-0043","贸易政策","中欧启动价格承诺磋商","2024-11-05","0.89"],
+           ["E-2024-0442","外部环境","主要车企出口欧盟成本上升","2025-04-17","0.87"]]},
+ {id:"A18C-0824",q:"长安汽车与华为合作的进展如何？",date:"2026-09-16 15:52",code:"000625.SZ",ev:8,hop:2,
+  evRows:[["ev1","长安汽车 2024 年年度报告 · 战略合作","深圳证券交易所","2025-04-10","doc_SZ000625_AR2024_0014"],
+          ["ev2","阿维塔入股引望，持股 10%","证券时报网","2024-08-20","doc_news_STCN_20240820_0163"],
+          ["ev3","深蓝汽车与华为签署合作协议","第一财经","2024-09-11","doc_news_YICAI_20240911_0288"]],
+  evtRows:[["E-2024-0341","战略合作","阿维塔入股引望智能，持股 10%","2024-08-20","0.94"],
+           ["E-2024-0364","战略合作","深蓝汽车与华为签署合作协议","2024-09-11","0.90"]]},
+ {id:"B5F2-0821",q:"2024 年碳酸锂价格波动对电池成本的影响？",date:"2026-09-15 08:41",code:"—",ev:13,hop:0,
+  evRows:[["ev1","2024 年碳酸锂现货均价 9.1 万元/吨，同比下跌 65%","上海有色网","2025-01-08","doc_news_SMM_20250108_0007"],
+          ["ev2","动力电池年度均价降至 0.55 元/Wh","中国汽车动力电池产业创新联盟","2025-01-15","doc_CAAM_20250115_0022"],
+          ["ev3","碳酸锂期货主力合约创上市以来新低","证券时报网","2024-08-14","doc_news_STCN_20240814_0121"]],
+  evtRows:[["M-2024-0012","原材料","碳酸锂现货均价同比下跌 65%","2025-01-08","0.90"],
+           ["M-2024-0018","成本","动力电池年度均价降至 0.55 元/Wh","2025-01-15","0.88"]]}
 ];
 (function history(){
   var box=$("#hrows");if(!box) return;
@@ -2015,14 +1772,11 @@ var SESSIONS=[
     return '<article class="hrow reveal" style="--d:'+(i*45)+'ms" data-od-id="history-row-'+no+'" data-session="'+s.id+'">'+
       '<span class="hrow__no">'+no+"</span>"+
       "<div><h3 class=\"hrow__q\">"+s.q+"</h3>"+
-        '<div class="hrow__sub"><span class="tag">'+s.date+'</span>'+
-        (s.replay?'<span class="tag tag--red">有图谱路径 · 深度 '+s.hop+' 跳</span>'
-                 :'<span class="tag tag--muted">未收录回看</span>')+
-        "</div></div>"+
-      '<div class="hrow__meta"><div class="hrow__nums">'+
-        (s.replay?'<b>'+s.ev+'</b><span class="small">条证据</span><span class="small">·</span><b>'+s.paths+'</b><span class="small">条图谱路径</span>'
-                 :'<b>—</b><span class="small">未收录</span>')+
-        '</div><span class="label">'+(s.replay?"点开回看":"未收录回看")+'</span></div>'+
+        '<div class="hrow__sub"><span class="tag">'+s.date+'</span><span class="tag">'+(s.code==="—"?"多标的":s.code)+"</span>"+
+        (s.hop>0?'<span class="tag tag--red">有图谱路径</span>':'<span class="tag">无图谱路径</span>')+"</div></div>"+
+      '<div class="hrow__meta"><div class="hrow__nums"><b>'+s.ev+'</b><span class="small">条证据</span><span class="small">·</span><b>'+
+        (s.hop>0?s.hop+" 跳":"—")+'</b><span class="small">图谱路径</span></div>'+
+        '<span class="label">点开回看</span></div>'+
       '<span class="hrow__sweep"></span>'+
       '<button class="hrow__open" aria-label="回看会话：'+s.q+'"></button></article>';
   }).join("");
@@ -2033,13 +1787,8 @@ var SESSIONS=[
       arr.map(function(r){return "<tr>"+r.map(function(c,i){return '<td class="'+(i>=1&&keyCol?"k":"")+'">'+c+"</td>"}).join("")+"</tr>"}).join("")+
       "</tbody>";
   }
-  // 证据表与屏②的证据清单同源（EVALL），两处不会给出不同的证据
-  var evRows=EVALL.map(function(it){
-    return [String(it.rank),it.g,it.t,it.site||"—",it.date||"—","doc_id "+(it.doc||"—"),"chunk_id "+(it.chunk||"—")];
-  });
   function open(s){
-    dId.textContent=s.replay?s.id:"未收录";
-    dTitle.textContent=s.q;
+    dId.textContent=s.id;dTitle.textContent=s.q;
     d.hidden=false;d.classList.add("on");
     document.body.style.overflow="hidden";
     tables.innerHTML='<div class="dloading"><span class="loader__ring">'+
@@ -2048,25 +1797,17 @@ var SESSIONS=[
       "<span>正在还原会话 "+s.id+" 的三张表…</span></div>";
     clearTimeout(loadT);
     loadT=setTimeout(function(){
-      if(!s.replay){
-        tables.innerHTML='<div class="dloading" style="padding:40px 0">'+
-          '<svg class="bull" viewBox="0 0 64 64" aria-hidden="true" style="width:44px;height:44px"><use href="#bull"></use></svg>'+
-          "<span>该问题只进了问题清单，未收录三张表内容。</span></div>"+
-          '<p class="small" style="max-width:64ch">历史记录里点开回看只还原问题／答案／证据三张表，不重新渲染当时的图谱路径视图，'+
-          "只保留「是否有图谱路径」的布尔标记。本演示只完整收录了 1 条会话，其余 3 条只有问题文本，因此这里不补任何内容。</p>";
-        return;
-      }
       tables.innerHTML=
-        '<div class="tblWrap"><div class="tblWrap__h"><span class="label">表一 · 问题表 question</span><span class="label">1 行</span></div>'+
-          '<table class="tbl">'+rows(s.qRows,["字段","值"],true)+"</table></div>"+
-        '<div class="tblWrap"><div class="tblWrap__h"><span class="label">表二 · 答案表 answer</span><span class="label">1 行</span></div>'+
-          '<table class="tbl"><thead><tr><th>字段</th><th>值</th></tr></thead><tbody>'+
-            '<tr><td class="k">answer_text</td><td class="ans">'+ANSWER_TEXT+"</td></tr>"+
-            '<tr><td class="k">refs_in_text</td><td>[证据6] × 2 处，与证据清单的 rank 一一对应</td></tr>'+
-            '<tr><td class="k">output_mode</td><td>单轮一次生成（非流式，没有逐字输出过程）</td></tr>'+
-          "</tbody></table></div>"+
-        '<div class="tblWrap"><div class="tblWrap__h"><span class="label">表三 · 证据表 evidence</span><span class="label">'+evRows.length+" 行</span></div>"+
-          '<table class="tbl">'+rows(evRows,["证据号","类别","标题","来源网站","发布日期","文档号","块号"],false)+"</table></div>";
+        '<div class="tblWrap"><div class="tblWrap__h"><span class="label">表一 · 会话表 session</span><span class="label">1 行</span></div>'+
+          '<table class="tbl">'+rows([
+            ["session_id",s.id],["user_query",s.q],["created_at",s.date+":07"],["model","deepseek-flash"],
+            ["data_cutoff","2026-09-25"],["window","2024-01-01 → 2024-12-31"],["graph_expand",s.hop>0?"true（"+s.hop+" 跳）":"false"],
+            ["evidence_count",String(s.ev)],["latency","1.84 s"]
+          ],["字段","值"],true)+"</table></div>"+
+        '<div class="tblWrap"><div class="tblWrap__h"><span class="label">表二 · 证据表 evidence</span><span class="label">'+s.evRows.length+" / "+s.ev+' 行</span></div>'+
+          '<table class="tbl">'+rows(s.evRows,["证据号","标题","来源网站","发布日期","文档号"],false)+"</table></div>"+
+        '<div class="tblWrap"><div class="tblWrap__h"><span class="label">表三 · 事件表 event</span><span class="label">'+s.evtRows.length+" 行</span></div>"+
+          '<table class="tbl">'+rows(s.evtRows,["事件号","类型","标题","发生日","置信度"],false)+"</table></div>";
     },560);
   }
   function close(){
@@ -2133,12 +1874,12 @@ $$("[data-focus-ask]").forEach(function(b){
   });
   $$("[data-submit-ask]").forEach(function(b){
     b.addEventListener("click",function(){
-      if(ta&&!ta.value.trim()) ta.value="平安银行与伊利股份共同参与的事件是什么？";
+      if(ta&&!ta.value.trim()) ta.value="长城汽车 2024 年发生了哪些事件？";
       go("answer");
     });
   });
   if(ta) ta.addEventListener("keydown",function(e){
-    if((e.metaKey||e.ctrlKey)&&e.key==="Enter"){ if(!ta.value.trim()) ta.value="平安银行与伊利股份共同参与的事件是什么？"; go("answer") }
+    if((e.metaKey||e.ctrlKey)&&e.key==="Enter"){ if(!ta.value.trim()) ta.value="长城汽车 2024 年发生了哪些事件？"; go("answer") }
   });
 })();
 
@@ -2200,8 +1941,6 @@ $$("[data-focus-ask]").forEach(function(b){
 
 /* 恢复上次视图 */
 (function boot(){
-  // 行情接入位：初值在这里恢复（setMarket 依赖的 save/read 在脚本后段才可用）
-  if(window.__setMarket) window.__setMarket(read("od.ashare.market","off")==="on");
   var v=read("od.ashare.view","ask");
   if(VIEWS.indexOf(v)<0||v==="ask"){ save("od.ashare.scroll.ask","0"); return }
   var sec=document.getElementById("view-"+v);
