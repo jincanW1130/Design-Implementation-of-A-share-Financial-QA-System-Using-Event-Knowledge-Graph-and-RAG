@@ -241,12 +241,9 @@
         「—（该关系类型不带证据属性）」，不留空、不编造；标题／来源站／日期缺失显示「—（未给出）」；
         正文片段不在单文件里，chunk_content 如实留空，neighbor_chunks 只用本次返回里真实出现的
         相邻块编号。
-     · 数据边界（v5.5 更新）：属性面板与 ① 计数概览的四格计数现在覆盖 19 个实体
-       （两个数据集里的全部 21 个节点），逐字取自 GET /api/graph/entities/{id} 与
-       GET /api/graph/entities/{id}/evidence?depth=1 的真实返回，不再有「—（空）」。
-       ④ 事件实体额外四项仍只有 EVT-0001 有实测明细，其余事件如实留白。
-       实体证据表的「关系数」只列本次返回里逐条给出的关系，与①的实体级实测总量口径不同，
-       两处不做换算。
+     · 数据边界（照作者口径）：本原型只对 601633 / 000001 / EVT-0001 三个实体做了实测并给出计数；
+       其余实体与文档如实留白。实体证据表的「关系数」只列本次返回里逐条给出的关系，与①的
+       实体级实测总量口径不同，两处不做换算。
 
   ▍十、本版（v5.1）相对 v5 的改动（逐条对应作者在无头 Chrome 截图上看到的三处残留问题）
    v5.1 只改三件事，v5 的布局算法（环形＋弧距迭代＋半径钳位）、标签规划与遮挡自检、
@@ -498,136 +495,7 @@
      「切到本数据集时未能自动选中（本数据集暂无可选节点）。」
      正常的空态只可能是「用户自己清掉的」，不出现这句。
 
-  ▍十三、本版（v5.4）相对 v5.3 的改动（只修一个真缺陷：部分实体在真实鼠标下点不到）
-
-   作者用**真实命中测试**（对 elementFromPoint 命中的元素派发 click，而不是直接对 .gnode 派发）
-   复测：数据集① 会话子图 10 个节点里 7 个可点，3 个点不到 ——
-     evt0236 中心 (15,858) 命中 section.view（屏容器本身）；
-     evt0823 (158,856)、evt0827 (301,856) 命中 div.gwrap（外层栅格）。
-   数据集② 实体证据图谱 11 个全部可点。复现结论与作者一致。
-
-   ▍十三·一、成因有**两个**，缺一不可（只改坐标治不了）
-     ① 位置：孤立节点（deg 0）的内容坐标是 iy = maxH + 66，**在主包围盒之外**。
-        而它们 dist=99，按 v5.1 的纪律**不参与 liveBB() 适配**（正是这一条把「节点挤在上半部」
-        修好的，不能回退），于是它们被画在画布盒子下方约 350px 处 —— 那个位置已经被
-        后面的 section.view / div.gwrap 盖住了，真实鼠标打下去只会命中覆盖物。
-     ② 命中面：refresh() 原本按可见性状态机给节点设 pointer-events，
-        n.on = (类型未隐藏) && (dist<=depth) && (时间在区间内)，孤立节点 dist=99 > depth，
-        恒为 false ⇒ pointer-events:none ⇒ 即使不被遮也点不到。
-     两条合起来才是「看得见却点不到」：图形在画布外、且自身不吃指针事件。
-
-   ▍十三·二、三条候选里为什么选第③条
-     方案① 把孤立节点挪进画布 SVG 的预留区、让 elementFromPoint(中心) 返回节点本身：
-       否决。要放进画布就得进入 liveBB() 的包围盒计算（否则仍被裁在盒外），
-       而把 dist=99 的点纳入适配**正是 v5.1 要修的那个缺陷**，属于「不要改的」清单，
-       等于用一次回退换一次可点。
-     方案② 抬命中层（DOM 顺序 / z-index / 让覆盖容器不吃指针事件）：
-       单独用不够。glyph 的**几何位置**就不在画布盒子内，抬高只会让它浮到别的区块之上、
-       压住正文，而且它自身的 pointer-events 仍被 n.on 关着。
-     方案③ 孤立节点在画布外的「孤立节点」列表里，把列表项做成**命中面本身**：采用。
-       理由：孤立节点本来就只有这一处呈现（画布里那份是必然点不到的幽灵元素），
-       把命中面放在它唯一呈现的地方，既不需要动坐标、也不需要回退 liveBB，
-       更不需要跟 n.on 的可见性状态机较劲。
-
-   ▍十三·三、具体改了四处
-     1) paint()：deg 0 的节点**不再在画布 SVG 里生成 glyph**（消灭幽灵元素），n.el 置 null。
-        它们的坐标、dist、deg 一概未动，liveBB()/planLabels()/selfCheck() 的输入与 v5.3 逐字相同。
-     2) renderIso()：列表项改成真 <button class="giso__i">，里面放**真 .gnode**
-        （.ghit 命中圈 ＋ .halo ＋ shapeSVG 图形）。看到的图形与点得到的东西是同一个元素，
-        不存在「图形与命中面错位」；整行可点是把命中面从 16px 放大到整行，两者仍然一致。
-     3) refresh()：deg 0 的节点不压暗、不隐藏、不设 pointer-events:none（永远可点）。
-        注意 n.on 本身仍为 false —— 所以适配与遮挡自检的行为与 v5.3 完全一致（见十三·五）。
-     4) 新增 isoBox 的 click：点图形走与画布节点**同一条** pick()；点整行走同一套选中赋值。
-        两条路都置 S.userCleared=false，三条取消出口（空白 / 取消选中 / Esc）对孤立节点同样有效。
-     说明文字「该节点在本次返回的图谱路径中未出现邻接边」**一字未删**：
-     列表项第二行一份，属性面板「本视图关系」块的「邻接关系 · 0 条」下方一份。
-
-   ▍十三·四、自证口径（真实命中测试，不是对 .gnode 派发事件）
-     无头 Chrome（--headless=new --disable-gpu --window-size=1440,1400 --virtual-time-budget=20000
-     --dump-dom）注入探针，对两个数据集里的**每一个** .gnode：
-       取 getBoundingClientRect() 中心 → document.elementFromPoint(cx,cy)
-       → 断言 node.contains(命中元素) → **对命中元素**派发 click → 读属性面板首行。
-     读数：合计 21 个 .gnode，可命中 21 个，不可命中 0 个；
-     21 个面板首行全部切到对应实体（含 evt0236 / evt0823 / evt0827 → 已选中 · EVT-0236 / -0823 / -0827）。
-
-   ▍十三·五、对既有读数的影响
-     遮挡自检在**固定选中同一个节点**时逐字未变（s：节点重叠 0／标签重叠 0；e：同为 0／0），
-     因为孤立节点仍 n.on=false、仍不参与 liveBB，标签由列表项文字承担（n.lel=null，
-     planLabels/selfCheck 自动跳过）。1440 下无横向滚动（scrollWidth 1409 = clientWidth 1409）。
-     v5.3 的点选幂等、三条取消出口、userCleared 语义全部回归通过。
-
-  ▍十四、本版（v5.5）相对 v5.4 的改动（把属性面板里的「—（空）」换成真实数据）
-
-   作者把点各类实体后的面板全文打出来对比，定位到症结：点平安银行（在内置的 4 个实测样本里）
-   实体档案有 4 条属性；点伊利股份（不在样本里）只有 2 条，且「实体证据计数」四格全是
-   「—（空）」。**不是渲染坏了，是原型只内置了 4 个实体的接口数据**，其余点开就是一片空 ——
-   观感即「点击实体没有属性」。本版把内置数据换成作者逐个取回的 19 个实体全量真实返回。
-
-   ▍十四·一、数据来源（两条真实接口，逐字照抄，不改数、不补造）
-     · GET /api/graph/entities/{id}                   → name / properties / property_keys / degree
-     · GET /api/graph/entities/{id}/evidence?depth=1  → counts（邻居/关系/涉及文档/不同文本块）
-                                                        ＋ documents_total / chunks_total
-     变量名 EAPI（定义在 ESAMPLE 原来的位置）。旧的 4 例样本表 ESAMPLE / ESAMPLE_BY_ID 已删除 ——
-     它们是过渡期的产物，留着就是两套并存的数据源。表里 documents_total / chunks_total 与
-     counts.documents / counts.chunks 在 19 条里逐条相等，是同一统计量的两个字段名，原样照抄未合并。
-
-   ▍十四·二、id 映射（画布别名 → 后端真实 node_id；面板一律显示真实 id）
-     映射写在 GNODES 的 eid 字段上，查表 key 与 EAPI 完全同口径（不再另设一张别名表）。
-       yili→600887    pab→000001      cy→601633      nafmii→INST-0069
-       doc1183→1183   doc1001→1001
-       per0010→PER-0010  per0029→PER-0029  per0187→PER-0187  per0264→PER-0264
-       per0386→PER-0386  per0062→PER-0062  per0308→PER-0308
-       evt0001→EVT-0001  evt0236→EVT-0236  evt0260→EVT-0260  evt0823→EVT-0823  evt0827→EVT-0827
-       pol0009→POL-0009
-     19 个真实 id 对两个数据集里的 21 个节点（pab 与 per0029 各出现在两套数据集里）——
-     每个节点都能在 EAPI 里命中，没有落空的。nafmii 原先没有 eid（v5.2 跳过了它），本版补上
-     INST-0069，所以机构的面板现在显示「机构 · INST-0069」而不是画布别名。
-
-   ▍十四·三、「—（空）」清零的范围（清了哪些、哪些没清、为什么）
-     已清零：① 属性面板「实体证据计数」四格（邻居／关系／涉及文档／不同文本块）——
-             21 个节点逐行实测，空值格 0 行。
-             ② 实体证据区 ① 计数概览的同一四格（与面板同源，同一个 evidOf）。
-             ③ 属性面板「实体档案」——原先 Person/Institution/Policy 与伊利、长城汽车等
-             显示「本类实体键名后端补测中」或只有 2 条属性，现在一律渲染 EAPI 里的真实键值。
-     未清零（且刻意保留）：本视图关系块的「距中心」对 3 个孤立节点仍显示
-             「—（空）（在本次边集里不可达）」—— 它们在本数据集的边集里确实没有邻接边，
-             这是画布局部的真实情况，不是缺数据。EAPI 的 degree 显示它们在全图有 4 度，
-             两块并列摆着，正是十四·四要说的口径差。
-             「实体证据」区 ② 的 role/confidence 空值、③ 的「—（未给出）」同理，都是接口真没给。
-
-   ▍十四·四、键序与「两块口径」（作者要求 3、4）
-     · 键序 ＝ 该实体自己的 property_keys（EAPI 里逐条给的那个数组），不再由一张按类型写死的
-       EAPI_KEYS 决定 —— 该表已删除，因为它的 company 顺序与 EAPI 的真实顺序不一致
-       （EAPI：aliases/company_name/exchange/short_name），留着就是两个互相打架的键序来源。
-       EAPI_HOT（高价值字段置顶）按 v5.2 既定规则保留：company / event 两类仍是高价值键在前、
-       其余按 property_keys 原序跟随；doc / person / org / policy 四类不在 HOT 表里，
-       因此**完全按 property_keys 顺序**渲染。
-     · Person / Institution / Policy 三类在图谱里确实只有 2 个自有属性（person_id/person_name 等），
-       这是图谱的真实情况。档案块下方补一句如实说明：「本类实体在图谱中仅存 N 个自有属性；
-       它的{人物|机构|政策}信息主要体现在关系与证据中（见下方「本视图关系」与「实体证据」区）」——
-       不用推测字段凑数。
-     · degree 两块都保留、各自标注、不合并：档案块新增「接口 degree · 全图度数」一格
-       （入 / 出 / 度，来源标注到具体接口路径），块②「本视图关系」仍是**当前数据集画布局部**的度。
-       两者确实不同：孤立节点 EVT-0236 画布局部 0 度、接口全图 4 度。
-
-   ▍十四·五、刻意没动的地方（边界写清楚，免得被当成遗漏）
-     · 画布一律未动：坐标、布局、半径、标签规划、遮挡自检、适配、时间轴、四屏、右栏、图例 —— 逐字保留。
-       因此 GNODES 里的 props 字段**保留**，它现在只喂时间轴取值（事件取 event_time、文档取 publish_time）。
-     · 由此产生一处**已知且刻意**的差异：EAPI 里 EVT-0001 的 event_time 是 2026-09-11，
-       而画布时间轴仍按 GNODES.props 里的 null 走（旧记录口径），所以该事件在时间轴上不落点、
-       但面板会如实显示 event_time 2026-09-11。本次只改面板，故不改画布；若要时间轴也跟着落点，
-       把 GNODES 里 evt0001 的 props 删掉、改由 EAPI 取值即可（一行的事，但会动画布，故未做）。
-     · v5.2 的 psrc / note 两个字段已从 GNODES 删除：它们是为「接口数据只覆盖 4 个实体」写的过渡口径，
-       现在 19 个实体都有真实返回，留着只会与新面板自相矛盾（例如伊利那条 note 说 exchange/aliases
-       不列出，而面板现在会列出）。属性来源改由 EAPI 在面板里生成，不再有第二处口径。
-
-   ▍十四·六、自证（无头 Chrome，真实命中测试）
-     对两个数据集里**每一个** .gnode：取 getBoundingClientRect() 中心 → document.elementFromPoint
-     → 断言 node.contains(命中元素) → **对命中元素**派发 click（不是对 .gnode 派发）→ 读面板。
-     读数：21 个 .gnode 全部可命中、全部切到对应实体；四格计数里出现空值的行 **0 行**；
-     1440 无横向滚动（scrollWidth 1409 = clientWidth 1409）。
-
-  ▍十五、数据说明
+   ▍十三、数据说明
    本原型分三类文字，界面上一律分开放置、不互相冒充：
      · 真实记录 —— 证据条目、图谱路径、事件三元组、判定区间、数据版本与截止时间，
        取自 ashare_qa 六表的一次真实问答输出，原样呈现。
@@ -1375,21 +1243,12 @@ body[data-market="on"]  .mk-off{display:none!important}
 .gpath__flt{color:rgba(255,255,255,.62);font-size:11.5px;line-height:1.6;padding:8px 0}
 
 /* --- 孤立节点 --- */
-/* v5.4：列表项改成真按钮 —— 它是孤立节点唯一的呈现处，也因此是它唯一的命中面。
-   glyph 就放在按钮里（.giso__g 里是真 .gnode：.ghit 命中圈 + 形状 + halo），
-   所以「看到的图形」与「点得到的东西」是同一个元素，不存在图形与命中面不一致。 */
 .giso{display:flex;flex-direction:column;gap:8px}
 .giso__i{display:grid;grid-template-columns:16px minmax(0,1fr);gap:11px;align-items:start;
-  width:100%;text-align:left;font:inherit;color:inherit;
-  padding:11px 13px;border-radius:9px;border:1px dashed var(--border);cursor:pointer;
-  transition:border-color .2s var(--ease),background .2s var(--ease)}
-.giso__i:hover{border-color:var(--accent-line);background:rgba(230,57,70,.06)}
-.giso__i:focus-visible{border-color:var(--accent);border-style:solid}
-.giso__i.is-sel{border-style:solid;border-color:var(--accent-line);background:rgba(230,57,70,.07)}
-.giso__i svg{width:16px;height:16px;margin-top:1px;display:block}
-.giso__g{overflow:visible}
-.giso__n{display:block;font-size:12.5px;color:var(--fg)}
-.giso__d{display:block;font-size:11.5px;color:rgba(255,255,255,.62);line-height:1.65;margin-top:4px}
+  padding:11px 13px;border-radius:9px;border:1px dashed var(--border)}
+.giso__i svg{width:16px;height:16px;margin-top:1px}
+.giso__n{font-size:12.5px;color:var(--fg)}
+.giso__d{font-size:11.5px;color:rgba(255,255,255,.62);line-height:1.65;margin-top:4px}
 .giso__d i{font-style:normal;font-family:var(--f-mono)}
 
 /* --- 准确性声明 --- */
@@ -2831,23 +2690,26 @@ var EMPTY="—（空）";
    v5.2 实体详情接口 GET /api/graph/entities/{node_id}
      面板「实体档案」块直接渲染返回里的 properties，键序就是 property_keys 的顺序 ——
      **不写死字段表、不派生、不推测**；接口没返回的键一律不显示，返回了但值为空的如实写 EMPTY。
-   · v5.5 起：键序**不再由本表提供**，改由每个实体的 EAPI.property_keys 决定（逐字照抄接口实返）。
-     旧版这里有一张按类型写死的 EAPI_KEYS —— 已删除：它与 EAPI 里 company 的真实键序不一致
-     （EAPI 给的是 aliases/company_name/exchange/short_name），留着就是两个互相打架的键序来源。
+   · EAPI_KEYS  各类型的 property_keys（有序），键名与顺序照抄接口实测返回；
    · EAPI_LABEL 键名的中文注释（只用于面板辅助显示，不改变原键名）；
-   · EAPI_HOT   高价值字段（置顶），其余键按该实体 property_keys 的原序跟随；
-   · EAPI_LONG  长文本键 —— 折行完整显示，不截断。
+   · EAPI_HOT   高价值字段（置顶），其余键按原序跟随；
+   · EAPI_LONG  长文本键 —— 折行完整显示，不截断；
+   · ESAMPLE    作者在无头环境里逐字测回的接口真实返回（演示数据内置，单文件不能真发请求）。
+                Person / Institution / Policy 三类的键名后端补测中，键名以接口实返为准，本原型不推测。
    ------------------------------------------------------------ */
+var EAPI_KEYS={
+  company :["company_name","short_name","aliases","exchange"],
+  event   :["event_type","event_time","event_id","event_name","confidence","description"],
+  doc     :["title","source","publish_time","category","doc_id","url"],
+  industry:["industry_name","industry_code"]
+};
 var EAPI_LABEL={
   company_name:"公司全称", short_name:"证券简称", aliases:"别名", exchange:"交易所",
   event_type:"事件类型", event_time:"事件时间", event_id:"事件编号",
   event_name:"事件名称", confidence:"置信度", description:"事件描述",
   title:"文档标题", source:"来源", publish_time:"发布时间", category:"分类",
   doc_id:"文档编号", url:"原文链接",
-  industry_name:"行业名称", industry_code:"行业代码",
-  person_id:"人物编号", person_name:"姓名",
-  institution_id:"机构编号", institution_name:"机构名称",
-  policy_id:"政策编号", policy_name:"政策名称"
+  industry_name:"行业名称", industry_code:"行业代码"
 };
 var EAPI_HOT={
   company:["company_name","exchange","aliases"],
@@ -2855,154 +2717,26 @@ var EAPI_HOT={
 };
 var EAPI_LONG={description:1,title:1,event_name:1,url:1,aliases:1};
 
-/* ------------------------------------------------------------
-   v5.5  EAPI —— 实体详情接口 ＋ 实体证据接口的**全量真实返回**（19 个实体，逐字照抄）
-   来源两条，与表里的字段一一对应：
-     · GET /api/graph/entities/{id}                   → name / properties / property_keys / degree
-     · GET /api/graph/entities/{id}/evidence?depth=1  → counts（邻居/关系/涉及文档/不同文本块）
-                                                        ＋ documents_total / chunks_total
-   表里的键就是**后端的真实 node_id**（INST-0069 / 600887 / EVT-0236 …），
-   与画布节点 id 的对应写在 GNODES 的 eid 字段上（画布别名 → 真实 id），面板一律显示真实 id。
-   覆盖度：19 个实体，两个数据集里的全部 21 个节点都能命中 ⇒ 四格计数不再出现空值。
-   注：documents_total / chunks_total 与 counts.documents / counts.chunks 在本表里逐条相等，
-       是接口同一统计量的两个字段名，原样照抄、不合并、不改写。
-   ------------------------------------------------------------ */
-var EAPI={
- "1001":{
-   label:"Document", name:"长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告",
-   properties:{category:"公告",doc_id:"1001",publish_time:"2026-09-25",source:"巨潮资讯网",title:"长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告",url:"https://static.cninfo.com.cn/finalpage/2026-09-25/1225581315.PDF"},
-   property_keys:["category","doc_id","publish_time","source","title","url"],
-   degree:{in_:1, out:1, total:2},
-   counts:{nbr:2, rel:2, doc:0, chunk:0},
-   documents_total:0, chunks_total:0},
- "1183":{
-   label:"Document", name:"内蒙古伊利实业集团股份有限公司关于收到中国银行间市场交易商协会《接受注册通知书》的公告",
-   properties:{category:"公告",doc_id:"1183",publish_time:"2026-08-25",source:"巨潮资讯网",title:"内蒙古伊利实业集团股份有限公司关于收到中国银行间市场交易商协会《接受注册通知书》的公告",url:"https://static.cninfo.com.cn/finalpage/2026-08-25/1225496541.PDF"},
-   property_keys:["category","doc_id","publish_time","source","title","url"],
-   degree:{in_:1, out:0, total:1},
-   counts:{nbr:1, rel:1, doc:0, chunk:0},
-   documents_total:0, chunks_total:0},
- "600887":{
-   label:"Company", name:"伊利股份",
-   properties:{aliases:"伊利股份",company_name:"内蒙古伊利实业集团股份有限公司",exchange:"上交所",short_name:"伊利股份"},
-   property_keys:["aliases","company_name","exchange","short_name"],
-   degree:{in_:0, out:15, total:15},
-   counts:{nbr:14, rel:15, doc:10, chunk:13},
-   documents_total:10, chunks_total:13},
- "601633":{
-   label:"Company", name:"长城汽车",
-   properties:{aliases:"长城汽车",company_name:"长城汽车股份有限公司",exchange:"上交所",short_name:"长城汽车"},
-   property_keys:["aliases","company_name","exchange","short_name"],
-   degree:{in_:0, out:17, total:17},
-   counts:{nbr:16, rel:17, doc:8, chunk:13},
-   documents_total:8, chunks_total:13},
- "000001":{
-   label:"Company", name:"平安银行",
-   properties:{aliases:"平安银行",company_name:"平安银行股份有限公司",exchange:"深交所",short_name:"平安银行"},
-   property_keys:["aliases","company_name","exchange","short_name"],
-   degree:{in_:0, out:21, total:21},
-   counts:{nbr:19, rel:21, doc:11, chunk:13},
-   documents_total:11, chunks_total:13},
- "EVT-0001":{
-   label:"Event", name:"2023年股票期权激励计划首次授予股票期权第二个行权期开始行权",
-   properties:{confidence:"0.9",description:"公司2023年股票期权激励计划首次授予股票期权于2026年1月26日进入第二个行权期，行权期有效期为2026年9月11日至2027年1月25日，2026年9月11日开始行权。",event_id:"EVT-0001",event_name:"2023年股票期权激励计划首次授予股票期权第二个行权期开始行权",event_time:"2026-09-11",event_type:"股权"},
-   property_keys:["confidence","description","event_id","event_name","event_time","event_type"],
-   degree:{in_:2, out:2, total:4},
-   counts:{nbr:3, rel:4, doc:1, chunk:2},
-   documents_total:1, chunks_total:2},
- "EVT-0236":{
-   label:"Event", name:"交易商协会接受伊利股份债务融资工具注册",
-   properties:{confidence:"0.95",description:"中国银行间市场交易商协会接受伊利股份多品种债务融资工具（DFI）注册。",event_id:"EVT-0236",event_name:"交易商协会接受伊利股份债务融资工具注册",event_type:"监管"},
-   property_keys:["confidence","description","event_id","event_name","event_type"],
-   degree:{in_:2, out:2, total:4},
-   counts:{nbr:3, rel:4, doc:1, chunk:2},
-   documents_total:1, chunks_total:2},
- "EVT-0260":{
-   label:"Event", name:"国家金融监督管理总局核准高鹏平安银行董事任职资格",
-   properties:{confidence:"0.95",description:"国家金融监督管理总局批复核准高鹏先生担任平安银行股份有限公司董事的任职资格。",event_id:"EVT-0260",event_name:"国家金融监督管理总局核准高鹏平安银行董事任职资格",event_time:"2026-08-22",event_type:"监管"},
-   property_keys:["confidence","description","event_id","event_name","event_time","event_type"],
-   degree:{in_:2, out:2, total:4},
-   counts:{nbr:3, rel:4, doc:1, chunk:1},
-   documents_total:1, chunks_total:1},
- "EVT-0823":{
-   label:"Event", name:"伊利股份发布2026年半年报",
-   properties:{confidence:"0.9",description:"伊利股份披露2026年半年度报告。",event_id:"EVT-0823",event_name:"伊利股份发布2026年半年报",event_time:"2026-08-26",event_type:"业绩"},
-   property_keys:["confidence","description","event_id","event_name","event_time","event_type"],
-   degree:{in_:1, out:1, total:2},
-   counts:{nbr:1, rel:2, doc:1, chunk:1},
-   documents_total:1, chunks_total:1},
- "EVT-0827":{
-   label:"Event", name:"伊利股份拟以10亿元-20亿元回购注销公司股份",
-   properties:{confidence:"0.9",description:"伊利股份拟使用自有资金以集中竞价方式回购公司股份并注销。",event_id:"EVT-0827",event_name:"伊利股份拟以10亿元-20亿元回购注销公司股份",event_time:"2026-08-27",event_type:"股权"},
-   property_keys:["confidence","description","event_id","event_name","event_time","event_type"],
-   degree:{in_:1, out:1, total:2},
-   counts:{nbr:1, rel:2, doc:1, chunk:1},
-   documents_total:1, chunks_total:1},
- "INST-0069":{
-   label:"Institution", name:"中国银行间市场交易商协会",
-   properties:{institution_id:"INST-0069",institution_name:"中国银行间市场交易商协会"},
-   property_keys:["institution_id","institution_name"],
-   degree:{in_:1, out:6, total:7},
-   counts:{nbr:6, rel:7, doc:7, chunk:7},
-   documents_total:7, chunks_total:7},
- "PER-0010":{
-   label:"Person", name:"付欣",
-   properties:{person_id:"PER-0010",person_name:"付欣"},
-   property_keys:["person_id","person_name"],
-   degree:{in_:1, out:0, total:1},
-   counts:{nbr:1, rel:1, doc:1, chunk:1},
-   documents_total:1, chunks_total:1},
- "PER-0029":{
-   label:"Person", name:"冀光恒",
-   properties:{person_id:"PER-0029",person_name:"冀光恒"},
-   property_keys:["person_id","person_name"],
-   degree:{in_:3, out:0, total:3},
-   counts:{nbr:2, rel:3, doc:2, chunk:2},
-   documents_total:2, chunks_total:2},
- "PER-0062":{
-   label:"Person", name:"吴雷鸣",
-   properties:{person_id:"PER-0062",person_name:"吴雷鸣"},
-   property_keys:["person_id","person_name"],
-   degree:{in_:2, out:0, total:2},
-   counts:{nbr:2, rel:2, doc:1, chunk:1},
-   documents_total:1, chunks_total:1},
- "PER-0187":{
-   label:"Person", name:"李红栓",
-   properties:{person_id:"PER-0187",person_name:"李红栓"},
-   property_keys:["person_id","person_name"],
-   degree:{in_:1, out:0, total:1},
-   counts:{nbr:1, rel:1, doc:1, chunk:1},
-   documents_total:1, chunks_total:1},
- "PER-0264":{
-   label:"Person", name:"穆峰",
-   properties:{person_id:"PER-0264",person_name:"穆峰"},
-   property_keys:["person_id","person_name"],
-   degree:{in_:1, out:0, total:1},
-   counts:{nbr:1, rel:1, doc:1, chunk:1},
-   documents_total:1, chunks_total:1},
- "PER-0308":{
-   label:"Person", name:"谢永林",
-   properties:{person_id:"PER-0308",person_name:"谢永林"},
-   property_keys:["person_id","person_name"],
-   degree:{in_:2, out:0, total:2},
-   counts:{nbr:1, rel:2, doc:2, chunk:2},
-   documents_total:2, chunks_total:2},
- "PER-0386":{
-   label:"Person", name:"魏建军",
-   properties:{person_id:"PER-0386",person_name:"魏建军"},
-   property_keys:["person_id","person_name"],
-   degree:{in_:1, out:0, total:1},
-   counts:{nbr:1, rel:1, doc:1, chunk:1},
-   documents_total:1, chunks_total:1},
- "POL-0009":{
-   label:"Policy", name:"上市公司股权激励管理办法",
-   properties:{policy_id:"POL-0009",policy_name:"上市公司股权激励管理办法"},
-   property_keys:["policy_id","policy_name"],
-   degree:{in_:4, out:0, total:4},
-   counts:{nbr:4, rel:4, doc:4, chunk:4},
-   documents_total:4, chunks_total:4}
+/* 接口实测返回的原样数据（键序即 property_keys）——「演示数据取自 GET /api/graph/entities/{id} 的真实返回」 */
+var ESAMPLE={
+ "000001":{type:"company",
+   props:[["company_name","平安银行股份有限公司"],["short_name","平安银行"],
+          ["aliases","平安银行"],["exchange","深交所"]]},
+ "EVT-0001":{type:"event",
+   props:[["event_type","股权"],["event_time",null],["event_id","EVT-0001"],
+          ["event_name","2023年股票期权激励计划首次授予股票期权第二个行权期开始行权"],
+          ["confidence",0.9],["description",null]]},
+ "1037":{type:"doc",
+   props:[["title","平安银行股份有限公司内部审计章程"],["source","巨潮资讯网"],
+          ["publish_time","2026-09-17"],["category","公告"],["doc_id","1037"],
+          ["url","https://static.cninfo.com.cn/finalpage/2026-09-17/1225568477.PDF"]]},
+ "IND-0069":{type:"industry",
+   props:[["industry_name","银行"],["industry_code","IND-0069"]]}
 };
-
+/* 接口实测样本里这些实体说明了「该类型的真实键名长什么样」——面板据此取键序与键名，
+   但**值**一律取节点自己的（记录原文或接口实测），不做任何跨实体搬运。 */
+var ESAMPLE_BY_ID={};
+(function(){for(var k in ESAMPLE) ESAMPLE_BY_ID[k]=ESAMPLE[k]})();
 
 var TYPE={
   company :{n:"公司",c:"#E63946",s:"circle"},
@@ -3035,65 +2769,77 @@ var mi=function(s){var p=s.split("-");return (parseInt(p[0],10)-2026)*12+(parseI
 // 节点：本次会话（A7F3-0912）载荷命中的 10 个实体，覆盖 7 类中的 5 类。
 // 坐标显式写死（无随机布局，回看与屏③渲染结果一致）；
 // r 不写死——由连接数（度）分级算出，见 radiusOf()；x/y 也不写死，见 5c 的 layout()。
-// eid  = **画布节点 id → 后端的真实 node_id** 的映射（如 yili→600887、nafmii→INST-0069）。
-//         面板一律显示真实 id，也用它去 EAPI 里取属性与计数（见下面的 EAPI）。
-// props = v5.5 起**只用于时间轴取值**（事件取 event_time、文档取 publish_time，见 makeDS）。
-//         「实体档案」块不再读这里 —— 该块改为直接渲染 EAPI 里该实体的 properties ＋ property_keys。
-//         保留本字段是为了让画布的时间轴、可见性、适配与遮挡自检与 v5.4 逐字一致（本版不动画布）。
-//         ⚠ 因此 EVT-0001 的时间轴取值仍是 null（旧记录口径）—— EAPI 里它有 event_time=2026-09-11，
-//           面板会如实显示该值，但画布时间轴仍按本字段走，这是本次刻意划出的边界，不是遗漏。
-// v5.2 的 psrc / note 两个字段已删除：它们是为「接口数据只覆盖 4 个实体」的过渡期写的口径说明，
-//      现在 19 个实体都有真实返回，留着只会与新面板自相矛盾（yili 的 note 说 alias/exchange 不列出，
-//      而面板现在会列出）。属性来源统一改由 EAPI 在面板里生成。
+// props = 该实体的属性字典，键序就是实体详情接口的 property_keys 顺序（见 EAPI_KEYS）；
+//         面板「实体档案」块原样渲染这里列出的键值，不补写、不派生；接口没返回的键直接不列。
+// psrc  = 这批属性的来源：api＝实体详情接口实测返回 / record＝本次记录原文 / none＝该类型键名后端补测中
 // ⚠ m 字段＝该节点出现在哪套数据集里：s＝会话载荷子图 / e＝实体证据库（v5 新增）。
 //   v5 起画布坐标不再写死 —— 由确定性分层环形布局算出（见 layout()），因此两套数据集都能自适应。
 var GNODES=[
- {id:"yili",type:"company",name:"伊利股份",code:"600887",m:"s",eid:"600887",
-  props:[["company_name","内蒙古伊利实业集团股份有限公司"],["short_name","伊利股份"]]},
- {id:"pab",type:"company",name:"平安银行",code:"000001",m:"se",eid:"000001",
+ {id:"yili",type:"company",name:"伊利股份",code:"600887",m:"s",eid:"600887",psrc:"record",
+  props:[["company_name","内蒙古伊利实业集团股份有限公司"],["short_name","伊利股份"]],
+  note:"公司全称逐字取自本次记录中 doc_id 1183 的标题，证券简称取自记录里的主标签。exchange 与 aliases 未随本次记录返回，故不列出。"},
+ {id:"pab",type:"company",name:"平安银行",code:"000001",m:"se",eid:"000001",psrc:"api",
   props:[["company_name","平安银行股份有限公司"],["short_name","平安银行"],
-         ["aliases","平安银行"],["exchange","深交所"]]},
- {id:"per0010",type:"person",name:"PER-0010",m:"s",eid:"PER-0010",
-  props:[]},
- {id:"per0029",type:"person",name:"PER-0029",m:"se",eid:"PER-0029",
-  props:[]},
- {id:"nafmii",type:"org",name:"中国银行间市场交易商协会",m:"s",eid:"INST-0069",
-  props:[]},
- {id:"evt0236",type:"event",name:"EVT-0236",sub:"监管",m:"s",eid:"EVT-0236",
-  props:[["event_type","监管"],["event_id","EVT-0236"]]},
- {id:"evt0260",type:"event",name:"EVT-0260",sub:"监管 · 2026-08-22",m:"s",eid:"EVT-0260",
-  props:[["event_type","监管"],["event_time","2026-08-22"],["event_id","EVT-0260"]]},
- {id:"evt0823",type:"event",name:"EVT-0823",sub:"业绩 · 2026-08-26",m:"s",eid:"EVT-0823",
-  props:[["event_type","业绩"],["event_time","2026-08-26"],["event_id","EVT-0823"]]},
- {id:"evt0827",type:"event",name:"EVT-0827",sub:"股权 · 2026-08-27",m:"s",eid:"EVT-0827",
-  props:[["event_type","股权"],["event_time","2026-08-27"],["event_id","EVT-0827"]]},
- {id:"doc1183",type:"doc",name:"公告 · doc_id 1183",sub:"巨潮资讯网 · 2026-08-25",m:"s",eid:"1183",
+         ["aliases","平安银行"],["exchange","深交所"]],
+  note:"四个键值逐字取自实体详情接口 GET /api/graph/entities/000001 的实测返回。该实体同时出现在会话载荷与实体证据库里。"},
+ {id:"per0010",type:"person",name:"PER-0010",m:"s",eid:"PER-0010",psrc:"none",
+  props:[],
+  note:"Person 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录也只给出人物编号。"},
+ {id:"per0029",type:"person",name:"PER-0029",m:"se",eid:"PER-0029",psrc:"none",
+  props:[],
+  note:"Person 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录也只给出人物编号。"},
+ {id:"nafmii",type:"org",name:"中国银行间市场交易商协会",m:"s",psrc:"none",
+  props:[],
+  note:"Institution 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录未给出机构编号。"},
+ {id:"evt0236",type:"event",name:"EVT-0236",sub:"监管",m:"s",eid:"EVT-0236",psrc:"record",
+  props:[["event_type","监管"],["event_id","EVT-0236"]],
+  note:"event_time / event_name / confidence / description 未随本次记录返回，故不列出。"},
+ {id:"evt0260",type:"event",name:"EVT-0260",sub:"监管 · 2026-08-22",m:"s",eid:"EVT-0260",psrc:"record",
+  props:[["event_type","监管"],["event_time","2026-08-22"],["event_id","EVT-0260"]],
+  note:"event_name / confidence / description 未随本次记录返回，故不列出；该事件即回答正文所指的《接受注册通知书》注册获接受事项。"},
+ {id:"evt0823",type:"event",name:"EVT-0823",sub:"业绩 · 2026-08-26",m:"s",eid:"EVT-0823",psrc:"record",
+  props:[["event_type","业绩"],["event_time","2026-08-26"],["event_id","EVT-0823"]],
+  note:"event_name / confidence / description 未随本次记录返回，故不列出。"},
+ {id:"evt0827",type:"event",name:"EVT-0827",sub:"股权 · 2026-08-27",m:"s",eid:"EVT-0827",psrc:"record",
+  props:[["event_type","股权"],["event_time","2026-08-27"],["event_id","EVT-0827"]],
+  note:"event_name / confidence / description 未随本次记录返回，故不列出。"},
+ {id:"doc1183",type:"doc",name:"公告 · doc_id 1183",sub:"巨潮资讯网 · 2026-08-25",m:"s",eid:"1183",psrc:"record",
   props:[["title","内蒙古伊利实业集团股份有限公司关于收到中国银行间市场交易商协会《接受注册通知书》的公告"],
-         ["source","巨潮资讯网"],["publish_time","2026-08-25"],["doc_id","1183"]]},
+         ["source","巨潮资讯网"],["publish_time","2026-08-25"],["doc_id","1183"]],
+  note:"该文档即本次证据清单里的证据 6。category 与 url 未随本次记录返回，故不列出。"},
 
  /* ---- v5 新增：实体证据库（图中实体直接取自作者给出的真实数据，字段逐字照抄） ---- */
- {id:"cy",type:"company",name:"长城汽车",code:"601633",m:"e",eid:"601633",
-  props:[["company_name","长城汽车股份有限公司"],["short_name","长城汽车"]]},
- {id:"per0187",type:"person",name:"PER-0187",m:"e",eid:"PER-0187",
-  props:[]},
- {id:"per0264",type:"person",name:"PER-0264",m:"e",eid:"PER-0264",
-  props:[]},
- {id:"per0386",type:"person",name:"PER-0386",m:"e",eid:"PER-0386",
-  props:[]},
- {id:"per0062",type:"person",name:"PER-0062",m:"e",eid:"PER-0062",
-  props:[]},
- {id:"per0308",type:"person",name:"PER-0308",m:"e",eid:"PER-0308",
-  props:[]},
- {id:"evt0001",type:"event",name:"EVT-0001",sub:"股权激励 · 行权",m:"e",eid:"EVT-0001",
+ {id:"cy",type:"company",name:"长城汽车",code:"601633",m:"e",eid:"601633",psrc:"record",
+  props:[["company_name","长城汽车股份有限公司"],["short_name","长城汽车"]],
+  note:"公司全称逐字取自本次记录中 601633 各篇公告的标题，证券简称取自记录里的主标签。exchange 与 aliases 未随本次记录返回，故不列出。"},
+ {id:"per0187",type:"person",name:"PER-0187",m:"e",eid:"PER-0187",psrc:"none",
+  props:[],
+  note:"Person 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录也只给出人物编号。"},
+ {id:"per0264",type:"person",name:"PER-0264",m:"e",eid:"PER-0264",psrc:"none",
+  props:[],
+  note:"Person 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录也只给出人物编号。"},
+ {id:"per0386",type:"person",name:"PER-0386",m:"e",eid:"PER-0386",psrc:"none",
+  props:[],
+  note:"Person 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录也只给出人物编号。"},
+ {id:"per0062",type:"person",name:"PER-0062",m:"e",eid:"PER-0062",psrc:"none",
+  props:[],
+  note:"Person 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录也只给出人物编号。"},
+ {id:"per0308",type:"person",name:"PER-0308",m:"e",eid:"PER-0308",psrc:"none",
+  props:[],
+  note:"Person 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录也只给出人物编号。"},
+ {id:"evt0001",type:"event",name:"EVT-0001",sub:"股权激励 · 行权",m:"e",eid:"EVT-0001",psrc:"api",
   props:[["event_type","股权"],["event_time",null],["event_id","EVT-0001"],
          ["event_name","2023年股票期权激励计划首次授予股票期权第二个行权期开始行权"],
-         ["confidence",0.9],["description",null]]},
- {id:"pol0009",type:"policy",name:"POL-0009",m:"e",eid:"POL-0009",
-  props:[]},
- {id:"doc1001",type:"doc",name:"公告 · doc_id 1001",sub:"巨潮资讯网 · 2026-09-25",m:"e",eid:"1001",
+         ["confidence",0.9],["description",null]],
+  note:"六个键值逐字取自实体详情接口 GET /api/graph/entities/EVT-0001 的实测返回；event_time 与 description 接口返回为空，如实写「"+EMPTY+"」，不补写。"},
+ {id:"pol0009",type:"policy",name:"POL-0009",m:"e",eid:"POL-0009",psrc:"none",
+  props:[],
+  note:"Policy 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录只给出政策编号。"},
+ {id:"doc1001",type:"doc",name:"公告 · doc_id 1001",sub:"巨潮资讯网 · 2026-09-25",m:"e",eid:"1001",psrc:"record",
   props:[["title","长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告"],
          ["source","巨潮资讯网"],["publish_time","2026-09-25"],["doc_id","1001"],
-         ["url","https://static.cninfo.com.cn/finalpage/2026-09-25/1225581315.PDF"]]},
+         ["url","https://static.cninfo.com.cn/finalpage/2026-09-25/1225581315.PDF"]],
+  note:"该文档是实体证据库中 601633 的 8 篇支撑文档之一，也是 EVT-0001 的证据指向对象。category 未随本次记录返回，故不列出。"}
 ];
 // 边：16 条。m 字段＝该边属于哪套数据集（s＝会话载荷子图 / e＝实体证据图谱）。
 // 前 6 条是 v4 原值未改（2 条逐字取自接口返回的样例路径 src=载荷样例，4 条由同一次返回的实体
@@ -3390,41 +3136,25 @@ function docLink(id,cls){
 }
 
 /* ------------------------------------------------------------
-   5e. 实体证据库的**逐条明细**（v5.5 起只剩这一部分）
-       —— 只有 3 个实体有「逐篇文档清单」与「事件实体额外四项」的实测值，其余如实留空。
-       ⚠ 计数（面板四格 / ① 计数概览）一律由 EAPI 提供，本表不再自带 counts：
-         旧版这三条自带的 counts 与作者新给的实测值并不一致
-         （601633 旧 nbr 17 / 新 16，000001 旧 nbr 21 / 新 19），两份并存必然打架；
-         按作者口径统一取 EAPI 的新值，本表只负责它独有的逐篇清单与事件四项。
+   5e. 实体证据库：作者给出的三例实测计数（照抄，不改一个数）
+       ① 计数概览 ④ 事件实体额外四项 —— 只有这三例有实测值，
+       其余实体如实显示「—」，不推算、不填充。
    ------------------------------------------------------------ */
 var EVID={
- "601633":{docs:["1001","1068","1109","1169","1261","1327","1375","2015"],
+ "601633":{type:"company",counts:{nbr:17,rel:17,doc:8,chunk:13},
+   docs:["1001","1068","1109","1169","1261","1327","1375","2015"],
    docNote:"实体证据库实测 8 篇，已全部列出。"},
- "000001":{docs:["1337","1355","1274","1183"],
+ "000001":{type:"company",counts:{nbr:21,rel:21,doc:11,chunk:13},
+   docs:["1337","1355","1274","1183"],
    docNote:"实体证据库实测 11 篇；本页逐条给出的 4 篇来自本次返回的关系边，其余 7 篇未随本记录返回。"},
- "EVT-0001":{docs:["1001"],
+ "EVT-0001":{type:"event",counts:{nbr:4,rel:4,doc:1,chunk:2},
+   docs:["1001"],
    docNote:"实体证据库实测 1 篇，已列出。",
    event:{participants:[["601633","主体"]],issuer:null,policies:["POL-0009"],
      sources:[{doc:"1001",chunk:"1001000"},{doc:"1001",chunk:"1001001"}]}}
 };
-/* v5.5：计数一律取 EAPI（真实接口返回），EVID 只补「逐篇文档清单 / 事件四项」。
-   查表 key 用节点的 eid（真实 node_id），与面板、EAPI 是同一个口径，不再另设一张别名表。 */
-function evidOf(node){
-  var id=node.eid||node.id,e=EAPI[id];
-  if(!e) return null;
-  var x=EVID[id]||{};
-  return {counts:e.counts, degree:e.degree,
-          docsTotal:e.documents_total, chunksTotal:e.chunks_total,
-          docs:x.docs||[], event:x.event||null,
-          docNote:x.docNote||docNoteOf(e)};
-}
-/* 没有逐篇清单的实体：用接口给的 documents_total / chunks_total 生成一句如实的口径说明 ——
-   不编造篇目，也不留空。 */
-function docNoteOf(e){
-  return e.documents_total
-    ? "实体证据库实测 "+e.documents_total+" 篇（不同文本块 "+e.chunks_total+" 个）；本表只列出本次返回中逐条给出的关系边所涉文档，其余未随本记录返回。"
-    : "实体证据库对该实体的实测文档数为 0 篇；本表只列出本次返回中逐条给出的关系边所涉文档。";
-}
+var EVID_KEY={"pab":"000001","cy":"601633","evt0001":"EVT-0001"};
+function evidOf(node){var k=EVID_KEY[node.id];return k?EVID[k]:null}
 
 function ngon(r,n,rot){var p=[],i,a;for(i=0;i<n;i++){a=(rot+i*360/n)*Math.PI/180;p.push((Math.cos(a)*r).toFixed(2)+","+(Math.sin(a)*r).toFixed(2))}return p.join(" ")}
 function shapeSVG(type,r,op){
@@ -3716,12 +3446,6 @@ function mountGraph(host,opt){
       '</g>';
     });
     DS.nodes.forEach(function(n){
-      /* v5.4：孤立节点（deg 0）不在画布上渲染 —— 它们的坐标在内容空间里位于主包围盒之外
-         （dist=99 不参与 liveBB 适配，落在画布盒子下方约 350px），glyph 会被后面的
-         区块盖住、又因 n.on=false 被 refresh() 设成 pointer-events:none，真实鼠标永远打不到。
-         现在它们只在下方「孤立节点」列表里渲染一份真 .gnode（见 renderIso），
-         画布里的这一份不再生成，避免出现「看得见却点不到」的幽灵元素。 */
-      if(n.deg===0) return;
       out+='<g class="gnode" data-node="'+n.id+'" tabindex="0" role="button" transform="translate('+
         n.x.toFixed(1)+','+n.y.toFixed(1)+')" '+
         'aria-label="'+TYPE[n.type].n+'节点 '+n.label+'，连接数 '+n.deg+'">'+
@@ -3735,7 +3459,6 @@ function mountGraph(host,opt){
     svg.innerHTML=out+'</g>';
     groot=svg.querySelector(".groot");
     DS.nodes.forEach(function(n){
-      if(n.deg===0){ n.el=null;n.lel=null;return }      // v5.4：画布里不生成，交给 renderIso()
       n.el=svg.querySelector('[data-node="'+n.id+'"]');
       n.lel=svg.querySelector('[data-lbl="'+n.id+'"]');
     });
@@ -3766,14 +3489,6 @@ function mountGraph(host,opt){
       n.on=on;
       if(!n.el) return;
       n.el.classList.toggle("sel",!!(S.sel&&S.sel.id===n.id));
-      /* v5.4：孤立节点不在画布视图内 —— 它渲染在下方「孤立节点」列表里，
-         不受类型筛选/深度/时间区间的可见性状态机约束：不压暗、不隐藏、永远可点。
-         （n.on 本身仍为 false，所以 liveBB 适配与遮挡自检的行为与 v5.3 完全一致。） */
-      if(n.deg===0){
-        n.el.classList.remove("dim");n.el.classList.remove("out");
-        n.el.style.pointerEvents="";n.el.setAttribute("aria-hidden","false");
-        return;
-      }
       n.el.classList.toggle("dim",on&&hasHot&&adj[n.id]!==1);
       n.el.classList.toggle("out",!on);
       n.el.style.pointerEvents=on?"":"none";
@@ -3830,54 +3545,29 @@ function mountGraph(host,opt){
     pathsBox.innerHTML=out;
   }
 
-  /* v5.4：孤立节点的**唯一**呈现处。列表项是真 <button>，里面放的是真 .gnode
-     （.ghit 命中圈 + shape + halo）—— 图形与命中面是同一个元素，不存在「看得见点不到」。
-     点它走的是与画布节点完全相同的 pick()：选中态标识、实体档案、本视图关系、
-     三条取消出口，全部照旧。原有说明文字（「未出现邻接边」）一字未删。 */
   function renderIso(){
     if(!isoBox) return;
     var iso=DS.nodes.filter(function(n){return n.deg===0});
     if(icount) icount.textContent=iso.length+" 个 · 连接数 0";
     isoBox.innerHTML=iso.length?iso.map(function(n){
-      var sel=!!(S.sel&&S.sel.id===n.id);
-      return '<button class="giso__i'+(sel?" is-sel":"")+'" type="button" '+
-          'data-iso="'+n.id+'" aria-pressed="'+(sel?"true":"false")+'" '+
-          'aria-label="孤立节点 '+n.label+' · '+TYPE[n.type].n+'，点选查看属性">'+
-        '<svg class="giso__g" viewBox="-11 -11 22 22" aria-hidden="true">'+
-          '<g class="gnode" data-node="'+n.id+'">'+
-            '<circle class="ghit" r="10"/>'+
-            '<circle class="halo" r="8.6"/>'+
-            shapeSVG(n.type,7,0.3)+
-          '</g>'+
-        '</svg>'+
-        '<span><span class="giso__n">'+n.label+(n.sub?' · '+n.sub:'')+' · '+TYPE[n.type].n+'</span>'+
-        '<span class="giso__d">该节点在本次返回的图谱路径中未出现邻接边。事件时间 '+
-          (n.time?n.time:EMPTY)+'。</span></span></button>';
+      return '<div class="giso__i">'+
+        '<svg viewBox="-11 -11 22 22" aria-hidden="true">'+shapeSVG(n.type,7,0.3)+'</svg>'+
+        '<div><div class="giso__n">'+n.label+(n.sub?' · '+n.sub:'')+' · '+TYPE[n.type].n+'</div>'+
+        '<div class="giso__d">该节点在本次返回的图谱路径中未出现邻接边。事件时间 '+
+          (n.time?n.time:EMPTY)+'。</div></div></div>';
     }).join(""):'<div class="giso__d">本数据集里没有孤立节点。</div>';
-    iso.forEach(function(n){
-      n.el=isoBox.querySelector('.gnode[data-node="'+n.id+'"]');
-      n.lel=null;                       // 标签由列表项文字承担，planLabels/selfCheck 会自动跳过
-    });
   }
 
   /* v5.2：属性面板 ——
      块①「实体档案」直接渲染实体详情接口的 properties：接口返回什么键就显示什么键
-       （顺序＝该实体的 property_keys，高价值键置顶），**没返回的键不显示、不派生、不推测**；
+       （顺序＝property_keys，高价值键置顶），**没返回的键不显示、不派生、不推测**；
        返回了但值为空的如实写 EMPTY，并在键下注明「本节点该属性在本次记录中为空」。
-     块②「本视图关系」是**数据集的画布局部视图**（度 / 距中心 / 邻接关系），与块①口径不同，故分块。
-
-     v5.5 改了块①的**取值来源**：不再读 GNODES 里那几个手写的 props，改为直接读 EAPI
-     （＝作者逐个取回的 GET /api/graph/entities/{id} 真实返回，19 个实体覆盖全部 21 个节点）。
-     键序＝EAPI 里该实体的 property_keys（接口自己给的顺序），EAPI_HOT 仍按 v5.2 的既定规则置顶。
-     原先「只有 4 个实体有接口数据、其余显示 —（空）」的状况到此结束。 */
-  function apiOf(n){return EAPI[n.eid||n.id]||null}
+     块②「本视图关系」是**数据集的画布局部视图**（度 / 距中心 / 邻接关系），与块①口径不同，故分块。 */
   function propOrder(n){
-    var e=apiOf(n);if(!e)return [];
     var hot=EAPI_HOT[n.type]||[],seen={},out=[],i;
-    for(i=0;i<hot.length;i++){
-      if(e.properties[hot[i]]!==undefined){out.push([hot[i],e.properties[hot[i]]]);seen[hot[i]]=1}
-    }
-    e.property_keys.forEach(function(k){if(!seen[k])out.push([k,e.properties[k]])});
+    var find=function(k){var r=null;n.props.forEach(function(p){if(p[0]===k)r=p});return r};
+    for(i=0;i<hot.length;i++){var r=find(hot[i]);if(r){out.push(r);seen[hot[i]]=1}}
+    n.props.forEach(function(p){if(!seen[p[0]])out.push(p)});
     return out;
   }
   function propVal(k,v){
@@ -3897,12 +3587,12 @@ function mountGraph(host,opt){
     var rows=propOrder(n),rec=evidOf(n),cnts=rec?rec.counts:null;
     /* 接口路径里要用**实体 id**（不是画布节点 id）：company 用证券代码、event 用 EVT-xxxx、
        doc 用文档号。n.eid 逐条写死在 GNODES 里，不在这里现推。 */
-    var EID=n.eid||n.id,e=apiOf(n);
-    /* v5.5：来源说明改为按「该 id 在不在 EAPI 里」判定 —— EAPI 就是这篇原型内置的全部真实返回，
-       不再有「样本只有四例」的过渡口径。 */
-    var SRC=e
+    var EID=n.eid||n.id;
+    var SRC=n.psrc==="api"
       ? '实体详情接口 <b>GET /api/graph/entities/'+EID+"</b> 的实测返回"
-      : "实体详情接口（该实体不在本版内置的实测返回里；接口可用时应取 <b>GET /api/graph/entities/"+EID+"</b>）";
+      : (n.psrc==="record"
+          ? "本次记录原文（该实体未纳入实体详情接口实测样本；接口可用时应取 <b>GET /api/graph/entities/"+EID+"</b>）"
+          : "实体详情接口（该类型键名后端补测中，本原型不推测键名）");
     var cnt=function(k,v){
       var empty=(v===null||v===undefined);
       return "<div><dt>"+k+'</dt><dd'+(empty?' class="is-empty"':"")+">"+(empty?EMPTY:v)+"</dd></div>";
@@ -3927,31 +3617,18 @@ function mountGraph(host,opt){
           : '<p class="gvp--none">'+TYPE[n.type].n+
             " 类的属性键名以实体详情接口实返为准，后端补测中 —— 本原型不推测键名，故此块暂无字段。下方「本视图关系」不受影响。</p>")+
         '<p class="gsrc" style="margin-top:10px">属性来源：'+SRC+"。"+
-          (rows.length?"属性值原样取自图谱，未派生；键序＝该实体的 property_keys。":"本块暂无字段可渲染，故无值可展示。")+"</p>"+
-        '<p class="gsrc" style="margin-top:4px">'+(e
-          ? "本版内置了 <b>19 个实体</b>的接口真实返回（<b>GET /api/graph/entities/{id}</b>），覆盖两个数据集里的全部 21 个节点，本节点在其中。"
-          : "本节点不在内置的实测返回里，上面各键逐字取自本次记录原文，不冒充接口返回。")+"</p>"+
-        /* v5.5：Person / Institution / Policy 三类在图谱里只有 2 个自有属性 —— 如实说明，不用推测字段凑数 */
-        ((n.type==="person"||n.type==="org"||n.type==="policy")&&rows.length
-          ? '<p class="gsrc" style="margin-top:4px">本类实体在图谱中仅存 <b>'+rows.length+
-            " 个自有属性</b>；它的"+TYPE[n.type].n+"信息主要体现在<b>关系与证据</b>中（见下方「本视图关系」与「实体证据」区）。</p>"
-          : "")+
-        /* v5.5：接口 degree（全图）与块②的画布局部度数口径不同，两块都保留、各自标注、不合并 */
-        (e?'<div class="gblkH" style="margin:14px 0 0;padding-top:13px;border-top:1px solid var(--border)">'+
-            '<span class="label">接口 degree · 全图度数</span>'+
-            '<span class="gsrc">GET /api/graph/entities/'+EID+"</span></div>"+
-          '<dl class="gkv"><div class="kv"><dt>入 / 出 / 度<span>接口按全图统计</span></dt>'+
-            '<dd class="mono">'+e.degree.in_+" / "+e.degree.out+" / "+e.degree.total+"</dd></div></dl>"+
-          '<p class="gsrc" style="margin-top:9px">这是该实体在<b>全图</b>里的度数；下方「本视图关系」的度是<b>当前数据集画布局部</b>的度数。两块口径不同，各自标注、不相互换算。</p>'
-          : "")+
+          (rows.length?"属性值原样取自图谱，未派生。":"本块暂无字段可渲染，故无值可展示。")+"</p>"+
+        '<p class="gsrc" style="margin-top:4px">'+(n.psrc==="api"
+          ? "演示数据取自 <b>GET /api/graph/entities/{id}</b> 的真实返回。"
+          : "本原型内置的接口实测样本只有 000001 / EVT-0001 / 1037 / IND-0069 四例（取自 <b>GET /api/graph/entities/{id}</b> 的真实返回）；本节点不在样本内，上面各键逐字取自本次记录原文，不冒充接口返回。")+"</p>"+
+        (n.note?'<p class="gnote" style="font-size:11px">'+n.note+"</p>":"")+
         /* 计数：来自实体证据接口，与块②的画布局部视图不是一回事 */
         '<div class="gblkH" style="margin:14px 0 0;padding-top:13px;border-top:1px solid var(--border)">'+
           '<span class="label">实体证据计数</span></div>'+
         '<dl class="gcount">'+cnt("邻居",cnts?cnts.nbr:null)+cnt("关系",cnts?cnts.rel:null)+
           cnt("涉及文档",cnts?cnts.doc:null)+cnt("不同文本块",cnts?cnts.chunk:null)+"</dl>"+
         '<p class="gsrc" style="margin-top:9px">计数来源：<b>实体证据接口</b>（与下方「实体证据」区 ① 同源）。'+
-          (cnts?"本版 19 个实体的四格计数全部为该接口的实测值，无一处留空。"
-               :"该实体不在本版内置的实测返回里，如实留 "+EMPTY+"，不推算。")+"</p>"+
+          (cnts?"":"本原型只对 601633 / 000001 / EVT-0001 三例实测并给出计数，其余如实留 "+EMPTY+"，不推算。")+"</p>"+
       "</section>"+
 
       /* —— 块② 本视图关系（数据集的画布局部视图） —— */
@@ -4032,8 +3709,8 @@ function mountGraph(host,opt){
 
   /* ============================================================
      实体证据区（v5 新增）—— 选中实体后在画布下方给出四块完整证据
-     ①②③ 用「会话载荷 ∪ 实体证据库」的全部真实边；① 的四格计数与属性面板同源，
-     v5.5 起一律取 EAPI（19 个实体全覆盖，不再有「—」）；④ 只有 EVT-0001 有实测明细。
+     ①②③ 用「会话载荷 ∪ 实体证据库」的全部真实边；①④ 的实测计数
+     只有 601633 / 000001 / EVT-0001 三例，其余如实显示「—」。
      ============================================================ */
   function relationsOf(id){
     var out=[];
@@ -4070,7 +3747,7 @@ function mountGraph(host,opt){
       '</div><p class="gnote">'+(c?
         '以上四项为实体证据库对该实体的实测值，原样照抄。'+
         '本页画布与下方关系表只展开本次返回中逐条给出的关系，二者口径不同，不相互换算。'
-        :'该实体不在本版内置的实测返回里，如实留「—」，不推算、不填充。')+
+        :'本原型只对 601633 / 000001 / EVT-0001 三个实体做了实测并给出计数；其余实体如实留「—」，不推算、不填充。')+
       '</p></section>';
 
     /* ② 关系证据表 */
@@ -4128,7 +3805,7 @@ function mountGraph(host,opt){
           '<td>'+docLink(id)+'</td></tr>';
       }).join(""):'<tr><td colspan="5" class="gev__gap">本次返回里没有与该实体关联的文档。</td></tr>')+
       '</tbody></table></div>'+
-      '<p class="gnote">'+(rec?rec.docNote:"该实体不在本版内置的实测返回里；上表按本次返回的关系边反推，逐条可点。")+
+      '<p class="gnote">'+(rec?rec.docNote:"该实体没有实测的文档计数；上表按本次返回的关系边反推，逐条可点。")+
       (docIds.length?' 文档编号按文档去重列出，同一文档的多个文本块只计一行。':'')+'</p></section>';
 
     /* ④ 事件实体额外四项 */
@@ -4319,18 +3996,6 @@ function mountGraph(host,opt){
     /* v5.3：把该数据集**自带**的锚点一并传进去（会话子图是 "pab"；实体证据图谱没有声明锚点，
        传 null，由锚点规则③「度最高的节点」确定性兜底）。 */
     setDataset(cloneDS(m==="s"?GDS_S:GDS_E), m==="s"?"pab":null);
-  });
-  /* v5.4：点孤立节点列表（图形或整行）＝ 选中该实体，与画布节点同一条代码路径 pick()。
-     整行可点是为了把命中面从 16px 的 glyph 放大到整行 —— 图形与命中面仍然一致，没有错位。 */
-  if(isoBox) isoBox.addEventListener("click",function(e){
-    if(!e.target.closest) return;
-    var g=e.target.closest(".gnode");
-    if(g&&g.getAttribute("data-node")){ pick(g); return }
-    var b=e.target.closest("[data-iso]");
-    if(!b) return;
-    var n=DS.idx[b.getAttribute("data-iso")];
-    if(!n) return;
-    S.edge=null;S.path=null;S.sel=n;S.userCleared=false;refresh();
   });
   if(pbody) pbody.addEventListener("click",function(e){
     /* v5.2：面板上的「取消选中」按钮 —— 明确的一条取消出口（另有 Esc 与点画布空白） */
