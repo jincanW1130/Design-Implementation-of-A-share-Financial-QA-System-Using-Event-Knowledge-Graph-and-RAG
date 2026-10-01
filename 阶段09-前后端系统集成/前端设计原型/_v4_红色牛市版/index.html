@@ -179,73 +179,7 @@
         （语料截止 2026-09-25 前 7 天）不符，故不并入该块，直接移除。
         其余（视觉语言／四屏／图谱／回看口径标注／实时区三块两态／红绿令牌）一律未动。
 
-  ▍九、本版（v5）相对 v4 的改动（逐条对应作者两条意见）
-   v5 只动两件事：① 知识图谱「有遮挡」——按六类措施系统性解决；② 每个实体展示的证据不足——
-   在画布下方新增通栏「实体证据区」四块。其余（视觉语言、四屏与吸顶导航、答案四段与那句
-   「本次回答未使用图谱扩展」、证据 8 条真实外链与「按当时记录的路径载荷还原 · 不重新查询图谱」、
-   实时区三块与两态、单文件零外部依赖、1440px 无横向滚动）一律未动。
-
-   ▍九·一、去遮挡用了哪六条措施
-     措施① 布局避让，不随机撒点（新增 layout()）：确定性分层环形 —— 选中／中心实体置圆心，
-           1 跳邻居在内环、2 跳在外环、依此类推；同环节点严格等角 θ = 2πk/n，环半径随环数递增。
-           节点半径按度分级但钳在 14～30px（radiusOf()：14 + 度×2.6，公司 +2），高度数节点不会
-           吞掉邻居。同环相邻节点设最小弧距（弧长 ≥ 两半径之和 + 标签预留），并取解析下界
-           rmin = need / (2·sin(π/n))；不满足就把该环半径放大 8% 重排，最多 40 轮，
-           直到「节点圆两两 + 标签矩形两两」的精确相交测试全部通过为止。
-     措施② 标签不许糊在一起（新增 planLabels()）：默认只给高优先级节点永久标签 —— 选中节点
-           （优先级 3）、它的直接邻居（优先级 2）、同环度数 Top-K（优先级 1），总数封顶 13／10；
-           其余节点无永久标签，悬停即亮。每个标签带 paint-order:stroke 描边光晕保证可读；
-           对所有已显示标签做**矩形两两相交测试**，冲突时隐藏优先级较低的那个，并在画布下方状态条
-           写「已隐藏 N 个标签（悬停查看）」。名称超过 14 字符截断加省略号（trunclbl()），
-           完整名在属性面板与 <title> 悬停提示里。
-     措施③ 面板与图例不许压住节点：属性面板从绝对定位浮层改为 .gwrap 栅格里的**独立右列**
-           （minmax(0,1fr) 348px），与画布并排；窄屏 ≤1023px 落为单列堆叠。图例与工具条从画布
-           角落浮层改为画布**上方的横向条**（.glegendBar / .gtop）。画布安全边距 SAFE = 9%（≥8%），
-           fit-to-view 时按 (1 - 2×SAFE) 缩放，任何浮层都不覆盖绘图区。原 .glegendBox / .gzctl /
-           .gzoomv 三处绝对定位浮层已从 CSS 与 DOM 中移除。
-     措施④ 边与边的标签：边**默认不显示文字**（.gelabel 基态 opacity:0），只在悬停或选中该边时
-           显示「中文关系名 ＋ 置信度」；同一对节点间的多条关系用二次贝塞尔按 ±24px 步长曲率分叉
-           （buildEdgeOffsets()，反向边符号翻转让平行边不重合）；边从节点圆边缘起止
-           （起点 +r+3、终点 −r−10），绝不画进节点内部。
-     措施⑤ 自适应与微调：初始 fit-to-view（fitView()，内容包围盒按 (1-2×SAFE) 缩放进画布并居中）；
-           提供「适应窗口」与「重置」按钮；滚轮以光标为锚点缩放（zoomAt()，0.4×～3.2×）、
-           拖拽空白平移；**节点可拖动**（pointerdown/pointermove）且相接的边与边标签实时跟随
-           （moveNode()）。所有这些控件都在画布之外的工具栏里。
-     措施⑥ 遮挡可核验（新增 selfCheck()）：每帧对当前渲染出的所有节点圆做两两圆心距 vs 半径和检测、
-           对所有已显示标签矩形做两两相交检测，把**真实计数**写进画布下方的状态条：
-           「遮挡自检：节点重叠 N ／ 标签重叠 M · 可见标签 x/y · 已隐藏 z 个标签（悬停查看）」。
-           该行位于画布之外（不压绘图区），数字来自实际几何计算，消不掉就如实显示，不写 0 糊弄。
-     · 配套：新增「实体证据图谱」数据集（11 节点 / 11 边）与屏③顶部的数据集分段控件；
-       「会话子图」（10 节点 / 6 边，与 v4 完全一致）仍是默认视图，故屏②「本页节点 · 边 10 · 6」
-       与「10 个节点、6 条边」那句话仍然成立。两套数据集共用同一渲染器、图例、自检与准确性声明。
-       历史回看固定用「会话子图」（modes:false，不显示切换控件）。
-       时间轴改为跟随当前数据集取值（G3.ds().nodes），切数据集即重算。
-
-   ▍九·二、实体证据区新增了哪四块（画布下方通栏，选中实体即出）
-     ① 计数概览 —— 实体证据库的实测四元组，照抄不改：邻居／关系／涉及文档／不同文本块。
-        601633 长城汽车：17 ／ 17 ／ 8 ／ 13；000001 平安银行：21 ／ 21 ／ 11 ／ 13；
-        EVT-0001：4 ／ 4 ／ 1 ／ 2。其余实体如实显示「—」，不推算、不填充。
-     ② 关系证据表 —— 该实体在「会话载荷 ∪ 实体证据库」里的每一条关系，逐行给出
-        中文关系名／对端实体／role／confidence／source_doc_id／source_chunk_id，
-        并配两个动作：「查看原文 ↗」＝该块所属文档的真实 document.url 外链；
-        「查看上下文」＝展开该块的正文片段（对应真实接口
-        GET /api/documents/{doc_id}/chunks/{chunk_id}，含 chunk_content 与 neighbor_chunks）。
-     ③ 文档聚合 —— 该实体的支撑文档按 doc_id 去重，逐行给出标题／来源站／发布日期／
-        支撑的关系数／「查看原文 ↗」。601633 的 8 篇（1001／1068／1109／1169／1261／1327／
-        1375／2015）为作者逐字给出的真实文档，URL 全部照抄。
-     ④ 事件实体额外四项 —— 仅事件节点出现：参与者（含 role）／发布机构／相关政策／
-        多来源证据按发布时间升序（多来源去重，最早一份标「主要来源」）。
-        EVT-0001：参与者 1（601633，role=主体）／发布机构 —（空）／相关政策 1（POL-0009）／
-        多来源证据 2 条（同为 doc 1001 的文本块 1001000 与 1001001，去重后 1 个来源）。
-     ⑤ 缺口如实说明（每块下方的小字）——不带证据属性的关系类型（EVIDENCED_BY）在表里整行显示
-        「—（该关系类型不带证据属性）」，不留空、不编造；标题／来源站／日期缺失显示「—（未给出）」；
-        正文片段不在单文件里，chunk_content 如实留空，neighbor_chunks 只用本次返回里真实出现的
-        相邻块编号。
-     · 数据边界（照作者口径）：本原型只对 601633 / 000001 / EVT-0001 三个实体做了实测并给出计数；
-       其余实体与文档如实留白。实体证据表的「关系数」只列本次返回里逐条给出的关系，与①的
-       实体级实测总量口径不同，两处不做换算。
-
-  ▍十、数据说明
+  ▍九、数据说明
    本原型分三类文字，界面上一律分开放置、不互相冒充：
      · 真实记录 —— 证据条目、图谱路径、事件三元组、判定区间、数据版本与截止时间，
        取自 ashare_qa 六表的一次真实问答输出，原样呈现。
@@ -832,78 +766,48 @@ body[data-market="on"]  .mk-off{display:none!important}
 .gedge{transition:stroke-width .2s var(--ease),stroke-opacity .2s var(--ease),stroke .2s var(--ease)}
 .gedge.hot{stroke:var(--accent);stroke-opacity:1}
 
-/* --- 图谱画布：缩放与平移（v5：控件全部移出画布，不再有绝对定位浮层） --- */
+/* --- 图谱画布：缩放与平移 --- */
 .gcanvasWrap svg{touch-action:none;user-select:none;cursor:grab}
 .gcanvasWrap svg.panning{cursor:grabbing}
-.gcanvasWrap svg .gnode{cursor:grab}
-.gcanvasWrap svg .gnode.dragging{cursor:grabbing}
-.gcanvasWrap svg .gnode.dragging .shape{stroke:#fff;stroke-width:2.2}
-/* 画布下方的状态条：遮挡自检结果 —— 位于画布之外，不压绘图区 */
-.gstatus{position:relative;display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-  padding:9px 14px;border-top:1px solid var(--border);background:rgba(15,15,16,.72);
-  font-family:var(--f-mono);font-size:10.5px;color:var(--faint)}
-.gstatus__i{display:inline-flex;align-items:center;gap:5px}
-.gstatus__i+.gstatus__i::before{content:"·";margin-right:5px;color:var(--border)}
-.gstatus__i--key{color:var(--muted)}
-.gstatus b{font-weight:500;color:var(--fg);font-variant-numeric:tabular-nums}
-.gstatus__i--key b{color:var(--accent-ink)}
+.gzctl{position:absolute;right:12px;top:12px;z-index:3;display:flex;flex-direction:column;gap:6px}
+.gzbtn{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:rgba(15,15,16,.84);
+  color:var(--muted);font-family:var(--f-mono);font-size:15px;line-height:1;display:grid;place-items:center;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  transition:border-color .25s var(--ease),color .25s var(--ease),background .25s var(--ease)}
+.gzbtn:hover{border-color:var(--accent-line);color:var(--fg);background:var(--accent-soft)}
+.gzbtn--wide{width:30px;font-size:10px;letter-spacing:.02em}
+.gzoomv{position:absolute;right:12px;bottom:12px;z-index:3;font-family:var(--f-mono);font-size:10.5px;
+  color:var(--faint);background:rgba(15,15,16,.72);border:1px solid var(--border-soft);border-radius:6px;padding:3px 7px}
 
-/* --- v5：图例横条移出画布，位于画布正上方（措施③） --- */
-.gtop{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:10px}
-.gtop--mode{margin-bottom:8px}
-.glegendBar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px;
-  padding:11px 14px;border-radius:var(--r-md);border:1px solid var(--border);background:rgba(255,255,255,.022)}
-.glegendBar__t{flex:none}
+/* --- 画布角落：可读图例（形状＋中文名＋本次计数＋边编码规则） --- */
+.glegendBox{position:absolute;left:14px;top:14px;z-index:3;width:262px;
+  background:rgba(13,13,14,.91);border:1px solid var(--border);border-radius:12px;padding:12px 13px 11px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.glegendBox__t{display:block;margin-bottom:9px}
 .glg{display:flex;flex-direction:column;gap:5px}
-.glg--row{flex-direction:row;flex-wrap:wrap;gap:7px 15px;align-items:center;min-width:0}
 .glg__i{display:grid;grid-template-columns:16px minmax(0,1fr) auto;align-items:center;gap:9px;
   font-size:11.5px;color:var(--muted)}
-.glg--row .glg__i{grid-template-columns:15px auto auto;gap:6px}
 .glg__i svg{width:16px;height:16px;display:block}
-.glg--row .glg__i svg{width:15px;height:15px}
 .glg__i b{font-weight:500;color:var(--fg)}
 .glg__i em{font-style:normal;font-family:var(--f-mono);font-size:10.5px;color:var(--faint)}
 .glg__i[data-zero="1"]{opacity:.48}
-.glg__rule{flex-basis:100%;margin-top:4px;padding-top:10px;border-top:1px solid var(--border-soft);
-  font-size:10.5px;line-height:1.75;color:var(--faint)}
+.glg__rule{margin-top:10px;padding-top:9px;border-top:1px solid var(--border-soft);
+  font-size:10.5px;line-height:1.65;color:var(--faint)}
 .glg__rule i{font-style:normal;font-family:var(--f-mono);color:var(--muted)}
 .glg__rule b{color:var(--muted);font-weight:500}
-/* 画布工具条上的小按钮（缩放 − / ＋） */
-.gchip{height:28px;min-width:28px;padding:0 9px;border-radius:8px;border:1px solid var(--border);
-  background:rgba(255,255,255,.03);color:var(--muted);font-size:12px;line-height:1;
-  display:inline-flex;align-items:center;justify-content:center;gap:6px;
-  transition:border-color .25s var(--ease),color .25s var(--ease),background .25s var(--ease)}
-.gchip:hover{border-color:var(--accent-line);color:var(--fg);background:var(--accent-soft)}
-.gchip--icon{font-family:var(--f-mono);font-size:15px}
-.chip--mini{height:26px;padding:0 10px;font-size:11.5px;color:var(--muted);
-  border:1px solid var(--border);background:rgba(255,255,255,.03);border-radius:8px;
-  transition:border-color .25s var(--ease),color .25s var(--ease)}
-.chip--mini:hover{border-color:var(--accent-line);color:var(--fg)}
-.chip__n{font-style:normal;font-family:var(--f-mono);font-size:10.5px;color:var(--faint);margin-left:2px}
 
 /* --- 有向边 / 键盘焦点 --- */
 .gedge{pointer-events:none}
 .gehit{stroke:transparent;stroke-width:14;fill:none;cursor:pointer}
-/* 节点命中区：必须透明，否则会盖住节点形状（默认 fill 是黑色） */
-.ghit{fill:transparent;stroke:none}
 .gnode:focus,.geline:focus{outline:none}
 .gnode .halo{fill:none;stroke:var(--accent);stroke-width:1.2;opacity:0;transition:opacity .2s var(--ease)}
 .gnode:focus-visible .halo,.gnode:hover .halo{opacity:.85}
 .gnode:focus-visible .shape{stroke:#fff;stroke-width:2.4}
 .geline:focus-visible .gedge{stroke:var(--accent);stroke-width:2.6;opacity:1}
 .geline{cursor:pointer}
-/* v5 措施④：边默认不显示任何文字，只在悬停 / 选中该边时出现「中文关系名 ＋ 置信度」 */
-.gcanvasWrap .gelabel{opacity:0;transition:opacity .18s var(--ease)}
+.gelabel{opacity:.9}
 .gelabel.on{opacity:1;fill:var(--accent-ink)}
-/* v5 措施②：节点标签默认只给高优先级（选中节点 + 其直接邻居 + 度数 Top-K）；
-   其余无永久标签，悬停即可看到（指针进入节点组 → 该节点标签亮起） */
-.gcanvasWrap .glabel{opacity:0;transition:opacity .18s var(--ease)}
-.gcanvasWrap .glabel.on{opacity:1}
-.gcanvasWrap .gnode:hover .glabel{opacity:1}
-.gcanvasWrap .gnode.sel .glabel{opacity:1}
-.gcanvasWrap .gnode.out .glabel{opacity:0}
 .gnode .deg{font-family:var(--f-mono);font-size:8.5px;fill:var(--faint)}
-.gdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:baseline}
 
 /* --- 工具栏：分段控件 --- */
 .seg{display:inline-flex;padding:3px;border-radius:9px;border:1px solid var(--border);background:rgba(255,255,255,.03)}
@@ -952,76 +856,6 @@ body[data-market="on"]  .mk-off{display:none!important}
 .gacc b{font-family:var(--f-mono);font-weight:500;color:var(--fg);font-variant-numeric:tabular-nums}
 .gnote{font-size:11.5px;line-height:1.68;color:var(--faint);max-width:108ch}
 .gnote i{font-style:normal;font-family:var(--f-mono);color:var(--muted)}
-.gnote--wide{max-width:none;margin-top:14px}
-.gwrap--lists{margin-top:20px}
-
-/* ============================================================
-   v5 新增：实体证据区（画布下方、通栏）—— 选中实体后给出四块完整证据
-   ① 计数概览 ② 关系证据表 ③ 文档聚合 ④ 事件实体额外四项（⑤ 缺口说明）
-   ============================================================ */
-.gev{margin-top:20px;padding:22px;border-radius:var(--r-lg);border:1px solid var(--border);
-  background:linear-gradient(180deg,rgba(22,24,28,.9),rgba(15,15,16,.9))}
-.gev__head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;
-  padding-bottom:16px;border-bottom:1px solid var(--border)}
-.gev__kind{font-style:normal;font-family:var(--f-mono);font-size:12px;color:var(--accent-ink);
-  border:1px solid var(--accent-line);border-radius:999px;padding:2px 9px;margin-left:10px;vertical-align:3px}
-.gev__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:18px}
-.gev__blk{border:1px solid var(--border-soft);border-radius:var(--r-md);padding:16px;
-  background:rgba(255,255,255,.018);display:flex;flex-direction:column;gap:12px;min-width:0}
-.gev__blk--wide{grid-column:1/-1}
-.gev__blkH{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.gev__blkH .label{flex:none}
-.gev__blk .gnote{margin:0}
-.gev__empty{padding:8px 0}
-.gstat4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.gstat{display:flex;flex-direction:column;gap:5px;padding:12px 13px;border-radius:10px;
-  border:1px solid var(--border-soft);background:rgba(255,255,255,.03)}
-.gstat b{font-family:var(--f-mono);font-size:24px;font-weight:500;line-height:1;color:var(--fg);
-  font-variant-numeric:tabular-nums}
-.gstat i{font-style:normal;font-size:10.5px;color:var(--faint)}
-.gstat em{font-style:normal;font-size:20px;color:var(--faint)}
-
-/* ② 关系证据表 / ③ 文档聚合 / ④ 多来源证据：同一套表格语言 */
-.gev__tblWrap{overflow-x:auto;border:1px solid var(--border-soft);border-radius:10px;
-  -webkit-overflow-scrolling:touch}
-.gev__tbl{width:100%;border-collapse:collapse;min-width:760px}
-.gev__tbl th{position:sticky;top:0;text-align:left;padding:10px 12px;white-space:nowrap;
-  font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:500;
-  background:rgba(20,22,26,.96);border-bottom:1px solid var(--border)}
-.gev__tbl td{padding:11px 12px;border-bottom:1px solid var(--border-soft);vertical-align:top;
-  font-size:12.5px;color:var(--fg);line-height:1.5}
-.gev__tbl tr:last-child td{border-bottom:0}
-.gev__tbl tbody tr:hover td{background:rgba(255,255,255,.02)}
-.gev__tbl td.mono,.gev__tbl .mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:12px}
-.gev__tbl td.k b{display:block;font-weight:500}
-.gev__tbl td.k em{display:block;font-style:normal;font-family:var(--f-mono);font-size:10.5px;
-  color:var(--faint);margin-top:3px;line-height:1.5}
-.gev__dir{font-style:normal;font-family:var(--f-mono);font-size:10px;color:var(--faint);
-  margin-left:8px;border:1px solid var(--border-soft);border-radius:5px;padding:1px 5px}
-.gev__gap{color:var(--faint);font-style:normal;font-family:var(--f-body);font-size:11.5px;line-height:1.6}
-.gev__acts{white-space:nowrap;display:flex;gap:7px;align-items:center;flex-wrap:wrap}
-.gev__ctxrowWrap>td{padding:0;border-bottom:1px solid var(--border-soft);background:rgba(0,0,0,.22)}
-.gev__ctxrowWrap[hidden]{display:none}
-.gev__ctx{padding:14px 16px;display:flex;flex-direction:column;gap:9px}
-.gev__ctxrow{display:grid;grid-template-columns:118px minmax(0,1fr);gap:12px;align-items:baseline;
-  font-size:11.5px;line-height:1.62}
-.gev__ctxrow>span{color:var(--faint);letter-spacing:.1em;text-transform:uppercase;font-size:10px}
-.gev__ctxrow i{font-style:normal;font-family:var(--f-mono);color:var(--muted);word-break:break-all}
-.gev__ctxnote{font-size:10.5px;line-height:1.65;color:var(--faint);padding-top:9px;
-  border-top:1px solid var(--border-soft)}
-.gev__kv4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.gev__kv4>div{padding:12px 13px;border-radius:10px;border:1px solid var(--border-soft);background:rgba(255,255,255,.03)}
-.gev__kv4 p{margin:8px 0 0;font-size:13px;color:var(--fg)}
-.gev__kv4 b{font-weight:500}
-.gev__role{font-style:normal;font-family:var(--f-mono);font-size:10.5px;color:var(--accent-ink);
-  border:1px solid var(--accent-line);border-radius:5px;padding:1px 6px;margin-left:7px}
-.gev__main{color:var(--accent-ink);font-weight:500;border:1px solid var(--accent-line);
-  border-radius:5px;padding:2px 7px;font-size:11px}
-.ev__dom{display:block;font-style:normal;font-family:var(--f-mono);font-size:10.5px;color:var(--faint);margin-top:3px}
-.gempty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
-  padding:44px 0;text-align:center;flex:1}
-.gempty svg{width:44px;height:44px;fill:var(--accent-deep);opacity:.5}
-.gempty p{font-size:12.5px;color:var(--faint);line-height:1.7;max-width:26ch}
 
 /* --- 证据卡：来源域名 + 原文外链 --- */
 .ev__src{display:grid;grid-template-columns:52px minmax(0,1fr);gap:9px;align-items:baseline;
@@ -1123,11 +957,10 @@ body[data-market="on"]  .mk-off{display:none!important}
   .hrow__nums{opacity:1;transform:none}
   .footer__top{grid-template-columns:1fr}
   .cursor{display:none}
-  /* v5：图例与工具条本来就在画布之外，窄屏不再需要任何回退；改为画布下的属性面板并排落下来 */
-  .gstat4,.gev__kv4{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .gev__grid{grid-template-columns:minmax(0,1fr)}
-  .gev{padding:18px}
-  .glg--row{gap:6px 12px}
+  /* v4：窄屏把画布角落图例放回文档流，避免遮挡图谱 */
+  .glegendBox{position:static;width:auto;border:0;border-radius:0;border-top:1px solid var(--border);
+              background:rgba(255,255,255,.02);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .gzctl{top:8px;right:8px}
   .rt__item{grid-template-columns:80px minmax(0,1fr);row-gap:6px}
   .rt__go{grid-column:2;justify-self:start}
   .rt__empty{flex-direction:column;align-items:flex-start;gap:12px}
@@ -1713,9 +1546,9 @@ body[data-market="on"]  .mk-off{display:none!important}
       <div class="sec__head-l">
         <span class="label">03 / 事件知识图谱</span>
         <h1 class="h1">从公司出发，把事件连成能走的路</h1>
-        <p class="body" style="max-width:70ch">节点按实体类型区分形状，半径按连接数分级（14～30px 钳位）；布局是确定性的分层环形——中心实体在圆心、1 跳内环、2 跳外环，同环等角分布，最小弧距不满足就迭代放大该环。边为有向箭头，<b>默认不显示文字</b>，悬停或选中才出现「中文关系名 ＋ 置信度」；线宽与透明度双编码 confidence。支持类型复选筛选、深度 1 跳／2 跳切换、按 event_time 的时间区间过滤，以及缩放、平移、适应窗口与一键重置。</p>
+        <p class="body" style="max-width:70ch">节点按实体类型区分形状，半径按连接数分级；边为有向箭头并标注中文关系名，线宽与透明度双编码 confidence。支持类型复选筛选、深度 1 跳／2 跳切换、按 event_time 的时间区间过滤，以及缩放、平移与一键重置。</p>
       </div>
-      <span class="label">两套数据集 · 会话子图 10 节点 / 6 边 · 实体证据图 11 节点 / 11 边</span>
+      <span class="label">会话 A7F3-0912 子图 · 本次返回 17 条路径 / 10 节点 / 6 边</span>
     </div>
 
     <!-- 图谱本体由 mountGraph() 渲染（与历史回看共用同一套渲染器 / 图例 / 准确性声明） -->
@@ -1738,14 +1571,9 @@ body[data-market="on"]  .mk-off{display:none!important}
 
     <p class="small reveal" style="margin-top:16px;max-width:106ch">
       时间轴只在记录里真正出现过的月份上取值：2026-07（最早证据 2026-07-03）～ 2026-09（数据截止 2026-09-25）。
-      过滤只作用于带 <span class="mono">event_time</span> 的节点与带 <span class="mono">publish_date</span> 的文档节点；
-      在<b>会话子图</b>里就是 EVT-0260／0823／0827 与 doc_id 1183，EVT-0236 的 <span class="mono">event_time</span> 在记录里为空，落不到轴上，不参与时间筛选，属性面板显示「—（空）」。
-      公司、人物、机构本身没有事件时间，同样不参与时间筛选、始终显示（是否在跳数范围内由上面的深度切换单独决定）。
+      过滤只作用于带 <span class="mono">event_time</span> 的节点（EVT-0260 / 0823 / 0827）与带 <span class="mono">publish_date</span> 的文档节点（doc_id 1183）；
+      EVT-0236 的 event_time 在记录里为空，落不到轴上，不参与时间筛选，属性面板显示「—（空）」。公司、人物、机构本身没有事件时间，同样不参与时间筛选、始终显示（是否在跳数范围内由上面的深度切换单独决定）。
       EVT-0236／EVT-0823／EVT-0827 在本次返回的 6 条边里确实没有邻接边——不是渲染缺失，它们已单列在「孤立节点」区。
-      切到<b>实体证据图谱</b>后时间轴自动跟随该数据集的节点取值，切换数据集即重算，不共用上一套的时间状态。
-    </p>
-    <p class="small reveal" style="margin-top:10px;max-width:106ch">
-      <b>去遮挡怎么做到、怎么核验</b>：① 半径 14～30px 钳位；② 标签只给高优先级节点（选中节点 + 直接邻居 + 度数 Top-K），并按矩形两两相交检测自动隐藏冲突项，画布下方状态条如实报出「已隐藏 N 个标签（悬停查看）」；③ 图例、工具条、属性面板全部移出绘图区（图例在上方横条、面板在右侧独立栅格列），画布留 ≥9% 安全边距；④ 同类多边用贝塞尔曲率分叉，边默认无文字；⑤ 初始 fit-to-view，可适应窗口／重置／滚轮缩放／拖拽平移，节点可拖动且边实时跟随；⑥ 脚本每帧对渲染出的节点圆与标签矩形做两两相交自检，结果打印在画布下方的状态条里——<b>消不掉就如实显示真实数字，不写 0</b>。
     </p>
   </div>
 </section>
@@ -1818,7 +1646,7 @@ body[data-market="on"]  .mk-off{display:none!important}
     </div>
     <div class="footer__bottom">
       <p class="footer__legal">本原型的证据条目、图谱路径、事件三元组、数据版本与截止时间，取自 ashare_qa 六表的一次真实问答输出，原样呈现，未做改写。行情数据源当前未接入：跑马灯与 K 线区域默认显示「行情数据源未接入」，其间不含任何报价；切到「已接入」态时显示的价格、涨跌幅与时间戳为界面示意，已就地标注。语料口径与行情口径分属两套时间基准，不可混用。不构成任何投资建议。</p>
-      <span class="label">© 2026 牛势问答 · 演示原型 v1.5（v5 图谱去遮挡六措施 / 实体证据区四块 / 遮挡自检）</span>
+      <span class="label">© 2026 牛势问答 · 演示原型 v1.4（v4 图谱重做 / 证据外链 / 回看图谱 / 实时区三块）</span>
     </div>
   </div>
 </footer>
@@ -2371,402 +2199,93 @@ var TYPE={
   doc     :{n:"文档",c:"#C89B5A",s:"page"}
 };
 var TKEYS=["company","person","org","event","policy","industry","doc"];
-/* v5 去遮挡 · 措施①：半径按连接数（度）分级，但设上下限 14～30px —— 高度数节点不再吞掉邻居 */
-var R_MIN=14,R_MAX=30,R_STEP=2.6;
-var RULE_R="半径 ＝ 14 + 度×2.6（公司 +2），上下限 14～30 px";
-// 度分级，但钳在 [R_MIN,R_MAX]：高度数节点不会长到吞掉邻居，低度数节点也不会小到点不中
-function radiusOf(deg,type){
-  var r=R_MIN+deg*R_STEP+(type==="company"?2:0);
-  return Math.max(R_MIN,Math.min(R_MAX,Math.round(r)));
-}
-/* v5 去遮挡 · 措施⑤：画布安全边距 ≥ 8%，任何浮层都不覆盖绘图区 */
-var SAFE=0.09,RING_GAP=34,COMP_GAP=76;
-/* v5：不带证据属性的关系类型（作者口径：EVIDENCED_BY 边不带证据三项）—— 证据表显示此项，不留空、不编造 */
-var NOEV="—（该关系类型不带证据属性）";
-/* 会话载荷的实测统计（v4 原值，未改） */
-var GSTATS={paths:17,nodes:10,edges:6,hops:2};
+var DEGR={0:18,1:22,2:27,3:33,4:38};                 // 半径按连接数（度）分级，公司再 +4
+var GSTATS={paths:17,nodes:10,edges:6,hops:2};       // 全部取自本次返回的载荷，不四舍五入
 // 时间轴只在「记录里真正出现过的月份」上取值：2026-07（最早证据 2026-07-03）～ 2026-09（数据截止 2026-09-25）
 var MONTHS=(function(){var a=[],y=2026,m=7;while(y<2026||(y===2026&&m<=9)){a.push(y+"-"+String(m).padStart(2,"0"));m++;if(m>12){m=1;y++}}return a})();
 var mi=function(s){var p=s.split("-");return (parseInt(p[0],10)-2026)*12+(parseInt(p[1],10)-7)};
 
 // 节点：本次会话（A7F3-0912）载荷命中的 10 个实体，覆盖 7 类中的 5 类。
 // 坐标显式写死（无随机布局，回看与屏③渲染结果一致）；
-// r 不写死——由连接数（度）分级算出，见 radiusOf()；x/y 也不写死，见 5c 的 layout()。
+// r 不写死——由连接数（度）分级算出，见 graphPrepare()。
 // kv = 属性面板只渲染这里列出的字段，字段值全部来自记录，不补写；空缺一律 EMPTY。
-// ⚠ m 字段＝该节点出现在哪套数据集里：s＝会话载荷子图 / e＝实体证据库（v5 新增）。
-//   v5 起画布坐标不再写死 —— 由确定性分层环形布局算出（见 layout()），因此两套数据集都能自适应。
 var GNODES=[
- {id:"yili",type:"company",name:"伊利股份",code:"600887",m:"s",
+ {id:"yili",type:"company",name:"伊利股份",code:"600887",x:400,y:118,
   kv:[["entity_id","600887"],["stock_code","600887"],["exchange","SH"],["aliases",EMPTY]],
   note:"600887 为公开市场代码，本次记录未直接给出该字段；exchange 由代码前缀判定为 上交所 SH。"},
- {id:"pab",type:"company",name:"平安银行",code:"000001",m:"se",
+ {id:"pab",type:"company",name:"平安银行",code:"000001",x:400,y:315,
   kv:[["entity_id","000001"],["stock_code","000001"],["exchange","SZ"],["aliases",EMPTY]],
-  note:"exchange 由代码前缀判定为 深交所 SZ；aliases 在本次记录里为空。该实体同时出现在会话载荷与实体证据库里。"},
- {id:"per0010",type:"person",name:"PER-0010",m:"s",
+  note:"exchange 由代码前缀判定为 深交所 SZ；aliases 在本次记录里为空。"},
+ {id:"per0010",type:"person",name:"PER-0010",x:168,y:378,
   kv:[["entity_id","PER-0010"],["name",EMPTY],["role",EMPTY]],
   note:"记录只给出人物编号，未给出姓名与角色。"},
- {id:"per0029",type:"person",name:"PER-0029",m:"se",
+ {id:"per0029",type:"person",name:"PER-0029",x:168,y:530,
   kv:[["entity_id","PER-0029"],["name",EMPTY],["role",EMPTY]],
   note:"记录只给出人物编号，未给出姓名与角色。"},
- {id:"nafmii",type:"org",name:"中国银行间市场交易商协会",m:"s",
+ {id:"nafmii",type:"org",name:"中国银行间市场交易商协会",x:790,y:96,
   kv:[["entity_id",EMPTY],["name","中国银行间市场交易商协会"],["role",EMPTY]],
   note:"机构编号未随本次记录给出。"},
- {id:"evt0236",type:"event",name:"EVT-0236",sub:"监管",m:"s",
+ {id:"evt0236",type:"event",name:"EVT-0236",sub:"监管",x:430,y:560,
   kv:[["event_id","EVT-0236"],["event_type","监管"],["event_time",EMPTY],["confidence",EMPTY]]},
- {id:"evt0260",type:"event",name:"EVT-0260",sub:"监管 · 2026-08-22",m:"s",
+ {id:"evt0260",type:"event",name:"EVT-0260",sub:"监管 · 2026-08-22",x:630,y:195,
   kv:[["event_id","EVT-0260"],["event_type","监管"],["event_time","2026-08-22"],["confidence",EMPTY]],
   note:"confidence 在本次记录里为空；该事件即回答正文所指的《接受注册通知书》注册获接受事项。"},
- {id:"evt0823",type:"event",name:"EVT-0823",sub:"业绩 · 2026-08-26",m:"s",
+ {id:"evt0823",type:"event",name:"EVT-0823",sub:"业绩 · 2026-08-26",x:630,y:560,
   kv:[["event_id","EVT-0823"],["event_type","业绩"],["event_time","2026-08-26"],["confidence",EMPTY]]},
- {id:"evt0827",type:"event",name:"EVT-0827",sub:"股权 · 2026-08-27",m:"s",
+ {id:"evt0827",type:"event",name:"EVT-0827",sub:"股权 · 2026-08-27",x:830,y:560,
   kv:[["event_id","EVT-0827"],["event_type","股权"],["event_time","2026-08-27"],["confidence",EMPTY]]},
- {id:"doc1183",type:"doc",name:"公告 · doc_id 1183",sub:"巨潮资讯网 · 2026-08-25",m:"s",
+ {id:"doc1183",type:"doc",name:"公告 · doc_id 1183",sub:"巨潮资讯网 · 2026-08-25",x:800,y:345,
   kv:[["doc_id","1183"],["chunk_id","1183000"],["source","巨潮资讯网"],["publish_date","2026-08-25"],
       ["title","内蒙古伊利实业集团股份有限公司关于收到中国银行间市场交易商协会《接受注册通知书》的公告"]],
-  note:"该文档即本次证据清单里的证据 6。"},
-
- /* ---- v5 新增：实体证据库（图中实体直接取自作者给出的真实数据，字段逐字照抄） ---- */
- {id:"cy",type:"company",name:"长城汽车",code:"601633",m:"e",
-  kv:[["entity_id","601633"],["stock_code","601633"],["exchange","SH"],["aliases",EMPTY]],
-  note:"exchange 由代码前缀判定为 上交所 SH；aliases 在本次记录里为空。"},
- {id:"per0187",type:"person",name:"PER-0187",m:"e",
-  kv:[["entity_id","PER-0187"],["name",EMPTY],["role",EMPTY]],
-  note:"记录只给出人物编号，未给出姓名与角色。"},
- {id:"per0264",type:"person",name:"PER-0264",m:"e",
-  kv:[["entity_id","PER-0264"],["name",EMPTY],["role",EMPTY]],
-  note:"记录只给出人物编号，未给出姓名与角色。"},
- {id:"per0386",type:"person",name:"PER-0386",m:"e",
-  kv:[["entity_id","PER-0386"],["name",EMPTY],["role",EMPTY]],
-  note:"记录只给出人物编号，未给出姓名与角色。"},
- {id:"per0062",type:"person",name:"PER-0062",m:"e",
-  kv:[["entity_id","PER-0062"],["name",EMPTY],["role",EMPTY]],
-  note:"记录只给出人物编号，未给出姓名与角色。"},
- {id:"per0308",type:"person",name:"PER-0308",m:"e",
-  kv:[["entity_id","PER-0308"],["name",EMPTY],["role",EMPTY]],
-  note:"记录只给出人物编号，未给出姓名与角色。"},
- {id:"evt0001",type:"event",name:"EVT-0001",sub:"股权激励 · 行权",m:"e",
-  kv:[["event_id","EVT-0001"],
-      ["event_title","2023年股票期权激励计划首次授予股票期权第二个行权期开始行权"],
-      ["event_type",EMPTY],["event_time",EMPTY],["confidence",EMPTY]],
-  note:"event_title 取自实体证据库返回的原值；event_type / event_time / confidence 未随本次记录返回，留空不补。"},
- {id:"pol0009",type:"policy",name:"POL-0009",m:"e",
-  kv:[["entity_id","POL-0009"],["name",EMPTY],["issuer",EMPTY],["publish_date",EMPTY]],
-  note:"政策实体只给出编号；issuer 与 publish_date 未随本次记录返回。"},
- {id:"doc1001",type:"doc",name:"公告 · doc_id 1001",sub:"巨潮资讯网 · 2026-09-25",m:"e",
-  kv:[["doc_id","1001"],["chunk_id","1001000"],["source","巨潮资讯网"],["publish_date","2026-09-25"],
-      ["title","长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告"]],
-  note:"该文档是实体证据库中 601633 的 8 篇支撑文档之一，也是 EVT-0001 的证据指向对象。"}
+  note:"该文档即本次证据清单里的证据 6。"}
 ];
-// 边：16 条。m 字段＝该边属于哪套数据集（s＝会话载荷子图 / e＝实体证据图谱）。
-// 前 6 条是 v4 原值未改（2 条逐字取自接口返回的样例路径 src=载荷样例，4 条由同一次返回的实体
-// 与回答正文表述还原 src=正文还原）；后 10 条 v5 新增，逐字取自实体证据库返回的真实关系。
+// 边：6 条。前 2 条逐字取自接口返回的样例路径（src=载荷样例）；
+// 后 4 条由同一次返回的实体与回答正文表述还原（src=正文还原），属性字段不补写、缺失记 EMPTY。
 // conf=null 表示 confidence 字段在记录里为空 → 画成虚线，面板显示「—（空）」。
-// noev=true 表示该关系类型不带证据属性（作者口径：EVIDENCED_BY 边不带证据三项）→ 证据表整行显示 NOEV。
 var GEDGES=[
- // —— 会话 A7F3-0912 载荷（v4 原值，未改）——
- {f:"pab",t:"per0010",rel:"HAS_EXECUTIVE",role:EMPTY,conf:0.9,sdoc:"1337",schunk:"1337000",m:"s",src:"载荷样例"},
- {f:"pab",t:"per0029",rel:"HAS_EXECUTIVE",role:EMPTY,conf:0.9,sdoc:"1337",schunk:"1337000",m:"se",src:"载荷样例"},
- {f:"yili",t:"evt0260",rel:"PARTICIPATES_IN",role:"主体",conf:null,sdoc:"1183",schunk:"1183000",m:"s",src:"正文还原"},
- {f:"pab", t:"evt0260",rel:"PARTICIPATES_IN",role:"合作方",conf:null,sdoc:"1183",schunk:"1183000",m:"s",src:"正文还原"},
- {f:"evt0260",t:"doc1183",rel:"EVIDENCED_BY",role:null,conf:null,sdoc:null,schunk:null,m:"s",src:"正文还原",noev:true},
- {f:"doc1183",t:"nafmii",rel:"ISSUED_BY",role:EMPTY,conf:null,sdoc:"1183",schunk:"1183000",m:"s",src:"正文还原"},
- // —— v5 新增：实体证据图谱（GET /api/graph/entities 返回的真实关系，字段逐字照抄）——
- {f:"cy",t:"per0187",rel:"HAS_EXECUTIVE",role:EMPTY,conf:0.9,sdoc:"1068",schunk:"1068001",m:"e",src:"实体证据库"},
- {f:"cy",t:"per0264",rel:"HAS_EXECUTIVE",role:EMPTY,conf:0.9,sdoc:"1068",schunk:"1068001",m:"e",src:"实体证据库"},
- {f:"cy",t:"per0386",rel:"HAS_EXECUTIVE",role:EMPTY,conf:0.9,sdoc:"1169",schunk:"1169000",m:"e",src:"实体证据库"},
- {f:"cy",t:"evt0001",rel:"PARTICIPATES_IN",role:"主体",conf:0.9,sdoc:"1001",schunk:"1001000",m:"e",src:"实体证据库"},
- {f:"cy",t:"evt0001",rel:"PARTICIPATES_IN",role:"主体",conf:0.9,sdoc:"1001",schunk:"1001001",m:"e",src:"实体证据库"},
- {f:"pab",t:"per0062",rel:"HAS_EXECUTIVE",role:EMPTY,conf:0.85,sdoc:"1355",schunk:"1355000",m:"e",src:"实体证据库"},
- {f:"pab",t:"per0308",rel:"HAS_EXECUTIVE",role:EMPTY,conf:0.9,sdoc:"1274",schunk:"1274001",m:"e",src:"实体证据库"},
- {f:"evt0001",t:"cy",rel:"PARTICIPATES_IN",role:"主体",conf:0.9,sdoc:"1001",schunk:"1001000",m:"e",src:"实体证据库"},
- {f:"evt0001",t:"pol0009",rel:"RELATED_TO",role:EMPTY,conf:0.9,sdoc:"1001",schunk:"1001000",m:"e",src:"实体证据库"},
- {f:"evt0001",t:"doc1001",rel:"EVIDENCED_BY",role:null,conf:null,sdoc:null,schunk:null,m:"e",src:"实体证据库",noev:true}
+ {f:"pab",t:"per0010",rel:"HAS_EXECUTIVE",role:EMPTY,conf:0.9,sdoc:"1337",schunk:"1337000",src:"载荷样例"},
+ {f:"pab",t:"per0029",rel:"HAS_EXECUTIVE",role:EMPTY,conf:0.9,sdoc:"1337",schunk:"1337000",src:"载荷样例"},
+ {f:"yili",t:"evt0260",rel:"PARTICIPATES_IN",role:"主体",conf:null,sdoc:"1183",schunk:"1183000",src:"正文还原"},
+ {f:"pab", t:"evt0260",rel:"PARTICIPATES_IN",role:"合作方",conf:null,sdoc:"1183",schunk:"1183000",src:"正文还原"},
+ {f:"evt0260",t:"doc1183",rel:"EVIDENCED_BY",role:EMPTY,conf:null,sdoc:"1183",schunk:"1183000",src:"正文还原"},
+ {f:"doc1183",t:"nafmii",rel:"ISSUED_BY",role:EMPTY,conf:null,sdoc:"1183",schunk:"1183000",src:"正文还原"}
 ];
 var NREF={};GNODES.forEach(function(n){NREF[n.id]=n});
 
-/* ============================================================
-   5a. v5 去遮挡工具箱
-   ============================================================ */
-var LBL_MAX=14;                                     // 措施②：过长名称截断到 14 字符
-function trunclbl(s){return s.length>LBL_MAX?s.slice(0,LBL_MAX)+"…":s}
-function textW(s,size){size=size||11.5;var w=0,i,c;
-  for(i=0;i<s.length;i++){c=s.charCodeAt(i);w+=(c>0x2E80?size:size*0.56)}return Math.round(w*10)/10}
-function rectHit(a,b){return !(a.x+a.w<=b.x||b.x+b.w<=a.x||a.y+a.h<=b.y||b.y+b.h<=a.y)}
-function lrect(n,x,y){var w=Math.max(n.lw,10),h=15;return {x:x-w/2,y:y+n.r+3,w:w,h:h}}
-function confTo(node,center,ds){
-  var best=-1;
-  ds.edges.forEach(function(e){
-    if((e.f===node.id&&e.t===center.id)||(e.t===node.id&&e.f===center.id))
-      best=Math.max(best,e.conf===null?-0.5:e.conf);
-  });
-  return best;
-}
-
-/* ============================================================
-   5b. 数据集：s＝会话载荷子图（10 节点 / 6 边，与 v4 完全一致）
-              e＝实体证据图谱（11 节点 / 11 边，v5 新增）
-      节点与边都做浅拷贝，两套数据集各自持有坐标与状态，互不污染。
-   ============================================================ */
-function makeDS(mode){
-  var nodes=[],edges=[],idx={},deg={},adj={},k;
+// 派生量：度 / 半径 / 主标签 / 从公司锚点出发的跳数 / 事件时间
+function graphPrepare(){
+  GNODES.forEach(function(n){n.deg=0});
+  GEDGES.forEach(function(e,i){e.i=i;NREF[e.f].deg++;NREF[e.t].deg++});
   GNODES.forEach(function(n){
-    if(n.m.indexOf(mode)<0) return;
-    var c={};for(k in n) c[k]=n[k];
-    c.kv=n.kv.map(function(r){return r.slice()});c.mode=mode;nodes.push(c);
-  });
-  GEDGES.forEach(function(e){
-    if(e.m.indexOf(mode)<0) return;
-    var c={};for(k in e) c[k]=e[k];c.mode=mode;edges.push(c);
-  });
-  nodes.forEach(function(n){idx[n.id]=n;deg[n.id]=0;adj[n.id]=[]});
-  edges.forEach(function(e,i){e.i=i;deg[e.f]++;deg[e.t]++;adj[e.f].push(e.t);adj[e.t].push(e.f)});
-  nodes.forEach(function(n){
-    n.deg=deg[n.id];n.r=radiusOf(n.deg,n.type);
+    n.r=(DEGR[Math.min(n.deg,4)]||18)+(n.type==="company"?4:0);
     n.label=n.code?(n.name+" "+n.code):n.name;
-    n.lbl=trunclbl(n.label);n.lw=textW(n.lbl);
-    n.lblOn=false;n.lblHidden=false;n.on=true;n.el=null;n.lel=null;n.pri=0;
-    var t=null;
-    n.kv.forEach(function(r){if(r[0]==="event_time"||r[0]==="publish_date")t=r[1]});
-    n.time=(t&&t!==EMPTY)?t:null;n.ti=n.time?mi(n.time.slice(0,7)):null;
   });
-  // 连通分量 + 中心实体（度最高，并列取 id 字典序）+ 从中心起算的跳数
-  var seen={},comps=[];
-  nodes.forEach(function(n){
-    if(seen[n.id]||!adj[n.id].length)return;
-    var q=[n.id],acc=[];seen[n.id]=1;
-    while(q.length){var c=q.shift();acc.push(c);adj[c].forEach(function(x){if(!seen[x]){seen[x]=1;q.push(x)}})}
-    comps.push(acc);
-  });
-  comps.forEach(function(acc){
-    var center=acc.slice().sort(function(a,b){return (idx[b].deg-idx[a].deg)||(a<b?-1:1)})[0];
-    var d={};d[center]=0;var q=[center];
-    while(q.length){var c=q.shift();adj[c].forEach(function(x){if(d[x]===undefined){d[x]=d[c]+1;q.push(x)}})}
-    acc.forEach(function(id){idx[id].dist=d[id];idx[id].centerId=center});
-  });
-  nodes.forEach(function(n){if(n.dist===undefined){n.dist=99;n.centerId=null}
-    n.isCenter=(n.centerId===n.id)});
-  var hops=0;
-  nodes.forEach(function(n){if(n.dist<99&&n.dist>hops)hops=n.dist});
-  return {mode:mode,nodes:nodes,edges:edges,idx:idx,adj:adj,comps:comps,hops:hops};
-}
-
-/* ============================================================
-   5c. 去遮挡措施①：确定性的分层环形布局
-       中心实体在圆心 → 1 跳内环、2 跳外环、3 跳更外环；
-       同环节点角度均分 θ = 2πk/n；半径按环数递增；
-       同环相邻节点最小弧距不满足时**迭代放大该环半径**，直到
-       节点圆不重叠、标签矩形不相交为止（迭代结果可被下方的几何自检复核）。
-   ============================================================ */
-function ringPositions(ring,R,rot){
-  var n=ring.length,out=[],i,a;
-  for(i=0;i<n;i++){a=rot+i*2*Math.PI/n;out.push({n:ring[i],x:Math.cos(a)*R,y:Math.sin(a)*R})}
-  return out;
-}
-function ringClear(pos,placed){
-  var i,j,a,b;
-  for(i=0;i<pos.length;i++){
-    a=pos[i];
-    for(j=0;j<pos.length;j++){
-      if(i===j)continue;b=pos[j];
-      if(Math.hypot(a.x-b.x,a.y-b.y)<a.n.r+b.n.r+2)return false;
-      if(rectHit(lrect(a.n,a.x,a.y),lrect(b.n,b.x,b.y)))return false;
-    }
-    for(j=0;j<placed.length;j++){
-      b=placed[j];
-      if(Math.hypot(a.x-b.x,a.y-b.y)<a.n.r+b.n.r+2)return false;
-      if(rectHit(lrect(a.n,a.x,a.y),lrect(b.n,b.x,b.y)))return false;
-    }
-  }
-  return true;
-}
-function layout(ds){
-  var groups=ds.comps.slice().sort(function(a,b){return (b.length-a.length)||(a[0]<b[0]?-1:1)});
-  var iso=ds.nodes.filter(function(n){return n.deg===0});
-  var blocks=[],i,j,s,d;
-  groups.forEach(function(acc){
-    var center=ds.idx[acc.slice().sort(function(a,b){return (ds.idx[b].deg-ds.idx[a].deg)||(a<b?-1:1)})[0]];
-    var rings={};
-    acc.forEach(function(id){d=ds.idx[id].dist;(rings[d]=rings[d]||[]).push(ds.idx[id])});
-    var ks=Object.keys(rings).map(Number).sort(function(a,b){return a-b}),R={0:0},placed=[],hw=0,hh=0;
-    ks.forEach(function(k){ if(k===0)return;
-      rings[k].sort(function(a,b){return (confTo(b,center,ds)-confTo(a,center,ds))||(b.deg-a.deg)||(a.id<b.id?-1:1)}) });
-    center.x=0;center.y=0;placed.push({n:center,x:0,y:0});
-    for(s=1;s<ks.length;s++){
-      var kk=ks[s],ring=rings[kk],n=ring.length,pd=ks[s-1],prevMax=0,maxR=0;
-      rings[pd].forEach(function(x){prevMax=Math.max(prevMax,x.r)});
-      ring.forEach(function(x){maxR=Math.max(maxR,x.r)});
-      // 起始半径：先满足「与内环的径向净距」
-      var Rk=Math.max(R[pd]+prevMax+maxR+RING_GAP,96),pos=null,it;
-      // 迭代：按最小弧距的解析下界起步，再用「节点圆 + 标签矩形」的精确相交测试复核，
-      // 不满足就把该环半径放大 8% 重排，直到同时满足为止（上限 40 轮，不会死循环）
-      var need=0;
-      for(j=0;j<n;j++){var a=ring[j],b=ring[(j+1)%n];
-        need=Math.max(need,a.r+b.r+16,(a.lw+b.lw)/2+14)}
-      var rmin=(n>1)?need/(2*Math.sin(Math.PI/n)):0;
-      Rk=Math.max(Rk,rmin);
-      for(it=0;it<40;it++){
-        pos=ringPositions(ring,Rk,-Math.PI/2+kk*0.42);
-        if(ringClear(pos,placed)&&Rk>=R[pd]+prevMax+maxR+RING_GAP-0.01)break;
-        Rk=Math.max(Rk*1.08,rmin,R[pd]+prevMax+maxR+maxR+RING_GAP);
-      }
-      R[kk]=Rk;
-      pos.forEach(function(p){p.n.x=p.x;p.n.y=p.y;placed.push(p)});
-      hw=Math.max(hw,Rk+maxR+26);hh=Math.max(hh,Rk+maxR+34);
-    }
-    if(ks.length===1)hw=hh=Math.max(center.r+34,60);
-    blocks.push({center:center,hw:hw,hh:hh});
-  });
-  // 分量横向排布（按体量降序，留 COMP_GAP 净距）；孤立节点另起一行
-  var x=0,maxH=60;
-  blocks.forEach(function(b){b.ox=x+b.hw;x+=b.hw*2+COMP_GAP;maxH=Math.max(maxH,b.hh)});
-  blocks.forEach(function(b){ds.nodes.forEach(function(n){if(n.centerId===b.center.id){n.x+=b.ox}})});
-  if(iso.length){
-    var iy=maxH+66,cx=-((iso.reduce(function(s2,n){return s2+n.lw+34},0))/2);
-    iso.forEach(function(n){cx+=n.lw/2+17;n.x=cx;n.y=iy;cx+=n.lw/2+17});
-  }
-  var bb=null;
-  ds.nodes.forEach(function(n){
-    n.x=Math.round(n.x*100)/100;n.y=Math.round(n.y*100)/100;   // 收敛到 2 位小数：画布坐标不出现长尾浮点
-    var r=lrect(n,n.x,n.y);
-    var x0=Math.min(n.x-n.r,r.x),x1=Math.max(n.x+n.r,r.x+r.w);
-    var y0=Math.min(n.y-n.r,r.y),y1=Math.max(n.y+n.r,r.y+r.h);
-    if(!bb)bb={x0:x0,y0:y0,x1:x1,y1:y1};
-    else{bb.x0=Math.min(bb.x0,x0);bb.y0=Math.min(bb.y0,y0);bb.x1=Math.max(bb.x1,x1);bb.y1=Math.max(bb.y1,y1)}
-  });
-  ds.bb={x:bb.x0,y:bb.y0,w:bb.x1-bb.x0,h:bb.y1-bb.y0};
-  return ds;
-}
-
-/* ============================================================
-   5c-2. 去遮挡措施②与措施⑥：标签优先级规划 ＋ 几何遮挡自检
-   两个函数都是纯几何计算（不碰 DOM，n.lel 为空时自动跳过），
-   因此可以在 Node 里脱离浏览器单独跑，把「节点重叠 N ／ 标签重叠 M」
-   的真实数字算出来核对 —— 状态条上显示的就是这里的返回值。
-   ============================================================ */
-/* 措施②：标签优先级（选中 3 / 直接邻居 2 / 其余 1 → 无永久标签 0）
-   + 对所有候选标签做矩形两两相交测试，冲突时保留优先级更高的那个。 */
-function planLabels(DS,S){
-  var live=DS.nodes.filter(function(n){return n.on});
-  var neigh={},focus=null;
-  if(S.sel){
-    focus=S.sel.id;
-    DS.edges.forEach(function(e){
-      if(e.f===S.sel.id)neigh[e.t]=1; if(e.t===S.sel.id)neigh[e.f]=1;
+  var dist={pab:0,yili:0},q=["pab","yili"];                 // 锚点=载荷起点实体（两家公司）
+  while(q.length){
+    var cur=q.shift();
+    GEDGES.forEach(function(e){
+      var nb=e.f===cur?e.t:(e.t===cur?e.f:null);
+      if(nb&&dist[nb]===undefined){dist[nb]=dist[cur]+1;q.push(nb)}
     });
-  }else if(S.edge!==null&&S.edge!==undefined&&DS.edges[S.edge]){
-    var ee=DS.edges[S.edge];            // 选中一条边：把它的两个端点提到高优先级，标签一起亮
-    neigh[ee.f]=1;neigh[ee.t]=1;
   }
-  live.forEach(function(n){
-    n.pri = focus ? (n.id===focus?3:(neigh[n.id]?2:0)) : (neigh[n.id]?2:1);
-    n.rect = lrect(n,n.x,n.y);
-    n.lblOn=false;n.lblHidden=false;
+  GNODES.forEach(function(n){
+    n.dist=(dist[n.id]===undefined)?99:dist[n.id];
+    var t=null;
+    n.kv.forEach(function(r){ if(r[0]==="event_time"||r[0]==="publish_date") t=r[1] });
+    n.time=(t&&t!==EMPTY)?t:null;
+    n.ti=n.time?mi(n.time.slice(0,7)):null;                 // 空值不上轴
   });
-  var list=live.filter(function(n){return n.pri>0}).sort(function(a,b){
-    return (b.pri-a.pri)||(b.deg-a.deg)||(a.id<b.id?-1:1);
-  });
-  var accepted=[],cap=S.sel?13:10,i;
-  list.forEach(function(n){
-    if(accepted.length>=cap&&n.pri<2){n.lblHidden=true;return}
-    for(i=0;i<accepted.length;i++) if(rectHit(n.rect,accepted[i].rect)){n.lblHidden=true;return}
-    accepted.push(n);n.lblOn=true;
-  });
-  live.forEach(function(n){ if(n.pri===0) n.lblHidden=true });
-  DS.nodes.forEach(function(n){
-    if(!n.lel) return;
-    n.lel.classList.toggle("on",!!(n.on&&n.lblOn));
-  });
-  return {shown:accepted.length,hidden:live.length-accepted.length};
 }
-/* 措施⑥：对当前渲染出的所有节点圆做两两「圆心距 < 半径和」检测，
-   对所有已显示标签矩形做两两相交检测。返回真实计数（消除不掉就如实返回非 0）。 */
-function selfCheck(DS){
-  var vis=DS.nodes.filter(function(n){return n.on}),i,j,a,b,no=0,lo=0;
-  for(i=0;i<vis.length;i++)for(j=i+1;j<vis.length;j++){
-    a=vis[i];b=vis[j];
-    if(Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y)) < a.r+b.r-0.5) no++;
-  }
-  var lb=vis.filter(function(n){return n.lblOn});
-  for(i=0;i<lb.length;i++)for(j=i+1;j<lb.length;j++) if(rectHit(lb[i].rect,lb[j].rect)) lo++;
-  return {node:no,label:lo,shown:lb.length,total:vis.length,
-          hidden:vis.filter(function(n){return n.lblHidden}).length};
-}
+graphPrepare();
 
-/* 路径集合：1 跳 ＋ 2 跳（沿有向边继续走一跳），与画布同一份边 */
-function pathsOf(ds){
-  var a=[],i;
-  ds.edges.forEach(function(e){a.push({d:1,e:[e.i]})});
-  ds.edges.forEach(function(e){ds.edges.forEach(function(e2){if(e2.f===e.t)a.push({d:2,e:[e.i,e2.i]})})});
-  for(i=0;i<a.length;i++){a[i].f=ds.edges[a[i].e[0]].f;a[i].t=ds.edges[a[i].e[a[i].e.length-1]].t}
+// 路径集合：6 条 1 跳 ＋ 3 条 2 跳（沿有向边继续走一跳），与画布同一份边
+var GPATHLIST=(function(){
+  var a=[],i,j;
+  GEDGES.forEach(function(e){a.push({d:1,e:[e.i]})});
+  GEDGES.forEach(function(e){GEDGES.forEach(function(e2){ if(e2.f===e.t) a.push({d:2,e:[e.i,e2.i]}) })});
+  for(i=0;i<a.length;i++){a[i].f=GEDGES[a[i].e[0]].f;a[i].t=GEDGES[a[i].e[a[i].e.length-1]].t}
   return a;
-}
-
-var GDS_S=makeDS("s"),GDS_E=makeDS("e");
-layout(GDS_S);layout(GDS_E);
-GDS_S.paths=pathsOf(GDS_S);GDS_E.paths=pathsOf(GDS_E);
-
-/* 合集：两套数据集的并集（mode="" 匹配所有边）。实体证据区取这条并集做「去重后的全体关系表」——
-   例如选中平安银行时，会话载荷里的 1337/1337000 与实体证据库里的 1355/1274 会一起列出。
-   只用于证据表与文档聚合，不做布局，因为两套数据集的坐标互不相通。 */
-var DSALL=makeDS("");
-
-/* ------------------------------------------------------------
-   5d. 文档登记表（措施③/证据区用）
-       · 601633 的 8 篇 = 作者逐字给出的真实文档（编号 / 来源站 / 发布日期 / 标题 / URL 全部照抄）
-       · 其余 doc 从屏②证据清单 EVALL 里按 doc_id 取真值，取不到就如实留空
-   ------------------------------------------------------------ */
-var GDOCS={
- "1001":{site:"巨潮资讯网",date:"2026-09-25",url:"https://static.cninfo.com.cn/finalpage/2026-09-25/1225581315.PDF",
-   title:"长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告"},
- "1068":{site:"巨潮资讯网",date:"2026-09-10",url:"https://static.cninfo.com.cn/finalpage/2026-09-10/1225555258.PDF",
-   title:"长城汽车股份有限公司关于参加2026年河北辖区上市公司投资者网上集体接待日暨2026年半年报业绩说明会的公告"},
- "1109":{site:"巨潮资讯网",date:"2026-09-02",url:"https://static.cninfo.com.cn/finalpage/2026-09-02/1225542270.PDF",
-   title:"长城汽车股份有限公司2026年8月产销快报"},
- "1169":{site:"巨潮资讯网",date:"2026-08-26",url:"https://static.cninfo.com.cn/finalpage/2026-08-26/1225502463.PDF",
-   title:"长城汽车股份有限公司第九届董事会第六次会议决议公告"},
- "1261":{site:"巨潮资讯网",date:"2026-08-03",url:"https://static.cninfo.com.cn/finalpage/2026-08-03/1225452790.PDF",
-   title:"长城汽车股份有限公司关于“长汽转债”可选择回售的第七次提示性公告"},
- "1327":{site:"巨潮资讯网",date:"2026-07-07",url:"https://static.cninfo.com.cn/finalpage/2026-07-07/1225411698.PDF",
-   title:"长城汽车股份有限公司关于调整公司2023年限制性股票激励计划预留授予限制性股票回购价格及数量的公告"},
- "1375":{site:"巨潮资讯网",date:"2026-06-19",url:"https://static.cninfo.com.cn/finalpage/2026-06-19/1225378817.PDF",
-   title:"长城汽车股份有限公司董事会薪酬委员会关于2026年限制性股票激励计划激励对象名单的核查意见"},
- "2015":{site:"中证网",date:"2026-08-27",url:"https://www.cs.com.cn/ssgs/01/2026/08/27/detail_2026082710034577.html",
-   title:"长城汽车发布2026半年报：营收站上千亿关口 海外销量反超国内"}
-};
-function docOf(id){
-  if(GDOCS[id]){var d=GDOCS[id];return {id:String(id),site:d.site,date:d.date,url:d.url,title:d.title,src:"实体证据库"}}
-  var hit=null;
-  EVALL.forEach(function(it){if(String(it.doc)===String(id))hit=it});
-  if(hit) return {id:String(id),site:hit.site,date:hit.date,url:hit.url,title:hit.t,src:"屏②证据清单"};
-  return {id:String(id),site:null,date:null,url:null,title:null,src:null};
-}
-function docLink(id,cls){
-  var d=docOf(id);
-  return d.url?'<a class="ev__link '+(cls||"ev__link--sm")+'" href="'+d.url+'" target="_blank" rel="noopener" '+
-      'aria-label="查看原文：'+d.title+'（新窗口打开）">'+EXT+"查看原文 ↗</a>"
-    :'<span class="ev__nolink ev__nolink--sm">记录未给出 url</span>';
-}
-
-/* ------------------------------------------------------------
-   5e. 实体证据库：作者给出的三例实测计数（照抄，不改一个数）
-       ① 计数概览 ④ 事件实体额外四项 —— 只有这三例有实测值，
-       其余实体如实显示「—」，不推算、不填充。
-   ------------------------------------------------------------ */
-var EVID={
- "601633":{type:"company",counts:{nbr:17,rel:17,doc:8,chunk:13},
-   docs:["1001","1068","1109","1169","1261","1327","1375","2015"],
-   docNote:"实体证据库实测 8 篇，已全部列出。"},
- "000001":{type:"company",counts:{nbr:21,rel:21,doc:11,chunk:13},
-   docs:["1337","1355","1274","1183"],
-   docNote:"实体证据库实测 11 篇；本页逐条给出的 4 篇来自本次返回的关系边，其余 7 篇未随本记录返回。"},
- "EVT-0001":{type:"event",counts:{nbr:4,rel:4,doc:1,chunk:2},
-   docs:["1001"],
-   docNote:"实体证据库实测 1 篇，已列出。",
-   event:{participants:[["601633","主体"]],issuer:null,policies:["POL-0009"],
-     sources:[{doc:"1001",chunk:"1001000"},{doc:"1001",chunk:"1001001"}]}}
-};
-var EVID_KEY={"pab":"000001","cy":"601633","evt0001":"EVT-0001"};
-function evidOf(node){var k=EVID_KEY[node.id];return k?EVID[k]:null}
+})();
 
 function ngon(r,n,rot){var p=[],i,a;for(i=0;i<n;i++){a=(rot+i*360/n)*Math.PI/180;p.push((Math.cos(a)*r).toFixed(2)+","+(Math.sin(a)*r).toFixed(2))}return p.join(" ")}
 function shapeSVG(type,r,op){
@@ -2783,75 +2302,45 @@ function shapeSVG(type,r,op){
   }
   return '<polygon points="'+ngon(r*1.12,3,90)+'" '+st+"/>";
 }
-var VBW=900,VBH=620;                                  // 图谱画布 viewBox（缩放/平移的坐标基准）
+var VBW=900,VBH=640;                                  // 图谱画布 viewBox（缩放/平移的坐标基准）
 
 /* ------------------------------------------------------------
-   可复用图谱渲染器（v5 重做）：
-   · 屏③ 与 历史回看 挂载同一份实现 —— 布局、图例、去遮挡规则、
-     自检、路径列表与准确性声明必然一致；
-   · 数据集由 opt.ds 传入（会话载荷子图 / 实体证据图谱），
-     节点与边各自持有坐标，互不污染。
+   可复用图谱渲染器：屏③ 与 历史回看 挂载同一份实现，
+   因此两处的节点、边、图例、路径列表与准确性声明必然一致。
    ------------------------------------------------------------ */
 function mountGraph(host,opt){
   if(!host) return null;
   opt=opt||{};
   var uid="gm"+(mountGraph._n=(mountGraph._n||0)+1),mk="mk"+uid;
-  /* 每个实例拿一份数据集副本：同一份 GDS_S 会被屏③ 与历史回看同时挂载，
-     共用节点对象会让两边的坐标 / 选中态 / 拖动互相污染。布局结果可复用（确定性），
-     所以克隆时直接带上 x/y 与包围盒，只在「重置」时重新 layout。 */
-  function cloneDS(src){
-    var nodes=src.nodes.map(function(n){
-      var c={};for(var k in n) c[k]=n[k];
-      c.el=null;c.lel=null;c.on=true;c.lblOn=false;c.lblHidden=false;return c;
-    });
-    var idx={};nodes.forEach(function(n){idx[n.id]=n});
-    var edges=src.edges.map(function(e){var c={};for(var k in e) c[k]=e[k];c.el=null;return c});
-    var paths=src.paths.map(function(p){return {d:p.d,e:p.e.slice(),f:p.f,t:p.t}});
-    return {mode:src.mode,nodes:nodes,edges:edges,idx:idx,adj:src.adj,comps:src.comps,
-            hops:src.hops,bb:src.bb,paths:paths};
-  }
-  var DS=cloneDS(opt.ds||GDS_S);
   var S={sel:null,edge:null,path:null,hidden:{},depth:2,i0:0,i1:MONTHS.length-1};
-  var view={k:1,tx:0,ty:0},groot=null;
 
   host.innerHTML=
-    (opt.modes===false?"":
-      '<div class="gtop gtop--mode">'+
-        '<div class="gbar" role="group" aria-label="数据集">'+
-          '<span class="label">数据集</span>'+
-          '<div class="seg" data-g="modes"></div>'+
-          '<span class="label" data-g="modenote"></span>'+
-        '</div>'+
-      '</div>')+
-    '<div class="gtop">'+
+    '<div class="gtoolbar">'+
       '<div class="gbar" data-g="filters" role="group" aria-label="按实体类型筛选节点"></div>'+
       '<div class="gbar">'+
         '<div class="seg" data-g="depth" role="group" aria-label="图谱深度"></div>'+
-        '<button class="gchip gchip--icon" type="button" data-g="zout" aria-label="缩小">−</button>'+
-        '<button class="gchip gchip--icon" type="button" data-g="zin" aria-label="放大">+</button>'+
-        '<button class="chip" type="button" data-g="fit" data-od-id="'+uid+'-fit">适应窗口</button>'+
-        '<button class="chip" type="button" data-g="reset" data-od-id="'+uid+'-reset">重置</button>'+
+        '<button class="chip" type="button" data-g="reset" data-od-id="cta-graph-reset">重置全部</button>'+
         '<span class="label" data-g="hint">点击节点或边查看属性</span>'+
       '</div>'+
     '</div>'+
-    '<div class="glegendBar" data-g="legend"></div>'+
     '<div class="gwrap">'+
       '<div class="gcanvasWrap">'+
         '<svg data-g="svg" viewBox="0 0 '+VBW+' '+VBH+'" preserveAspectRatio="xMidYMid meet" role="img" '+
-          'aria-label="事件知识图谱：节点与有向关系边"></svg>'+
-        '<div class="gstatus">'+
-          '<span class="gstatus__i gstatus__i--key" data-g="check">遮挡自检：—</span>'+
-          '<span class="gstatus__i" data-g="zoominfo">缩放 100%</span>'+
-          '<span class="gstatus__i">拖节点微调布局 · 拖空白平移 · 滚轮以光标为锚点缩放</span>'+
+          'aria-label="事件知识图谱：10 个节点与 6 条有向关系边"></svg>'+
+        '<div class="gzctl">'+
+          '<button class="gzbtn" type="button" data-g="zin" aria-label="放大">+</button>'+
+          '<button class="gzbtn" type="button" data-g="zout" aria-label="缩小">−</button>'+
+          '<button class="gzbtn gzbtn--wide" type="button" data-g="zres" aria-label="重置缩放与平移" title="重置缩放与平移">⌂</button>'+
         '</div>'+
+        '<span class="gzoomv" data-g="zoomv">100%</span>'+
+        '<div class="glegendBox" data-g="legend"></div>'+
       '</div>'+
       '<aside class="gpanel" aria-live="polite">'+
         '<div class="gpanel__head"><span class="label">属性面板</span><span class="label" data-g="ptype">未选中</span></div>'+
         '<div class="gpanel__body" data-g="pbody"></div>'+
       '</aside>'+
     '</div>'+
-    '<section class="gev" data-g="ev" data-od-id="'+uid+'-evidence"></section>'+
-    '<div class="gwrap gwrap--lists">'+
+    '<div class="gwrap" style="margin-top:16px">'+
       '<section class="card" style="padding:18px 18px 14px" data-od-id="'+uid+'-paths">'+
         '<div class="evgroup__head" style="margin-bottom:12px"><span class="label">路径列表 · 起 → 关系 → 终</span>'+
           '<span class="evgroup__n" data-g="pcount"></span></div>'+
@@ -2863,116 +2352,60 @@ function mountGraph(host,opt){
         '<div class="giso" data-g="iso"></div>'+
       '</section>'+
     '</div>'+
-    '<div data-g="acc"></div>'+
-    '<p class="gnote gnote--wide" data-g="note"></p>';
+    '<div class="gacc" style="margin-top:16px">'+
+      '<span class="label">准确性声明</span>'+
+      '<span class="small">数据来源：本次返回的 <b>'+GSTATS.paths+'</b> 条路径 / <b>'+GSTATS.nodes+'</b> 节点 / <b>'+GSTATS.edges+'</b> 边</span>'+
+      '<span class="tag tag--red">图谱深度上限 '+GSTATS.hops+' 跳</span>'+
+      '<span class="tag tag--muted">'+(opt.tag||"载荷 answer.graph_path")+'</span>'+
+    '</div>'+
+    '<p class="gnote" style="margin-top:12px">画布按本次载荷绘制全部 <i>10</i> 个节点与 <i>6</i> 条边；'+
+      '据此可枚举 1 跳路径 <i>6</i> 条、2 跳路径 <i>3</i> 条，共 <i>9</i> 条，已全部列在「路径列表」；'+
+      '载荷中的其余 <i>8</i> 条路径未在本页展开。跳数从两家公司锚点（平安银行 <i>000001</i>、伊利股份 <i>600887</i>）起算：'+
+      '默认「2 跳」视图下，「中国银行间市场交易商协会」距锚点 <i>3</i> 跳、落在范围外被压暗；'+
+      '切到「1 跳」会再压暗 <i>doc_id 1183</i> 节点与其 <i>EVIDENCED_BY</i> 边。'+
+      '压暗只影响可见性，不删除数据 —— 属性面板照常可查、路径列表只是暂不显示，重置即回来。属性值未做任何补写。</p>';
 
   var q=function(k){return host.querySelector('[data-g="'+k+'"]')};
   var svg=q("svg"),legend=q("legend"),filters=q("filters"),depthBox=q("depth"),
       pbody=q("pbody"),ptype=q("ptype"),pathsBox=q("paths"),pcount=q("pcount"),
-      isoBox=q("iso"),icount=q("icount"),hint=q("hint"),zoominfo=q("zoominfo"),
-      checkEl=q("check"),evBox=q("ev"),accBox=q("acc"),noteBox=q("note"),modesBox=q("modes");
+      isoBox=q("iso"),icount=q("icount"),hint=q("hint"),zoomv=q("zoomv");
+  var view={k:1,tx:0,ty:0},groot=null;
 
-  /* ---- 并行边分叉（措施④）：同一对节点间多条关系用轻微曲率分开，不重合 ---- */
-  function buildEdgeOffsets(){
-    var g={};
-    DS.edges.forEach(function(e){
-      var k=(e.f<e.t?e.f+"|"+e.t:e.t+"|"+e.f);
-      (g[k]=g[k]||[]).push(e);
-    });
-    Object.keys(g).forEach(function(k){
-      var arr=g[k],total=arr.length,canon=k.split("|")[0];
-      arr.sort(function(a,b){
-        var ka=String(a.schunk||""),kb=String(b.schunk||"");
-        return (ka<kb?-1:(ka>kb?1:0))||(a.f<b.f?-1:(a.f>b.f?1:0))||(a.i-b.i);
-      });
-      arr.forEach(function(e,idx){e.canonFrom=canon;e.clat=(idx-(total-1)/2)*24});
-    });
-  }
-  buildEdgeOffsets();
+  // ---- 画布角落图例（形状＋颜色＋计数＋边编码规则），只读，不与工具栏的筛选重复 ----
+  legend.innerHTML='<span class="label glegendBox__t">图例 · 7 类节点</span><div class="glg">'+
+    TKEYS.map(function(k){
+      var n=GNODES.filter(function(x){return x.type===k}).length;
+      return '<span class="glg__i" data-zero="'+(n?0:1)+'">'+
+        '<svg viewBox="-11 -11 22 22" aria-hidden="true">'+shapeSVG(k,7,0.35)+'</svg>'+
+        '<b>'+TYPE[k].n+'</b><em>'+(n?n+" 个":"0 · 本次无")+'</em></span>';
+    }).join("")+'</div>'+
+    '<div class="glg__rule"><b>形状＋颜色</b> ＝ 实体类型；<br>'+
+      '<b>半径</b> ＝ 连接数（度）：0→18 / 1→22 / 2→27 / 3→33 px，公司 +4px；<br>'+
+      '<b>箭头</b> ＝ 关系方向，边上文字为中文关系名；<br>'+
+      '<b>线宽</b> ＝ 1.0 + confidence×1.6，<b>不透明度</b> ＝ .55 + confidence×.45；<br>'+
+      '<b>虚线</b> ＝ confidence 为空（属性面板显示「—（空）」）；<br>'+
+      '<b>压暗</b> ＝ 被类型筛选／深度／时间区间排除在外，数据未删。</div>';
 
-  function edgeGeom(e){
-    var a=DS.idx[e.f],b=DS.idx[e.t];
-    var dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1,ux=dx/d,uy=dy/d;
-    var x1=a.x+ux*(a.r+3),y1=a.y+uy*(a.r+3);
-    var x2=b.x-ux*(b.r+10),y2=b.y-uy*(b.r+10);
-    var mx=(x1+x2)/2,my=(y1+y2)/2;
-    var off=(e.clat||0)*(e.f===e.canonFrom?1:-1);
-    var cx=mx-uy*off*2,cy=my+ux*off*2;
-    var lx=mx-uy*off,ly=my+ux*off;
-    return {x1:x1,y1:y1,x2:x2,y2:y2,lx:lx,ly:ly,
-      d:"M"+x1.toFixed(1)+","+y1.toFixed(1)+" Q"+cx.toFixed(1)+","+cy.toFixed(1)+" "+x2.toFixed(1)+","+y2.toFixed(1)};
-  }
+  // ---- 类型复选筛选（7 类全覆盖；本次 0 个的类型置灰但保留，让「本次没有」一眼可见）----
+  filters.innerHTML=TKEYS.map(function(k){
+    var n=GNODES.filter(function(x){return x.type===k}).length;
+    return '<button class="chip chip--f" type="button" role="checkbox" aria-checked="true" data-ftype="'+k+'"'+
+      (n?"":' disabled')+' title="'+TYPE[k].n+'（本次子图 '+n+' 个节点）">'+
+      '<span class="bx" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" '+
+        'stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M1.6 5.2 3.9 7.5 8.4 2.6"/></svg></span>'+
+      '<svg width="13" height="13" viewBox="-11 -11 22 22" aria-hidden="true">'+shapeSVG(k,7,0.3)+'</svg>'+
+      TYPE[k].n+'<em class="chip__n">'+n+'</em></button>';
+  }).join("");
 
-  /* ---- 画布上方的独立图例横条（措施③：图例/工具条不压在绘图区上） ---- */
-  function paintLegend(){
-    if(!legend) return;
-    legend.innerHTML='<span class="label glegendBar__t">图例 · 7 类节点</span>'+
-      '<div class="glg glg--row">'+
-      TKEYS.map(function(k){
-        var n=DS.nodes.filter(function(x){return x.type===k}).length;
-        return '<span class="glg__i" data-zero="'+(n?0:1)+'">'+
-          '<svg viewBox="-11 -11 22 22" aria-hidden="true">'+shapeSVG(k,7,0.35)+'</svg>'+
-          '<b>'+TYPE[k].n+'</b><em>'+(n?n+" 个":"0 · 本次无")+'</em></span>';
-      }).join("")+'</div>'+
-      '<button class="chip chip--mini" type="button" data-g="ruletog" aria-expanded="false">编码规则</button>'+
-      '<div class="glg__rule" data-g="rule" hidden>'+
-        '<b>形状＋颜色</b> ＝ 实体类型；<b>'+RULE_R+'</b>；<br>'+
-        '<b>箭头</b> ＝ 关系方向；<b>边上的文字只在悬停／选中该边时出现</b>，内容为「中文关系名 ＋ 置信度」；<br>'+
-        '<b>线宽</b> ＝ 1.0 + confidence×1.6，<b>不透明度</b> ＝ .55 + confidence×.45；'+
-        '<b>虚线</b> ＝ confidence 为空（属性面板显示「—（空）」）；<br>'+
-        '<b>曲率</b> ＝ 同一对节点间存在多条关系时按贝塞尔偏移分叉；<b>压暗</b> ＝ 被类型筛选／深度／时间区间排除在外，数据未删。'+
-      '</div>';
-  }
+  // ---- 深度切换：1 跳＝只留锚点近邻；2 跳＝载荷全部 ----
+  depthBox.innerHTML=[2,1].map(function(d){
+    return '<button class="seg__b" type="button" data-depth="'+d+'" aria-pressed="'+(d===2?"true":"false")+'">'+
+      d+' 跳'+(d===2?" · 默认":" · 近邻")+'</button>';
+  }).join("");
 
-  function paintModes(){
-    if(!modesBox) return;
-    var M=[["s","会话子图",GDS_S],["e","实体证据图谱",GDS_E]];
-    modesBox.innerHTML=M.map(function(m){
-      return '<button class="seg__b" type="button" data-mode="'+m[0]+'" aria-pressed="'+(DS.mode===m[0]?"true":"false")+'">'+
-        m[1]+' <em>'+m[2].nodes.length+' · '+m[2].edges.length+'</em></button>';
-    }).join("");
-    var mn=q("modenote");
-    if(mn) mn.textContent=DS.mode==="s"
-      ? "会话 A7F3-0912 的 answer.graph_path 载荷（与 v4 相同）"
-      : "实体证据库返回的真实关系（601633 / 000001 / EVT-0001）";
-  }
-
-  function paintFilters(){
-    if(!filters) return;
-    filters.innerHTML=TKEYS.map(function(k){
-      var n=DS.nodes.filter(function(x){return x.type===k}).length;
-      return '<button class="chip chip--f" type="button" role="checkbox" aria-checked="true" data-ftype="'+k+'"'+
-        (n?"":' disabled')+' title="'+TYPE[k].n+'（本数据集 '+n+' 个节点）">'+
-        '<span class="bx" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" '+
-          'stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M1.6 5.2 3.9 7.5 8.4 2.6"/></svg></span>'+
-        '<svg width="13" height="13" viewBox="-11 -11 22 22" aria-hidden="true">'+shapeSVG(k,7,0.3)+'</svg>'+
-        TYPE[k].n+'<em class="chip__n">'+n+'</em></button>';
-    }).join("");
-    $$("[data-ftype]",filters).forEach(function(b){b.setAttribute("aria-checked",S.hidden[b.getAttribute("data-ftype")]?"false":"true")});
-  }
-
-  function paintDepth(){
-    if(!depthBox) return;
-    depthBox.innerHTML=[2,1].map(function(d){
-      return '<button class="seg__b" type="button" data-depth="'+d+'" aria-pressed="'+(d===S.depth?"true":"false")+'">'+
-        d+' 跳'+(d===2?" · 默认":" · 近邻")+'</button>';
-    }).join("");
-  }
-
-  /* ---- 视角：fit-to-view（措施⑤） ---- */
   function applyView(){
     if(groot) groot.setAttribute("transform","translate("+view.tx.toFixed(1)+","+view.ty.toFixed(1)+") scale("+view.k.toFixed(3)+")");
-    if(zoominfo) zoominfo.textContent="缩放 "+Math.round(view.k*100)+"%";
-  }
-  function fitView(){
-    var bb=DS.bb;
-    if(!bb||!bb.w){view={k:1,tx:0,ty:0};applyView();return}
-    var s=Math.min(VBW*(1-2*SAFE)/bb.w, VBH*(1-2*SAFE)/bb.h);
-    s=Math.max(0.25,Math.min(2.4,s));
-    view.k=s;
-    view.tx=VBW/2-(bb.x+bb.w/2)*s;
-    view.ty=VBH/2-(bb.y+bb.h/2)*s;
-    applyView();
+    if(zoomv) zoomv.textContent=Math.round(view.k*100)+"%";
   }
 
   function paint(){
@@ -2982,114 +2415,100 @@ function mountGraph(host,opt){
       '<marker id="'+mk+'h" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse">'+
         '<path d="M0,1.3 L9,5 L0,8.7 Z" fill="#E63946"/></marker>'+
     '</defs><g class="groot">';
-    DS.edges.forEach(function(e){
-      var a=DS.idx[e.f],b=DS.idx[e.t],g=edgeGeom(e);
-      var sw=e.conf===null||e.conf===undefined?1:(1+e.conf*1.6),
-          op=e.conf===null||e.conf===undefined?.55:(.55+e.conf*.45),
-          dash=(e.conf===null||e.conf===undefined)?' stroke-dasharray="4 3"':'';
-      var confTxt=(e.conf===null||e.conf===undefined)?EMPTY:e.conf;
+    GEDGES.forEach(function(e){
+      var a=NREF[e.f],b=NREF[e.t];
+      var dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1,ux=dx/d,uy=dy/d;
+      var x1=a.x+ux*(a.r+3),y1=a.y+uy*(a.r+3),x2=b.x-ux*(b.r+9),y2=b.y-uy*(b.r+9);
+      var sw=e.conf===null?1:(1+e.conf*1.6),
+          op=e.conf===null?.55:(.55+e.conf*.45),
+          dash=e.conf===null?' stroke-dasharray="4 3"':'';
+      var mx=(x1+x2)/2-uy*9,my=(y1+y2)/2+ux*9;
       out+='<g class="geline" data-edge="'+e.i+'" tabindex="0" role="button" aria-label="'+
         a.label+' 到 '+b.label+'，关系'+REL[e.rel]+'（'+e.rel+'）">'+
-        '<path class="gehit" d="'+g.d+'"/>'+
-        '<path class="gedge" d="'+g.d+'" stroke="rgba(255,255,255,.55)" stroke-width="'+sw.toFixed(2)+
-          '" stroke-opacity="'+op.toFixed(2)+'"'+dash+' marker-end="url(#'+mk+'a)"/>'+
-        '<text class="gelabel" x="'+g.lx.toFixed(1)+'" y="'+g.ly.toFixed(1)+'" text-anchor="middle">'+
-          REL[e.rel]+' · '+confTxt+'</text>'+
+        '<line class="gehit" x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'"/>'+
+        '<line class="gedge" x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+
+          '" stroke="rgba(255,255,255,.55)" stroke-width="'+sw.toFixed(2)+'" stroke-opacity="'+op.toFixed(2)+'"'+dash+
+          ' marker-end="url(#'+mk+'a)"/>'+
+        '<text class="gelabel" x="'+mx.toFixed(1)+'" y="'+my.toFixed(1)+'" text-anchor="middle">'+REL[e.rel]+'</text>'+
       '</g>';
     });
-    DS.nodes.forEach(function(n){
-      out+='<g class="gnode" data-node="'+n.id+'" tabindex="0" role="button" transform="translate('+
-        n.x.toFixed(1)+','+n.y.toFixed(1)+')" '+
+    GNODES.forEach(function(n){
+      out+='<g class="gnode" data-node="'+n.id+'" tabindex="0" role="button" transform="translate('+n.x+','+n.y+')" '+
         'aria-label="'+TYPE[n.type].n+'节点 '+n.label+'，连接数 '+n.deg+'">'+
-        '<title>'+n.label+' · '+TYPE[n.type].n+' · 连接数 '+n.deg+'</title>'+
-        '<circle class="ghit" r="'+(n.r+12)+'"/>'+
         '<circle class="halo" r="'+(n.r+7)+'"/>'+shapeSVG(n.type,n.r)+
-        '<text class="glabel" y="'+(n.r+16)+'" data-lbl="'+n.id+'">'+n.lbl+'</text>'+
+        '<text y="'+(n.r+16)+'">'+n.label+'</text>'+
         (n.sub?'<text class="code" y="'+(n.r+28)+'">'+n.sub+'</text>':'')+
       '</g>';
     });
     svg.innerHTML=out+'</g>';
     groot=svg.querySelector(".groot");
-    DS.nodes.forEach(function(n){
-      n.el=svg.querySelector('[data-node="'+n.id+'"]');
-      n.lel=svg.querySelector('[data-lbl="'+n.id+'"]');
-    });
-    DS.edges.forEach(function(e){e.el=svg.querySelector('[data-edge="'+e.i+'"]')});
+    GNODES.forEach(function(n){n.el=svg.querySelector('[data-node="'+n.id+'"]')});
+    GEDGES.forEach(function(e){e.el=svg.querySelector('[data-edge="'+e.i+'"]')});
     applyView();
   }
 
   function pathLabel(p){
     var s=[],k,e;
     for(k=0;k<p.e.length;k++){
-      e=DS.edges[p.e[k]];
-      if(k===0)s.push(DS.idx[e.f].label);
-      s.push(REL[e.rel]);s.push(DS.idx[e.t].label);
+      e=GEDGES[p.e[k]];
+      if(k===0) s.push(NREF[e.f].label);
+      s.push(REL[e.rel]);
+      s.push(NREF[e.t].label);
     }
     return s.join(" → ");
   }
 
   function refresh(){
-    var adj={},hotE={},i;
-    if(S.sel) DS.edges.forEach(function(e){ if(e.f===S.sel.id||e.t===S.sel.id){adj[e.f]=1;adj[e.t]=1;hotE[e.i]=1} });
-    if(S.edge!==null&&DS.edges[S.edge]){
-      var se=DS.edges[S.edge];adj[se.f]=1;adj[se.t]=1;hotE[se.i]=1;   // 选中一条边 → 只聚焦它
-    }
-    if(S.path) S.path.e.forEach(function(i2){ hotE[i2]=1;adj[DS.edges[i2].f]=1;adj[DS.edges[i2].t]=1 });
-    var hasHot=!!(S.sel||S.path||(S.edge!==null));
-    DS.nodes.forEach(function(n){
+    var adj={},hotE={};
+    if(S.sel) GEDGES.forEach(function(e){ if(e.f===S.sel.id||e.t===S.sel.id){adj[e.f]=1;adj[e.t]=1;hotE[e.i]=1} });
+    if(S.path) S.path.e.forEach(function(i){ hotE[i]=1;adj[GEDGES[i].f]=1;adj[GEDGES[i].t]=1 });
+    var hasHot=!!(S.sel||S.path);
+    GNODES.forEach(function(n){
       var on=(!S.hidden[n.type])&&(n.dist<=S.depth)&&(n.ti===null||(n.ti>=S.i0&&n.ti<=S.i1));
       n.on=on;
       if(!n.el) return;
-      n.el.classList.toggle("sel",!!(S.sel&&S.sel.id===n.id));
       n.el.classList.toggle("dim",on&&hasHot&&adj[n.id]!==1);
       n.el.classList.toggle("out",!on);
       n.el.style.pointerEvents=on?"":"none";
       n.el.setAttribute("aria-hidden",on?"false":"true");
     });
-    DS.edges.forEach(function(e){
-      var on=DS.idx[e.f].on&&DS.idx[e.t].on,hot=on&&hotE[e.i]===1;
+    GEDGES.forEach(function(e){
+      var on=NREF[e.f].on&&NREF[e.t].on,hot=on&&hotE[e.i]===1;
       e.on=on;
       if(!e.el) return;
       var ln=e.el.querySelector(".gedge");
       ln.classList.toggle("hot",!!hot);
       ln.setAttribute("marker-end","url(#"+(hot?mk+"h":mk+"a")+")");
-      e.el.classList.toggle("sel",S.edge===e.i);
-      e.el.classList.toggle("dim",on&&hasHot&&!hot);
+      e.el.classList.toggle("dim",on&&hasHot&&!hot);   // 淡化(class 挂在 <g> 上，与节点同一套规则)
       e.el.classList.toggle("out",!on);
-      e.el.querySelector(".gelabel").classList.toggle("on",!!hot||S.edge===e.i);
+      e.el.querySelector(".gelabel").classList.toggle("on",!!hot);
       e.el.style.pointerEvents=on?"":"none";
     });
-    var lp=planLabels(DS,S),sc=selfCheck(DS);
-    if(checkEl) checkEl.innerHTML="遮挡自检：节点重叠 <b>"+sc.node+"</b> ／ 标签重叠 <b>"+sc.label+
-      "</b> · 可见标签 <b>"+sc.shown+"</b>/"+sc.total+
-      (lp.hidden>0?" · 已隐藏 <b>"+lp.hidden+"</b> 个标签（悬停查看）":"");
     if(hint) hint.textContent=S.sel?("已选中 "+S.sel.label)
       :(S.path?("已选中路径 "+pathLabel(S.path)):"点击节点或边查看属性");
-    renderPaths();renderIso();panel();renderEvidence();
+    renderPaths();renderIso();panel();
   }
 
   function renderPaths(){
     if(!pathsBox) return;
-    var PL=DS.paths;
-    var shown=PL.filter(function(p){return p.d<=S.depth});
+    var shown=GPATHLIST.filter(function(p){return p.d<=S.depth});
     var live=shown.filter(function(p){
-      return p.e.every(function(i){return DS.edges[i].on&&DS.idx[DS.edges[i].f].on&&DS.idx[DS.edges[i].t].on});
+      return p.e.every(function(i){return GEDGES[i].on&&NREF[GEDGES[i].f].on&&NREF[GEDGES[i].t].on});
     });
-    if(pcount) pcount.textContent="显示 "+live.length+" / 可枚举 "+PL.length+" 条"+
-      (DS.mode==="s"?" · 载荷 answer.graph_path 命中 "+GSTATS.paths+" 条":" · 实体证据库返回");
+    if(pcount) pcount.textContent="显示 "+live.length+" / 可枚举 "+GPATHLIST.length+" 条 · 载荷 17 条";
     var out=live.map(function(p){
-      var e0=DS.edges[p.e[0]];
-      return '<button class="gpath'+(S.path===p?" on":"")+'" type="button" data-pi="'+PL.indexOf(p)+'" '+
+      var e0=GEDGES[p.e[0]];
+      return '<button class="gpath'+(S.path===p?" on":"")+'" type="button" data-pi="'+GPATHLIST.indexOf(p)+'" '+
         'aria-pressed="'+(S.path===p?"true":"false")+'">'+
         '<span class="gpath__l">'+p.e.map(function(i,k){
-          var e=DS.edges[i];
-          return (k===0?'<i style="background:'+TYPE[DS.idx[e.f].type].c+'"></i>'+DS.idx[e.f].label:'')+
+          var e=GEDGES[i];
+          return (k===0?'<i style="background:'+TYPE[NREF[e.f].type].c+'"></i>'+NREF[e.f].label:'')+
             '<span class="gpath__rel">—['+REL[e.rel]+']→</span>'+
-            '<i style="background:'+TYPE[DS.idx[e.t].type].c+'"></i>'+DS.idx[e.t].label;
+            '<i style="background:'+TYPE[NREF[e.t].type].c+'"></i>'+NREF[e.t].label;
         }).join("")+'</span>'+
         '<span class="gpath__d">'+p.d+' 跳</span>'+
-        '<span class="gpath__a">首条关系 '+e0.rel+' · role='+(e0.role||NOEV)+' · confidence='+(e0.conf===null||e0.conf===undefined?EMPTY:e0.conf)+
-          ' · source_doc_id='+(e0.sdoc||NOEV)+' · source_chunk_id='+(e0.schunk||NOEV)+'</span></button>';
+        '<span class="gpath__a">首条关系 '+e0.rel+' · role='+e0.role+' · confidence='+(e0.conf===null?EMPTY:e0.conf)+
+          ' · source_doc_id='+e0.sdoc+' · source_chunk_id='+e0.schunk+'</span></button>';
     }).join("");
     if(shown.length-live.length) out+='<p class="gpath__flt">另有 '+(shown.length-live.length)+
       ' 条路径因类型筛选、深度或时间区间被过滤，暂不显示（未被删除，重置后回来）。</p>';
@@ -3099,23 +2518,24 @@ function mountGraph(host,opt){
 
   function renderIso(){
     if(!isoBox) return;
-    var iso=DS.nodes.filter(function(n){return n.deg===0});
+    var iso=GNODES.filter(function(n){return n.deg===0});
     if(icount) icount.textContent=iso.length+" 个 · 连接数 0";
     isoBox.innerHTML=iso.length?iso.map(function(n){
       return '<div class="giso__i">'+
         '<svg viewBox="-11 -11 22 22" aria-hidden="true">'+shapeSVG(n.type,7,0.3)+'</svg>'+
         '<div><div class="giso__n">'+n.label+(n.sub?' · '+n.sub:'')+' · '+TYPE[n.type].n+'</div>'+
         '<div class="giso__d">该节点在本次返回的图谱路径中未出现邻接边。事件时间 '+
-          (n.time?n.time:EMPTY)+'。</div></div></div>';
-    }).join(""):'<div class="giso__d">本数据集里没有孤立节点。</div>';
+          (n.time?n.time:EMPTY)+'。'+(n.dist>S.depth?'当前深度 '+S.depth+' 跳下也不在锚点可达范围内。':'')+
+        '</div></div></div>';
+    }).join(""):'<div class="giso__d">本次载荷里没有孤立节点。</div>';
   }
 
   function panelNode(n){
     ptype.textContent=TYPE[n.type].n;
     var nb=[],out=0,inc=0;
-    DS.edges.forEach(function(e){
-      if(e.f===n.id){nb.push({dir:"出",rel:e.rel,to:DS.idx[e.t]});out++}
-      else if(e.t===n.id){nb.push({dir:"入",rel:e.rel,to:DS.idx[e.f]});inc++}
+    GEDGES.forEach(function(e){
+      if(e.f===n.id){nb.push({dir:"出",rel:e.rel,to:NREF[e.t]});out++}
+      else if(e.t===n.id){nb.push({dir:"入",rel:e.rel,to:NREF[e.f]});inc++}
     });
     pbody.innerHTML=
       '<div><span class="label">主标签</span><div class="h4" style="margin-top:6px">'+n.label+'</div></div>'+
@@ -3127,11 +2547,10 @@ function mountGraph(host,opt){
       "</dl>"+
       (n.note?'<p class="gnote" style="font-size:11px">'+n.note+"</p>":"")+
       '<div style="padding-top:13px;border-top:1px solid var(--border)">'+
-        '<span class="label">本数据集连接数</span>'+
+        '<span class="label">本页连接数 · 由 6 条边计算</span>'+
         '<div class="kv" style="margin-top:9px"><dt>度</dt><dd class="mono">'+n.deg+'（出 '+out+' / 入 '+inc+'）</dd></div>'+
-        '<div class="kv" style="margin-top:9px"><dt>距中心</dt><dd class="mono">'+
-          (n.dist>90?EMPTY+'（在本次边集里不可达）':n.dist+' 跳'+
-            (n.isCenter?'（所在分量的中心实体）':'')+(n.dist>S.depth?' · 超出当前 '+S.depth+' 跳视图，已压暗':''))+
+        '<div class="kv" style="margin-top:9px"><dt>距锚点</dt><dd class="mono">'+
+          (n.dist>90?EMPTY+'（本次边集里不可达）':n.dist+' 跳'+(n.dist>S.depth?' · 超出当前 '+S.depth+' 跳视图，已压暗':''))+
         "</dd></div>"+
       "</div>"+
       '<div style="padding-top:13px;border-top:1px solid var(--border)">'+
@@ -3146,243 +2565,50 @@ function mountGraph(host,opt){
 
   function panelEdge(e){
     ptype.textContent="关系边";
-    var noev=!!e.noev;
-    var val=function(v){return (v===null||v===undefined||v===EMPTY)
-      ? '<span style="color:var(--faint)">'+(noev?NOEV:EMPTY)+'</span>' : v};
+    var hasChunk=EVALL.some(function(it){return it.chunk===e.schunk});
     pbody.innerHTML=
       '<div><span class="label">关系</span><div class="h4" style="margin-top:6px">'+e.rel+' · '+REL[e.rel]+'</div>'+
-        '<span class="tag" style="margin-top:9px">'+e.src+'</span>'+
-        (e.clat?'<span class="tag tag--muted" style="margin-top:9px;margin-left:6px">并行边 · 曲率分叉</span>':'')+'</div>'+
+        '<span class="tag" style="margin-top:9px">'+e.src+'</span></div>'+
       '<dl style="display:flex;flex-direction:column;gap:12px;margin:0">'+
-        '<div class="kv"><dt>起点</dt><dd>'+DS.idx[e.f].label+'</dd></div>'+
-        '<div class="kv"><dt>终点</dt><dd>'+DS.idx[e.t].label+'</dd></div>'+
-        '<div class="kv"><dt>role</dt><dd class="mono">'+val(e.role)+'</dd></div>'+
-        '<div class="kv"><dt>confidence</dt><dd class="mono">'+val(e.conf)+'</dd></div>'+
-        '<div class="kv"><dt>source_doc_id</dt><dd class="mono">'+val(e.sdoc)+'</dd></div>'+
-        '<div class="kv"><dt>source_chunk_id</dt><dd class="mono">'+val(e.schunk)+'</dd></div>'+
+        '<div class="kv"><dt>起点</dt><dd>'+NREF[e.f].label+'</dd></div>'+
+        '<div class="kv"><dt>终点</dt><dd>'+NREF[e.t].label+'</dd></div>'+
+        '<div class="kv"><dt>role</dt><dd class="mono">'+(e.role===EMPTY?'<span style="color:var(--faint)">'+EMPTY+'</span>':e.role)+'</dd></div>'+
+        '<div class="kv"><dt>confidence</dt><dd class="mono">'+(e.conf===null?'<span style="color:var(--faint)">'+EMPTY+'</span>':e.conf)+'</dd></div>'+
+        '<div class="kv"><dt>source_doc_id</dt><dd class="mono">'+e.sdoc+'</dd></div>'+
+        '<div class="kv"><dt>source_chunk_id</dt><dd class="mono">'+e.schunk+'</dd></div>'+
       "</dl>"+
-      '<p class="gnote" style="font-size:11px">'+(noev
-        ? '该关系类型（<i>'+e.rel+'</i>）不带证据属性，四项证据字段按作者口径一律显示「'+NOEV+'」。'
-        : '线宽与不透明度由 confidence 编码：'+(e.conf===null||e.conf===undefined
-            ?"本次为空 → 虚线、线宽 1.0、不透明度 .55。"
-            :"confidence "+e.conf+" → 线宽 "+(1+e.conf*1.6).toFixed(2)+"、不透明度 "+(.55+e.conf*.45).toFixed(2)+"。"))+
+      '<p class="gnote" style="font-size:11px">线宽与不透明度由 confidence 编码：'+
+        (e.conf===null?"本次为空 → 虚线、线宽 1.0、不透明度 .55。"
+                      :"confidence "+e.conf+" → 线宽 "+(1+e.conf*1.6).toFixed(2)+"、不透明度 "+(.55+e.conf*.45).toFixed(2)+"。")+
       "</p>"+
       '<div style="margin-top:auto;padding-top:14px;border-top:1px solid var(--border)">'+
-        '<button class="btn btn--quiet btn--sm" type="button" data-g="jump" '+(e.schunk?"":"disabled")+'>'+
-          (e.schunk?"跳到对应证据":"该边不带 source_chunk_id")+"</button>"+
-        '<p class="gnote" style="font-size:10.5px;margin-top:9px">按 source_chunk_id '+(e.schunk||"（无）")+
+        '<button class="btn btn--quiet btn--sm" type="button" data-g="jump" '+(hasChunk?"":"disabled")+'>'+
+          (hasChunk?"跳到对应证据":"证据清单中无此 chunk")+"</button>"+
+        '<p class="gnote" style="font-size:10.5px;margin-top:9px">按 source_chunk_id '+e.schunk+
           ' 在证据清单里定位并高亮那一条。</p>'+
       "</div>";
   }
 
   function panel(){
     if(!pbody) return;
-    if(S.edge!==null){ panelEdge(DS.edges[S.edge]); return }
+    if(S.edge!==null){ panelEdge(GEDGES[S.edge]); return }
     if(S.sel){ panelNode(S.sel); return }
     ptype.textContent="未选中";
     pbody.innerHTML='<div class="gempty"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#bull"></use></svg>'+
       "<p>点击任一节点或边，查看实体属性与邻接关系</p></div>";
   }
 
-  /* ============================================================
-     实体证据区（v5 新增）—— 选中实体后在画布下方给出四块完整证据
-     ①②③ 用「会话载荷 ∪ 实体证据库」的全部真实边；①④ 的实测计数
-     只有 601633 / 000001 / EVT-0001 三例，其余如实显示「—」。
-     ============================================================ */
-  function relationsOf(id){
-    var out=[];
-    DSALL.edges.forEach(function(e){
-      if(e.f===id) out.push({e:e,dir:"出",other:DSALL.idx[e.t]});
-      else if(e.t===id) out.push({e:e,dir:"入",other:DSALL.idx[e.f]});
-    });
-    out.sort(function(a,b){return (b.e.conf===null?-1:b.e.conf)-(a.e.conf===null?-1:a.e.conf)||(a.e.i-b.e.i)});
-    return out;
-  }
-  function renderEvidence(){
-    if(!evBox) return;
-    if(!S.sel){
-      evBox.innerHTML='<div class="gev__head"><div><span class="label">实体证据 · Entity evidence</span>'+
-        '<h3 class="h3">未选中实体</h3></div></div>'+
-        '<p class="gnote">选中画布上任一节点，这里给出该实体的完整证据：① 计数概览 ② 关系证据表 ③ 文档聚合 ④ 事件实体额外四项。</p>';
-      return;
-    }
-    var n=S.sel,rec=evidOf(n),c=rec?rec.counts:null,rels=relationsOf(n.id);
-    var stat=function(k,v,sub){return '<div class="gstat"><span class="label">'+k+'</span><b>'+
-      (v===null||v===undefined?'<em class="gev__gap">—</em>':v)+'</b>'+(sub?'<i>'+sub+'</i>':'')+'</div>'};
-    var h='<div class="gev__head"><div>'+
-        '<span class="label">实体证据 · Entity evidence</span>'+
-        '<h3 class="h3">'+n.label+' <em class="gev__kind">'+TYPE[n.type].n+'</em></h3>'+
-      '</div><span class="label">全体关系表按「会话载荷 ∪ 实体证据库」去重后给出</span></div>'+
-      '<div class="gev__grid">';
-
-    /* ① 计数概览 */
-    h+='<section class="gev__blk"><div class="gev__blkH"><span class="label">① 计数概览</span>'+
-      '<span class="label">'+(c?'实体证据库实测':'该实体未返回计数')+'</span></div>'+
-      '<div class="gstat4">'+
-        stat("邻居",c?c.nbr:null)+stat("关系",c?c.rel:null)+
-        stat("涉及文档",c?c.doc:null)+stat("不同文本块",c?c.chunk:null)+
-      '</div><p class="gnote">'+(c?
-        '以上四项为实体证据库对该实体的实测值，原样照抄。'+
-        '本页画布与下方关系表只展开本次返回中逐条给出的关系，二者口径不同，不相互换算。'
-        :'本原型只对 601633 / 000001 / EVT-0001 三个实体做了实测并给出计数；其余实体如实留「—」，不推算、不填充。')+
-      '</p></section>';
-
-    /* ② 关系证据表 */
-    h+='<section class="gev__blk gev__blk--wide"><div class="gev__blkH">'+
-      '<span class="label">② 关系证据表</span><span class="label">'+rels.length+' 条</span></div>'+
-      '<div class="gev__tblWrap"><table class="gev__tbl"><thead><tr>'+
-        '<th>中文关系名</th><th>对端实体</th><th>role</th><th>confidence</th>'+
-        '<th>source_doc_id</th><th>source_chunk_id</th><th>操作</th></tr></thead><tbody>'+
-      (rels.length?rels.map(function(r){
-        var e=r.e,o=r.other,noev=!!e.noev;
-        var td=function(v){return noev?'':'<td class="mono">'+
-          (v===null||v===undefined||v===EMPTY?'<span class="gev__gap">'+EMPTY+'</span>':v)+'</td>'};
-        return '<tr>'+
-          '<td class="k"><b>'+REL[e.rel]+'</b><em>'+e.rel+'</em></td>'+
-          '<td><i class="gdot" style="background:'+TYPE[o.type].c+'"></i>'+o.label+
-            '<em class="gev__dir">'+r.dir+'</em></td>'+
-          (noev?'<td colspan="4" class="gev__gap">'+NOEV+'</td>':
-            td(e.role)+td(e.conf)+td(e.sdoc)+td(e.schunk))+
-          '<td class="gev__acts">'+(noev?'<span class="gev__gap">—</span>':
-            docLink(e.sdoc)+'<button class="gchip" type="button" data-ctx="'+e.i+'" aria-expanded="false">查看上下文</button>')+
-          '</td></tr>'+
-          (noev?'':'<tr class="gev__ctxrowWrap" data-ctxfor="'+e.i+'" hidden><td colspan="7"><div class="gev__ctx">'+
-            '<span class="label">查看上下文</span>'+
-            '<div class="gev__ctxrow"><span>接口</span><i>GET /api/documents/'+e.sdoc+'/chunks/'+e.schunk+'</i></div>'+
-            '<div class="gev__ctxrow"><span>chunk_id</span><i>'+e.schunk+'</i></div>'+
-            '<div class="gev__ctxrow"><span>chunk_content</span><i class="gev__gap">本原型未收录语料原文正文；接口返回的 chunk_content 为正文文本，此处如实留空，不补写。</i></div>'+
-            '<div class="gev__ctxrow"><span>neighbor_chunks</span><i>'+ctxNeighbors(e)+'</i></div>'+
-            '<div class="gev__ctxrow"><span>支撑关系</span><i>'+REL[e.rel]+'（'+e.rel+'）· '+
-              DSALL.idx[e.f].label+' → '+DSALL.idx[e.t].label+'</i></div>'+
-            '</div></td></tr>');
-      }).join(""):'<tr><td colspan="7" class="gev__gap">该实体在本次返回里没有邻接关系。</td></tr>')+
-      '</tbody></table></div>'+
-      '<p class="gnote">每条关系给两个动作：「查看原文 ↗」＝该块所属文档的 <i>document.url</i>（真实外链）；'+
-      '「查看上下文」＝展开该块的正文片段（真实接口 <i>GET /api/documents/{doc_id}/chunks/{chunk_id}</i> 的 '+
-      '<i>chunk_content</i> 与 <i>neighbor_chunks</i>）。不带证据属性的关系类型整行显示「'+NOEV+'」。</p>'+
-      '</section>';
-
-    /* ③ 文档聚合 */
-    var docIds=[];
-    if(rec&&rec.docs) rec.docs.forEach(function(id){docIds.push(id)});
-    rels.forEach(function(r){ if(r.e.sdoc&&docIds.indexOf(String(r.e.sdoc))<0) docIds.push(String(r.e.sdoc)) });
-    h+='<section class="gev__blk gev__blk--wide"><div class="gev__blkH">'+
-      '<span class="label">③ 文档聚合 · 按文档看证据</span><span class="label">'+docIds.length+' 篇</span></div>'+
-      '<div class="gev__tblWrap"><table class="gev__tbl"><thead><tr>'+
-        '<th>标题</th><th>来源站</th><th>发布日期</th><th>支撑的关系数</th><th>原文</th></tr></thead><tbody>'+
-      (docIds.length?docIds.map(function(id){
-        var d=docOf(id);
-        var cnt=DSALL.edges.filter(function(e){
-          return String(e.sdoc)===String(id)&&(e.f===n.id||e.t===n.id);
-        }).length;
-        return '<tr><td class="k"><b>'+(d.title||'—（本次记录未给出标题）')+'</b><em>doc_id '+d.id+'</em></td>'+
-          '<td>'+(d.site?('<b>'+d.site+'</b>'+(DOMAIN[d.site]?'<em class="ev__dom">'+DOMAIN[d.site]+'</em>':'')):'<span class="gev__gap">—（未给出）</span>')+'</td>'+
-          '<td class="mono">'+(d.date||'<span class="gev__gap">—（未给出）</span>')+'</td>'+
-          '<td class="mono">'+(cnt?cnt+" 条":'<span class="gev__gap">—（本次记录未逐条给出）</span>')+'</td>'+
-          '<td>'+docLink(id)+'</td></tr>';
-      }).join(""):'<tr><td colspan="5" class="gev__gap">本次返回里没有与该实体关联的文档。</td></tr>')+
-      '</tbody></table></div>'+
-      '<p class="gnote">'+(rec?rec.docNote:"该实体没有实测的文档计数；上表按本次返回的关系边反推，逐条可点。")+
-      (docIds.length?' 文档编号按文档去重列出，同一文档的多个文本块只计一行。':'')+'</p></section>';
-
-    /* ④ 事件实体额外四项 */
-    if(rec&&rec.event){
-      var ev=rec.event,sorted=ev.sources.slice().sort(function(a,b){
-        var da=(docOf(a.doc).date||""),db=(docOf(b.doc).date||"");
-        return (da<db?-1:(da>db?1:0))||(a.chunk<b.chunk?-1:1);
-      });
-      var seenDoc={},uniq=[];
-      sorted.forEach(function(s){ if(!seenDoc[s.doc]){seenDoc[s.doc]=1;uniq.push(s)} });
-      h+='<section class="gev__blk gev__blk--wide"><div class="gev__blkH">'+
-        '<span class="label">④ 事件实体额外四项</span>'+
-        '<span class="label">GET /api/graph/events/'+n.name+'</span></div>'+
-        '<div class="gev__kv4">'+
-          '<div><span class="label">参与者（含 role）</span><p>'+(ev.participants.length?
-            ev.participants.map(function(p){return '<b>'+p[0]+'</b><em class="gev__role">role='+p[1]+'</em>'}).join("、"):"—")+'</p></div>'+
-          '<div><span class="label">发布机构</span><p>'+(ev.issuer?'<b>'+ev.issuer+'</b>':'<span class="gev__gap">—（空）</span>')+'</p></div>'+
-          '<div><span class="label">相关政策</span><p>'+(ev.policies.length?
-            ev.policies.map(function(x){return '<b>'+x+'</b>'}).join("、"):'<span class="gev__gap">—（空）</span>')+'</p></div>'+
-          '<div><span class="label">多来源证据 · 按发布时间升序</span><p>原始 '+ev.sources.length+
-            ' 条 · 去重后 '+uniq.length+' 个来源</p></div>'+
-        '</div>'+
-        '<div class="gev__tblWrap"><table class="gev__tbl"><thead><tr>'+
-          '<th>来源</th><th>文档</th><th>文本块</th><th>来源站</th><th>发布日期</th><th>原文</th></tr></thead><tbody>'+
-        uniq.map(function(s,i){
-          var d=docOf(s.doc);
-          return '<tr><td class="k">'+(i===0?'<b class="gev__main">主要来源</b>':'<em>同源（同文档，已去重）</em>')+'</td>'+
-            '<td class="k"><b>'+(d.title||'—（未给出标题）')+'</b><em>doc_id '+s.doc+'</em></td>'+
-            '<td class="mono"><span class="gev__gap">'+ev.sources.map(function(x){return x.chunk}).join("、")+'</span></td>'+
-            '<td>'+(d.site?d.site:'<span class="gev__gap">—（未给出）</span>')+'</td>'+
-            '<td class="mono">'+(d.date||'<span class="gev__gap">—（未给出）</span>')+'</td>'+
-            '<td>'+docLink(s.doc)+'</td></tr>';
-        }).join("")+'</tbody></table></div>'+
-        '<p class="gnote">多来源证据按发布日期升序排列，采用实体证据库返回的真实日期；'+uniq.length+' 个来源去重后只有 1 个，'+
-        '最早一份标为「主要来源」。该来源在同一文档下对应 '+ev.sources.length+' 个文本块，合并为一行不重复计算。</p></section>';
-    } else if(n.type==="event"){
-      h+='<section class="gev__blk gev__blk--wide"><div class="gev__blkH">'+
-        '<span class="label">④ 事件实体额外四项</span><span class="label">未返回</span></div>'+
-        '<p class="gnote">本原型只对 EVT-0001 的事件级字段做了实测（参与者／发布机构／相关政策／多来源证据）；'+
-        '该事件实体未随本次记录返回这四项，如实留空，不补写。</p></section>';
-    }
-
-    h+='</div>'+
-      '<p class="gnote gnote--wide"><b>⑤ 缺口说明</b>：'+
-      '① 的计数与 ②③ 逐条列出的关系口径不同（① 是实体级实测总量，② 只列本次返回里逐条给出的关系），两处不做换算；'+
-      '不带证据属性的关系类型（如 <i>EVIDENCED_BY</i>）在 ② 里整行显示「'+NOEV+'」；'+
-      '文档标题／来源站／发布日期缺失时显示「—（未给出）」而不猜；'+
-      '正文片段不在单文件里，<i>chunk_content</i> 如实留空、<i>neighbor_chunks</i> 用本次返回里真实出现的相邻块编号。</p>';
-    evBox.innerHTML=h;
-  }
-  function ctxNeighbors(e){
-    var adj=[];
-    if(!e.sdoc||!e.schunk) return "本次返回里没有同文档的相邻块";
-    DSALL.edges.forEach(function(x){
-      if(x.schunk===null||String(x.sdoc)!==String(e.sdoc)) return;
-      if(Math.abs(parseInt(x.schunk,10)-parseInt(e.schunk,10))===1&&adj.indexOf(x.schunk)<0) adj.push(x.schunk);
-    });
-    EVALL.forEach(function(it){
-      if(String(it.doc)===String(e.sdoc)&&Math.abs(parseInt(it.chunk,10)-parseInt(e.schunk,10))===1&&adj.indexOf(it.chunk)<0)
-        adj.push(it.chunk);
-    });
-    adj.sort();
-    return adj.length?adj.map(function(c){return "chunk_id "+c}).join("、"):"本次返回里没有同文档的相邻块";
-  }
-
-  /* ---- 准确性声明与口径说明（随数据集变化） ---- */
-  function paintAcc(){
-    var n=DS.nodes.length,e=DS.edges.length;
-    var p1=DS.paths.filter(function(p){return p.d===1}).length,p2=DS.paths.filter(function(p){return p.d===2}).length;
-    if(accBox) accBox.innerHTML='<div class="gacc">'+
-      '<span class="label">准确性声明</span>'+
-      '<span class="small">'+(DS.mode==="s"?"会话载荷子图":"实体证据图谱")+
-        '：<b>'+n+'</b> 节点 / <b>'+e+'</b> 边，全部来自真实返回</span>'+
-      '<span class="tag tag--red">图谱深度上限 '+DS.hops+' 跳</span>'+
-      '<span class="tag tag--muted">'+(DS.mode==="s"?(opt.tag||"载荷 answer.graph_path"):"实体证据库 GET /api/graph/entities")+'</span>'+
-    '</div>';
-    if(noteBox) noteBox.innerHTML= DS.mode==="s"
-      ? '数据集＝会话 A7F3-0912 的 <i>answer.graph_path</i> 载荷。画布绘制全部 <i>'+n+'</i> 个节点与 <i>'+e+'</i> 条边；'+
-        '据此可枚举 1 跳路径 <i>'+p1+'</i> 条、2 跳路径 <i>'+p2+'</i> 条。跳数从各连通分量的中心实体（度最高者）起算：'+
-        '默认「2 跳」视图下，距中心超过 2 跳的节点被压暗（不是渲染缺失）。'+
-        '压暗只影响可见性，不删除数据 —— 属性面板照常可查、路径列表只是暂不显示，重置即回来。属性值未做任何补写。'
-      : '数据集＝实体证据库返回的真实关系：实体与边逐条取自作者给出的返回，字段照抄未改，共 <i>'+n+'</i> 节点 / <i>'+e+'</i> 边。'+
-        '其中 601633→EVT-0001 有两条 <i>PARTICIPATES_IN</i>（文本块 1001000 / 1001001），与 EVT-0001→601633 构成并行边，'+
-        '按贝塞尔曲率分叉绘制，互不重合。<i>EVIDENCED_BY</i> 边不带证据三项，画布与证据表都如实显示「'+NOEV+'」。';
-  }
-
-  /* ---- 交互 ---- */
   function pick(t){
     if(t.classList.contains("gnode")){
-      var id=t.getAttribute("data-node"),n=DS.idx[id];
-      if(!n) return;                              // 该 id 不在当前数据集里 → 不改变选中态
-      S.edge=null;S.path=null;S.sel=(S.sel&&S.sel.id===id)?null:n;
+      var id=t.getAttribute("data-node");
+      S.edge=null;S.path=null;S.sel=(S.sel&&S.sel.id===id)?null:NREF[id];
     }else{
       var i=parseInt(t.getAttribute("data-edge"),10);
-      if(!(i>=0)||!DS.edges[i]) return;
       S.sel=null;S.path=null;S.edge=(S.edge===i)?null:i;
     }
     refresh();
   }
-  var moved=false;
+  var moved=false;                                // 拖拽平移结束时不要顺手把选中清掉
   svg.addEventListener("click",function(e){
     if(moved){moved=false;return}
     var t=e.target.closest?e.target.closest(".gnode,.geline"):null;
@@ -3394,19 +2620,19 @@ function mountGraph(host,opt){
     var t=e.target.closest?e.target.closest(".gnode,.geline"):null;if(!t) return;
     e.preventDefault();pick(t);
   });
-  if(pathsBox) pathsBox.addEventListener("click",function(e){
+  pathsBox.addEventListener("click",function(e){
     var b=e.target.closest?e.target.closest("[data-pi]"):null;if(!b) return;
-    var p=DS.paths[parseInt(b.getAttribute("data-pi"),10)];
+    var p=GPATHLIST[parseInt(b.getAttribute("data-pi"),10)];
     S.path=(S.path===p)?null:p;S.sel=null;S.edge=null;refresh();
   });
-  if(filters) filters.addEventListener("click",function(e){
+  filters.addEventListener("click",function(e){
     var b=e.target.closest?e.target.closest("[data-ftype]"):null;if(!b||b.disabled) return;
     var k=b.getAttribute("data-ftype");
     S.hidden[k]=!S.hidden[k];
     b.setAttribute("aria-checked",S.hidden[k]?"false":"true");
     refresh();
   });
-  if(depthBox) depthBox.addEventListener("click",function(e){
+  depthBox.addEventListener("click",function(e){
     var b=e.target.closest?e.target.closest("[data-depth]"):null;if(!b) return;
     S.depth=parseInt(b.getAttribute("data-depth"),10);
     $$("[data-depth]",depthBox).forEach(function(x){
@@ -3414,49 +2640,25 @@ function mountGraph(host,opt){
     });
     refresh();
   });
-  if(modesBox) modesBox.addEventListener("click",function(e){
-    var b=e.target.closest?e.target.closest("[data-mode]"):null;if(!b) return;
-    var m=b.getAttribute("data-mode");if(m===DS.mode) return;
-    setDataset(cloneDS(m==="s"?GDS_S:GDS_E));
-  });
-  if(pbody) pbody.addEventListener("click",function(e){
+  pbody.addEventListener("click",function(e){
     var b=e.target.closest?e.target.closest('[data-g="jump"]'):null;if(!b||b.disabled) return;
     if(S.edge===null) return;
-    if(window.__jumpEvidence) window.__jumpEvidence(DS.edges[S.edge].schunk);
+    if(window.__jumpEvidence) window.__jumpEvidence(GEDGES[S.edge].schunk);
   });
-  host.addEventListener("click",function(e){
-    if(!e.target.closest) return;
-    var r=e.target.closest('[data-g="ruletog"]');
-    if(r){ var rl=q("rule"); var open=r.getAttribute("aria-expanded")==="true";
-      r.setAttribute("aria-expanded",open?"false":"true"); if(rl) rl.hidden=open; return }
-    var c=e.target.closest("[data-ctx]");
-    if(c){ var i=c.getAttribute("data-ctx");
-      var row=host.querySelector('[data-ctxfor="'+i+'"]'),open2=c.getAttribute("aria-expanded")==="true";
-      c.setAttribute("aria-expanded",open2?"false":"true");
-      if(row) row.hidden=open2;
-    }
-  });
-  function setDataset(ds){
-    DS=ds;
-    S.sel=null;S.edge=null;S.path=null;S.hidden={};S.depth=2;
-    buildEdgeOffsets();paintLegend();paintModes();paintFilters();paintDepth();paintAcc();
-    fitView();paint();refresh();
-    if(opt.onDataset) opt.onDataset(DS);
-  }
   q("reset").addEventListener("click",function(){
     S.sel=null;S.edge=null;S.path=null;S.hidden={};S.depth=2;
     $$("[data-ftype]",filters).forEach(function(b){b.setAttribute("aria-checked","true")});
     $$("[data-depth]",depthBox).forEach(function(x){x.setAttribute("aria-pressed",x.getAttribute("data-depth")==="2"?"true":"false")});
-    layout(DS);fitView();paint();refresh();
+    view={k:1,tx:0,ty:0};applyView();
     if(opt.onReset) opt.onReset();
+    refresh();
   });
-  q("fit").addEventListener("click",fitView);
 
-  // 缩放：滚轮以光标为锚点 ＋ 两个按钮；平移：拖拽空白处；节点可拖动（措施⑤）
+  // 缩放：滚轮（以光标为锚点）＋ 两个按钮；平移：拖拽空白处
   function zoomAt(cx,cy,f){
     var r=svg.getBoundingClientRect();if(!r.width) return;
     var mx=(cx-r.left)/r.width*VBW,my=(cy-r.top)/r.height*VBH;
-    var nk=Math.max(.4,Math.min(3.2,view.k*f));
+    var nk=Math.max(.5,Math.min(3,view.k*f));
     view.tx=mx-(mx-view.tx)*(nk/view.k);
     view.ty=my-(my-view.ty)*(nk/view.k);
     view.k=nk;applyView();
@@ -3467,46 +2669,17 @@ function mountGraph(host,opt){
   },{passive:false});
   q("zin").addEventListener("click",function(){var r=svg.getBoundingClientRect();zoomAt(r.left+r.width/2,r.top+r.height/2,1.2)});
   q("zout").addEventListener("click",function(){var r=svg.getBoundingClientRect();zoomAt(r.left+r.width/2,r.top+r.height/2,1/1.2)});
+  q("zres").addEventListener("click",function(){view={k:1,tx:0,ty:0};applyView()});
 
-  function toLocal(cx,cy){
-    var r=svg.getBoundingClientRect();if(!r.width) return null;
-    var vx=(cx-r.left)/r.width*VBW,vy=(cy-r.top)/r.height*VBH;
-    return {x:(vx-view.tx)/view.k,y:(vy-view.ty)/view.k};
-  }
-  function moveNode(n){
-    if(n.el) n.el.setAttribute("transform","translate("+n.x.toFixed(1)+","+n.y.toFixed(1)+")");
-    DS.edges.forEach(function(e){
-      if(e.f!==n.id&&e.t!==n.id) return;
-      var g=edgeGeom(e);
-      var p=e.el&&e.el.querySelector(".gedge"),hit=e.el&&e.el.querySelector(".gehit"),lab=e.el&&e.el.querySelector(".gelabel");
-      if(p)p.setAttribute("d",g.d);
-      if(hit)hit.setAttribute("d",g.d);
-      if(lab){lab.setAttribute("x",g.lx.toFixed(1));lab.setAttribute("y",g.ly.toFixed(1))}
-    });
-  }
-  var drag=null,dn=null;
+  var drag=null;
   svg.addEventListener("pointerdown",function(e){
-    var g=e.target.closest?e.target.closest(".gnode"):null;
-    var p=toLocal(e.clientX,e.clientY);if(!p) return;
-    if(g){
-      var n=DS.idx[g.getAttribute("data-node")];
-      if(!n||!n.on) return;
-      dn={n:n,dx:n.x-p.x,dy:n.y-p.y};moved=false;
-      g.classList.add("dragging");
-    }else{
-      drag={x:e.clientX,y:e.clientY,tx:view.tx,ty:view.ty};
-      svg.classList.add("panning");
-    }
+    if(e.target.closest&&e.target.closest(".gnode,.geline")) return;
+    drag={x:e.clientX,y:e.clientY,tx:view.tx,ty:view.ty};
+    svg.classList.add("panning");
     if(svg.setPointerCapture) svg.setPointerCapture(e.pointerId);
   });
   svg.addEventListener("pointermove",function(e){
-    if(!drag&&!dn) return;
-    var p=toLocal(e.clientX,e.clientY);if(!p) return;
-    if(dn){
-      if(Math.abs(p.x-(dn.n.x-dn.dx))+Math.abs(p.y-(dn.n.y-dn.dy))>3) moved=true;
-      dn.n.x=p.x+dn.dx;dn.n.y=p.y+dn.dy;moveNode(dn.n);
-      return;
-    }
+    if(!drag) return;
     var r=svg.getBoundingClientRect();if(!r.width) return;
     var dx=e.clientX-drag.x,dy=e.clientY-drag.y;
     if(Math.abs(dx)+Math.abs(dy)>4) moved=true;
@@ -3515,25 +2688,17 @@ function mountGraph(host,opt){
     applyView();
   });
   function endPan(e){
-    if(dn&&dn.n.el) dn.n.el.classList.remove("dragging");
-    if(dn){ dsReclip(); }
-    drag=null;dn=null;svg.classList.remove("panning");
+    if(!drag) return;drag=null;svg.classList.remove("panning");
     if(svg.releasePointerCapture&&e&&e.pointerId!==undefined&&svg.hasPointerCapture&&svg.hasPointerCapture(e.pointerId))
       svg.releasePointerCapture(e.pointerId);
   }
-  function dsReclip(){ refresh(); }
   svg.addEventListener("pointerup",endPan);
   svg.addEventListener("pointercancel",endPan);
 
-  paintLegend();paintModes();paintFilters();paintDepth();paintAcc();
-  fitView();paint();
-  if(opt.select){ var s=DS.idx[opt.select]; if(s) S.sel=s }
-  refresh();
+  paint();refresh();
   return {
     host:host,
-    ds:function(){return DS},
     setTimeRange:function(a,b){S.i0=a;S.i1=b;refresh()},
-    setDataset:setDataset,
     reset:function(){q("reset").click()}
   };
 }
@@ -3551,13 +2716,9 @@ function setRange(a,b){
   if(tlPaint) tlPaint();
   if(G3) G3.setTimeRange(TL.i0,TL.i1);             // 画布与时间轴联动（同一实例）
 }
-/* 屏③ 图谱实例：与历史回看抽屉共用 mountGraph 这一套渲染器。
-   v5：默认打开「会话子图」（与 v4 的 10 节点 / 6 边一致，屏②那段话仍然成立），
-   可通过顶部数据集分段控件切到「实体证据图谱」（作者给出的 601633 / 000001 / EVT-0001 真实关系）。
-   select:"pab" —— 进屏即选中平安银行 000001，实体证据区立刻给出作者给出的实测计数，不用先点一下。 */
-var G3=mountGraph($("#graphApp"),{ds:GDS_S,tag:"载荷 answer.graph_path",modes:true,select:"pab",
-  onReset:function(){ setRange(0,MONTHS.length-1) },
-  onDataset:function(){ setRange(TL.i0,TL.i1) }});
+/* 屏③ 图谱实例：与历史回看抽屉共用 mountGraph 这一套渲染器 */
+var G3=mountGraph($("#graphApp"),{tag:"载荷 answer.graph_path",
+  onReset:function(){ setRange(0,MONTHS.length-1) }});
 (function timeline(){
   var svg=$("#tlSvg");if(!svg) return;
   var PAD=34,W=1160,step=(W-PAD*2)/(MONTHS.length-1);
@@ -3573,8 +2734,7 @@ var G3=mountGraph($("#graphApp"),{ds:GDS_S,tag:"载荷 answer.graph_path",modes:
         out+='<text class="tl__tlab" x="'+X(i).toFixed(1)+'" y="90" text-anchor="middle">'+MONTHS[i]+"</text>";
     }
     // 事件点：按实体类型分泳道，只画记录里真的有 event_time / publish_date 的节点
-    // v5：跟随当前数据集（切换数据集后时间轴自动重算，不共用上一套的点）
-    G3.ds().nodes.forEach(function(n){
+    GNODES.forEach(function(n){
       if(n.ti===null) return;                   // 时间为空 → 落不到轴上，不参与时间筛选
       var ly=44-(TKEYS.indexOf(n.type)%6)*7;    // 同类型同泳道
       var inR=n.ti>=TL.i0&&n.ti<=TL.i1;
@@ -3723,9 +2883,7 @@ var SESSIONS=[
           '8 条的 url 逐字取自真实接口 <span class="mono">GET /api/evidence/16</span> 的原样返回，未改写、未拼接。'+
           '其中证据1／3 是同文档的两个块（chunk_id 1337001 / 1337000）、证据2／4 同理（1274004 / 1274000），照实分列不合并。</p></div>';
       // 第四段：图谱路径可视化（惰性挂载，与屏③同一套渲染器 / 图例 / 准确性声明）
-      // v5：回看固定用「会话载荷子图」（回看还原的是当时那一次的路径载荷），
-      //     因此 modes:false 不显示数据集切换控件，去遮挡布局与自检规则仍与屏③完全一致。
-      if(gHost&&!dGraph) dGraph=mountGraph(gHost,{ds:GDS_S,modes:false,tag:"载荷 answer.graph_path · 回看还原"});
+      if(gHost&&!dGraph) dGraph=mountGraph(gHost,{tag:"载荷 answer.graph_path · 回看还原"});
     },560);
   }
   // 证据表里的「定位证据」→ 关抽屉、切回屏②并高亮那条证据卡（__jumpEvidence 内部已处理关抽屉）

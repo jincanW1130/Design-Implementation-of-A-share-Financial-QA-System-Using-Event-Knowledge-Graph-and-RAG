@@ -135,6 +135,15 @@ def _page_args(page, page_size) -> tuple:
     return page_no, size
 
 
+def _truthy(raw) -> bool:
+    """布尔开关：`1`／`true`／`yes`／`on`（大小写不敏感）为真，其余（含缺省）为假。
+
+    用于 `with_evidence`（第 9 阶段新增的**可选**开关）：缺省与任何非真值都按「关」处理，
+    以保证「不带参数时响应逐字节与旧版一致」这条硬约束不受参数杂音影响。
+    """
+    return _s(raw).strip().lower() in ("1", "true", "yes", "on")
+
+
 def _check_type(label) -> str | None:
     """`type` 必须是六个实体标签之一（空表示不限），否则 1002。"""
     if label is None or _s(label).strip() == "":
@@ -491,6 +500,100 @@ def reader():
 # --------------------------------------------------------------------------
 # 5. 响应整形：关系项与路径项
 # --------------------------------------------------------------------------
+# 5.0 实体级证据：文档元数据的**批量**补全（第 9 阶段新增）
+# --------------------------------------------------------------------------
+# 设计要点（对应任务书「作者意见：每个实体展示的证据不够充足」）：
+#   * 一次调用拿全实体的证据——N 条边只发 2 条 SQL（`document` 一条 IN、`document_chunk`
+#     一条 IN），**不逐条查**，从根上消掉前端拼证据时的 N+1；
+#   * 文档元数据只从 MySQL 六表取（`document`／`document_chunk`），图谱侧只出边与证据属性；
+#   * **空值如实**：`document` 里没有对应行时条目仍在、字段为 `null` 且标 `missing=true`，
+#     不丢条目、不编内容。
+def _fetch_doc_meta(doc_ids) -> dict:
+    """按 `doc_id` 批量取文档元数据（**一条 `IN (...)`**）：`{doc_id: {title, source, …}}`。
+
+    没有对应行的 `doc_id` **不会**出现在返回值里——调用方据此标 `missing=true`。
+    """
+    ids = sorted({int(x) for x in doc_ids if x is not None})
+    if not ids:
+        return {}
+    marks = ",".join(["%s"] * len(ids))
+    out = {}
+    for row in db.query(
+            "SELECT doc_id, title, source, publish_time, url, category FROM document "
+            "WHERE doc_id IN (%s)" % marks, tuple(ids)):
+        out[_as_int(row["doc_id"])] = {
+            "title": _s(row["title"]), "source": _s(row["source"]),
+            "publish_time": _iso(row["publish_time"]), "url": row["url"],
+            "category": _s(row["category"])}
+    return out
+
+
+def _fetch_chunk_meta(chunk_ids) -> dict:
+    """按 `chunk_id` 批量取块序号（**一条 `IN (...)`**）：`{chunk_id: chunk_index}`。"""
+    ids = sorted({int(x) for x in chunk_ids if x is not None})
+    if not ids:
+        return {}
+    marks = ",".join(["%s"] * len(ids))
+    return {_as_int(row["chunk_id"]): _as_int(row["chunk_index"])
+            for row in db.query(
+                "SELECT chunk_id, chunk_index FROM document_chunk "
+                "WHERE chunk_id IN (%s)" % marks, tuple(ids))}
+
+
+def _evidence_index(raw_items: list) -> tuple:
+    """给一批关系项做**一次性**元数据补全，返回 `(doc_meta, chunk_meta)` 两个字典。
+
+    只收集**带证据属性的边**（`evidence` 非空）的 `source_doc_id`／`source_chunk_id`；
+    `EVIDENCED_BY` 这类不带证据属性的边不参与（它们走 `relations_without_evidence`／`note`）。
+    """
+    doc_ids, chunk_ids = set(), set()
+    for item in raw_items:
+        evidence = item.get("evidence") or {}
+        d = _as_int(evidence.get("source_doc_id"))
+        c = _as_int(evidence.get("source_chunk_id"))
+        if d is not None:
+            doc_ids.add(d)
+        if c is not None:
+            chunk_ids.add(c)
+    return _fetch_doc_meta(doc_ids), _fetch_chunk_meta(chunk_ids)
+
+
+def _evidence_obj(evidence: dict, doc_meta: dict, chunk_meta: dict) -> dict:
+    """把一条边上的证据两项（`source_doc_id`／`source_chunk_id`）＋ 批量元数据，
+    整形成 `{doc_id, chunk_id, title, source, publish_time, url, chunk_index, missing}`。
+
+    `missing=true` 表示 `document` 表里没有该 `doc_id` 的行（此时 `title` 等为 `null`）。
+    """
+    doc_id = _as_int((evidence or {}).get("source_doc_id"))
+    chunk_id = _as_int((evidence or {}).get("source_chunk_id"))
+    meta = doc_meta.get(doc_id)
+    return {"doc_id": doc_id, "chunk_id": chunk_id,
+            "title": (meta or {}).get("title"),
+            "source": (meta or {}).get("source"),
+            "publish_time": (meta or {}).get("publish_time"),
+            "url": (meta or {}).get("url"),
+            "chunk_index": chunk_meta.get(chunk_id),
+            "missing": meta is None}
+
+
+NO_EVIDENCE_NOTE = "该关系类型不带证据属性"
+"""不带证据属性的边（如 `EVIDENCED_BY`）在证据视图里的如实说明。"""
+
+
+def _attach_edge_evidence(edge: dict, item: dict, doc_meta: dict, chunk_meta: dict) -> None:
+    """**就地**给一条已整形的边**追加**证据对象（只在 `with_evidence=1` 时调用）。
+
+    带证据属性 → 追加 `evidence`；不带（如 `EVIDENCED_BY`）→ `evidence: null` ＋ `note`。
+    **不改动边已有的任何键**（`_relation_item` 的产物原样保留）。
+    """
+    evidence = item.get("evidence")
+    if evidence:
+        edge["evidence"] = _evidence_obj(evidence, doc_meta, chunk_meta)
+    else:
+        edge["evidence"] = None
+        edge["note"] = NO_EVIDENCE_NOTE
+
+
 def _relation_item(item: dict, neighbor_label: str) -> dict:
     """一条关系项：证据三项（`EVIDENCED_BY` 换成 `evidence_doc_id`）＋ 角色与对端。
 
@@ -538,10 +641,14 @@ def _edge_id(item: dict):
     return item.get("edge_id")
 
 
-def _path_payload(reader_obj: GraphReader, path: dict) -> dict:
+def _path_payload(reader_obj: GraphReader, path: dict, with_evidence: bool = False,
+                  doc_meta: dict | None = None, chunk_meta: dict | None = None) -> dict:
     """把内部路径项整形为表 4-13／《10》4.7.3 的 `paths[i]`：
 
     `{start, end, depth, nodes:[{node_id,label,name}], edges:[…证据属性…]}`。
+
+    `with_evidence=True` 时每条边**追加**一个 `evidence` 对象（元数据由调用方**批量**查库后
+    经 `doc_meta`／`chunk_meta` 传入）；默认 False 时产物与既有版本逐字节一致。
     """
     node_ids = list(path.get("nodes") or [])
     briefs = [reader_obj.brief(nid) for nid in node_ids]
@@ -549,7 +656,10 @@ def _path_payload(reader_obj: GraphReader, path: dict) -> dict:
     for rel in path.get("relations") or []:
         neighbor = _s(rel.get("neighbor"))
         label = next((b["label"] for b in briefs if b["node_id"] == neighbor), "")
-        edges.append(_relation_item(rel, label))
+        edge = _relation_item(rel, label)
+        if with_evidence:
+            _attach_edge_evidence(edge, rel, doc_meta or {}, chunk_meta or {})
+        edges.append(edge)
     return {"start": _s(path.get("start")), "end": _s(path.get("end")),
             "depth": int(path.get("depth") or 0), "nodes": briefs, "edges": edges,
             "node_ids": node_ids}
@@ -600,10 +710,18 @@ async def list_entities(keyword: str | None = None, type: str | None = None,   #
 # 7. 接口二：GET /api/graph/entities/{node_id}/neighbors
 # --------------------------------------------------------------------------
 @router.get("/entities/{node_id}/neighbors")
-async def neighbors(node_id: str, relation: str | None = None, direction: str | None = None):
-    """一跳邻居（走 `graph_service` 的 G1）；节点不存在 → 2001；无边 → HTTP 200 空结果。"""
+async def neighbors(node_id: str, relation: str | None = None, direction: str | None = None,
+                    with_evidence: str | None = None):
+    """一跳邻居（走 `graph_service` 的 G1）；节点不存在 → 2001；无边 → HTTP 200 空结果。
+
+    **可选开关 `with_evidence=1`**（第 9 阶段新增）：打开时每条边**追加**一个 `evidence`
+    对象（`doc_id`／`chunk_id`／`title`／`source`／`publish_time`／`url`／`chunk_index`／
+    `missing`，元数据经**一次 `IN (...)`** 批量查库）；不带证据属性的边给 `evidence: null`
+    ＋ `note`。**默认关闭时响应逐字节与既有版本一致**（不加任何字段）。
+    """
     rel_filter = _check_relation(relation)
     dir_filter = _check_direction(direction)
+    with_ev = _truthy(with_evidence)
     with reader() as rd:
         env = rd.graph.g1_one_hop(node_id)
         code = _s(env.get("code"))
@@ -612,7 +730,7 @@ async def neighbors(node_id: str, relation: str | None = None, direction: str | 
         if code == gs.RC_INVALID_INPUT:
             raise errors.ApiError(1002, detail="节点标识非法：%s" % node_id)
         raw = _dedup_edges(env.get("results") or [])
-        edges, node_index = [], {}
+        edges, node_index, pairs = [], {}, []
         for item in raw:
             if rel_filter and _s(item.get("relation")) != rel_filter:
                 continue
@@ -621,7 +739,13 @@ async def neighbors(node_id: str, relation: str | None = None, direction: str | 
             neighbor = _s(item.get("neighbor"))
             brief = _brief_of(rd, item, neighbor)
             node_index[neighbor] = brief
-            edges.append(_relation_item(item, brief["label"]))
+            edge = _relation_item(item, brief["label"])
+            edges.append(edge)
+            pairs.append((edge, item))
+        if with_ev:
+            doc_meta, chunk_meta = _evidence_index([it for _, it in pairs])
+            for edge, item in pairs:
+                _attach_edge_evidence(edge, item, doc_meta, chunk_meta)
         nodes = [node_index[nid] for nid in sorted(node_index,
                                                   key=lambda x: (node_index[x]["label"], x))]
         edges.sort(key=lambda e: (e["relation"], e["direction"], e["neighbor"]))
@@ -651,12 +775,143 @@ def _brief_of(rd: GraphReader, item: dict, node_id: str) -> dict:
 
 
 # --------------------------------------------------------------------------
+# 7.5 接口二之补：GET /api/graph/entities/{node_id}/evidence（第 9 阶段新增）
+# --------------------------------------------------------------------------
+def _entity_edges(rd: GraphReader, node_id: str, depth: int) -> list:
+    """一个实体在 `depth` 跳内的**去重边**集合（走既有图谱查询层，不另写 Cypher）。
+
+    * `depth=1` → G1（`g1_one_hop`）的边；
+    * `depth=2` → G2（`g2_two_hop`）各路径上的边（G2 已含 1 跳，故是 1 跳的超集）。
+
+    节点不存在 → 2001；节点标识非法 → 1002。返回边项（含 `evidence` 属性）的列表。
+    """
+    env = rd.graph.g2_two_hop(node_id) if depth == 2 else rd.graph.g1_one_hop(node_id)
+    code = _s(env.get("code"))
+    if code == gs.RC_NOT_FOUND:
+        raise errors.ApiError(2001, detail="节点标识未匹配到任何实体：%s" % node_id)
+    if code == gs.RC_INVALID_INPUT:
+        raise errors.ApiError(1002, detail="节点标识非法：%s" % node_id)
+    if depth == 2:
+        raw = []
+        for path in env.get("results") or []:
+            raw += list(path.get("relations") or [])
+    else:
+        raw = env.get("results") or []
+    return _dedup_edges(raw)                         # 按 edge_id 去重（两处同口径）
+
+
+def _evidence_documents(edges: list) -> tuple:
+    """把边集归并成**按文档去重**的证据列表 ＋ 不带证据属性的边清单。
+
+    返回 `(documents, relations_without_evidence, chunk_total)`：
+    * `documents`：`{doc_id, title, source, publish_time, url, category, support_relations,
+      missing, chunks:[{chunk_id, chunk_index, relations:[{relation, neighbor, role,
+      confidence}]}]}`——元数据来自**一次 `IN (...)`** 的 `document`／`document_chunk`；
+      查无此文档的行仍出现并标 `missing=true`（字段为 `null`）；
+    * `relations_without_evidence`：`EVIDENCED_BY` 这类**不带证据属性**的边，
+      每项 `{relation, neighbor, note}`——**如实列出，不隐藏、不补造**；
+    * `chunk_total`：去重后的块总数（分页前）。
+    """
+    raw_docs, chunk_ids = {}, set()
+    without = []
+    for item in edges:
+        evidence = item.get("evidence")
+        doc_id = _as_int((evidence or {}).get("source_doc_id")) if evidence else None
+        if doc_id is None:                           # 不带证据属性（如 EVIDENCED_BY）
+            without.append({"relation": _s(item.get("relation")),
+                            "neighbor": _s(item.get("neighbor")),
+                            "note": NO_EVIDENCE_NOTE})
+            continue
+        chunk_id = _as_int((evidence or {}).get("source_chunk_id"))
+        row = raw_docs.setdefault(doc_id, {"doc_id": doc_id, "support_relations": 0,
+                                           "chunks": {}})
+        row["support_relations"] += 1
+        if chunk_id is not None:
+            chunk_ids.add(chunk_id)
+            chunk = row["chunks"].setdefault(chunk_id, {"chunk_id": chunk_id, "relations": []})
+            chunk["relations"].append({
+                "relation": _s(item.get("relation")), "neighbor": _s(item.get("neighbor")),
+                "role": _s(item.get("role")),
+                "confidence": _float((evidence or {}).get("confidence"))})
+
+    doc_meta = _fetch_doc_meta(list(raw_docs))       # 一条 IN
+    chunk_meta = _fetch_chunk_meta(list(chunk_ids))  # 一条 IN
+
+    documents = []
+    for doc_id, row in raw_docs.items():
+        meta = doc_meta.get(doc_id)
+        chunks = []
+        for chunk_id, chunk in row["chunks"].items():
+            chunk["chunk_index"] = chunk_meta.get(chunk_id)
+            chunk["relations"].sort(
+                key=lambda r: (r["relation"], r["neighbor"], r["role"]))
+            chunks.append(chunk)
+        chunks.sort(key=lambda c: (c["chunk_index"] is None, c["chunk_index"] or 0,
+                                   c["chunk_id"]))
+        documents.append({
+            "doc_id": doc_id,
+            "title": (meta or {}).get("title"),
+            "source": (meta or {}).get("source"),
+            "publish_time": (meta or {}).get("publish_time"),
+            "url": (meta or {}).get("url"),
+            "category": (meta or {}).get("category"),
+            "support_relations": row["support_relations"],
+            "missing": meta is None,
+            "chunks": chunks})
+    # 排序：发布时间倒序（最新在前），缺发布时间的排在最后；同键按 doc_id 升序（两趟稳定排序）
+    documents.sort(key=lambda d: d["doc_id"])
+    documents.sort(key=lambda d: _s(d.get("publish_time")), reverse=True)
+    chunk_total = sum(len(d["chunks"]) for d in documents)
+    return documents, without, chunk_total
+
+
+@router.get("/entities/{node_id}/evidence")
+async def entity_evidence(node_id: str, depth: str | None = None,
+                          page: str | None = None, page_size: str | None = None):
+    """**一次调用拿全实体的证据**（第 9 阶段新增，表 4-13 之外的新增接口）。
+
+    * `depth`：`1`（默认）走 G1 一跳边，`2` 走 G2 两跳边；其余 → 1002；
+    * `page`／`page_size`：对 `documents[]` 分页（`1 ≤ page_size ≤ 200`）；
+    * 节点不存在 → 2001；无证据 → HTTP 200 ＋ 空列表（**2002 的语义，用空数据表达**）；
+    * 返回键：`node`／`counts`／`documents`／`documents_total`／`chunks_total`／
+      `relations_without_evidence`／`depth`／`params`／`scope`／`source`。
+    """
+    depth_no = _parse_int(depth, "depth", default=1)
+    if depth_no not in (1, 2):
+        raise errors.ApiError(1002, detail="depth 只能是 1 或 2：%r" % depth)
+    page_no, size = _page_args(page, page_size)
+
+    with reader() as rd:
+        brief = rd.brief(node_id)
+        edges = _entity_edges(rd, node_id, depth_no)          # 节点不存在时在此抛 2001
+    documents, without, chunk_total = _evidence_documents(edges)
+
+    neighbors = {_s(e.get("neighbor")) for e in edges}
+    total_docs = len(documents)
+    start = (page_no - 1) * size
+    return errors.ok({
+        "node": brief,
+        "counts": {"neighbors": len(neighbors), "relations": len(edges),
+                   "documents": total_docs, "chunks": chunk_total},
+        "documents": documents[start:start + size],
+        "documents_total": total_docs,
+        "chunks_total": chunk_total,
+        "relations_without_evidence": without,
+        "depth": depth_no,
+        "params": {"depth": depth_no, "page": page_no, "page_size": size},
+        "scope": "entity_evidence",
+        "source": "图谱查询层（services.graph_service 的 G1／G2，本地 Neo4j 实例）"
+                  "＋ MySQL 六表（document／document_chunk 元数据，各一次 IN 批量查）"})
+
+
+# --------------------------------------------------------------------------
 # 8. 接口三：GET /api/graph/paths
 # --------------------------------------------------------------------------
 @router.get("/paths")
 async def paths(from_node: str | None = None, to_node: str | None = None,
                 relation: str | None = None, hop: str | None = None,
-                start_time: str | None = None, end_time: str | None = None):
+                start_time: str | None = None, end_time: str | None = None,
+                with_evidence: str | None = None):
     """多跳路径查询：`from_node` ＋（`to_node` 或 `relation`），`hop` 只接受 1／2。
 
     两条模式：
@@ -667,6 +922,10 @@ async def paths(from_node: str | None = None, to_node: str | None = None,
     时间窗按 **`event_time`** 过滤：路径上**含 Event 节点**时，要求至少一个 Event 节点的
     `event_time` 落在闭区间内（`event_time` 为空的 Event 不满足，即按空值策略剔除）；
     路径上没有任何 Event 节点时视为与时间无关，原样保留。
+
+    **可选开关 `with_evidence=1`**（第 9 阶段新增）：打开时每条边的 `edges[i]` **追加**一个
+    `evidence` 对象（元数据经**一次 `IN (...)`** 批量查库）；不带证据属性的边给 `evidence: null`
+    ＋ `note`。默认关闭时响应逐字节与既有版本一致。
     """
     source = _s(from_node).strip()
     if not source:
@@ -704,7 +963,13 @@ async def paths(from_node: str | None = None, to_node: str | None = None,
         raw = _dedup_paths(raw)
         if lo or hi:
             raw = [p for p in raw if _path_in_window(rd, p, lo, hi)]
-        payload = [_path_payload(rd, p) for p in raw]
+        with_ev = _truthy(with_evidence)
+        doc_meta = chunk_meta = None
+        if with_ev:
+            # 全部路径上的边一起收集 → 一次 IN 批量补元数据（不逐条查）
+            all_raw = [rel for p in raw for rel in (p.get("relations") or [])]
+            doc_meta, chunk_meta = _evidence_index(all_raw)
+        payload = [_path_payload(rd, p, with_ev, doc_meta, chunk_meta) for p in raw]
         payload = _sort_paths(payload)
     return errors.ok({"paths": payload, "hop": hop_no,
                       "is_graph_extended": bool(payload),

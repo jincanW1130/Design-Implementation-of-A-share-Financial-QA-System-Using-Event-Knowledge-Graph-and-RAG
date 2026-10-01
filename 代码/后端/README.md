@@ -242,6 +242,58 @@ G6 的九组集合…）。当前覆盖 **17 组**：3 家公司的 G1 与 G2（
 * 外部源字段可能随上游调整而变；字段名一旦变化，本层按「解析失败」降级为「未接入」，
   **不会返回半真半假的数据**。
 
+## 3.3 实体级证据（作者新增意见：每个实体展示的证据不够充足）
+
+> **动机**：既有的 `GET /api/graph/entities/{node_id}/neighbors` 每条边只给
+> `source_doc_id`／`source_chunk_id`／`confidence`／`role`，**不带文档元数据**（标题／来源站／
+> 发布日期／原文链接）。前端要拼出「这个实体的证据」就得对每条边再调一次 chunk 接口（N+1）。
+> 本批新增**一次调用拿全实体证据**的接口，并给两条既有接口加一个**默认关闭**的证据开关。
+
+### 新增接口 `GET /api/graph/entities/{node_id}/evidence`
+
+| 参数 | 说明 |
+| --- | --- |
+| `depth` | `1`（默认，走 G1 一跳边）或 `2`（走 G2 两跳边）；其余 → **1002** |
+| `page`／`page_size` | 对 `documents[]` 分页；`1 ≤ page_size ≤ 200`，非法 → 1002 |
+
+`data` 返回键：
+
+* `node`：实体本身（`node_id`／`label`／`name`／`stock_code`，沿用既有 brief 形状）；
+* `counts`：`{neighbors, relations, documents, chunks}`——**真实计数**（去重后）；
+* `documents[]`：**按文档去重**的证据列表，每条含
+  `doc_id`／`title`／`source`／`publish_time`／`url`／`category`／
+  `support_relations`（该文档支撑了几条关系）／`missing`（`document` 表缺行标 `true`）／
+  `chunks[]`（该文档下的块：`chunk_id`／`chunk_index`／`relations[]`＝用到的
+  `relation`／对端 `neighbor`／`role`／`confidence`）；
+* `documents_total`／`chunks_total`：**分页前**的总数；
+* `relations_without_evidence`：**不带证据属性**的边清单（如 `EVIDENCED_BY`），
+  每项 `{relation, neighbor, note}`——**如实列出，不隐藏、不补造**；
+* `depth`／`params`（`{depth, page, page_size}`）／`scope`（`"entity_evidence"`）；
+* `source`：数据来源说明（图谱查询层 ＋ MySQL 六表）。
+
+**错误码**：`depth`／分页非法 → 1002；节点不存在 → 2001；无证据 → HTTP 200 ＋ 空列表
+（即 **2002 的语义，用空数据表达**，响应体里不出现该码）。
+
+**取数**：邻居与边走**既有图谱查询层**（`services\graph_service.py` 的 G1／G2，两后端同语义）；
+文档元数据查 **MySQL 六表**（`document`／`document_chunk`），**各一次 `IN (...)` 批量查**——
+同一个实体无论多少条边，DB 层**恒定只发 2 条 SQL**，从根上消掉 N+1。
+`document` 里缺行的文档条目**仍出现**、字段为 `null` 并标 `missing: true`（不丢条目、不编内容）。
+
+### 两条既有接口的可选开关 `with_evidence=1`
+
+`GET .../neighbors` 与 `GET /api/graph/paths` 新增**可选**参数 `with_evidence`
+（认出 `1`／`true`／`yes`／`on`）：
+
+* **默认关闭**：不带该参数时，响应**逐字节与既有版本一致**（不加任何字段——门禁 C2 会逐字段比对表 4-13）；
+* 打开时：每条边**追加**一个 `evidence` 对象
+  `{doc_id, chunk_id, title, source, publish_time, url, chunk_index, missing}`（同一次 `IN (...)` 批量查库）；
+  不带证据属性的边给 `evidence: null` ＋ `note`（如「该关系类型不带证据属性」）。
+
+**新增登记**：`/api/graph/entities/{node_id}/evidence` 与 `with_evidence` 开关**不在表 4-13 的
+25 个业务接口之内**，属作者新增意见下的**新增接口／新增参数**，与 `/api/health`、`/api/market/*`
+同一处理，**须在《25》登记**。本批**只改 `api\graph.py`**（唯一被改的源码文件），
+`main.py` 未动（新端点挂在既有 `graph` 路由下）。
+
 ## 4. 已知限制（第一版）
 
 1. **MySQL 连接不池化**：单进程内单例连接，`ping()` 掉线重连。单机演示够用。
