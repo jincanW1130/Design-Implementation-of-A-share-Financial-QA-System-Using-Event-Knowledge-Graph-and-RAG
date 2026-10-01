@@ -337,99 +337,7 @@
      实测/取值：图谱区背景 canvas 不透明度 = **0.14**（基线 0.5），画布容器背景 = **#141416**
      （不透明实色，非半透明渐变）。
 
-  ▍十一、本版（v5.2）相对 v5.1 的改动（修一个真 bug ＋ 属性面板改显示真实属性）
-   v5.2 只改这两件事：图形面板的**点选行为**、面板里**实体属性的字段与来源**。
-   去遮挡的六类措施与遮挡自检、实体证据四块（计数概览／关系证据表／文档聚合／事件四项）、
-   图例横条与右栏结构、数据集切换、四屏与吸顶导航、role="tabpanel"、视觉语言（红三档／
-   绿色唯一 #22C55E／牛元素／背景曲线及其在图谱屏降到 .14）、单文件零外部依赖、
-   1440 无横向滚动，以及 v3～v5.1 的全部既有纪律，一律未动。
-
-   ▍十一·一、问题一（真 bug）：再点同一个节点＝取消选中 → 面板空 ⇒ 观感就是「属性不显示」
-     复现路径：进入屏③ 时默认就选中了平安银行 000001（画布上半径最大的那个），
-     作者第一下点的多半正是它 —— 于是面板被清空成空态，看起来像「属性不显示」。
-     根因：pick() 里的选中赋值是**三态切换**写法：
-
-       —— 改前（v5.1）：
-         S.sel = (S.sel && S.sel.id === id) ? null : n;      // 点同一个 ⇒ 置 null
-         S.edge = (S.edge === i) ? null : i;                 // 边同理（原写法）
-
-       —— 改后（v5.2，幂等）：
-         S.edge=null;S.path=null;S.sel=n;                    // 点已选中的节点：保持选中，面板不变
-         S.sel=null;S.path=null;S.edge=i;                    // 边同样幂等
-
-     选中既然是幂等的，「取消选中」就必须有一条明确的出口，本版保留三条（不再靠再点一次节点）：
-       ① 点画布空白（原有行为，未改）；② 面板上的「取消选中」按钮（data-g="unselect"）；
-       ③ Esc 键 —— 文档级 keydown 监听，且当 document.body[data-drawer]="on"（抽屉开着）时
-          让位给抽屉，不抢 Esc。
-     面板顶部新增**选中态标识**（节点与边都有）：
-       「已选中 · 平安银行 000001」（右端小字为实体类型 · 实体 id），并带「取消选中」按钮。
-     空态文案改为：
-       「未选中任何实体／点节点或边查看属性；当前视图共 N 个节点」（N 由当前数据集实时数出，
-       s 数据集为 7、e 数据集为 11），并加一句「单击已选中的节点不会取消选中；
-       取消请按 Esc、点画布空白，或用面板上的「取消选中」。」
-
-   ▍十一·二、问题二（字段）：面板改为渲染实体详情接口 properties 的全部键值
-     ① 字段来源。面板「实体档案」块渲染的是实体详情接口
-        GET /api/graph/entities/{node_id} 返回里的 properties，**按 property_keys 的顺序**出键。
-        不写死字段表、不派生、不推测：接口没返回的键不显示；返回了但值为空的如实写「—（空）」。
-        v5.1 面板只有 entity_id／stock_code／exchange／aliases 四个键，其中 exchange 还是按代码
-        前缀推出来的（600xxx ⇒ SH、000xxx ⇒ SZ）—— 这类派生本版**全部删除**，改为照抄接口实值
-        （000001 的 exchange = 深交所）。代码里的 EAPI_KEYS / EAPI_HOT 只为「键序 + 高价值字段置顶」
-        服务，不新增、不改名任何键。
-     ② 真实键表（逐字照抄接口实测返回，Person / Institution / Policy 三类后端补测中，
-        键名以接口实返为准，本原型不推测）：
-          Company     company_name, short_name, aliases, exchange
-          Event       event_type, event_time, event_id, event_name, confidence, description
-          Document    title, source, publish_time, category, doc_id, url
-          Industry    industry_name, industry_code
-          Person / Institution / Policy —— 补测中，本版不列键名
-        显示顺序：高价值字段置顶，其后按 property_keys 原序跟随（EAPI_HOT）：
-          Company  company_name → exchange → aliases → short_name
-          Event    event_type → event_time → confidence → description → event_id → event_name
-        长文本（description / title / event_name / url / aliases）折行完整显示，不截断
-        （.gvp--long 用 white-space:pre-wrap，url 用 word-break:break-all）。
-     ③ 内置的接口实测样本（单文件原型不能真发请求，故按作者逐字给出的实测值内置，
-        并就地标注「演示数据取自 GET /api/graph/entities/{id} 的真实返回」）：
-          000001（Company） company_name=平安银行股份有限公司、short_name=平安银行、
-                            aliases=平安银行、exchange=深交所
-          EVT-0001（Event）  event_type=股权、event_time=（空）、confidence=0.9、
-                            description=（空，如实写「本次记录未给出 description」）、
-                            event_id=EVT-0001、event_name=2023年股票期权激励计划首次授予
-                            股票期权第二个行权期开始行权
-          1037（Document）   title=平安银行股份有限公司内部审计章程、source=巨潮资讯网、
-                            publish_time=2026-09-17、category=公告、doc_id=1037、
-                            url=https://static.cninfo.com.cn/finalpage/2026-09-17/1225568477.PDF
-          IND-0069（Industry） industry_name=银行、industry_code=IND-0069
-        不在样本内的实体（伊利股份、长城汽车、6 个人物、EVT-0236/0260/0823/0827、doc1183/1001 等）
-        只用本次记录里**真正出现过**的键值，并如实写明来源是「本次记录原文」、绝非接口返回。
-        接口路径里用的是**实体 id**（company 用证券代码、event 用 EVT-xxxx、doc 用文档号，
-        逐条写死在节点数据的 eid 字段里，不现推）。
-
-   ▍十一·三、空值与缺失键怎么显示
-     · 值为空（接口返回了键但值为 null/""）：该行如实写「—（空）」，并保留一行小字说明
-       「本节点该属性在本次记录中为空」；键名与键序**照常保留**（EVT-0001 的 event_time、
-       description 即此情形）。
-     · 键缺失（接口/记录根本没返回这个键）：**整个键不显示**，不做占位、不补写。
-       例：伊利股份只有 company_name 与 short_name（记录未返回 exchange 与 aliases），
-       doc1183 只有 title/source/publish_time/doc_id（记录未返回 category 与 url），
-       面板就地注明「exchange 与 aliases 未随本次记录返回，故不列出」。
-     · 整类都没有键名（Person / Institution / Policy）：不伪造 entity_id/name/role 之类的键，
-       只写一句「人物 类的属性键名以实体详情接口实返为准，后端补测中 —— 本原型不推测键名，
-       故此块暂无字段。下方「本视图关系」不受影响。」
-     · 计数（实体证据接口）未实测到的实体：四个计数格子如实留「—（空）」，并注明
-       「本原型只对 601633 / 000001 / EVT-0001 三例实测并给出计数，其余如实留 —（空），不推算。」
-
-   ▍十一·四、两块口径的划分（避免混为一谈）
-     面板正文拆成两块，各自标明数据来源，互不冒充：
-       · 块①「实体档案 · Entity profile」—— 口径是**实体本身**，来源是实体详情接口的
-         properties（键值原样，未派生）；块内下半部分的「实体证据计数（邻居／关系／涉及文档／
-         不同文本块）」来源是**实体证据接口**，与实体证据区 ① 同源，并在下方注明。
-       · 块②「本视图关系 · In this view」—— 口径是**画布局部**，来源是当前数据集本身：
-         度（出/入）、距中心（跳数／是否为分量中心／是否超出当前跳数视图）、
-         邻接关系 N 条（逐条列出方向 · 关系中文名 · 对端实体）。这一块随数据集与视图参数变化，
-         与块① 的接口计数**不是一回事**，故两块各自标注来源，代码里也分属两个 <section class="gblk">。
-
-  ▍十二、数据说明
+  ▍十一、数据说明
    本原型分三类文字，界面上一律分开放置、不互相冒充：
      · 真实记录 —— 证据条目、图谱路径、事件三元组、判定区间、数据版本与截止时间，
        取自 ashare_qa 六表的一次真实问答输出，原样呈现。
@@ -905,47 +813,6 @@ body[data-market="on"]  .mk-off{display:none!important}
 /* 字段值一律正文色 --fg（14.53:1） */
 .gpanel .kv dd{font-size:13.5px;color:var(--fg);word-break:break-word}
 .gpanel .kv dd.mono{font-variant-numeric:tabular-nums;font-size:13.5px}
-
-/* ============================================================
-   v5.2 属性面板：选中态标识 ＋ 两块口径分开
-     ① 实体档案 · Entity profile —— 实体详情接口的 properties（接口没返回的键不显示）
-     ② 本视图关系 · In this view —— 数据集的局部视图（度 / 距中心 / 邻接关系）
-   两块各自带来源标注，避免「实体档案属性」与「画布局部关系」口径混淆。
-   ============================================================ */
-.gsel{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;
-  background:rgba(230,57,70,.07);border:1px solid var(--accent-line)}
-.gsel i{width:9px;height:9px;border-radius:50%;flex:none}
-.gsel b{font-weight:500;font-size:13.5px;color:var(--fg);min-width:0;overflow-wrap:anywhere}
-.gsel em{font-style:normal;font-family:var(--f-mono);font-size:10.5px;color:rgba(255,255,255,.62);white-space:nowrap}
-.gsel .gchip{margin-left:auto;flex:none}
-.gblk{padding-top:13px;border-top:1px solid var(--border)}
-.gblk--first{padding-top:0;border-top:0}
-.gblkH{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:11px}
-.gblkH .label{flex:none}
-/* 来源标注：辅助文字，.62 白 = 7.40:1 @ --surface（≥3:1 底线） */
-.gsrc{font-size:10.5px;line-height:1.5;color:rgba(255,255,255,.62);margin:0}
-.gsrc b{font-weight:500;color:rgba(255,255,255,.78)}
-.gkv{display:flex;flex-direction:column;gap:11px;margin:0}
-.gkv .kv{grid-template-columns:74px minmax(0,1fr);align-items:start}
-/* 接口键名原样小写显示（不转大写 —— 键名是 API 契约的一部分，照抄才看得出取自哪里），
-   下方一行小字给中文注释；.68 白 = 8.67:1、注释 .62 白 = 7.40:1，均在门槛之上。 */
-.gkv .kv dt{text-transform:none;font-family:var(--f-mono);font-size:11px;font-weight:500;
-  letter-spacing:.02em;color:rgba(255,255,255,.68);overflow-wrap:anywhere;padding-top:2px}
-.gkv .kv dt span{display:block;font-family:var(--f-body);font-size:10px;font-weight:400;
-  letter-spacing:.02em;color:rgba(255,255,255,.62);margin-top:3px}
-/* 长文本（description / title / event_name / aliases）折行完整显示，不截断 */
-.gvp{display:block;overflow-wrap:anywhere;word-break:break-word;line-height:1.6}
-.gvp--long{white-space:pre-wrap}
-.gvp--url{font-size:12px;word-break:break-all}
-.gvp--empty{color:rgba(255,255,255,.62)}
-.gvp--none{color:rgba(255,255,255,.62);font-size:12.5px;line-height:1.7}
-/* 「计数」四条：来自实体证据接口，2×2 排布（面板只有 ~240px 宽，4 列会挤） */
-.gcount{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:11px}
-.gcount>div{padding:8px 10px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--border-soft)}
-.gcount dt{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.62)}
-.gcount dd{margin:5px 0 0;font-family:var(--f-mono);font-variant-numeric:tabular-nums;
-  font-size:15px;color:var(--fg)}
-.gcount dd.is-empty{font-size:13px;color:rgba(255,255,255,.62)}
 .gempty{margin:auto;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;padding:20px 0}
 .gempty svg{width:82px;height:82px;color:rgba(230,57,70,.5)}
 .gempty p{font-size:13px;color:rgba(255,255,255,.62);max-width:22ch;line-height:1.6}
@@ -2619,59 +2486,6 @@ var TRIPLES=[["EVT-0236","监管",""],["EVT-0260","监管","2026-08-22"],
 var REL={HAS_EXECUTIVE:"任职",PARTICIPATES_IN:"参与",ISSUED_BY:"发布",BELONGS_TO:"属于",
          RELATED_TO:"相关",CUSTOMER_OF:"客户关系",COMPETES_WITH:"同业竞争",EVIDENCED_BY:"证据指向"};
 var EMPTY="—（空）";
-
-/* ------------------------------------------------------------
-   v5.2 实体详情接口 GET /api/graph/entities/{node_id}
-     面板「实体档案」块直接渲染返回里的 properties，键序就是 property_keys 的顺序 ——
-     **不写死字段表、不派生、不推测**；接口没返回的键一律不显示，返回了但值为空的如实写 EMPTY。
-   · EAPI_KEYS  各类型的 property_keys（有序），键名与顺序照抄接口实测返回；
-   · EAPI_LABEL 键名的中文注释（只用于面板辅助显示，不改变原键名）；
-   · EAPI_HOT   高价值字段（置顶），其余键按原序跟随；
-   · EAPI_LONG  长文本键 —— 折行完整显示，不截断；
-   · ESAMPLE    作者在无头环境里逐字测回的接口真实返回（演示数据内置，单文件不能真发请求）。
-                Person / Institution / Policy 三类的键名后端补测中，键名以接口实返为准，本原型不推测。
-   ------------------------------------------------------------ */
-var EAPI_KEYS={
-  company :["company_name","short_name","aliases","exchange"],
-  event   :["event_type","event_time","event_id","event_name","confidence","description"],
-  doc     :["title","source","publish_time","category","doc_id","url"],
-  industry:["industry_name","industry_code"]
-};
-var EAPI_LABEL={
-  company_name:"公司全称", short_name:"证券简称", aliases:"别名", exchange:"交易所",
-  event_type:"事件类型", event_time:"事件时间", event_id:"事件编号",
-  event_name:"事件名称", confidence:"置信度", description:"事件描述",
-  title:"文档标题", source:"来源", publish_time:"发布时间", category:"分类",
-  doc_id:"文档编号", url:"原文链接",
-  industry_name:"行业名称", industry_code:"行业代码"
-};
-var EAPI_HOT={
-  company:["company_name","exchange","aliases"],
-  event  :["event_type","event_time","confidence","description"]
-};
-var EAPI_LONG={description:1,title:1,event_name:1,url:1,aliases:1};
-
-/* 接口实测返回的原样数据（键序即 property_keys）——「演示数据取自 GET /api/graph/entities/{id} 的真实返回」 */
-var ESAMPLE={
- "000001":{type:"company",
-   props:[["company_name","平安银行股份有限公司"],["short_name","平安银行"],
-          ["aliases","平安银行"],["exchange","深交所"]]},
- "EVT-0001":{type:"event",
-   props:[["event_type","股权"],["event_time",null],["event_id","EVT-0001"],
-          ["event_name","2023年股票期权激励计划首次授予股票期权第二个行权期开始行权"],
-          ["confidence",0.9],["description",null]]},
- "1037":{type:"doc",
-   props:[["title","平安银行股份有限公司内部审计章程"],["source","巨潮资讯网"],
-          ["publish_time","2026-09-17"],["category","公告"],["doc_id","1037"],
-          ["url","https://static.cninfo.com.cn/finalpage/2026-09-17/1225568477.PDF"]]},
- "IND-0069":{type:"industry",
-   props:[["industry_name","银行"],["industry_code","IND-0069"]]}
-};
-/* 接口实测样本里这些实体说明了「该类型的真实键名长什么样」——面板据此取键序与键名，
-   但**值**一律取节点自己的（记录原文或接口实测），不做任何跨实体搬运。 */
-var ESAMPLE_BY_ID={};
-(function(){for(var k in ESAMPLE) ESAMPLE_BY_ID[k]=ESAMPLE[k]})();
-
 var TYPE={
   company :{n:"公司",c:"#E63946",s:"circle"},
   person  :{n:"人物",c:"#6C7BE0",s:"hex"},
@@ -2703,77 +2517,70 @@ var mi=function(s){var p=s.split("-");return (parseInt(p[0],10)-2026)*12+(parseI
 // 节点：本次会话（A7F3-0912）载荷命中的 10 个实体，覆盖 7 类中的 5 类。
 // 坐标显式写死（无随机布局，回看与屏③渲染结果一致）；
 // r 不写死——由连接数（度）分级算出，见 radiusOf()；x/y 也不写死，见 5c 的 layout()。
-// props = 该实体的属性字典，键序就是实体详情接口的 property_keys 顺序（见 EAPI_KEYS）；
-//         面板「实体档案」块原样渲染这里列出的键值，不补写、不派生；接口没返回的键直接不列。
-// psrc  = 这批属性的来源：api＝实体详情接口实测返回 / record＝本次记录原文 / none＝该类型键名后端补测中
+// kv = 属性面板只渲染这里列出的字段，字段值全部来自记录，不补写；空缺一律 EMPTY。
 // ⚠ m 字段＝该节点出现在哪套数据集里：s＝会话载荷子图 / e＝实体证据库（v5 新增）。
 //   v5 起画布坐标不再写死 —— 由确定性分层环形布局算出（见 layout()），因此两套数据集都能自适应。
 var GNODES=[
- {id:"yili",type:"company",name:"伊利股份",code:"600887",m:"s",eid:"600887",psrc:"record",
-  props:[["company_name","内蒙古伊利实业集团股份有限公司"],["short_name","伊利股份"]],
-  note:"公司全称逐字取自本次记录中 doc_id 1183 的标题，证券简称取自记录里的主标签。exchange 与 aliases 未随本次记录返回，故不列出。"},
- {id:"pab",type:"company",name:"平安银行",code:"000001",m:"se",eid:"000001",psrc:"api",
-  props:[["company_name","平安银行股份有限公司"],["short_name","平安银行"],
-         ["aliases","平安银行"],["exchange","深交所"]],
-  note:"四个键值逐字取自实体详情接口 GET /api/graph/entities/000001 的实测返回。该实体同时出现在会话载荷与实体证据库里。"},
- {id:"per0010",type:"person",name:"PER-0010",m:"s",eid:"PER-0010",psrc:"none",
-  props:[],
-  note:"Person 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录也只给出人物编号。"},
- {id:"per0029",type:"person",name:"PER-0029",m:"se",eid:"PER-0029",psrc:"none",
-  props:[],
-  note:"Person 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录也只给出人物编号。"},
- {id:"nafmii",type:"org",name:"中国银行间市场交易商协会",m:"s",psrc:"none",
-  props:[],
-  note:"Institution 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录未给出机构编号。"},
- {id:"evt0236",type:"event",name:"EVT-0236",sub:"监管",m:"s",eid:"EVT-0236",psrc:"record",
-  props:[["event_type","监管"],["event_id","EVT-0236"]],
-  note:"event_time / event_name / confidence / description 未随本次记录返回，故不列出。"},
- {id:"evt0260",type:"event",name:"EVT-0260",sub:"监管 · 2026-08-22",m:"s",eid:"EVT-0260",psrc:"record",
-  props:[["event_type","监管"],["event_time","2026-08-22"],["event_id","EVT-0260"]],
-  note:"event_name / confidence / description 未随本次记录返回，故不列出；该事件即回答正文所指的《接受注册通知书》注册获接受事项。"},
- {id:"evt0823",type:"event",name:"EVT-0823",sub:"业绩 · 2026-08-26",m:"s",eid:"EVT-0823",psrc:"record",
-  props:[["event_type","业绩"],["event_time","2026-08-26"],["event_id","EVT-0823"]],
-  note:"event_name / confidence / description 未随本次记录返回，故不列出。"},
- {id:"evt0827",type:"event",name:"EVT-0827",sub:"股权 · 2026-08-27",m:"s",eid:"EVT-0827",psrc:"record",
-  props:[["event_type","股权"],["event_time","2026-08-27"],["event_id","EVT-0827"]],
-  note:"event_name / confidence / description 未随本次记录返回，故不列出。"},
- {id:"doc1183",type:"doc",name:"公告 · doc_id 1183",sub:"巨潮资讯网 · 2026-08-25",m:"s",eid:"1183",psrc:"record",
-  props:[["title","内蒙古伊利实业集团股份有限公司关于收到中国银行间市场交易商协会《接受注册通知书》的公告"],
-         ["source","巨潮资讯网"],["publish_time","2026-08-25"],["doc_id","1183"]],
-  note:"该文档即本次证据清单里的证据 6。category 与 url 未随本次记录返回，故不列出。"},
+ {id:"yili",type:"company",name:"伊利股份",code:"600887",m:"s",
+  kv:[["entity_id","600887"],["stock_code","600887"],["exchange","SH"],["aliases",EMPTY]],
+  note:"600887 为公开市场代码，本次记录未直接给出该字段；exchange 由代码前缀判定为 上交所 SH。"},
+ {id:"pab",type:"company",name:"平安银行",code:"000001",m:"se",
+  kv:[["entity_id","000001"],["stock_code","000001"],["exchange","SZ"],["aliases",EMPTY]],
+  note:"exchange 由代码前缀判定为 深交所 SZ；aliases 在本次记录里为空。该实体同时出现在会话载荷与实体证据库里。"},
+ {id:"per0010",type:"person",name:"PER-0010",m:"s",
+  kv:[["entity_id","PER-0010"],["name",EMPTY],["role",EMPTY]],
+  note:"记录只给出人物编号，未给出姓名与角色。"},
+ {id:"per0029",type:"person",name:"PER-0029",m:"se",
+  kv:[["entity_id","PER-0029"],["name",EMPTY],["role",EMPTY]],
+  note:"记录只给出人物编号，未给出姓名与角色。"},
+ {id:"nafmii",type:"org",name:"中国银行间市场交易商协会",m:"s",
+  kv:[["entity_id",EMPTY],["name","中国银行间市场交易商协会"],["role",EMPTY]],
+  note:"机构编号未随本次记录给出。"},
+ {id:"evt0236",type:"event",name:"EVT-0236",sub:"监管",m:"s",
+  kv:[["event_id","EVT-0236"],["event_type","监管"],["event_time",EMPTY],["confidence",EMPTY]]},
+ {id:"evt0260",type:"event",name:"EVT-0260",sub:"监管 · 2026-08-22",m:"s",
+  kv:[["event_id","EVT-0260"],["event_type","监管"],["event_time","2026-08-22"],["confidence",EMPTY]],
+  note:"confidence 在本次记录里为空；该事件即回答正文所指的《接受注册通知书》注册获接受事项。"},
+ {id:"evt0823",type:"event",name:"EVT-0823",sub:"业绩 · 2026-08-26",m:"s",
+  kv:[["event_id","EVT-0823"],["event_type","业绩"],["event_time","2026-08-26"],["confidence",EMPTY]]},
+ {id:"evt0827",type:"event",name:"EVT-0827",sub:"股权 · 2026-08-27",m:"s",
+  kv:[["event_id","EVT-0827"],["event_type","股权"],["event_time","2026-08-27"],["confidence",EMPTY]]},
+ {id:"doc1183",type:"doc",name:"公告 · doc_id 1183",sub:"巨潮资讯网 · 2026-08-25",m:"s",
+  kv:[["doc_id","1183"],["chunk_id","1183000"],["source","巨潮资讯网"],["publish_date","2026-08-25"],
+      ["title","内蒙古伊利实业集团股份有限公司关于收到中国银行间市场交易商协会《接受注册通知书》的公告"]],
+  note:"该文档即本次证据清单里的证据 6。"},
 
  /* ---- v5 新增：实体证据库（图中实体直接取自作者给出的真实数据，字段逐字照抄） ---- */
- {id:"cy",type:"company",name:"长城汽车",code:"601633",m:"e",eid:"601633",psrc:"record",
-  props:[["company_name","长城汽车股份有限公司"],["short_name","长城汽车"]],
-  note:"公司全称逐字取自本次记录中 601633 各篇公告的标题，证券简称取自记录里的主标签。exchange 与 aliases 未随本次记录返回，故不列出。"},
- {id:"per0187",type:"person",name:"PER-0187",m:"e",eid:"PER-0187",psrc:"none",
-  props:[],
-  note:"Person 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录也只给出人物编号。"},
- {id:"per0264",type:"person",name:"PER-0264",m:"e",eid:"PER-0264",psrc:"none",
-  props:[],
-  note:"Person 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录也只给出人物编号。"},
- {id:"per0386",type:"person",name:"PER-0386",m:"e",eid:"PER-0386",psrc:"none",
-  props:[],
-  note:"Person 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录也只给出人物编号。"},
- {id:"per0062",type:"person",name:"PER-0062",m:"e",eid:"PER-0062",psrc:"none",
-  props:[],
-  note:"Person 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录也只给出人物编号。"},
- {id:"per0308",type:"person",name:"PER-0308",m:"e",eid:"PER-0308",psrc:"none",
-  props:[],
-  note:"Person 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录也只给出人物编号。"},
- {id:"evt0001",type:"event",name:"EVT-0001",sub:"股权激励 · 行权",m:"e",eid:"EVT-0001",psrc:"api",
-  props:[["event_type","股权"],["event_time",null],["event_id","EVT-0001"],
-         ["event_name","2023年股票期权激励计划首次授予股票期权第二个行权期开始行权"],
-         ["confidence",0.9],["description",null]],
-  note:"六个键值逐字取自实体详情接口 GET /api/graph/entities/EVT-0001 的实测返回；event_time 与 description 接口返回为空，如实写「"+EMPTY+"」，不补写。"},
- {id:"pol0009",type:"policy",name:"POL-0009",m:"e",eid:"POL-0009",psrc:"none",
-  props:[],
-  note:"Policy 类的属性键名以实体详情接口实返为准（后端补测中），本原型不推测键名；本次记录只给出政策编号。"},
- {id:"doc1001",type:"doc",name:"公告 · doc_id 1001",sub:"巨潮资讯网 · 2026-09-25",m:"e",eid:"1001",psrc:"record",
-  props:[["title","长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告"],
-         ["source","巨潮资讯网"],["publish_time","2026-09-25"],["doc_id","1001"],
-         ["url","https://static.cninfo.com.cn/finalpage/2026-09-25/1225581315.PDF"]],
-  note:"该文档是实体证据库中 601633 的 8 篇支撑文档之一，也是 EVT-0001 的证据指向对象。category 未随本次记录返回，故不列出。"}
+ {id:"cy",type:"company",name:"长城汽车",code:"601633",m:"e",
+  kv:[["entity_id","601633"],["stock_code","601633"],["exchange","SH"],["aliases",EMPTY]],
+  note:"exchange 由代码前缀判定为 上交所 SH；aliases 在本次记录里为空。"},
+ {id:"per0187",type:"person",name:"PER-0187",m:"e",
+  kv:[["entity_id","PER-0187"],["name",EMPTY],["role",EMPTY]],
+  note:"记录只给出人物编号，未给出姓名与角色。"},
+ {id:"per0264",type:"person",name:"PER-0264",m:"e",
+  kv:[["entity_id","PER-0264"],["name",EMPTY],["role",EMPTY]],
+  note:"记录只给出人物编号，未给出姓名与角色。"},
+ {id:"per0386",type:"person",name:"PER-0386",m:"e",
+  kv:[["entity_id","PER-0386"],["name",EMPTY],["role",EMPTY]],
+  note:"记录只给出人物编号，未给出姓名与角色。"},
+ {id:"per0062",type:"person",name:"PER-0062",m:"e",
+  kv:[["entity_id","PER-0062"],["name",EMPTY],["role",EMPTY]],
+  note:"记录只给出人物编号，未给出姓名与角色。"},
+ {id:"per0308",type:"person",name:"PER-0308",m:"e",
+  kv:[["entity_id","PER-0308"],["name",EMPTY],["role",EMPTY]],
+  note:"记录只给出人物编号，未给出姓名与角色。"},
+ {id:"evt0001",type:"event",name:"EVT-0001",sub:"股权激励 · 行权",m:"e",
+  kv:[["event_id","EVT-0001"],
+      ["event_title","2023年股票期权激励计划首次授予股票期权第二个行权期开始行权"],
+      ["event_type",EMPTY],["event_time",EMPTY],["confidence",EMPTY]],
+  note:"event_title 取自实体证据库返回的原值；event_type / event_time / confidence 未随本次记录返回，留空不补。"},
+ {id:"pol0009",type:"policy",name:"POL-0009",m:"e",
+  kv:[["entity_id","POL-0009"],["name",EMPTY],["issuer",EMPTY],["publish_date",EMPTY]],
+  note:"政策实体只给出编号；issuer 与 publish_date 未随本次记录返回。"},
+ {id:"doc1001",type:"doc",name:"公告 · doc_id 1001",sub:"巨潮资讯网 · 2026-09-25",m:"e",
+  kv:[["doc_id","1001"],["chunk_id","1001000"],["source","巨潮资讯网"],["publish_date","2026-09-25"],
+      ["title","长城汽车股份有限公司关于公司股票期权限制行权期间的提示性公告"]],
+  note:"该文档是实体证据库中 601633 的 8 篇支撑文档之一，也是 EVT-0001 的证据指向对象。"}
 ];
 // 边：16 条。m 字段＝该边属于哪套数据集（s＝会话载荷子图 / e＝实体证据图谱）。
 // 前 6 条是 v4 原值未改（2 条逐字取自接口返回的样例路径 src=载荷样例，4 条由同一次返回的实体
@@ -2830,7 +2637,7 @@ function makeDS(mode){
   GNODES.forEach(function(n){
     if(n.m.indexOf(mode)<0) return;
     var c={};for(k in n) c[k]=n[k];
-    c.props=n.props.map(function(r){return r.slice()});c.mode=mode;nodes.push(c);
+    c.kv=n.kv.map(function(r){return r.slice()});c.mode=mode;nodes.push(c);
   });
   GEDGES.forEach(function(e){
     if(e.m.indexOf(mode)<0) return;
@@ -2843,13 +2650,9 @@ function makeDS(mode){
     n.label=n.code?(n.name+" "+n.code):n.name;
     n.lbl=trunclbl(n.label);n.lw=textW(n.lbl);
     n.lblOn=false;n.lblHidden=false;n.on=true;n.el=null;n.lel=null;n.pri=0;
-    /* v5.2：时间轴取值仍只看「记录里真正出现过的时间字段」——事件看 event_time、
-       文档看 publish_time（接口键名），并兼容旧的 publish_date。其余属性不参与时间轴。 */
     var t=null;
-    n.props.forEach(function(r){
-      if(r[0]==="event_time"||r[0]==="publish_time"||r[0]==="publish_date")t=r[1];
-    });
-    n.time=(t&&t!==EMPTY&&t!==null)?t:null;n.ti=n.time?mi(n.time.slice(0,7)):null;
+    n.kv.forEach(function(r){if(r[0]==="event_time"||r[0]==="publish_date")t=r[1]});
+    n.time=(t&&t!==EMPTY)?t:null;n.ti=n.time?mi(n.time.slice(0,7)):null;
   });
   // 连通分量 + 中心实体（度最高，并列取 id 字典序）+ 从中心起算的跳数
   var seen={},comps=[];
@@ -3487,25 +3290,6 @@ function mountGraph(host,opt){
     }).join(""):'<div class="giso__d">本数据集里没有孤立节点。</div>';
   }
 
-  /* v5.2：属性面板 ——
-     块①「实体档案」直接渲染实体详情接口的 properties：接口返回什么键就显示什么键
-       （顺序＝property_keys，高价值键置顶），**没返回的键不显示、不派生、不推测**；
-       返回了但值为空的如实写 EMPTY，并在键下注明「本节点该属性在本次记录中为空」。
-     块②「本视图关系」是**数据集的画布局部视图**（度 / 距中心 / 邻接关系），与块①口径不同，故分块。 */
-  function propOrder(n){
-    var hot=EAPI_HOT[n.type]||[],seen={},out=[],i;
-    var find=function(k){var r=null;n.props.forEach(function(p){if(p[0]===k)r=p});return r};
-    for(i=0;i<hot.length;i++){var r=find(hot[i]);if(r){out.push(r);seen[hot[i]]=1}}
-    n.props.forEach(function(p){if(!seen[p[0]])out.push(p)});
-    return out;
-  }
-  function propVal(k,v){
-    if(v===null||v===undefined||v===""||v===EMPTY)
-      return '<span class="gvp gvp--empty">'+EMPTY+'</span>'+
-             '<span class="gsrc" style="display:block;margin-top:3px">本节点该属性在本次记录中为空</span>';
-    var c=EAPI_LONG[k]?(k==="url"?"gvp gvp--url":"gvp gvp--long"):"gvp";
-    return '<span class="'+c+'">'+v+"</span>";
-  }
   function panelNode(n){
     ptype.textContent=TYPE[n.type].n;
     var nb=[],out=0,inc=0;
@@ -3513,72 +3297,33 @@ function mountGraph(host,opt){
       if(e.f===n.id){nb.push({dir:"出",rel:e.rel,to:DS.idx[e.t]});out++}
       else if(e.t===n.id){nb.push({dir:"入",rel:e.rel,to:DS.idx[e.f]});inc++}
     });
-    var rows=propOrder(n),rec=evidOf(n),cnts=rec?rec.counts:null;
-    /* 接口路径里要用**实体 id**（不是画布节点 id）：company 用证券代码、event 用 EVT-xxxx、
-       doc 用文档号。n.eid 逐条写死在 GNODES 里，不在这里现推。 */
-    var EID=n.eid||n.id;
-    var SRC=n.psrc==="api"
-      ? '实体详情接口 <b>GET /api/graph/entities/'+EID+"</b> 的实测返回"
-      : (n.psrc==="record"
-          ? "本次记录原文（该实体未纳入实体详情接口实测样本；接口可用时应取 <b>GET /api/graph/entities/"+EID+"</b>）"
-          : "实体详情接口（该类型键名后端补测中，本原型不推测键名）");
-    var cnt=function(k,v){
-      var empty=(v===null||v===undefined);
-      return "<div><dt>"+k+'</dt><dd'+(empty?' class="is-empty"':"")+">"+(empty?EMPTY:v)+"</dd></div>";
-    };
     pbody.innerHTML=
-      /* —— 选中态标识 ＋ 取消选中 —— */
-      '<div class="gsel"><i style="background:'+TYPE[n.type].c+'"></i>'+
-        "<b>已选中 · "+n.label+'</b><em>'+TYPE[n.type].n+" · "+EID+"</em>"+
-        '<button class="gchip" type="button" data-g="unselect" '+
-          'title="取消选中（也可以按 Esc，或点画布空白处）">取消选中</button>'+
+      '<div><span class="label">主标签</span><div class="h4" style="margin-top:6px">'+n.label+'</div></div>'+
+      '<dl style="display:flex;flex-direction:column;gap:12px;margin:0">'+
+        n.kv.map(function(r){
+          /* v5.1 措施②：空值占位（stock_code / exchange / aliases 多为空）原为 --faint 5.31:1，
+             现在是 --fg 的从属层级：.62 白 = 7.40:1，仍明显弱于真实值（14.53:1）。 */
+          var v=(r[1]===EMPTY||r[1]===""||r[1]===null)?'<span style="color:rgba(255,255,255,.62)">'+EMPTY+'</span>':r[1];
+          return '<div class="kv"><dt>'+r[0]+'</dt><dd class="mono">'+v+'</dd></div>';
+        }).join("")+
+      "</dl>"+
+      (n.note?'<p class="gnote" style="font-size:11px">'+n.note+"</p>":"")+
+      '<div style="padding-top:13px;border-top:1px solid var(--border)">'+
+        '<span class="label">本数据集连接数</span>'+
+        '<div class="kv" style="margin-top:9px"><dt>度</dt><dd class="mono">'+n.deg+'（出 '+out+' / 入 '+inc+'）</dd></div>'+
+        '<div class="kv" style="margin-top:9px"><dt>距中心</dt><dd class="mono">'+
+          (n.dist>90?EMPTY+'（在本次边集里不可达）':n.dist+' 跳'+
+            (n.isCenter?'（所在分量的中心实体）':'')+(n.dist>S.depth?' · 超出当前 '+S.depth+' 跳视图，已压暗':''))+
+        "</dd></div>"+
       "</div>"+
-
-      /* —— 块① 实体档案（实体详情接口的 properties） —— */
-      '<section class="gblk gblk--first">'+
-        '<div class="gblkH"><span class="label">实体档案 · Entity profile</span></div>'+
-        (rows.length
-          ? '<dl class="gkv">'+rows.map(function(r){
-              return '<div class="kv"><dt>'+r[0]+
-                (EAPI_LABEL[r[0]]?"<span>"+EAPI_LABEL[r[0]]+"</span>":"")+
-                "</dt><dd>"+propVal(r[0],r[1])+"</dd></div>";
-            }).join("")+"</dl>"
-          : '<p class="gvp--none">'+TYPE[n.type].n+
-            " 类的属性键名以实体详情接口实返为准，后端补测中 —— 本原型不推测键名，故此块暂无字段。下方「本视图关系」不受影响。</p>")+
-        '<p class="gsrc" style="margin-top:10px">属性来源：'+SRC+"。"+
-          (rows.length?"属性值原样取自图谱，未派生。":"本块暂无字段可渲染，故无值可展示。")+"</p>"+
-        '<p class="gsrc" style="margin-top:4px">'+(n.psrc==="api"
-          ? "演示数据取自 <b>GET /api/graph/entities/{id}</b> 的真实返回。"
-          : "本原型内置的接口实测样本只有 000001 / EVT-0001 / 1037 / IND-0069 四例（取自 <b>GET /api/graph/entities/{id}</b> 的真实返回）；本节点不在样本内，上面各键逐字取自本次记录原文，不冒充接口返回。")+"</p>"+
-        (n.note?'<p class="gnote" style="font-size:11px">'+n.note+"</p>":"")+
-        /* 计数：来自实体证据接口，与块②的画布局部视图不是一回事 */
-        '<div class="gblkH" style="margin:14px 0 0;padding-top:13px;border-top:1px solid var(--border)">'+
-          '<span class="label">实体证据计数</span></div>'+
-        '<dl class="gcount">'+cnt("邻居",cnts?cnts.nbr:null)+cnt("关系",cnts?cnts.rel:null)+
-          cnt("涉及文档",cnts?cnts.doc:null)+cnt("不同文本块",cnts?cnts.chunk:null)+"</dl>"+
-        '<p class="gsrc" style="margin-top:9px">计数来源：<b>实体证据接口</b>（与下方「实体证据」区 ① 同源）。'+
-          (cnts?"":"本原型只对 601633 / 000001 / EVT-0001 三例实测并给出计数，其余如实留 "+EMPTY+"，不推算。")+"</p>"+
-      "</section>"+
-
-      /* —— 块② 本视图关系（数据集的画布局部视图） —— */
-      '<section class="gblk">'+
-        '<div class="gblkH"><span class="label">本视图关系 · In this view</span>'+
-          '<span class="gsrc">画布局部 · 当前数据集</span></div>'+
-        '<dl class="gkv">'+
-          '<div class="kv"><dt>度<span>本数据集</span></dt><dd class="mono">'+n.deg+
-            "（出 "+out+" / 入 "+inc+"）</dd></div>"+
-          '<div class="kv"><dt>距中心<span>到分量中心</span></dt><dd class="mono">'+
-            (n.dist>90?EMPTY+'（在本次边集里不可达）':n.dist+" 跳"+
-              (n.isCenter?"（所在分量的中心实体）":"")+(n.dist>S.depth?" · 超出当前 "+S.depth+" 跳视图，已压暗":""))+
-          "</dd></div>"+
-        "</dl>"+
-        '<div class="gblkH" style="margin:13px 0 0"><span class="label">邻接关系 · '+nb.length+" 条</span></div>"+
+      '<div style="padding-top:13px;border-top:1px solid var(--border)">'+
+        '<span class="label">邻接关系 · '+nb.length+' 条</span>'+
         '<div class="grel">'+(nb.length?nb.map(function(x){
           return '<div class="grel__i"><i style="background:'+TYPE[x.to.type].c+'"></i>'+
-            '<span class="gpath__rel">'+x.dir+" · "+REL[x.rel]+"</span> "+x.to.label+
+            '<span class="gpath__rel">'+x.dir+' · '+REL[x.rel]+'</span> '+x.to.label+
             "<em>"+TYPE[x.to.type].n+"</em></div>";
         }).join(""):'<div class="grel--none">该节点在本次返回的图谱路径中未出现邻接边。</div>')+"</div>"+
-      "</section>";
+      "</div>";
   }
 
   function panelEdge(e){
@@ -3588,12 +3333,6 @@ function mountGraph(host,opt){
       /* v5.1 措施②：边的 role/confidence/source_doc_id 空值占位同样提到 .62 白 = 7.40:1 */
       ? '<span style="color:rgba(255,255,255,.62)">'+(noev?NOEV:EMPTY)+'</span>' : v};
     pbody.innerHTML=
-      /* v5.2：边也是幂等选中，同样给一个明确的取消出口 */
-      '<div class="gsel"><i style="background:'+TYPE[DS.idx[e.f].type].c+'"></i>'+
-        "<b>已选中 · "+DS.idx[e.f].label+" → "+DS.idx[e.t].label+'</b><em>边 #'+e.i+"</em>"+
-        '<button class="gchip" type="button" data-g="unselect" '+
-          'title="取消选中（也可以按 Esc，或点画布空白处）">取消选中</button>'+
-      "</div>"+
       '<div><span class="label">关系</span><div class="h4" style="margin-top:6px">'+e.rel+' · '+REL[e.rel]+'</div>'+
         '<span class="tag" style="margin-top:9px">'+e.src+'</span>'+
         (e.clat?'<span class="tag tag--muted" style="margin-top:9px;margin-left:6px">并行边 · 曲率分叉</span>':'')+'</div>'+
@@ -3623,14 +3362,9 @@ function mountGraph(host,opt){
     if(!pbody) return;
     if(S.edge!==null){ panelEdge(DS.edges[S.edge]); return }
     if(S.sel){ panelNode(S.sel); return }
-    /* v5.2：空态把「当前视图共有多少个节点」写出来，避免点了却像没反应。
-       数的是**当前可见**节点（n.on）——筛选 / 深度 / 时间区间收窄后跟着变。 */
-    var vis=DS.nodes.filter(function(n){return n.on}).length;
     ptype.textContent="未选中";
     pbody.innerHTML='<div class="gempty"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#bull"></use></svg>'+
-      "<p>未选中任何实体<br>点节点或边查看属性；当前视图共 <b>"+vis+"</b> 个节点</p>"+
-      '<p class="gsrc" style="max-width:24ch">单击已选中的节点<b>不会</b>取消选中；取消请按 Esc、点画布空白，或用面板上的「取消选中」。</p>'+
-      "</div>";
+      "<p>点击任一节点或边，查看实体属性与邻接关系</p></div>";
   }
 
   /* ============================================================
@@ -3823,30 +3557,14 @@ function mountGraph(host,opt){
     if(t.classList.contains("gnode")){
       var id=t.getAttribute("data-node"),n=DS.idx[id];
       if(!n) return;                              // 该 id 不在当前数据集里 → 不改变选中态
-      /* v5.2 修复：原来写的是 S.sel = (S.sel && S.sel.id === id) ? null : n; ——
-         **再点同一个节点等于取消选中**。而进屏默认就选中了平安银行 000001（画布上最大的那个），
-         作者第一下点的多半就是它，于是面板被清空，观感就是「属性不显示」。
-         现在改成幂等：点已选中的节点保持选中、面板不变。 */
-      S.edge=null;S.path=null;S.sel=n;
+      S.edge=null;S.path=null;S.sel=(S.sel&&S.sel.id===id)?null:n;
     }else{
       var i=parseInt(t.getAttribute("data-edge"),10);
       if(!(i>=0)||!DS.edges[i]) return;
-      /* v5.2：边同样改成幂等（原来是 S.edge = (S.edge===i) ? null : i） */
-      S.sel=null;S.path=null;S.edge=i;
+      S.sel=null;S.path=null;S.edge=(S.edge===i)?null:i;
     }
     refresh();
   }
-  /* v5.2：取消选中的三条路径 —— 点画布空白（原有）／ Esc 键 ／ 面板上的「取消选中」按钮。
-     选中态是幂等的，所以「取消」必须有一条明确的出口，不能靠再点一次节点。 */
-  function clearSel(){
-    if(!S.sel&&S.edge===null&&!S.path) return;
-    S.sel=null;S.edge=null;S.path=null;refresh();
-  }
-  document.addEventListener("keydown",function(e){
-    if(e.key!=="Escape"&&e.key!=="Esc") return;
-    if(document.body.getAttribute("data-drawer")==="on") return;   // 抽屉开着时 Esc 归抽屉
-    clearSel();
-  });
   var moved=false;
   svg.addEventListener("click",function(e){
     if(moved){moved=false;return}
@@ -3885,9 +3603,6 @@ function mountGraph(host,opt){
     setDataset(cloneDS(m==="s"?GDS_S:GDS_E));
   });
   if(pbody) pbody.addEventListener("click",function(e){
-    /* v5.2：面板上的「取消选中」按钮 —— 明确的一条取消出口（另有 Esc 与点画布空白） */
-    var u=e.target.closest?e.target.closest('[data-g="unselect"]'):null;
-    if(u){ clearSel(); return }
     var b=e.target.closest?e.target.closest('[data-g="jump"]'):null;if(!b||b.disabled) return;
     if(S.edge===null) return;
     if(window.__jumpEvidence) window.__jumpEvidence(DS.edges[S.edge].schunk);

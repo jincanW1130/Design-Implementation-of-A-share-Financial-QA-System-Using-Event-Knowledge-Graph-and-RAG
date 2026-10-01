@@ -74,6 +74,10 @@ PAGE_SIZE_MAX = 200
 
 DEFAULT_PAGE_SIZE = 20
 
+MAX_NODE_ID_LEN = 128
+"""实体详情路径参数 `node_id` 的长度上限（超长 → 1002）。本项目最长的节点标识形如
+`PER-0001`／`EVT-0236`／`HCONF-…`，128 足够宽裕，只用于挡住异常长的输入。"""
+
 PROP_SKIP = frozenset({"node_id", "label", "name", "stock_code"})
 """`properties` 里不再重复这四个顶层字段（表 4-13 把它们单列在 `items` 上）。"""
 
@@ -138,10 +142,68 @@ def _page_args(page, page_size) -> tuple:
 def _truthy(raw) -> bool:
     """布尔开关：`1`／`true`／`yes`／`on`（大小写不敏感）为真，其余（含缺省）为假。
 
-    用于 `with_evidence`（第 9 阶段新增的**可选**开关）：缺省与任何非真值都按「关」处理，
-    以保证「不带参数时响应逐字节与旧版一致」这条硬约束不受参数杂音影响。
+    用于 `with_evidence`／`with_properties`（第 9 阶段新增的**可选**开关）：缺省与任何
+    非真值都按「关」处理，以保证「不带参数时响应逐字节与旧版一致」这条硬约束不受参数杂音影响。
     """
     return _s(raw).strip().lower() in ("1", "true", "yes", "on")
+
+
+def _node_id_arg(node_id) -> str:
+    """实体详情路径参数 `node_id` 的校验：去首尾空白后**非空且不超长**，否则 1002。
+
+    （`node_id` 取不存在的取值时不算「格式错误」，那是 2001；这里只挡空串与异常长串。）
+    """
+    nid = _s(node_id).strip()
+    if not nid:
+        raise errors.ApiError(1002, detail="node_id 为空")
+    if len(nid) > MAX_NODE_ID_LEN:
+        raise errors.ApiError(1002, detail="node_id 超长（%d > %d）：%r…"
+                              % (len(nid), MAX_NODE_ID_LEN, nid[:32]))
+    return nid
+
+
+def _properties_of(raw: dict) -> dict:
+    """从节点的**原始属性字典**里取**真实属性**（原样取值，不改名、不补造、不派生）。
+
+    只做两件**减法的、不改值**的事：
+    * 去掉 `PROP_SKIP` 的四个顶层字段（`node_id`／`label`／`name`／`stock_code`）——
+      它们已单列在 `node` brief 上；这与 `/api/graph/entities` 的 `entity_item` **同一口径**；
+    * **空串／None 的属性如实省略**（由 `property_notes` 逐条说明），不填占位、不补默认值。
+    """
+    return {k: v for k, v in (raw or {}).items()
+            if k not in PROP_SKIP and v not in (None, "")}
+
+
+def _properties_ordered(raw: dict) -> dict:
+    """真实属性字典，按**键升序**重建（供实体详情与 `with_properties` 开关使用）。
+
+    排序有两个理由：① 前端可**按固定顺序**渲染；② **Neo4j 不保证** `properties(n)` 的键
+    迭代顺序稳定，直接回传原始顺序会让同一节点的键序在多次请求间漂移。
+    （`/api/graph/entities` 列表接口的 `properties` 为保持向后兼容**沿用图谱原始顺序**，
+    不在此处改动——见 `entity_item`。）
+    """
+    props = _properties_of(raw)
+    return {k: props[k] for k in sorted(props)}
+
+
+def _property_notes(raw: dict, props: dict) -> list:
+    """对**图谱中确实存在该属性、但取值为空／缺失**的情形逐条如实说明（不隐藏、不补造）。
+
+    实测：本图谱在导入时**已丢弃空属性**，故稳健节点（七类标签）的 `property_notes` 通常为空；
+    一旦某个节点确有某属性列而值为空串／缺失，这里会补一条 `{key, note}`；当整个节点没有任何
+    可展示属性时，再补一条总说明。**注意**：Neo4j 后端下「值为空串」与「属性缺失」不可区分
+    （导入即丢弃），故二者共用同一句说明。
+    """
+    notes = []
+    for key in sorted(k for k in (raw or {}) if k not in PROP_SKIP):
+        if key in props:
+            continue
+        notes.append({"key": key, "value": None,
+                      "note": "本节点无该属性（图谱中为缺失或空串，已省略）"})
+    if not props:
+        notes.append({"key": None, "value": None,
+                      "note": "本节点在图谱中没有任何可展示的真实属性"})
+    return notes
 
 
 def _check_type(label) -> str | None:
@@ -319,13 +381,15 @@ class GraphReader:
 
     @staticmethod
     def entity_item(label: str, props: dict) -> dict:
-        """`/api/graph/entities` 的条目：`node_id`／`label`／`name`／`stock_code`／`properties`。"""
-        clean = {k: v for k, v in (props or {}).items()
-                 if k not in PROP_SKIP and v not in (None, "")}
+        """`/api/graph/entities` 的条目：`node_id`／`label`／`name`／`stock_code`／`properties`。
+
+        `properties` 与实体详情接口**同一口径**（去掉 `PROP_SKIP` 四个顶层字段、省略空值），
+        统一走 `_properties_of()`，避免两处各写一份而漂移。
+        """
         return {"node_id": _s((props or {}).get("node_id")), "label": _s(label),
                 "name": _s((props or {}).get("name")),
                 "stock_code": _s((props or {}).get("stock_code")),
-                "properties": clean}
+                "properties": _properties_of(props)}
 
     # --------------------------------------------------- ① 实体检索（keyword／type）
     def search(self, keyword: str, label: str | None) -> list:
@@ -711,17 +775,21 @@ async def list_entities(keyword: str | None = None, type: str | None = None,   #
 # --------------------------------------------------------------------------
 @router.get("/entities/{node_id}/neighbors")
 async def neighbors(node_id: str, relation: str | None = None, direction: str | None = None,
-                    with_evidence: str | None = None):
+                    with_evidence: str | None = None, with_properties: str | None = None):
     """一跳邻居（走 `graph_service` 的 G1）；节点不存在 → 2001；无边 → HTTP 200 空结果。
 
     **可选开关 `with_evidence=1`**（第 9 阶段新增）：打开时每条边**追加**一个 `evidence`
     对象（`doc_id`／`chunk_id`／`title`／`source`／`publish_time`／`url`／`chunk_index`／
     `missing`，元数据经**一次 `IN (...)`** 批量查库）；不带证据属性的边给 `evidence: null`
     ＋ `note`。**默认关闭时响应逐字节与既有版本一致**（不加任何字段）。
+
+    **可选开关 `with_properties=1`**（第 9 阶段新增）：打开时给中心节点的 `node` brief
+    **追加** `properties`（与实体详情接口同口径的真实属性字典）；默认关闭时不加该键。
     """
     rel_filter = _check_relation(relation)
     dir_filter = _check_direction(direction)
     with_ev = _truthy(with_evidence)
+    with_props = _truthy(with_properties)
     with reader() as rd:
         env = rd.graph.g1_one_hop(node_id)
         code = _s(env.get("code"))
@@ -750,6 +818,8 @@ async def neighbors(node_id: str, relation: str | None = None, direction: str | 
                                                   key=lambda x: (node_index[x]["label"], x))]
         edges.sort(key=lambda e: (e["relation"], e["direction"], e["neighbor"]))
         center = rd.brief(node_id)                    # 后端已关，必须在 with 内取
+        if with_props:                                # 追加字段；关时不出现该键
+            center["properties"] = _properties_ordered(rd._raw_node(node_id) or {})
     return errors.ok({"node": center, "nodes": nodes, "edges": edges,
                       "total": len(edges)})
 
@@ -867,12 +937,15 @@ def _evidence_documents(edges: list) -> tuple:
 
 @router.get("/entities/{node_id}/evidence")
 async def entity_evidence(node_id: str, depth: str | None = None,
-                          page: str | None = None, page_size: str | None = None):
+                          page: str | None = None, page_size: str | None = None,
+                          with_properties: str | None = None):
     """**一次调用拿全实体的证据**（第 9 阶段新增，表 4-13 之外的新增接口）。
 
     * `depth`：`1`（默认）走 G1 一跳边，`2` 走 G2 两跳边；其余 → 1002；
     * `page`／`page_size`：对 `documents[]` 分页（`1 ≤ page_size ≤ 200`）；
     * 节点不存在 → 2001；无证据 → HTTP 200 ＋ 空列表（**2002 的语义，用空数据表达**）；
+    * **可选开关 `with_properties=1`**：打开时给 `node` brief **追加** `properties`
+      （与实体详情接口同口径的真实属性字典）；默认关闭时不加该键，响应逐字段与旧版一致；
     * 返回键：`node`／`counts`／`documents`／`documents_total`／`chunks_total`／
       `relations_without_evidence`／`depth`／`params`／`scope`／`source`。
     """
@@ -880,9 +953,12 @@ async def entity_evidence(node_id: str, depth: str | None = None,
     if depth_no not in (1, 2):
         raise errors.ApiError(1002, detail="depth 只能是 1 或 2：%r" % depth)
     page_no, size = _page_args(page, page_size)
+    with_props = _truthy(with_properties)
 
     with reader() as rd:
         brief = rd.brief(node_id)
+        if with_props:                                        # 追加字段；关时不出现该键
+            brief["properties"] = _properties_ordered(rd._raw_node(node_id) or {})
         edges = _entity_edges(rd, node_id, depth_no)          # 节点不存在时在此抛 2001
     documents, without, chunk_total = _evidence_documents(edges)
 
@@ -902,6 +978,101 @@ async def entity_evidence(node_id: str, depth: str | None = None,
         "scope": "entity_evidence",
         "source": "图谱查询层（services.graph_service 的 G1／G2，本地 Neo4j 实例）"
                   "＋ MySQL 六表（document／document_chunk 元数据，各一次 IN 批量查）"})
+
+
+# --------------------------------------------------------------------------
+# 7.6 接口二之补：GET /api/graph/entities/{node_id}（实体详情，第 9 阶段新增）
+# --------------------------------------------------------------------------
+def _degree(rd: GraphReader, node_id: str) -> dict:
+    """节点的入／出／总度数：`out` ＝以本节点为**起点**的边数，`in_` ＝以本节点为**终点**的边数。
+
+    * **Neo4j 后端**：一条 Cypher 用 `OPTIONAL MATCH (n)-[r]-()` 双向取边，
+      再按 `startNode(r) = n`／`endNode(r) = n` 分别计数（`MATCH` 命中节点即可，无边时和为 0）；
+    * **内存后端**：直接数 `adj[node_id]` 里 `direction` 为 `out`／`in` 的入射项（两个后端同口径）；
+    * **自环**（起点＝终点的边）在两个后端上都**同时计一出一入**（口径一致）；
+    * 节点不存在（Neo4j 侧查询无行）→ 三项如实为 `null`（本接口在调用前已先判过存在性，
+      正常不会走到这里）。
+    """
+    if rd.backend == "neo4j":
+        rows = rd._run(                                        # noqa: SLF001（同包内复用）
+            "MATCH (n {node_id:$id}) OPTIONAL MATCH (n)-[r]-() "
+            "RETURN sum(CASE WHEN startNode(r) = n THEN 1 ELSE 0 END) AS out_deg, "
+            "       sum(CASE WHEN endNode(r) = n THEN 1 ELSE 0 END) AS in_deg",
+            id=_s(node_id))
+        if not rows:
+            return {"out": None, "in_": None, "total": None}
+        out = int(rows[0]["out_deg"] or 0)
+        inn = int(rows[0]["in_deg"] or 0)
+        return {"out": out, "in_": inn, "total": out + inn}
+    out = inn = 0
+    for rec in (rd.graph.adj or {}).get(_s(node_id), []):
+        if _s(rec.get("direction")) == "out":
+            out += 1
+        else:
+            inn += 1
+    return {"out": out, "in_": inn, "total": out + inn}
+
+
+@router.get("/entities/{node_id}")
+async def entity_detail(node_id: str):
+    """**实体详情**（第 9 阶段新增，表 4-13 之外的新增接口）：返回单个实体在图谱里的真实属性。
+
+    作者反馈「选中画布节点时属性不显示」的数据侧根因是：图谱里本就有节点属性，但**没有取单个
+    实体属性的接口**（既有五条只给 `node` brief：`node_id`／`label`／`name`／`stock_code`）。
+    本接口补上这一条，`data` 含：
+
+    * `node`：`{node_id, label, name, stock_code}`（沿用既有 brief 形状）；
+    * `properties`：该节点在**图谱里的真实属性字典**（原样取值，**不改名、不补造、不派生**）——
+      例如 Company 给 `aliases/company_name/exchange/short_name`，Event 给
+      `confidence/description/event_id/event_name/event_time/event_type`；空值如实省略；
+    * `property_keys`：属性键的**有序列表**（升序，便于前端按固定顺序渲染，与 `properties` 同序）；
+    * `property_notes`：空值／缺失属性的如实说明（正常节点通常为空表）；
+    * `degree`：`{out, in_, total}`（入／出／总度数，走既有图谱查询层；两个后端同口径。
+      本项目两个后端都能取到入度与出度，故本接口**不出现** `null`——万一后端查不到该节点，
+      三项如实为 `null` 而不假装成 0）；
+    * `counts`：`{neighbors, relations, documents, chunks}`——**复用上批口径**
+      （`_entity_edges` 取一跳边 ＋ `_evidence_documents` 归并文档／块，不另写一套）；
+    * `source`：本响应字段的**来源归属**（图谱侧／MySQL 六表）；
+    * `params`／`scope`（`scope`＝`entity_detail`）。
+
+    错误码：节点不存在 → **2001**（HTTP 404）；`node_id` 为空／超长 → **1002**；其余按既有约定。
+    """
+    nid = _node_id_arg(node_id)
+    with reader() as rd:
+        raw = rd._raw_node(nid)                               # noqa: SLF001（同包内复用）
+        if raw is None:
+            raise errors.ApiError(2001, detail="节点标识未匹配到任何实体：%s" % nid)
+        label = _s(raw.get("label"))
+        node = {"node_id": nid, "label": label,
+                "name": _s(raw.get("name")), "stock_code": _s(raw.get("stock_code"))}
+        props = _properties_ordered(raw)                      # 已按升序
+        keys = list(props)                                    # 有序键表（与 properties 同序）
+        notes = _property_notes(raw, props)
+        degree = _degree(rd, nid)
+        edges = _entity_edges(rd, nid, 1)                     # 复用：一跳边（同批口径）
+    documents, _without, chunk_total = _evidence_documents(edges)     # 复用：文档／块归并
+    neighbors = {_s(e.get("neighbor")) for e in edges}
+    return errors.ok({
+        "node": node,
+        "properties": props,                                  # 已按 `property_keys` 同序排列
+        "property_keys": keys,
+        "property_notes": notes,
+        "degree": degree,
+        "counts": {"neighbors": len(neighbors), "relations": len(edges),
+                   "documents": len(documents), "chunks": chunk_total},
+        "params": {"node_id": nid},
+        "scope": "entity_detail",
+        "source": {
+            "graph": ["node", "properties", "property_keys", "property_notes", "degree",
+                      "counts.neighbors", "counts.relations",
+                      "counts.documents", "counts.chunks"],
+            "mysql": [],
+            "note": "本响应全部字段取自图谱后端（本地 Neo4j 实例；内存后端同形）的只读查询；"
+                    "counts 由 G1 一跳边（_entity_edges）＋ _evidence_documents 归并得到——"
+                    "后者会只读访问 document／document_chunk 两张表补文档元数据，"
+                    "但本接口只回文档／块**计数**，不回传其元数据字段。",
+        },
+    })
 
 
 # --------------------------------------------------------------------------
