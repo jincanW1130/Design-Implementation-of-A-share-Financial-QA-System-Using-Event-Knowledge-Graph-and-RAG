@@ -429,73 +429,7 @@
          邻接关系 N 条（逐条列出方向 · 关系中文名 · 对端实体）。这一块随数据集与视图参数变化，
          与块① 的接口计数**不是一回事**，故两块各自标注来源，代码里也分属两个 <section class="gblk">。
 
-  ▍十二、本版（v5.3）相对 v5.2 的改动（一处定点修复：切数据集后「未选中任何实体」）
-   作者用无头渲染逐条跑过进入路径，实测「未选中任何实体」只在这两处出现：
-     A 图谱屏 · 默认数据集 · 不操作      → 已选中 · 平安银行 000001   ✓
-     B **切到第二个数据集（实体证据图谱）** → 未选中任何实体            ✗（作者看到的就是这个）
-     C 切走再切回图谱屏                  → 已选中 · 平安银行 000001   （侥幸，非规则保证）
-     D 历史回看的图谱子区                → 已选中 · 平安银行 000001
-     E 主动点画布空白                    → 未选中（合理，是用户自己的操作）
-   根因：默认选中挂在 opt.select 上 —— 会话数据集带了锚点（select:"pab"），
-   而切到「实体证据图谱」时没有传锚点，且切换分支里先执行了清空选中，于是新数据集没有选中项。
-         —— 改前（v5.2）setDataset / 挂载尾：
-            function setDataset(ds){
-              DS=ds;
-              S.sel=null;S.edge=null;S.path=null;S.hidden={};S.depth=2;   // ← 清空选中
-              …
-            }
-            …
-            if(opt.select){ var s=DS.idx[opt.select]; if(s) S.sel=s }     // ← 只有传了锚点才有选中
-            refresh();
-
-         —— 改后（v5.3）：
-            function setDataset(ds,pref){
-              var prevId=(S.sel&&S.sel.id)||null;      // 必须在 DS=ds 之前取
-              DS=ds;
-              S.hidden={};S.depth=2;
-              autoAnchor(pref!==undefined?pref:PREF,prevId);
-              …
-            }
-            autoAnchor(PREF,null);                     // 进屏同样走规则，不再靠 opt.select 命中
-            refresh();
-
-   ▍十二·一、锚点选择的三级规则（anchorOf，确定性、可复现）
-     切数据集 / 重新进入图谱屏时，**若当前没有选中项**就给新数据集自动落一个锚点：
-       ① 沿用 —— 切换前选中的节点 id 在新数据集里存在（DS.idx[id]）→ 选它。
-                  两侧同名实体（会话载荷与实体证据图谱共有的那批，m 里带 "s"+"e"）之间
-                  来回切，选中项连续，不会跳到别的实体上。
-       ② 数据集自带锚点 —— pref，即本实例的 opt.select（屏③ 传的是 "pab"）。
-                  实体证据图谱没有声明自己的锚点，这里传 null，直接落到③。
-       ③ 兜底 —— 该数据集里**度最高**的节点；**并列时取 node_id 升序第一个**，
-                  保证同一份数据每次跑出来的锚点完全一致。
-       三级都不成立（数据集里一个节点都没有）才返回 null，允许留空。
-     实测（本文件当前数据）：
-       · 会话子图 s（10 节点 / 6 边）：度最高 = EVT-0260（度 3），与 pab（度 3）**并列**，
-         按 node_id 升序 "evt0260" < "pab" → 取 EVT-0260。屏③ 因为传了 opt.select="pab"，
-         走规则② 落在 **平安银行 000001**；历史回看子区没传锚点，走规则③ 落在 **EVT-0260**。
-       · 实体证据图谱 e（11 节点 / 11 边）：度最高 = 长城汽车 601633（度 6，无并列）。
-         但 s→e 切换时规则①先生效（pab 在新数据集里也存在）→ 落在 **平安银行 000001**；
-         只有在「e 里没选中 / 冷启动直接进 e」时才落到 cy 长城汽车 601633。
-     进入图谱屏（从别的屏切回 / boot() 首次挂载）走**同一套规则**：go() 在切到 graph 屏末尾调
-     G3.reenter()，把「进屏就有选中项」从巧合变成规则；已有选中项时 reenter 不动它，
-     来回切屏不打断用户当前看的东西。
-
-   ▍十二·二、userCleared 的语义
-     新增状态位 S.userCleared，用来区分「用户主动清空」与「尚未选中」：
-       · 置 true —— 用户主动取消选中的三条出口（点画布空白 / 面板「取消选中」/ Esc）都走
-                    clearSel()，clearSel() 一律把 userCleared 置 true；
-       · 置 false —— pick() 选中节点或边时置回 false（用户自己选了东西）；
-                    autoAnchor() 在切数据集 / 重进图谱屏时也复位为 false。
-     效果：用户在**同一数据集内**清掉的空态必须保持（不会被「无选中则自动选锚点」立刻选回去），
-     只有**切数据集**或**重新进入图谱屏**才重新自动选锚点。
-
-   ▍十二·三、空态补充句
-     空态原句保留（「未选中任何实体／点节点或边查看属性；当前视图共 N 个节点」＋取消方式说明），
-     只在 **DS.nodes.length === 0**（锚点规则三级都落空）时补一句
-     「切到本数据集时未能自动选中（本数据集暂无可选节点）。」
-     正常的空态只可能是「用户自己清掉的」，不出现这句。
-
-   ▍十三、数据说明
+  ▍十二、数据说明
    本原型分三类文字，界面上一律分开放置、不互相冒充：
      · 真实记录 —— 证据条目、图谱路径、事件三元组、判定区间、数据版本与截止时间，
        取自 ashare_qa 六表的一次真实问答输出，原样呈现。
@@ -3199,12 +3133,7 @@ function mountGraph(host,opt){
             hops:src.hops,bb:src.bb,paths:paths};
   }
   var DS=cloneDS(opt.ds||GDS_S);
-  /* v5.3：userCleared —— 区分「用户主动清空」与「尚未选中」。
-     true ＝ 用户在本数据集内自己点了空白／「取消选中」／Esc 清掉的，
-            此时**不**自动选回锚点（否则用户永远清不掉）；
-     切数据集 或 重新进入图谱屏时复位为 false，再走一遍自动锚点规则。 */
-  var S={sel:null,edge:null,path:null,hidden:{},depth:2,i0:0,i1:MONTHS.length-1,userCleared:false};
-  var PREF=opt.select||null;      // v5.3：本实例「自带锚点」（屏③ 传的是 "pab"），锚点规则的②级
+  var S={sel:null,edge:null,path:null,hidden:{},depth:2,i0:0,i1:MONTHS.length-1};
   var view={k:1,tx:0,ty:0,fit:1,bb:null},groot=null;
   /* v5.1 措施①：viewBox 不再写死 900×620，而是随内容自适应；单位恒等于 1 CSS px，
      因此指针换算（zoomAt / toLocal / 平移）在这套坐标下依然是精确的。 */
@@ -3701,9 +3630,6 @@ function mountGraph(host,opt){
     pbody.innerHTML='<div class="gempty"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#bull"></use></svg>'+
       "<p>未选中任何实体<br>点节点或边查看属性；当前视图共 <b>"+vis+"</b> 个节点</p>"+
       '<p class="gsrc" style="max-width:24ch">单击已选中的节点<b>不会</b>取消选中；取消请按 Esc、点画布空白，或用面板上的「取消选中」。</p>'+
-      /* v5.3：只有在**本数据集真的一无所有**（锚点规则三级都落空）时才补这一句。
-         正常的空态只可能是「用户自己清掉的」——不在这里吓唬人。 */
-      (DS.nodes.length?"":'<p class="gsrc" style="max-width:24ch">切到本数据集时未能自动选中（本数据集暂无可选节点）。</p>')+
       "</div>";
   }
 
@@ -3901,57 +3827,20 @@ function mountGraph(host,opt){
          **再点同一个节点等于取消选中**。而进屏默认就选中了平安银行 000001（画布上最大的那个），
          作者第一下点的多半就是它，于是面板被清空，观感就是「属性不显示」。
          现在改成幂等：点已选中的节点保持选中、面板不变。 */
-      S.edge=null;S.path=null;S.sel=n;S.userCleared=false;
+      S.edge=null;S.path=null;S.sel=n;
     }else{
       var i=parseInt(t.getAttribute("data-edge"),10);
       if(!(i>=0)||!DS.edges[i]) return;
       /* v5.2：边同样改成幂等（原来是 S.edge = (S.edge===i) ? null : i） */
-      S.sel=null;S.path=null;S.edge=i;S.userCleared=false;
+      S.sel=null;S.path=null;S.edge=i;
     }
     refresh();
   }
   /* v5.2：取消选中的三条路径 —— 点画布空白（原有）／ Esc 键 ／ 面板上的「取消选中」按钮。
-     选中态是幂等的，所以「取消」必须有一条明确的出口，不能靠再点一次节点。
-     v5.3：这一条路径同时把 userCleared 置 true —— 用户自己清掉的空态**必须保持**，
-     不会被「无选中则自动选锚点」的规则在同一数据集内立刻选回去。 */
+     选中态是幂等的，所以「取消」必须有一条明确的出口，不能靠再点一次节点。 */
   function clearSel(){
-    S.userCleared=true;
     if(!S.sel&&S.edge===null&&!S.path) return;
     S.sel=null;S.edge=null;S.path=null;refresh();
-  }
-  /* v5.3：锚点选择三级规则（确定性、可复现）
-       ① 沿用 —— 切换前选中的节点 id 在新数据集里存在（DS.idx[id]）→ 选它
-                  （两侧同名实体之间来回切，选中项连续，不会跳走）；
-       ② 数据集自带锚点 —— pref（即 opt.select，会话载荷子图传的是 "pab"）；
-       ③ 兜底 —— 该数据集里**度最高**的节点；并列时取 node_id **升序**第一个，
-                  保证同一份数据每次跑出来的锚点完全一致。
-       三级都不成立（数据集里一个节点都没有）才返回 null，允许留空。 */
-  function anchorOf(ds,prevId,pref){
-    if(prevId&&ds.idx[prevId]) return ds.idx[prevId];               // ① 沿用
-    if(pref){ var p=ds.idx[pref]; if(p) return p }                  // ② 数据集自带锚点
-    var best=null,i;                                                // ③ 度最高（并列取 id 升序）
-    for(i=0;i<ds.nodes.length;i++){
-      var n=ds.nodes[i];
-      if(!best||n.deg>best.deg||(n.deg===best.deg&&n.id<best.id)) best=n;
-    }
-    return best;
-  }
-  /* 切数据集 / 重新进入图谱屏时调用：复位 userCleared，然后按三级规则落一个锚点。
-     prevId 由调用方在**换 DS 之前**取好（见 setDataset）。 */
-  function autoAnchor(pref,prevId){
-    S.userCleared=false;
-    var a=anchorOf(DS,prevId,pref);
-    S.sel=a||null;S.edge=null;S.path=null;
-    return a;
-  }
-  /* v5.3：重新进入图谱屏（从别的屏切回）。
-     把「刚进屏就该有个选中项」从**巧合**变成**规则**：复位 userCleared（上一次在本屏清空的
-     记忆到此为止），若当前确实没有选中项（节点/边都空）就按三级规则选一个。
-     已有选中项时不动它 —— 来回切屏不会打断用户当前看的东西。 */
-  function reenter(){
-    S.userCleared=false;
-    if(!S.sel&&S.edge===null) autoAnchor(PREF,null);
-    refresh();
   }
   document.addEventListener("keydown",function(e){
     if(e.key!=="Escape"&&e.key!=="Esc") return;
@@ -3962,7 +3851,7 @@ function mountGraph(host,opt){
   svg.addEventListener("click",function(e){
     if(moved){moved=false;return}
     var t=e.target.closest?e.target.closest(".gnode,.geline"):null;
-    if(!t){ clearSel();return }        // v5.3：走 clearSel，连带把 userCleared 置 true
+    if(!t){ S.sel=null;S.edge=null;S.path=null;refresh();return }
     pick(t);
   });
   svg.addEventListener("keydown",function(e){
@@ -3993,9 +3882,7 @@ function mountGraph(host,opt){
   if(modesBox) modesBox.addEventListener("click",function(e){
     var b=e.target.closest?e.target.closest("[data-mode]"):null;if(!b) return;
     var m=b.getAttribute("data-mode");if(m===DS.mode) return;
-    /* v5.3：把该数据集**自带**的锚点一并传进去（会话子图是 "pab"；实体证据图谱没有声明锚点，
-       传 null，由锚点规则③「度最高的节点」确定性兜底）。 */
-    setDataset(cloneDS(m==="s"?GDS_S:GDS_E), m==="s"?"pab":null);
+    setDataset(cloneDS(m==="s"?GDS_S:GDS_E));
   });
   if(pbody) pbody.addEventListener("click",function(e){
     /* v5.2：面板上的「取消选中」按钮 —— 明确的一条取消出口（另有 Esc 与点画布空白） */
@@ -4017,16 +3904,9 @@ function mountGraph(host,opt){
       if(row) row.hidden=open2;
     }
   });
-  /* v5.3：切数据集。原来这里是 S.sel=null;… —— 直接把选中项清空，新数据集没有任何选中项，
-     面板就落到「未选中任何实体」（作者切到「实体证据图谱」时看到的就是这一条）。
-     现在：**先在旧数据集里取好 prevId**，再换 DS，然后按三级规则自动落一个锚点 ——
-     prevId 在新数据集里存在就沿用（两侧同名实体切换体验连续），否则退回数据集自带锚点，
-     再否则选度最高的那个。用户主动清空过的空态只在**同一数据集内**保持。 */
-  function setDataset(ds,pref){
-    var prevId=(S.sel&&S.sel.id)||null;          // 必须在 DS=ds 之前取
+  function setDataset(ds){
     DS=ds;
-    S.hidden={};S.depth=2;
-    autoAnchor(pref!==undefined?pref:PREF,prevId);
+    S.sel=null;S.edge=null;S.path=null;S.hidden={};S.depth=2;
     buildEdgeOffsets();paintLegend();paintModes();paintFilters();paintDepth();paintAcc();
     fitView();paint();refresh();
     if(opt.onDataset) opt.onDataset(DS);
@@ -4116,17 +3996,13 @@ function mountGraph(host,opt){
 
   paintLegend();paintModes();paintFilters();paintDepth();paintAcc();
   fitView();paint();
-  /* v5.3：进入图谱屏（首次挂载 / 从别的屏切回）走**同一套锚点规则**，不再是
-     「碰巧 opt.select 命中了才有选中」——无选中则按三级规则选一个，规则保证面板不空。
-     prevId 传 null：刚挂载没有「切换前选中的节点」，从②/③ 级开始。 */
-  autoAnchor(PREF,null);
+  if(opt.select){ var s=DS.idx[opt.select]; if(s) S.sel=s }
   refresh();
   return {
     host:host,
     ds:function(){return DS},
     setTimeRange:function(a,b){S.i0=a;S.i1=b;refit()},
     setDataset:setDataset,
-    reenter:reenter,               // v5.3：从别的屏切回图谱屏时调，套用「无选中则自动选锚点」
     reset:function(){q("reset").click()}
   };
 }
@@ -4368,9 +4244,6 @@ function go(name){
   $$(".reveal",sec).forEach(function(e){e.classList.remove("in")});
   void sec.offsetWidth;
   if(window.__reveal) requestAnimationFrame(function(){requestAnimationFrame(window.__reveal)});
-  /* v5.3：切入图谱屏时套用「无选中则自动选锚点」——让「进屏就有选中项」是规则保证，
-     而不是「上一次的选中恰好还在」。只有图谱屏（graph）这一屏有图谱实例。 */
-  if(name==="graph"&&G3&&G3.reenter) G3.reenter();
 }
 document.addEventListener("click",function(e){
   var t=e.target.closest?e.target.closest("[data-goto],[data-noop]"):null;
