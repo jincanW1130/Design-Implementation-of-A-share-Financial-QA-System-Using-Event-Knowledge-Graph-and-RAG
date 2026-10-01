@@ -145,6 +145,9 @@ REGISTERED_ADDITIONS = {
     ("GET", "/api/market/announcements"),
     ("GET", "/api/market/news"),
     ("GET", "/api/market/reports"),
+    # 2026-10-01 补登（《25》v1.6 / v1.8 已登记，本清单此前漏同步）：
+    ("GET", "/api/graph/entities/{node_id}"),            # 实体详情（真实属性）
+    ("GET", "/api/graph/entities/{node_id}/evidence"),   # 实体级证据
 }
 
 # D1／D2 的**候选题列表**：依次尝试，取前若干道成功（HTTP 200）的题做机检。

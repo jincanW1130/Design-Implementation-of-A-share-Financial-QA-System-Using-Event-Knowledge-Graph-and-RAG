@@ -215,6 +215,46 @@ export function listEvents(params = {}) {
 export function getEventDetail(eventId) {
   return request(`/graph/events/${encodeURIComponent(eventId)}`)
 }
+/**
+ * GET /api/graph/entities/{node_id} —— 单个实体详情。
+ * 返回 `{node{node_id,label,name,stock_code}, properties, property_keys, property_notes,
+ * degree{out,in_,total}, counts{neighbors,relations,documents,chunks}, params, scope, source}`。
+ * 「实体档案」块直接渲染 properties（键序＝property_keys），**不派生、不推测**。
+ */
+export function getEntity(nodeId) {
+  return request(`/graph/entities/${encodeURIComponent(nodeId)}`)
+}
+/**
+ * GET /api/graph/entities/{node_id}/evidence —— 实体证据（depth=1 一跳 / 2 两跳）。
+ * 返回 `{node, counts{neighbors,relations,documents,chunks}, documents[]{doc_id,title,source,
+ * publish_time,url,category,support_relations,missing,chunks[]{chunk_id,chunk_index,
+ * relations[]{relation,neighbor,role,confidence}}}, documents_total, chunks_total,
+ * relations_without_evidence[]{relation,neighbor,note}, depth, params, scope}`。
+ */
+export function getEntityEvidence(nodeId, depth = 1, params = {}) {
+  return request(`/graph/entities/${encodeURIComponent(nodeId)}/evidence`,
+    { params: { depth, ...params } })
+}
+
+// —— 实时数据区（api\market.py · 四条只读接口 · scope=display_only）——
+// 三条纪律：只作展示、不进问答证据链；外部源不可达时 connected=false 仍返回 HTTP 200；
+// 页面按 connected／reason **如实显示「未接入」**，绝不编造价格／涨跌幅／新闻。
+/** GET /api/market/quote —— 实时行情（codes 缺省取后端默认股）。 */
+export function getMarketQuote(codes) {
+  return request('/market/quote', { params: codes ? { codes } : {} })
+}
+/** GET /api/market/announcements —— 个股公告（code 必填）。 */
+export function getMarketAnnouncements(code, params = {}) {
+  return request('/market/announcements', { params: { code, ...params } })
+}
+/** GET /api/market/news —— 个股新闻（keyword 必填）。 */
+export function getMarketNews(keyword, params = {}) {
+  return request('/market/news', { params: { keyword, ...params } })
+}
+/** GET /api/market/reports —— 语料内近一周文档（不依赖外部源，降级形态常驻）。 */
+export function getMarketReports(params = {}) {
+  return request('/market/reports', { params })
+}
 
 /**
  * 健康检查（用于顶栏「后端状态」提示；非表 4-13 接口，见《24》格式决策 9）。
