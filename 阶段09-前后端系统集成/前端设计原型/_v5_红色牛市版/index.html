@@ -245,99 +245,7 @@
        其余实体与文档如实留白。实体证据表的「关系数」只列本次返回里逐条给出的关系，与①的
        实体级实测总量口径不同，两处不做换算。
 
-  ▍十、本版（v5.1）相对 v5 的改动（逐条对应作者在无头 Chrome 截图上看到的三处残留问题）
-   v5.1 只改三件事，v5 的布局算法（环形＋弧距迭代＋半径钳位）、标签规划与遮挡自检、
-   图例横条与右栏结构、默认选中与四块实体证据、数据集切换、四屏结构、视觉语言
-   （红三档／绿色唯一 #22C55E／牛元素／DSL 骨架）、单文件零外部依赖，一律未动。
-
-   ▍十·一、措施① 画布纵向留白过大 → fit 改成真正的双向适配，画布高度随内容自适应
-     问题（截图上确实看到）：画布高约 560px，节点全挤在上半部，下半部一片空黑。
-     实测根因：viewBox 写死 900×620（宽高比 1.452），而 fit 只在「宽高同取 min」后
-     受宽度限制，元素的纵向空间没用上。以作者截图尺寸（画布列宽 813px）为例，
-     实体证据图谱的内容包围盒是 669.4 × 284.3（宽扁），适配比被宽度顶到 1.102，
-     纵向只填满 50.5% —— 也就是上下各空 24.7%，正是截图里那片黑。
-     三处改动：
-       · measureCanvas()：画布高度改为随内容自适应
-             H = clamp(420, W × 内容高 / 内容宽, 680)      （420 = H_MIN，680 = H_MAX）
-         viewBox 随之写成 "0 0 W H"，并设 preserveAspectRatio="none" —— 因为 viewBox 的
-         宽高比恒等于元素的宽高比，所以没有 letterbox，1 个 SVG 单位恒等于 1 个 CSS px，
-         指针换算（滚轮锚点缩放 / 拖拽平移 / 拖节点）在这套坐标下依旧是精确的。
-       · fitView()：s = min(W/bw, H/bh) × (1 - SAFE)，SAFE=0.09 —— 两个方向同时适配，
-         再按包围盒中心重新居中（tx = W/2 − cx·s，ty = H/2 − cy·s）。
-         当 H 未被 clamp 时（H 恰好等于 W×bh/bw），两个方向的填充率都正好是 82%。
-       · liveBB()：适配只用「当前可见」节点的包围盒（未被类型筛选掉、跳数 ≤ 深度、
-         在时间区间内）。会话子图里那 3 个孤立节点 dist=99 恒为不可见（opacity .06、
-         pointer-events:none），v5 里它们把包围盒往下撑了约 100px，是「节点挤在上半部」
-         的直接原因；现在它们不再参与适配，仍照常出现在下方的「孤立节点」卡片里。
-       滚轮缩放上下限也随适配比走：k ∈ [max(0.25, 0.35×适配比), min(14, 8×适配比)]，
-       单节点／稀疏视图也能放大到看清。容器宽度变化（ResizeObserver）与
-       筛选／深度／时间区间变化后都会重新适配。
-     实测（画布列宽 876px = 1440 视口下容器 1240 − 右栏 348 − gap 16）：
-       · 实体证据图谱 11 节点/11 边：画布高 603px → 420px；适配比 1.102 → 1.073；
-         填充 宽 82.0% 高 50.5% → 宽 82.0% 高 72.6%（纵向空白 49.5% → 27.4%）
-       · 会话子图 10 节点（可见 7）：画布高 603px → 680px；适配比 1.525 → 1.672；
-         填充 宽 65.1% 高 82.0% → 宽 73.4% 高 82.0%
-       · 空态（全部筛掉）：画布保持 H_MIN=420px，不留大片死区
-       · 保底·单节点（14 字符标签）：画布 876×448、适配比 7.981、填充 宽 82.0% 高 82.0%，
-         最大空白带 18.0% —— 远低于「不超过 40%」的要求
-       · 状态行新增实测读数：「内容包围盒 669.4 × 284.3 · 适配比 1.073 · 实际 100% ·
-         画布 876 × 420」，缩放框改为「缩放 ×k」（绝对倍率），实际百分比相对适配比给出。
-
-   ▍十·二、措施② 属性面板与次要文字对比度 → 只调字色与字号层级，色板里的红绿一律未动
-     逐项按 WCAG 相对亮度实算（比值＝较亮者亮度+0.05 ÷ 较暗者亮度+0.05），
-     背景一律取**层叠合成后的实色**（下列每条都可按同样公式独立复算）：
-       .grel__i 行底  = rgba(255,255,255,.03)  压 --surface #16181C → #1D1F23
-       .glegendBar 底 = rgba(255,255,255,.022) 压 --bg #0F0F10      → #141416
-       .gev__blk 底   = rgba(255,255,255,.018) 压 .gev 渐变顶       → #1A1B1F
-       .gev__ctxrowWrap>td = rgba(0,0,0,.22)   压证据块底           → #141518
-       .gstatus 底    = rgba(15,15,16,.72)     压画布实底 #141416   → #101012
-     实算（"→"前＝v5 原值，"→"后＝v5.1 现值）：
-       ① 关键正文 / 字段（门槛 4.5:1）
-         字段名 .gpanel .kv dt        --faint #868D98（5.31:1）→ rgba(255,255,255,.68)
-                                      = **8.67:1** @ 面板底；11px → 11.5px，补 font-weight:500
-         字段值 .gpanel .kv dd        --fg #E8E8EA = **14.53:1** @ 面板底（本就达标，未改色）
-                                      · dd.mono 13px → 13.5px，与 dd 齐平
-         面板**空值占位**（stock_code / exchange / aliases 多为空，原来整格是 --faint）
-                                      --faint 5.31:1 → .62 白 = **7.40:1**
-         邻接关系·关系名＋对端实体名  --muted #A2A9B5（6.98:1）→ --fg #E8E8EA
-                                      = **13.50:1** @ 行底 #1D1F23（该行本身无 hover 规则）
-         证据块·上下文字段值 .gev__ctxrow i  --muted（7.42:1）→ --fg = **14.90:1** @ #141518
-         实体证据 .gev .ev__row i     → --fg = **14.05:1** @ 证据块底 #1A1B1F
-       ② 非关键辅助文字（门槛 3:1，v5.1 一律提到 .62 白）
-         邻接关系·类型名 em           --faint 4.94:1 → .62 白 = **7.09:1** @ 行底；10.5px → 11px
-         路径属性行 gpath__a / gpath__flt  --faint → .62 白 = **7.13:1** / **7.27:1**
-         证据表头 .gev__tbl th        --faint 5.40:1 → .62 白 = **7.47:1** @ th 底；10.5px → 11px
-         实体证据区 .gstat i / .gstat em / .evgroup__n / .gev__ctxnote / .gev__gap /
-         .giso__d / .gnote / .gpath__flt   --faint → .62 白 = **7.27:1** @ 证据块底 #1A1B1F
-         实体证据·上下文字段名 .gev__ctxrow>span  --faint → .62 白 = **7.50:1** @ #141518
-         面板空态 .gempty p           --faint 5.31:1 → .62 白 = **7.40:1** @ 面板底
-         画布状态条 .gstatus          --faint 5.67:1 → .62 白 = **7.64:1** @ #101012；10.5px → 11px
-         图例横条 .glg__i em          --faint → .62 白 = **7.53:1** @ .glegendBar 底 #141416
-         图例脚注 .glg__rule i / b    --faint → .78 白 = **11.36:1**
-         计数标签 .chip__n            --faint → .62 白 = **7.40:1**（9.5px / 10.5px → 统一 10px）
-         **图例零计数行 [data-zero="1"]**  opacity:.48 的 --muted → 合成仅 **2.72:1**
-                                      ——这是 v5 里**唯一**跌破 3:1 底线的一处 →
-                                      改 .62 白 + opacity:.82 = **5.44:1**，层级差仍在
-         画布实底 / 抽屉面板上的辅助文字   .62 白 = **7.54:1**
-       ③ 作用域纪律：证据区的 .ev* 与屏② 共用类名，故所有提亮都写成 `.gev …` 覆盖
-          （如 .gev .ev__row i 提到 --fg = 14.05:1），**屏②的证据卡一字未动**。
-     结论：正文与关键字段**全部 ≥ 4.5:1（最低 7.40:1）**；
-           非关键辅助文字**全部 ≥ 3:1（最低 5.44:1）**。
-     色板里的红（#E63946 / #FF3B30 / #C8102E）与那条唯一的绿（#22C55E）在 v5.1 里一个字都没改。
-
-   ▍十·三、措施③ 背景股票曲线横穿图谱画布 → 画布实底 + 该屏背景曲线降到 .14
-     截图上：装饰性红色曲线从画布中间穿过，和图谱自身的红色边线混在一起。三重隔离：
-       · 画布容器 .gcanvasWrap 改为**实底面板** background:#141416（＋原有 1px 描边 ＋ 圆角），
-         曲线再也透不出来 —— 屏③ 与历史回看的图谱子区共用同一条规则，一处改两处生效；
-       · 屏③ 激活时 body[data-view="graph"] #field{opacity:.14}，全局基线是 #field{opacity:.5}
-         （≤ .14 的要求见下）；
-       · 历史回看抽屉打开时 body[data-drawer="on"] #field{opacity:.14}
-         （抽屉面板本身 background:var(--bg-deep) #1a1615，本就不透明）。
-       滚轮/切屏/刷新恢复到屏③ 的情况都已接上（go() 与 boot() 都写 data-view）。
-     实测/取值：图谱区背景 canvas 不透明度 = **0.14**（基线 0.5），画布容器背景 = **#141416**
-     （不透明实色，非半透明渐变）。
-
-  ▍十一、数据说明
+  ▍十、数据说明
    本原型分三类文字，界面上一律分开放置、不互相冒充：
      · 真实记录 —— 证据条目、图谱路径、事件三元组、判定区间、数据版本与截止时间，
        取自 ashare_qa 六表的一次真实问答输出，原样呈现。
@@ -458,10 +366,6 @@ svg{display:block}
 /* ============================ 3. 背景曲线 + 自定义光标 ============================ */
 #field{position:fixed;inset:0;z-index:0;display:none;opacity:.5;pointer-events:none}
 #field.on{display:block}
-/* v5.1 措施③：图谱屏（屏③）与历史回看抽屉打开时，背景股票曲线降到 .14，
-   不再横穿画布与图谱自身的红色边线打架；画布本身另有 #141416 实底，双重隔离。 */
-body[data-view="graph"] #field{opacity:.14}
-body[data-drawer="on"] #field{opacity:.14}
 #veil{position:fixed;inset:0;z-index:0;pointer-events:none;
       background:
         radial-gradient(120% 74% at 78% 6%, rgba(230,57,70,.09), transparent 62%),
@@ -788,9 +692,7 @@ body[data-market="on"]  .mk-off{display:none!important}
 .gwrap{display:grid;grid-template-columns:minmax(0,1fr) 348px;gap:20px;align-items:start}
 .gtoolbar{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:14px}
 .glegend{display:flex;gap:14px;flex-wrap:wrap}
-/* v5.1 措施③：画布容器改为**实底面板**（#141416，1px 描边 + 圆角），背景股票曲线不再透出；
-   配合 body[data-view="graph"] / body[data-drawer="on"] 把 #field 不透明度降到 .14。 */
-.gcanvasWrap{position:relative;background:#141416;
+.gcanvasWrap{position:relative;background:linear-gradient(180deg,rgba(22,24,28,.92),rgba(15,15,16,.92));
              border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
 .gcanvasWrap::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
   background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
@@ -807,22 +709,17 @@ body[data-market="on"]  .mk-off{display:none!important}
 .gpanel__head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--border)}
 .gpanel__body{margin-top:16px;display:flex;flex-direction:column;gap:14px;flex:1}
 .gpanel .kv{display:grid;grid-template-columns:78px minmax(0,1fr);gap:10px;align-items:baseline}
-/* v5.1 措施②：字段名 11px/--faint(5.31:1) → 11.5px/rgba(255,255,255,.68)(8.67:1)，并补 font-weight:500 */
-.gpanel .kv dt{font-size:11.5px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;
-  color:rgba(255,255,255,.68)}
-/* 字段值一律正文色 --fg（14.53:1） */
+.gpanel .kv dt{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
 .gpanel .kv dd{font-size:13.5px;color:var(--fg);word-break:break-word}
-.gpanel .kv dd.mono{font-variant-numeric:tabular-nums;font-size:13.5px}
+.gpanel .kv dd.mono{font-variant-numeric:tabular-nums;font-size:13px}
 .gempty{margin:auto;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;padding:20px 0}
 .gempty svg{width:82px;height:82px;color:rgba(230,57,70,.5)}
-.gempty p{font-size:13px;color:rgba(255,255,255,.62);max-width:22ch;line-height:1.6}
+.gempty p{font-size:13px;color:var(--faint);max-width:22ch;line-height:1.6}
 .grel{display:flex;flex-direction:column;gap:7px;margin-top:4px}
-/* v5.1 措施②：关系名与对端实体名提到正文色 --fg（13.50:1 @ 行底 #1D1F23，hover 13.88:1） */
 .grel__i{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,.03);
-         border:1px solid var(--border-soft);font-size:12.5px;color:var(--fg)}
+         border:1px solid var(--border-soft);font-size:12.5px;color:var(--muted)}
 .grel__i i{width:8px;height:8px;border-radius:50%;flex:none}
-/* 类型名属辅助信息：--faint(4.94:1) → rgba(255,255,255,.62)(7.09:1) */
-.grel__i em{font-style:normal;font-family:var(--f-mono);font-size:11px;color:rgba(255,255,255,.62);margin-left:auto}
+.grel__i em{font-style:normal;font-family:var(--f-mono);font-size:10.5px;color:var(--faint);margin-left:auto}
 
 /* 时间轴 */
 .tl{margin-top:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 22px 14px}
@@ -892,7 +789,7 @@ body[data-market="on"]  .mk-off{display:none!important}
 .tbl td.ans{color:var(--fg);line-height:1.95;white-space:normal;max-width:560px}
 .tbl td .ref{margin:0 2px}
 .grel--none{padding:12px 0;color:var(--faint);font-size:12.5px;line-height:1.8}
-.chip__n{font-style:normal;font-family:var(--f-mono);font-size:10px;color:rgba(255,255,255,.62);margin-left:5px}
+.chip__n{font-style:normal;font-family:var(--f-mono);font-size:9.5px;color:var(--faint);margin-left:5px}
 .chip[aria-pressed="true"] .chip__n{color:rgba(255,255,255,.7)}
 .tbl tbody tr:hover td{background:rgba(255,255,255,.02)}
 .tblWrap .dloading{display:flex;align-items:center;gap:12px;padding:26px 0;color:var(--faint);font-size:13px}
@@ -913,7 +810,7 @@ body[data-market="on"]  .mk-off{display:none!important}
 /* --- 图谱工具条 / 画布 / 属性面板 --- */
 .gtoolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
 .gwrap{display:grid;grid-template-columns:minmax(0,1fr) 348px;gap:16px;align-items:start}
-.gcanvasWrap{position:relative;background:#141416;
+.gcanvasWrap{position:relative;background:linear-gradient(180deg,rgba(22,24,28,.92),rgba(15,15,16,.92));
   border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
 .gcanvasWrap::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
   background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
@@ -944,10 +841,10 @@ body[data-market="on"]  .mk-off{display:none!important}
 /* 画布下方的状态条：遮挡自检结果 —— 位于画布之外，不压绘图区 */
 .gstatus{position:relative;display:flex;align-items:center;gap:8px;flex-wrap:wrap;
   padding:9px 14px;border-top:1px solid var(--border);background:rgba(15,15,16,.72);
-  font-family:var(--f-mono);font-size:11px;color:rgba(255,255,255,.62)}
+  font-family:var(--f-mono);font-size:10.5px;color:var(--faint)}
 .gstatus__i{display:inline-flex;align-items:center;gap:5px}
 .gstatus__i+.gstatus__i::before{content:"·";margin-right:5px;color:var(--border)}
-.gstatus__i--key{color:rgba(255,255,255,.78)}
+.gstatus__i--key{color:var(--muted)}
 .gstatus b{font-weight:500;color:var(--fg);font-variant-numeric:tabular-nums}
 .gstatus__i--key b{color:var(--accent-ink)}
 
@@ -965,14 +862,12 @@ body[data-market="on"]  .mk-off{display:none!important}
 .glg__i svg{width:16px;height:16px;display:block}
 .glg--row .glg__i svg{width:15px;height:15px}
 .glg__i b{font-weight:500;color:var(--fg)}
-.glg__i em{font-style:normal;font-family:var(--f-mono);font-size:10.5px;color:rgba(255,255,255,.62)}
-/* v5.1 措施②：零计数图例行原是 opacity:.48 的 --muted → 实测仅 2.57:1（低于 3:1 底线）；
-   改为 .62 白 + opacity:.82 → 合成后 6.27:1，既保留「本数据集为 0」的层级差，又不再低到读不清。 */
-.glg__i[data-zero="1"]{opacity:.82;color:rgba(255,255,255,.62)}
+.glg__i em{font-style:normal;font-family:var(--f-mono);font-size:10.5px;color:var(--faint)}
+.glg__i[data-zero="1"]{opacity:.48}
 .glg__rule{flex-basis:100%;margin-top:4px;padding-top:10px;border-top:1px solid var(--border-soft);
-  font-size:10.5px;line-height:1.75;color:rgba(255,255,255,.62)}
-.glg__rule i{font-style:normal;font-family:var(--f-mono);color:rgba(255,255,255,.78)}
-.glg__rule b{color:rgba(255,255,255,.78);font-weight:500}
+  font-size:10.5px;line-height:1.75;color:var(--faint)}
+.glg__rule i{font-style:normal;font-family:var(--f-mono);color:var(--muted)}
+.glg__rule b{color:var(--muted);font-weight:500}
 /* 画布工具条上的小按钮（缩放 − / ＋） */
 .gchip{height:28px;min-width:28px;padding:0 9px;border-radius:8px;border:1px solid var(--border);
   background:rgba(255,255,255,.03);color:var(--muted);font-size:12px;line-height:1;
@@ -984,7 +879,7 @@ body[data-market="on"]  .mk-off{display:none!important}
   border:1px solid var(--border);background:rgba(255,255,255,.03);border-radius:8px;
   transition:border-color .25s var(--ease),color .25s var(--ease)}
 .chip--mini:hover{border-color:var(--accent-line);color:var(--fg)}
-.chip__n{font-style:normal;font-family:var(--f-mono);font-size:10.5px;color:rgba(255,255,255,.62);margin-left:2px}
+.chip__n{font-style:normal;font-family:var(--f-mono);font-size:10.5px;color:var(--faint);margin-left:2px}
 
 /* --- 有向边 / 键盘焦点 --- */
 .gedge{pointer-events:none}
@@ -1037,11 +932,10 @@ body[data-market="on"]  .mk-off{display:none!important}
 .gpath__l{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--fg);min-width:0}
 .gpath__l i{width:8px;height:8px;border-radius:50%;flex:none}
 .gpath__rel{font-family:var(--f-mono);font-size:10.5px;color:var(--accent-ink);white-space:nowrap}
-/* v5.1 措施②：路径属性行（含 confidence）从 --faint(.48 白) 提到 .62 白，7.12:1 @ 行底 #1D1E22 */
-.gpath__d{font-family:var(--f-mono);font-size:10.5px;color:rgba(255,255,255,.62);white-space:nowrap;align-self:center}
-.gpath__a{grid-column:1/-1;font-family:var(--f-mono);font-size:10.5px;color:rgba(255,255,255,.62);line-height:1.62;
+.gpath__d{font-family:var(--f-mono);font-size:10.5px;color:var(--faint);white-space:nowrap;align-self:center}
+.gpath__a{grid-column:1/-1;font-family:var(--f-mono);font-size:10.5px;color:var(--faint);line-height:1.62;
   padding-top:8px;margin-top:1px;border-top:1px solid var(--border-soft);word-break:break-all}
-.gpath__flt{color:rgba(255,255,255,.62);font-size:11.5px;line-height:1.6;padding:8px 0}
+.gpath__flt{color:var(--faint);font-size:11.5px;line-height:1.6;padding:8px 0}
 
 /* --- 孤立节点 --- */
 .giso{display:flex;flex-direction:column;gap:8px}
@@ -1049,15 +943,15 @@ body[data-market="on"]  .mk-off{display:none!important}
   padding:11px 13px;border-radius:9px;border:1px dashed var(--border)}
 .giso__i svg{width:16px;height:16px;margin-top:1px}
 .giso__n{font-size:12.5px;color:var(--fg)}
-.giso__d{font-size:11.5px;color:rgba(255,255,255,.62);line-height:1.65;margin-top:4px}
+.giso__d{font-size:11.5px;color:var(--faint);line-height:1.65;margin-top:4px}
 .giso__d i{font-style:normal;font-family:var(--f-mono)}
 
 /* --- 准确性声明 --- */
 .gacc{display:flex;flex-wrap:wrap;align-items:center;gap:9px;padding:13px 15px;border-radius:var(--r-md);
   background:rgba(255,255,255,.022);border:1px solid var(--border)}
 .gacc b{font-family:var(--f-mono);font-weight:500;color:var(--fg);font-variant-numeric:tabular-nums}
-.gnote{font-size:11.5px;line-height:1.68;color:rgba(255,255,255,.62);max-width:108ch}
-.gnote i{font-style:normal;font-family:var(--f-mono);color:rgba(255,255,255,.78)}
+.gnote{font-size:11.5px;line-height:1.68;color:var(--faint);max-width:108ch}
+.gnote i{font-style:normal;font-family:var(--f-mono);color:var(--muted)}
 .gnote--wide{max-width:none;margin-top:14px}
 .gwrap--lists{margin-top:20px}
 
@@ -1079,35 +973,20 @@ body[data-market="on"]  .mk-off{display:none!important}
 .gev__blkH .label{flex:none}
 .gev__blk .gnote{margin:0}
 .gev__empty{padding:8px 0}
-/* v5.1 措施②：实体证据区复用了屏②的 .ev* 卡片语言，
-   这里**只对 .gev 作用域内**提亮字色，屏②的证据卡一字未动。 */
-.gev .evgroup__n{color:rgba(255,255,255,.62)}
-.gev .ev__row{color:rgba(255,255,255,.72)}
-.gev .ev__row span{color:rgba(255,255,255,.62)}
-.gev .ev__row i{color:var(--fg)}
-.gev .ev__ctxrow{color:rgba(255,255,255,.72)}
-.gev .ev__ctxrow span{color:rgba(255,255,255,.62)}
-.gev .ev__ctxrow i{color:var(--fg)}
-.gev .ev__ctxnote{color:rgba(255,255,255,.62)}
-.gev .evgrp--empty p{color:rgba(255,255,255,.62)}
-.gev .ev--missing .ev__t{color:rgba(255,255,255,.62)}
-.gev .giso__d,.gev .gpath__flt{color:rgba(255,255,255,.62)}
 .gstat4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .gstat{display:flex;flex-direction:column;gap:5px;padding:12px 13px;border-radius:10px;
   border:1px solid var(--border-soft);background:rgba(255,255,255,.03)}
 .gstat b{font-family:var(--f-mono);font-size:24px;font-weight:500;line-height:1;color:var(--fg);
   font-variant-numeric:tabular-nums}
-/* v5.1 措施②：计数小标 --faint(5.14:1 @ 块底) → .62 白(7.27:1) */
-.gstat i{font-style:normal;font-size:11px;color:rgba(255,255,255,.62)}
-.gstat em{font-style:normal;font-size:20px;color:rgba(255,255,255,.62)}
+.gstat i{font-style:normal;font-size:10.5px;color:var(--faint)}
+.gstat em{font-style:normal;font-size:20px;color:var(--faint)}
 
 /* ② 关系证据表 / ③ 文档聚合 / ④ 多来源证据：同一套表格语言 */
 .gev__tblWrap{overflow-x:auto;border:1px solid var(--border-soft);border-radius:10px;
   -webkit-overflow-scrolling:touch}
 .gev__tbl{width:100%;border-collapse:collapse;min-width:760px}
-/* v5.1 措施②：表头 --faint(5.40:1 @ th 底) → .62 白(7.47:1) */
 .gev__tbl th{position:sticky;top:0;text-align:left;padding:10px 12px;white-space:nowrap;
-  font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.62);font-weight:500;
+  font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:500;
   background:rgba(20,22,26,.96);border-bottom:1px solid var(--border)}
 .gev__tbl td{padding:11px 12px;border-bottom:1px solid var(--border-soft);vertical-align:top;
   font-size:12.5px;color:var(--fg);line-height:1.5}
@@ -1116,22 +995,19 @@ body[data-market="on"]  .mk-off{display:none!important}
 .gev__tbl td.mono,.gev__tbl .mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:12px}
 .gev__tbl td.k b{display:block;font-weight:500}
 .gev__tbl td.k em{display:block;font-style:normal;font-family:var(--f-mono);font-size:10.5px;
-  color:rgba(255,255,255,.62);margin-top:3px;line-height:1.5}
-.gev__dir{font-style:normal;font-family:var(--f-mono);font-size:10px;color:rgba(255,255,255,.62);
+  color:var(--faint);margin-top:3px;line-height:1.5}
+.gev__dir{font-style:normal;font-family:var(--f-mono);font-size:10px;color:var(--faint);
   margin-left:8px;border:1px solid var(--border-soft);border-radius:5px;padding:1px 5px}
-/* v5.1 措施②：实体证据块内的「跳数缺口」提示原为 --faint（5.31:1 @ --surface）→ .62 白（7.31:1 @ #151619） */
-.gev__gap{color:rgba(255,255,255,.62);font-style:normal;font-family:var(--f-body);font-size:11.5px;line-height:1.6}
+.gev__gap{color:var(--faint);font-style:normal;font-family:var(--f-body);font-size:11.5px;line-height:1.6}
 .gev__acts{white-space:nowrap;display:flex;gap:7px;align-items:center;flex-wrap:wrap}
 .gev__ctxrowWrap>td{padding:0;border-bottom:1px solid var(--border-soft);background:rgba(0,0,0,.22)}
 .gev__ctxrowWrap[hidden]{display:none}
 .gev__ctx{padding:14px 16px;display:flex;flex-direction:column;gap:9px}
 .gev__ctxrow{display:grid;grid-template-columns:118px minmax(0,1fr);gap:12px;align-items:baseline;
   font-size:11.5px;line-height:1.62}
-/* v5.1 措施②：实体证据「原文上下文」三行 —— 字段名 --faint(5.31:1) → .62 白(7.31:1)、
-   字段值 --muted(6.80:1) → 正文色 --fg(14.27:1)、脚注 --faint → .62 白。 */
-.gev__ctxrow>span{color:rgba(255,255,255,.62);letter-spacing:.1em;text-transform:uppercase;font-size:10px}
-.gev__ctxrow i{font-style:normal;font-family:var(--f-mono);color:var(--fg);word-break:break-all}
-.gev__ctxnote{font-size:10.5px;line-height:1.65;color:rgba(255,255,255,.62);padding-top:9px;
+.gev__ctxrow>span{color:var(--faint);letter-spacing:.1em;text-transform:uppercase;font-size:10px}
+.gev__ctxrow i{font-style:normal;font-family:var(--f-mono);color:var(--muted);word-break:break-all}
+.gev__ctxnote{font-size:10.5px;line-height:1.65;color:var(--faint);padding-top:9px;
   border-top:1px solid var(--border-soft)}
 .gev__kv4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .gev__kv4>div{padding:12px 13px;border-radius:10px;border:1px solid var(--border-soft);background:rgba(255,255,255,.03)}
@@ -1145,8 +1021,7 @@ body[data-market="on"]  .mk-off{display:none!important}
 .gempty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
   padding:44px 0;text-align:center;flex:1}
 .gempty svg{width:44px;height:44px;fill:var(--accent-deep);opacity:.5}
-/* v5.1 措施②：图谱面板空态正文 --faint(5.31:1) → .62 白(7.40:1 @ --surface) */
-.gempty p{font-size:12.5px;color:rgba(255,255,255,.62);line-height:1.7;max-width:26ch}
+.gempty p{font-size:12.5px;color:var(--faint);line-height:1.7;max-width:26ch}
 
 /* --- 证据卡：来源域名 + 原文外链 --- */
 .ev__src{display:grid;grid-template-columns:52px minmax(0,1fr);gap:9px;align-items:baseline;
@@ -2908,7 +2783,7 @@ function shapeSVG(type,r,op){
   }
   return '<polygon points="'+ngon(r*1.12,3,90)+'" '+st+"/>";
 }
-var VBW=900,VBH=620;                                  // v5.1：仅作初始/兜底基准；实例内用随内容自适应的 VB（见 mountGraph）
+var VBW=900,VBH=620;                                  // 图谱画布 viewBox（缩放/平移的坐标基准）
 
 /* ------------------------------------------------------------
    可复用图谱渲染器（v5 重做）：
@@ -2937,10 +2812,7 @@ function mountGraph(host,opt){
   }
   var DS=cloneDS(opt.ds||GDS_S);
   var S={sel:null,edge:null,path:null,hidden:{},depth:2,i0:0,i1:MONTHS.length-1};
-  var view={k:1,tx:0,ty:0,fit:1,bb:null},groot=null;
-  /* v5.1 措施①：viewBox 不再写死 900×620，而是随内容自适应；单位恒等于 1 CSS px，
-     因此指针换算（zoomAt / toLocal / 平移）在这套坐标下依然是精确的。 */
-  var VB={w:900,h:620},H_MIN=420,H_MAX=680,K_MIN=0.25,K_MAX=14,paintedW=0;
+  var view={k:1,tx:0,ty:0},groot=null;
 
   host.innerHTML=
     (opt.modes===false?"":
@@ -2965,12 +2837,11 @@ function mountGraph(host,opt){
     '<div class="glegendBar" data-g="legend"></div>'+
     '<div class="gwrap">'+
       '<div class="gcanvasWrap">'+
-        '<svg data-g="svg" viewBox="0 0 '+VB.w+' '+VB.h+'" preserveAspectRatio="none" role="img" '+
+        '<svg data-g="svg" viewBox="0 0 '+VBW+' '+VBH+'" preserveAspectRatio="xMidYMid meet" role="img" '+
           'aria-label="事件知识图谱：节点与有向关系边"></svg>'+
         '<div class="gstatus">'+
           '<span class="gstatus__i gstatus__i--key" data-g="check">遮挡自检：—</span>'+
-          '<span class="gstatus__i" data-g="zoominfo">缩放 ×1.000</span>'+
-          '<span class="gstatus__i" data-g="vbinfo">内容包围盒 —</span>'+
+          '<span class="gstatus__i" data-g="zoominfo">缩放 100%</span>'+
           '<span class="gstatus__i">拖节点微调布局 · 拖空白平移 · 滚轮以光标为锚点缩放</span>'+
         '</div>'+
       '</div>'+
@@ -2999,8 +2870,7 @@ function mountGraph(host,opt){
   var svg=q("svg"),legend=q("legend"),filters=q("filters"),depthBox=q("depth"),
       pbody=q("pbody"),ptype=q("ptype"),pathsBox=q("paths"),pcount=q("pcount"),
       isoBox=q("iso"),icount=q("icount"),hint=q("hint"),zoominfo=q("zoominfo"),
-      checkEl=q("check"),evBox=q("ev"),accBox=q("acc"),noteBox=q("note"),modesBox=q("modes"),
-      vbinfo=q("vbinfo"),cwrap=svg?svg.parentNode:null;
+      checkEl=q("check"),evBox=q("ev"),accBox=q("acc"),noteBox=q("note"),modesBox=q("modes");
 
   /* ---- 并行边分叉（措施④）：同一对节点间多条关系用轻微曲率分开，不重合 ---- */
   function buildEdgeOffsets(){
@@ -3089,71 +2959,21 @@ function mountGraph(host,opt){
     }).join("");
   }
 
-  /* ---- 视角：fit-to-view（措施⑤，v5.1 重做） ----
-     · liveBB()     只按「当前可见」节点算包围盒 —— 筛选 / 深度 / 时间区间收窄后不留死区；
-     · measureCanvas() 画布高度随内容自适应 H = clamp(420, W×内容高/内容宽, 680)；
-     · fitView()    两个方向同时适配 s = min(W/bw, H/bh)×(1-SAFE)，再按包围盒中心重新居中。 */
-  function liveBB(){
-    var on=DS.nodes.filter(function(n){return n.on}),bb=null;
-    if(!on.length) return null;
-    on.forEach(function(n){
-      var r=lrect(n,n.x,n.y);
-      var x0=Math.min(n.x-n.r,r.x),x1=Math.max(n.x+n.r,r.x+r.w);
-      var y0=Math.min(n.y-n.r,r.y),y1=Math.max(n.y+n.r,r.y+r.h);
-      if(!bb)bb={x0:x0,y0:y0,x1:x1,y1:y1};
-      else{bb.x0=Math.min(bb.x0,x0);bb.y0=Math.min(bb.y0,y0);
-           bb.x1=Math.max(bb.x1,x1);bb.y1=Math.max(bb.y1,y1)}
-    });
-    return {x:bb.x0,y:bb.y0,w:bb.x1-bb.x0,h:bb.y1-bb.y0};
-  }
-  function measureCanvas(bb){
-    var W=(cwrap&&cwrap.clientWidth)||0;
-    if(!W){ VB.w=900;VB.h=620 }                     // 屏未显示（width 0）：先用设计基准，可见后由 ResizeObserver 重算
-    else{
-      VB.w=W;
-      var nat=bb?W*(bb.h/bb.w):0;                    // 内容按自身宽高比铺满画布宽度所需的高度
-      VB.h=Math.round(Math.max(H_MIN,Math.min(H_MAX,nat||H_MIN)));
-    }
-    svg.setAttribute("viewBox","0 0 "+VB.w+" "+VB.h);
-    svg.setAttribute("preserveAspectRatio","none");  // viewBox 宽高比恒等于元素宽高比 → 无 letterbox，1 单位 = 1 px
-    svg.style.height=VB.h+"px";
-    paintedW=VB.w;
-  }
+  /* ---- 视角：fit-to-view（措施⑤） ---- */
   function applyView(){
     if(groot) groot.setAttribute("transform","translate("+view.tx.toFixed(1)+","+view.ty.toFixed(1)+") scale("+view.k.toFixed(3)+")");
-    if(zoominfo) zoominfo.textContent="缩放 ×"+view.k.toFixed(3);
-    if(vbinfo){
-      var b=view.bb;
-      vbinfo.innerHTML= b
-        ? "内容包围盒 <b>"+b.w.toFixed(1)+" × "+b.h.toFixed(1)+"</b> · 适配比 <b>"+view.fit.toFixed(3)+
-          "</b> · 实际 <b>"+Math.round(view.k/view.fit*100)+"%</b> · 画布 <b>"+VB.w+" × "+VB.h+"</b>"
-        : "内容包围盒 <b>—</b> · 画布 <b>"+VB.w+" × "+VB.h+"</b>";
-    }
+    if(zoominfo) zoominfo.textContent="缩放 "+Math.round(view.k*100)+"%";
   }
   function fitView(){
-    var bb=liveBB();
-    measureCanvas(bb);
-    if(!bb||!bb.w){ view={k:1,tx:0,ty:0,fit:1,bb:null}; applyView(); return }   // 空态：不留死区，画布保持 H_MIN
-    var s=Math.min(VB.w*(1-2*SAFE)/bb.w, VB.h*(1-2*SAFE)/bb.h);   // ← 两个方向同时适配
-    s=Math.max(K_MIN,Math.min(K_MAX,s));
-    view.k=s; view.fit=s; view.bb=bb;
-    view.tx=VB.w/2-(bb.x+bb.w/2)*s;                                // ← 按包围盒中心重新居中
-    view.ty=VB.h/2-(bb.y+bb.h/2)*s;
+    var bb=DS.bb;
+    if(!bb||!bb.w){view={k:1,tx:0,ty:0};applyView();return}
+    var s=Math.min(VBW*(1-2*SAFE)/bb.w, VBH*(1-2*SAFE)/bb.h);
+    s=Math.max(0.25,Math.min(2.4,s));
+    view.k=s;
+    view.tx=VBW/2-(bb.x+bb.w/2)*s;
+    view.ty=VBH/2-(bb.y+bb.h/2)*s;
     applyView();
   }
-  /* 尺寸/可见性变化：容器宽度变了才重算（高度变化由自身引起，避免来回抖动） */
-  function onCanvasResize(){
-    var W=(cwrap&&cwrap.clientWidth)||0;
-    if(!W) return;
-    if(Math.abs(W-paintedW)<0.5) return;
-    fitView();
-  }
-  if(cwrap){
-    if(window.ResizeObserver){ try{ new ResizeObserver(onCanvasResize).observe(cwrap) }catch(e){} }
-    else window.addEventListener("resize",onCanvasResize);
-  }
-  /* 可见集变化（类型筛选 / 深度 / 时间区间）后：先重算可见性与标签，再按新包围盒自适应 */
-  function refit(){ refresh(); fitView(); }
 
   function paint(){
     var out='<defs>'+
@@ -3301,9 +3121,7 @@ function mountGraph(host,opt){
       '<div><span class="label">主标签</span><div class="h4" style="margin-top:6px">'+n.label+'</div></div>'+
       '<dl style="display:flex;flex-direction:column;gap:12px;margin:0">'+
         n.kv.map(function(r){
-          /* v5.1 措施②：空值占位（stock_code / exchange / aliases 多为空）原为 --faint 5.31:1，
-             现在是 --fg 的从属层级：.62 白 = 7.40:1，仍明显弱于真实值（14.53:1）。 */
-          var v=(r[1]===EMPTY||r[1]===""||r[1]===null)?'<span style="color:rgba(255,255,255,.62)">'+EMPTY+'</span>':r[1];
+          var v=(r[1]===EMPTY||r[1]===""||r[1]===null)?'<span style="color:var(--faint)">'+EMPTY+'</span>':r[1];
           return '<div class="kv"><dt>'+r[0]+'</dt><dd class="mono">'+v+'</dd></div>';
         }).join("")+
       "</dl>"+
@@ -3330,8 +3148,7 @@ function mountGraph(host,opt){
     ptype.textContent="关系边";
     var noev=!!e.noev;
     var val=function(v){return (v===null||v===undefined||v===EMPTY)
-      /* v5.1 措施②：边的 role/confidence/source_doc_id 空值占位同样提到 .62 白 = 7.40:1 */
-      ? '<span style="color:rgba(255,255,255,.62)">'+(noev?NOEV:EMPTY)+'</span>' : v};
+      ? '<span style="color:var(--faint)">'+(noev?NOEV:EMPTY)+'</span>' : v};
     pbody.innerHTML=
       '<div><span class="label">关系</span><div class="h4" style="margin-top:6px">'+e.rel+' · '+REL[e.rel]+'</div>'+
         '<span class="tag" style="margin-top:9px">'+e.src+'</span>'+
@@ -3587,7 +3404,7 @@ function mountGraph(host,opt){
     var k=b.getAttribute("data-ftype");
     S.hidden[k]=!S.hidden[k];
     b.setAttribute("aria-checked",S.hidden[k]?"false":"true");
-    refit();                       // v5.1：筛选后按剩余可见节点的包围盒重新适配，不留死区
+    refresh();
   });
   if(depthBox) depthBox.addEventListener("click",function(e){
     var b=e.target.closest?e.target.closest("[data-depth]"):null;if(!b) return;
@@ -3595,7 +3412,7 @@ function mountGraph(host,opt){
     $$("[data-depth]",depthBox).forEach(function(x){
       x.setAttribute("aria-pressed",parseInt(x.getAttribute("data-depth"),10)===S.depth?"true":"false");
     });
-    refit();
+    refresh();
   });
   if(modesBox) modesBox.addEventListener("click",function(e){
     var b=e.target.closest?e.target.closest("[data-mode]"):null;if(!b) return;
@@ -3638,9 +3455,8 @@ function mountGraph(host,opt){
   // 缩放：滚轮以光标为锚点 ＋ 两个按钮；平移：拖拽空白处；节点可拖动（措施⑤）
   function zoomAt(cx,cy,f){
     var r=svg.getBoundingClientRect();if(!r.width) return;
-    var mx=(cx-r.left)/r.width*VB.w,my=(cy-r.top)/r.height*VB.h;
-    // v5.1：缩放上下限跟着「当前适配比」走，单节点/稀疏视图下也能放大到看清
-    var nk=Math.max(Math.max(K_MIN,view.fit*0.35),Math.min(Math.min(K_MAX,view.fit*8),view.k*f));
+    var mx=(cx-r.left)/r.width*VBW,my=(cy-r.top)/r.height*VBH;
+    var nk=Math.max(.4,Math.min(3.2,view.k*f));
     view.tx=mx-(mx-view.tx)*(nk/view.k);
     view.ty=my-(my-view.ty)*(nk/view.k);
     view.k=nk;applyView();
@@ -3654,7 +3470,7 @@ function mountGraph(host,opt){
 
   function toLocal(cx,cy){
     var r=svg.getBoundingClientRect();if(!r.width) return null;
-    var vx=(cx-r.left)/r.width*VB.w,vy=(cy-r.top)/r.height*VB.h;
+    var vx=(cx-r.left)/r.width*VBW,vy=(cy-r.top)/r.height*VBH;
     return {x:(vx-view.tx)/view.k,y:(vy-view.ty)/view.k};
   }
   function moveNode(n){
@@ -3694,8 +3510,8 @@ function mountGraph(host,opt){
     var r=svg.getBoundingClientRect();if(!r.width) return;
     var dx=e.clientX-drag.x,dy=e.clientY-drag.y;
     if(Math.abs(dx)+Math.abs(dy)>4) moved=true;
-    view.tx=drag.tx+dx/r.width*VB.w;
-    view.ty=drag.ty+dy/r.height*VB.h;
+    view.tx=drag.tx+dx/r.width*VBW;
+    view.ty=drag.ty+dy/r.height*VBH;
     applyView();
   });
   function endPan(e){
@@ -3716,7 +3532,7 @@ function mountGraph(host,opt){
   return {
     host:host,
     ds:function(){return DS},
-    setTimeRange:function(a,b){S.i0=a;S.i1=b;refit()},
+    setTimeRange:function(a,b){S.i0=a;S.i1=b;refresh()},
     setDataset:setDataset,
     reset:function(){q("reset").click()}
   };
@@ -3875,7 +3691,6 @@ var SESSIONS=[
     dTitle.textContent=s.q;
     d.hidden=false;d.classList.add("on");
     document.body.style.overflow="hidden";
-    document.body.setAttribute("data-drawer","on");   // v5.1 措施③：历史回看图谱子区同样降背景曲线不透明度
     if(gSec) gSec.hidden=!s.replay;               // 没有路径载荷就不摆图谱区，改用固定文案
     tables.innerHTML='<div class="dloading"><span class="loader__ring">'+
       '<svg viewBox="0 0 32 32" aria-hidden="true"><circle class="dash" cx="16" cy="16" r="14" fill="none" stroke="rgba(230,57,70,.30)" stroke-width="2" stroke-dasharray="18 70" stroke-linecap="round"/></svg>'+
@@ -3920,7 +3735,6 @@ var SESSIONS=[
   });
   function close(){
     clearTimeout(loadT);d.classList.remove("on");d.hidden=true;document.body.style.overflow="";
-    document.body.removeAttribute("data-drawer");
   }
   box.addEventListener("click",function(e){
     var b=e.target.closest?e.target.closest(".hrow__open"):null;if(!b) return;
@@ -3950,7 +3764,6 @@ function go(name){
     cur.classList.remove("is-on");
   }
   sec.classList.add("is-on");
-  document.body.setAttribute("data-view",name);   // v5.1 措施③：屏③ 时把背景曲线降到 .14
   $$(".nav__btn").forEach(function(b){b.setAttribute("aria-selected",b.getAttribute("data-goto")===name?"true":"false")});
   save("od.ashare.view",name);
   var y=parseInt(read("od.ashare.scroll."+name,"0"),10)||0;
@@ -4060,7 +3873,6 @@ $$("[data-focus-ask]").forEach(function(b){
   var cur=document.querySelector(".view.is-on");
   if(cur) cur.classList.remove("is-on");
   sec.classList.add("is-on");
-  document.body.setAttribute("data-view",v);      // v5.1：刷新后恢复到屏③ 时同样降背景曲线不透明度
   $$(".nav__btn").forEach(function(b){b.setAttribute("aria-selected",b.getAttribute("data-goto")===v?"true":"false")});
   $$(".reveal",sec).forEach(function(e){e.classList.add("in")});
   window.scrollTo({top:parseInt(read("od.ashare.scroll."+v,"0"),10)||0,behavior:"auto"});
