@@ -1,0 +1,140 @@
+{
+  "baseline": {
+    "alias_surfaces": 210,
+    "company_identity_nodes_configured": 104,
+    "company_identity_nodes_other": 1,
+    "entity_map_size": 3293,
+    "label": "baseline",
+    "multi": {
+      "_sample": [
+        [
+          1005,
+          "EVT-1005-02"
+        ],
+        [
+          1183,
+          "EVT-1183-01"
+        ],
+        [
+          1429,
+          "EVT-1429-01"
+        ],
+        [
+          1500,
+          "EVT-1500-01"
+        ],
+        [
+          1513,
+          "EVT-1513-01"
+        ]
+      ],
+      "events_with_ge2_companies": 9,
+      "participant_count_dist": {
+        "2": 9
+      }
+    },
+    "multi_B": {
+      "_sample": [
+        [
+          1005,
+          "EVT-1005-02"
+        ],
+        [
+          1010,
+          "EVT-1010-01"
+        ],
+        [
+          1013,
+          "EVT-1013-02"
+        ],
+        [
+          1015,
+          "EVT-1015-01"
+        ],
+        [
+          1016,
+          "EVT-1016-01"
+        ]
+      ],
+      "events_with_ge2_companies": 287,
+      "participant_count_dist": {
+        "2": 200,
+        "3": 59,
+        "4": 17,
+        "5": 10,
+        "6": 1
+      }
+    },
+    "resolved_company_mentions": 755,
+    "unresolved_mentions": 1070
+  },
+  "variant": {
+    "alias_surfaces": 210,
+    "company_identity_nodes_configured": 105,
+    "company_identity_nodes_other": 1,
+    "entity_map_size": 3293,
+    "label": "variant",
+    "multi": {
+      "_sample": [
+        [
+          1005,
+          "EVT-1005-02"
+        ],
+        [
+          1183,
+          "EVT-1183-01"
+        ],
+        [
+          1429,
+          "EVT-1429-01"
+        ],
+        [
+          1500,
+          "EVT-1500-01"
+        ],
+        [
+          1513,
+          "EVT-1513-01"
+        ]
+      ],
+      "events_with_ge2_companies": 9,
+      "participant_count_dist": {
+        "2": 9
+      }
+    },
+    "multi_B": {
+      "_sample": [
+        [
+          1005,
+          "EVT-1005-02"
+        ],
+        [
+          1010,
+          "EVT-1010-01"
+        ],
+        [
+          1013,
+          "EVT-1013-02"
+        ],
+        [
+          1015,
+          "EVT-1015-01"
+        ],
+        [
+          1016,
+          "EVT-1016-01"
+        ]
+      ],
+      "events_with_ge2_companies": 287,
+      "participant_count_dist": {
+        "2": 200,
+        "3": 59,
+        "4": 17,
+        "5": 10,
+        "6": 1
+      }
+    },
+    "resolved_company_mentions": 785,
+    "unresolved_mentions": 1040
+  }
+}
