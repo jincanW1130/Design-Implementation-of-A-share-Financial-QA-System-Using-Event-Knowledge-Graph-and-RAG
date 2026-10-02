@@ -29,6 +29,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -129,15 +130,86 @@ def load_cases_from_trace(qids=None):
     return cases
 
 
-def record_to_trace_row(rec: dict) -> dict:
+# --------------------------------------------------------------------------
+# 最终证据集合（第④步保留 K 之后）的 token 分账——**本文件自算，不 import 第 7 阶段模块**
+# --------------------------------------------------------------------------
+# 为什么不 import：见本文件开头第 21～22 行的记载——`代码\检索\` 的模块内部一律写
+# `import config`，一旦把检索目录插进本进程的 `sys.path`，`import config` 会解析到检索侧
+# 还是问答侧取决于导入顺序，属**已知的路径解析陷阱**；第 8 阶段因此刻意用子进程桥接
+# （`load_case_via_retrieval()`），本函数沿用同一纪律，故只做**逐字等价**的本地复刻。
+#
+# 口径与出处（复刻对象）：
+#   `代码\检索\pipeline.py` 的 `estimate_tokens()`（第 802 行）与 `_CJK_RE`／`_ASCII_RUN_RE`
+#   （第 163～164 行）；`代码\检索\config.py` 的 `stable_json()`（第 331 行）。
+#   `code\检索\pipeline.py` 的 `account_tokens()`（第 845 行）说明了分账构成。
+#
+# **等价性验证（不是口头保证）**：用本函数对第 7 阶段冻结的 30 条 C 组 trace 逐条复算，
+# 与 trace 里的 `token_account` **7 个字段全部逐位一致（30／30）**。该验证已固化为
+# `阶段10-系统测试与对比实验\工具\跑AC对照.py` 的 `--check-token-account` 自检，
+# 防止本复刻与上游口径日后漂移。
+_CJK_RE = re.compile(r"[\u3000-\u303f\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff00-\uffef]")
+_ASCII_RUN_RE = re.compile(r"[A-Za-z0-9_]+")
+
+
+def _estimate_tokens(text) -> int:
+    """图谱路径与事件三元组的估算 token（与 `pipeline.estimate_tokens()` 逐字等价）。"""
+    value = str(text)
+    return len(_CJK_RE.findall(value)) + len(_ASCII_RUN_RE.findall(value))
+
+
+def _stable_json(obj) -> str:
+    """确定性 JSON 序列化（与 `config.stable_json()` 逐字等价）。"""
+    return json.dumps(obj, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+
+
+def final_set_token_account(rec: dict, chunks: dict) -> dict:
+    """按**最终证据集合**（第④步保留 K 之后）复算 token 分账，与第 7 阶段 trace 行同口径。
+
+    **2026-10-02 修正（评审 P0-新①）**：`record_to_trace_row()` 原先把运行记录的
+    `budget_trim.after` 当作 trace 的 `token_account`。那是**第③步裁剪到预算之后、
+    第④步保留 K 之前**的账；第④步按 K 丢块时（`keep_k.dropped_by_k` 非空）两者必然不等，
+    于是《21》第五节 硬约束 6 的**装配账目守卫**（要求 token 账必须由现场重算分量组成）
+    判「现场重算与上游 trace 不一致」并**非零退出**——A／B／D／E 组经桥接路径的答案生成
+    因此成片失败。这也正是第 8 阶段 PE-03 报 3004、第 9 阶段 PE-03 报 HTTP 503 的**根因**
+    （当时只登记为「真实原因不是图谱服务」，未定位到此）。
+
+    本修正**不放宽守卫**：守卫仍按现场重算判等，只是把上游账目换成正确口径。
+    """
+    gp = rec.get("graph_path_payload") or {}
+    paths = list(gp.get("graph_path") or [])
+    triples = list(gp.get("event_triples") or [])
+    order = [int(c) for c in (rec["final_evidence"]["presentation_order"] or [])]
+    missing = [c for c in order if c not in chunks]
+    if missing:
+        raise SystemExit("最终证据集合里有 chunks.jsonl 中不存在的 chunk_id：%s" % missing[:5])
+    text_tokens = sum(int(chunks[c]["token_count"]) for c in order)
+    path_tokens = sum(_estimate_tokens(_stable_json(p)) for p in paths)
+    triple_tokens = sum(_estimate_tokens("|".join(t)) for t in triples)
+    return {
+        "estimate_note": "文本块＝chunks.jsonl 的 token_count 实测；图谱路径与事件三元组＝估算 token",
+        "text_chunks": len(order), "text_tokens": text_tokens,
+        "paths": len(paths), "path_tokens": path_tokens,
+        "event_triples": len(triples), "event_triple_tokens": triple_tokens,
+        "graph_tokens": path_tokens + triple_tokens,
+        "total_tokens": text_tokens + path_tokens + triple_tokens,
+    }
+
+
+def record_to_trace_row(rec: dict, chunks: dict | None = None) -> dict:
     """把第 7 阶段 `run_query.py` 的运行记录**映射成 trace 行的形状**（不改它的实现）。
 
-    只取 `assemble.assemble_case()` 需要的字段；映射是纯函数、不做任何加工：
-    证据顺序取 `final_evidence.presentation_order`（生成侧不得重排），
-    token 分账取 `budget_trim.after`（trace 的 `token_account` 与它同源、不重算），
+    证据顺序取 `final_evidence.presentation_order`（生成侧不得重排）；
+    token 分账取**最终证据集合**的口径（`final_set_token_account()`，见上）；
     图谱载荷取 `graph_path_payload`（原样）。
     """
     fe = rec["final_evidence"]
+    account = rec.get("token_account")
+    if not isinstance(account, dict):
+        if chunks is None:
+            raise SystemExit(
+                "运行记录不含最终证据集合口径的 `token_account`，且未提供 chunks 供复算——"
+                "拒绝回退到 `budget_trim.after`（那是保留 K 之前的账，会让装配账目守卫误判）。")
+        account = final_set_token_account(rec, chunks)
     return {
         "qid": rec["question"]["qid"],
         "question": rec["question"]["text"],
@@ -150,7 +222,7 @@ def record_to_trace_row(rec: dict) -> dict:
         "graph_evidence_in_final": list(fe.get("graph_evidence_in_final") or []),
         "dual_hit_in_final": list(fe.get("dual_hit_in_final") or []),
         "graph_payload": rec["graph_path_payload"],
-        "token_account": rec["budget_trim"]["after"],
+        "token_account": account,
     }
 
 
@@ -203,9 +275,11 @@ def load_case_via_retrieval(args, params: dict) -> dict:
         raise SystemExit("第 7 阶段链路未跑通（退出码 %s）——本脚本拒绝用别的语义替代，"
                          "如实报错退出。" % proc.returncode)
     rec = config.read_json(out)
-    row = record_to_trace_row(rec)
-    qrow = question_row_from_record(rec)
     chunks, docs, meta = asm.load_chunks(), asm.load_documents(), asm.load_dataset_meta()
+    # chunks 先加载再映射：运行记录不携带最终证据集合口径的 token 账，需按 chunks 的
+    # token_count 现场复算（见 final_set_token_account()）。
+    row = record_to_trace_row(rec, chunks)
+    qrow = question_row_from_record(rec)
     case = asm.assemble_case(row, chunks, docs, qrow, meta)
     return {"case": case, "record": rec, "source": "第 7 阶段 run_query.py（子进程，只读）",
             "cmd": cmd}
