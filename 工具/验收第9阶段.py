@@ -29,8 +29,12 @@ A～I 共 **58 行**（A6＋B8＋C10＋D6＋E6＋F6＋G6＋H5＋I5）。
   「缺」→ FAIL（一个都不能少）；「多」逐条比对登记清单：清单内记「已登记新增」并打印，**清单外一律 FAIL**。
 * `2003` 是响应体纪律的唯一例外：错误响应键集 ⊆ {code, message}；2003 允许且必须带
   `retained_for_history=true`；**任何**响应都不得出现 `detail` 键。
-* 两个新码必须在 C3 逐码列表里出现：`1004`（HTTP 429，限流）与 `3004`（HTTP 502，装配账目守卫未通过）；
-  3004 的确定性样本是 PE-03。
+* 两个新码必须在 C3 逐码列表里出现：`1004`（HTTP 429，限流）与 `3004`（HTTP 502，装配账目守卫未通过）。
+  1004 由突发触发并留痕；**3004 只做静态逐码核对**（登记在 `errors.py`、HTTP 502），**不做实况探针**——
+  原先写的"3004 的确定性样本是 PE-03"是把**缺陷当成了期望行为**：PE-03 稳定报 3004 源于
+  `代码\问答\run_answer.py` 桥接路径取错 token 账口径（`budget_trim.after`＝保留 K 之前，
+  而守卫要的是保留 K 之后）。该缺陷已于 2026-10-02 修复，故 PE-03 改判为
+  **回归断言（必须 HTTP 200）**，见 C3 内的「PE-03 回归断言」块。
 * D1／D2 走**候选题列表**（`QA_CANDIDATES`）取前若干道成功（HTTP 200）的题：D1 取前 3 道判「四段答案」，
   不足 3 道 → FAIL；D2 取前 2 道判「`[证据n]` 不越界」。某题命中守卫码（3004／3001）→ 本轮跳过（逐题打印）、
   不计 FAIL；D2 候选题全被守卫拦下 → UNRUN；其它错误码（500／9999 等）→ 仍 FAIL。
@@ -154,7 +158,12 @@ REGISTERED_ADDITIONS = {
 # 上游第 8 阶段的「装配账目守卫／图谱侧」属**已知限制**（确定性样本 PE-03，已登记于《25》）：
 # 某题返回守卫码（3004＝装配账目守卫未通过／3001＝图谱服务不可用）时，本轮**跳过该题**并继续下一题，
 # 不计 FAIL（逐题打印）；返回其它错误码（500／9999 等）仍按**真故障** FAIL，不混进「守卫跳过」。
-QA_CANDIDATES = ["PE-01", "PE-02", "PE-15", "PE-04"]
+QA_CANDIDATES = ["PE-01", "PE-02", "PE-03", "PE-04"]
+# 2026-10-02 复原：`PE-03` 归位。此前 C、D、E 三组把 PE-03 从候选题里换成了 `PE-15`，
+# 原因是 PE-03 经 `/api/qa/ask` 稳定报 3004（装配账目守卫）——那**不是 PE-03 特殊**，
+# 而是 `代码\问答\run_answer.py` 桥接路径把 `budget_trim.after`（保留 K 之前的账）
+# 当成了 trace 的 `token_account`（应为保留 K 之后的账），凡触发 K 裁块的题都会中招。
+# 该缺陷已于 2026-10-02 修复（见 C3 的 PE-03 回归断言），故把 PE-03 换回候选题。
 UPSTREAM_GUARD_CODES = frozenset({3004, 3001})
 
 # C2 抽样的 8 个接口（覆盖六个模块；声明在前，避免「挑对得上的报」）
@@ -1163,6 +1172,18 @@ def c_c3(g):
             g.ok("C3", stat + "（静态档：逐类构造命中需连服务，实况判定见 full 档）")
         return
     hits = {}
+    # 2026-10-02 门禁口径修订（评审 P0-新①）：**3004 不再走实况探针**。
+    #
+    # 原判据把 PE-03 当作「3004 的确定性样本」，期望它返回 HTTP 502／code=3004。那是把
+    # **缺陷当成了期望行为**：PE-03 之所以稳定报 3004，是因为 `代码\问答\run_answer.py`
+    # 的桥接路径取了错误的 token 账口径（`budget_trim.after`＝保留 K 之前，而守卫要的是
+    # 保留 K 之后）。该缺陷修复后 PE-03 正常返回 HTTP 200，原期望必然落空。
+    #
+    # 修订后**判据不放宽、反而更强**：
+    #   ① 3004 仍必须登记在 `errors.py` 的 `CODES` 里且 HTTP 状态为 502——由本组开头的
+    #      静态逐码核对（`C3_CODES` 循环）继续强制，**没有删掉 3004**；
+    #   ② 新增一条**回归断言**：PE-03 必须保持 HTTP 200（见下方 PE-03 回归块）——
+    #      即「修好的题不许再坏」，这比原来"期望它一直坏着"强。
     probes = [
         (1001, "POST", "/api/qa/ask", {"question": "", "session_id": "S-GATE"}, None),
         (1002, "GET", "/api/graph/events" + qs(start_time="2026-13-99"), None, None),
@@ -1170,7 +1191,6 @@ def c_c3(g):
         (2001, "GET", "/api/qa/answers/999999", None, None),
         (2002, "GET", "/api/graph/entities" + qs(keyword="zzz不存在的实体zzz"), None, None),
         (2003, "DELETE", "/api/admin/documents/%s" % (_referenced_doc(g) or 1307), None, ADMIN),
-        (3004, "POST", "/api/qa/ask", {"question": pe_q(g, "PE-03"), "session_id": "S-GATE"}, None),
     ]
     for (code, meth, path, payload, hdr) in probes:
         st, body, _ = http(meth, path, payload, hdr, timeout=300)
@@ -1189,6 +1209,19 @@ def c_c3(g):
             continue
         if body.get("code") != code or st != C3_EXPECT_HTTP[code]:
             bad.append("%s 期望 %s/%s，实测 HTTP %s code=%s" % (code, code, C3_EXPECT_HTTP[code], st, body.get("code")))
+
+    # ---- PE-03 回归断言（2026-10-02 新增，替代原来的「3004 实况探针」）----
+    # 详见上方 probes 前的注释：3004 由「桥接 token 账口径」缺陷触发，缺陷已修；
+    # 这里把**修好的行为固化成回归判据**——PE-03 必须继续 HTTP 200。
+    st_p3, body_p3, _ = http("POST", "/api/qa/ask",
+                             {"question": pe_q(g, "PE-03"), "session_id": "S-GATE"},
+                             None, timeout=300)
+    g.err_responses.append(("POST /api/qa/ask PE-03（回归断言）", st_p3, body_p3, None))
+    hits[3004] = (st_p3, body_p3.get("code"), body_p3)
+    if st_p3 != 200 or body_p3.get("code") not in (None, 0):
+        bad.append("PE-03 回归：应 HTTP 200（桥接 token 账口径缺陷已于 2026-10-02 修复），"
+                   "实测 HTTP %s code=%s —— 若又见 3004，说明装配账目守卫再次被触发（真故障，须定位）"
+                   % (st_p3, body_p3.get("code")))
 
     # 4002（越权）：《24》第 219 行「普通用户访问 /api/admin/* 返回 4002（HTTP 403）
     # （机检：逐个后台路径探测）」。普通用户通道的判定见 代码\后端\api\admin.py 的
@@ -1246,11 +1279,16 @@ def c_c3(g):
     else:
         g.ok("C3", "逐类构造命中：%s；4002 越权：逐个探测 %d 条后台路径（%s）＋ 未登记路径兜底路由，全部 403／4002；"
                    "未实探的后台操作 %d 条【会改数据的 POST 与含未替换占位符的路径，只登记不探】：%s；"
-                   "1004（429）由突发触发——留痕 %s 记 %d 次限流；3004（502）确定性样本 PE-03 → HTTP %s code=%s"
-             % ("；".join("%s→%s/%s" % (c, hits[c][0], hits[c][1]) for c in C3_CODES if c != 1004),
+                   "1004（429）由突发触发——留痕 %s 记 %d 次限流；"
+                   "3004 仍登记在 errors.py（HTTP 502，静态逐码核对通过），**不再做实况探针**"
+                   "（原样本 PE-03 的 3004 系桥接 token 账口径缺陷所致、已于 2026-10-02 修复）"
+                   "→ PE-03 回归断言：HTTP %s code=%s"
+             % ("；".join("%s→%s/%s" % (c, hits[c][0], hits[c][1])
+                          for c in C3_CODES if c not in (1004, 3004)),
                 len(probed), "、".join(probed[:3]) + ("…" if len(probed) > 3 else ""),
                 len(skipped_post), "、".join(skipped_post) if skipped_post else "无",
-                br(g.root, g.p(P_EVID, "nfr02_sequential100.json")), n1004, hits[3004][0], hits[3004][1]))
+                br(g.root, g.p(P_EVID, "nfr02_sequential100.json")), n1004,
+                hits[3004][0], hits[3004][1]))
 
 
 def _err_bodies(g):
