@@ -2491,15 +2491,22 @@ chk(not thresh_hits,
     % (len(thresh_hits), "：" + br(thresh_hits) if thresh_hits else "", cfg_ref))
 
 # 逐字子串判据随口径切换更新：v1.1 时代是 `choices=["pilot", "v21"]`（旧期望值），
-# 2026-09-27 起 v1.2 为默认口径，五个脚本的实际 choices 都是三取值，判据同步改为
-# `choices=["pilot", "v21", "v21_v1_2"]`；判据仍是「源码里的逐字子串」，未放宽。
+# 2026-09-27 起 v1.2 为默认口径，判据同步改为三取值。
+# **2026-10-02 再同步（路线③ B-1）**：新增候选口径 `v21_v1_3`，六个脚本（五个 STAGE_SCRIPTS
+# ＋ run_all）的 choices 一律改为**平铺四取值**，判据同步改为四取值。
+#
+# ⚠️ **纪律留痕**：上一版实现者为了让本判据继续通过，把源码写成
+# `choices=["pilot", "v21", "v21_v1_2"] + ["v21_v1_3"]` —— 逐字子串确实还在，但
+# **本判据从此名不副实**（它检查的字符串已不反映实际取值）。那是「让门禁通过而不改判据语义」，
+# 已改回平铺写法并同步判据。凡新增/变更 profile，**必须同时改源码与判据**，不得用拼接绕过。
+PROFILE_CHOICES_LITERAL = 'choices=["pilot", "v21", "v21_v1_2", "v21_v1_3"]'
 profile_bad = [name for name, src in scripts_src.items()
                if name not in ("config.py",) and "add_argument(\"--profile\"" not in src]
-profile_ok = all('choices=["pilot", "v21", "v21_v1_2"]' in scripts_src.get(n, "")
+profile_ok = all(PROFILE_CHOICES_LITERAL in scripts_src.get(n, "")
                  for n in STAGE_SCRIPTS if n.endswith(".py") and n != "config.py")
 chk(not profile_bad and profile_ok,
-    "T5 五个脚本都接受 --profile（pilot／v21／v21_v1_2 三个取值，与 config.pipeline_paths 对齐）",
-    "实测 未声明 --profile 的脚本 %s；choices 均为 pilot／v21／v21_v1_2：%s"
+    "T5 五个脚本都接受 --profile（pilot／v21／v21_v1_2／v21_v1_3 四个取值，与 config.pipeline_paths 对齐）",
+    "实测 未声明 --profile 的脚本 %s；choices 均为 pilot／v21／v21_v1_2／v21_v1_3：%s"
     % ("、".join(profile_bad) or "无", profile_ok))
 
 

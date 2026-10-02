@@ -233,6 +233,14 @@ def run(args) -> int:
     results, failures = [], 0
     env = dict(os.environ)
     env["PYTHONIOENCODING"] = "utf-8"
+    # **2026-10-02 修正（路线③ 实测发现的假阳性）**：模型调用守卫原先无条件读
+    # `run_history.jsonl` 的**最后一条**记录，于是用 `--from disambiguate` 跳过 extract 时，
+    # 它读到的是**上一次** extract 的历史记录（api_calls=31）→ 判「本次发生了 31 次调用」
+    # 并 `[阻断]` 退出码 1，而本次实际**零调用**。
+    # 修法：先记下运行前的记录条数，跑完后只看**本次新增**的记录——
+    # 「本次运行的模型调用」＝本次真的跑了并且记了账的那些调用，历史账不再冒充本次账。
+    _history_path = table.get("run_history")
+    _history_before = len(read_jsonl(_history_path) or [])
     for index, stage in enumerate(todo, start=1):
         command = stage_command(stage, args.profile, args)
         print("[%d/%d] %s …" % (index, len(todo), stage["label"]), flush=True)
@@ -262,14 +270,22 @@ def run(args) -> int:
     readings = collect_readings(args.profile, paths, table)
     api_calls = None
     history = read_jsonl(table.get("run_history"))
-    if history:
-        api_calls = history[-1].get("api_calls_total", history[-1].get("api_calls"))
+    new_records = history[_history_before:] if history else []
+    if new_records:
+        api_calls = new_records[-1].get("api_calls_total", new_records[-1].get("api_calls"))
+        calls_note = "本次运行新增 %d 条 extract 记录" % len(new_records)
+    else:
+        # 本次没跑 extract（`--from`／`--only` 跳过，或 todo 为空）：本次调用数就是 0，
+        # 不得拿历史记录冒充（否则零调用的复跑会被误判成放量）。
+        api_calls = 0
+        calls_note = "本次未跑 extract（跳过），模型调用记 0；历史记录 %d 条不计入" % len(history or [])
     limit = int(config.RUN_ALL["max_api_calls_on_replay"])
     api_ok = (api_calls is not None and api_calls <= limit)
 
     lines += ["=" * 78, "关键读数（直接读机器可读产物，不解析屏幕输出）", "=" * 78]
     lines += ["* %s：%s" % (k, v) for k, v in readings]
-    lines += ["* 本次 extract 的模型调用合计：%s（复跑上限 %d）" % (api_calls, limit), ""]
+    lines += ["* 本次 extract 的模型调用合计：%s（复跑上限 %d；%s）"
+              % (api_calls, limit, calls_note), ""]
 
     lines += ["=" * 78, "产物校验和（sha256，逐字节复现的比对依据）", "=" * 78]
     lines += ["%s  %s  %d bytes" % (digest or "(缺)", path, size)
@@ -286,7 +302,7 @@ def run(args) -> int:
     print("")
     for key, value in readings:
         print("  · %s：%s" % (key, value))
-    print("  · 模型调用合计：%s（复跑上限 %d）" % (api_calls, limit))
+    print("  · 模型调用合计：%s（复跑上限 %d；%s）" % (api_calls, limit, calls_note))
     print("运行日志：%s" % rel(log_path))
 
     if failures:
@@ -309,8 +325,10 @@ def main(argv=None) -> int:
     # 在同一参数上追加 v21_v1_2（＝默认 profile，落 图谱导出\v2.1_v1_2\ 与
     # _抽取缓存\v2.1_v1_2\图谱管线\）；v1.1 归档仍用 --profile v21 显式复现。
     parser.add_argument("--profile", default=config.GRAPH_PIPELINE["default_profile"],
-                        choices=["pilot", "v21", "v21_v1_2"],
-                        help="默认 v21_v1_2＝v1.2 口径；v21／pilot＝v1.1 归档口径")
+                        # 四取值：pilot／v21＝v1.1 归档，v21_v1_2＝现行 v1.2，v21_v1_3＝路线③ 候选口径。
+                        choices=["pilot", "v21", "v21_v1_2", "v21_v1_3"],
+                        help="默认 v21_v1_2＝v1.2 口径；v21_v1_3＝候选口径 v1.3（路线③ A＋B，"
+                             "落 图谱导出\\v2.1_v1_3\\）；v21／pilot＝v1.1 归档口径")
     parser.add_argument("--force", action="store_true",
                         help="重算 T4／T5／T6 的产物（**不会**让 extract 重新调用模型）")
     parser.add_argument("--force-extract", action="store_true",

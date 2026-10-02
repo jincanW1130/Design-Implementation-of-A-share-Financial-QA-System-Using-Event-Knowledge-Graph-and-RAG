@@ -1694,7 +1694,7 @@ def main(argv=None) -> int:
         description="第 6 阶段实体与事件抽取（T1 小规模试跑；参数一律取自 config.py）")
     # 既有 v1.1 口径：choices=["pilot", "v21"]；v1.2 升为默认口径后追加 v21_v1_2（默认 profile）。
     parser.add_argument("--profile", default=config.GRAPH_PIPELINE["default_profile"],
-                        choices=["pilot", "v21", "v21_v1_2"],
+                        choices=["pilot", "v21", "v21_v1_2", "v21_v1_3"],
                         help="v21_v1_2＝**默认口径** v1.2 全量 709 篇（默认）；v21＝v1.1 归档"
                              "全量；pilot＝v1.1 归档的 12 篇确定性选样")
     parser.add_argument("--limit", type=int, default=None, help="只跑选样结果的前 N 篇")

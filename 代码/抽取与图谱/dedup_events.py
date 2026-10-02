@@ -711,8 +711,10 @@ def main(argv=None) -> int:
     # 既有 v1.1 口径：choices=["pilot", "v21"]；2026-09-27 起 v1.2 为**默认口径**，
     # 在同一参数上追加 v21_v1_2（＝默认 profile），v1.1 归档仍用 pilot／v21 显式复现。
     parser.add_argument("--profile", default=config.GRAPH_PIPELINE["default_profile"],
-                        choices=["pilot", "v21", "v21_v1_2"],
-                        help="默认 v21_v1_2＝v1.2 口径；v21／pilot＝v1.1 归档口径")
+                        # 四取值：pilot／v21＝v1.1 归档，v21_v1_2＝现行 v1.2，v21_v1_3＝路线③ 候选口径。
+                        choices=["pilot", "v21", "v21_v1_2", "v21_v1_3"],
+                        help="默认 v21_v1_2＝v1.2 口径；v21_v1_3＝候选口径 v1.3（路线③ A＋B）；"
+                             "v21／pilot＝v1.1 归档口径")
     parser.add_argument("--force", action="store_true", help="忽略已有产物，重算并重写")
     parser.add_argument("--self-test-only", action="store_true",
                         help="只跑「合并后保留全部证据文档」的自检，不重写去重产物")

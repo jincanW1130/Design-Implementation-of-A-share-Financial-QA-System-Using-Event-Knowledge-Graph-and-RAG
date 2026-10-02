@@ -92,6 +92,12 @@ PILOT_DIR = os.path.join(_THIS_DIR, "_试跑")
 GRAPH_EXPORT_DIR = os.path.join(STAGE_DIR, "图谱导出", DATASET_VERSION + V1_2_SUFFIX)
 GRAPH_EXPORT_DIR_V1_2 = GRAPH_EXPORT_DIR          # 兼容别名（上一轮已登记的键名）
 GRAPH_EXPORT_DIR_V1_1 = os.path.join(STAGE_DIR, "图谱导出", DATASET_VERSION)
+# **v1.3（路线③ A＋B 的候选口径）**的导出落点：`图谱导出\v2.1_v1_3\`。
+# v1.2 是**默认口径（现行交付）**，其落点 `图谱导出\v2.1_v1_2\` 与工作目录
+# `_抽取缓存\v2.1_v1_2\图谱管线\` 一个字都不动、可原样复现（归档）。
+# v1.3 只是一个**候选口径**：A＝归一化叠 `fold_simp`（简繁／异体折叠，由 profile 开关驱动），
+# B＝放宽入图策略（名单外 Company 主体按归一化名建 name_only 节点）；两者默认关闭。
+GRAPH_EXPORT_DIR_V1_3 = os.path.join(STAGE_DIR, "图谱导出", DATASET_VERSION + "_v1_3")
 
 # 试跑产物文件名（机器可读产物一律 ASCII 名；运行日志用中文名，与第 5 阶段 勘察\\ 同风格）。
 OUTPUT_FILES = {
@@ -645,7 +651,11 @@ GRAPH_PIPELINE = {
     # 命令行 `--ontology-defs`／`--no-ontology-defs` 与环境变量 `STAGE6_ONTOLOGY_DEFS`
     # 仍是显式覆盖（两条冲突时报错退出，不静默取其一）；两条都没给出时才用本表。
     # 本表里默认 profile 的那一项必须与 `LLM["ontology_defs"]["enabled"]` 一致（同一个裁定）。
-    "profile_prompt_variants": {"pilot": False, "v21": False, "v21_v1_2": True},
+    #   * v21_v1_3 → True：**候选口径 v1.3（路线③ A＋B）**，抽取侧 Prompt 版本与 v1.2 相同
+    #     （仍是 stage6-extract-v1.2），因此**复用 v1.2 的抽取缓存，不重跑抽取**；A／B 两个
+    #     开关默认关，只有本 profile 打开（见 `apply_profile_switches`）。
+    "profile_prompt_variants": {"pilot": False, "v21": False, "v21_v1_2": True,
+                                "v21_v1_3": True},
     "profile_roots": {
         # pilot：试跑专用目录，不是交付物；v21：v1.1 归档，按《15》第4.2／4.3节 落缓存目录；
         # v21_v1_2：**默认口径 v1.2** 的 T4／T5 工作目录，与 v2.1 的 `图谱管线\` 物理分开，
@@ -653,18 +663,26 @@ GRAPH_PIPELINE = {
         "pilot": os.path.join(STAGE_DIR, "_试跑_图谱管线"),
         "v21": os.path.join(CACHE_DIR_V1_1, "图谱管线"),
         "v21_v1_2": os.path.join(CACHE_DIR_V1_2, "图谱管线"),
+        # v21_v1_3：候选口径 v1.3 的 T4／T5 工作目录，**与 v1.2 的 `图谱管线\` 物理分开**
+        # （否则一次 v1.3 复跑会覆盖 v1.2 默认口径的消歧／去重产物）。落点仍是 v1.2 的缓存根下，
+        # 因为 v1.3 复用 v1.2 的抽取结果（同一份缓存），只是管线工作目录另起一个。
+        "v21_v1_3": os.path.join(CACHE_DIR_V1_2, "图谱管线_v1_3"),
     },
     "export_roots": {
         "pilot": os.path.join(STAGE_DIR, "_试跑_图谱管线", "图谱导出"),
         "v21": GRAPH_EXPORT_DIR_V1_1,
         "v21_v1_2": GRAPH_EXPORT_DIR,
+        "v21_v1_3": GRAPH_EXPORT_DIR_V1_3,
     },
     # T4～T7 的**唯一输入**是 extract.py（T3）解析后的抽取结果（一行一篇）；
     # pilot 落 `OUTPUT_FILES["extracted"]`、v21 落 `FULL_OUTPUT_FILES_V1_1["extracted"]`（归档）、
     # v21_v1_2 落 `FULL_OUTPUT_FILES["extracted"]`（默认口径）——第 8 节，T3 全量产物与试跑
     # 留痕物理隔离。用函数取值而不是在定义处取，这样本节的求值顺序与第 8 节的先后无关。
+    # v21_v1_3 与 v21_v1_2 同用 `FULL_OUTPUT_FILES`（＝ v1.2 的抽取结果）：
+    # A／B 两步都只动消歧与入图策略，**不改抽取**，故复用同一份缓存、零 LLM 调用。
     "extract_records_profiles": {"pilot": "OUTPUT_FILES", "v21": "FULL_OUTPUT_FILES_V1_1",
-                                 "v21_v1_2": "FULL_OUTPUT_FILES"},
+                                 "v21_v1_2": "FULL_OUTPUT_FILES",
+                                 "v21_v1_3": "FULL_OUTPUT_FILES"},
     "extract_records_key": "extracted",
     "subdirs": {"disambig": "消歧", "dedup": "去重"},
     # 文件名（机器可读产物一律 ASCII 名，与第 7 节 OUTPUT_FILES 同风格）。
@@ -746,6 +764,14 @@ DISAMBIG = {
     # 该开关不是匹配规则的一部分，也不改身份键：`company_list` 只作**标注**
     # （《15》硬约束 16：它的松口径不作依据）。命令行 `--enable-doc-company-list` 可显式覆盖。
     "enable_doc_company_list": False,
+    # A 步（路线③，**候选口径 v1.3 专用**）的开关：`normalize_entity_name()` 是否在
+    # 「去空白 ＋ 剥壳」之后**再叠一层 `auto_annotate_lint.fold_simp()`**
+    # （`NFKC` 全角→半角 ＋ 常用简繁／异体**单字**折叠）。**默认 False＝冻结口径**：
+    # 关闭时 `normalize_entity_name` 的行为逐字节不变（v1.1／v1.2 可复现的前提）。
+    # 打开后修好 603501 豪威集成电路这类「配置半角括号、语料全角括号（或繁体）」的消歧
+    # （该折叠表由作者裁定、明确排除多义映射，见 `auto_annotate_lint.py` 第 187～259 行）。
+    # 取值由 `apply_profile_switches(profile)` 按 profile 设置，不手工改。
+    "normalize_fold": False,
 }
 
 # --------------------------------------------------------------------------
@@ -918,6 +944,18 @@ def normalize_entity_name(name) -> str:
     其余字符一律照原样（不做大小写折叠、不做标点归一、不做模糊匹配）。
     比 T3 的证据定位（`evidence_key`，只去空白）多一步剥壳，是为了让
     「《证券法》」与「证券法」这类**同一条政策的两种书写**在身份层对齐。
+
+    **现行口径「只去空白 ＋ 剥最外层包裹字符」是有意的**（作者裁定，冻结）：它**不做**
+    宽度折叠、也**不做**简繁折叠。代价是有的——**603501 豪威集成电路**的注册全称在配置里
+    写的是**半角括号** `豪威集成电路(集团)股份有限公司`，而语料里 7 处提及是**全角括号**
+    `豪威集成电路（集团）股份有限公司`（另 1 处繁体），于是该公司的提及**全部留在待消歧**。
+
+    **A 步（候选口径 v1.3）**在剥壳之后**当开关为真时**再叠一层 `fold_simp()`
+    （`NFKC` 全角→半角 ＋ 常用简繁／异体单字折叠），修好上面这类写法差异。折叠是
+    **精度无损的规范化**：它复用作者已裁定过的折叠表（`auto_annotate_lint.fold_simp`，
+    该表就地维护、明确排除了多义映射——後／臺／覆／髮 之类一律不进表），不另造轮子。
+    **由 profile 开关控制、默认关**（`DISAMBIG["normalize_fold"]`，经
+    `apply_profile_switches` 设置）；开关为假时本函数**逐字节不变**（v1.1／v1.2 可复现的前提）。
     """
     import re as _re
     text = _re.sub(r"[\s　]+", "", str(name or ""))
@@ -931,7 +969,46 @@ def normalize_entity_name(name) -> str:
                 text = text[1:-1]
                 changed = True
                 break
+    if DISAMBIG.get("normalize_fold"):
+        # 惰性导入：`auto_annotate_lint` 在模块级 `import config`（其第 91 行），
+        # 若本文件在模块级导入它，则与本文件形成**循环导入**（两个 config 同名，路径解析
+        # 还会互相打架——见 `代码\问答\run_answer.py` 开头记载的陷阱）。故只在**开关为真**时
+        # 在函数体内导入。**导入失败不得静默降级**：宁可抛错，也不让「打开了折叠却悄悄按老口径
+        # 跑」——那会让 v1.3 的读数与产物不自洽（精度问题被掩盖）。
+        try:
+            from auto_annotate_lint import fold_simp
+        except Exception as exc:            # noqa: BLE001 —— 刻意不静默：转成明文错误抛出
+            raise RuntimeError(
+                "normalize_fold 已打开，但无法惰性导入 auto_annotate_lint.fold_simp（%s: %s）；"
+                "拒绝静默降级——请确认该模块在本文件同目录且可导入。" % (type(exc).__name__, exc)
+            )
+        text = fold_simp(text)
     return text
+
+
+def apply_profile_switches(profile: str) -> dict:
+    """按 profile 设置运行期开关；**默认值保持现状**，只有新 profile 才打开新行为。
+
+    返回本次生效的开关快照（供脚本写进产物、便于审计）。
+
+    * `v21_v1_3`（**候选口径，路线③ A＋B**）→ 打开 A（`normalize_fold`＝True，归一化叠
+      `fold_simp`）与 B（`GRAPH["include_unresolved_entities"]`＝True，名单外 Company 主体
+      按归一化名建 `name_only` 节点入图）两个开关；
+    * **其它任何 profile（含 `pilot`／`v21`／`v21_v1_2`）一律回到默认关**——
+      因此 v1.1／v1.2 的行为与产物逐字节不变（可复现的前提）。
+
+    注意：`GRAPH["include_unresolved_entities"]` 是**既有键**（第 9.3 节，当前 `False`）。
+    本函数只是把它按 profile 重新设置——**v1.2 及以前恒为 `False`**（默认关），
+    所以既有口径不受影响。各脚本在 `--profile` 解析后**立即**调用本函数。
+    """
+    enabled = (profile == "v21_v1_3")
+    DISAMBIG["normalize_fold"] = bool(enabled)
+    GRAPH["include_unresolved_entities"] = bool(enabled)
+    return {
+        "profile": profile,
+        "normalize_fold": bool(DISAMBIG["normalize_fold"]),
+        "include_unresolved_entities": bool(GRAPH["include_unresolved_entities"]),
+    }
 
 
 def round_confidence(value):
@@ -1090,6 +1167,9 @@ EVENT_TIME_BACKFILL = {
         "pilot": os.path.join(CACHE_DIR_V1_1, "时间补抽"),
         "v21": os.path.join(CACHE_DIR_V1_1, "时间补抽"),
         "v21_v1_2": os.path.join(CACHE_DIR_V1_2, "时间补抽"),
+        # v21_v1_3（候选口径）与 v21_v1_2 共用同一份时间补抽缓存目录：v1.3 复用 v1.2
+        # 的抽取结果，事件与 doc_id 完全一致，补抽结论直接沿用（**只读**，不重跑补抽）。
+        "v21_v1_3": os.path.join(CACHE_DIR_V1_2, "时间补抽"),
     },
     "cache_file_pattern": "{event_id}.json",
     "pacing": {
@@ -1111,6 +1191,14 @@ EVENT_TIME_BACKFILL = {
             "measure": os.path.join(FULL_RUN_DIR_V1_1, "时间覆盖_度量.json"),
         },
         "v21_v1_2": {
+            "overlay": os.path.join(FULL_RUN_DIR, "event_time_backfill.json"),
+            "report": os.path.join(FULL_RUN_DIR, "event_time_backfill_report.json"),
+            "measure": os.path.join(FULL_RUN_DIR, "时间覆盖_度量.json"),
+        },
+        # v21_v1_3（候选口径）**只读复用 v1.2 的时间补抽覆盖层**：v1.3 不重跑抽取、也不重跑
+        # 补抽，事件与 doc_id 与 v1.2 一致，故覆盖层同一份（写入路径与 v1.2 相同，但本管线
+        # 不写它，只读）。
+        "v21_v1_3": {
             "overlay": os.path.join(FULL_RUN_DIR, "event_time_backfill.json"),
             "report": os.path.join(FULL_RUN_DIR, "event_time_backfill_report.json"),
             "measure": os.path.join(FULL_RUN_DIR, "时间覆盖_度量.json"),

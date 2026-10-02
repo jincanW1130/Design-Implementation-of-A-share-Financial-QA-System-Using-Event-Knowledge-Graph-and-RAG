@@ -1219,7 +1219,7 @@ def main(argv=None) -> int:
     # 默认 profile 取 config.GRAPH_PIPELINE["default_profile"]（v21_v1_2）；
     # v1.1 归档的补抽缓存／覆盖层仍用 --profile v21 显式复现。
     parser.add_argument("--profile", default=config.GRAPH_PIPELINE["default_profile"],
-                        choices=["pilot", "v21", "v21_v1_2"],
+                        choices=["pilot", "v21", "v21_v1_2", "v21_v1_3"],
                         help="默认 v21_v1_2＝v1.2 口径（缓存／覆盖层落 v2.1_v1_2）；"
                              "v21／pilot＝v1.1 归档口径")
     parser.add_argument("--limit", type=int, default=None, help="只处理前 N 条 null 事件（联机自检）")

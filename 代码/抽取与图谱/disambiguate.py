@@ -317,7 +317,16 @@ def match_company(name_norm, alias_table):
 # 逐条实体判身份
 # --------------------------------------------------------------------------
 def disambiguate_records(records, alias_table, doc_company_lists=None,
-                         enable_doc_company_list=False):
+                         enable_doc_company_list=False, include_unresolved=False):
+    """逐条实体判身份。
+
+    `include_unresolved`＝**B 步开关（候选口径 v1.3 专用，默认 False＝冻结口径）**：为真时，
+    **未消歧的 Company 提及**除了照旧进入 `unresolved` 列表（审计留痕一条都不少），还按其
+    **归一化名**额外进入 `entity_map`（`status="resolved"`、`identity_key="Company:<归一化名>"`、
+    `resolved_by="name_only"`、`rule="name_only_admitted"`），从而被 T6 自然写进图谱。
+    只有 **Company** 类型走这条放宽；Person／Institution／Policy／Industry 一律照旧。
+    开关为假时本函数行为逐字节不变（v1.1／v1.2 依赖这一点）。
+    """
     entity_map, unresolved = {}, []
     companies_seen = {}
     # M-5：`in_doc_company_list` 的两种读法由开关选择。
@@ -352,6 +361,9 @@ def disambiguate_records(records, alias_table, doc_company_lists=None,
                     item["identity_key"] = "Company%s%s" % (
                         config.DISAMBIG["identity_key_separator"], code)
                     item["status"] = "resolved"
+                    if include_unresolved:
+                        # **有股票代码锚**：下游据此区分「命中配置公司」与「只有名字」。
+                        item["resolved_by"] = "stock_code"
                     # company_list 只作**标注**（《15》硬约束 16：它的松口径不作依据）。
                     item["in_doc_company_list"] = code in doc_codes
                     entry = companies_seen.setdefault(code, {"surfaces": set(), "doc_ids": set()})
@@ -370,6 +382,16 @@ def disambiguate_records(records, alias_table, doc_company_lists=None,
                         "note": "按《10》第4.5.4节：匹配失败进待消歧列表，人工确认后再写入图谱；"
                                 "本阶段不猜、不合并。",
                     })
+                    if include_unresolved:
+                        # **B 步（候选口径 v1.3）**：名单外的 Company 主体**按其归一化名**建身份，
+                        # 额外放进 entity_map（上面那条 unresolved 留痕**原样保留、一条都不少**）。
+                        # 身份键＝`Company:<归一化名>`——与命中配置公司的 `Company:<6位代码>`
+                        # 形态可区分（下游据此判定 resolved_by）。只有 Company 走这条；其余四类照旧。
+                        item["identity_key"] = "Company%s%s" % (
+                            config.DISAMBIG["identity_key_separator"], name_norm)
+                        item["status"] = "resolved"
+                        item["resolved_by"] = "name_only"
+                        item["rule"] = "name_only_admitted"
             else:
                 if not name_norm:
                     raise SystemExit("实体名为空：doc_id=%s %s" % (doc_id, local_id))
@@ -434,6 +456,9 @@ def build_industry_index(alias_table, entity_map):
 # 主流程
 # --------------------------------------------------------------------------
 def run(args) -> int:
+    # 解析 --profile 后**立即**按 profile 设置运行期开关（A＝折叠、B＝放宽入图）：
+    # 默认值保持现状，只有 v21_v1_3 打开；其它 profile 一律回到默认关。
+    switches = config.apply_profile_switches(args.profile)
     paths = config.pipeline_paths(args.profile)
     records = load_records(args.profile)
     if not records:
@@ -453,8 +478,13 @@ def run(args) -> int:
     alias_table = build_alias_table()
     _registered_table, registered_meta = load_registered_names()
     enable_dcl = bool(args.enable_doc_company_list)
+    include_unresolved = bool(switches["include_unresolved_entities"])
     entity_map, unresolved, companies_seen = disambiguate_records(
-        records, alias_table, enable_doc_company_list=enable_dcl)
+        records, alias_table, enable_doc_company_list=enable_dcl,
+        include_unresolved=include_unresolved)
+    if include_unresolved:
+        print("[注意] 已开启 B 步（include_unresolved_entities）：名单外 Company 主体按归一化名"
+              "建 name_only 身份并入图——仅是 v1.3 候选口径，v1.2 默认口径不含此行为。")
     if enable_dcl:
         # 开启＝M-5 真实读法：会改变 in_doc_company_list 标注 → 必须整链重跑（见模块 docstring）。
         print("[注意] 已开启 --enable-doc-company-list（M-5 真实读法）：in_doc_company_list 取 "
@@ -537,6 +567,15 @@ def run(args) -> int:
                 sum(1 for e in alias_table.values() if not e.get("registered_name")),
         },
     }
+    # **开关快照**：只在有开关被打开时写进产物（v1.3 专用）。开关全关（pilot／v21／v21_v1_2）
+    # 时**不新增该键**——否则会让消歧产物多一个键、破坏「用现行代码重放＝当初落盘的消歧产物」
+    # 这条冻结链（第 6 阶段验收 H2 逐字节比对）。
+    if include_unresolved:
+        disambig_payload["switches"] = switches
+        disambig_payload["counts"]["company_identities_name_only"] = sum(
+            1 for i in entity_map.values() if i.get("resolved_by") == "name_only")
+        disambig_payload["counts"]["company_identities_stock_code"] = sum(
+            1 for i in entity_map.values() if i.get("resolved_by") == "stock_code")
     dump_json(paths["alias_table"], alias_payload)
     dump_json(paths["disambiguation"], disambig_payload)
     dump_jsonl(paths["unresolved"], unresolved)
@@ -570,12 +609,15 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
         description="第 6 阶段实体消歧（T4；参数一律取自 config.py，不调用模型）")
     # 既有 v1.1 口径：choices=["pilot", "v21"]；2026-09-27 起 v1.2 为**默认口径**，
-    # 在同一参数上追加 v21_v1_2（＝默认 profile），v1.1 归档仍用 pilot／v21 显式复现。
+    # 在同一参数上追加 v21_v1_2（＝默认 profile），v1.1 归档仍用 pilot／v21 显式复现；
+    # 2026-10-02 追加 v21_v1_3（路线③ A＋B 候选口径，落 图谱导出\v2.1_v1_3\）。
     parser.add_argument("--profile", default=config.GRAPH_PIPELINE["default_profile"],
-                        choices=["pilot", "v21", "v21_v1_2"],
+                        # 四取值：pilot／v21＝v1.1 归档，v21_v1_2＝现行 v1.2，v21_v1_3＝路线③ 候选。
+                        choices=["pilot", "v21", "v21_v1_2", "v21_v1_3"],
                         help="v21_v1_2＝**默认口径** v1.2 的全量产物（默认，读 "
-                             "FULL_OUTPUT_FILES）；v21＝v1.1 归档全量 709 篇；pilot＝v1.1 归档"
-                             "的 12 篇试跑")
+                             "FULL_OUTPUT_FILES）；v21_v1_3＝候选口径 v1.3（路线③ A＋B，"
+                             "复用 v1.2 抽取缓存，落 图谱导出\\v2.1_v1_3\\）；"
+                             "v21＝v1.1 归档全量 709 篇；pilot＝v1.1 归档的 12 篇试跑")
     parser.add_argument("--force", action="store_true", help="忽略已有产物，重算并重写")
     parser.add_argument("--enable-doc-company-list", action="store_true",
                         default=bool(config.DISAMBIG["enable_doc_company_list"]),

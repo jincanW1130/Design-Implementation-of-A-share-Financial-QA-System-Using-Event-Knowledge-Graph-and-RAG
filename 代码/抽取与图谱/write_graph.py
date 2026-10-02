@@ -354,6 +354,12 @@ def assign_nodes(disambig, merged, meta, alias_table_path=None, confirmation=Non
             by_identity[key] = row
         row["_surfaces"].add(item["name"])
         row["_nodes"].append(item)
+        # 身份来源标记（v1.3 的 entity_map 才有 resolved_by；v1.2 及以前恒缺该字段）：
+        # 只用于 graph_stats.json 的审计读数（name_only 节点可追溯、可筛可弃），
+        # **不写进 nodes.csv**（不进 node_columns）。
+        resolved_by = item.get("resolved_by")
+        if resolved_by:
+            row.setdefault("_resolved_by", set()).add(resolved_by)
 
     # 2) 四类按确定性顺序一次性分配（Company 用 stock_code、Document 用 doc_id，见下）。
     counters = {}
@@ -1057,7 +1063,7 @@ def build_all(paths, records, disambig, merged, meta):
 
 
 def write_products(paths, nodes, edges, skipped, duplicates, merged, fingerprint, stats_extra,
-                   confirmation_info=None, dropped=None):
+                   confirmation_info=None, dropped=None, switches=None):
     columns_n, columns_e = config.GRAPH["node_columns"], config.GRAPH["edge_columns"]
     nodes_csv = to_csv(columns_n, nodes)
     edges_csv = to_csv(columns_e, edges)
@@ -1065,12 +1071,19 @@ def write_products(paths, nodes, edges, skipped, duplicates, merged, fingerprint
     replay = build_replay(nodes, edges, fingerprint, stats_note)
     isolated_ids = _isolated(nodes, edges)
     # 2026-09-27 审查 B 的缺陷 2：`isolated_nodes.count` 原先直接放 **435 个 id 的列表**
-    # （字段名撒谎）。修法分口径——默认口径 v21_v1_2 改成名副其实的形状（count 为整数、
-    # ids 存列表）；pilot／v21 是 v1.1 **冻结归档**，其 `图谱导出\v2.1\graph_stats.json`
-    # 已入库、逐字节不许动（且 `验收第6阶段.py --profile v21` 要求它能被现有代码逐字节复现），
+    # （字段名撒谎）。修法分口径——**非归档口径**改成名副其实的形状（count 为整数、ids 存列表）；
+    # pilot／v21 是 v1.1 **冻结归档**，其 `图谱导出\v2.1\graph_stats.json` 已入库、
+    # 逐字节不许动（且 `验收第6阶段.py --profile v21` 要求它能被现有代码逐字节复现），
     # 因此归档口径保持历史形状不变——与 `issuer_participation_dropped` 的「归档零影响」同一惯例。
+    #
+    # **2026-10-02 修正（路线③ B-1 实测发现）**：原判据写成
+    # `paths["profile"] == config.GRAPH_PIPELINE["default_profile"]`，于是**只有默认口径**
+    # 拿到正确形状，新增的候选口径 `v21_v1_3` 落进 else 分支、`count` 又变回列表
+    # （字段名第二次撒谎）。判据改为「**凡不是 v1.1 归档口径**都拿正确形状」——
+    # 这样既有口径（v1.2）逐字节不变，新口径也自动继承修好的形状，且将来再加 profile 不会再踩。
     isolated_note = "无边节点：实体抽到了但语料没给出关系；如实保留，不删（不是遗漏）"
-    if paths["profile"] == config.GRAPH_PIPELINE["default_profile"]:
+    V1_1_ARCHIVE_PROFILES = ("pilot", "v21")
+    if paths["profile"] not in V1_1_ARCHIVE_PROFILES:
         isolated_block = {"count": len(isolated_ids), "ids": isolated_ids, "note": isolated_note}
     else:
         isolated_block = {"count": isolated_ids, "note": isolated_note}
@@ -1133,6 +1146,32 @@ def write_products(paths, nodes, edges, skipped, duplicates, merged, fingerprint
                     "其余内容逐字节可复现（见 manifest.sha256 与复跑比对读数）",
         },
     }
+    # 候选口径 v1.3（B 步）：name_only 节点与含 name_only 端点的边的审计读数。
+    # **只在开关打开时**写这两个键——否则 v1.2 的 graph_stats.json 会多键，破坏「镜像重跑
+    # ＝盘上产物」（第 6 阶段验收 J 组按 `json_equal_without_fields` 逐键比对）。
+    # 节点身份来自 entity_map 的 `resolved_by`（v1.2 及以前没有该字段 → 恒不进入这里）。
+    if (switches or {}).get("include_unresolved_entities"):
+        name_only_ids = sorted(str(n["node_id"]) for n in nodes
+                               if "name_only" in (n.get("_resolved_by") or ()))
+        name_only_set = set(name_only_ids)
+        stats["switches"] = switches
+        stats["name_only_nodes"] = {
+            "count": len(name_only_ids),
+            "by_label": _counts(n["label"] for n in nodes
+                                if str(n["node_id"]) in name_only_set),
+            "node_ids": name_only_ids,
+            "note": "B 步（include_unresolved_entities）按归一化名建节点的名单外 Company 主体"
+                    "（resolved_by=name_only）；仅在 graph_stats.json 登记，**不进 nodes.csv 列**"
+                    "（加列会改 nodes.csv 表头，与 E1「表头==node_columns」冲突）。",
+        }
+        stats["edges_with_name_only_endpoint"] = {
+            "count": sum(1 for e in edges if str(e["head_id"]) in name_only_set
+                         or str(e["tail_id"]) in name_only_set),
+            "by_relation": _counts(e["relation"] for e in edges
+                                   if str(e["head_id"]) in name_only_set
+                                   or str(e["tail_id"]) in name_only_set),
+            "note": "至少一个端点是 name_only 节点的边——下游据此判断精度风险面。",
+        }
     # 《10》第4.5.2节 的程序侧确定性去重（规则冻结、不放宽校验）：登记本次丢弃条数与
     # 逐条样本。归档口径（pilot／v21）下无此边、计数为 0，此时**不新增字段**——
     # v1.1 的四件产物因此逐字节不变（作者 2026-09-27 的零影响要求）。
@@ -1240,6 +1279,10 @@ def _dropped_from_stats(paths):
 
 
 def run(args) -> int:
+    # 解析 --profile 后**立即**设置运行期开关（与 disambiguate.py 同源）；默认值保持现状，
+    # 只有 v21_v1_3 打开。B 步的实体在 T4 侧已被赋 status=resolved 与 identity_key，
+    # 故节点构建与边端点解析的**既有逻辑一字不改**——它们自然入图，这里不写第二遍放行判据。
+    switches = config.apply_profile_switches(args.profile)
     paths = config.pipeline_paths(args.profile)
     records_path = paths["extract_records"]
     if not os.path.isfile(records_path):
@@ -1265,7 +1308,7 @@ def run(args) -> int:
     stats, checks = write_products(paths, nodes, edges, skipped, duplicates, merged,
                                    fingerprint,
                                    {"document_meta_missing": missing_meta},
-                                   confirmation_info, dropped)
+                                   confirmation_info, dropped, switches=switches)
 
     print("输入（只读）：%s（%d 篇，sha256 %s…）"
           % (rel(records_path), len(records), fingerprint["extract_records_sha256"][:16]))
@@ -1323,8 +1366,10 @@ def main(argv=None) -> int:
     # 既有 v1.1 口径：choices=["pilot", "v21"]；2026-09-27 起 v1.2 为**默认口径**，
     # 在同一参数上追加 v21_v1_2（＝默认 profile），v1.1 归档仍用 pilot／v21 显式复现。
     parser.add_argument("--profile", default=config.GRAPH_PIPELINE["default_profile"],
-                        choices=["pilot", "v21", "v21_v1_2"],
+                        # 四取值：pilot／v21＝v1.1 归档，v21_v1_2＝现行 v1.2，v21_v1_3＝路线③ 候选口径。
+                        choices=["pilot", "v21", "v21_v1_2", "v21_v1_3"],
                         help="默认 v21_v1_2＝v1.2 口径（导出到 图谱导出\\v2.1_v1_2\\）；"
+                             "v21_v1_3＝候选口径 v1.3（路线③ A＋B，导出到 图谱导出\\v2.1_v1_3\\）；"
                              "v21＝v1.1 归档（图谱导出\\v2.1\\）；pilot＝试跑目录")
     parser.add_argument("--force", action="store_true",
                         help="**当前无操作**（L-7）：本脚本没有跳过路径，每次运行都按输入"
