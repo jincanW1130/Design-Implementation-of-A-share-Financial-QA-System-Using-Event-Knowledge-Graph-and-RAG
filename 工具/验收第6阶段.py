@@ -2183,8 +2183,13 @@ for i, line in enumerate(t02.split("\n"), 1):
     if m:
         row_llm = (i, m.group(1).strip())
         break
-chk(row_llm is not None and "TBD" in row_llm[1].upper(),
-    "P3 《02》第12.4节 的「大语言模型」行仍为 TBD（答案生成模型归第 8 阶段）",
+# 2026-10-02 修订（评审 P0-6）：本行原断言语义是「该行应为 TBD」——那是**第 8 阶段开工前**
+# 的口径。第 8 阶段已于 2026-09-29 把「大语言模型与版本」固化为 `deepseek-flash`
+# （《02》第12.4节，见本文件 P4 之后的模型语境检查 P5），本断言语义随之失效：它会把
+# 「已经做对了的事」判成失败，导致默认档退出码 1（评审实测 101／103、内容失败 1 项）。
+# 修订后语义＝**该行必须已定值且不再为 TBD**（即第 8 阶段已收口）；仍保留「解析不到行即失败」。
+chk(row_llm is not None and bool(row_llm[1].strip()) and "TBD" not in row_llm[1].upper(),
+    "P3 《02》第12.4节 的「大语言模型」行已定值、不再为 TBD（答案生成模型已由第 8 阶段固化）",
     "实测 《02》第 %s 行取值「%s」"
     % (row_llm[0] if row_llm else "?", row_llm[1] if row_llm else "未解析到"))
 

@@ -9,7 +9,10 @@
 # 运行（`--network host` 使容器共用 WSL 的网络命名空间，从而直连同一 WSL 内的 Neo4j 容器）：
 #     docker run --rm -d --name ashare-qa-api --network host \
 #         -v "$PWD/部署/config.docker.json:/app/代码/后端/config.local.json:ro" \
+#         -v /mnt/d/Cache/huggingface:/app/hf:ro \
 #         ashare-qa-backend:local
+# 　HF 缓存挂载路径随执行环境而变：WSL2 内执行用 /mnt/d/Cache/huggingface；
+# 　若在装了 Docker Desktop 的 Windows 主机上执行，则写 D:/Cache/huggingface。
 #
 # **已知环境限制（如实登记，不是代码缺陷）**：宿主机 Windows 上的 MySQL 8.4 只监听
 # 127.0.0.1（my.ini 的 bind-address），WSL 与容器都连不到它的 3306；因此容器形态下
@@ -20,21 +23,35 @@ FROM python:3.12-slim
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
-    TZ=Asia/Shanghai
+    TZ=Asia/Shanghai \
+    HF_HOME=/app/hf
+
+# embedding 模型（BAAI/bge-small-zh-v1.5）快照约 183 MB，**不打进镜像**：
+#   ① 避免构建上下文携带大文件、拖慢构建；② 便于换机时替换／复用本机已有缓存。
+# 运行容器时用 bind mount 把本机 HF 缓存挂到容器的 HF_HOME（＝/app/hf）：
+#     WSL2 内执行：              -v /mnt/d/Cache/huggingface:/app/hf:ro
+#     Windows / Docker Desktop： -v D:/Cache/huggingface:/app/hf:ro
+# 　（本机 HF_HOME=D:\Cache\huggingface，其下 hub\models--BAAI--bge-small-zh-v1.5\snapshots\
+# 　 7999e1d3359715c523056ef9478215996d62a620；挂载后容器内路径与之对齐。）
+# 若不挂载，容器内无模型快照，向量检索不可用（后端以错误码 3003 明确报错，不静默降级）。
 
 WORKDIR /app
 
-# 依赖：与开发环境实测版本对齐（见 代码\后端\README.md）；不装 ORM、不装可视化/编排类组件。
+# 依赖：改为从仓库根 requirements.txt 安装——它是全项目 Python 依赖的【单一来源】，
+# 与开发环境实测版本对齐（见 代码\后端\README.md）；不装 ORM、不装可视化/编排类组件。
+# 先 COPY 再 RUN，用 Docker 层缓存：只要 requirements.txt 不变，改代码不会重装依赖。
 #
 # **版本号一律以发行版号为准**（`importlib.metadata.version()`），**不要**照抄包自报的
 # `__version__`：实测 PyMySQL 的发行版 **1.2.3** 会把 `pymysql.__version__` 报成 **2.2.8**，
 # 照抄会让 `pip install "pymysql==2.2.8"` 直接失败（PyPI 上不存在这个版本）——本镜像第一版
 # 就是这么构筑失败的，属实测踩坑留痕。
-RUN pip install --no-cache-dir \
-        "fastapi==0.141.1" \
-        "uvicorn[standard]==0.54.0" \
-        "pymysql==1.2.3" \
-        "neo4j==6.3.1"
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+# uvicorn[standard] 的 extras 语义保留在此处（requirements.txt 只写不带 extras 的
+# `uvicorn==0.54.0` 作为版本单一来源）：版本号与 requirements 一致，仅在容器内就地补
+# websockets／httptools 等 extras，避免 requirements 与 Dockerfile 两处写法打架。
+RUN pip install --no-cache-dir "uvicorn[standard]==0.54.0"
 
 # 后端代码 ＋ 上游只读代码（后端 import 复用检索与问答组件，故必须一起进镜像）
 COPY 代码/后端/ /app/代码/后端/

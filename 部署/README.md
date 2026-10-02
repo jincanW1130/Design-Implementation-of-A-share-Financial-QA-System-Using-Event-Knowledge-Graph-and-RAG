@@ -46,13 +46,18 @@ cd /mnt/c/Users/15129/Desktop/毕业设计
 docker build -f 部署/Dockerfile -t ashare-qa-backend:local .
 docker run --rm -d --name ashare-qa-api --network host \
     -v "$PWD/部署/config.docker.json:/app/代码/后端/config.local.json:ro" \
+    -v /mnt/d/Cache/huggingface:/app/hf:ro \
     ashare-qa-backend:local
 curl -s http://127.0.0.1:8000/api/health
 ```
 
-镜像内容：Python 3.12-slim ＋ 锁定版本的 `fastapi==0.141.1`／`uvicorn[standard]==0.54.0`／
-`pymysql==1.2.3`／`neo4j==6.3.1`；`代码\后端\`＋`代码\检索\`＋`代码\问答\`（后端 import 复用上游
-组件，必须一起进镜像）；数据集 v2.1 的索引与图谱导出物（后端运行期读取的只读输入）。
+（第 3 行 `-v ...:/app/hf:ro` 是 embedding 模型缓存挂载，见「已知限制」第 7 条；
+在 Windows／Docker Desktop 主机上执行时改写成 `-v D:/Cache/huggingface:/app/hf:ro`。）
+
+镜像内容：Python 3.12-slim ＋ **仓库根 `requirements.txt` 里锁定的全部依赖**（该文件是全项目
+Python 依赖的单一来源，与 `部署\Dockerfile` 同源——Dockerfile 用 `pip install -r requirements.txt`
+安装，另单独补 `uvicorn[standard]` 的 extras）；`代码\后端\`＋`代码\检索\`＋`代码\问答\`（后端 import
+复用上游组件，必须一起进镜像）；数据集 v2.1 的索引与图谱导出物（后端运行期读取的只读输入）。
 构建上下文排除 `node_modules\`／`dist\`／`_工作底稿\`／**`config.local.json`**（见仓库根的 `.dockerignore`）。
 
 `--network host` 的用意：容器与 Neo4j 容器共用 WSL 的网络命名空间，于是容器内 `127.0.0.1:7687`
@@ -81,6 +86,14 @@ curl -s http://127.0.0.1:8000/api/health
    避免裸调挂住脚本。
 5. **限流**：单进程内滑动窗口（60 次／60 秒，`/api/health` 豁免），多进程／多实例不共享计数。
 6. **不引入容器编排**：只交付 `Dockerfile` 与启动脚本，**没有** docker-compose 与 K8s 清单。
+7. **容器形态下 embedding 模型须用 `-v` 挂载 HF 缓存**：embedding 模型快照
+   `BAAI/bge-small-zh-v1.5`（约 183 MB）**不打进镜像**（避免构建上下文携带大文件、便于换机替换），
+   容器内以环境变量 `HF_HOME=/app/hf` 为缓存根。**必须**把本机 HF 缓存 bind mount 到 `/app/hf`，
+   否则容器内无快照、向量检索不可用（后端以错误码 **3003** 报"向量索引不可用"，不静默降级）。
+   本机实测缓存路径 `D:\Cache\huggingface`（其下 `hub\models--BAAI--bge-small-zh-v1.5\snapshots\
+   7999e1d3359715c523056ef9478215996d62a620`），挂载命令：
+   * WSL2 内执行：`-v /mnt/d/Cache/huggingface:/app/hf:ro`
+   * Windows／Docker Desktop：`-v D:/Cache/huggingface:/app/hf:ro`
 
 ---
 
