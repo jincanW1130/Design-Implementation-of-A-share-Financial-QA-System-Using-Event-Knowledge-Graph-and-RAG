@@ -72,11 +72,20 @@ OUT = dict(config.OUTPUT_FILES)
 def output_files_for(profile: str) -> dict:
     r"""按 profile 与**有效 Prompt 变体**取产物落点（v1.2 的产物与 v1.1 物理隔离）。
 
-    * `v21_v1_2`（**默认口径**）→ `_全量\v2.1_v1_2\`（只看 profile，不受开关影响）；
+    * `v21_v1_2`／`v21_v1_3`（**默认口径**，二者共用同一份抽取产物）→ `_全量\v2.1_v1_2\`；
     * 关闭 v1.2 变体（v1.1 归档口径）：pilot → `_试跑\`；v21 → `_全量\v2.1\`；
     * 显式开启 v1.2 变体：pilot → `_试跑\v1_2\定向\`；v21 → `_全量\v2.1_v1_2\`。
+
+    **2026-10-02 修正（真缺陷）**：原判据写死 `profile == "v21_v1_2"`。新增 `v21_v1_3` 后，
+    它落进下面的 else 分支、被解析成 `config.OUTPUT_FILES_V1_2`
+    ＝ **`_试跑\v1_2\定向\`** —— 实测该 profile 下 `extract.py` 把产物写到定向目录
+    （`verify.json` 落在 `_试跑\v1_2\定向\`、`run_history` 不追加），第 6 阶段门禁的
+    K1／K2 因读不到本次记录而误报。改为**以 `config.GRAPH_PIPELINE["extract_records_profiles"]`
+    为唯一来源**判定「是否走全量 v2.1 表」，与 `pipeline_paths()` 同源；
+    三个既有 profile 的落点逐项不变，将来再加 profile 也不必改这里。
     """
-    if profile == "v21_v1_2":
+    table_key = (config.GRAPH_PIPELINE.get("extract_records_profiles") or {}).get(profile)
+    if table_key == "FULL_OUTPUT_FILES":
         return dict(config.FULL_OUTPUT_FILES)
     if ontology_defs_enabled():
         table = (config.FULL_OUTPUT_FILES_V1_2 if profile == "v21"

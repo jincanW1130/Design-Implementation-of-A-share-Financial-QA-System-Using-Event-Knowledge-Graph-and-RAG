@@ -641,10 +641,18 @@ def load_dataset():
 # **2026-09-27 作者裁定：默认口径＝v1.2**——`default_profile` 取 `v21_v1_2`（落
 # `图谱导出\\v2.1_v1_2\\` 与 `_抽取缓存\\v2.1_v1_2\\图谱管线\\`）；v1.1 为**归档版本**，
 # `--profile pilot`／`--profile v21` 仍各自指向原落点与缓存，一个字都不动、可原样复现。
+#
+# **2026-10-02 作者裁定：默认口径由 v1.2 切换为 v1.3**（原候选口径 `v21_v1_3` 转正）。
+# 理由：v1.3 把「含 ≥2 个公司参与方的事件」由 16 提到 286，从而让正式测试集的
+# 「关系型 2 跳」格子由不可达变为充裕（分格统计见
+# `阶段10-系统测试与对比实验\\时间覆盖\\分格可时序候选统计.md`）。
+# 代价：832 个无股票代码锚的 Company 节点与 813 条受影响的边（精度风险，须写进论文）。
+# **v1.2 转为归档**：`--profile v21_v1_2` 仍指向 `图谱导出\\v2.1_v1_2\\`（一个字节未动）、
+# 其开关全关、可原样复现；v1.1 归档（pilot／v21）不受影响。
 
 GRAPH_PIPELINE = {
-    # 默认 profile：脚本 `--profile` 的缺省值一律取它（v1.2＝默认口径）。
-    "default_profile": "v21_v1_2",
+    # 默认 profile：脚本 `--profile` 的缺省值一律取它（**2026-10-02 起＝v1.3**）。
+    "default_profile": "v21_v1_3",
     # profile → Prompt 变体（8 类事件定义是否进提示词）的**默认口径**：
     #   * v21_v1_2 → True：默认口径，有效 Prompt 版本 stage6-extract-v1.2；
     #   * pilot／v21 → False：v1.1 归档版本，提示词与 709 篇主缓存逐字节一致。
@@ -976,7 +984,7 @@ def normalize_entity_name(name) -> str:
         # 在函数体内导入。**导入失败不得静默降级**：宁可抛错，也不让「打开了折叠却悄悄按老口径
         # 跑」——那会让 v1.3 的读数与产物不自洽（精度问题被掩盖）。
         try:
-            from auto_annotate_lint import fold_simp
+            from fold_variants import fold_simp
         except Exception as exc:            # noqa: BLE001 —— 刻意不静默：转成明文错误抛出
             raise RuntimeError(
                 "normalize_fold 已打开，但无法惰性导入 auto_annotate_lint.fold_simp（%s: %s）；"
