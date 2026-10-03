@@ -376,14 +376,30 @@ def assign_nodes(disambig, merged, meta, alias_table_path=None, confirmation=Non
                                                        counters[label])
 
     # 3) 公司节点：编号＝stock_code（本体标识，硬约束 9）；属性取配置＋语料书写面。
+    #
+    # **2026-10-02 修正（字段名撒谎 + 编号语义）**：B 步接纳的名单外主体**没有 stock_code**
+    # ——B-1 的口径原文就是「无股票代码锚」。但原实现把身份键 `Company:<归一化名>` 的
+    # 冒号后半段**同时**当成 `node_id` 与 `stock_code`，于是 v1.3 里 832 个节点的
+    # `stock_code` 列装的是**公司名**（如 `AREVAPHARMA`）：
+    #   * 字段名与取值不符（`stock_code` 应当是六位 A 股代码）；
+    #   * 下游凡按「六位代码」校验或据此定位公司的地方都会把它当成合法代码。
+    # 现按**有无代码锚**分两条路：
+    #   * 有锚（六位数字）：`node_id = stock_code = 六位代码`，行为**逐字不变**；
+    #   * 无锚：`node_id = <name_only_id_prefix>-####`（按身份键确定性排序分配），
+    #     **`stock_code` 留空**、不猜；`name` 仍取语料中最长书写面。
+    # 人工确认行（`HCONF-####`）已在 3.5 分配过编号，本段跳过，不重排。
     alias_table = {}
     if alias_table_path and os.path.isfile(alias_table_path):
         with open(alias_table_path, encoding="utf-8") as fh:
             alias_table = json.load(fh).get("companies") or {}
+    name_only_keys = []
     for key, row in by_identity.items():
         surfaces = sorted(row["_surfaces"])
         if row["label"] == "Company":
             code = key.split(config.DISAMBIG["identity_key_separator"], 1)[1]
+            if not (code.isdigit() and len(code) == 6):
+                name_only_keys.append(key)
+                continue
             # 字段口径与 T4 的 `companies` 块逐字一致（表 4-8）：company_name 取语料中出现的
             # 最长书写面，aliases 取其余书写面，short_name／exchange／industry 取自冻结配置。
             configured = (disambig.get("companies") or {}).get(code) \
@@ -408,6 +424,22 @@ def assign_nodes(disambig, merged, meta, alias_table_path=None, confirmation=Non
                          "Policy": "policy_name", "Industry": "industry_name"}[row["label"]]
             row[id_attr] = row["node_id"]
             row[name_attr] = row["name"]
+
+    # 3.4 名单外主体（B 步接纳、**无股票代码锚**）的编号与属性：确定性顺序分配 `NCOMP-####`，
+    #     `stock_code` 一律留空（不猜代码）。与本体的「Company 编号＝stock_code」区分开，
+    #     使「有锚／无锚」在导出物里**一眼可辨**，而不是靠猜列里那串字符是不是六位数字。
+    _no_prefix = config.DISAMBIG.get("name_only_id_prefix") or "NCOMP"
+    for _index, _key in enumerate(sorted(name_only_keys), start=1):
+        _row = by_identity[_key]
+        _surfaces = sorted(_row["_surfaces"])
+        _longest = sorted(_surfaces, key=lambda s: (-len(s), s))[0]
+        _row["node_id"] = "%s-%0*d" % (_no_prefix, int(config.GRAPH["id_width"]), _index)
+        _row["stock_code"] = ""              # 无股票代码锚：留空，不填、不猜
+        _row["name"] = _longest
+        _row["company_name"] = _longest
+        _row["short_name"] = ""
+        _row["aliases"] = sorted({s for s in _surfaces if s != _longest})
+        _row["exchange"] = ""
 
     # 3.5 人工确认的实体：只对**确认文件里 confirmed=true** 的名称建节点（其余继续排除）。
     #     节点名＝书写面（确认文件里登记的名字），**不填 stock_code**（没有解析出代码）；

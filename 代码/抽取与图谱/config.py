@@ -762,6 +762,12 @@ DISAMBIG = {
     # 这里取**同类型 + 同名（归一化后）即同一实体**的最小规则，不做跨写法归并（不猜）。
     "non_company_rule": "same_type_same_normalized_name",
     "identity_key_separator": ":",
+    # **2026-10-02（B 步）**：名单外主体（**无股票代码锚**）的节点编号前缀。
+    # 它们不填 `stock_code`（B-1 的口径就是「无股票代码锚」），编号与本体的
+    # 「Company 编号＝stock_code」区分开，使「有锚／无锚」在导出物里一眼可辨。
+    # 背景：原实现把身份键 `Company:<归一化名>` 的冒号后半段同时当成 node_id 与 stock_code，
+    # 于是 832 个节点的 `stock_code` 列装的是公司名——字段名撒谎。
+    "name_only_id_prefix": "NCOMP",
     # M-5 的**可选开关**（默认 False＝冻结行为）。审查 M-5 指出：`in_doc_company_list` 原先读
     # 抽取记录的 `company_list` 键，而 T3 抽取记录根本没有该键，于是该标注恒为 False／`[]`
     # （实测 0/709 篇）。修好后的实现（从权威来源 `documents.jsonl` 取该 doc 的 company_list）
