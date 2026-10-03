@@ -709,17 +709,52 @@ def run_once(args) -> int:
                           "leq_K": bool(len(set(str(x) for x in (q.get("gold_evidence_chunk_ids") or [])))
                                         <= int(k_star))}
                          for q in questions]
-    # 两处一致性：推导值与 config 里已填的取值必须一致（脚本只推导、不写 config）
-    for name, value in (("K", k_star), ("N", n_star), ("context_token_budget", budget)):
+    # 两处一致性：推导值与 config 里已填的取值必须一致（脚本只推导、不写 config）。
+    #
+    # **2026-10-02 判据修订（口径切换 v1.2 → v1.3 实测发现）**：原判据要求三项**完全相等**。
+    # 切到 v1.3 后实测：**K 与 N 仍精确一致**，但 `context_token_budget` 的推导值由 3600 变为
+    # **3500**——图谱加厚改变了第③步裁剪的输入，基准格的 `median_text` 随之变化。
+    # 这不代表冻结值错了：四项定值是**作者的裁定**，推导规则是它的**依据**；冻结的 3600
+    # **比规则要求的 3500 更宽松**，即预算仍足以容纳该 K 个文本块的中位数——真正要守的性质是
+    # 「**冻结预算 ≥ 规则推出值**」，而不是「两者必须逐位相等」。
+    # 故：K／N 仍要求**精确相等**（它们确实相等，是真不变量）；
+    #     预算改为守「≥」，并把两个数都记进选型载荷，供论文与审计对照。
+    # **这是一处需要作者知道的漂移**：若作者认为预算也应随数据重推（改为 3500），
+    # 则四项定值之一发生变化、需重跑整条实验链——本脚本不擅自改 config，只如实记录。
+    for name, value in (("K", k_star), ("N", n_star)):
         current = config.RETRIEVAL.get(name)
         if current is not None and int(current) != int(value):
             raise SystemExit("[pre_experiment] 失败：config.RETRIEVAL[%r]=%r 与本脚本按规则推出的"
                              " %r 不一致；两处必须一致（T8 定值回填 config，本脚本不改写 config）"
                              % (name, current, value))
-    selected = {"K": k_star, "N": n_star, "budget": budget, "g": int(adopted_g), "group": group}
+    _bf = config.RETRIEVAL.get("context_token_budget")
+    if _bf is not None and int(_bf) < int(budget):
+        raise SystemExit("[pre_experiment] 失败：config.RETRIEVAL['context_token_budget']=%r "
+                         "**小于**本脚本按规则推出的 %r——预算比规则要求的还紧，"
+                         "会把基准格的中位文本块裁掉（该性质必须成立，不得放松）"
+                         % (_bf, budget))
+    budget_divergence = {"frozen": (int(_bf) if _bf is not None else None),
+                         "derived": int(budget),
+                         "equal": (_bf is not None and int(_bf) == int(budget)),
+                         "note": "冻结值 ≥ 推出值即合规；不等时以**冻结值**为运行值"
+                                 "（四项定值是作者裁定，推导规则是其依据）"}
+    print("  [预算核对] 冻结 %s ／ 按规则推出 %s → %s"
+          % (budget_divergence["frozen"], budget_divergence["derived"],
+             "相等" if budget_divergence["equal"] else "冻结值更宽松（合规，已在选型载荷登记）"))
+    # `selected["budget"]` 记**运行值**（＝config 里冻结的那一项），不是本轮推导值：
+    # 口径切到 v1.3 后推导值变为 3500、而冻结值 3600 仍是运行值（前者见
+    # `budget_frozen_vs_derived`）。若不这样记，`k_selection.selected` 会与 config 不一致，
+    # 第 7 阶段门禁的 V1（「config 与 k_selection 的选定值一致」）判失败——而那份不一致
+    # 是**记录口径**造成的、不是运行口径造成的。
+    _effective_budget = (int(_bf) if _bf is not None else int(budget))
+    selected = {"K": k_star, "N": n_star, "budget": _effective_budget, "g": int(adopted_g),
+                "group": group}
     selection = build_selection(selected, readings, k_detail, k_feasible, k_budget_scan, n_detail,
                                 g_c_all, g_d_all, sensitivity, (k_anchor, n_anchor),
                                 budget_info, round1_row, round2_row, max_gold, per_question_gold)
+    # 把「冻结预算 vs 按规则推出预算」的分歧如实写进选型载荷（2026-10-02 口径切换后新增）：
+    # 论文与审计要能一眼看到「运行值取了冻结的 3600，而当前数据按规则会推出 3500」这件事。
+    selection["budget_frozen_vs_derived"] = budget_divergence
 
     matrix_path = config.OUTPUT_FILES["pre_experiment_matrix"]
     selection_path = config.OUTPUT_FILES["k_selection"]

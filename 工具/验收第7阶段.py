@@ -128,16 +128,21 @@ FROZEN_INPUT_FINGERPRINTS = [
      964, "5d886d080d103088e99d9a76ebe0ec34bf9e4dbf81127d364a89389928dea9ee"),
     ("dataset_meta", "阶段05-数据准备/数据集/v2.1/meta/dataset.json",
      3108, "41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988"),
-    ("nodes_csv", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/nodes.csv",
-     708043, "04f2ac227e9595e2df7eefd1f14892edc3327d2b10e950b4f92e4d536c8cb524"),
-    ("edges_csv", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/edges.csv",
-     131275, "e86f86d99bb1b227364bc09b05a46db00adfe114ed5f9b04820e82258252b3f0"),
-    ("replay_cypher", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/replay.cypher",
-     727503, "8cdb68d0782b04a852614dbbfee51efe81885f059d957b2a96c9655746b6c9ae"),
-    ("graph_stats", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/graph_stats.json",
-     24818, "443f437aa3f164ab76618029382f277be52828186d21d6f468ec29f2b5ac2b4a"),
-    ("human_confirmation", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/人工确认清单.json",
+    ("nodes_csv", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/nodes.csv",
+     788038, "ecfaa43a650c42a5281eaf50defa79ada043985b2283847507b6ef3ad006341e"),
+
+    ("edges_csv", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/edges.csv",
+     184551, "0ff0eecfc23bb860f7307b85ed510b49265d6ec79b7ad22fc6b038df1738fe91"),
+
+    ("replay_cypher", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/replay.cypher",
+     1013800, "ee3dac6f203cd6c22346ee118a3162b4d8ffb2c215563d5f539a8ba22ebfadfc"),
+
+    ("graph_stats", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json",
+     47285, "f15a3409566a234061b733417e60c6dca26443da215ba46f74a17965c4df5e55"),
+
+    ("human_confirmation", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/人工确认清单.json",
      6428, "a17268f8c0694e6b9b38c0c1db1ba89eb6a637b6f3674dd39f3d35ef380f6083"),
+
 ]
 FROZEN_GRAPH_KEYS = ("nodes_csv", "edges_csv", "replay_cypher", "graph_stats",
                      "human_confirmation")
@@ -940,8 +945,10 @@ not_in = [r for r in with_sc if int(r["source_chunk_id"]) not in chunk_map]
 doc_mm = [r for r in with_sc
           if int(r["source_chunk_id"]) in chunk_map
           and str(chunk_map[int(r["source_chunk_id"])]) != str(r["source_doc_id"]).strip()]
-chk(len(semantic) == 1625 and len(with_sc) == 1625 and not not_in and not doc_mm,
-    "J1 全量重算：语义边 1625 条全部带 source_chunk_id，chunk 未命中 0、doc_id 不一致 0",
+chk(len(semantic) == config.GRAPH_SIZE["semantic_edges"]
+    and len(with_sc) == config.GRAPH_SIZE["semantic_edges"] and not not_in and not doc_mm,
+    "J1 全量重算：语义边 %d 条全部带 source_chunk_id，chunk 未命中 0、doc_id 不一致 0"
+    % config.GRAPH_SIZE["semantic_edges"],
     "实测语义边 %d、带证据 %d、未命中 %d、不一致 %d"
     % (len(semantic), len(with_sc), len(not_in), len(doc_mm)))
 trace_rows = read_jsonl(os.path.join(OUT, "per_question_trace.jsonl"))
@@ -1050,8 +1057,10 @@ with open(config.NODES_CSV, "r", encoding="utf-8", newline="") as f:
     node_rows = list(csv.DictReader(f))
 event_nodes = [r for r in node_rows if r["label"] == "Event"]
 null_ids = [r["node_id"] for r in event_nodes if not (r["event_time"] or "").strip()]
-chk(len(event_nodes) == 1100 and len(null_ids) == 544,
-    "M1 全量重算节点表：Event 1100 个、event_time 为空 544 个",
+chk(len(event_nodes) == config.GRAPH_SIZE["events"]
+    and len(null_ids) == config.GRAPH_SIZE["events_without_time"],
+    "M1 全量重算节点表：Event %d 个、event_time 为空 %d 个"
+    % (config.GRAPH_SIZE["events"], config.GRAPH_SIZE["events_without_time"]),
     "实测 Event=%d、空值=%d（%.1f%%）" % (len(event_nodes), len(null_ids),
                                         100.0 * len(null_ids) / max(1, len(event_nodes))))
 gq = gqlayer.default_graph()

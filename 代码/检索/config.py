@@ -152,13 +152,21 @@ ROLES = ["主体", "合作方", "涉及方", "监管方", "受影响方"]
 EVENT_TRIPLE_FIELDS = ["event_id", "event_type", "event_time"]
 
 # 图谱规模（实测读数；T1 会逐项复核）
+#
+# **2026-10-02 重登记（口径切换 v1.2 → v1.3）**：作者裁定把原候选口径 `v21_v1_3` 转正为
+# 交付口径（理由与代价见《16》9.5、《10》第4.5.4节、《02》修订记录）。本表随图谱导出物
+# 从 `图谱导出\v2.1_v1_2\` 改锚到 `图谱导出\v2.1_v1_3\`，逐项按**新产物实测值**重登记：
+#   节点 2802→3607、边 2736→3614、Event 1100→1098（去重合并 16 组）、
+#   语义边 1625→2503、replay.cypher 行数 5561→7244；
+#   `events_without_time` 544 与机检 20／18 两项**未变**。
+# v1.2 归档口径的原读数保留在《16》9.5 的并排表里，可对照。
 GRAPH_SIZE = {
-    "nodes": 2802,
-    "edges": 2736,
-    "events": 1100,
+    "nodes": 3607,
+    "edges": 3614,
+    "events": 1098,
     "events_without_time": 544,       # 49.5%：D／E 组时间过滤要剔除的规模（硬约束 3）
-    "semantic_edges": 1625,
-    "replay_cypher_lines": 5561,
+    "semantic_edges": 2503,
+    "replay_cypher_lines": 7244,
     "checks": 20,
     "checks_passed": 18,
 }

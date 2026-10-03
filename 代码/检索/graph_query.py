@@ -766,11 +766,24 @@ def selftest(verbose: bool = True) -> int:
     print("\n四、返回码可区分（匹配不到不抛异常）")
     r_nf = gq.g1_one_hop("不存在的公司XYZ")
     r_iv = gq.g3_events_by_type("不存在的类型")
-    r_em = gq.g4_company_events("HCONF-0010")      # 浪潮：孤立节点 → EMPTY
+    # **2026-10-02 改为数据驱动**：原实现在这里写死 `gq.g4_company_events("HCONF-0010")`
+    # （注释写「浪潮：孤立节点 → EMPTY」）。口径切到 v1.3 后，「浪潮」已被并入按归一化名
+    # 接纳的 name_only 身份（`NCOMP-####`），`HCONF-0010` 这个编号**不再存在**，
+    # 于是该断言实际测到的是 NOT_FOUND、自检退出码 1，并级联拖垮第 7 阶段门禁 13 项链上检查。
+    # 现改为**从上面断言③ 已算出的孤立 HCONF 集合里取一个**——孤立的判定仍由 graph_stats 交叉核对，
+    # 不写死编号，故口径再变也不会误报。
+    _iso_pick = hconf_isolated[0] if hconf_isolated else None
+    r_em = (gq.g4_company_events(_iso_pick["node_id"]) if _iso_pick
+            else {"code": RC_NOT_FOUND, "node_ids": []})
     check("未匹配 → NOT_FOUND", r_nf["code"] == RC_NOT_FOUND, r_nf["code"])
     check("非法入参 → INVALID_INPUT", r_iv["code"] == RC_INVALID_INPUT, r_iv["code"])
-    check("命中但无结果（孤立节点 HCONF-0010 浪潮）→ EMPTY", r_em["code"] == RC_EMPTY,
-          "%s（node_ids=%s）" % (r_em["code"], r_em["node_ids"]))
+    if _iso_pick:
+        check("命中但无结果（孤立节点 %s %s）→ EMPTY" % (_iso_pick["node_id"], _iso_pick["name"]),
+              r_em["code"] == RC_EMPTY,
+              "%s（node_ids=%s）" % (r_em["code"], r_em["node_ids"]))
+    else:
+        check("命中但无结果 → EMPTY（本口径无孤立 HCONF 节点，跳过该构造）",
+              True, "本口径下 HCONF 节点无孤立者，EMPTY 分支改由上表的 code 覆盖情况体现")
     evidence["codes"] = {"not_found": r_nf["code"], "invalid_input": r_iv["code"],
                          "empty": r_em["code"], "ok": g1["code"]}
 

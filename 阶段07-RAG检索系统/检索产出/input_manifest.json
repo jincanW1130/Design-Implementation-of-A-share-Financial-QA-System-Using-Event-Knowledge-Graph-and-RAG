@@ -1,15 +1,15 @@
 {
   "all_ok": true,
   "boundaries": {
-    "belongs_to": 14,
+    "belongs_to": 54,
     "belongs_to_with_valid_from": 0,
-    "company_nodes": 116,
-    "company_nodes_without_stock_code": 12,
-    "competes_with": 1,
-    "customer_of": 4,
-    "isolated_nodes": 435,
-    "relations_skipped": 878,
-    "supplies": 0
+    "company_nodes": 938,
+    "company_nodes_without_stock_code": 833,
+    "competes_with": 8,
+    "customer_of": 9,
+    "isolated_nodes": 587,
+    "relations_skipped": 0,
+    "supplies": 29
   },
   "checks": [
     {
@@ -83,13 +83,13 @@
       "ok": true
     },
     {
-      "detail": "实测 2802",
-      "name": "节点数 = 2802",
+      "detail": "实测 3607",
+      "name": "节点数 = 3607",
       "ok": true
     },
     {
-      "detail": "实测 2736",
-      "name": "边数 = 2736",
+      "detail": "实测 3614",
+      "name": "边数 = 3614",
       "ok": true
     },
     {
@@ -103,13 +103,13 @@
       "ok": true
     },
     {
-      "detail": "['BELONGS_TO', 'COMPETES_WITH', 'CUSTOMER_OF', 'EVIDENCED_BY', 'HAS_EXECUTIVE', 'ISSUED_BY', 'PARTICIPATES_IN', 'RELATED_TO']",
+      "detail": "['BELONGS_TO', 'COMPETES_WITH', 'CUSTOMER_OF', 'EVIDENCED_BY', 'HAS_EXECUTIVE', 'ISSUED_BY', 'PARTICIPATES_IN', 'RELATED_TO', 'SUPPLIES']",
       "name": "关系名都在 9 条内",
       "ok": true
     },
     {
-      "detail": "实测 1100",
-      "name": "Event 节点数 = 1100",
+      "detail": "实测 1098",
+      "name": "Event 节点数 = 1098",
       "ok": true
     },
     {
@@ -118,8 +118,8 @@
       "ok": true
     },
     {
-      "detail": "语义边 1625、带 source_chunk_id 1625",
-      "name": "语义边数 = 1625 且全部带 source_chunk_id",
+      "detail": "语义边 2503、带 source_chunk_id 2503",
+      "name": "语义边数 = 2503 且全部带 source_chunk_id",
       "ok": true
     },
     {
@@ -128,8 +128,8 @@
       "ok": true
     },
     {
-      "detail": "实测 5561",
-      "name": "replay.cypher 行数 = 5561",
+      "detail": "实测 7244",
+      "name": "replay.cypher 行数 = 7244",
       "ok": true
     },
     {
@@ -186,33 +186,33 @@
       "sha256": "41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988"
     },
     {
-      "bytes": 708043,
+      "bytes": 788038,
       "key": "nodes_csv",
-      "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/nodes.csv",
-      "sha256": "04f2ac227e9595e2df7eefd1f14892edc3327d2b10e950b4f92e4d536c8cb524"
+      "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/nodes.csv",
+      "sha256": "ecfaa43a650c42a5281eaf50defa79ada043985b2283847507b6ef3ad006341e"
     },
     {
-      "bytes": 131275,
+      "bytes": 184551,
       "key": "edges_csv",
-      "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/edges.csv",
-      "sha256": "e86f86d99bb1b227364bc09b05a46db00adfe114ed5f9b04820e82258252b3f0"
+      "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/edges.csv",
+      "sha256": "0ff0eecfc23bb860f7307b85ed510b49265d6ec79b7ad22fc6b038df1738fe91"
     },
     {
-      "bytes": 727503,
+      "bytes": 1013800,
       "key": "replay_cypher",
-      "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/replay.cypher",
-      "sha256": "8cdb68d0782b04a852614dbbfee51efe81885f059d957b2a96c9655746b6c9ae"
+      "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/replay.cypher",
+      "sha256": "ee3dac6f203cd6c22346ee118a3162b4d8ffb2c215563d5f539a8ba22ebfadfc"
     },
     {
-      "bytes": 24818,
+      "bytes": 47285,
       "key": "graph_stats",
-      "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/graph_stats.json",
-      "sha256": "443f437aa3f164ab76618029382f277be52828186d21d6f468ec29f2b5ac2b4a"
+      "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json",
+      "sha256": "f15a3409566a234061b733417e60c6dca26443da215ba46f74a17965c4df5e55"
     },
     {
       "bytes": 6428,
       "key": "human_confirmation",
-      "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/人工确认清单.json",
+      "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/人工确认清单.json",
       "sha256": "a17268f8c0694e6b9b38c0c1db1ba89eb6a637b6f3674dd39f3d35ef380f6083"
     }
   ],
@@ -229,8 +229,8 @@
       "valid_from",
       "valid_to"
     ],
-    "edges": 2736,
-    "events": 1100,
+    "edges": 3614,
+    "events": 1098,
     "events_without_time": 544,
     "graph_check": {
       "checks": 20,
@@ -246,30 +246,31 @@
       "passed": 18
     },
     "labels": {
-      "Company": 116,
+      "Company": 938,
       "Document": 692,
-      "Event": 1100,
+      "Event": 1098,
       "Industry": 73,
-      "Institution": 316,
-      "Person": 403,
+      "Institution": 308,
+      "Person": 396,
       "Policy": 102
     },
-    "nodes": 2802,
+    "nodes": 3607,
     "relations": {
-      "BELONGS_TO": 14,
-      "COMPETES_WITH": 1,
-      "CUSTOMER_OF": 4,
+      "BELONGS_TO": 54,
+      "COMPETES_WITH": 8,
+      "CUSTOMER_OF": 9,
       "EVIDENCED_BY": 1111,
-      "HAS_EXECUTIVE": 143,
+      "HAS_EXECUTIVE": 278,
       "ISSUED_BY": 124,
-      "PARTICIPATES_IN": 1252,
-      "RELATED_TO": 87
+      "PARTICIPATES_IN": 1914,
+      "RELATED_TO": 87,
+      "SUPPLIES": 29
     },
-    "replay_cypher_lines": 5561,
-    "semantic_edges": 1625,
-    "semantic_edges_with_source_chunk_id": 1625
+    "replay_cypher_lines": 7244,
+    "semantic_edges": 2503,
+    "semantic_edges_with_source_chunk_id": 2503
   },
-  "graph_version": "v2.1_v1_2",
+  "graph_version": "v2.1_v1_3",
   "index": {
     "d": 512,
     "metric_name": "inner_product",

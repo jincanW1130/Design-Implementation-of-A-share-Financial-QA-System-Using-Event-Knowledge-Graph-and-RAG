@@ -7,35 +7,41 @@
   "artifacts": {
     "determinism": "同一输入两次运行逐字节一致；文件内不写时间戳与耗时",
     "matrix": "阶段07-RAG检索系统/检索产出/pre_experiment_matrix.jsonl",
-    "matrix_sha256": "df9c05ad56b021df3cbdced3610adc58edbcf7587b646b4ca9ec0a0f7f321731",
+    "matrix_sha256": "af4c34f646ba01015086741759acbc68878f1703ba0ec726fe3781c32cab06ad",
     "model_calls": {
       "llm_or_external_api": 0,
       "note": "问题侧向量化为本地 Embedding 前向（与索引同模型同 revision、不联网），按《18》第2.5节 不计入「模型调用」"
     },
     "selection": "阶段07-RAG检索系统/检索产出/k_selection.json"
   },
+  "budget_frozen_vs_derived": {
+    "derived": 3500,
+    "equal": false,
+    "frozen": 3600,
+    "note": "冻结值 ≥ 推出值即合规；不等时以**冻结值**为运行值（四项定值是作者裁定，推导规则是其依据）"
+  },
   "evidence": {
     "N_curve": [
       {
         "K": 10,
         "N": 20,
-        "context_token_budget": 3600,
-        "mean_evidence_size": 9.76666667,
-        "median_text_tokens": 3102.5,
+        "context_token_budget": 3500,
+        "mean_evidence_size": 9.43333333,
+        "median_text_tokens": 3021,
         "metrics": {
           "complete_evidence_recall_at_k": 0.56666667,
           "mrr": 0.65925926,
-          "precision_at_k": 0.15,
-          "recall_at_k": 0.69230159
+          "precision_at_k": 0.14666667,
+          "recall_at_k": 0.68563492
         },
         "selected": true
       },
       {
         "K": 10,
         "N": 50,
-        "context_token_budget": 3600,
-        "mean_evidence_size": 9.8,
-        "median_text_tokens": 3121,
+        "context_token_budget": 3500,
+        "mean_evidence_size": 9.46666667,
+        "median_text_tokens": 2980,
         "metrics": {
           "complete_evidence_recall_at_k": 0.56666667,
           "mrr": 0.65555556,
@@ -47,14 +53,14 @@
       {
         "K": 10,
         "N": 100,
-        "context_token_budget": 3600,
-        "mean_evidence_size": 9.8,
-        "median_text_tokens": 3146.5,
+        "context_token_budget": 3500,
+        "mean_evidence_size": 9.6,
+        "median_text_tokens": 3069,
         "metrics": {
           "complete_evidence_recall_at_k": 0.56666667,
           "mrr": 0.65555556,
-          "precision_at_k": 0.14,
-          "recall_at_k": 0.67063492
+          "precision_at_k": 0.13666667,
+          "recall_at_k": 0.66587302
         },
         "selected": false
       }
@@ -64,13 +70,13 @@
         "K": 10,
         "N": 20
       },
-      "context_token_budget": 3600,
+      "context_token_budget": 3500,
       "graph_share_note": "图谱路径与事件三元组不单独预留额度、与文本块共用同一上限；超限先裁与问题实体无关的远端图谱路径",
       "margin": 1.1,
-      "median_graph_tokens": 426.5,
-      "median_text_tokens": 3191.5,
-      "median_total_tokens": 3630,
-      "raw_value": 3510.65,
+      "median_graph_tokens": 449.5,
+      "median_text_tokens": 3169,
+      "median_total_tokens": 3646.5,
+      "raw_value": 3485.9,
       "round_to": 100,
       "rule": "B ＝ ceil100( 1.10 × 基准格（网格中满足 gold 约束的最小 K 及其最小可行 N）在第一轮非约束预算下逐题**文本块 token** 的中位数 )；图谱路径与事件三元组不单独预留额度、与文本块共用同一上限（超限先裁与问题实体无关的远端图谱路径）"
     },
@@ -122,7 +128,7 @@
         "margin": 0.05
       },
       {
-        "context_token_budget": 3600,
+        "context_token_budget": 3500,
         "g0_metrics": {
           "complete_evidence_recall_at_k": 0.56666667,
           "mrr": 0.65555556,
@@ -132,8 +138,8 @@
         "g2_metrics": {
           "complete_evidence_recall_at_k": 0.56666667,
           "mrr": 0.65925926,
-          "precision_at_k": 0.15,
-          "recall_at_k": 0.69230159
+          "precision_at_k": 0.14666667,
+          "recall_at_k": 0.68563492
         },
         "g2_not_worse_than_g0": true,
         "g2_vs_g0_flags": {
@@ -199,12 +205,12 @@
         {
           "K": 10,
           "N": 20,
-          "context_token_budget": 3600,
+          "context_token_budget": 3500,
           "g": 0,
           "graph_evidence_in_final_questions": 0,
           "graph_evidence_in_final_total": 0,
           "group": "D",
-          "mean_evidence_size": 9.86666667,
+          "mean_evidence_size": 9.73333333,
           "metrics": {
             "complete_evidence_recall_at_k": 0.56666667,
             "mrr": 0.65555556,
@@ -222,17 +228,17 @@
         {
           "K": 10,
           "N": 20,
-          "context_token_budget": 3600,
+          "context_token_budget": 3500,
           "g": 1,
-          "graph_evidence_in_final_questions": 23,
-          "graph_evidence_in_final_total": 23,
+          "graph_evidence_in_final_questions": 16,
+          "graph_evidence_in_final_total": 16,
           "group": "D",
-          "mean_evidence_size": 9.9,
+          "mean_evidence_size": 9.66666667,
           "metrics": {
             "complete_evidence_recall_at_k": 0.56666667,
             "mrr": 0.65555556,
-            "precision_at_k": 0.14333333,
-            "recall_at_k": 0.67920635
+            "precision_at_k": 0.14,
+            "recall_at_k": 0.67253968
           },
           "not_worse_than_g0": true,
           "vs_g0_flags": {
@@ -245,12 +251,12 @@
         {
           "K": 10,
           "N": 20,
-          "context_token_budget": 3600,
+          "context_token_budget": 3500,
           "g": 2,
-          "graph_evidence_in_final_questions": 26,
-          "graph_evidence_in_final_total": 47,
+          "graph_evidence_in_final_questions": 24,
+          "graph_evidence_in_final_total": 36,
           "group": "D",
-          "mean_evidence_size": 9.86666667,
+          "mean_evidence_size": 9.5,
           "metrics": {
             "complete_evidence_recall_at_k": 0.56666667,
             "mrr": 0.65555556,
@@ -268,12 +274,12 @@
         {
           "K": 10,
           "N": 20,
-          "context_token_budget": 3600,
+          "context_token_budget": 3500,
           "g": 3,
           "graph_evidence_in_final_questions": 26,
-          "graph_evidence_in_final_total": 65,
+          "graph_evidence_in_final_total": 62,
           "group": "D",
-          "mean_evidence_size": 9.76666667,
+          "mean_evidence_size": 9.6,
           "metrics": {
             "complete_evidence_recall_at_k": 0.53333333,
             "mrr": 0.65555556,
@@ -291,12 +297,12 @@
         {
           "K": 10,
           "N": 20,
-          "context_token_budget": 3600,
+          "context_token_budget": 3500,
           "g": 5,
           "graph_evidence_in_final_questions": 26,
-          "graph_evidence_in_final_total": 98,
+          "graph_evidence_in_final_total": 94,
           "group": "D",
-          "mean_evidence_size": 9.66666667,
+          "mean_evidence_size": 9.46666667,
           "metrics": {
             "complete_evidence_recall_at_k": 0.53333333,
             "mrr": 0.65,
@@ -317,12 +323,12 @@
         {
           "K": 10,
           "N": 20,
-          "context_token_budget": 3600,
+          "context_token_budget": 3500,
           "g": 0,
           "graph_evidence_in_final_questions": 0,
           "graph_evidence_in_final_total": 0,
           "group": "C",
-          "mean_evidence_size": 9.76666667,
+          "mean_evidence_size": 9.6,
           "metrics": {
             "complete_evidence_recall_at_k": 0.56666667,
             "mrr": 0.65555556,
@@ -340,15 +346,38 @@
         {
           "K": 10,
           "N": 20,
-          "context_token_budget": 3600,
+          "context_token_budget": 3500,
           "g": 1,
-          "graph_evidence_in_final_questions": 23,
-          "graph_evidence_in_final_total": 23,
+          "graph_evidence_in_final_questions": 18,
+          "graph_evidence_in_final_total": 18,
           "group": "C",
-          "mean_evidence_size": 9.73333333,
+          "mean_evidence_size": 9.56666667,
           "metrics": {
             "complete_evidence_recall_at_k": 0.56666667,
-            "mrr": 0.65888889,
+            "mrr": 0.65555556,
+            "precision_at_k": 0.14333333,
+            "recall_at_k": 0.67730159
+          },
+          "not_worse_than_g0": true,
+          "vs_g0_flags": {
+            "complete_evidence_recall_at_k": "=",
+            "mrr": "=",
+            "precision_at_k": "+",
+            "recall_at_k": "+"
+          }
+        },
+        {
+          "K": 10,
+          "N": 20,
+          "context_token_budget": 3500,
+          "g": 2,
+          "graph_evidence_in_final_questions": 28,
+          "graph_evidence_in_final_total": 43,
+          "group": "C",
+          "mean_evidence_size": 9.43333333,
+          "metrics": {
+            "complete_evidence_recall_at_k": 0.56666667,
+            "mrr": 0.65925926,
             "precision_at_k": 0.14666667,
             "recall_at_k": 0.68563492
           },
@@ -363,35 +392,12 @@
         {
           "K": 10,
           "N": 20,
-          "context_token_budget": 3600,
-          "g": 2,
-          "graph_evidence_in_final_questions": 29,
-          "graph_evidence_in_final_total": 53,
-          "group": "C",
-          "mean_evidence_size": 9.76666667,
-          "metrics": {
-            "complete_evidence_recall_at_k": 0.56666667,
-            "mrr": 0.65925926,
-            "precision_at_k": 0.15,
-            "recall_at_k": 0.69230159
-          },
-          "not_worse_than_g0": true,
-          "vs_g0_flags": {
-            "complete_evidence_recall_at_k": "=",
-            "mrr": "+",
-            "precision_at_k": "+",
-            "recall_at_k": "+"
-          }
-        },
-        {
-          "K": 10,
-          "N": 20,
-          "context_token_budget": 3600,
+          "context_token_budget": 3500,
           "g": 3,
           "graph_evidence_in_final_questions": 30,
-          "graph_evidence_in_final_total": 78,
+          "graph_evidence_in_final_total": 71,
           "group": "C",
-          "mean_evidence_size": 9.63333333,
+          "mean_evidence_size": 9.36666667,
           "metrics": {
             "complete_evidence_recall_at_k": 0.53333333,
             "mrr": 0.65972222,
@@ -409,12 +415,12 @@
         {
           "K": 10,
           "N": 20,
-          "context_token_budget": 3600,
+          "context_token_budget": 3500,
           "g": 5,
           "graph_evidence_in_final_questions": 30,
-          "graph_evidence_in_final_total": 129,
+          "graph_evidence_in_final_total": 122,
           "group": "C",
-          "mean_evidence_size": 9.5,
+          "mean_evidence_size": 9.23333333,
           "metrics": {
             "complete_evidence_recall_at_k": 0.5,
             "mrr": 0.65555556,
@@ -457,7 +463,7 @@
     },
     "round1_curve_note": "第一轮（非约束预算）下 CER@K 随 K 单调上升：在 N=20 这一格上，K=5 → K=10 → K=15 的提升分别为 0.1667 与 0.0667；因此「预算不构成约束时 K 在网格内并未饱和」——这正是必须先把预算定死、再在预算下判饱和的原因",
     "round1_vs_round2": {
-      "metrics_identical": true,
+      "metrics_identical": false,
       "note": "预算从非约束值降到选定值后，四项指标是否变化如实记录：若不同即说明预算进入了 K 的保留区（此时以第二轮读数为准）",
       "round1": {
         "budget_checks": {
@@ -486,48 +492,48 @@
           "account_note": "文本块＝chunks.jsonl 的 token_count 实测；图谱路径与事件三元组＝估算 token；均为**最终证据集合及其留存路径**的占用",
           "event_triple_tokens": {
             "max": 62,
-            "mean": 30.8,
+            "mean": 30.3,
             "median": 29.5,
             "min": 9,
             "n": 30,
-            "p90": 43,
-            "sum": 924
+            "p90": 41,
+            "sum": 909
           },
           "graph_tokens": {
             "max": 1084,
-            "mean": 456.43333333,
-            "median": 426.5,
-            "min": 134,
+            "mean": 476.86666667,
+            "median": 449.5,
+            "min": 167,
             "n": 30,
             "p90": 718,
-            "sum": 13693
+            "sum": 14306
           },
           "path_tokens": {
             "max": 1036,
-            "mean": 425.63333333,
-            "median": 394,
-            "min": 118,
+            "mean": 446.56666667,
+            "median": 417,
+            "min": 151,
             "n": 30,
             "p90": 691,
-            "sum": 12769
+            "sum": 13397
           },
           "text_tokens": {
             "max": 3744,
-            "mean": 3179.9,
-            "median": 3191.5,
-            "min": 2830,
+            "mean": 3172.13333333,
+            "median": 3169,
+            "min": 2681,
             "n": 30,
             "p90": 3397,
-            "sum": 95397
+            "sum": 95164
           },
           "total_tokens": {
             "max": 4469,
-            "mean": 3636.33333333,
-            "median": 3630,
-            "min": 3094,
+            "mean": 3649.0,
+            "median": 3646.5,
+            "min": 2871,
             "n": 30,
-            "p90": 4005,
-            "sum": 109090
+            "p90": 4068,
+            "sum": 109470
           }
         },
         "round": "round1_nonbinding",
@@ -536,72 +542,72 @@
       "round2": {
         "budget_checks": {
           "questions_exceeding_budget": 0,
-          "questions_holding_K_blocks": 24,
+          "questions_holding_K_blocks": 15,
           "questions_with_trimmed_blocks": 30,
           "questions_with_trimmed_paths": 30
         },
-        "context_token_budget": 3600,
+        "context_token_budget": 3500,
         "evidence_size": {
           "max": 10,
-          "mean": 9.76666667,
-          "median": 10,
+          "mean": 9.43333333,
+          "median": 9.5,
           "min": 8,
           "n": 30,
           "p90": 10,
-          "sum": 293
+          "sum": 283
         },
         "metrics": {
           "complete_evidence_recall_at_k": 0.56666667,
           "mrr": 0.65925926,
-          "precision_at_k": 0.15,
-          "recall_at_k": 0.69230159
+          "precision_at_k": 0.14666667,
+          "recall_at_k": 0.68563492
         },
         "occupancy": {
           "account_note": "文本块＝chunks.jsonl 的 token_count 实测；图谱路径与事件三元组＝估算 token；均为**最终证据集合及其留存路径**的占用",
           "event_triple_tokens": {
             "max": 55,
-            "mean": 29.46666667,
-            "median": 29.5,
-            "min": 9,
+            "mean": 26.4,
+            "median": 26,
+            "min": 0,
             "n": 30,
-            "p90": 41,
-            "sum": 884
+            "p90": 40,
+            "sum": 792
           },
           "graph_tokens": {
-            "max": 627,
-            "mean": 245.66666667,
-            "median": 212.5,
-            "min": 76,
+            "max": 595,
+            "mean": 235.3,
+            "median": 199.5,
+            "min": 39,
             "n": 30,
-            "p90": 443,
-            "sum": 7370
+            "p90": 432,
+            "sum": 7059
           },
           "path_tokens": {
-            "max": 591,
-            "mean": 216.2,
-            "median": 181,
-            "min": 60,
+            "max": 561,
+            "mean": 208.9,
+            "median": 167,
+            "min": 30,
             "n": 30,
-            "p90": 416,
-            "sum": 6486
+            "p90": 401,
+            "sum": 6267
           },
           "text_tokens": {
-            "max": 3487,
-            "mean": 3093.73333333,
-            "median": 3102.5,
-            "min": 2615,
+            "max": 3323,
+            "mean": 2972.6,
+            "median": 3021,
+            "min": 2536,
             "n": 30,
-            "p90": 3367,
-            "sum": 92812
+            "p90": 3161,
+            "sum": 89178
           },
           "total_tokens": {
-            "max": 3599,
-            "mean": 3339.4,
-            "median": 3304,
-            "min": 2978,
+            "max": 3490,
+            "mean": 3207.9,
+            "median": 3210.5,
+            "min": 2813,
             "n": 30,
-            "p90": 3573,
-            "sum": 100182
+            "p90": 3363,
+            "sum": 96237
           }
         },
         "round": "round2_selected",
@@ -617,7 +623,7 @@
           "K": 5,
           "N": 20,
           "budget_feasible": true,
-          "context_token_budget": 3600,
+          "context_token_budget": 3500,
           "delta_cer_vs_prev_under_budget": null,
           "gold_feasible": false,
           "median_text_tokens": 1603.5,
@@ -643,10 +649,10 @@
           "K": 10,
           "N": 20,
           "budget_feasible": true,
-          "context_token_budget": 3600,
+          "context_token_budget": 3500,
           "delta_cer_vs_prev_under_budget": null,
           "gold_feasible": true,
-          "median_text_tokens": 3191.5,
+          "median_text_tokens": 3169,
           "note": "满足 gold 约束与预算",
           "round1_complete_evidence_recall_at_k": 0.56666667,
           "round1_metrics": {
@@ -657,23 +663,23 @@
           },
           "selected": true,
           "under_budget_complete_evidence_recall_at_k": 0.56666667,
-          "under_budget_mean_evidence_size": 9.76666667,
+          "under_budget_mean_evidence_size": 9.43333333,
           "under_budget_metrics": {
             "complete_evidence_recall_at_k": 0.56666667,
             "mrr": 0.65925926,
-            "precision_at_k": 0.15,
-            "recall_at_k": 0.69230159
+            "precision_at_k": 0.14666667,
+            "recall_at_k": 0.68563492
           }
         },
         {
           "K": 15,
           "N": 20,
           "budget_feasible": false,
-          "context_token_budget": 3600,
+          "context_token_budget": 3500,
           "delta_cer_vs_prev_under_budget": 0.0,
           "gold_feasible": true,
           "median_text_tokens": 4826,
-          "note": "被预算排除（文本块中位数占用 4826 > 预算 3600）",
+          "note": "被预算排除（文本块中位数占用 4826 > 预算 3500）",
           "round1_complete_evidence_recall_at_k": 0.63333333,
           "round1_metrics": {
             "complete_evidence_recall_at_k": 0.63333333,
@@ -683,12 +689,12 @@
           },
           "selected": false,
           "under_budget_complete_evidence_recall_at_k": 0.56666667,
-          "under_budget_mean_evidence_size": 10.23333333,
+          "under_budget_mean_evidence_size": 9.9,
           "under_budget_metrics": {
             "complete_evidence_recall_at_k": 0.56666667,
-            "mrr": 0.65858586,
-            "precision_at_k": 0.09333333,
-            "recall_at_k": 0.67809524
+            "mrr": 0.65555556,
+            "precision_at_k": 0.09111111,
+            "recall_at_k": 0.66142857
           }
         }
       ],
@@ -696,37 +702,37 @@
         "10": {
           "K": 10,
           "N": 20,
-          "context_token_budget": 3600,
+          "context_token_budget": 3500,
           "g": 2,
-          "mean_evidence_size": 9.76666667,
-          "median_text_tokens": 3102.5,
+          "mean_evidence_size": 9.43333333,
+          "median_text_tokens": 3021,
           "metrics": {
             "complete_evidence_recall_at_k": 0.56666667,
             "mrr": 0.65925926,
-            "precision_at_k": 0.15,
-            "recall_at_k": 0.69230159
+            "precision_at_k": 0.14666667,
+            "recall_at_k": 0.68563492
           },
-          "questions_holding_K_blocks": 24
+          "questions_holding_K_blocks": 15
         },
         "15": {
           "K": 15,
           "N": 20,
-          "context_token_budget": 3600,
+          "context_token_budget": 3500,
           "g": 2,
-          "mean_evidence_size": 10.23333333,
-          "median_text_tokens": 3268,
+          "mean_evidence_size": 9.9,
+          "median_text_tokens": 3107,
           "metrics": {
             "complete_evidence_recall_at_k": 0.56666667,
-            "mrr": 0.65858586,
-            "precision_at_k": 0.09333333,
-            "recall_at_k": 0.67809524
+            "mrr": 0.65555556,
+            "precision_at_k": 0.09111111,
+            "recall_at_k": 0.66142857
           },
           "questions_holding_K_blocks": 0
         },
         "5": {
           "K": 5,
           "N": 20,
-          "context_token_budget": 3600,
+          "context_token_budget": 3500,
           "g": 2,
           "mean_evidence_size": 5.0,
           "median_text_tokens": 1603.5,
