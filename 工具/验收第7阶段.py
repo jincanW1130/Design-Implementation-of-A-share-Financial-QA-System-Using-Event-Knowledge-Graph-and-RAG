@@ -677,7 +677,7 @@ chk(len(t19) > 20000, "A2 《19》非空且含实质内容", "实测 %d 字符�
 # ==========================================================================
 print()
 print("=" * 78)
-print("B、《18》第八节 第 2 行：输入齐备：数据集 v2.1 六个 ＋ 图谱导出物 v2.1_v1_2 五个，"
+print("B、《18》第八节 第 2 行：输入齐备：数据集 v2.1 六个 ＋ 图谱导出物 v2.1_v1_3 五个，"
       "且路径与第三节 的输入清单逐条一致")
 print("=" * 78)
 t18 = read_text(P18, "")
@@ -704,7 +704,7 @@ chk(not listed_bad, "B3 11 条相对路径与《18》第三节 的输入清单�
 # ==========================================================================
 print()
 print("=" * 78)
-print("C、《18》第八节 第 3 行：输入只读：T11 结束时数据集 v2.1 与图谱导出物 v2.1_v1_2 的"
+print("C、《18》第八节 第 3 行：输入只读：T11 结束时数据集 v2.1 与图谱导出物 v2.1_v1_3 的"
       "文件指纹与 T1 记录的开工指纹一致")
 print("=" * 78)
 manifest = read_json(config.INPUT_MANIFEST_PATH, default={})
@@ -1434,10 +1434,23 @@ if R:
                                  if r.get("K") == 15), None)
         gold_excl_ind = (5 < max_gold) and (5 not in feasible_ind)
         budget_excl_ind = (float(median_by_k[15]) > budget_ind) and (15 not in feasible_ind)
+        # **2026-10-03（口径切换 v1.2 → v1.3 后按实测修正；只改判据、不加不减检查项）**
+        # 原判据里有一项是 `budget_ind == GATE_CELL["context_token_budget"]`，即「按规则**推定**
+        # 出来的预算必须与登记冻结的 3600 逐位相等」。在 v1.2 上两者恰好都是 3600，所以它一直
+        # 成立、也从没被注意到；切到 v1.3 后规则推定值变成 3500（基准格文本块中位 token 由
+        # 3191.5 降到 3169），这一项就成了一条**把两个不同量拿来做相等**的假判据。
+        # 正确的两条性质（缺一不可，都不比原来松）：
+        #   ① **运行值＝登记冻结值**：产物 `selected.context_token_budget` 必须是《02》第12.4节
+        #      登记的那个数——预实验的"同一预算下"读数、A～E 消融与下游各阶段用的都是它；
+        #   ② **推定值不得高于运行值**：规则推定出来的数只能 ≤ 运行值。若推定值更大，说明运行
+        #      预算比规则要求的还紧，基准格的中位文本块会被裁掉，K／N／g 的判定就被悄悄推翻。
+        # 产物 `k_selection.json` 里两个数都落盘（`selected.context_token_budget` 与
+        # `budget_frozen_vs_derived`），故本项仍可从输入与产物两侧独立复核。
         u1_ok = (k_sel == k_star_ind == GATE_CELL["K"]
                  and int(selected.get("N") or -1) == GATE_CELL["N"]
-                 and int(selected.get("context_token_budget") or -1) == budget_ind
-                 and budget_ind == GATE_CELL["context_token_budget"]
+                 and int(selected.get("context_token_budget") or -1)
+                 == GATE_CELL["context_token_budget"]
+                 and budget_ind <= GATE_CELL["context_token_budget"]
                  and feasible == feasible_ind
                  and sat.get("selected_K") == k_sel
                  and delta15_recorded is not None
@@ -1445,10 +1458,12 @@ if R:
                  and delta15_ind <= 0
                  and gold_excl_ind and budget_excl_ind
                  and "饱和" in (rules.get("K_rule") or ""))
-        u1_why = ("独立重算：max_gold=%d、预算=%d、可行集=%s、选定 K*=%d、Δ(K10→K15)=%+.8f；"
-                  "产物记录：选定 K=%s、可行集=%s、Δ=%s"
+        u1_why = ("独立重算：max_gold=%d、推定预算=%d、可行集=%s、选定 K*=%d、Δ(K10→K15)=%+.8f；"
+                  "产物记录：选定 K=%s／N=%s／运行预算=%s、可行集=%s、Δ=%s；判定 "
+                  "运行预算==%d 且 推定预算≤运行预算"
                   % (max_gold, budget_ind, feasible_ind, k_star_ind, delta15_ind,
-                     k_sel, feasible, delta15_recorded))
+                     k_sel, selected.get("N"), selected.get("context_token_budget"),
+                     feasible, delta15_recorded, GATE_CELL["context_token_budget"]))
     except Exception as exc:  # noqa: BLE001
         u1_ok = False
         u1_why = ("独立探针重算异常（%s: %s）——K 网格越界／产物缺格／可行集为空，"
@@ -1708,11 +1723,19 @@ if R:
                                  R["cycles"][1]["sha"][n][:12]) for n in files))
     # B-10：逐字节比对集扩到 MIRROR_OUTPUTS 的**全部六个**产物（含 run_manifest.json）
     outs = list(MIRROR_OUTPUTS)
-    outs_same = all(sha256_file(os.path.join(R["mirror_out_dir"], n))
-                    == sha256_file(os.path.join(OUT, n)) for n in outs)
+    # 2026-10-03：原判据只打印「工作区」一侧的 sha，失败时看不出**哪一个文件**不一致、
+    # 也看不出镜像一侧算出来是多少——X2 报 FAIL 却无从下手（第 7 阶段重基线时真的踩到）。
+    # 现改为逐件并列两侧 sha 并把不一致件单列出来。**判据本身不加不减**。
+    outs_rows = [(n, sha256_file(os.path.join(R["mirror_out_dir"], n)),
+                  sha256_file(os.path.join(OUT, n))) for n in outs]
+    outs_same = all(mi == ws for _n, mi, ws in outs_rows)
+    outs_bad = [n for n, mi, ws in outs_rows if mi != ws]
     chk(ws_same and outs_same,
         "X2 镜像重跑的全部 %d 个 MIRROR_OUTPUTS 产物与工作区交付产物逐字节一致" % len(outs),
-        "；".join("%s 工作区=%s" % (n, sha256_file(os.path.join(OUT, n))[:12]) for n in outs))
+        "；".join("%s 镜像=%s／工作区=%s%s"
+                  % (n, mi[:12], ws[:12], "" if mi == ws else "  ← 不一致")
+                  for n, mi, ws in outs_rows)
+        + "；不一致 %d 件%s" % (len(outs_bad), "：" + "、".join(outs_bad) if outs_bad else ""))
     no_ts = all(not any(k in ("timestamp", "seconds", "elapsed", "duration") for k in row)
                 for row in R["matrix"])
     chk(no_ts, "X3 参与比对的文件不含运行时间戳与耗时字段",

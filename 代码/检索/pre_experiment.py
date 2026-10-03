@@ -10,7 +10,9 @@ r"""代码\检索\pre_experiment.py —— T8：检索预实验（固化 K／N�
    逐格记四项指标（chunk 级、按题取平均）与**预算分账**（文本块 token ＋ 图谱路径 token ＋
    事件三元组 token）。第一轮用**非约束预算**，把"预算比 K 更早生效"这一混淆隔离开，
    得到 Complete Evidence Recall@K 随 K 变化的曲线。
-2. **第二轮**在按预算规则算出的 Context Token Budget 下复跑**选定格**，两轮读数并列记录。
+2. **第二轮**在**运行预算**下复跑**选定格**，两轮读数并列记录。运行预算＝
+   `config.RETRIEVAL["context_token_budget"]`（＝《02》第12.4节 固定表 里登记冻结的那一项）；
+   预算规则推出值与它不等时，两者都记进 `k_selection.json`（见规则 2 与下面的判据说明）。
 3. **按预先写明的规则定值**：K／N／Context Token Budget／g 四者的执行证据全部落进
    `检索产出\k_selection.json`。
 4. **落盘**`检索产出\pre_experiment_matrix.jsonl`（9 格 ＋ 第二轮选定格）与
@@ -30,6 +32,12 @@ r"""代码\检索\pre_experiment.py —— T8：检索预实验（固化 K／N�
   无关的远端图谱路径、再按分层保留顺序从尾部往前裁文本块（这正是"若不控制上下文预算，
   KG-RAG 会天然获得更多 token"那条理由要求的）。余量比例是本规则唯一的自由量，故在
   `k_selection.json` 的 `budget_rule.sensitivity` 里给出 0%／5%／10%／15%／20% 五档对照。
+  **推定值 vs 运行值（2026-10-03 判据修订）**：本规则算出的数是**推定值**
+  （`budget_rule.derived_context_token_budget`），它随数据快照变化；四项定值中真正**在运行中
+  生效**的是 `config.RETRIEVAL["context_token_budget"]`（作者裁定、已登记进《02》第12.4节）。
+  本脚本**一律用运行值**跑下面所有"同一预算下"的读数（K 档扫描、饱和判定、N 曲线、g 曲线、
+  第二轮选定格），推定值只作对照落盘。守的性质是「**运行值 ≥ 推定值**」：运行值若比推定值还紧，
+  基准格的中位文本块会被裁掉，K／N／g 的判定就被悄悄推翻——那种情况直接判失败、不降级通过。
 * **规则 3（K 的选择与饱和判定）**：K 必须（a）**满足 gold 约束**：K ≥ 本题集逐题 gold
   证据数的最大值（验收第 25 行）；（b）**满足 Context Token Budget**：`median_text(K, N) ≤ B`
   （同一预算至少能容纳该 K 个文本块的文本占用中位数）。**饱和判据（可执行）**：在**同一预算
@@ -618,12 +626,45 @@ def run_once(args) -> int:
 
     k_anchor, n_anchor = pick_anchor(k_grid, n_grid, max_gold)
     median_text = readings[(k_anchor, n_anchor)]["row"]["occupancy"]["text_tokens"]["median"]
-    budget = _ceil100(float(median_text) * BUDGET_MARGIN)
+    derived_budget = _ceil100(float(median_text) * BUDGET_MARGIN)
     print("\n[预算规则] 基准格 K=%d N=%d：文本块占用中位数 %s × %.2f 余量 → 取整到 %d 位 → "
-          "Context Token Budget = %d" % (k_anchor, n_anchor, median_text, BUDGET_MARGIN,
-                                          BUDGET_ROUND_TO, budget))
+          "Context Token Budget 推定值 = %d"
+          % (k_anchor, n_anchor, median_text, BUDGET_MARGIN, BUDGET_ROUND_TO, derived_budget))
 
-    print("\n[规则 3] 在同一预算 %d 下复跑各 K 档，判「饱和」（预算不随 K 放大）" % budget)
+    # ------------------------------------------------------------------
+    # **2026-10-03 运行值判据修订（口径切换 v1.2 → v1.3 实测发现）**
+    # 现象：`config.RETRIEVAL['context_token_budget']` 登记冻结为 3600，而切到 v1.3 后本规则推出
+    #   3500——图谱加厚改变了第③步裁剪的输入，基准格的文本块 token 中位数由 3191.5 降到 3169
+    #   （×1.10 ＝ 3485.9，取整到整百即 3500）。
+    # 判据：四项定值是**作者的裁定**（《02》第12.4节 固定表），推导规则只是它的**依据**。依据随
+    #   数据快照变化不改变裁定；真正要守的性质是「**运行值 ≥ 推定值**」——运行值若比规则要求的
+    #   还紧，基准格的中位文本块会被裁掉，K／N／g 的判定就被悄悄推翻。
+    # 运行值：**一律取 config 里的冻结值**，下面所有"同一预算下"的读数（K 档扫描与饱和判定、
+    #   N 曲线、g 曲线、第二轮选定格、预算分账）都在**运行值**下测量。两条理由：
+    #   ① 运行值才是 A～E 消融与下游各阶段实际使用的预算，选型证据必须与实验口径一致；
+    #   ② 否则 `k_selection` 的第二轮读数会与消融的 C 组读数不等，同一份产出文档里出现两个
+    #      互不相同的"选定格读数"（2026-10-03 的第 7 阶段全量门禁 U1／U2／U3 正是这样报出来的）。
+    # 推定值不丢：写进 `budget_rule.derived_context_token_budget` 与 `budget_frozen_vs_derived`。
+    # ------------------------------------------------------------------
+    _frozen_budget = config.RETRIEVAL.get("context_token_budget")
+    if _frozen_budget is not None and int(_frozen_budget) < int(derived_budget):
+        raise SystemExit("[pre_experiment] 失败：config.RETRIEVAL['context_token_budget']=%r "
+                         "**小于**本脚本按规则推出的 %r——预算比规则要求的还紧，"
+                         "会把基准格的中位文本块裁掉（该性质必须成立，不得放松）"
+                         % (_frozen_budget, derived_budget))
+    budget = int(_frozen_budget) if _frozen_budget is not None else int(derived_budget)
+    budget_divergence = {"frozen": (int(_frozen_budget) if _frozen_budget is not None else None),
+                         "derived": int(derived_budget),
+                         "equal": (_frozen_budget is not None
+                                   and int(_frozen_budget) == int(derived_budget)),
+                         "note": "运行值＝冻结值；判据是「运行值 ≥ 推定值」。不等时推定值只作"
+                                 "对照落盘，不改运行口径（四项定值是作者裁定，推导规则是其依据）"}
+    print("[预算运行值] 冻结值 %s ／ 规则推定值 %s → 运行值取 **%d**（%s）"
+          % (budget_divergence["frozen"], budget_divergence["derived"], budget,
+             "两者相等" if budget_divergence["equal"]
+             else "冻结值更宽松，合规；分歧已记入 k_selection.json"))
+
+    print("\n[规则 3] 在同一运行预算 %d 下复跑各 K 档，判「饱和」（预算不随 K 放大）" % budget)
     k_budget_scan = scan_k_under_budget(runner, questions, switches, k_grid, n_anchor,
                                          budget, g_config)
     k_star, k_detail, k_feasible = pick_k(k_grid, readings, k_budget_scan, budget,
@@ -699,6 +740,11 @@ def run_once(args) -> int:
         "raw_value": round(float(median_text) * BUDGET_MARGIN, metrics.ROUND),
         "round_to": BUDGET_ROUND_TO,
         "context_token_budget": int(budget),
+        "derived_context_token_budget": int(derived_budget),
+        "budget_note": ("context_token_budget＝本次运行的预算（＝config 里登记冻结的那一项，"
+                        "下面所有「同一预算下」的读数都在它之下测量）；"
+                        "derived_context_token_budget＝本规则按当前数据快照算出的推定值。"
+                        "两者不等见 selection.budget_frozen_vs_derived"),
         "rule": RULE_BUDGET_TEXT,
         "graph_share_note": ("图谱路径与事件三元组不单独预留额度、与文本块共用同一上限；"
                              "超限先裁与问题实体无关的远端图谱路径"),
@@ -709,45 +755,20 @@ def run_once(args) -> int:
                           "leq_K": bool(len(set(str(x) for x in (q.get("gold_evidence_chunk_ids") or [])))
                                         <= int(k_star))}
                          for q in questions]
-    # 两处一致性：推导值与 config 里已填的取值必须一致（脚本只推导、不写 config）。
-    #
-    # **2026-10-02 判据修订（口径切换 v1.2 → v1.3 实测发现）**：原判据要求三项**完全相等**。
-    # 切到 v1.3 后实测：**K 与 N 仍精确一致**，但 `context_token_budget` 的推导值由 3600 变为
-    # **3500**——图谱加厚改变了第③步裁剪的输入，基准格的 `median_text` 随之变化。
-    # 这不代表冻结值错了：四项定值是**作者的裁定**，推导规则是它的**依据**；冻结的 3600
-    # **比规则要求的 3500 更宽松**，即预算仍足以容纳该 K 个文本块的中位数——真正要守的性质是
-    # 「**冻结预算 ≥ 规则推出值**」，而不是「两者必须逐位相等」。
-    # 故：K／N 仍要求**精确相等**（它们确实相等，是真不变量）；
-    #     预算改为守「≥」，并把两个数都记进选型载荷，供论文与审计对照。
-    # **这是一处需要作者知道的漂移**：若作者认为预算也应随数据重推（改为 3500），
-    # 则四项定值之一发生变化、需重跑整条实验链——本脚本不擅自改 config，只如实记录。
+    # 两处一致性：K／N 的规则推出值必须与 config 里已填的取值**精确相等**（脚本只推导、
+    # 不写 config）。预算的判据与落盘见上面「运行值判据修订」一段——那里已经在**跑任何
+    # 「同一预算下」的读数之前**校验过「运行值 ≥ 推定值」，这里不再重复判。
     for name, value in (("K", k_star), ("N", n_star)):
         current = config.RETRIEVAL.get(name)
         if current is not None and int(current) != int(value):
             raise SystemExit("[pre_experiment] 失败：config.RETRIEVAL[%r]=%r 与本脚本按规则推出的"
                              " %r 不一致；两处必须一致（T8 定值回填 config，本脚本不改写 config）"
                              % (name, current, value))
-    _bf = config.RETRIEVAL.get("context_token_budget")
-    if _bf is not None and int(_bf) < int(budget):
-        raise SystemExit("[pre_experiment] 失败：config.RETRIEVAL['context_token_budget']=%r "
-                         "**小于**本脚本按规则推出的 %r——预算比规则要求的还紧，"
-                         "会把基准格的中位文本块裁掉（该性质必须成立，不得放松）"
-                         % (_bf, budget))
-    budget_divergence = {"frozen": (int(_bf) if _bf is not None else None),
-                         "derived": int(budget),
-                         "equal": (_bf is not None and int(_bf) == int(budget)),
-                         "note": "冻结值 ≥ 推出值即合规；不等时以**冻结值**为运行值"
-                                 "（四项定值是作者裁定，推导规则是其依据）"}
-    print("  [预算核对] 冻结 %s ／ 按规则推出 %s → %s"
-          % (budget_divergence["frozen"], budget_divergence["derived"],
-             "相等" if budget_divergence["equal"] else "冻结值更宽松（合规，已在选型载荷登记）"))
-    # `selected["budget"]` 记**运行值**（＝config 里冻结的那一项），不是本轮推导值：
-    # 口径切到 v1.3 后推导值变为 3500、而冻结值 3600 仍是运行值（前者见
+    # `selected["budget"]` 记**运行值**（＝config 里冻结的那一项），不是本轮推定值（推定值见
     # `budget_frozen_vs_derived`）。若不这样记，`k_selection.selected` 会与 config 不一致，
     # 第 7 阶段门禁的 V1（「config 与 k_selection 的选定值一致」）判失败——而那份不一致
     # 是**记录口径**造成的、不是运行口径造成的。
-    _effective_budget = (int(_bf) if _bf is not None else int(budget))
-    selected = {"K": k_star, "N": n_star, "budget": _effective_budget, "g": int(adopted_g),
+    selected = {"K": k_star, "N": n_star, "budget": int(budget), "g": int(adopted_g),
                 "group": group}
     selection = build_selection(selected, readings, k_detail, k_feasible, k_budget_scan, n_detail,
                                 g_c_all, g_d_all, sensitivity, (k_anchor, n_anchor),

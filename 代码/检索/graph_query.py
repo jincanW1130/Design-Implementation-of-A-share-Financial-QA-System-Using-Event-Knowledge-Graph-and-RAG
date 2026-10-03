@@ -125,6 +125,11 @@ NULL_POLICIES = ("exclude", "keep")
 # 别名分隔符：nodes.csv 的 aliases 列用 "|" 分隔多个写法（如 "中兴通讯|中兴通讯股份有限公司"）
 _ALIAS_SEP = "|"
 
+# 公司→事件的关系名。**只在这里写一次**：`代码\检索\config.py` 的 `RELATIONS` 是列表、
+# 没有单列常量，而本文件原先在 G4 与断言③ 两处各写了一遍字面量 `"PARTICIPATES_IN"`；
+# 断言③ 需要按同一关系名复核「EMPTY 的节点确实没有出向该关系的边」，故提成常量以免两处漂移。
+REL_PARTICIPATES_IN = "PARTICIPATES_IN"
+
 
 def _s(value) -> str:
     """CSV 字段值统一按字符串读；None → 空串；两端空白剔除。"""
@@ -723,30 +728,68 @@ def selftest(verbose: bool = True) -> int:
                            "evidenced_by_in_pool": len(offenders),
                            "missing_source_chunk_id": len(missing_chunk)}
 
-    # 断言③：G4 对**没有 stock_code** 的 HCONF 公司节点（按名称匹配）能取到参与事件，
+    # 断言③：G4 对**没有 stock_code** 的公司节点（按名称匹配）能取到参与事件，
     #        或如实报告它确实是孤立节点（先查 graph_stats.json 的 isolated_nodes.ids）
+    #
+    # **2026-10-03 修正两处（口径切换 v1.2 → v1.3 后按实测改，只加强、不减弱）**：
+    # ① **覆盖范围**：原实现只遍历 `HCONF-` 前缀的节点。v1.2 下那是 12 个人工确认节点，
+    #    断言覆盖面就是 12；切到 v1.3 后人工确认清单里 11 条**并入**了 B 步按归一化名建成的
+    #    身份（`NCOMP-####`），`HCONF-` 前缀只剩 1 个（`HCONF-0001` 芜湖联飞），
+    #    断言实际只测 1 个节点——"无 stock_code 的公司节点按名称可达"这条性质**几乎没被验证**。
+    #    现改为遍历 `HCONF-*` ∪ `NCOMP-*`（v1.3 下共 833 个），覆盖面由 1 升到 833。
+    # ② **提示文本**：原文本把节点数写法写死成"12 个 HCONF"，与实际遍历数无关——**文本在撒谎**。
+    #    改为按实测计数打印，并分别报两类前缀的条数。
     stats = config.read_json(config.GRAPH_STATS_PATH)
     isolated = set((stats.get("isolated_nodes") or {}).get("ids") or [])
     hconf_with_events, hconf_isolated, hconf_missing = [], [], []
-    for nid in sorted(n for n in gq.nodes if n.startswith("HCONF-")):
+    _no_code_ids = sorted(n for n in gq.nodes
+                          if n.startswith("HCONF-") or n.startswith("NCOMP-"))
+    for nid in _no_code_ids:
         name = _s(gq.nodes[nid].get("name"))
         r = gq.g4_company_events(name)          # 用**名称**匹配（该节点没有 stock_code）
         if r["code"] == RC_OK:
             hconf_with_events.append({"node_id": nid, "name": name, "events": r["count"]})
         elif r["code"] == RC_EMPTY:
-            hconf_isolated.append({"node_id": nid, "name": name, "in_graph_stats_isolated": nid in isolated})
+            # EMPTY 的正确含义是「该（这些）节点没有**出向 PARTICIPATES_IN**」，比
+            # graph_stats 的「孤立节点」（任何关系都没有）更弱——v1.2 下那 12 个人工确认节点
+            # 恰好"要么有参与事件、要么完全孤立"，两者重合，所以原判据看不出这个区别；
+            # v1.3 下 347 个 EMPTY 里有一批是"只有 HAS_EXECUTIVE／SUPPLIES 等边、没有参与事件"
+            # 的名单外主体，与孤立清单不再重合。故把判据改成与语义一致的那条，
+            # 并把「其中有多少确实完全孤立」作为读数一并报出。
+            _ids = r.get("node_ids") or [nid]
+            _no_part = all(not any(it["relation"] == REL_PARTICIPATES_IN
+                                   and it["direction"] == "out"
+                                   for it in gq.adj.get(x, [])) for x in _ids)
+            hconf_isolated.append({"node_id": nid, "name": name, "matched_node_ids": _ids,
+                                   "no_participates_in": _no_part,
+                                   "in_graph_stats_isolated": nid in isolated})
         else:
             hconf_missing.append({"node_id": nid, "name": name, "code": r["code"]})
-    ok3 = (not hconf_missing) and (bool(hconf_with_events) or bool(hconf_isolated))
-    # 有事件的必须真的来自按名称匹配；被报为孤立（EMPTY）的必须与 graph_stats 的孤立清单一致
-    empty_consistent = all(x["in_graph_stats_isolated"] for x in hconf_isolated)
-    check("断言③ G4 按名称匹配无 stock_code 的 HCONF 公司节点", ok3 and empty_consistent,
-          "12 个 HCONF：能取到参与事件 %d 个、EMPTY（且经 graph_stats 核对为孤立）%d 个、未匹配 %d 个"
-          % (len(hconf_with_events), len(hconf_isolated), len(hconf_missing)))
-    evidence["assert3"] = {"with_events": hconf_with_events, "empty_and_isolated": hconf_isolated,
+    # `ok3` 的分母不再是"有 12 个节点"而是"确有节点被遍历到"：v1.3 下 833 个。
+    ok3 = (bool(_no_code_ids) and not hconf_missing
+           and (bool(hconf_with_events) or bool(hconf_isolated)))
+    # 报为 EMPTY 的必须**确实没有出向 PARTICIPATES_IN**（可由内存图当场复核）
+    empty_consistent = all(x["no_participates_in"] for x in hconf_isolated)
+    _fully_isolated = sum(1 for x in hconf_isolated if x["in_graph_stats_isolated"])
+    check("断言③ G4 按名称匹配无 stock_code 的公司节点（HCONF ＋ NCOMP）",
+          ok3 and empty_consistent,
+          "%d 个无 stock_code 公司节点（HCONF-%d ＋ NCOMP-%d）：能取到参与事件 %d 个、"
+          "EMPTY %d 个（逐个复核确认无出向 PARTICIPATES_IN＝%s；其中 %d 个在 graph_stats "
+          "的孤立清单里）、未匹配 %d 个"
+          % (len(_no_code_ids),
+             sum(1 for n in _no_code_ids if n.startswith("HCONF-")),
+             sum(1 for n in _no_code_ids if n.startswith("NCOMP-")),
+             len(hconf_with_events), len(hconf_isolated), empty_consistent,
+             _fully_isolated, len(hconf_missing)))
+    evidence["assert3"] = {"with_events": hconf_with_events[:50], "empty_and_isolated": hconf_isolated[:50],
                            "not_found": hconf_missing,
+                           "scanned_ids": len(_no_code_ids),
+                           "counts": {"with_events": len(hconf_with_events),
+                                      "empty_and_isolated": len(hconf_isolated),
+                                      "empty_also_fully_isolated": _fully_isolated,
+                                      "not_found": len(hconf_missing)},
                            "isolated_ids_from_graph_stats": sorted(isolated & set(gq.nodes))[:20],
-                           "empty_matches_isolated_list": empty_consistent}
+                           "empty_has_no_participates_in": empty_consistent}
 
     # ---- 三、G6 差集示例（一个能产生非空差集的事件区间）----
     print("\n三、G6 差集返回示例（逐题差集的来源；硬约束 5）")

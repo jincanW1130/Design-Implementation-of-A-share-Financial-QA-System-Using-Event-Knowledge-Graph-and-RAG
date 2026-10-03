@@ -11,46 +11,46 @@
     "files": {
       "k_selection.json": {
         "identical": true,
-        "matches_t11": false,
-        "run1_sha256": "1fd88d11c17b0895efd60cc767e8a1f1a02dd2db6d8a7abd7b6406d1ce37ddce",
-        "run2_sha256": "1fd88d11c17b0895efd60cc767e8a1f1a02dd2db6d8a7abd7b6406d1ce37ddce",
-        "t11_recorded_run1_sha256": "ab62e0099a5878bc7b87698e4405f81f4170b5834d1223d0da728f812c00659d",
-        "t11_recorded_run2_sha256": "ab62e0099a5878bc7b87698e4405f81f4170b5834d1223d0da728f812c00659d",
-        "workspace_sha256": "1fd88d11c17b0895efd60cc767e8a1f1a02dd2db6d8a7abd7b6406d1ce37ddce"
+        "matches_t11": true,
+        "run1_sha256": "b6fd1e7c9d1b171a4d1e1ade7f1eb5abf90a96c93e699a55369ca63b7483d367",
+        "run2_sha256": "b6fd1e7c9d1b171a4d1e1ade7f1eb5abf90a96c93e699a55369ca63b7483d367",
+        "t11_recorded_run1_sha256": "b6fd1e7c9d1b171a4d1e1ade7f1eb5abf90a96c93e699a55369ca63b7483d367",
+        "t11_recorded_run2_sha256": "b6fd1e7c9d1b171a4d1e1ade7f1eb5abf90a96c93e699a55369ca63b7483d367",
+        "workspace_sha256": "b6fd1e7c9d1b171a4d1e1ade7f1eb5abf90a96c93e699a55369ca63b7483d367"
       },
       "metrics_pre.jsonl": {
         "identical": true,
         "matches_t11": true,
-        "run1_sha256": "b33491f723cd33aa42b6cbe9cdd136e74c868b088e41103352aaff6fdedd9dd2",
-        "run2_sha256": "b33491f723cd33aa42b6cbe9cdd136e74c868b088e41103352aaff6fdedd9dd2",
-        "t11_recorded_run1_sha256": "b33491f723cd33aa42b6cbe9cdd136e74c868b088e41103352aaff6fdedd9dd2",
-        "t11_recorded_run2_sha256": "b33491f723cd33aa42b6cbe9cdd136e74c868b088e41103352aaff6fdedd9dd2",
-        "workspace_sha256": "b33491f723cd33aa42b6cbe9cdd136e74c868b088e41103352aaff6fdedd9dd2"
+        "run1_sha256": "869602c2a2d8cc66ada72b736ab072231ab59fe86afa405123c1f7518ef1d9e0",
+        "run2_sha256": "869602c2a2d8cc66ada72b736ab072231ab59fe86afa405123c1f7518ef1d9e0",
+        "t11_recorded_run1_sha256": "869602c2a2d8cc66ada72b736ab072231ab59fe86afa405123c1f7518ef1d9e0",
+        "t11_recorded_run2_sha256": "869602c2a2d8cc66ada72b736ab072231ab59fe86afa405123c1f7518ef1d9e0",
+        "workspace_sha256": "869602c2a2d8cc66ada72b736ab072231ab59fe86afa405123c1f7518ef1d9e0"
       },
       "per_question_trace.jsonl": {
         "identical": true,
-        "matches_t11": false,
-        "run1_sha256": "2b1c0da16bc246e583c398a8c12a39a4dca11bc3a668e411da524fca32a29a72",
-        "run2_sha256": "2b1c0da16bc246e583c398a8c12a39a4dca11bc3a668e411da524fca32a29a72",
-        "t11_recorded_run1_sha256": "7839de9a1089404f9de2ac90c0003379ba93c6d590c943aa6a39b1ec2891024c",
-        "t11_recorded_run2_sha256": "7839de9a1089404f9de2ac90c0003379ba93c6d590c943aa6a39b1ec2891024c",
-        "workspace_sha256": "2b1c0da16bc246e583c398a8c12a39a4dca11bc3a668e411da524fca32a29a72"
+        "matches_t11": true,
+        "run1_sha256": "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b",
+        "run2_sha256": "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b",
+        "t11_recorded_run1_sha256": "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b",
+        "t11_recorded_run2_sha256": "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b",
+        "workspace_sha256": "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b"
       },
       "pre_experiment_matrix.jsonl": {
         "identical": true,
         "matches_t11": true,
-        "run1_sha256": "df9c05ad56b021df3cbdced3610adc58edbcf7587b646b4ca9ec0a0f7f321731",
-        "run2_sha256": "df9c05ad56b021df3cbdced3610adc58edbcf7587b646b4ca9ec0a0f7f321731",
-        "t11_recorded_run1_sha256": "df9c05ad56b021df3cbdced3610adc58edbcf7587b646b4ca9ec0a0f7f321731",
-        "t11_recorded_run2_sha256": "df9c05ad56b021df3cbdced3610adc58edbcf7587b646b4ca9ec0a0f7f321731",
-        "workspace_sha256": "df9c05ad56b021df3cbdced3610adc58edbcf7587b646b4ca9ec0a0f7f321731"
+        "run1_sha256": "300b9a823bc5280c05365db0189531ed1da97e801ea6e770bc6e8603f8d81dfb",
+        "run2_sha256": "300b9a823bc5280c05365db0189531ed1da97e801ea6e770bc6e8603f8d81dfb",
+        "t11_recorded_run1_sha256": "300b9a823bc5280c05365db0189531ed1da97e801ea6e770bc6e8603f8d81dfb",
+        "t11_recorded_run2_sha256": "300b9a823bc5280c05365db0189531ed1da97e801ea6e770bc6e8603f8d81dfb",
+        "workspace_sha256": "300b9a823bc5280c05365db0189531ed1da97e801ea6e770bc6e8603f8d81dfb"
       }
     },
     "identical": true,
     "method": "同一输入的两次运行：在系统临时目录的镜像里各跑一轮 pipeline --group C → pre_experiment --quiet → metrics，四个产出逐一比对 SHA-256，并与工作区交付产物逐字节比对；临时目录用后删除，工作区交付目录零写入"
   },
   "generated_by": "代码/检索/run_query.py --run-manifest",
-  "graph_version": "v2.1_v1_2",
+  "graph_version": "v2.1_v1_3",
   "input_manifest": {
     "all_match": true,
     "files": [
@@ -109,47 +109,47 @@
         "sha256_recorded": "41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988"
       },
       {
-        "bytes_recomputed": 708043,
-        "bytes_recorded": 708043,
+        "bytes_recomputed": 788038,
+        "bytes_recorded": 788038,
         "key": "nodes_csv",
         "matches_input_manifest": true,
-        "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/nodes.csv",
-        "sha256_recomputed": "04f2ac227e9595e2df7eefd1f14892edc3327d2b10e950b4f92e4d536c8cb524",
-        "sha256_recorded": "04f2ac227e9595e2df7eefd1f14892edc3327d2b10e950b4f92e4d536c8cb524"
+        "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/nodes.csv",
+        "sha256_recomputed": "ecfaa43a650c42a5281eaf50defa79ada043985b2283847507b6ef3ad006341e",
+        "sha256_recorded": "ecfaa43a650c42a5281eaf50defa79ada043985b2283847507b6ef3ad006341e"
       },
       {
-        "bytes_recomputed": 131275,
-        "bytes_recorded": 131275,
+        "bytes_recomputed": 184551,
+        "bytes_recorded": 184551,
         "key": "edges_csv",
         "matches_input_manifest": true,
-        "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/edges.csv",
-        "sha256_recomputed": "e86f86d99bb1b227364bc09b05a46db00adfe114ed5f9b04820e82258252b3f0",
-        "sha256_recorded": "e86f86d99bb1b227364bc09b05a46db00adfe114ed5f9b04820e82258252b3f0"
+        "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/edges.csv",
+        "sha256_recomputed": "0ff0eecfc23bb860f7307b85ed510b49265d6ec79b7ad22fc6b038df1738fe91",
+        "sha256_recorded": "0ff0eecfc23bb860f7307b85ed510b49265d6ec79b7ad22fc6b038df1738fe91"
       },
       {
-        "bytes_recomputed": 727503,
-        "bytes_recorded": 727503,
+        "bytes_recomputed": 1013800,
+        "bytes_recorded": 1013800,
         "key": "replay_cypher",
         "matches_input_manifest": true,
-        "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/replay.cypher",
-        "sha256_recomputed": "8cdb68d0782b04a852614dbbfee51efe81885f059d957b2a96c9655746b6c9ae",
-        "sha256_recorded": "8cdb68d0782b04a852614dbbfee51efe81885f059d957b2a96c9655746b6c9ae"
+        "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/replay.cypher",
+        "sha256_recomputed": "ee3dac6f203cd6c22346ee118a3162b4d8ffb2c215563d5f539a8ba22ebfadfc",
+        "sha256_recorded": "ee3dac6f203cd6c22346ee118a3162b4d8ffb2c215563d5f539a8ba22ebfadfc"
       },
       {
-        "bytes_recomputed": 24818,
-        "bytes_recorded": 24818,
+        "bytes_recomputed": 47285,
+        "bytes_recorded": 47285,
         "key": "graph_stats",
         "matches_input_manifest": true,
-        "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/graph_stats.json",
-        "sha256_recomputed": "443f437aa3f164ab76618029382f277be52828186d21d6f468ec29f2b5ac2b4a",
-        "sha256_recorded": "443f437aa3f164ab76618029382f277be52828186d21d6f468ec29f2b5ac2b4a"
+        "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json",
+        "sha256_recomputed": "f15a3409566a234061b733417e60c6dca26443da215ba46f74a17965c4df5e55",
+        "sha256_recorded": "f15a3409566a234061b733417e60c6dca26443da215ba46f74a17965c4df5e55"
       },
       {
         "bytes_recomputed": 6428,
         "bytes_recorded": 6428,
         "key": "human_confirmation",
         "matches_input_manifest": true,
-        "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/人工确认清单.json",
+        "path": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/人工确认清单.json",
         "sha256_recomputed": "a17268f8c0694e6b9b38c0c1db1ba89eb6a637b6f3674dd39f3d35ef380f6083",
         "sha256_recorded": "a17268f8c0694e6b9b38c0c1db1ba89eb6a637b6f3674dd39f3d35ef380f6083"
       }
@@ -157,7 +157,7 @@
     "files_count": 11,
     "path": "阶段07-RAG检索系统/检索产出/input_manifest.json",
     "schema": "stage7-input-manifest-1.0",
-    "sha256": "59233ad0093b469f41a2323aa5ffcbb3e335ba339d7b6d44c26707cfa53770e5"
+    "sha256": "57ac92d44602d4eaf1d2db8c13d64a3588576aba16c6cca2d3f0de3ba54f50a5"
   },
   "local_embedding": {
     "device": "本地 CPU 前向（torch.set_num_threads(1)，离线加载）",
@@ -176,7 +176,7 @@
         "component": "vector_search.py --selftest",
         "count_note": "T11 未逐次记录编码条数（该步骤含本地 Embedding 前向）",
         "encodes_query": null,
-        "seconds": 7.223,
+        "seconds": 8.173,
         "seconds_note": "T11 记录的该步骤墙钟耗时（含本地 Embedding 前向；未单独计时）"
       },
       {
@@ -187,20 +187,20 @@
           "vector_search_cache": 90
         },
         "encodes_query": 120,
-        "seconds": 19.899,
+        "seconds": 28.802,
         "seconds_note": "T11 记录的该步骤墙钟耗时（含本地 Embedding 前向；未单独计时）"
       },
       {
         "component": "pipeline.py --selftest（五组 × 30 题）",
         "count_note": "T11 未逐次记录编码条数（该步骤含本地 Embedding 前向）",
         "encodes_query": null,
-        "seconds": 10.431,
+        "seconds": 12.074,
         "seconds_note": "T11 记录的该步骤墙钟耗时（含本地 Embedding 前向；未单独计时）"
       },
       {
         "component": "metrics.py（纯计算，不编码）",
         "encodes_query": 0,
-        "seconds": 0.068,
+        "seconds": 0.056,
         "seconds_note": "T11 记录的该步骤墙钟耗时（含本地 Embedding 前向；未单独计时）"
       }
     ],
