@@ -748,7 +748,7 @@
     "events": 1098,
     "merged_events": 16,
     "nodes_by_label": {
-      "Company": 937,
+      "Company": 938,
       "Document": 692,
       "Event": 1098,
       "Industry": 73,
@@ -756,7 +756,7 @@
       "Person": 396,
       "Policy": 102
     },
-    "nodes_total": 3606,
+    "nodes_total": 3607,
     "singleton_events": 1082
   },
   "dataset_version": "v2.1",
@@ -798,17 +798,17 @@
       "sha256": "6d6917132186a5fd59ba9f99701399dd423b0cd3747edc7124b4690635dae376"
     },
     "nodes.csv": {
-      "bytes": 819782,
-      "rows": 3606,
-      "sha256": "c01a07a64f3f4a2866a52ff5d687b22088c37932b5fed612973b86164bb07536"
+      "bytes": 819844,
+      "rows": 3607,
+      "sha256": "081cf78ed834c580a1833dec6b062f60da7d6fc85b22d83731ccd2363f1803dd"
     },
     "replay.cypher": {
-      "bytes": 1074034,
+      "bytes": 1074105,
       "rows": null,
-      "sha256": "ef7b2732c84c98f826eaca60aa87864b19f55809654b79d794e69ef18df95a78"
+      "sha256": "599e1d7f40e959ddd71b7aa3fba30d400b231175dbb40be0bf8c9909d6fc0ffb"
     }
   },
-  "generated_at": "2026-10-03T01:28:30+08:00",
+  "generated_at": "2026-10-03T13:38:16+08:00",
   "graph_check": {
     "checks": 20,
     "failed": [
@@ -823,26 +823,143 @@
     "passed": 18
   },
   "human_confirmation": {
-    "confirmed_names": [],
-    "edges_added": 0,
-    "edges_added_by_relation": {},
-    "entries_confirmed": 0,
-    "entries_total": 0,
-    "entries_unconfirmed": 0,
-    "node_ids": [],
-    "nodes_added": 0,
-    "nodes_by_label": {},
+    "confirmed_names": [
+      "PT.ACTER INTEGRATION TECHNOLOGY INDONESIA",
+      "PT.Hardases Abadi Indonesia",
+      "中国中元国际工程有限公司",
+      "中国电信股份有限公司",
+      "中国电信集团有限公司",
+      "中国移动通信有限公司",
+      "中国邮政速递物流股份有限公司",
+      "安徽元控储充新能源科技有限公司",
+      "川环科技",
+      "浪潮",
+      "芜湖联飞",
+      "贵州时代矿业有限公司"
+    ],
+    "edges_added": 32,
+    "edges_added_by_relation": {
+      "CUSTOMER_OF": 4,
+      "HAS_EXECUTIVE": 7,
+      "PARTICIPATES_IN": 18,
+      "SUPPLIES": 3
+    },
+    "entries_confirmed": 12,
+    "entries_merged_into_name_only": 11,
+    "entries_total": 13,
+    "entries_unconfirmed": 1,
+    "merged_into_name_only": [
+      {
+        "identity_key": "Company:PT.ACTERINTEGRATIONTECHNOLOGYINDONESIA",
+        "label": "Company",
+        "name": "PT.ACTER INTEGRATION TECHNOLOGY INDONESIA",
+        "normalized_name": "PT.ACTERINTEGRATIONTECHNOLOGYINDONESIA",
+        "note": "B 步已按归一化名接纳该实体；人工确认并入同一节点，不另建 HCONF 节点"
+      },
+      {
+        "identity_key": "Company:PT.HardasesAbadiIndonesia",
+        "label": "Company",
+        "name": "PT.Hardases Abadi Indonesia",
+        "normalized_name": "PT.HardasesAbadiIndonesia",
+        "note": "B 步已按归一化名接纳该实体；人工确认并入同一节点，不另建 HCONF 节点"
+      },
+      {
+        "identity_key": "Company:中国中元国际工程有限公司",
+        "label": "Company",
+        "name": "中国中元国际工程有限公司",
+        "normalized_name": "中国中元国际工程有限公司",
+        "note": "B 步已按归一化名接纳该实体；人工确认并入同一节点，不另建 HCONF 节点"
+      },
+      {
+        "identity_key": "Company:中国电信股份有限公司",
+        "label": "Company",
+        "name": "中国电信股份有限公司",
+        "normalized_name": "中国电信股份有限公司",
+        "note": "B 步已按归一化名接纳该实体；人工确认并入同一节点，不另建 HCONF 节点"
+      },
+      {
+        "identity_key": "Company:中国电信集团有限公司",
+        "label": "Company",
+        "name": "中国电信集团有限公司",
+        "normalized_name": "中国电信集团有限公司",
+        "note": "B 步已按归一化名接纳该实体；人工确认并入同一节点，不另建 HCONF 节点"
+      },
+      {
+        "identity_key": "Company:中国移动通信有限公司",
+        "label": "Company",
+        "name": "中国移动通信有限公司",
+        "normalized_name": "中国移动通信有限公司",
+        "note": "B 步已按归一化名接纳该实体；人工确认并入同一节点，不另建 HCONF 节点"
+      },
+      {
+        "identity_key": "Company:中国邮政速递物流股份有限公司",
+        "label": "Company",
+        "name": "中国邮政速递物流股份有限公司",
+        "normalized_name": "中国邮政速递物流股份有限公司",
+        "note": "B 步已按归一化名接纳该实体；人工确认并入同一节点，不另建 HCONF 节点"
+      },
+      {
+        "identity_key": "Company:安徽元控储充新能源科技有限公司",
+        "label": "Company",
+        "name": "安徽元控储充新能源科技有限公司",
+        "normalized_name": "安徽元控储充新能源科技有限公司",
+        "note": "B 步已按归一化名接纳该实体；人工确认并入同一节点，不另建 HCONF 节点"
+      },
+      {
+        "identity_key": "Company:川环科技",
+        "label": "Company",
+        "name": "川环科技",
+        "normalized_name": "川环科技",
+        "note": "B 步已按归一化名接纳该实体；人工确认并入同一节点，不另建 HCONF 节点"
+      },
+      {
+        "identity_key": "Company:浪潮",
+        "label": "Company",
+        "name": "浪潮",
+        "normalized_name": "浪潮",
+        "note": "B 步已按归一化名接纳该实体；人工确认并入同一节点，不另建 HCONF 节点"
+      },
+      {
+        "identity_key": "Company:贵州时代矿业有限公司",
+        "label": "Company",
+        "name": "贵州时代矿业有限公司",
+        "normalized_name": "贵州时代矿业有限公司",
+        "note": "B 步已按归一化名接纳该实体；人工确认并入同一节点，不另建 HCONF 节点"
+      }
+    ],
+    "node_ids": [
+      "HCONF-0001",
+      "PT.ACTERINTEGRATIONTECHNOLOGYINDONESIA",
+      "PT.HardasesAbadiIndonesia",
+      "中国中元国际工程有限公司",
+      "中国电信股份有限公司",
+      "中国电信集团有限公司",
+      "中国移动通信有限公司",
+      "中国邮政速递物流股份有限公司",
+      "安徽元控储充新能源科技有限公司",
+      "川环科技",
+      "浪潮",
+      "贵州时代矿业有限公司"
+    ],
+    "nodes_added": 12,
+    "nodes_admitted_total": 12,
+    "nodes_by_label": {
+      "Company": 1
+    },
+    "nodes_created_as_hconf": 1,
     "note": "《10》第4.5.4节：匹配失败进待消歧列表，**人工确认后再写入图谱**。确认是数据（确认文件的 confirmed 字段），不是代码；未确认条目继续排除，确认名称只建一个节点、不并进配置公司。",
     "policy": "pending_confirmation_exclude_from_graph",
     "rejected_not_merged_into_configured_company": [],
-    "sha256": "",
+    "sha256": "a17268f8c0694e6b9b38c0c1db1ba89eb6a637b6f3674dd39f3d35ef380f6083",
     "source_file": "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/人工确认清单.json",
-    "unconfirmed_names": [],
+    "unconfirmed_names": [
+      "豪威集成电路（集团）股份有限公司"
+    ],
     "work_root_copy": "阶段05-数据准备/数据集/_抽取缓存/v2.1_v1_2/图谱管线_v1_3/人工确认清单.json"
   },
   "id_rule": "Company=stock_code；Document=doc_id；Person／Institution／Policy／Industry／Event 按（类型, 归一化名称）或事件的确定性排序一次性分配 PER／INST／POL／IND／EVT 编号",
   "isolated_nodes": {
-    "count": 586,
+    "count": 587,
     "ids": [
       "002090",
       "26东财证券05",
@@ -859,6 +976,7 @@
       "Dangote集团",
       "DeepSeek",
       "GrünenthalGmbH(德国格兰泰)",
+      "HCONF-0001",
       "HKSCCNOMINEESLIMITED",
       "JanssenPharmaceuticals(杨森制药)",
       "KylaneLaboratoiresSA基兰实验室股份公司",

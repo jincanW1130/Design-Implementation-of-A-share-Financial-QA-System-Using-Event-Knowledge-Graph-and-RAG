@@ -423,6 +423,7 @@ def assign_nodes(disambig, merged, meta, alias_table_path=None, confirmation=Non
             if surface:
                 configured_surfaces.add(str(surface))
     confirmed_rows, rejected = [], []
+    merged_into_name_only = []
     endpoint_map, label_map = {}, {}
     for norm in sorted(confirmation["entries"]):
         entry = confirmation["entries"][norm]
@@ -435,9 +436,27 @@ def assign_nodes(disambig, merged, meta, alias_table_path=None, confirmation=Non
                                      "规则归并到 stock_code 节点，本机制不得再建第二个节点"})
             continue
         label = entry["label"]
-        key = "%s%s%s%s%s" % (label, config.DISAMBIG["identity_key_separator"],
+        sep = config.DISAMBIG["identity_key_separator"]
+        # **2026-10-02 修正：B 步（放宽入图）与人工确认的交互 —— 同一实体不得拆成两个节点。**
+        # B 打开时，未消歧的 Company 已按 `label:归一化名` 建立了 name_only 身份（见 3.x）。
+        # 此时若仍按 `label:HCONF:名` 建第二个节点，同一实体会被拆开，且 HCONF 那个**拿不到边**
+        # （实测 v1.3：nodes_added=12 而 edges_added=0，凭空多出 12 个孤立点；v1.2 同口径为 29 条边）。
+        # 故先查 name_only 身份：命中则**不另建节点**，只把既有身份标记为「已人工确认」并计数上报。
+        name_only_key = "%s%s%s" % (label, sep, norm)
+        name_only_row = by_identity.get(name_only_key)
+        if name_only_row is not None and "name_only" in (name_only_row.get("_resolved_by") or set()):
+            name_only_row["_human_confirmed"] = True
+            name_only_row["_confirmation_entry"] = entry
+            endpoint_map[norm] = name_only_key
+            label_map[norm] = label
+            merged_into_name_only.append({
+                "name": entry["name"], "normalized_name": norm, "label": label,
+                "identity_key": name_only_key,
+                "note": "B 步已按归一化名接纳该实体；人工确认并入同一节点，不另建 HCONF 节点"})
+            continue
+        key = "%s%s%s%s%s" % (label, sep,
                               config.HUMAN_CONFIRMATION["identity_key_prefix"],
-                              config.DISAMBIG["identity_key_separator"], norm)
+                              sep, norm)
         row = by_identity.get(key)
         if row is None:
             row = {"label": label, "name": entry["name"], "_surfaces": {entry["name"]},
@@ -510,14 +529,27 @@ def assign_nodes(disambig, merged, meta, alias_table_path=None, confirmation=Non
                                   if confirmation["entries"][n]["confirmed"]]),
         "entries_unconfirmed": len([n for n in confirmation["entries"]
                                     if not confirmation["entries"][n]["confirmed"]]),
-        "confirmed_names": sorted(r["name"] for r in confirmed_rows),
+        "confirmed_names": sorted([r["name"] for r in confirmed_rows]
+                                  + [m["name"] for m in merged_into_name_only]),
         "unconfirmed_names": sorted(confirmation["entries"][n]["name"]
                                     for n in confirmation["entries"]
                                     if not confirmation["entries"][n]["confirmed"]),
-        "node_ids": sorted(r["node_id"] for r in confirmed_rows),
+        "node_ids": sorted([r["node_id"] for r in confirmed_rows]
+                           + [by_identity[m["identity_key"]]["node_id"]
+                              for m in merged_into_name_only
+                              if m["identity_key"] in by_identity
+                              and by_identity[m["identity_key"]].get("node_id")]),
         "nodes_by_label": _counts(r["label"] for r in confirmed_rows),
         "rejected_not_merged_into_configured_company": rejected,
     }
+    # **2026-10-02：新键只在 B 步（放宽入图）下输出。**
+    # 归档口径（v1.1／v1.2）的 `graph_stats.json` 是**已入库的冻结产物**，第 6 阶段门禁的 J5
+    # 要它对逐字节复现——多一个键就会让 J5 判失败（实测：v21_v1_2 与 v21 两档均因此转红）。
+    # 而「并入 name_only」这件事**只可能发生在 B 步打开时**（B 关时未消歧实体根本不入图、
+    # 也不存在同名 name_only 身份），所以按开关裁剪既不影响新口径，也保住了归档口径的字节不变。
+    if bool(config.GRAPH.get("include_unresolved_entities")):
+        confirmation_info["merged_into_name_only"] = merged_into_name_only
+        confirmation_info["entries_merged_into_name_only"] = len(merged_into_name_only)
     return nodes, by_identity, event_by_key, confirmation_info, (endpoint_map, label_map)
 
 
@@ -937,11 +969,24 @@ def check_export(paths, nodes, edges, fingerprint, profile, extra_text="", dropp
          "names": sorted(confirmed_names)[:12],
          "note": "同名只产生一个节点；编号按归一化名称确定性分配 %s-####"
                  % config.HUMAN_CONFIRMATION["node_id_prefix"]})
-    expected, rejected_names = _confirmation_expectation(paths)
-    add("human_confirmed_entries_match_export", len(confirmed_nodes) == expected,
-        {"confirmed_entries_in_file": expected, "human_confirmed_nodes_in_export":
-         len(confirmed_nodes), "rejected_configured_company_matches": rejected_names[:5],
-         "source_file": rel(config.human_confirmation_path(profile))})
+    expected, rejected_names, admitted_norms = _confirmation_expectation(paths)
+    # **2026-10-02 判据加强**：原判据数「HCONF 前缀的节点数 == 应接纳条数」。B 步打开后，
+    # 确认条目会被**并入既有的 name_only 节点**（同一实体不拆两个节点，见 assign_nodes 3.5），
+    # 此时 HCONF 节点数为 0、原判据会误判为「确认丢失」。改为按**归一化名**在整张导出物里核：
+    # 每条应接纳的确认名称都必须在导出物里落成**一个**节点——不论它是新建的 HCONF 节点，
+    # 还是并入的 name_only 节点。这个判据比原来更强（它不再依赖「必须新建节点」这一实现细节）。
+    node_names_norm = {config.normalize_entity_name(n.get("name")) for n in nodes}
+    missing_norms = sorted(admitted_norms - node_names_norm)
+    add("human_confirmed_entries_match_export", not missing_norms,
+        {"confirmed_entries_in_file": expected,
+         "confirmed_entries_admitted_in_export": expected - len(missing_norms),
+         "as_new_hconf_nodes": len(confirmed_nodes),
+         "merged_into_existing_name_only_nodes": expected - len(confirmed_nodes),
+         "missing": missing_norms[:5],
+         "rejected_configured_company_matches": rejected_names[:5],
+         "source_file": rel(config.human_confirmation_path(profile)),
+         "note": "按名称核：每条 confirmed=true 且未命中配置公司的条目都必须在导出物里"
+                 "落成一个节点；B 步打开时其中被并入 name_only 节点的不计入 HCONF 前缀计数"})
 
     result = {
         "schema": config.GRAPH_SCHEMA,
@@ -976,10 +1021,15 @@ def _confirmation_expectation(paths):
 
     与 `assign_nodes` 用同一套判定，避免「机检自己说自己」：两边都只做同一件事——
     读确认文件 ＋ 读别名表，然后数「该建几个节点」。
+
+    **返回 `(应接纳条数, 命中配置公司被拒的名称, 应接纳名称的归一化集合)`**（第三个返回值
+    于 2026-10-02 追加）：有了归一化名称集合，调用方才能按**名称**在导出物里核「每条确认
+    都恰好落成了一个节点」——这在 B 步打开、确认条目被**并入既有 name_only 节点**而不是
+    新建 HCONF 节点时是必需的（否则按 HCONF 前缀数会数到 0）。
     """
     path = config.human_confirmation_path(paths["profile"])
     if not os.path.isfile(path):
-        return 0, []
+        return 0, [], set()
     with open(path, encoding="utf-8") as fh:
         payload = json.load(fh)
     configured = set()
@@ -993,7 +1043,7 @@ def _confirmation_expectation(paths):
                 if surface:
                     configured.add(str(surface))
     field = config.HUMAN_CONFIRMATION["field"]
-    expected, rejected = 0, []
+    expected, rejected, admitted = 0, [], set()
     for entry in payload.get("entries") or []:
         if not entry.get(field):
             continue
@@ -1002,7 +1052,8 @@ def _confirmation_expectation(paths):
             rejected.append(entry.get("name"))
         else:
             expected += 1
-    return expected, rejected
+            admitted.add(norm)
+    return expected, rejected, admitted
 
 
 def _body_check(paths, text):
@@ -1051,6 +1102,14 @@ def build_all(paths, records, disambig, merged, meta):
     confirmed_ids = set(confirmation_info["node_ids"])
     attributed = [e for e in edges
                   if str(e["head_id"]) in confirmed_ids or str(e["tail_id"]) in confirmed_ids]
+    # **2026-10-02 字段语义澄清**：B 步打开后，`node_ids` 里既有**新建的 HCONF 节点**、
+    # 也有**被并入的既有 name_only 节点**，直接叫 `nodes_added` 会让读者以为是「新建了几个」。
+    # 两个数分开给，字段名与取值相符。**同样只在 B 步下输出**——归档口径要逐字节复现，
+    # 多键会让 J5 失败（v1.1／v1.2 的 `graph_stats.json` 是已入库的冻结产物）。
+    if bool(config.GRAPH.get("include_unresolved_entities")):
+        confirmation_info["nodes_created_as_hconf"] = sum(
+            (confirmation_info.get("nodes_by_label") or {}).values())
+        confirmation_info["nodes_admitted_total"] = len(confirmed_ids)
     confirmation_info["nodes_added"] = len(confirmed_ids)
     confirmation_info["edges_added"] = len(attributed)
     confirmation_info["edges_added_by_relation"] = _counts(e["relation"] for e in attributed)

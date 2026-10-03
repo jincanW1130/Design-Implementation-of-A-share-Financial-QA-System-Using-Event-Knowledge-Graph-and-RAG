@@ -4,7 +4,7 @@
 //   文档数 709；prompt 版本 stage6-extract-v1.2
 // 口径：编号显式分配并固化（不使用自增主键）；八条由模型给出的关系带 source_doc_id／source_chunk_id／confidence，EVIDENCED_BY 不带这三项；
 //   图上不设数据截止时间属性（《10》第4.5.6节：时间只落在 Event.event_time、BELONGS_TO.valid_from／valid_to、Document.publish_time）；导出物不复制正文。
-// 节点 3606 个、边 3614 条（事件 1098 条（合并后））
+// 节点 3607 个、边 3614 条（事件 1098 条（合并后））
 
 // ---- 约束与索引：《10》第4.5.3节 逐字照抄（7 条唯一性约束 ＋ 3 条索引）----
 CREATE CONSTRAINT uk_company_stock FOR (c:Company) REQUIRE c.stock_code IS UNIQUE;
@@ -142,6 +142,7 @@ MERGE (n:Company {node_id: 'DeepSeek'}) SET n.name = 'DeepSeek', n.stock_code = 
 MERGE (n:Company {node_id: 'ElevarTherapeutics'}) SET n.name = 'Elevar Therapeutics', n.stock_code = 'ElevarTherapeutics', n.company_name = 'Elevar Therapeutics', n.aliases = '[]';
 MERGE (n:Company {node_id: 'Goertek(HongKong)Co.,Limited'}) SET n.name = 'Goertek (HongKong) Co., Limited', n.stock_code = 'Goertek(HongKong)Co.,Limited', n.company_name = 'Goertek (HongKong) Co., Limited', n.aliases = '[]';
 MERGE (n:Company {node_id: 'GrünenthalGmbH(德国格兰泰)'}) SET n.name = 'Grünenthal GmbH（德国格兰泰）', n.stock_code = 'GrünenthalGmbH(德国格兰泰)', n.company_name = 'Grünenthal GmbH（德国格兰泰）', n.aliases = '[]';
+MERGE (n:Company {node_id: 'HCONF-0001'}) SET n.name = '芜湖联飞';
 MERGE (n:Company {node_id: 'HKSCCNOMINEESLIMITED'}) SET n.name = 'HKSCC NOMINEES LIMITED', n.stock_code = 'HKSCCNOMINEESLIMITED', n.company_name = 'HKSCC NOMINEES LIMITED', n.aliases = '[]';
 MERGE (n:Company {node_id: 'HeidelbergPharma'}) SET n.name = 'Heidelberg Pharma', n.stock_code = 'HeidelbergPharma', n.company_name = 'Heidelberg Pharma', n.aliases = '[]';
 MERGE (n:Company {node_id: 'HighTechnologyProducts,S.L.U.'}) SET n.name = 'High Technology Products，S.L.U.', n.stock_code = 'HighTechnologyProducts,S.L.U.', n.company_name = 'High Technology Products，S.L.U.', n.aliases = '[]';
