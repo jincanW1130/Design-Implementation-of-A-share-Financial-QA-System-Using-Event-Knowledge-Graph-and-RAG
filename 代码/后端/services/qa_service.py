@@ -257,24 +257,49 @@ def _summary(answer_text) -> str:
 def _classify_failure(text: str) -> int:
     """子进程非零退出时，按日志尾部判错误码。
 
-    判定顺序（**先判守卫，再判索引／图谱**）：上游第 8 阶段的「装配账目守卫」会打印
-    「token 账现场重算与上游 trace 不一致……预算守卫必须由重算分量组成」，它既不是图谱故障也不是
-    模型故障——2026-09-30 实测 PE-03 就落在这条上，早期版本会落到默认分支被**误标成 3001
-    （图谱服务不可用）**，与事实不符。故先认这一条并返回新增的 **3004**；其余按原判据：
-    向量索引不可用(3003)／图谱服务不可用(3001)。
+    判定顺序：**先判守卫，再判索引／图谱，最后判模型侧**。
+
+    * `3004` 上游第 8 阶段的「装配账目守卫」——它既不是图谱故障也不是模型故障，故先认这一条
+      （2026-09-30 实测 PE-03 落在这条上，早期版本会被误标成 3001）。
+    * `3003` 向量索引不可用；`3001` 图谱服务不可用。
+    * `3002` 模型侧失败（超时／连接失败）——2026-10-04 口径切换复测时新认的一条。
+
+    **2026-10-04 修掉一处真缺陷（同一天在第 9 阶段门禁上实测到）**：原判据的 `graph_marks`
+    里有一个**裸词 `"图谱"`**，而第 8 阶段的每次失败都会在日志尾部打印装配状态行
+    `[生成] PE-0x … 图谱段BAD …`——它**含"图谱"二字**，于是**任何**模型侧失败都会被判成
+    `3001（图谱服务不可用）`。后果不只是报错串不准：第 9 阶段门禁把 `3001` 与 `3004` 一起
+    当成「上游守卫码、本轮跳过该题」，**一整类真故障因此被静默跳过**——2026-10-04 实测到
+    答案生成侧到 `api.deepseek.com` 的 HTTPS 连接整段失败（`URLError: SSL:
+    UNEXPECTED_EOF_WHILE_READING`）时，D1 逐题打印「HTTP 503 code=3001：本轮跳过（上游守卫）」，
+    D2 直接记 UNRUN，**没有一个字提到模型侧失败**。故：
+    ① `graph_marks` 收窄为**具体的传输／服务标识**（不再用裸词"图谱"）；
+    ② 新增 `model_marks` 分支返回 **3002**——该码早已登记在 `errors.py` 的 `CODES` 里
+       （"大模型接口超时"，HTTP 504）却**从未被返回过**，是一枚死码，此处正好启用；
+    ③ 兜底由 `3001` 改为 **9999（未归类）**：判不出类别时如实说"不知道"，而不是替图谱认领故障。
     """
     low = (text or "").lower()
     guard_marks = ("token 账现场重算与上游 trace 不一致", "预算守卫", "现场 text+path+event_triple")
     index_marks = ("faiss", "向量索引", "索引文件", "vector_map", "build_meta",
                    "vector index", "向量检索")
-    graph_marks = ("neo4j", "bolt", "7687", "graphdatabase", "图谱")
+    # 收窄后的图谱标识：只认传输层／服务层的具体字样，**不再用裸词"图谱"**
+    # （"图谱段BAD"是装配状态行，任何失败都会打印，不能当作图谱故障的证据）。
+    graph_marks = ("neo4j", "bolt", "7687", "graphdatabase", "graphservice",
+                   "图谱服务", "图谱查询层", "graphreader")
+    # 模型侧：连接失败／超时／TLS 中断／显式的调用失败字样。放在图谱之后判，
+    # 因为图谱侧的传输错误同样会带 "connection refused" 之类的通用字样。
+    model_marks = ("urlerror", "ssl", "timed out", "timeout", "connection reset",
+                   "调用失败", "大模型", "deepseek", "api.deepseek.com")
     if any(mark in low for mark in guard_marks):
         return 3004
     if any(mark in low for mark in index_marks):
         return 3003
     if any(mark in low for mark in graph_marks):
         return 3001
-    return 3001
+    if any(mark in low for mark in model_marks):
+        return 3002
+    logger.warning("问答链路非零退出但**未能归类**（不含守卫／索引／图谱／模型侧标记），"
+                   "按 9999 未归类返回；日志尾部前 300 字：%s", (text or "")[:300])
+    return 9999
 
 
 def _run_chain(question: str, group: str, session_id: str, now_iso: str) -> dict:
