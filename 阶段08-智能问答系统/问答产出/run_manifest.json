@@ -1,14 +1,14 @@
 {
   "artifacts_sha256": {
     "answer_trace": {
-      "bytes": 365825,
+      "bytes": 376495,
       "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段08-智能问答系统\\问答产出\\answer_trace.jsonl",
-      "sha256": "ac1cc22718772366c9f458047ff249d95f40a4a5ea4231069f6592af808e0e2f"
+      "sha256": "8b0d755ef43d214c7fae84856f8e06a73041e452cbe5c8b3fd786247c8ffdb1a"
     },
     "input_manifest": {
-      "bytes": 6663,
+      "bytes": 6660,
       "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段08-智能问答系统\\问答产出\\input_manifest.json",
-      "sha256": "e9e155e8e1337521f381f184de740c4eaf5ca5195200a897cd202ab872208a7a"
+      "sha256": "051e88c5b7c446743b64b023083daa5d04239ee6474bbb69163f4bf7a5989664"
     },
     "prompt_snapshot": {
       "bytes": 3898,
@@ -16,19 +16,19 @@
       "sha256": "702a23c62247dafa68e00243759231966961f3d3360585808fab2582f8b0bd5d"
     },
     "qa_records": {
-      "bytes": 246922,
+      "bytes": 253335,
       "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段08-智能问答系统\\问答产出\\qa_records.jsonl",
-      "sha256": "b1820ed83ebd4ad3a6b953b99ed99ca0add49c80ca91a8389fe1868d37628d72"
+      "sha256": "a64d0f0bcf60a0449bc4dbe4d9866bdbbd51a1f1968c275f514d2984f092768d"
     },
     "selection_decision": {
-      "bytes": 12218,
+      "bytes": 12233,
       "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段08-智能问答系统\\问答产出\\selection_decision.json",
-      "sha256": "b30a424a9b343fe8afee79a6082de2582f539b62301ee8ec7db0995100da677b"
+      "sha256": "517a5ee0c56bf7a5dde5ad0645e9542831b41bc963630c8de6671076bdf2495d"
     },
     "selection_matrix": {
-      "bytes": 591130,
+      "bytes": 591286,
       "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段08-智能问答系统\\问答产出\\selection_matrix.jsonl",
-      "sha256": "9891377f9c6594067e5f81d382a845101114af833846934537e48a7a7c0b24cf"
+      "sha256": "a0c875efe161af6f840261a9dfd2380aa346b0f1093b5754f8ec6bf7a897d39c"
     }
   },
   "assembly_determinism": {
@@ -39,34 +39,34 @@
     "prompt_sha256_by_qid": {
       "PE-01": "af0b07b3623e5cbd7b6908663b0f82503d68588b18fe83c4997eed0ef0c0d3f7",
       "PE-02": "cab7f7570fc9d9e88ac29358db08106010daf6d9e694a1fef0945afb8fb53367",
-      "PE-03": "5e3d4d2b1972e2d240447c238f97621bd9f3c89db813ec96a4f4f57e2f37cb1c",
-      "PE-04": "2aed22b517e02c0de074f0f8dc46cd7403131d754f9e4f54fab95e9c02ce9026",
-      "PE-05": "7cfd1c195d7e201ab2c02426f7a0c1570a573e3af68b0dbdb879949fc2066f91",
-      "PE-06": "ca0975b44ac617e9d86c6494ac58bfc5bd7b3d367225646b9e5fc4de571b7fcb",
+      "PE-03": "5b85b4347e031e8bade4a312522311a0cd951f19ea96a63c18481b09caf28f28",
+      "PE-04": "1c20bf83fff7d1a2fd92dfec34409edef8b0fb8b8f9c6ec5c78da9c17ae0de70",
+      "PE-05": "4f212ed091fc615358c51d2d0a6715c4a6502db6e2568ca19b68fa8e0c2a4aac",
+      "PE-06": "2e8b1318059563e3a094a4510576f0b12cd993b74ef9d9eb4b8427fbf705a250",
       "PE-07": "f0a6670d6e79c8c4044263bb9f8ccbc3b98824b1e99d6a68cb2337b17090cd04",
-      "PE-08": "60760c70e56cb762041682ee50422f5e90ecc2105b12e982754f43fd8e4dc3f9",
-      "PE-09": "4438a82977e4bcae9cddea888f6c4ef49cebcd60c0626722b43871e1135be722",
-      "PE-10": "ab22b1fa96067f91e5476516bf1bec4ca07b6cfa7f107ab7b3e63fd7e43a68dc",
+      "PE-08": "72326b733d0fdeeac80e916b264f24d2af061895e3ebc04ffad2e59f7327f814",
+      "PE-09": "1a75708edb2e0e6dee0778bd25f4c8a201794075f57460677446884a7b984f61",
+      "PE-10": "b1368b52442380424ec9fab039c3bf557830b50a8403703cef4476216a664e3c",
       "PE-11": "665b06f375d579ba1859446180aa9154d8cfc5b7b1b1e26fa22bb2f4aa4a6dd6",
-      "PE-12": "14f87b00b06b15b3ee420887074452308b03d87097b2507b6eb9a411716ff6e3",
-      "PE-13": "db06365de1732b2d75266ce26763d84f6aa81fcd7705b76911ce7d2679666d64",
-      "PE-14": "8399a47bc3e809e74aeeab506eb5742f7057f2ee94fa88bca4f14ff0f6916f5d",
-      "PE-15": "afa46c91635c8ad6106164990f21365976d2e56cfeeac0c061a3369bc55f7f7f",
-      "PE-16": "d2f45ee682bdc97180cff53bdaec1009b5e46389cd716c233be8215fc9fad7b4",
+      "PE-12": "d4b6edf26f56a4ae7b34f4ac4aeb0295d30518b9a4de4813020f1bce8a210947",
+      "PE-13": "ebb46a240dc89c136cb09f5b3dceb6557f99c8c7ea87d3e5694a85abfef9282e",
+      "PE-14": "39f8cf2e2321996832e10a37964f3c3b73a03e47455e9cd7b6ca89591d9063ee",
+      "PE-15": "eee4d3db30313073dffbf2c53dee2c789cb4d29de58769a15ef590e6cedce7f0",
+      "PE-16": "1562f4a152d9ab22b88e9e5b0f4735ea7adc20388fb0a4942333721bc03ba8d3",
       "PE-17": "8ddff3d21cd7a52d589c205b309fc200bbd20827ac5c1eafc4abb6f45de003da",
-      "PE-18": "6683023054795a3a5462940f035a3284917f97966695e004753308c4df6eda00",
-      "PE-19": "1cd7278422c53fe032633b328917d02da30aef8014329eb42cfe26cc03562ace",
+      "PE-18": "7eee2204e265d09a56ac2bb77c390f7630380df6ec7a5fd56c37d3acb9740297",
+      "PE-19": "9d16dac2db49dd897398fdfdefa066c6f9e81f577526e311b72a548c68e92023",
       "PE-20": "bbe884ede6112cd367fa720a476135509e476d5b3526f3819ab2b8039693bc3a",
-      "PE-21": "f13f059fd4ccbfdb0f6b393ac34ffaa8c320c13d00e4e14c2d1e4e23cec44a31",
-      "PE-22": "6e1660e70f413958cfc9e0aa57b93323875f87fbb50c169823aefa51ba3e2dce",
+      "PE-21": "4d73a785a55450fc1e2102c675358189c2a3006d12ba5ac6dafd0e9fa8822d9e",
+      "PE-22": "a2cc0f3cf60437bec3af0ad60fef1c9e26e2429f7dec5c934f93e624bd7307f4",
       "PE-23": "f77c4c4dbc21676ba9d3ea027d3c76b4a946b404d177e3a01832ee0eeaa566f9",
       "PE-24": "082768647756fa7210e2f05f27637f6637fb9c2f747e22b873a6aee38aeec4bf",
-      "PE-25": "a6965821398a4484b70da76c83701ec3735c6dcbf5e265dc5ab104dfd510af84",
-      "PE-26": "56281de8b5b6128878368404be214b0c7c5de5d9c315d4a3e930a1edd3525454",
-      "PE-27": "2d0ed49bdea81da7de5a0d01508997d3e03dc38287fa10bce8adcf152815b7c6",
-      "PE-28": "ac37da154c67ed26aef065234f681d80117a7a7646089434140248518b41aaad",
-      "PE-29": "6c396f87cb2593325fa07dd2692773c62e5d545e2fc73ccaa2b035703ec345b8",
-      "PE-30": "6cbcb4ec7a49c5528b5fbca573f80b109bb9c6dac7841eebf28d54f275c97c88"
+      "PE-25": "5fec3aca8c50c9bc998edcb12103332e2682cde5703c0a2ad3575ac61b4a69fc",
+      "PE-26": "205de01510a2726e9d6efc2c8d0eaa5e2c85203b72e6b133a3aee7444ca0b3f1",
+      "PE-27": "3ba5655199ccb547484f6421b9d08364c115055c7fcc14bbfba60fe25471cb9c",
+      "PE-28": "277d54596de5aa42ab8458c9132e3d9ad25c74af9c0572b312d78e7790dd1709",
+      "PE-29": "13a710e82508881431839f69bb3125e64ee3a65c9707072b70902ee2cbb7d8e9",
+      "PE-30": "cc7373b562acb948d119d1c9094bae2357a83f5ddd5981bde5193dbbb8311630"
     },
     "questions": 30,
     "repeats": 2
@@ -100,25 +100,25 @@
     "count": 10,
     "files": [
       {
-        "bytes": 256704,
+        "bytes": 260054,
         "item": 1,
         "key": "per_question_trace",
         "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段07-RAG检索系统\\检索产出\\per_question_trace.jsonl",
-        "sha256": "2b1c0da16bc246e583c398a8c12a39a4dca11bc3a668e411da524fca32a29a72"
+        "sha256": "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b"
       },
       {
-        "bytes": 7878,
+        "bytes": 7913,
         "item": 2,
         "key": "stage7_input_manifest",
         "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段07-RAG检索系统\\检索产出\\input_manifest.json",
-        "sha256": "59233ad0093b469f41a2323aa5ffcbb3e335ba339d7b6d44c26707cfa53770e5"
+        "sha256": "57ac92d44602d4eaf1d2db8c13d64a3588576aba16c6cca2d3f0de3ba54f50a5"
       },
       {
         "bytes": 11834,
         "item": 3,
         "key": "stage7_run_manifest",
         "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段07-RAG检索系统\\检索产出\\run_manifest.json",
-        "sha256": "0e59c0df3dc1a1e1cb867ba8c4c973941de5510382083a057a550864be8241ec"
+        "sha256": "f152d9432689a098766ccb03999a59bae10b09916b2949f2ae8e300b02da4786"
       },
       {
         "bytes": 4496547,
@@ -142,25 +142,25 @@
         "sha256": "41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988"
       },
       {
-        "bytes": 708043,
+        "bytes": 788038,
         "item": 7,
         "key": "nodes_csv",
-        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_2\\nodes.csv",
-        "sha256": "04f2ac227e9595e2df7eefd1f14892edc3327d2b10e950b4f92e4d536c8cb524"
+        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\nodes.csv",
+        "sha256": "ecfaa43a650c42a5281eaf50defa79ada043985b2283847507b6ef3ad006341e"
       },
       {
-        "bytes": 131275,
+        "bytes": 184551,
         "item": 7,
         "key": "edges_csv",
-        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_2\\edges.csv",
-        "sha256": "e86f86d99bb1b227364bc09b05a46db00adfe114ed5f9b04820e82258252b3f0"
+        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\edges.csv",
+        "sha256": "0ff0eecfc23bb860f7307b85ed510b49265d6ec79b7ad22fc6b038df1738fe91"
       },
       {
-        "bytes": 24818,
+        "bytes": 47285,
         "item": 7,
         "key": "graph_stats",
-        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_2\\graph_stats.json",
-        "sha256": "443f437aa3f164ab76618029382f277be52828186d21d6f468ec29f2b5ac2b4a"
+        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\graph_stats.json",
+        "sha256": "f15a3409566a234061b733417e60c6dca26443da215ba46f74a17965c4df5e55"
       },
       {
         "bytes": 101879,
@@ -221,7 +221,7 @@
     "rate": 0.0
   },
   "notice": "本文件只登记 30 题预实验集上的**原始读数**，不含人工评分，不构成正式实验结论（《21》第1.2节、非目标 4／5）；模型输出重复一致率只登记数值，**不作通过／失败判据**（验收 G3）。",
-  "now_injected": "2026-09-29T22:54:12+08:00",
+  "now_injected": "2026-10-04T11:41:31+08:00",
   "purpose": "T9：复跑命令、输入指纹、产出 SHA-256、两次运行的装配逐字节一致性、两次运行的模型输出重复一致率、模型调用次数（含重试）",
   "reproduce_commands": [
     "python 代码\\问答\\model_selection.py --recheck",

@@ -27,13 +27,13 @@
       "ok": true
     },
     {
-      "detail": "总行 2803 − 表头 1 = 2802（数据行）",
-      "name": "nodes.csv = 2802 行（不含表头）",
+      "detail": "总行 3608 − 表头 1 = 3607（数据行）",
+      "name": "nodes.csv = 3607 行（不含表头）",
       "ok": true
     },
     {
-      "detail": "总行 2737 − 表头 1 = 2736（数据行）",
-      "name": "edges.csv = 2736 行（不含表头）",
+      "detail": "总行 3615 − 表头 1 = 3614（数据行）",
+      "name": "edges.csv = 3614 行（不含表头）",
       "ok": true
     },
     {
@@ -58,9 +58,9 @@
       "阶段05-数据准备/数据集/v2.1/chunks/chunks.jsonl",
       "阶段05-数据准备/数据集/v2.1/clean/documents.jsonl",
       "阶段05-数据准备/数据集/v2.1/meta/dataset.json",
-      "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/edges.csv",
-      "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/graph_stats.json",
-      "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/nodes.csv"
+      "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/edges.csv",
+      "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json",
+      "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/nodes.csv"
     ],
     "matched_count": 6,
     "mismatched": [],
@@ -73,11 +73,11 @@
     {
       "files": [
         {
-          "bytes": 256704,
+          "bytes": 260054,
           "key": "per_question_trace",
-          "mtime": 1790617867.8185585,
+          "mtime": 1791042700.823795,
           "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段07-RAG检索系统\\检索产出\\per_question_trace.jsonl",
-          "sha256": "2b1c0da16bc246e583c398a8c12a39a4dca11bc3a668e411da524fca32a29a72"
+          "sha256": "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b"
         }
       ],
       "item": 1
@@ -85,11 +85,11 @@
     {
       "files": [
         {
-          "bytes": 7878,
+          "bytes": 7913,
           "key": "stage7_input_manifest",
-          "mtime": 1790525590.9708636,
+          "mtime": 1791042608.928856,
           "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段07-RAG检索系统\\检索产出\\input_manifest.json",
-          "sha256": "59233ad0093b469f41a2323aa5ffcbb3e335ba339d7b6d44c26707cfa53770e5"
+          "sha256": "57ac92d44602d4eaf1d2db8c13d64a3588576aba16c6cca2d3f0de3ba54f50a5"
         }
       ],
       "item": 2
@@ -99,9 +99,9 @@
         {
           "bytes": 11834,
           "key": "stage7_run_manifest",
-          "mtime": 1790617925.6000702,
+          "mtime": 1791042794.449597,
           "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段07-RAG检索系统\\检索产出\\run_manifest.json",
-          "sha256": "0e59c0df3dc1a1e1cb867ba8c4c973941de5510382083a057a550864be8241ec"
+          "sha256": "f152d9432689a098766ccb03999a59bae10b09916b2949f2ae8e300b02da4786"
         }
       ],
       "item": 3
@@ -145,25 +145,25 @@
     {
       "files": [
         {
-          "bytes": 708043,
+          "bytes": 788038,
           "key": "nodes_csv",
-          "mtime": 1790512359.8529942,
-          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_2\\nodes.csv",
-          "sha256": "04f2ac227e9595e2df7eefd1f14892edc3327d2b10e950b4f92e4d536c8cb524"
+          "mtime": 1791006257.8932567,
+          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\nodes.csv",
+          "sha256": "ecfaa43a650c42a5281eaf50defa79ada043985b2283847507b6ef3ad006341e"
         },
         {
-          "bytes": 131275,
+          "bytes": 184551,
           "key": "edges_csv",
-          "mtime": 1790512359.8529942,
-          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_2\\edges.csv",
-          "sha256": "e86f86d99bb1b227364bc09b05a46db00adfe114ed5f9b04820e82258252b3f0"
+          "mtime": 1791006257.8942566,
+          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\edges.csv",
+          "sha256": "0ff0eecfc23bb860f7307b85ed510b49265d6ec79b7ad22fc6b038df1738fe91"
         },
         {
-          "bytes": 24818,
+          "bytes": 47285,
           "key": "graph_stats",
-          "mtime": 1790512360.1674802,
-          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_2\\graph_stats.json",
-          "sha256": "443f437aa3f164ab76618029382f277be52828186d21d6f468ec29f2b5ac2b4a"
+          "mtime": 1791006258.4141314,
+          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\graph_stats.json",
+          "sha256": "f15a3409566a234061b733417e60c6dca26443da215ba46f74a17965c4df5e55"
         }
       ],
       "item": 7
@@ -188,10 +188,10 @@
     "data_cutoff_time": "2026-09-25T23:59:59+08:00",
     "dataset_version": "v2.1",
     "documents_rows": 709,
-    "edges_csv_data_rows": 2736,
-    "edges_csv_total_lines": 2737,
-    "nodes_csv_data_rows": 2802,
-    "nodes_csv_total_lines": 2803,
+    "edges_csv_data_rows": 3614,
+    "edges_csv_total_lines": 3615,
+    "nodes_csv_data_rows": 3607,
+    "nodes_csv_total_lines": 3608,
     "questions_rows": 30,
     "trace_groups": [
       "C"

@@ -537,10 +537,11 @@ def group_a(g):
                                          "chunks", "chunks.jsonl"))
         docs = read_jsonl(os.path.join(g.root, "阶段05-数据准备", "数据集", "v2.1", "clean",
                                        "documents.jsonl"))
+        # 2026-10-03 口径切换：图谱交付口径由 v2.1_v1_2 切到 **v2.1_v1_3**（见《02》修订记录 v3.6）。
         nodes = read_text(os.path.join(g.root, "阶段06-事件抽取与知识图谱", "图谱导出",
-                                       "v2.1_v1_2", "nodes.csv"), "")
+                                       "v2.1_v1_3", "nodes.csv"), "")
         edges = read_text(os.path.join(g.root, "阶段06-事件抽取与知识图谱", "图谱导出",
-                                       "v2.1_v1_2", "edges.csv"), "")
+                                       "v2.1_v1_3", "edges.csv"), "")
         live = {
             "dataset_version": ds2.get("dataset_version"),
             "data_cutoff_time": ds2.get("data_cutoff_time"),
@@ -1987,9 +1988,9 @@ MIRROR_FILES = (
     "阶段05-数据准备/数据集/v2.1/clean/documents.jsonl",
     "阶段05-数据准备/数据集/v2.1/chunks/chunks.jsonl",
     "阶段05-数据准备/数据集/v2.1/meta/dataset.json",
-    "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/nodes.csv",
-    "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/edges.csv",
-    "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_2/graph_stats.json",
+    "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/nodes.csv",
+    "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/edges.csv",
+    "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json",
     "阶段08-智能问答系统/21-第8阶段任务书（智能问答系统）.md",
     # 《22》必须一起带进镜像：H1／H2／H3 判的就是它。少了它，H1／H2／H3 在**原样副本**上就
     # 会 FAIL，「正向对照」失去意义（原本「3 个反例」里没有一条能覆盖 H 组；H 组的正控也是

@@ -38,7 +38,7 @@
     "user": 0
   },
   "database": "ashare_qa",
-  "generated_at": "2026-10-02T01:37:15+08:00",
+  "generated_at": "2026-10-04T12:02:18+08:00",
   "input_fields": {
     "chunks": [
       "chunk_id",
@@ -114,10 +114,10 @@
       "sha256": "c838c608c20060adb1366d5c6f7566f9de25016110dc368f7f92fcb8a10f9eea"
     },
     "qa_records": {
-      "bytes": 246922,
+      "bytes": 253335,
       "path": "阶段08-智能问答系统\\问答产出\\qa_records.jsonl",
       "rows": 30,
-      "sha256": "b1820ed83ebd4ad3a6b953b99ed99ca0add49c80ca91a8389fe1868d37628d72"
+      "sha256": "a64d0f0bcf60a0449bc4dbe4d9866bdbbd51a1f1968c275f514d2984f092768d"
     }
   },
   "limit": null,

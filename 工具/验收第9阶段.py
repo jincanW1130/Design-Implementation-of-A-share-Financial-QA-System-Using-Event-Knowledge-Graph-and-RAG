@@ -42,7 +42,8 @@ A～I 共 **58 行**（A6＋B8＋C10＋D6＋E6＋F6＋G6＋H5＋I5）。
   `answer` 行数 ＝ `question` 行数；`answer_evidence` 按 `answer_id` 分组且 `` `rank` `` 连续 1..m、总数 ≥293；
   30 条基线的交叉检查用 db_counts.json 的**导入读数**（30／30／293）。
   `` `rank` ``／`` `user` `` 是 MySQL 8 保留字，SQL 里必须加反引号。
-* E1 的图谱计数取自一致性检查响应的 `diff`（`diff.graph_nodes_total` 2802／`diff.graph_edges_total` 2736），
+* E1 的图谱计数取自一致性检查响应的 `diff`（现行口径 v1.3：`diff.graph_nodes_total` **3607**／
+  `diff.graph_edges_total` **3614**；2026-10-03 前为 v1.2 的 2802／2736），
   7 个节点标签与 9 个关系类型与 graph_counts.json／graph_stats.json 交叉检查。
 * G5（NFR-02）两个读数口径不同、**不互相替代**：① 背靠背 100 连续（60/100，缺口全是限流 1004）——
   这是**限流生效的证据，不是 FAIL**；② 正常节奏（每 1.2 s 一次）100 连续 —— 这是 G5 的通过判据（阈值 ≥95%）。
@@ -99,9 +100,12 @@ P_QSET = os.path.join("阶段07-RAG检索系统", "预实验问题集", "questio
 P_QAREC = os.path.join("阶段08-智能问答系统", "问答产出", "qa_records.jsonl")
 P_DOCS = os.path.join("阶段05-数据准备", "数据集", "v2.1", "clean", "documents.jsonl")
 P_CHUNKS = os.path.join("阶段05-数据准备", "数据集", "v2.1", "chunks", "chunks.jsonl")
-P_GRAPH_STATS = os.path.join("阶段06-事件抽取与知识图谱", "图谱导出", "v2.1_v1_2", "graph_stats.json")
-P_NODES_CSV = os.path.join("阶段06-事件抽取与知识图谱", "图谱导出", "v2.1_v1_2", "nodes.csv")
-P_EDGES_CSV = os.path.join("阶段06-事件抽取与知识图谱", "图谱导出", "v2.1_v1_2", "edges.csv")
+# 2026-10-03 口径切换：图谱交付口径由 v2.1_v1_2 切到 **v2.1_v1_3**（作者裁定，见《02》修订记录 v3.6）。
+# v1.2 的导出目录转为归档、逐字节未动，本脚本不再指向它；三处路径一律取自同一常量，避免漏改。
+GRAPH_EXPORT_VERSION = "v2.1_v1_3"
+P_GRAPH_STATS = os.path.join("阶段06-事件抽取与知识图谱", "图谱导出", GRAPH_EXPORT_VERSION, "graph_stats.json")
+P_NODES_CSV = os.path.join("阶段06-事件抽取与知识图谱", "图谱导出", GRAPH_EXPORT_VERSION, "nodes.csv")
+P_EDGES_CSV = os.path.join("阶段06-事件抽取与知识图谱", "图谱导出", GRAPH_EXPORT_VERSION, "edges.csv")
 P_XDOC = os.path.join("工具", "跨文档核验.py")
 P_WORK = os.path.join(STAGE, "_工作底稿")
 P_FINGERPRINT = os.path.join(P_WORK, "决策者核验", "输入指纹.py")
@@ -3010,7 +3014,7 @@ def tamper_cases(root):
     return [
         ("① 删掉冒烟矩阵里 /api/graph/entities 的正常行 → 覆盖缺口", "阶段09-前后端系统集成/集成产出/smoke_matrix.jsonl", t_smoke, {"C1"}),
         ("② errors.py 把 3004 改成 3999 → 逐码表对不上", "代码/后端/errors.py", t_codes, {"C3"}),
-        ("③ graph_counts.json 节点总数 2802 → 2801 → 计数对拍不符", "阶段09-前后端系统集成/集成产出/graph_counts.json", t_graphcount, {"E1"}),
+        ("③ graph_counts.json 节点总数 3607 → 3606 → 计数对拍不符", "阶段09-前后端系统集成/集成产出/graph_counts.json", t_graphcount, {"E1"}),
         ("④ 《25》改掉一个小节标题 → 九节不齐", "阶段09-前后端系统集成/25-第9阶段产出文档（前后端系统集成）.md", t_doc25_title, {"I4"}),
         ("⑤ 部署\\README.md 把「未安装 Docker Desktop」改成反义", "部署/README.md", t_readme, {"H4"}),
         ("⑥ AnswerSections.vue 删掉一个固定段头 → 四段不齐", "代码/前端/src/components/AnswerSections.vue", t_f2, {"F2"}),

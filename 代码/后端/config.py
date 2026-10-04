@@ -89,7 +89,7 @@ BUILD_META_PATH = os.path.join(DATASET_INDEX_DIR, "build_meta.json")
 
 # **2026-10-02 作者裁定：交付口径由 v1.2 切换为 v1.3**（原候选口径转正；理由与代价见
 # 《16》第 9.5 节、《10》第4.5.4节 与《02》修订记录）。v1.2 归档保留、可原样复现
-# （抽取侧用 --profile v21_v1_2，产物仍在 图谱导出\v2.1_v1_2\、一个字节未动）。
+# （历史口径 v1.2 的产物仍在 图谱导出\v2.1_v1_2\、一个字节未动，用 `工具\验收第6阶段.py --profile v21_v1_2` 复核）。
 GRAPH_VERSION = "v2.1_v1_3"
 GRAPH_DIR = os.path.join(ROOT, "阶段06-事件抽取与知识图谱", "图谱导出", GRAPH_VERSION)
 NODES_CSV = os.path.join(GRAPH_DIR, "nodes.csv")

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """代码\\后端\\tools\\import_graph.py —— 第 9 阶段 T3：**图谱导入 Neo4j（幂等）**。
 
-把 `阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_2\\` 的 `nodes.csv`（33 列／2802 行）与
-`edges.csv`（9 列／2736 行）导入**本机真实 Neo4j 服务**，并把库内计数与上游
+把**现行**`阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\` 的 `nodes.csv`（33 列／3607 行）与
+`edges.csv`（9 列／3614 行）导入**本机真实 Neo4j 服务**，并把库内计数与上游
 `graph_stats.json` 逐项对拍（《24-第9阶段任务书》第八节 E 组 E1／E2、第五节 硬约束 16）。
 
 上游与只读
@@ -28,12 +28,14 @@
 
 **关系匹配键的一处如实登记（不许改口径蒙混）**：题述的匹配键是「关系端点 ＋ 类型 ＋
 证据三项」。本批 `edges.csv` 实测存在 **5 组共 10 行**满足该键却**不是同一行**的平行边
-——它们的 `role` 不同（如 `('000063','PARTICIPATES_IN','EVT-0356','1272','1272001','0.9')`
-的两行分别是「主体」与「涉及方」）。若严格只用题述三项作匹配键，`MERGE` 会把它们并成
-5 条，库内关系数将变成 **2731 ≠ 2736**，与硬约束 16／E1 的登记读数冲突。
+（v1.2 与 v1.3 两版实测同为 5 组；组内的键与 `role` 见产物的 `dup_key_audit` 字段）
+——它们的 `role` 不同（如「主体」与「涉及方」）。若严格只用题述三项作匹配键，`MERGE`
+会把每组并成 1 条，库内关系数将**比 `edges.csv` 少 5 条**，与硬约束 16／E1 的
+登记读数冲突。
 处置：匹配键取「端点 ＋ 类型 ＋ 证据三项 ＋ **role**」——实测「9 列（含 role）全同」的
-重复组为 **0**，该键在整份 `edges.csv` 上**唯一**，因此既完整保留全部 2736 行，
-又满足幂等。**这不是调整统计口径**：对拍基准仍是 2802／2736，一个数字都没动；
+重复组为 **0**，该键在整份 `edges.csv` 上**唯一**，因此既完整保留全部 3614 行，
+又满足幂等。**这不是调整统计口径**：对拍基准就是 `nodes.csv`／`edges.csv` 的去表头
+行数本身（现行 v1.3：3607／3614），一个数字都没动；
 差别只在「用哪组属性把 CSV 的每一行唯一地认出来」。脚本导入前会**断言该键唯一**，
 不唯一即报错退出（见 `check_edge_unique_keys`）。
 
@@ -161,7 +163,8 @@ def check_nodes(cols: list, rows: list) -> None:
             seen[nid] = i
     if dup:
         raise SystemExit("nodes.csv 的 node_id 不唯一（%d 组，首组 %s）——MERGE 会并成一行，"
-                         "与登记读数 2802 冲突；不做静默合并。" % (len(dup), dup[0]))
+                         "与 nodes.csv 的 %d 行冲突；不做静默合并。"
+                         % (len(dup), dup[0], len(rows)))
 
 
 def check_edges(cols: list, edge_rows: list, node_ids: set) -> None:
@@ -177,8 +180,8 @@ def check_edges(cols: list, edge_rows: list, node_ids: set) -> None:
                 if r["head_id"] not in node_ids or r["tail_id"] not in node_ids]
     if dangling:
         raise SystemExit("edges.csv 有 %d 条边的端点不在 nodes.csv 内（首条 %s）——"
-                         "导入会凭空造出无标签节点，与登记读数 2802 冲突；不做静默丢弃。"
-                         % (len(dangling), dangling[0]))
+                         "导入会凭空造出无标签节点，与 nodes.csv 的 %d 个节点冲突；"
+                         "不做静默丢弃。" % (len(dangling), dangling[0], len(node_ids)))
 
 
 def check_edge_unique_keys(edge_rows: list) -> dict:
@@ -210,12 +213,12 @@ def check_edge_unique_keys(edge_rows: list) -> dict:
                              sem)
     if sem_dups:
         raise SystemExit("8 条语义边里存在 %d 组「端点＋类型＋证据三项＋role」完全相同的边：%s——"
-                         "MERGE 会并成一行，与登记读数 2736 冲突；不做静默合并。"
-                         % (len(sem_dups), list(sem_dups.items())[:3]))
+                         "MERGE 会并成一行，与 edges.csv 的 %d 行冲突；不做静默合并。"
+                         % (len(sem_dups), list(sem_dups.items())[:3], len(edge_rows)))
     if evd_dups:
         raise SystemExit("EVIDENCED_BY 里存在 %d 组「端点＋类型」完全相同的边：%s——"
-                         "MERGE 会并成一行，与登记读数 2736 冲突。"
-                         % (len(evd_dups), list(evd_dups.items())[:3]))
+                         "MERGE 会并成一行，与 edges.csv 的 %d 行冲突。"
+                         % (len(evd_dups), list(evd_dups.items())[:3], len(edge_rows)))
     return {"semantic_key_fields": ["head_id"] + REL_KEY_FIELDS + ["relation", "tail_id"],
             "semantic_dup_groups": 0,
             "evidenced_by_key_fields": ["head_id", "relation", "tail_id"],
@@ -529,12 +532,19 @@ def write_graph_counts(csv_c, neo_c, st_c, rows, all_match, info, mode,
         "graph_stats_counts": st_c,
         "comparison": rows,
         "all_match": bool(all_match),
-        "comparison_basis": "节点 2802／关系 2736（按 nodes.csv／edges.csv 去表头计数）",
+        # 2026-10-03：原为写死字符串，切到 v1.3 后仍印 2802／2736（**产物在撒谎**），
+        # 现改为按本次实际读入的 CSV 计数生成。
+        "comparison_basis": ("对拍基准 ＝ nodes.csv／edges.csv 的去表头行数本身："
+                             "节点 %d／关系 %d（两版口径都不写死，一律现场计数）"
+                             % (csv_c["nodes_total"], csv_c["edges_total"])),
         "merge_key_note": (
             "节点 MERGE 键 ＝ node_id；语义边 MERGE 键 ＝ 端点＋类型＋证据三项＋role；"
             "EVIDENCED_BY 键 ＝ 端点＋类型（不带证据三项）。role 并入键的原因见本文件"
-            "模块头与 dup_key_audit 字段：仅用『端点＋类型＋证据三项』会把 5 组 role 不同"
-            "的平行边并成 5 条，关系数将变成 2731 ≠ 2736。"),
+            "模块头与 dup_key_audit 字段：仅用『端点＋类型＋证据三项』会把 %d 组 role 不同"
+            "的平行边各并成 1 条，关系数将变成 %d ≠ %d。"
+            % (dup_info["three_field_only_dup_groups"],
+               csv_c["edges_total"] - dup_info["three_field_only_dup_groups"],
+               csv_c["edges_total"])),
         "dup_key_audit": dup_info,
         "relation_types_present": [r for r in RELATIONS
                                    if (neo_c or {}).get("edges_by_relation", {}).get(r, 0) > 0],
@@ -567,7 +577,8 @@ def fingerprint_inputs() -> dict:
 # --------------------------------------------------------------------------
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
-        description="第 9 阶段 T3：图谱导入 Neo4j（幂等）＋ 计数对拍（2802／2736）")
+        description="第 9 阶段 T3：图谱导入 Neo4j（幂等）＋ 计数三方对拍（CSV↔Neo4j↔graph_stats，"
+                    "规模一律现场计数、不写死）")
     parser.add_argument("--dry-run", action="store_true",
                         help="只读 CSV 与统计、不连库、不写库（对拍只做 CSV ↔ graph_stats 两方）")
     parser.add_argument("--reset", action="store_true",
