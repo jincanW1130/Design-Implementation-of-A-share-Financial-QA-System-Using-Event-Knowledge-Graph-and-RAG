@@ -78,9 +78,16 @@ Python 依赖的单一来源，与 `部署\Dockerfile` 同源——Dockerfile �
    并重启服务；② 另起一个 `mysql:8.4` 容器并用 `代码\后端\tools\import_data.py` 导入同一份数据。
    **完整可用的形态是本机形态（第一节）。**
 3. **Neo4j 未注册为 Windows 服务**：它跑在 WSL2 的容器里，**WSL2 发行版空闲会挂起**，挂起后
-   bolt 7687 不可达（`/api/health` 会如实报 `neo4j: false`、状态 `degraded`）。恢复：
+   bolt 7687 不可达（`/api/health` 会如实报 `neo4j: false`、状态 `degraded`）。**2026-10-04 实测把窗口
+   量化了**：最后一次 `wsl` 调用结束后**约 10～15 秒** VM 即挂起，Windows 侧 `bolt 7687` 由可达转为
+   连接被拒；容器随之被**优雅停止**再由 `unless-stopped` 拉起（`docker inspect` 显示 `RestartCount=0`
+   且 `FinishedAt` 非空、日志为 `Neo4j Server shutdown initiated by request`）—— 所以「刚启动好好的、
+   十几秒后 Neo4j 就没了」**不是崩溃，是空闲挂起**。恢复：
    `wsl -d Ubuntu -u root -- bash -lc "systemctl start docker; docker start ashare-neo4j"`；
-   长期运行请保持一个 WSL 会话常驻（例如 `wsl -d Ubuntu -u root -- tail -f /dev/null` 放在另一个窗口）。
+   **长期运行必须让一个 WSL 会话常驻**，两种做法等效：① `启动.ps1 -KeepAlive`（脚本替你起一个
+   `wsl -d Ubuntu -u root -- sleep 7200`，用 `-Stop` 停）；② 自己另开一个窗口跑
+   `wsl -d Ubuntu -u root -- tail -f /dev/null`。保活后实测：连续 60 秒轮询 `bolt 7687` 与
+   `/api/health` 的 `neo4j` 探针**全程为真**。（`启动.ps1` **默认不保活**，加 `-KeepAlive` 才起。）
 4. **WSL 服务偶发 `Wsl/Service/E_UNEXPECTED`**：本阶段实测出现过一次（并发调用 WSL 时），
    `wsl --shutdown` 后重跑启动脚本即可恢复；`启动.ps1` 的所有 WSL 调用都加了超时与作业包装，
    避免裸调挂住脚本。

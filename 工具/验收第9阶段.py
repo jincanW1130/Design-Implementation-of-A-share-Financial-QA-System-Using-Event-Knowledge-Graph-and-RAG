@@ -2595,9 +2595,12 @@ def c_h5(g):
     if bad:
         g.fail("H5", "；".join(bad))
     else:
-        g.ok("H5", "端口口径一致：%s 后端 %s／前端 %s；部署\\README.md 端口一览 %s；"
+        g.ok("H5", "端口口径一致：%s 后端 %s／前端 %s；部署\\README.md **包含**全部固定端口 %s"
+                   "（该正则抓到的是该文件里**所有**四位数字 %s —— 多出的年份／秒数等属误捕，"
+                   "本行判据是「包含」不是「相等」，故不影响判定）；"
                    "run_manifest.json 登记 %s；Neo4j uri=%s%s"
-             % (rel(g.root, cfgsrc), bport, fport, sorted(readme_ports), sorted(man_ports), uri, live_note))
+             % (rel(g.root, cfgsrc), bport, fport, sorted(fixed), sorted(readme_ports),
+                sorted(man_ports), uri, live_note))
 
 
 # --------------------------------------------------------------------------
