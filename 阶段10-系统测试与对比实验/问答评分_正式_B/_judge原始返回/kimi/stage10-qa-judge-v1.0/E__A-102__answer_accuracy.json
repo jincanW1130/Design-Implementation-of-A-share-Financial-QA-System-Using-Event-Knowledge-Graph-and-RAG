@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-102",
+  "attempts": [
+    {
+      "answer_key": "E__A-102",
+      "attempt": 1,
+      "completion_tokens": 1991,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 60.955,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5644,
+      "qid": "FQ-102",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:46:13+08:00",
+      "total_tokens": 7635
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:47:14+08:00",
+  "group": "E",
+  "input_sha256": "2510e2a0bfaed4c72d74528cbec39c2670dfdc4d73a6708682accb8b17f98e76",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "漏报依折麦布(Ⅰ)/(Ⅱ)编号2026S03337/2026S03336并称无法确认；利格列汀编号2026S02025正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-102",
+  "raw_text": "{\"score\":1,\"reason\":\"漏报依折麦布(Ⅰ)/(Ⅱ)编号2026S03337/2026S03336并称无法确认；利格列汀编号2026S02025正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

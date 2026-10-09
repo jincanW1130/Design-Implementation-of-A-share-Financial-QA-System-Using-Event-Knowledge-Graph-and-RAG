@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-110",
+  "attempts": [
+    {
+      "answer_key": "E__A-110",
+      "attempt": 1,
+      "completion_tokens": 642,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 24.743,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4466,
+      "qid": "FQ-110",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:52:34+08:00",
+      "total_tokens": 5108
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:52:59+08:00",
+  "group": "E",
+  "input_sha256": "4211383949d3d0ab7a118690cc11f33325dabb207b3ee7792496a10a090967a3",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "控股股东身份、持股数量与比例、解除质押等事项均有证据2、6直接支撑；但“三一集团为公司第一大股东”一说证据未载明其他股东持股，属少量不严谨。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-110",
+  "raw_text": "{\"score\": 1, \"reason\": \"控股股东身份、持股数量与比例、解除质押等事项均有证据2、6直接支撑；但“三一集团为公司第一大股东”一说证据未载明其他股东持股，属少量不严谨。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

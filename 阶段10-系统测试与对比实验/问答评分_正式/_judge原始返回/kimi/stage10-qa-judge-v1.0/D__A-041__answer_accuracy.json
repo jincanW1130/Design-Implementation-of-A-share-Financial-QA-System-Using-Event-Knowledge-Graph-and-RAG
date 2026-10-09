@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-041",
+  "attempts": [
+    {
+      "answer_key": "D__A-041",
+      "attempt": 1,
+      "completion_tokens": 280,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 10.567,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4276,
+      "qid": "FQ-041",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:49:41+08:00",
+      "total_tokens": 4556
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:49:52+08:00",
+  "group": "D",
+  "input_sha256": "f8369de73e43e671a7964f44887afbca0439446b6d28e2957915efcc1101a105",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "信用卡APP停服迁移答对，但算力金融部分称证据不足未答出中国银行算力Token贷及授信要点，只答对一半，属部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-041",
+  "raw_text": "{\"score\": 1, \"reason\": \"信用卡APP停服迁移答对，但算力金融部分称证据不足未答出中国银行算力Token贷及授信要点，只答对一半，属部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

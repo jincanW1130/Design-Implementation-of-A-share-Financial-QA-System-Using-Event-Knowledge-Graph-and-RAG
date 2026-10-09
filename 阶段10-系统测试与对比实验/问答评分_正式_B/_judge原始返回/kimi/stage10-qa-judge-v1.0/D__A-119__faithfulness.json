@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-119",
+  "attempts": [
+    {
+      "answer_key": "D__A-119",
+      "attempt": 1,
+      "completion_tokens": 949,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 24.732,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4331,
+      "qid": "FQ-119",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:15:43+08:00",
+      "total_tokens": 5280
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:16:08+08:00",
+  "group": "D",
+  "input_sha256": "051943d36733803d0845dcca3f691a5913e96f8002cc6cc072763153e69a639a",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中持股数106.36亿股、占比43.47%、'不会导致控股股东及实际控制人发生变化、不构成要约收购'等事实均逐字见证据2，披露日期2026-07-18与证据元数据一致，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-119",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中持股数106.36亿股、占比43.47%、'不会导致控股股东及实际控制人发生变化、不构成要约收购'等事实均逐字见证据2，披露日期2026-07-18与证据元数据一致，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

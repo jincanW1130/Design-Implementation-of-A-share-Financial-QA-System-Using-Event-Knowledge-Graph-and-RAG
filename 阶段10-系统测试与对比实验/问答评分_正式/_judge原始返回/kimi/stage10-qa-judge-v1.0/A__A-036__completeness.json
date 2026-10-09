@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-036",
+  "attempts": [
+    {
+      "answer_key": "A__A-036",
+      "attempt": 1,
+      "completion_tokens": 151,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 4.46,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4675,
+      "qid": "FQ-036",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:58:00+08:00",
+      "total_tokens": 4826
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T18:58:04+08:00",
+  "group": "A",
+  "input_sha256": "ba883767752154928792ce7116ba05cab027f0bd145054b025a02ab626a05667",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "122人、2,915,367股、三位高管各解锁32,000股及上市流通日2026年7月13日等关键信息全部覆盖，无遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-036",
+  "raw_text": "{\"score\": 2, \"reason\": \"122人、2,915,367股、三位高管各解锁32,000股及上市流通日2026年7月13日等关键信息全部覆盖，无遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

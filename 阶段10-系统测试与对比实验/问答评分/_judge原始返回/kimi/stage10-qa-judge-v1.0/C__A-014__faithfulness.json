@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-014",
+  "attempts": [
+    {
+      "answer_key": "C__A-014",
+      "attempt": 1,
+      "completion_tokens": 1126,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 29.765,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6634,
+      "qid": "PE-14",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:25:46+08:00",
+      "total_tokens": 7760
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:26:16+08:00",
+  "group": "C",
+  "input_sha256": "ed59e531a02e905566e826589d07e7db4f69ba10b60a10003e66e2cdbf46497c",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中回购股数、价格调整、账户号码、过户股数、董事会决议等事实均能在可用证据1-10中逐条找到支撑，且对证据9截断处作了诚实说明，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-14",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中回购股数、价格调整、账户号码、过户股数、董事会决议等事实均能在可用证据1-10中逐条找到支撑，且对证据9截断处作了诚实说明，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

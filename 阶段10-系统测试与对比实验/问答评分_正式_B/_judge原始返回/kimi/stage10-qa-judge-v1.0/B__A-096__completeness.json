@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-096",
+  "attempts": [
+    {
+      "answer_key": "B__A-096",
+      "attempt": 1,
+      "completion_tokens": 1015,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 36.56,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4710,
+      "qid": "FQ-096",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:42:38+08:00",
+      "total_tokens": 5725
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:43:15+08:00",
+  "group": "B",
+  "input_sha256": "d8a46e86034b3db883af9051de69fb0bbbec0bb09cab092193970996ef4fc315",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案含两个关键信息，答案仅覆盖分红派息部分，控股股东质押专户持股422,627,942股这一半关键信息完全缺失",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-096",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案含两个关键信息，答案仅覆盖分红派息部分，控股股东质押专户持股422,627,942股这一半关键信息完全缺失\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

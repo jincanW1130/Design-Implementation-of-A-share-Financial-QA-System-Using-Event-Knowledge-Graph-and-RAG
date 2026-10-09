@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-106",
+  "attempts": [
+    {
+      "answer_key": "E__A-106",
+      "attempt": 1,
+      "completion_tokens": 130,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 11.358,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4278,
+      "qid": "FQ-106",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:50:24+08:00",
+      "total_tokens": 4408
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:50:35+08:00",
+  "group": "E",
+  "input_sha256": "9f469b8bd4afdd36ac541cccc2b5799df6fd415b818a0fcbc8f060b1ddbbf6bd",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核准机构、文号、发行张数（7,000万张）与发行总额（700,000.00万元）均完整覆盖参考答案，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-106",
+  "raw_text": "{\"score\": 2, \"reason\": \"核准机构、文号、发行张数（7,000万张）与发行总额（700,000.00万元）均完整覆盖参考答案，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,46 @@
+{
+  "answer_key": "B__A-052",
+  "attempts": [
+    {
+      "answer_key": "B__A-052",
+      "attempt": 1,
+      "completion_tokens": 2401,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 43.276,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5559,
+      "qid": "FQ-052",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:25:03+08:00",
+      "total_tokens": 7960
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:25:46+08:00",
+  "group": "B",
+  "input_sha256": "a66dbb7d50d4de9ab183e7dde342183f56351027b791411286c785849fc41815",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "disagreement_note": "主 judge 只核人物属实、未计较名称；答案处量表边界，该名称瑕疵使其未达'完全基于证据'。",
+    "final_score": 1,
+    "reason": "人物职务、日期均有可用证据支撑，无编造；但'国家电网南瑞'称呼无证据出处，属少量不严谨，评1。"
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-052",
+  "raw_text": "{\"final_score\": 1, \"reason\": \"人物职务、日期均有可用证据支撑，无编造；但'国家电网南瑞'称呼无证据出处，属少量不严谨，评1。\", \"disagreement_note\": \"主 judge 只核人物属实、未计较名称；答案处量表边界，该名称瑕疵使其未达'完全基于证据'。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

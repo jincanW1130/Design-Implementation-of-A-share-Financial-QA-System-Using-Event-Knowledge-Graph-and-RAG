@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-014",
+  "attempts": [
+    {
+      "answer_key": "D__A-014",
+      "attempt": 1,
+      "completion_tokens": 144,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 7.568,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5135,
+      "qid": "FQ-014",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:34:21+08:00",
+      "total_tokens": 5279
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:34:29+08:00",
+  "group": "D",
+  "input_sha256": "80d447d0890a6cde39fbab1d6db469a9948f385c0574702162509c2225c651b2",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核准机构（国家金融监督管理总局）与文号（金复〔2026〕496号）及任期表述均见证据1原文，全部事实有支撑。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-014",
+  "raw_text": "{\"score\": 2, \"reason\": \"核准机构（国家金融监督管理总局）与文号（金复〔2026〕496号）及任期表述均见证据1原文，全部事实有支撑。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

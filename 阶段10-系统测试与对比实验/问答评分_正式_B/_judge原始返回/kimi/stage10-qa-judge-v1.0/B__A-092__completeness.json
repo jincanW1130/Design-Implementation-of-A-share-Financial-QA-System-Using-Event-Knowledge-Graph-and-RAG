@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-092",
+  "attempts": [
+    {
+      "answer_key": "B__A-092",
+      "attempt": 1,
+      "completion_tokens": 138,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 5.315,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5189,
+      "qid": "FQ-092",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:40:26+08:00",
+      "total_tokens": 5327
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:40:31+08:00",
+  "group": "B",
+  "input_sha256": "9dd5f720b4e726a985bdb06a425fd1f3668b6ecb482df989d81d3c00534d9949",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案三项关键信息：上限由153.59调整为151.01元/股、2026年7月16日生效、管控事件2026年8月13日，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-092",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案三项关键信息：上限由153.59调整为151.01元/股、2026年7月16日生效、管控事件2026年8月13日，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-063",
+  "attempts": [
+    {
+      "answer_key": "D__A-063",
+      "attempt": 1,
+      "completion_tokens": 179,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 8.575,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4671,
+      "qid": "FQ-063",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:15:31+08:00",
+      "total_tokens": 4850
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:15:39+08:00",
+  "group": "D",
+  "input_sha256": "440626811a91f41fe37efb61c68b0ca819f3b132894479f646f842d1789f6593",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件识别为中国石化回购A股并注销事项，合计持股比例由69.95%增至70.01%且跨越1%及5%整数倍，与参考答案完全一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-063",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件识别为中国石化回购A股并注销事项，合计持股比例由69.95%增至70.01%且跨越1%及5%整数倍，与参考答案完全一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

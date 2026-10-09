@@ -1,0 +1,46 @@
+{
+  "answer_key": "D__A-072",
+  "attempts": [
+    {
+      "answer_key": "D__A-072",
+      "attempt": 1,
+      "completion_tokens": 3341,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 25.841,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5139,
+      "qid": "FQ-072",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:34:42+08:00",
+      "total_tokens": 8480
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:35:07+08:00",
+  "group": "D",
+  "input_sha256": "ea8d7c9e874a5a9efd0db87e725661141d4746b94a26d57afb22af9d589f3c52",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "disagreement_note": "分歧在图谱事件时间可否作支撑：主judge认可图谱三元组，副judge只认证据全文，答案处量表边界",
+    "final_score": 1,
+    "reason": "标的、价格、发行对象、交易性质均有证据9/10/3支撑，仅事件时间2026-06-12证据文本未见，属少量不严谨"
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-072",
+  "raw_text": "{\"final_score\": 1, \"reason\": \"标的、价格、发行对象、交易性质均有证据9/10/3支撑，仅事件时间2026-06-12证据文本未见，属少量不严谨\", \"disagreement_note\": \"分歧在图谱事件时间可否作支撑：主judge认可图谱三元组，副judge只认证据全文，答案处量表边界\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

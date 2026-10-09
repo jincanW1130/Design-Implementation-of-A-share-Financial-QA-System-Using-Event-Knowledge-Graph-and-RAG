@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-051",
+  "attempts": [
+    {
+      "answer_key": "A__A-051",
+      "attempt": 1,
+      "completion_tokens": 1080,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 35.307,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4379,
+      "qid": "FQ-051",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:10:51+08:00",
+      "total_tokens": 5459
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:11:26+08:00",
+  "group": "A",
+  "input_sha256": "264de15b727d2a813322f24ebf4b152b5a7f98a4b3b3b1776f5944975ebc0d8c",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "基本覆盖5名在任董事职务缺席及宋静刚，但漏叶礼德、张梦娇候选人信息，未达完整。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-051",
+  "raw_text": "{\"score\":1,\"reason\":\"基本覆盖5名在任董事职务缺席及宋静刚，但漏叶礼德、张梦娇候选人信息，未达完整。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-087",
+  "attempts": [
+    {
+      "answer_key": "C__A-087",
+      "attempt": 1,
+      "completion_tokens": 348,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 2.596,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5012,
+      "qid": "FQ-087",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:03:32+08:00",
+      "total_tokens": 5360
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T01:03:35+08:00",
+  "group": "C",
+  "input_sha256": "5d57d0244b3e3cb45e4ba4f3a4840e76a35a96bcad5b9e61a304b549e8f7f239",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖可行权期限、4,506人可行权5,205.9492万份、0.45万份及303.006万份注销等全部关键信息，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-087",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖可行权期限、4,506人可行权5,205.9492万份、0.45万份及303.006万份注销等全部关键信息，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

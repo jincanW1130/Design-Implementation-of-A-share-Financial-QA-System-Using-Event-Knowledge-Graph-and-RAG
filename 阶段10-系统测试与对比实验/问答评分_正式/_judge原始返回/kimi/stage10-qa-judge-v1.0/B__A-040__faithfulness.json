@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-040",
+  "attempts": [
+    {
+      "answer_key": "B__A-040",
+      "attempt": 1,
+      "completion_tokens": 933,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 27.719,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4981,
+      "qid": "FQ-040",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:07:21+08:00",
+      "total_tokens": 5914
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:07:49+08:00",
+  "group": "B",
+  "input_sha256": "6e1e326ed3f0cb027ac6e1170b028ce846193f332705322dc51406c4cd5d38bd",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "AI智算卡、15家银行智能体卡、三层权益等事实均有对应证据支撑，且对银联未参与AI支付作了恰当限定，未见编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-040",
+  "raw_text": "{\"score\": 2, \"reason\": \"AI智算卡、15家银行智能体卡、三层权益等事实均有对应证据支撑，且对银联未参与AI支付作了恰当限定，未见编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

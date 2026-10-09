@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-005",
+  "attempts": [
+    {
+      "answer_key": "D__A-005",
+      "attempt": 1,
+      "completion_tokens": 112,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 6.554,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3850,
+      "qid": "FQ-005",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:28:59+08:00",
+      "total_tokens": 3962
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:29:05+08:00",
+  "group": "D",
+  "input_sha256": "6858a76e208c5e5bf2498e56eb10005a9537e4015a7841049b8c1d87ea6e927b",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "账户名称、号码0899563268及开户日期2026年8月5日均被证据3、证据4原文明确支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-005",
+  "raw_text": "{\"score\": 2, \"reason\": \"账户名称、号码0899563268及开户日期2026年8月5日均被证据3、证据4原文明确支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

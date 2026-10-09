@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-010",
+  "attempts": [
+    {
+      "answer_key": "C__A-010",
+      "attempt": 1,
+      "completion_tokens": 182,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 11.571,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4846,
+      "qid": "FQ-010",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:38:55+08:00",
+      "total_tokens": 5028
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:39:07+08:00",
+  "group": "C",
+  "input_sha256": "00f815288e26e46de6e204641574be54a4ab251172eb45d5f42751312560a542",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "期权份数2,269,777与注销291,322份（66人）均正确，但漏答符合行权条件的激励对象650名，称无法确认，故部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-010",
+  "raw_text": "{\"score\": 1, \"reason\": \"期权份数2,269,777与注销291,322份（66人）均正确，但漏答符合行权条件的激励对象650名，称无法确认，故部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

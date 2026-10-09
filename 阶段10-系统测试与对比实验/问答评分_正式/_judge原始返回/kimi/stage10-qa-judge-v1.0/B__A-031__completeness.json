@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-031",
+  "attempts": [
+    {
+      "answer_key": "B__A-031",
+      "attempt": 1,
+      "completion_tokens": 422,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 17.146,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5063,
+      "qid": "FQ-031",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:01:29+08:00",
+      "total_tokens": 5485
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:01:46+08:00",
+  "group": "B",
+  "input_sha256": "9fbaa7d8b1bee986fa50a8bb314679ecbb1c7173141d7e98cefc43b7370a6a6c",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案的三项关键数据——营收161.46亿元增6.01%、归母净利润41.90亿元增7.13%、营养健康系列增速27.09%——均已完整覆盖，无关键遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-031",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案的三项关键数据——营收161.46亿元增6.01%、归母净利润41.90亿元增7.13%、营养健康系列增速27.09%——均已完整覆盖，无关键遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

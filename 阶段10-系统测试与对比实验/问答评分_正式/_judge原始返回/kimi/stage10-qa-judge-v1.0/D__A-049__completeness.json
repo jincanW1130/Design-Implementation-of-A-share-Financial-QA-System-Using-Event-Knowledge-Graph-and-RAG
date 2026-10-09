@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-049",
+  "attempts": [
+    {
+      "answer_key": "D__A-049",
+      "attempt": 1,
+      "completion_tokens": 164,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 10.762,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4924,
+      "qid": "FQ-049",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:00:13+08:00",
+      "total_tokens": 5088
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:00:23+08:00",
+  "group": "D",
+  "input_sha256": "7d80ee62a045b34211ecfe658440ac6672ed914737f1a2eb1b668431df1150c2",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "仅覆盖穆峰、李红栓、袁媛三名高管，魏建军等全部8名董事及职务完全缺失，关键信息大量遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-049",
+  "raw_text": "{\"score\": 0, \"reason\": \"仅覆盖穆峰、李红栓、袁媛三名高管，魏建军等全部8名董事及职务完全缺失，关键信息大量遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

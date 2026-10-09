@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-004",
+  "attempts": [
+    {
+      "answer_key": "D__A-004",
+      "attempt": 1,
+      "completion_tokens": 483,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 9.655,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5969,
+      "qid": "PE-04",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:45:56+08:00",
+      "total_tokens": 6452
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T18:46:06+08:00",
+  "group": "D",
+  "input_sha256": "5b4171c9db81c08dd59d6004b384877ca047ed2b3cd74f54d2c940f5780b9cf3",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "仅提及许兴仁一人，遗漏郑弘孟、黄德才、杨秋瑾、丁肇邦、林奂汝等绝大多数关键人名，属大量遗漏。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-04",
+  "raw_text": "{\"score\": 0, \"reason\": \"仅提及许兴仁一人，遗漏郑弘孟、黄德才、杨秋瑾、丁肇邦、林奂汝等绝大多数关键人名，属大量遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-036",
+  "attempts": [
+    {
+      "answer_key": "D__A-036",
+      "attempt": 1,
+      "completion_tokens": 723,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 18.336,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5405,
+      "qid": "FQ-036",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:46:38+08:00",
+      "total_tokens": 6128
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:46:57+08:00",
+  "group": "D",
+  "input_sha256": "cae88a893ac24d0d51707fe86294dce5c57ae20580de2b8cf795d7b73f24fd43",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "122人、2,915,367股、0.04%、2026年7月13日流通、高管各32,000股、19.70%收益率、回购注销及公告日期等事实均可在证据1/2/4/5/6中找到对应支撑，未见编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-036",
+  "raw_text": "{\"score\": 2, \"reason\": \"122人、2,915,367股、0.04%、2026年7月13日流通、高管各32,000股、19.70%收益率、回购注销及公告日期等事实均可在证据1/2/4/5/6中找到对应支撑，未见编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,1093 @@
+{
+ "count": 120,
+ "error_codes": [
+  1002
+ ],
+ "note": "修复前（C 组特例化读 30 题预实验 trace）正式集 120 题的失败留痕；原文件随后清空，以免与新产出混在一起。",
+ "per_question": [
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-001/error_contract.json",
+   "qid": "FQ-001",
+   "reason": "no_runnable_case",
+   "sha256": "17d90af811a4e00819f1f019edf5aa809d94ce6f169041c1e148f1d860cceafa"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-002/error_contract.json",
+   "qid": "FQ-002",
+   "reason": "no_runnable_case",
+   "sha256": "debf64ba36434e58bcb810c9703c32a5dfe54c8cf690b48c3a50f760e525a9ee"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-003/error_contract.json",
+   "qid": "FQ-003",
+   "reason": "no_runnable_case",
+   "sha256": "704c97c209587e4c23e5ebdcb33fd6b7e501517d38f64c0e005ebe9093fc4761"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-004/error_contract.json",
+   "qid": "FQ-004",
+   "reason": "no_runnable_case",
+   "sha256": "49d62b57de3b080de4084ed6b6eadf77f01a43efeacb36095d79e4c3693f1561"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-005/error_contract.json",
+   "qid": "FQ-005",
+   "reason": "no_runnable_case",
+   "sha256": "ae3a1fce5ffc90ada722f5e64ada2e452264d80cd6e905a8cf7dcf0194ea907b"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-006/error_contract.json",
+   "qid": "FQ-006",
+   "reason": "no_runnable_case",
+   "sha256": "d53ae5e4ce64700f3d16640580f647a6d2fa48e79aa6974860449713c238c5c2"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-007/error_contract.json",
+   "qid": "FQ-007",
+   "reason": "no_runnable_case",
+   "sha256": "2d294437aadcdd41724f05be6cf1f259c54c3a2bf19f63c9156b4defa852e8c0"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-008/error_contract.json",
+   "qid": "FQ-008",
+   "reason": "no_runnable_case",
+   "sha256": "c6381b3852c927665444b1c56086e85911a541c0b2936ab0e29fc4a777a9ede0"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-009/error_contract.json",
+   "qid": "FQ-009",
+   "reason": "no_runnable_case",
+   "sha256": "af55b809c6bcb18093dbb955ba167174646e372c9524d0be8229868332983754"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-010/error_contract.json",
+   "qid": "FQ-010",
+   "reason": "no_runnable_case",
+   "sha256": "6a1555c76d3e6f0b2fc7c4c00bcf76e04c28327a3ab595cfea1a8dc0ef4e1cc0"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-011/error_contract.json",
+   "qid": "FQ-011",
+   "reason": "no_runnable_case",
+   "sha256": "aa0702bce19f05f02f2e57d642b841bba7b57aec3c26e1341b7b9a0ef9c7a8db"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-012/error_contract.json",
+   "qid": "FQ-012",
+   "reason": "no_runnable_case",
+   "sha256": "df7e764ded5e5bc94d885e0866b7689b5bc01fb8c19d521a45ab834ad0f0eee2"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-013/error_contract.json",
+   "qid": "FQ-013",
+   "reason": "no_runnable_case",
+   "sha256": "59505c8357eaa817e1a6287520bdc79cfcaede5c5564c43afb0c3f5cff0e8901"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-014/error_contract.json",
+   "qid": "FQ-014",
+   "reason": "no_runnable_case",
+   "sha256": "068f9ec190c9f057610fddba1f183fb804c0bd5888e27fc2b30cb61f8447f264"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-015/error_contract.json",
+   "qid": "FQ-015",
+   "reason": "no_runnable_case",
+   "sha256": "ca4c6de2f9e897871a5d43df5caf1d0dc038269c940abda257e7d08d5365ffbd"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-016/error_contract.json",
+   "qid": "FQ-016",
+   "reason": "no_runnable_case",
+   "sha256": "c6529af585cc3311afe3f672cf003c0ee4086069521e7dfd5a17bb555ff7660c"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-017/error_contract.json",
+   "qid": "FQ-017",
+   "reason": "no_runnable_case",
+   "sha256": "3572dd4f50a860da10d723e259332a128274f287e1f5a23638a2d2f2a447369a"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-018/error_contract.json",
+   "qid": "FQ-018",
+   "reason": "no_runnable_case",
+   "sha256": "3a5f6c6bf8107272d46c1624efd06024929e91f3c105be77c7a66564787218b6"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-019/error_contract.json",
+   "qid": "FQ-019",
+   "reason": "no_runnable_case",
+   "sha256": "79887d360254936a4dd8c683b03d99824b755f172d6bcb358167ee0b2b11708f"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-020/error_contract.json",
+   "qid": "FQ-020",
+   "reason": "no_runnable_case",
+   "sha256": "f3f60398e4c0fb76eabc022d9838879bd105c30d60b99184ebe76eeedd56ee5f"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-021/error_contract.json",
+   "qid": "FQ-021",
+   "reason": "no_runnable_case",
+   "sha256": "fcfdadf4486242cd7db673022142a0bb3fbaad63527801201a9b53444bf3cd4d"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-022/error_contract.json",
+   "qid": "FQ-022",
+   "reason": "no_runnable_case",
+   "sha256": "f86097b6262d981bf695d0d49801bf0ce0e0ec6e2677c6149402f7daa6ba7cfe"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-023/error_contract.json",
+   "qid": "FQ-023",
+   "reason": "no_runnable_case",
+   "sha256": "09446df04ef9539a5a0cd9c91f4edf07aa128de4248d2f127d6651f074b4f501"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-024/error_contract.json",
+   "qid": "FQ-024",
+   "reason": "no_runnable_case",
+   "sha256": "528c0ae55751e834bd06d0547b3bef0d4aac0520d08e33b79f7456ea3a0b4542"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-025/error_contract.json",
+   "qid": "FQ-025",
+   "reason": "no_runnable_case",
+   "sha256": "3fdcd5daa05a52a1f5cdb7ae4382fcfb9b3aa8c6d53afd9e2dd19b0f619eb2d5"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-026/error_contract.json",
+   "qid": "FQ-026",
+   "reason": "no_runnable_case",
+   "sha256": "40a95df054a959714f6fe33cdf98252919ab11065480ce0409dc5da7e1304aff"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-027/error_contract.json",
+   "qid": "FQ-027",
+   "reason": "no_runnable_case",
+   "sha256": "16f9b67c820060d208c51f8c3a396b3a7381dd1e57bc8bf260a5a4deb8eaa776"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-028/error_contract.json",
+   "qid": "FQ-028",
+   "reason": "no_runnable_case",
+   "sha256": "f44f3722d1e9858d7a08f3e02c37461fdd2342645075439290f85a0a08659945"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-029/error_contract.json",
+   "qid": "FQ-029",
+   "reason": "no_runnable_case",
+   "sha256": "456fdefbf3738f7314feb0908cf76acc2f8123503a50ad01ae1443d0f178753d"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-030/error_contract.json",
+   "qid": "FQ-030",
+   "reason": "no_runnable_case",
+   "sha256": "efc01e428abc1c835730fc0d151add9ef3e6306a4d7a93fd6e7fc1b533f3ba19"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-031/error_contract.json",
+   "qid": "FQ-031",
+   "reason": "no_runnable_case",
+   "sha256": "7af233819fd99b1026e5e84409870a37d471049db5b5a0d12fd902cd97fd141a"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-032/error_contract.json",
+   "qid": "FQ-032",
+   "reason": "no_runnable_case",
+   "sha256": "9a1f916daa835a7116d07e0a2c2f9aaaf4d1d26b46784164503119b467c8859b"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-033/error_contract.json",
+   "qid": "FQ-033",
+   "reason": "no_runnable_case",
+   "sha256": "ed82ccc84b256edc748ec83ae20f9558450494e57ab8f047f547e6752210d1be"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-034/error_contract.json",
+   "qid": "FQ-034",
+   "reason": "no_runnable_case",
+   "sha256": "4c38adfb6dc2e8a403c9bd033b457c545264d45f54676e552fe6363161811f66"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-035/error_contract.json",
+   "qid": "FQ-035",
+   "reason": "no_runnable_case",
+   "sha256": "3a4046371e7acae67bdcfbba54440cab0d0c82146eb13c4feb9b1a3bf4348140"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-036/error_contract.json",
+   "qid": "FQ-036",
+   "reason": "no_runnable_case",
+   "sha256": "f7cc7c1091fd7827c9d4e6cdd239c769bbc881fd3211c7049b7754f8b5335053"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-037/error_contract.json",
+   "qid": "FQ-037",
+   "reason": "no_runnable_case",
+   "sha256": "e595413503f6215651692763272c29aed927e81541ca6b9810c7f723432c830d"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-038/error_contract.json",
+   "qid": "FQ-038",
+   "reason": "no_runnable_case",
+   "sha256": "22102393ad884fe59a6f5c2108c09d69449f1f53684b7b0b77542a0611d48ac8"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-039/error_contract.json",
+   "qid": "FQ-039",
+   "reason": "no_runnable_case",
+   "sha256": "10d82d17c1f56512f9302c222dae21088ec469eade768977f42abd2f53dfd1d8"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-040/error_contract.json",
+   "qid": "FQ-040",
+   "reason": "no_runnable_case",
+   "sha256": "6e6ba3a852a497f1fc049b2384e70ea1920188aa6a61575129b975cb1a73688d"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-041/error_contract.json",
+   "qid": "FQ-041",
+   "reason": "no_runnable_case",
+   "sha256": "21e7e16a57246c48d24b675b6eb8ac29ccb6dc0a88f015c8407b8fcea52185e4"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-042/error_contract.json",
+   "qid": "FQ-042",
+   "reason": "no_runnable_case",
+   "sha256": "f942dc09191ebada2efea62a88fac95a5934f22779debe62a6b626d3f92820e6"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-043/error_contract.json",
+   "qid": "FQ-043",
+   "reason": "no_runnable_case",
+   "sha256": "99b3cb4c13a092f5a6c70cb4842b01177f40a5643d84f381a75ea1eb21bf78b7"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-044/error_contract.json",
+   "qid": "FQ-044",
+   "reason": "no_runnable_case",
+   "sha256": "23a8e0884ddfc1ff9a89695d76aacf580b8973944785c4958f8c6e7de07fa324"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-045/error_contract.json",
+   "qid": "FQ-045",
+   "reason": "no_runnable_case",
+   "sha256": "7495ccefbac93da0015dc724278ca4ffdb908918872a26e45a7a07b3e8e1d7da"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-046/error_contract.json",
+   "qid": "FQ-046",
+   "reason": "no_runnable_case",
+   "sha256": "31d3f3c1c6bbd405f6dd1685d0453b590d713345b1d0205cc5424ea1ddcbd0a0"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-047/error_contract.json",
+   "qid": "FQ-047",
+   "reason": "no_runnable_case",
+   "sha256": "98c8aee7c0f907872986a97702ecc763080ded27834c051a515fd93223c596cc"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-048/error_contract.json",
+   "qid": "FQ-048",
+   "reason": "no_runnable_case",
+   "sha256": "aa0e5e4b7377a0f6a825c3cb8b81afb31c1b2c20f274965d1f32ba43d7a8c562"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-049/error_contract.json",
+   "qid": "FQ-049",
+   "reason": "no_runnable_case",
+   "sha256": "5bd0a9f586806e2cf9f2ea1099c289fbacf5c9b5210afd269e7af8ae814a270e"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-050/error_contract.json",
+   "qid": "FQ-050",
+   "reason": "no_runnable_case",
+   "sha256": "d9e9f26bb37a0ba1f672085347bcc72a3a9131911ba243546e03339beefa6a69"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-051/error_contract.json",
+   "qid": "FQ-051",
+   "reason": "no_runnable_case",
+   "sha256": "41ec02842b988a51115c617c9371ee15c8ee366018e416ec8fe2b463638908d6"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-052/error_contract.json",
+   "qid": "FQ-052",
+   "reason": "no_runnable_case",
+   "sha256": "16b2188ce6357a35c4af1e43613b6ea6251046b5b31da5070ad841e2b70ce3a2"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-053/error_contract.json",
+   "qid": "FQ-053",
+   "reason": "no_runnable_case",
+   "sha256": "1023bf1b533d567d01f5f92afa105d7446c71d998fab9de4dcae92e302fcae44"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-054/error_contract.json",
+   "qid": "FQ-054",
+   "reason": "no_runnable_case",
+   "sha256": "44b5ff0b700f50a875cb9686dac48f57230aa4f0f22ea763963248584d0f8560"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-055/error_contract.json",
+   "qid": "FQ-055",
+   "reason": "no_runnable_case",
+   "sha256": "b343a0b8bc2ae935e5a6964718924783a13073709aa42cb053b9dcb5d47ba1f9"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-056/error_contract.json",
+   "qid": "FQ-056",
+   "reason": "no_runnable_case",
+   "sha256": "fc37c26c2c5b0b205b3921a424af41fe071322c38f01baaae8fc4b46994d1521"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-057/error_contract.json",
+   "qid": "FQ-057",
+   "reason": "no_runnable_case",
+   "sha256": "f56d61fa53111f802b19d880d77a50a3558453afc120e9a2fd24a65073d1aac2"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-058/error_contract.json",
+   "qid": "FQ-058",
+   "reason": "no_runnable_case",
+   "sha256": "4d0f93fb2f1ac386c97b51030c452aadd7d4e932a95ea85d463b16cc85107b69"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-059/error_contract.json",
+   "qid": "FQ-059",
+   "reason": "no_runnable_case",
+   "sha256": "79887b897be9b50c53ee19416dab2343bb5cf6cf6123e8b8884c45942b07f0b7"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-060/error_contract.json",
+   "qid": "FQ-060",
+   "reason": "no_runnable_case",
+   "sha256": "e2065c3258648e40b08a346862054e59d9854a6e2e7b4f0e47ba91711aff4e26"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-061/error_contract.json",
+   "qid": "FQ-061",
+   "reason": "no_runnable_case",
+   "sha256": "2749b1adcbb69288f4fa1863e589a6e5e11f768295787eb6afab6dd9c15752c6"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-062/error_contract.json",
+   "qid": "FQ-062",
+   "reason": "no_runnable_case",
+   "sha256": "9c49ad2131ee085f6e9cfd103da02cfde8f260979ec6e9c52e2db40c4ed97b6f"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-063/error_contract.json",
+   "qid": "FQ-063",
+   "reason": "no_runnable_case",
+   "sha256": "35c2b3403329c5ebbffb1a941acad4fdbc5c63d259c31a84c177c513ebd0184d"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-064/error_contract.json",
+   "qid": "FQ-064",
+   "reason": "no_runnable_case",
+   "sha256": "4887909792be26dc1b299addebd1a49877711b53f1a6f610340ca973569b0a26"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-065/error_contract.json",
+   "qid": "FQ-065",
+   "reason": "no_runnable_case",
+   "sha256": "bb60cba74423a49e725feade9b72b75b5ea19d1b36995943a2dd3353791334c6"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-066/error_contract.json",
+   "qid": "FQ-066",
+   "reason": "no_runnable_case",
+   "sha256": "082886c54f20ca0c45dea4f16e0d8b66220286aa2f66cf929a951532b409a65b"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-067/error_contract.json",
+   "qid": "FQ-067",
+   "reason": "no_runnable_case",
+   "sha256": "02d5042a16d161a65a0a1600bbe727a23f1b9eaa20501038e734e5fb6b5f98bb"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-068/error_contract.json",
+   "qid": "FQ-068",
+   "reason": "no_runnable_case",
+   "sha256": "5c9c0873b651fe409d184795dd9265b1ba1d1e6b29311fdd90e353337e138a66"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-069/error_contract.json",
+   "qid": "FQ-069",
+   "reason": "no_runnable_case",
+   "sha256": "3a410f0fbc2ea9d7f857e23258029cab5d9c5d421b56d53db5f08c18179bb649"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-070/error_contract.json",
+   "qid": "FQ-070",
+   "reason": "no_runnable_case",
+   "sha256": "b7129d185955d5c5c568384b905192e6a846d71f107e78d115cb6d013dab3f96"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-071/error_contract.json",
+   "qid": "FQ-071",
+   "reason": "no_runnable_case",
+   "sha256": "12b0fba8f6be721da4720b06a92aad4709ef87b4c43d0191cc82aab25c49bc13"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-072/error_contract.json",
+   "qid": "FQ-072",
+   "reason": "no_runnable_case",
+   "sha256": "a935a180d5e49453df92af0689a9ca99532bfc5f8e2e2e8e99473f49ad45f90a"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-073/error_contract.json",
+   "qid": "FQ-073",
+   "reason": "no_runnable_case",
+   "sha256": "29ea790e63f6485ab5d81918ae2620cfc66250d08c9718918ae7fa4f6b049f16"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-074/error_contract.json",
+   "qid": "FQ-074",
+   "reason": "no_runnable_case",
+   "sha256": "2f26d86376f5e636a0a673ce9635144d2d2be3e7e1e02bd41095e1690827d25a"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-075/error_contract.json",
+   "qid": "FQ-075",
+   "reason": "no_runnable_case",
+   "sha256": "e5f3955fd9b697843addeffba661f0e777c83d937020d0cc2e3460ae70f794cb"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-076/error_contract.json",
+   "qid": "FQ-076",
+   "reason": "no_runnable_case",
+   "sha256": "838dec67f33242621822f8e68675b4670562ace64088b99a9ba3f2454c2b6b23"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-077/error_contract.json",
+   "qid": "FQ-077",
+   "reason": "no_runnable_case",
+   "sha256": "0f09f32a583e0e5efc8298b3dbb906d0bcab27c149b3d9929781cfb6a4e33569"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-078/error_contract.json",
+   "qid": "FQ-078",
+   "reason": "no_runnable_case",
+   "sha256": "418b59fc047484427b35bf8038aea26b04ea17cc7ad584768c388c04a09e9327"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-079/error_contract.json",
+   "qid": "FQ-079",
+   "reason": "no_runnable_case",
+   "sha256": "116896ac360d813462c6280f40129aa22d7963467b2b3d7e9953db288b87d088"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-080/error_contract.json",
+   "qid": "FQ-080",
+   "reason": "no_runnable_case",
+   "sha256": "77ba0fdfc14dd57e3447f7fb4e1cb3cd3c76693dcf55c2314fd59c78f38e977a"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-081/error_contract.json",
+   "qid": "FQ-081",
+   "reason": "no_runnable_case",
+   "sha256": "fcd6b4701d9451a7961684b3e659d337b6d775b927d32c6ee7215112ea632964"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-082/error_contract.json",
+   "qid": "FQ-082",
+   "reason": "no_runnable_case",
+   "sha256": "497a16f18a8a85adbcf0edc1a9718c6dc2074b9fd07620e40d474e5473321880"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-083/error_contract.json",
+   "qid": "FQ-083",
+   "reason": "no_runnable_case",
+   "sha256": "05384c15f326aa7bedf9dfb18a1f83dc8c0dcf4c244d9222e29cfd5898dc5651"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-084/error_contract.json",
+   "qid": "FQ-084",
+   "reason": "no_runnable_case",
+   "sha256": "f381eea536128f655866797075c3d551f681a870537fc41c330ee3d10eff9882"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-085/error_contract.json",
+   "qid": "FQ-085",
+   "reason": "no_runnable_case",
+   "sha256": "db3298ceb88ce72e865eefe01ac795cb5b2dcb6909f09d1444ca772ab3e19051"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-086/error_contract.json",
+   "qid": "FQ-086",
+   "reason": "no_runnable_case",
+   "sha256": "5c391fecd7ff62d25f937f5df7ed5a38ce9776b8568369dda538de6051f5d612"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-087/error_contract.json",
+   "qid": "FQ-087",
+   "reason": "no_runnable_case",
+   "sha256": "7d0e75b64cd8e6c0e616ad632a7ff33e8a982c498f2f522334e407c3d21849c6"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-088/error_contract.json",
+   "qid": "FQ-088",
+   "reason": "no_runnable_case",
+   "sha256": "6eca166f04c7fadd978aea7390c5838a5639b804ed923d635c7dac2396476e87"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-089/error_contract.json",
+   "qid": "FQ-089",
+   "reason": "no_runnable_case",
+   "sha256": "374af8d5d1bf87f59e11e54704f2a6ce29f245139b25d392a7f5244716082809"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-090/error_contract.json",
+   "qid": "FQ-090",
+   "reason": "no_runnable_case",
+   "sha256": "48b9f2ae66b9c13275d470936b536aa80ee5e0c2c044dc5c5b35db8c298a0ee8"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-091/error_contract.json",
+   "qid": "FQ-091",
+   "reason": "no_runnable_case",
+   "sha256": "e3e46497afe91d83dc296554c2d1ce8000712bbb137a0c4fe2f2a415294b2f6d"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-092/error_contract.json",
+   "qid": "FQ-092",
+   "reason": "no_runnable_case",
+   "sha256": "4109c0fb912f05af7154a3710899237a277de397f5c780d269290f78de226ce7"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-093/error_contract.json",
+   "qid": "FQ-093",
+   "reason": "no_runnable_case",
+   "sha256": "581fad43fda0c6899a3a180c4e6a3824ad6454c6bb1648dc067efe65bead6d6a"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-094/error_contract.json",
+   "qid": "FQ-094",
+   "reason": "no_runnable_case",
+   "sha256": "3d4d2bae11bcea3b548c66aba3df69a03acf7c2b4fb3436e06fcfe91f3780720"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-095/error_contract.json",
+   "qid": "FQ-095",
+   "reason": "no_runnable_case",
+   "sha256": "a631854749c1b116f830b598a514ee3a957c98b16945f94aa8464498607ca54a"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-096/error_contract.json",
+   "qid": "FQ-096",
+   "reason": "no_runnable_case",
+   "sha256": "f5c4cc7b8005b0f7b9dcbd95b5a0a7b37a9ce5735cf9dc5898ecb7ee6ca6468e"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-097/error_contract.json",
+   "qid": "FQ-097",
+   "reason": "no_runnable_case",
+   "sha256": "680e780f1f3012f500faae9362a85e9ece251c90475ecfd7878b81957ff13157"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-098/error_contract.json",
+   "qid": "FQ-098",
+   "reason": "no_runnable_case",
+   "sha256": "b33a26b47dbaf70aff9604bf6f6e317403062bdd39b613864aa4fdd3193d7f7c"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-099/error_contract.json",
+   "qid": "FQ-099",
+   "reason": "no_runnable_case",
+   "sha256": "6f99085ee4c10ec1c847ca9fe011b4cbb627f4d195c32a4edda273fd36df500b"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-100/error_contract.json",
+   "qid": "FQ-100",
+   "reason": "no_runnable_case",
+   "sha256": "3a9b5163be98aabf8da0d1e10fc1701838b875ff97c4d6603eb486383c94b3f5"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-101/error_contract.json",
+   "qid": "FQ-101",
+   "reason": "no_runnable_case",
+   "sha256": "c2ff9f6fa79d957640c0647c8af0ff85bd008e2534882fea8cca154f40ef3a10"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-102/error_contract.json",
+   "qid": "FQ-102",
+   "reason": "no_runnable_case",
+   "sha256": "433d6613c74dccabbd5ec010fa82e0f271979e1348375c52e9685cc703955e03"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-103/error_contract.json",
+   "qid": "FQ-103",
+   "reason": "no_runnable_case",
+   "sha256": "f32091f2a8c06a42cd809d3a921d44c307b8abc624a0b19aa57718267a07226a"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-104/error_contract.json",
+   "qid": "FQ-104",
+   "reason": "no_runnable_case",
+   "sha256": "735f8e23d4c00e5e3139b3c8b574acb5c78eaacf8a0413766e876b5cc117e971"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-105/error_contract.json",
+   "qid": "FQ-105",
+   "reason": "no_runnable_case",
+   "sha256": "0f73b2413cf0974cfd324556f661cbc78b39b759e62873436ed55601c107d0e2"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-106/error_contract.json",
+   "qid": "FQ-106",
+   "reason": "no_runnable_case",
+   "sha256": "fcfbe6ae54d6550315995f93e6fff531d49618d5c1e3582c61488c353a06dbaf"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-107/error_contract.json",
+   "qid": "FQ-107",
+   "reason": "no_runnable_case",
+   "sha256": "3df24964dd9c9ae18a1c194f99912751989492b4efbbe060af40b4d183113dc9"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-108/error_contract.json",
+   "qid": "FQ-108",
+   "reason": "no_runnable_case",
+   "sha256": "798d53169e79843f4cc55b988e2d27b11e531e7396aa8c75e825c11f7279c3f2"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-109/error_contract.json",
+   "qid": "FQ-109",
+   "reason": "no_runnable_case",
+   "sha256": "11dcdbe280ae4e90512bc6259ef7557fc6978077e4fe073fd0571a758a197c38"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-110/error_contract.json",
+   "qid": "FQ-110",
+   "reason": "no_runnable_case",
+   "sha256": "729ff4b205d72f0774205d48e868838970ec7ffea2a7e0008f05ceb5dbfe7e1b"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-111/error_contract.json",
+   "qid": "FQ-111",
+   "reason": "no_runnable_case",
+   "sha256": "7a169428a9dadf354bbf1acf2f2dedf7a9d47a9a2df321602163ac7807d3c879"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-112/error_contract.json",
+   "qid": "FQ-112",
+   "reason": "no_runnable_case",
+   "sha256": "be41f8d24dfba0f0efa3e725f11a70649353e5283c61f03e4e40634348272e74"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-113/error_contract.json",
+   "qid": "FQ-113",
+   "reason": "no_runnable_case",
+   "sha256": "b360359a3588a18cceedcb512f50b351e37c9b095b0c4f3e3d3cc22903191e4b"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-114/error_contract.json",
+   "qid": "FQ-114",
+   "reason": "no_runnable_case",
+   "sha256": "6462dfa5eabfedf4e25ca276aba8c6c79e52df20b46c78fd81f81d7c35a9a457"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-115/error_contract.json",
+   "qid": "FQ-115",
+   "reason": "no_runnable_case",
+   "sha256": "0be168cbe9a2a29befe0ef441d366d346201bfd582e58c9c2ccd568e6f10acb0"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-116/error_contract.json",
+   "qid": "FQ-116",
+   "reason": "no_runnable_case",
+   "sha256": "f6e0ea6ad3524e261c831328612a523404bd3865d78d780f09125071d2bda799"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-117/error_contract.json",
+   "qid": "FQ-117",
+   "reason": "no_runnable_case",
+   "sha256": "f215e8ded7ff8ae5c862935a78918044ce429509f7669cc64e0c10fff5c971e1"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-118/error_contract.json",
+   "qid": "FQ-118",
+   "reason": "no_runnable_case",
+   "sha256": "9055779b1bba73ecc1a910807af38034d5c2f02c1c26b75166032b37cf60b6a8"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-119/error_contract.json",
+   "qid": "FQ-119",
+   "reason": "no_runnable_case",
+   "sha256": "cfbbb73972c245c85550beeac64de8145f6852b550a76b416a9b03f0d64b0d68"
+  },
+  {
+   "bytes": 367,
+   "error_code": 1002,
+   "exit_code": 1,
+   "path": "逐题/C/FQ-120/error_contract.json",
+   "qid": "FQ-120",
+   "reason": "no_runnable_case",
+   "sha256": "f3b2d671472d34e2a199219bedcec49793d31fc651539c2d8dffc74dba83eb9c"
+  }
+ ],
+ "reasons": [
+  "no_runnable_case"
+ ],
+ "schema": "stage10-c-prefix-failure-record-1.0"
+}

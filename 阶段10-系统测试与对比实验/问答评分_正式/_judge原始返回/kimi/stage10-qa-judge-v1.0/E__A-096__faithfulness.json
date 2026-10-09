@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-096",
+  "attempts": [
+    {
+      "answer_key": "E__A-096",
+      "attempt": 1,
+      "completion_tokens": 683,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 20.603,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4683,
+      "qid": "FQ-096",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:40:50+08:00",
+      "total_tokens": 5366
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:41:11+08:00",
+  "group": "E",
+  "input_sha256": "6593e496d82a10d7343bff33380aa07ab0d6ff9b55c2a8e5ea822e43ab8e0726",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "每股0.18元（每10股派1.8元）有证据4原文支撑，回购股数42,987,413股、员工持股22,736,500股分别与证据4、证据2一致，质押专户数量如实说明证据未披露，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-096",
+  "raw_text": "{\"score\": 2, \"reason\": \"每股0.18元（每10股派1.8元）有证据4原文支撑，回购股数42,987,413股、员工持股22,736,500股分别与证据4、证据2一致，质押专户数量如实说明证据未披露，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

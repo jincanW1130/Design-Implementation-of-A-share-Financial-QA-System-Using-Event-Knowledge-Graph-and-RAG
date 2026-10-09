@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-010",
+  "attempts": [
+    {
+      "answer_key": "B__A-010",
+      "attempt": 1,
+      "completion_tokens": 299,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 13.697,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4776,
+      "qid": "FQ-010",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:50:25+08:00",
+      "total_tokens": 5075
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:50:38+08:00",
+  "group": "B",
+  "input_sha256": "b4d827efdd75a3d5a0bd9a5413e4b05ac170817024354cbcac0a40b0c14dbc1e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答对了行权份数2,269,777份及离职注销66人291,322份，但缺少关键信息“符合行权条件的激励对象650名”，三项关键信息缺一项，属基本覆盖。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-010",
+  "raw_text": "{\"score\": 1, \"reason\": \"答对了行权份数2,269,777份及离职注销66人291,322份，但缺少关键信息“符合行权条件的激励对象650名”，三项关键信息缺一项，属基本覆盖。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

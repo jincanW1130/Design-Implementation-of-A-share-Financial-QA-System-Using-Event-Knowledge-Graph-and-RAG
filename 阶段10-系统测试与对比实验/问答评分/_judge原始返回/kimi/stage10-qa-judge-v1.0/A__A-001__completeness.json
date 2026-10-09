@@ -1,0 +1,44 @@
+{
+  "answer_key": "A__A-001",
+  "attempts": [
+    {
+      "answer_key": "A__A-001",
+      "attempt": 1,
+      "completion_tokens": 182,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 7.087,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4190,
+      "qid": "PE-01",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:13:21+08:00",
+      "total_tokens": 4372
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:13:28+08:00",
+  "group": "A",
+  "input_sha256": "87255342d64d43b50f814d693f73a3015bae244598a56a7d8a6a566f91afe4ee",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案关键信息：有效期2026年9月11日至2027年1月25日及开始行权日均无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-01",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案关键信息：有效期2026年9月11日至2027年1月25日及开始行权日均无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

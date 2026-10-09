@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-082",
+  "attempts": [
+    {
+      "answer_key": "C__A-082",
+      "attempt": 1,
+      "completion_tokens": 371,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 6.953,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3989,
+      "qid": "FQ-082",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:03:02+08:00",
+      "total_tokens": 4360
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T01:03:09+08:00",
+  "group": "C",
+  "input_sha256": "e5a98d52b3f932c24d2930aff6982160e6db67c0561791959b03579a241e1945",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案与参考一致：8月31日信义玻璃宣布拟以实物分派方式分拆信义汽车玻璃上市，申请以保密形式递交，证据1完全支撑。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-082",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案与参考一致：8月31日信义玻璃宣布拟以实物分派方式分拆信义汽车玻璃上市，申请以保密形式递交，证据1完全支撑。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

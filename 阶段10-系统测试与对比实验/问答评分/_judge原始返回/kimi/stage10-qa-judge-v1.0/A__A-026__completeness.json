@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-026",
+  "attempts": [
+    {
+      "answer_key": "A__A-026",
+      "attempt": 1,
+      "completion_tokens": 591,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 24.816,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5027,
+      "qid": "PE-26",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:45:30+08:00",
+      "total_tokens": 5618
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:45:54+08:00",
+  "group": "A",
+  "input_sha256": "5bb9791ace44df885289329a32cde486a402ab06366869304d8249725cafafd0",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两份核心协议均已列出，但参考答案中的签署时间（8月3日、7月13日）缺失，且对共同签署主体表示无法确认，属基本覆盖而非信息完整",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-26",
+  "raw_text": "{\"score\": 1, \"reason\": \"两份核心协议均已列出，但参考答案中的签署时间（8月3日、7月13日）缺失，且对共同签署主体表示无法确认，属基本覆盖而非信息完整\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

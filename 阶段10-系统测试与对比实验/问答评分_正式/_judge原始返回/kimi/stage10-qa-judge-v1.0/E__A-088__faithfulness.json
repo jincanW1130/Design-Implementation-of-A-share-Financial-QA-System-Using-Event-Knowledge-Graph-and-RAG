@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-088",
+  "attempts": [
+    {
+      "answer_key": "E__A-088",
+      "attempt": 1,
+      "completion_tokens": 270,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 13.467,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5299,
+      "qid": "FQ-088",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:31:27+08:00",
+      "total_tokens": 5569
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:31:41+08:00",
+  "group": "E",
+  "input_sha256": "b7440ff51f94b9a5376d03974b4885e7dabe2c04edef33279f336a839e6307b2",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "80亿、40亿上限及审批程序由证据3/5/6/7支撑，唐飞期权8,000股与股份74,250股由证据4支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-088",
+  "raw_text": "{\"score\": 2, \"reason\": \"80亿、40亿上限及审批程序由证据3/5/6/7支撑，唐飞期权8,000股与股份74,250股由证据4支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

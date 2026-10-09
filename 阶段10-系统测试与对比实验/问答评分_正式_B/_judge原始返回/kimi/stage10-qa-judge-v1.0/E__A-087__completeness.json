@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-087",
+  "attempts": [
+    {
+      "answer_key": "E__A-087",
+      "attempt": 1,
+      "completion_tokens": 148,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 13.438,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4975,
+      "qid": "FQ-087",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:30:22+08:00",
+      "total_tokens": 5123
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:30:35+08:00",
+  "group": "E",
+  "input_sha256": "e6179a6a28ad7312be5a9310c04f5c06103ec3d832fa23660dcb2b081be9943d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "行权期限、可行权数量（5,205.9492万份/4,506人/17.62元）及两笔注销（0.45万份、303.006万份）均已完整覆盖参考答案，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-087",
+  "raw_text": "{\"score\": 2, \"reason\": \"行权期限、可行权数量（5,205.9492万份/4,506人/17.62元）及两笔注销（0.45万份、303.006万份）均已完整覆盖参考答案，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-049",
+  "attempts": [
+    {
+      "answer_key": "A__A-049",
+      "attempt": 1,
+      "completion_tokens": 224,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 10.642,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4316,
+      "qid": "FQ-049",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:08:20+08:00",
+      "total_tokens": 4540
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:08:31+08:00",
+  "group": "A",
+  "input_sha256": "5258fe4a8de50e5a18ad6efdef3834236bd8913359da7f26d7da2bc64a874eab",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案含全部8名董事及3名高管，被评答案仅答出3名高管，全部董事名单缺失，属关键信息大量遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-049",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案含全部8名董事及3名高管，被评答案仅答出3名高管，全部董事名单缺失，属关键信息大量遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

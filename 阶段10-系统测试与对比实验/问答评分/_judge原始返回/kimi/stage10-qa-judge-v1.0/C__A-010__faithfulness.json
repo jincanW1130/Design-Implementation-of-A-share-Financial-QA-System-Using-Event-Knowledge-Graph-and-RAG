@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-010",
+  "attempts": [
+    {
+      "answer_key": "C__A-010",
+      "attempt": 1,
+      "completion_tokens": 210,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 14.535,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4798,
+      "qid": "PE-10",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:18:18+08:00",
+      "total_tokens": 5008
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:18:32+08:00",
+  "group": "C",
+  "input_sha256": "f08810c2f92c53a5560878255e6357bad1a364509ecc11f9b2e14c21044796c1",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案仅确认证据1载明的第一项议案，明确说明其余议案证据不足，且9月6日会议议案区分均有证据支撑，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-10",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案仅确认证据1载明的第一项议案，明确说明其余议案证据不足，且9月6日会议议案区分均有证据支撑，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

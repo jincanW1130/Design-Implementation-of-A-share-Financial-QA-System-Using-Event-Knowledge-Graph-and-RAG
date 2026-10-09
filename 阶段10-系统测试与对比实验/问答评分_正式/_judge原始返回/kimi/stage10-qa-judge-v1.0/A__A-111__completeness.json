@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-111",
+  "attempts": [
+    {
+      "answer_key": "A__A-111",
+      "attempt": 1,
+      "completion_tokens": 96,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 6.24,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3803,
+      "qid": "FQ-111",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:18:38+08:00",
+      "total_tokens": 3899
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:18:44+08:00",
+  "group": "A",
+  "input_sha256": "8d5a51fbb8fb7eb8ec394b13b5e587ec20de2ec0351af9b6af4af579daecba2a",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确指出通光强能、通光光缆均为公司全资子公司，完整覆盖参考答案关键信息，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-111",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确指出通光强能、通光光缆均为公司全资子公司，完整覆盖参考答案关键信息，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

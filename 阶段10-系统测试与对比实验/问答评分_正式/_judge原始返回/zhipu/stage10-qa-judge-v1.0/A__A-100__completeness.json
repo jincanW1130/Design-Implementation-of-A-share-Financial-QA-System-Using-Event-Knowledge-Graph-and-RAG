@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-100",
+  "attempts": [
+    {
+      "answer_key": "A__A-100",
+      "attempt": 1,
+      "completion_tokens": 1148,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 18.665,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4269,
+      "qid": "FQ-100",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:03:26+08:00",
+      "total_tokens": 5417
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:03:44+08:00",
+  "group": "A",
+  "input_sha256": "d271e08b49ce0d2b5cf115d7c28d6f0d0ff73472ccce1bb46f2bce6c104743de",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案关键信息（北京中兰7月13日签署总承包合同、该项目中标候选人公示、18560万元）全部覆盖，无关键遗漏，判2分。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-100",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案关键信息（北京中兰7月13日签署总承包合同、该项目中标候选人公示、18560万元）全部覆盖，无关键遗漏，判2分。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

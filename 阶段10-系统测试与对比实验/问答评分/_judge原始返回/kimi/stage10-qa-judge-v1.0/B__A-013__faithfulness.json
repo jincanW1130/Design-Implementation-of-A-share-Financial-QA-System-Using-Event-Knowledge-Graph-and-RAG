@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-013",
+  "attempts": [
+    {
+      "answer_key": "B__A-013",
+      "attempt": 1,
+      "completion_tokens": 960,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 27.055,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6079,
+      "qid": "PE-13",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:57:34+08:00",
+      "total_tokens": 7039
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:58:01+08:00",
+  "group": "B",
+  "input_sha256": "6e805ac3c1390e3818e580d575f491be89be7a3231a830755ca8a470237e01a4",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "各事件日期、股数、金额、价格区间、公告编号及人员卖出情况等事实均能在证据1-10中找到对应支撑，未见无依据编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-13",
+  "raw_text": "{\"score\": 2, \"reason\": \"各事件日期、股数、金额、价格区间、公告编号及人员卖出情况等事实均能在证据1-10中找到对应支撑，未见无依据编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

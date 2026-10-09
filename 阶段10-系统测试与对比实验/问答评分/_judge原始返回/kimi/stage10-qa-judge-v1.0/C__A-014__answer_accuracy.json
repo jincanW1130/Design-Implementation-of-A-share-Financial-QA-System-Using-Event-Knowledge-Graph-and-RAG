@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-014",
+  "attempts": [
+    {
+      "answer_key": "C__A-014",
+      "attempt": 1,
+      "completion_tokens": 261,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 10.929,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6604,
+      "qid": "PE-14",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:24:57+08:00",
+      "total_tokens": 6865
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:25:08+08:00",
+  "group": "C",
+  "input_sha256": "18ea0646ac501aa1babf5a9ce664f07ebf422ae431c5c7d06b2d20e9faa5eefc",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答对第六期进展、价格上限调整、首次回购三项，但漏掉第五期回购完成、第二期持股锁定期届满及1,665万股过户，仅部分覆盖金标准",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-14",
+  "raw_text": "{\"score\": 1, \"reason\": \"答对第六期进展、价格上限调整、首次回购三项，但漏掉第五期回购完成、第二期持股锁定期届满及1,665万股过户，仅部分覆盖金标准\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

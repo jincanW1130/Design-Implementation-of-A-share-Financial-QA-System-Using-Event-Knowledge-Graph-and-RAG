@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-023",
+  "attempts": [
+    {
+      "answer_key": "B__A-023",
+      "attempt": 1,
+      "completion_tokens": 99,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 5.618,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4494,
+      "qid": "PE-23",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:05:42+08:00",
+      "total_tokens": 4593
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T17:05:48+08:00",
+  "group": "B",
+  "input_sha256": "d67b5bf5ac874762dd4f96e0df793c95f7da4780c53ef7714d2d72f22b7f3788",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案拒答，未覆盖参考答案中任何董监高人员姓名（薛驰、陆伟等全部遗漏），按大量遗漏处理",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-23",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案拒答，未覆盖参考答案中任何董监高人员姓名（薛驰、陆伟等全部遗漏），按大量遗漏处理\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,47 @@
+{
+  "answer_key": "A__A-034",
+  "attempts": [
+    {
+      "answer_key": "A__A-034",
+      "attempt": 1,
+      "completion_tokens": 103,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "json_recovered": true,
+      "judge": "kimi",
+      "latency_seconds": 4.763,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4215,
+      "qid": "FQ-034",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:57:00+08:00",
+      "total_tokens": 4318
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T18:57:05+08:00",
+  "group": "A",
+  "input_sha256": "85dacef54348498abbf8bbb430c51436e6a109f63dba17b32b3ef5f2d1746f95",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "_recovered_from_malformed_json": true,
+    "reason": "答案称无法回答，未给出资金区间、价格上限与回购股数等任何关键信息，属大量遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-034",
+  "raw_text": "{\"score\": 0, \"reason\": 答案称无法回答，未给出资金区间、价格上限与回购股数等任何关键信息，属大量遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

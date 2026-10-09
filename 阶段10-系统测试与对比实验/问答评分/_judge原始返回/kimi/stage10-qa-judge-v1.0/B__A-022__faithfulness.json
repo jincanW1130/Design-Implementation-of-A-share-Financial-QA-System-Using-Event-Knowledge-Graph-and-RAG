@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-022",
+  "attempts": [
+    {
+      "answer_key": "B__A-022",
+      "attempt": 1,
+      "completion_tokens": 894,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 29.233,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6226,
+      "qid": "PE-22",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:05:02+08:00",
+      "total_tokens": 7120
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:05:31+08:00",
+  "group": "B",
+  "input_sha256": "33b5dc70471e8e5ad7cae7ac2d82a270dbb60651a66eebc908a1d705d408fd38",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "董事12人名单、高鹏/吴雷鸣任职资格、冀光恒行长身份均与证据1/2/7/10原文一致，对证据3/4/8仅提职务未提姓名的描述属实，推断部分明确标注为模型分析并加了限定，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-22",
+  "raw_text": "{\"score\": 2, \"reason\": \"董事12人名单、高鹏/吴雷鸣任职资格、冀光恒行长身份均与证据1/2/7/10原文一致，对证据3/4/8仅提职务未提姓名的描述属实，推断部分明确标注为模型分析并加了限定，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

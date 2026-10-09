@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-030",
+  "attempts": [
+    {
+      "answer_key": "A__A-030",
+      "attempt": 1,
+      "completion_tokens": 109,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 6.582,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4716,
+      "qid": "PE-30",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:48:13+08:00",
+      "total_tokens": 4825
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T16:48:20+08:00",
+  "group": "A",
+  "input_sha256": "07adc25149ea1f17bd4760bd973992eb5117bb75e2df57a22d392914d5bbceac",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件（2026年A股持股计划非交易过户完成）、过户数量15,772,385股、占比0.21%及锁定期均与参考答案一致，判定完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-30",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件（2026年A股持股计划非交易过户完成）、过户数量15,772,385股、占比0.21%及锁定期均与参考答案一致，判定完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

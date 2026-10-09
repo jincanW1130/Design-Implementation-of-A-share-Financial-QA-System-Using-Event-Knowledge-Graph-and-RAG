@@ -1,0 +1,44 @@
+{
+  "answer_key": "A__A-011",
+  "attempts": [
+    {
+      "answer_key": "A__A-011",
+      "attempt": 1,
+      "completion_tokens": 82,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 6.021,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5632,
+      "qid": "PE-11",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:30:47+08:00",
+      "total_tokens": 5714
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:30:54+08:00",
+  "group": "A",
+  "input_sha256": "0b63e4d28af8edab946131ff4b5679374b3391a076e9e3fe94361bd80e6af250",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案的10家被担保人全部被列出，无遗漏，信息完整",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-11",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案的10家被担保人全部被列出，无遗漏，信息完整\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-088",
+  "attempts": [
+    {
+      "answer_key": "E__A-088",
+      "attempt": 1,
+      "completion_tokens": 119,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 9.425,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5269,
+      "qid": "FQ-088",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:31:07+08:00",
+      "total_tokens": 5388
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:31:16+08:00",
+  "group": "E",
+  "input_sha256": "60530bb5cec77b1b28f1881705e2e514006df64210ff13663b9a0a4672e0ccac",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "四项数值（80亿元含、40亿元含、期权8,000股、股份74,250股）与参考答案完全一致，无遗漏无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-088",
+  "raw_text": "{\"score\": 2, \"reason\": \"四项数值（80亿元含、40亿元含、期权8,000股、股份74,250股）与参考答案完全一致，无遗漏无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-076",
+  "attempts": [
+    {
+      "answer_key": "B__A-076",
+      "attempt": 1,
+      "completion_tokens": 945,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 30.557,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4812,
+      "qid": "FQ-076",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:27:07+08:00",
+      "total_tokens": 5757
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:27:38+08:00",
+  "group": "B",
+  "input_sha256": "fb825705cc7991fc51c3509a51c2c9acdabcafc7d460fc925c0790ed014c5f2f",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件认定正确，但主答将公司此次中标金额答为12,950万元，与金标准10,762万元不符（10,762仅出现在补充说明中），项目金额12,950万元正确，故部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-076",
+  "raw_text": "{\"score\": 1, \"reason\": \"事件认定正确，但主答将公司此次中标金额答为12,950万元，与金标准10,762万元不符（10,762仅出现在补充说明中），项目金额12,950万元正确，故部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

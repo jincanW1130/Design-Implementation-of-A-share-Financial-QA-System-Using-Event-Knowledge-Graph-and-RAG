@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-012",
+  "attempts": [
+    {
+      "answer_key": "D__A-012",
+      "attempt": 1,
+      "completion_tokens": 664,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 24.662,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4614,
+      "qid": "PE-12",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:47:34+08:00",
+      "total_tokens": 5278
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:47:59+08:00",
+  "group": "D",
+  "input_sha256": "a24a8b2d6eba517dcdc1ab9efa4bb0d1be19fe154fa148e1cb5220d9cb9f4f9f",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "协议名称、签订日期、期限、释义及股东会审议等事实均能在证据2/3/4/6中找到原文支撑，仅引文「规定/规范」一字之差，不构成无依据事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-12",
+  "raw_text": "{\"score\": 2, \"reason\": \"协议名称、签订日期、期限、释义及股东会审议等事实均能在证据2/3/4/6中找到原文支撑，仅引文「规定/规范」一字之差，不构成无依据事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

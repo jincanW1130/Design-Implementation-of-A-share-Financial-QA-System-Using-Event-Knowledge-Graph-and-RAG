@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-007",
+  "attempts": [
+    {
+      "answer_key": "E__A-007",
+      "attempt": 1,
+      "completion_tokens": 85,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 5.523,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4980,
+      "qid": "PE-07",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:13:54+08:00",
+      "total_tokens": 5065
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T18:14:00+08:00",
+  "group": "E",
+  "input_sha256": "69043660f2d5a60497926c86c7064c919c19c8af5bce4ae185a22924efae3ec5",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确工商银行为联席主承销商之一，并指出主承销为渤海银行，完整覆盖参考答案全部关键信息。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-07",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确工商银行为联席主承销商之一，并指出主承销为渤海银行，完整覆盖参考答案全部关键信息。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

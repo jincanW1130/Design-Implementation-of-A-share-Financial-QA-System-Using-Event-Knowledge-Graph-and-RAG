@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-103",
+  "attempts": [
+    {
+      "answer_key": "D__A-103",
+      "attempt": 1,
+      "completion_tokens": 222,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 4.574,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4808,
+      "qid": "FQ-103",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:10:30+08:00",
+      "total_tokens": 5030
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T01:10:35+08:00",
+  "group": "D",
+  "input_sha256": "05c63505a4f265e9eb9377615e40ef18140e65df598bb750582c59fd99f8b917",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案三个关键点：接受机构、通知书编号、注册有效期及起始日期，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-103",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案三个关键点：接受机构、通知书编号、注册有效期及起始日期，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

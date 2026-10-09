@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-083",
+  "attempts": [
+    {
+      "answer_key": "B__A-083",
+      "attempt": 1,
+      "completion_tokens": 325,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 11.757,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4562,
+      "qid": "FQ-083",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:34:06+08:00",
+      "total_tokens": 4887
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:34:18+08:00",
+  "group": "B",
+  "input_sha256": "73b714406ecccf87962ec7f90e326cc047b565a67f4ccdb8261e9b9b9331968b",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、编号INTerpath-001、联合Keytruda、适应症及股价涨幅等全部事实均能在证据1原文中找到对应支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-083",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、编号INTerpath-001、联合Keytruda、适应症及股价涨幅等全部事实均能在证据1原文中找到对应支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

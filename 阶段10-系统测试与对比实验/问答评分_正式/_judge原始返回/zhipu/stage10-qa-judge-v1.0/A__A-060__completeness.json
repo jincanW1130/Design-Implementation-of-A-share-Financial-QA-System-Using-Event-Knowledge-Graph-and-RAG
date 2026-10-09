@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-060",
+  "attempts": [
+    {
+      "answer_key": "A__A-060",
+      "attempt": 1,
+      "completion_tokens": 200,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 2.329,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4207,
+      "qid": "FQ-060",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:26:51+08:00",
+      "total_tokens": 4407
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:26:53+08:00",
+  "group": "A",
+  "input_sha256": "11684b035dce3aa7703afcc75ab9470c4104b63867fb7b4aaecf40af3aa5f47f",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案声称证据不足未给出任何内容，参考答案中的程忠身份与688001代码等关键信息全部遗漏，按大量遗漏计0分。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-060",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案声称证据不足未给出任何内容，参考答案中的程忠身份与688001代码等关键信息全部遗漏，按大量遗漏计0分。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

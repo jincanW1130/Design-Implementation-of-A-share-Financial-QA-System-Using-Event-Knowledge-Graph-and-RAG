@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-075",
+  "attempts": [
+    {
+      "answer_key": "B__A-075",
+      "attempt": 1,
+      "completion_tokens": 993,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 27.71,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4132,
+      "qid": "FQ-075",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:26:38+08:00",
+      "total_tokens": 5125
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:27:06+08:00",
+  "group": "B",
+  "input_sha256": "00f68274a8efb7c00e10d4f5fdfc4d95d701babbba862d172e26b4f55a960ba4",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参与主体、招标项目、公示期9月4日起3日、合计12950万元及5.09%、分包金额与包号均在证据1/3/4/10中有原文支撑，未见编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-075",
+  "raw_text": "{\"score\": 2, \"reason\": \"参与主体、招标项目、公示期9月4日起3日、合计12950万元及5.09%、分包金额与包号均在证据1/3/4/10中有原文支撑，未见编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

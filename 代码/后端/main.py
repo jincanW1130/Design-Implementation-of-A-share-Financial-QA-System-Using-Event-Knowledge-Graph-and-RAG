@@ -63,7 +63,7 @@ logger = errors.logger
 APP_TITLE = "A 股财经文本问答系统 · 第 9 阶段后端"
 APP_VERSION = "stage9-t4-skeleton"
 
-# 可选注册的接口模块 → 路由前缀（表 4-13 的 27 个接口分属这些模块）
+# 可选注册的接口模块 → 路由前缀（表 4-13 共 28 行＝业务 25 个接口 ＋ 条件性登录 3 个，后者不注册；25 个业务接口按模块归入下列前缀）
 OPTIONAL_ROUTERS = [
     ("qa", "/api/qa"),
     ("evidence", "/api/evidence"),

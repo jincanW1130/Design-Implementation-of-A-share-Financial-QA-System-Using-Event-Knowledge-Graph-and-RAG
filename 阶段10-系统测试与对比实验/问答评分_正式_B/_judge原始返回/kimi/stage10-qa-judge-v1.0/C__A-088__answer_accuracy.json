@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-088",
+  "attempts": [
+    {
+      "answer_key": "C__A-088",
+      "attempt": 1,
+      "completion_tokens": 100,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 5.957,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5333,
+      "qid": "FQ-088",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:11:37+08:00",
+      "total_tokens": 5433
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:11:43+08:00",
+  "group": "C",
+  "input_sha256": "d52a021ea1042b69fa42e549ede0d7b81b334b885af797fe0002cbc27b357811",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "80亿元、40亿元上限及期权8,000股、股份74,250股均与参考答案完全一致，四要素全部答对。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-088",
+  "raw_text": "{\"score\": 2, \"reason\": \"80亿元、40亿元上限及期权8,000股、股份74,250股均与参考答案完全一致，四要素全部答对。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

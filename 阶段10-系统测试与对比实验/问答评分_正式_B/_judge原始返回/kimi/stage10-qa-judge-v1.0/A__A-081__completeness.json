@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-081",
+  "attempts": [
+    {
+      "answer_key": "A__A-081",
+      "attempt": 1,
+      "completion_tokens": 690,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 22.698,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4282,
+      "qid": "FQ-081",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:57:47+08:00",
+      "total_tokens": 4972
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:58:09+08:00",
+  "group": "A",
+  "input_sha256": "2ea027d6a34c908857d1dc71eedcaf04ca3a57646225449cdb6037a3faf0185f",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案全部关键信息：7月20日签署两份合同、32套GPU算力、8年（5年+3年续约）、含税2.9957亿元，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-081",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案全部关键信息：7月20日签署两份合同、32套GPU算力、8年（5年+3年续约）、含税2.9957亿元，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

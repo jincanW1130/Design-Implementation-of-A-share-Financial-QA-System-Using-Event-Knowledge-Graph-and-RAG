@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-104",
+  "attempts": [
+    {
+      "answer_key": "E__A-104",
+      "attempt": 1,
+      "completion_tokens": 299,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 7.205,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4525,
+      "qid": "FQ-104",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:34:37+08:00",
+      "total_tokens": 4824
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:34:44+08:00",
+  "group": "E",
+  "input_sha256": "83df705508c3587ee21ff19519ab0fe1c6685b4526946d8ce90d7915370de96b",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "登记机构中国结算上海分公司与授予股数367,989,000股均被证据1原文直接支撑，无编造",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-104",
+  "raw_text": "{\"score\": 2, \"reason\": \"登记机构中国结算上海分公司与授予股数367,989,000股均被证据1原文直接支撑，无编造\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

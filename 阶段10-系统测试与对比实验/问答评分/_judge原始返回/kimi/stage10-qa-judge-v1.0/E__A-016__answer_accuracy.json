@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-016",
+  "attempts": [
+    {
+      "answer_key": "E__A-016",
+      "attempt": 1,
+      "completion_tokens": 416,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 16.185,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5451,
+      "qid": "PE-16",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:21:21+08:00",
+      "total_tokens": 5867
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:21:37+08:00",
+  "group": "E",
+  "input_sha256": "fcb12b8866bff40da182fb908f44303b88a6c67347a2f7e27f7f86b35b8ef9ae",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "金标准指出共同事件为伊利DFI注册且平安银行任联席主承销商，被评答案却明确否认存在共同事件，结论与参考答案相反。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-16",
+  "raw_text": "{\"score\": 0, \"reason\": \"金标准指出共同事件为伊利DFI注册且平安银行任联席主承销商，被评答案却明确否认存在共同事件，结论与参考答案相反。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

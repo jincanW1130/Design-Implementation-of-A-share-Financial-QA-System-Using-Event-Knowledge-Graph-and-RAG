@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-096",
+  "attempts": [
+    {
+      "answer_key": "D__A-096",
+      "attempt": 1,
+      "completion_tokens": 839,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 31.642,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4599,
+      "qid": "FQ-096",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:58:04+08:00",
+      "total_tokens": 5438
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:58:36+08:00",
+  "group": "D",
+  "input_sha256": "2a4edb68cc0db7178234e83cb8d8ece693f7b9788d73eed99716be8f330a0dc7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案两个关键信息均未覆盖：每股派现金额答错（应为每10股3.74元而非1.8元），质押专户持股422,627,942股完全缺失且明示无法回答。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-096",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案两个关键信息均未覆盖：每股派现金额答错（应为每10股3.74元而非1.8元），质押专户持股422,627,942股完全缺失且明示无法回答。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-008",
+  "attempts": [
+    {
+      "answer_key": "E__A-008",
+      "attempt": 1,
+      "completion_tokens": 86,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 10.359,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4178,
+      "qid": "PE-08",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:14:15+08:00",
+      "total_tokens": 4264
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:14:25+08:00",
+  "group": "E",
+  "input_sha256": "b85b93569dd66ec813b767d8823e629369cf55340962fb5b02352702a73ac8e4",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案给出的买方（万华化学集团物资有限公司）与预估总金额（18,000万元）与参考答案完全一致，两要素均答对。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-08",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案给出的买方（万华化学集团物资有限公司）与预估总金额（18,000万元）与参考答案完全一致，两要素均答对。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

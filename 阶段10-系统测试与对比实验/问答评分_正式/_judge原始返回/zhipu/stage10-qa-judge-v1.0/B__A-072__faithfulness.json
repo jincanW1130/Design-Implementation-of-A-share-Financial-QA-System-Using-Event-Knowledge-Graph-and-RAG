@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-072",
+  "attempts": [
+    {
+      "answer_key": "B__A-072",
+      "attempt": 1,
+      "completion_tokens": 1253,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 20.622,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 6045,
+      "qid": "FQ-072",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:38:53+08:00",
+      "total_tokens": 7298
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:39:13+08:00",
+  "group": "B",
+  "input_sha256": "9cd0ab94d92d0a8f68faf8291861c5215d0fc8e05b4c6ddcafe8d73c0079a1b9",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、49.00%股权标的、4,060,091.00万元价格及五方发行对象均可由证据3、9支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-072",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、49.00%股权标的、4,060,091.00万元价格及五方发行对象均可由证据3、9支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

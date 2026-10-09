@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-078",
+  "attempts": [
+    {
+      "answer_key": "A__A-078",
+      "attempt": 1,
+      "completion_tokens": 524,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 4.581,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4155,
+      "qid": "FQ-078",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T22:59:46+08:00",
+      "total_tokens": 4679
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:59:50+08:00",
+  "group": "A",
+  "input_sha256": "f3e0a32a39771763aec10c0e4153534e06b17c9b4ee394d6994ed15b00d8f982",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "与金标准一致：签订22/05石油合同、作业者身份、100%勘探权益、49%开采权益及15年生产期均正确",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-078",
+  "raw_text": "{\"score\": 2, \"reason\": \"与金标准一致：签订22/05石油合同、作业者身份、100%勘探权益、49%开采权益及15年生产期均正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

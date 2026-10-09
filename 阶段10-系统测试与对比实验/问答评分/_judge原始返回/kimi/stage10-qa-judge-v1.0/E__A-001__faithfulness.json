@@ -1,0 +1,44 @@
+{
+  "answer_key": "E__A-001",
+  "attempts": [
+    {
+      "answer_key": "E__A-001",
+      "attempt": 1,
+      "completion_tokens": 136,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.025,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4744,
+      "qid": "PE-01",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:19:36+08:00",
+      "total_tokens": 4880
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:19:44+08:00",
+  "group": "E",
+  "input_sha256": "a564c04e051bc33f6ab63f43ec676f6bede58ad7ed7851a6c90297f5029c38b4",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "行权期有效期、开始行权日、期权代码及限制行权期均可在证据2（chunk 1001001）原文中找到，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-01",
+  "raw_text": "{\"score\": 2, \"reason\": \"行权期有效期、开始行权日、期权代码及限制行权期均可在证据2（chunk 1001001）原文中找到，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

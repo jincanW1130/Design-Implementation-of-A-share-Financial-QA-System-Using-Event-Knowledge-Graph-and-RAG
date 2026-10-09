@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-082",
+  "attempts": [
+    {
+      "answer_key": "D__A-082",
+      "attempt": 1,
+      "completion_tokens": 112,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 9.933,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4024,
+      "qid": "FQ-082",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:47:21+08:00",
+      "total_tokens": 4136
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:47:31+08:00",
+  "group": "D",
+  "input_sha256": "01ce25096b28e10b0906da3aa6a07c5d377421621fd42cf40cb4d2c9c5c4fbff",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案两个关键点：实物分派方式分拆信义汽车玻璃上市、上市申请以保密形式递交，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-082",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案两个关键点：实物分派方式分拆信义汽车玻璃上市、上市申请以保密形式递交，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

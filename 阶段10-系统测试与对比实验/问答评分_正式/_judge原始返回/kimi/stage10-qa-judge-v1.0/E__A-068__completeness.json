@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-068",
+  "attempts": [
+    {
+      "answer_key": "E__A-068",
+      "attempt": 1,
+      "completion_tokens": 525,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 20.257,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5383,
+      "qid": "FQ-068",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:15:31+08:00",
+      "total_tokens": 5908
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:15:51+08:00",
+  "group": "E",
+  "input_sha256": "d84a00eaafd1f3bf9e76a6c7e1e7bc3d57c32a6f1d1623ef2c1c536772c2569e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件（变更募投议案）、金额20,000.00万元、新实施主体中天储能均完整覆盖，准确对应参考答案核心信息",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-068",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件（变更募投议案）、金额20,000.00万元、新实施主体中天储能均完整覆盖，准确对应参考答案核心信息\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

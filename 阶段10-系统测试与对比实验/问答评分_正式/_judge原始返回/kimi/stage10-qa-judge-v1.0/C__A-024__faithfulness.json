@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-024",
+  "attempts": [
+    {
+      "answer_key": "C__A-024",
+      "attempt": 1,
+      "completion_tokens": 234,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 7.86,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4472,
+      "qid": "FQ-024",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:45:57+08:00",
+      "total_tokens": 4706
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:46:05+08:00",
+  "group": "C",
+  "input_sha256": "0c7e8f6f4582fa5bc5675b7379cac10f642743def5409553b0d53dce7dcc36a0",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "机构、编号、6月10日收函及30亿元规模均见证据2原文，接受注册由出具《接受注册通知书》可直接推出，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-024",
+  "raw_text": "{\"score\": 2, \"reason\": \"机构、编号、6月10日收函及30亿元规模均见证据2原文，接受注册由出具《接受注册通知书》可直接推出，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

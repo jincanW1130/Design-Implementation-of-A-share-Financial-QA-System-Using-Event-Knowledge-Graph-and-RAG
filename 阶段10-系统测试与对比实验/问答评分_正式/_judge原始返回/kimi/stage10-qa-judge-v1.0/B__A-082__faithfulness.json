@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-082",
+  "attempts": [
+    {
+      "answer_key": "B__A-082",
+      "attempt": 1,
+      "completion_tokens": 139,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 6.142,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3982,
+      "qid": "FQ-082",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:33:41+08:00",
+      "total_tokens": 4121
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:33:47+08:00",
+  "group": "B",
+  "input_sha256": "72a26852fbee04761e742d441bb6e76d740eaa71153362940e1b74e62217f9cf",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "分拆上市、8月31日、保密形式递交、实物分派等事实均可由证据1原文支撑，未披露细节的说明也属实，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-082",
+  "raw_text": "{\"score\": 2, \"reason\": \"分拆上市、8月31日、保密形式递交、实物分派等事实均可由证据1原文支撑，未披露细节的说明也属实，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

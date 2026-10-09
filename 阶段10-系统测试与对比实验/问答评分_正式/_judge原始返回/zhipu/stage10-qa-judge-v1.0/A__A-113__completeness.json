@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-113",
+  "attempts": [
+    {
+      "answer_key": "A__A-113",
+      "attempt": 1,
+      "completion_tokens": 313,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 6.348,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3706,
+      "qid": "FQ-113",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:53:04+08:00",
+      "total_tokens": 4019
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T00:53:11+08:00",
+  "group": "A",
+  "input_sha256": "e58d21cd875f1f79e707b3c317dff7ae9deea23d0eeb1a26a59c83437efea393",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考要点：周锦明为控股股东及实际控制人，其控股的天津锦龙为2026年度钻探总包提供部分装备及配套服务。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-113",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考要点：周锦明为控股股东及实际控制人，其控股的天津锦龙为2026年度钻探总包提供部分装备及配套服务。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

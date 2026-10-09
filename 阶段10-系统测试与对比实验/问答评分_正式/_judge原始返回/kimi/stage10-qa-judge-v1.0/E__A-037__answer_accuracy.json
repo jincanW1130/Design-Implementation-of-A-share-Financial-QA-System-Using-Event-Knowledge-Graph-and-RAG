@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-037",
+  "attempts": [
+    {
+      "answer_key": "E__A-037",
+      "attempt": 1,
+      "completion_tokens": 181,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.655,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4448,
+      "qid": "FQ-037",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:45:46+08:00",
+      "total_tokens": 4629
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:45:54+08:00",
+  "group": "E",
+  "input_sha256": "5d7e750fa1183554cf03c2f90f89c6f693a74e59a0b14939fa8c5adbbddeb49a",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两次中标主体（公司本身、控股子公司赛博引擎）与金额（30,441.89万元、约1.7亿元）均与参考答案一致，项目内容亦正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-037",
+  "raw_text": "{\"score\": 2, \"reason\": \"两次中标主体（公司本身、控股子公司赛博引擎）与金额（30,441.89万元、约1.7亿元）均与参考答案一致，项目内容亦正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

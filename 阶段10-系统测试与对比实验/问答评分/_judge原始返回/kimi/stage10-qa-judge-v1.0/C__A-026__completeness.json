@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-026",
+  "attempts": [
+    {
+      "answer_key": "C__A-026",
+      "attempt": 1,
+      "completion_tokens": 251,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 14.088,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6825,
+      "qid": "PE-26",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:38:03+08:00",
+      "total_tokens": 7076
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T17:38:17+08:00",
+  "group": "C",
+  "input_sha256": "b63a811fcdb54224efe632c398b956c0429310c53a074f44eb77afbead433164",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案含两份协议，答案只确认了FTTR协议，对天翼智屏协议称无法确认，遗漏一半关键信息，属基本覆盖。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-26",
+  "raw_text": "{\"score\": 1, \"reason\": \"参考答案含两份协议，答案只确认了FTTR协议，对天翼智屏协议称无法确认，遗漏一半关键信息，属基本覆盖。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

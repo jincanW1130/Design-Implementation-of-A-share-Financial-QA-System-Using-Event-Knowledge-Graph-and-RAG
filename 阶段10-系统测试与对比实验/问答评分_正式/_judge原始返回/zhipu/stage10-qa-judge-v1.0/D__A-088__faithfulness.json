@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-088",
+  "attempts": [
+    {
+      "answer_key": "D__A-088",
+      "attempt": 1,
+      "completion_tokens": 491,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 8.42,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5579,
+      "qid": "FQ-088",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:23:34+08:00",
+      "total_tokens": 6070
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:23:42+08:00",
+  "group": "D",
+  "input_sha256": "83d9842417c762d4766f42527e24ec388028a6ffa834bb44bc69992ea4cb3c7e",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中会议日期、两额度上限、唐飞期权8000股与股份74250股等说法均可由证据1、2、3、6、7直接支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-088",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中会议日期、两额度上限、唐飞期权8000股与股份74250股等说法均可由证据1、2、3、6、7直接支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-025",
+  "attempts": [
+    {
+      "answer_key": "A__A-025",
+      "attempt": 1,
+      "completion_tokens": 660,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 15.279,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4022,
+      "qid": "FQ-025",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:51:58+08:00",
+      "total_tokens": 4682
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T18:52:14+08:00",
+  "group": "A",
+  "input_sha256": "3b7d13e50f18620dec4391a52db7f254fa920413de11545a974f032dbb3abe3d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核准文号、股数、发行价、募资总额、到账时间、验资报告及三方监管协议等事实均与证据1/3/4逐字吻合，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-025",
+  "raw_text": "{\"score\": 2, \"reason\": \"核准文号、股数、发行价、募资总额、到账时间、验资报告及三方监管协议等事实均与证据1/3/4逐字吻合，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

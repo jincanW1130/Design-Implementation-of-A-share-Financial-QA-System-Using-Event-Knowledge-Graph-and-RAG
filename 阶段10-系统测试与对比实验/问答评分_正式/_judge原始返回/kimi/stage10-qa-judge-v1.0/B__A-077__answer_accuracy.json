@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-077",
+  "attempts": [
+    {
+      "answer_key": "B__A-077",
+      "attempt": 1,
+      "completion_tokens": 346,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 12.793,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4492,
+      "qid": "FQ-077",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:28:30+08:00",
+      "total_tokens": 4838
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:28:42+08:00",
+  "group": "B",
+  "input_sha256": "fd6da8ae16b4bd94429305971b58feb199404bfd36e0a324b27ed62c655108a7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、招标人、招标代理机构角色及中标金额144,141,970.11元均与参考答案一致，且正确区分了30天区间内的中标公示与区间外的预中标公示。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-077",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、招标人、招标代理机构角色及中标金额144,141,970.11元均与参考答案一致，且正确区分了30天区间内的中标公示与区间外的预中标公示。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-031",
+  "attempts": [
+    {
+      "answer_key": "B__A-031",
+      "attempt": 1,
+      "completion_tokens": 343,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 11.021,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5086,
+      "qid": "FQ-031",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:01:48+08:00",
+      "total_tokens": 5429
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:01:59+08:00",
+  "group": "B",
+  "input_sha256": "5f2603c76edd2059e58135b968a775b1ab0bc13b7bc7842a7615de8f32ad718e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "营收161.46亿/6.01%、净利41.90亿/7.13%、营养健康系列27.09%及半年报发布与说明会信息均可由证据1、2直接支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-031",
+  "raw_text": "{\"score\": 2, \"reason\": \"营收161.46亿/6.01%、净利41.90亿/7.13%、营养健康系列27.09%及半年报发布与说明会信息均可由证据1、2直接支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

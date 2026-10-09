@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-055",
+  "attempts": [
+    {
+      "answer_key": "E__A-055",
+      "attempt": 1,
+      "completion_tokens": 171,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 7.332,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3755,
+      "qid": "FQ-055",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:05:30+08:00",
+      "total_tokens": 3926
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:05:37+08:00",
+  "group": "E",
+  "input_sha256": "6a2d7286990769ca9006e8973364518e34b46fb86803856b6a4783bad814d1b1",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案核心为周锦明及其身份职务，被评答案未提及任何自然人，反而断言未披露人员信息，与金标准完全不符，判错误。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-055",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案核心为周锦明及其身份职务，被评答案未提及任何自然人，反而断言未披露人员信息，与金标准完全不符，判错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

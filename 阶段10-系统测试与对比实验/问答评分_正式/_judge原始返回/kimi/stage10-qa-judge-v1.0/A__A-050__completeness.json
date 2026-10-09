@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-050",
+  "attempts": [
+    {
+      "answer_key": "A__A-050",
+      "attempt": 1,
+      "completion_tokens": 149,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 9.337,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4860,
+      "qid": "FQ-050",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:09:37+08:00",
+      "total_tokens": 5009
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:09:46+08:00",
+  "group": "A",
+  "input_sha256": "5ad45b338d798867b582019abc189471508d030a9184c96386aa105d76da0c8e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案的全部关键人物（程雪、管江华等董事及高管）均未覆盖，答案自称证据不足仅提杨兆、赵明璟，属关键信息大量遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-050",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案的全部关键人物（程雪、管江华等董事及高管）均未覆盖，答案自称证据不足仅提杨兆、赵明璟，属关键信息大量遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

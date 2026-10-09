@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-042",
+  "attempts": [
+    {
+      "answer_key": "A__A-042",
+      "attempt": 1,
+      "completion_tokens": 305,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 13.184,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4114,
+      "qid": "FQ-042",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:02:33+08:00",
+      "total_tokens": 4419
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:02:47+08:00",
+  "group": "A",
+  "input_sha256": "6a2cddf7f5f8c85d33d8d38dd265618caf16110cd13ffc9017ce663a0c3f1f1e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案两项关键信息（审计费用372万含明细及增30万、业绩预告纳入合并范围说明）均被完整覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-042",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案两项关键信息（审计费用372万含明细及增30万、业绩预告纳入合并范围说明）均被完整覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

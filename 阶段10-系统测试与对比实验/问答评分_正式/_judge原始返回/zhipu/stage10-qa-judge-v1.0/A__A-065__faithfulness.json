@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-065",
+  "attempts": [
+    {
+      "answer_key": "A__A-065",
+      "attempt": 1,
+      "completion_tokens": 1029,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 15.917,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3898,
+      "qid": "FQ-065",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:27:29+08:00",
+      "total_tokens": 4927
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:27:45+08:00",
+  "group": "A",
+  "input_sha256": "6831cacffcfddc4db7e26b1621f798a31d717b885afb534e21e7e39042a7ba47",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "议案名称、200亿元上限、36个月有效期、15票表决结果、ESG委员会预审等说法均可由可用证据1、3支撑，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-065",
+  "raw_text": "{\"score\": 2, \"reason\": \"议案名称、200亿元上限、36个月有效期、15票表决结果、ESG委员会预审等说法均可由可用证据1、3支撑，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-069",
+  "attempts": [
+    {
+      "answer_key": "E__A-069",
+      "attempt": 1,
+      "completion_tokens": 156,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 7.263,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4519,
+      "qid": "FQ-069",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:16:21+08:00",
+      "total_tokens": 4675
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:16:28+08:00",
+  "group": "E",
+  "input_sha256": "40d75824ffb0ebd52d6c386a6a1e52acaef175476bd03e3ca658446ec9053442",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案全部事实（担保双方、金额2137.84万、连带责任/保函担保、受益人建行陕西省分行、起止日期、无反担保）均被证据1原文支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-069",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案全部事实（担保双方、金额2137.84万、连带责任/保函担保、受益人建行陕西省分行、起止日期、无反担保）均被证据1原文支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

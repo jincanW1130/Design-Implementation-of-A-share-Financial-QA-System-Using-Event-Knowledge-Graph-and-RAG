@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-021",
+  "attempts": [
+    {
+      "answer_key": "C__A-021",
+      "attempt": 1,
+      "completion_tokens": 96,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 7.417,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4707,
+      "qid": "PE-21",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:34:33+08:00",
+      "total_tokens": 4803
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:34:41+08:00",
+  "group": "C",
+  "input_sha256": "ba1272ee92f902de4eb634c941c70b405232d26782727cb018aea81f5b1aeae6",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确指出中信证券为受托管理人且担保信托财产以其名义持有，并正确给出登记机构为中证登上海分公司，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-21",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案正确指出中信证券为受托管理人且担保信托财产以其名义持有，并正确给出登记机构为中证登上海分公司，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

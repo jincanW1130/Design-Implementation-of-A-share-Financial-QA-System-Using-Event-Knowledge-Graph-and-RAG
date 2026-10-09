@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-098",
+  "attempts": [
+    {
+      "answer_key": "E__A-098",
+      "attempt": 1,
+      "completion_tokens": 575,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 18.456,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5029,
+      "qid": "FQ-098",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:42:37+08:00",
+      "total_tokens": 5604
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:42:55+08:00",
+  "group": "E",
+  "input_sha256": "99385568901d934bf3c18d2155bea3c0ee5dacc5ed32526d650ed5cfddaf5322",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "中标、签约、金额、交货期、公告日期及联合体成员等说法均可在证据3、6、7、10、1中找到对应原文，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-098",
+  "raw_text": "{\"score\": 2, \"reason\": \"中标、签约、金额、交货期、公告日期及联合体成员等说法均可在证据3、6、7、10、1中找到对应原文，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

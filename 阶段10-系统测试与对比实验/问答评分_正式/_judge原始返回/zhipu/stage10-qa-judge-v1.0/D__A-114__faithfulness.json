@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-114",
+  "attempts": [
+    {
+      "answer_key": "D__A-114",
+      "attempt": 1,
+      "completion_tokens": 947,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 8.41,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4632,
+      "qid": "FQ-114",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:27:16+08:00",
+      "total_tokens": 5579
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:27:24+08:00",
+  "group": "D",
+  "input_sha256": "a9804fb499fb6f556c2503b42c1ffba3464ccef6b5e203fabffc54f39958544f",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "母子公司关系、全资子公司表述及生产承接等事实均被证据1、2直接支撑，推断段已明确标注为非公开事实分析",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-114",
+  "raw_text": "{\"score\": 2, \"reason\": \"母子公司关系、全资子公司表述及生产承接等事实均被证据1、2直接支撑，推断段已明确标注为非公开事实分析\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

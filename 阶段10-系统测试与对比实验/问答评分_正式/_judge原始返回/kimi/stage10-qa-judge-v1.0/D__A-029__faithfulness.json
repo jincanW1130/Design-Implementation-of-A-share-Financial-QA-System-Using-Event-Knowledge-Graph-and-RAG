@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-029",
+  "attempts": [
+    {
+      "answer_key": "D__A-029",
+      "attempt": 1,
+      "completion_tokens": 539,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 15.373,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5891,
+      "qid": "FQ-029",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:42:28+08:00",
+      "total_tokens": 6430
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:42:44+08:00",
+  "group": "D",
+  "input_sha256": "0445e631eed1dafd6574ed7f91e19ada80240aca62cceb1383bbaecdcdcd6781",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "交易对方、49%股权、无现金支付、12个月锁定、验资金额与基准日、新增股数、登记日期等均能在证据3/6/7/8中找到对应支撑，未见无依据事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-029",
+  "raw_text": "{\"score\": 2, \"reason\": \"交易对方、49%股权、无现金支付、12个月锁定、验资金额与基准日、新增股数、登记日期等均能在证据3/6/7/8中找到对应支撑，未见无依据事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

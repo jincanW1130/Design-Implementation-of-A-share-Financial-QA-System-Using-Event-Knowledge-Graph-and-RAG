@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-093",
+  "attempts": [
+    {
+      "answer_key": "B__A-093",
+      "attempt": 1,
+      "completion_tokens": 482,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 8.096,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5408,
+      "qid": "FQ-093",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:09:11+08:00",
+      "total_tokens": 5890
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:09:19+08:00",
+  "group": "B",
+  "input_sha256": "b67bae9c1a1318e7ac130e796ebef263c3a5fe5c154c045e4917769b598c312e",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "价格上限调整、起始日期、回购及尚余股数均可由证据1、10支撑，且对尚余股份时间口径作了严谨限定，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-093",
+  "raw_text": "{\"score\": 2, \"reason\": \"价格上限调整、起始日期、回购及尚余股数均可由证据1、10支撑，且对尚余股份时间口径作了严谨限定，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

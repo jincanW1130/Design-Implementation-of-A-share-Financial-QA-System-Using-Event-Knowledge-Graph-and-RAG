@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-094",
+  "attempts": [
+    {
+      "answer_key": "D__A-094",
+      "attempt": 1,
+      "completion_tokens": 934,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 20.45,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5173,
+      "qid": "FQ-094",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:23:53+08:00",
+      "total_tokens": 6107
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:24:14+08:00",
+  "group": "D",
+  "input_sha256": "778d5566a0630525e051989b5d4d30c6cc1bca3b72bf8585d93da2072eb6fdae",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "仅答出说明会日期，独立财务顾问国泰海通证券这一关键信息完全遗漏，关键信息过半缺失。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-094",
+  "raw_text": "{\"score\": 0, \"reason\": \"仅答出说明会日期，独立财务顾问国泰海通证券这一关键信息完全遗漏，关键信息过半缺失。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

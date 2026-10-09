@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-060",
+  "attempts": [
+    {
+      "answer_key": "C__A-060",
+      "attempt": 1,
+      "completion_tokens": 232,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 10.2,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4151,
+      "qid": "FQ-060",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:19:18+08:00",
+      "total_tokens": 4383
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:19:28+08:00",
+  "group": "C",
+  "input_sha256": "e5f3aeeb6943addc294c8a14eeb08006531d043528f3deb36263e2d1f3147d0d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案所有事实陈述（各披露主体、许兴仁身份职务、无法作答结论）均能在检索证据中找到对应支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-060",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案所有事实陈述（各披露主体、许兴仁身份职务、无法作答结论）均能在检索证据中找到对应支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

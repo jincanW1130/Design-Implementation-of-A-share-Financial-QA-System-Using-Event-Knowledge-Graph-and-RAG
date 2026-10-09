@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-004",
+  "attempts": [
+    {
+      "answer_key": "E__A-004",
+      "attempt": 1,
+      "completion_tokens": 777,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 14.786,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 6174,
+      "qid": "PE-04",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:50:26+08:00",
+      "total_tokens": 6951
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T18:50:41+08:00",
+  "group": "E",
+  "input_sha256": "33681c35ecf0da84f7a6b1252419b75b370e7a1290b345897c375b9b94e1b19a",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "仅覆盖许兴仁（李昕非金标人员），遗漏郑弘孟、黄德才、杨秋瑾等绝大多数董事高管，属大量遗漏。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-04",
+  "raw_text": "{\"score\": 0, \"reason\": \"仅覆盖许兴仁（李昕非金标人员），遗漏郑弘孟、黄德才、杨秋瑾等绝大多数董事高管，属大量遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

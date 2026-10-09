@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-042",
+  "attempts": [
+    {
+      "answer_key": "C__A-042",
+      "attempt": 1,
+      "completion_tokens": 1507,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 24.948,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4810,
+      "qid": "FQ-042",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:44:33+08:00",
+      "total_tokens": 6317
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:44:58+08:00",
+  "group": "C",
+  "input_sha256": "dc64192c830908a1bf8a624fbeb89d4d9cb9398c12d2d82d288dc697402b9602",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "并表、追溯调整、审计费372/292/80万及增30万原因、未经审计说明均可在可用证据中找到原文对应，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-042",
+  "raw_text": "{\"score\": 2, \"reason\": \"并表、追溯调整、审计费372/292/80万及增30万原因、未经审计说明均可在可用证据中找到原文对应，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

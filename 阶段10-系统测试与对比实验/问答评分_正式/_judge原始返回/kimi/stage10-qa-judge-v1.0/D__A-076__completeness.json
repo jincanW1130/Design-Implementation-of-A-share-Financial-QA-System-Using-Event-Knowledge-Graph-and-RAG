@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-076",
+  "attempts": [
+    {
+      "answer_key": "D__A-076",
+      "attempt": 1,
+      "completion_tokens": 715,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 23.73,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4733,
+      "qid": "FQ-076",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:41:01+08:00",
+      "total_tokens": 5448
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:41:25+08:00",
+  "group": "D",
+  "input_sha256": "d6aa5b2d1191c6eb4f481b7c32d5fc339473c4676b3d844e9b0f3ecc25a6f75c",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案关键信息（9月9日补充名单、通光光缆入包3中标人名单、10,762万、12,950万、占比5.09%）均被覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-076",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案关键信息（9月9日补充名单、通光光缆入包3中标人名单、10,762万、12,950万、占比5.09%）均被覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

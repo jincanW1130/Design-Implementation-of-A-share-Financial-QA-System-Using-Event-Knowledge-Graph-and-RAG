@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-034",
+  "attempts": [
+    {
+      "answer_key": "D__A-034",
+      "attempt": 1,
+      "completion_tokens": 106,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 6.022,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4125,
+      "qid": "FQ-034",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:45:10+08:00",
+      "total_tokens": 4231
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:45:16+08:00",
+  "group": "D",
+  "input_sha256": "5c83606c57bc28d25266080a8e41d7c6e623643e4ab9400aafc36a895de9aa90",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "资金区间15-25亿、价格上限41.5元/股、实际回购77,474,592股及占比0.29%均与参考答案完全一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-034",
+  "raw_text": "{\"score\": 2, \"reason\": \"资金区间15-25亿、价格上限41.5元/股、实际回购77,474,592股及占比0.29%均与参考答案完全一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

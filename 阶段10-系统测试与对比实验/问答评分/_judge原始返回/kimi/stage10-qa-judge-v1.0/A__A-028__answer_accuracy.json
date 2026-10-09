@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-028",
+  "attempts": [
+    {
+      "answer_key": "A__A-028",
+      "attempt": 1,
+      "completion_tokens": 784,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 30.923,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4004,
+      "qid": "PE-28",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:46:11+08:00",
+      "total_tokens": 4788
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T16:46:42+08:00",
+  "group": "A",
+  "input_sha256": "19fd3131c928f703fca92d9830e0160bd23feef8053181e60981174dc7958ec9",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "正确识别出2026年9月15日“隆22转债”预计满足转股价格向下修正条件的提示性公告事件，与参考答案一致，所述内容无误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-28",
+  "raw_text": "{\"score\": 2, \"reason\": \"正确识别出2026年9月15日“隆22转债”预计满足转股价格向下修正条件的提示性公告事件，与参考答案一致，所述内容无误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

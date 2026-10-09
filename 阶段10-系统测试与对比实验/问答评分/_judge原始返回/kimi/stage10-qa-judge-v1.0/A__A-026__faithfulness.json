@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-026",
+  "attempts": [
+    {
+      "answer_key": "A__A-026",
+      "attempt": 1,
+      "completion_tokens": 420,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 14.351,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5050,
+      "qid": "PE-26",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:45:56+08:00",
+      "total_tokens": 5470
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:46:10+08:00",
+  "group": "A",
+  "input_sha256": "b77f23cb9f7a18909990e9ba9228c41868a385f3099a297152f268a2f41a904d",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "所列各协议名称、日期、编号、履行状态均可在检索证据（备查文件及合同列表）中找到对应，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-26",
+  "raw_text": "{\"score\": 2, \"reason\": \"所列各协议名称、日期、编号、履行状态均可在检索证据（备查文件及合同列表）中找到对应，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

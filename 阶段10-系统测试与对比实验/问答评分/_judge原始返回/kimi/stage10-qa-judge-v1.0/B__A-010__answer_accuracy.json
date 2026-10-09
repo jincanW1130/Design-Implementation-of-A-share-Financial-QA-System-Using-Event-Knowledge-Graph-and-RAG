@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-010",
+  "attempts": [
+    {
+      "answer_key": "B__A-010",
+      "attempt": 1,
+      "completion_tokens": 71,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 6.583,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4633,
+      "qid": "PE-10",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:55:12+08:00",
+      "total_tokens": 4704
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T16:55:18+08:00",
+  "group": "B",
+  "input_sha256": "2254922518e177b61ddaad642b423df12e680cdf1e996915996d10398a8af557",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "仅答出五项议案中的第一项（十五五规划），其余四项未答，属部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-10",
+  "raw_text": "{\"score\": 1, \"reason\": \"仅答出五项议案中的第一项（十五五规划），其余四项未答，属部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

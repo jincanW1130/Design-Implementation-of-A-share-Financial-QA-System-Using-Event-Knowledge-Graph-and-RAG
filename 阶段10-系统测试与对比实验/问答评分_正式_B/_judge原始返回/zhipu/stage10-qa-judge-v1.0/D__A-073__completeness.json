@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-073",
+  "attempts": [
+    {
+      "answer_key": "D__A-073",
+      "attempt": 1,
+      "completion_tokens": 467,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 11.568,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5148,
+      "qid": "FQ-073",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:21:12+08:00",
+      "total_tokens": 5615
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:21:24+08:00",
+  "group": "D",
+  "input_sha256": "7a05daafb3de03db31c972e6a1084f5ab5e96a7cd77b7e0f287a220af9e89d52",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案全部关键信息：6月17日两笔票据、8,000万美元、《信托契据》下无条件及不可撤销保证担保，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-073",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案全部关键信息：6月17日两笔票据、8,000万美元、《信托契据》下无条件及不可撤销保证担保，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

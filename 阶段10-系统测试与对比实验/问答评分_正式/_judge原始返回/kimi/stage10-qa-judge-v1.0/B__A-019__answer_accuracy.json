@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-019",
+  "attempts": [
+    {
+      "answer_key": "B__A-019",
+      "attempt": 1,
+      "completion_tokens": 112,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 6.823,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4696,
+      "qid": "FQ-019",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:54:41+08:00",
+      "total_tokens": 4808
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T19:54:48+08:00",
+  "group": "B",
+  "input_sha256": "8041591c88b22512862ac9d297dcf9d9f53fd7eb42f55191910a4a57da27f838",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "文号财会〔2026〕7号及施行要求（自公布之日起施行、新增业务应调整）与参考答案完全一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-019",
+  "raw_text": "{\"score\": 2, \"reason\": \"文号财会〔2026〕7号及施行要求（自公布之日起施行、新增业务应调整）与参考答案完全一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-060",
+  "attempts": [
+    {
+      "answer_key": "C__A-060",
+      "attempt": 1,
+      "completion_tokens": 88,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 6.315,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4128,
+      "qid": "FQ-060",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:19:10+08:00",
+      "total_tokens": 4216
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:19:16+08:00",
+  "group": "C",
+  "input_sha256": "94c433b0a3c5b3508aa6e2bf8072ff87c157eec5c7e3216d8abb7376a1796ece",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案称无法回答，完全未覆盖参考答案中的程忠及其身份和688001代码，关键信息全部遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-060",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案称无法回答，完全未覆盖参考答案中的程忠及其身份和688001代码，关键信息全部遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

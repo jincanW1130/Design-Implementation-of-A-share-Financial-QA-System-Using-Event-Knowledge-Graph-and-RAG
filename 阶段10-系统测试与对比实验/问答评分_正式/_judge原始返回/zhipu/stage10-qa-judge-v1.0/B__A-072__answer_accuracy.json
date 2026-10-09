@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-072",
+  "attempts": [
+    {
+      "answer_key": "B__A-072",
+      "attempt": 1,
+      "completion_tokens": 476,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 9.873,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 6017,
+      "qid": "FQ-072",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:38:33+08:00",
+      "total_tokens": 6493
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:38:43+08:00",
+  "group": "B",
+  "input_sha256": "437319c257792f6a72d1d9472dbb064acfdb000e1a4fc9c74c5e43fa7dedc405",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案与参考答案完全一致：事件为发行股份购买资产，标的中芯北方49.00%股权、价格4,060,091.00万元、五名发行对象均正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-072",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案与参考答案完全一致：事件为发行股份购买资产，标的中芯北方49.00%股权、价格4,060,091.00万元、五名发行对象均正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

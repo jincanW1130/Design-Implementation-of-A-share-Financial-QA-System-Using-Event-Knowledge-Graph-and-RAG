@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-086",
+  "attempts": [
+    {
+      "answer_key": "D__A-086",
+      "attempt": 1,
+      "completion_tokens": 115,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 4.91,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5848,
+      "qid": "FQ-086",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:51:48+08:00",
+      "total_tokens": 5963
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:51:53+08:00",
+  "group": "D",
+  "input_sha256": "2515d6dd53b808fbb080cf04efc4fbc7aa3e7baeea1119597053a53f9d298dc3",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "四个关键数据（每股3.02元税前、登记日9月23日、规模200亿、利率1.86%）与参考答案完全一致，补充信息亦无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-086",
+  "raw_text": "{\"score\": 2, \"reason\": \"四个关键数据（每股3.02元税前、登记日9月23日、规模200亿、利率1.86%）与参考答案完全一致，补充信息亦无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

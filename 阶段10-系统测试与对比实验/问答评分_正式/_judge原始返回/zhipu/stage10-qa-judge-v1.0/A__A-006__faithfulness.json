@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-006",
+  "attempts": [
+    {
+      "answer_key": "A__A-006",
+      "attempt": 1,
+      "completion_tokens": 1189,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 23.878,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3879,
+      "qid": "FQ-006",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:18:21+08:00",
+      "total_tokens": 5068
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:18:45+08:00",
+  "group": "A",
+  "input_sha256": "fe8d5aec28ffa495a0078193f7e5233bd59bb207d74e1a2fa86dd1df6d9ebf60",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "文号证监许可〔2026〕2414号、400亿元上限、24个月有效期及落款日期均直接见于证据1，发布时间有证据元数据支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-006",
+  "raw_text": "{\"score\": 2, \"reason\": \"文号证监许可〔2026〕2414号、400亿元上限、24个月有效期及落款日期均直接见于证据1，发布时间有证据元数据支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-101",
+  "attempts": [
+    {
+      "answer_key": "B__A-101",
+      "attempt": 1,
+      "completion_tokens": 173,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 10.168,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5159,
+      "qid": "FQ-101",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:46:21+08:00",
+      "total_tokens": 5332
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:46:31+08:00",
+  "group": "B",
+  "input_sha256": "97a1e771f7738c5428f3ecdea0b673a6f2f1599eaa15c795c027395566f13e0d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、签约价107,380,000元、设计费328万元及参股40%关系等关键信息均完整覆盖，无遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-101",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、签约价107,380,000元、设计费328万元及参股40%关系等关键信息均完整覆盖，无遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

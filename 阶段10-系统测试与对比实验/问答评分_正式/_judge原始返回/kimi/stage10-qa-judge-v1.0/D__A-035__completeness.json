@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-035",
+  "attempts": [
+    {
+      "answer_key": "D__A-035",
+      "attempt": 1,
+      "completion_tokens": 131,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 5.243,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4551,
+      "qid": "FQ-035",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:45:53+08:00",
+      "total_tokens": 4682
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:45:58+08:00",
+  "group": "D",
+  "input_sha256": "e3bce4f20054536463de57bf9f1a7f50cdb4466a2d373a144eb5261c0eb258d8",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案两项关键信息（总包承接方潜能蒙古、关联方天津锦龙及其控股关系与董事会审议）均已完整覆盖，无遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-035",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案两项关键信息（总包承接方潜能蒙古、关联方天津锦龙及其控股关系与董事会审议）均已完整覆盖，无遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

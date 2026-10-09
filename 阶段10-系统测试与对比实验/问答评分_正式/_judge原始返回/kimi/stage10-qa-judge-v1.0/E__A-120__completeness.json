@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-120",
+  "attempts": [
+    {
+      "answer_key": "E__A-120",
+      "attempt": 1,
+      "completion_tokens": 246,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.891,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4636,
+      "qid": "FQ-120",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:58:27+08:00",
+      "total_tokens": 4882
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:58:36+08:00",
+  "group": "E",
+  "input_sha256": "c1d4c80ccbc73d96c288fd3ead1f338dd47ae8978b5a0c41eabbd2ca6f4b57ff",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案关键信息：控股子公司关系、奥卡西平片、0.15g规格及证书编号2026S03114均给出，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-120",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案关键信息：控股子公司关系、奥卡西平片、0.15g规格及证书编号2026S03114均给出，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

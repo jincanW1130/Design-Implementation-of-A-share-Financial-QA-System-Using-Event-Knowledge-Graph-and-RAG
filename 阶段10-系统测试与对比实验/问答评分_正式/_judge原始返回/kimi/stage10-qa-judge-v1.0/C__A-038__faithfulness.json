@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-038",
+  "attempts": [
+    {
+      "answer_key": "C__A-038",
+      "attempt": 1,
+      "completion_tokens": 1578,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 48.271,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5154,
+      "qid": "FQ-038",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:55:57+08:00",
+      "total_tokens": 6732
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:56:45+08:00",
+  "group": "C",
+  "input_sha256": "4867f5b8a1f9610968e3cc43fad0327d8468fbe217073be3ffa09bfdd6dc29aa",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两项事件的中标价、交易对方、金额、法人等信息均能在证据4/8/9/2/3/5/6中找到对应支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-038",
+  "raw_text": "{\"score\": 2, \"reason\": \"两项事件的中标价、交易对方、金额、法人等信息均能在证据4/8/9/2/3/5/6中找到对应支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

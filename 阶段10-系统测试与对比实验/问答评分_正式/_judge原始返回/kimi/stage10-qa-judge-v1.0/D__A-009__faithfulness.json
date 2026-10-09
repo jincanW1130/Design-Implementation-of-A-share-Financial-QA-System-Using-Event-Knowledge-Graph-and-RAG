@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-009",
+  "attempts": [
+    {
+      "answer_key": "D__A-009",
+      "attempt": 1,
+      "completion_tokens": 196,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 15.782,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4083,
+      "qid": "FQ-009",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:31:14+08:00",
+      "total_tokens": 4279
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:31:30+08:00",
+  "group": "D",
+  "input_sha256": "26eb100cfdee2e9e41e204c4087c40ca883efa781ed32232a68ef367be901a91",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "四项债券要素及补充背景（BVI发行主体、5亿欧元额度、担保、发改委登记）均被证据1、2原文完整支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-009",
+  "raw_text": "{\"score\": 2, \"reason\": \"四项债券要素及补充背景（BVI发行主体、5亿欧元额度、担保、发改委登记）均被证据1、2原文完整支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

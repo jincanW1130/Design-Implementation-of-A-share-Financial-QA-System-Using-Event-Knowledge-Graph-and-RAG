@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-017",
+  "attempts": [
+    {
+      "answer_key": "E__A-017",
+      "attempt": 1,
+      "completion_tokens": 366,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 14.089,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4545,
+      "qid": "FQ-017",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:33:32+08:00",
+      "total_tokens": 4911
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:33:46+08:00",
+  "group": "E",
+  "input_sha256": "bebb1710357ff7a3946ecb7cb6cde39d965e9773a3a9e17be4c158f59291e132",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "文件名称、文号、颁布日期及规定内容均见证据1原文，变更依据与影响表述亦有证据1、6支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-017",
+  "raw_text": "{\"score\": 2, \"reason\": \"文件名称、文号、颁布日期及规定内容均见证据1原文，变更依据与影响表述亦有证据1、6支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

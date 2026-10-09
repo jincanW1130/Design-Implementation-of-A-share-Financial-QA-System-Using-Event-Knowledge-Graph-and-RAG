@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-114",
+  "attempts": [
+    {
+      "answer_key": "C__A-114",
+      "attempt": 1,
+      "completion_tokens": 559,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 10.5,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5147,
+      "qid": "FQ-114",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:19:09+08:00",
+      "total_tokens": 5706
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:19:20+08:00",
+  "group": "C",
+  "input_sha256": "bb1ae59cbde89bd7441c71721b0225c4b22590dd0ae08918cc6063f4f9552c71",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "核心事实“江西透景为上海透景全资子公司”由证据1、2原文直接支撑，注册证、洁净厂房等表述均有出处，分析部分已标注且未超出证据，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-114",
+  "raw_text": "{\"score\": 2, \"reason\": \"核心事实“江西透景为上海透景全资子公司”由证据1、2原文直接支撑，注册证、洁净厂房等表述均有出处，分析部分已标注且未超出证据，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

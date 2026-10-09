@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-070",
+  "attempts": [
+    {
+      "answer_key": "A__A-070",
+      "attempt": 1,
+      "completion_tokens": 698,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 13.529,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4321,
+      "qid": "FQ-070",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:28:03+08:00",
+      "total_tokens": 5019
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:28:17+08:00",
+  "group": "A",
+  "input_sha256": "5eaa87d3ed0d16e3648c2aa99df1a5b4594eb66dacdd546dbd4c87268d35ca0b",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中债券要素、主承销商中信银行、联席主承销商兴业与交行均可由证据4逐项支撑，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-070",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中债券要素、主承销商中信银行、联席主承销商兴业与交行均可由证据4逐项支撑，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-103",
+  "attempts": [
+    {
+      "answer_key": "D__A-103",
+      "attempt": 1,
+      "completion_tokens": 397,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 7.201,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4831,
+      "qid": "FQ-103",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:10:36+08:00",
+      "total_tokens": 5228
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:10:44+08:00",
+  "group": "D",
+  "input_sha256": "084224cc6dcebcb990b98e92ce63f088feb7f942361048c8a52049b2c3392384",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "机构、通知书编号、2年有效期及落款日期等全部事实性说法均见于证据1、证据5，无无依据事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-103",
+  "raw_text": "{\"score\": 2, \"reason\": \"机构、通知书编号、2年有效期及落款日期等全部事实性说法均见于证据1、证据5，无无依据事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

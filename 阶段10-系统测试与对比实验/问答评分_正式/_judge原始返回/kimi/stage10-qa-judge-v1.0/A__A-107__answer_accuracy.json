@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-107",
+  "attempts": [
+    {
+      "answer_key": "A__A-107",
+      "attempt": 1,
+      "completion_tokens": 156,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 7.316,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4086,
+      "qid": "FQ-107",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:16:50+08:00",
+      "total_tokens": 4242
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:16:57+08:00",
+  "group": "A",
+  "input_sha256": "f422579da164c527774474c558dd79d8ec016ddac63d454548ca85876ccc9d0f",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核准机构（证监会）、文号（证监许可[2020]247号）、发行张数（3,000万张）与总额（300,000万元）四项均与参考答案一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-107",
+  "raw_text": "{\"score\": 2, \"reason\": \"核准机构（证监会）、文号（证监许可[2020]247号）、发行张数（3,000万张）与总额（300,000万元）四项均与参考答案一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

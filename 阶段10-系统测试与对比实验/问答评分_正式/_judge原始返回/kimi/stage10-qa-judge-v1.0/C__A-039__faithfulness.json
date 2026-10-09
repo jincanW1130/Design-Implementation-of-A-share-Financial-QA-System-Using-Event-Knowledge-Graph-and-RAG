@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-039",
+  "attempts": [
+    {
+      "answer_key": "C__A-039",
+      "attempt": 1,
+      "completion_tokens": 256,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 10.798,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4866,
+      "qid": "FQ-039",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:57:03+08:00",
+      "total_tokens": 5122
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:57:14+08:00",
+  "group": "C",
+  "input_sha256": "ae8ef6246103668f3d49e3844a9aa5ccac2ecba518c25e41f45d27dcf1bb5ff7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中6月295.6万头、8月281.8万头及全资子公司等说法均逐字见于证据1与证据4，无无依据内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-039",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中6月295.6万头、8月281.8万头及全资子公司等说法均逐字见于证据1与证据4，无无依据内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

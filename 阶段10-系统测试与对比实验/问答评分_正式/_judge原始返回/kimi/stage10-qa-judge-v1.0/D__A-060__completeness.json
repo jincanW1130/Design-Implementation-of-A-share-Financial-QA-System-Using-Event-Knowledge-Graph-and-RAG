@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-060",
+  "attempts": [
+    {
+      "answer_key": "D__A-060",
+      "attempt": 1,
+      "completion_tokens": 191,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 8.104,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4084,
+      "qid": "FQ-060",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:13:42+08:00",
+      "total_tokens": 4275
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:13:50+08:00",
+  "group": "D",
+  "input_sha256": "1d2a29dcffbb7a219d33cf7b64527526ecd4693c704dc54c8e56a7fa79a7057f",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案称证据不足拒答，完全未覆盖参考答案关键信息：程忠（副总经理、财务总监）及证券代码688001，属关键信息大量遗漏。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-060",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案称证据不足拒答，完全未覆盖参考答案关键信息：程忠（副总经理、财务总监）及证券代码688001，属关键信息大量遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

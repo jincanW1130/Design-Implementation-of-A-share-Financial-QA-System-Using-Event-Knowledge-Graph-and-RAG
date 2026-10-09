@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-107",
+  "attempts": [
+    {
+      "answer_key": "E__A-107",
+      "attempt": 1,
+      "completion_tokens": 118,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 4.374,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4415,
+      "qid": "FQ-107",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:50:54+08:00",
+      "total_tokens": 4533
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:50:59+08:00",
+  "group": "E",
+  "input_sha256": "99c0c2cdba359df832966cbabcd32380a56caf4f524ae660a026f7b6d8ecaec5",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核准机构、文号证监许可[2020]247号、3,000.00万张、总额300,000.00万元等关键信息全部覆盖，无遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-107",
+  "raw_text": "{\"score\": 2, \"reason\": \"核准机构、文号证监许可[2020]247号、3,000.00万张、总额300,000.00万元等关键信息全部覆盖，无遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

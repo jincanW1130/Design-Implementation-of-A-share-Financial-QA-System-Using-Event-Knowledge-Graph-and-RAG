@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-104",
+  "attempts": [
+    {
+      "answer_key": "C__A-104",
+      "attempt": 1,
+      "completion_tokens": 122,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 10.563,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5049,
+      "qid": "FQ-104",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:30:36+08:00",
+      "total_tokens": 5171
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:30:46+08:00",
+  "group": "C",
+  "input_sha256": "7271923f6225f7f2536148663c262dd8c0172ece637ca29b4750f3a304f866ec",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案的登记机构、取得日期及授予股数均与证据1原文一致，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-104",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案的登记机构、取得日期及授予股数均与证据1原文一致，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

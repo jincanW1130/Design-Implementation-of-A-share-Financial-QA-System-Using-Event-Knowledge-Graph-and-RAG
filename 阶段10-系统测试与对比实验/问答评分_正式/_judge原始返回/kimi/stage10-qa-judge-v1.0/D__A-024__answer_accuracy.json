@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-024",
+  "attempts": [
+    {
+      "answer_key": "D__A-024",
+      "attempt": 1,
+      "completion_tokens": 236,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 8.734,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4461,
+      "qid": "FQ-024",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:38:46+08:00",
+      "total_tokens": 4697
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:38:55+08:00",
+  "group": "D",
+  "input_sha256": "b152cb01abd4f4b6f673c30b469e6313843adb04fa4ca0152ec93aa8fad873ba",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "机构（交易商协会）、编号（中市协注〔2026〕PDFI6号）、规模（30亿元）及2026-06-10收函时间均与参考答案一致，三要素全部答对。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-024",
+  "raw_text": "{\"score\": 2, \"reason\": \"机构（交易商协会）、编号（中市协注〔2026〕PDFI6号）、规模（30亿元）及2026-06-10收函时间均与参考答案一致，三要素全部答对。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

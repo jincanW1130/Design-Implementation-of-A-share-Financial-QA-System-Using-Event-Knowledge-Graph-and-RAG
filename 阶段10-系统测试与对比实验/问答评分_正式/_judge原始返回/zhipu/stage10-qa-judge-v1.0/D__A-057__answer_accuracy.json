@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-057",
+  "attempts": [
+    {
+      "answer_key": "D__A-057",
+      "attempt": 1,
+      "completion_tokens": 572,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 10.934,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4027,
+      "qid": "FQ-057",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:00:15+08:00",
+      "total_tokens": 4599
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T00:00:26+08:00",
+  "group": "D",
+  "input_sha256": "7e7619d72526fe3b961779b2ace9c129c0090dce58db384a66aacd4538ee9f15",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案未给出任何参考要点（董事李凯、杨杰、郑颖及SPV公司类型），明示无法作答，对照参考答案完全错误",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-057",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案未给出任何参考要点（董事李凯、杨杰、郑颖及SPV公司类型），明示无法作答，对照参考答案完全错误\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

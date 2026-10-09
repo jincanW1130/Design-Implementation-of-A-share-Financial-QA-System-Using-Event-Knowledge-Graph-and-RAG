@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-079",
+  "attempts": [
+    {
+      "answer_key": "C__A-079",
+      "attempt": 1,
+      "completion_tokens": 947,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 29.861,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5366,
+      "qid": "FQ-079",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:05:20+08:00",
+      "total_tokens": 6313
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:05:49+08:00",
+  "group": "C",
+  "input_sha256": "077c0274ea0fcb567d12ec4423ccf2389105e588752334ace27158c5cfb4b6e4",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "完整覆盖参考答案全部关键信息：共同参与事件为WZ10-11W-1井钻井总包（2026年8月13日启动），井别初探井、设计井深海拔-1700米、作业2个月左右、总包商中海油服（注册资本47.72亿元）均已答出。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-079",
+  "raw_text": "{\"score\": 2, \"reason\": \"完整覆盖参考答案全部关键信息：共同参与事件为WZ10-11W-1井钻井总包（2026年8月13日启动），井别初探井、设计井深海拔-1700米、作业2个月左右、总包商中海油服（注册资本47.72亿元）均已答出。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

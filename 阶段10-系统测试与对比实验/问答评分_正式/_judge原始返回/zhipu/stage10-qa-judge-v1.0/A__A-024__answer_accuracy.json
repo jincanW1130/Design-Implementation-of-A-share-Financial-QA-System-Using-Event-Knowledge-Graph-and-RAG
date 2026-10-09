@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-024",
+  "attempts": [
+    {
+      "answer_key": "A__A-024",
+      "attempt": 1,
+      "completion_tokens": 193,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 3.798,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3952,
+      "qid": "FQ-024",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:19:53+08:00",
+      "total_tokens": 4145
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:19:57+08:00",
+  "group": "A",
+  "input_sha256": "810ffd95c74f0448cba195a16ef92fa4615fa1ac74f66a16de231992e3743ba5",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案三项要点（交易商协会、中市协注〔2026〕PDFI6号、30亿元）与参考答案完全一致，且证据2可支撑。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-024",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案三项要点（交易商协会、中市协注〔2026〕PDFI6号、30亿元）与参考答案完全一致，且证据2可支撑。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

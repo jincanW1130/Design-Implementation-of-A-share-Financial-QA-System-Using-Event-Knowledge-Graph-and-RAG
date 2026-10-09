@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-020",
+  "attempts": [
+    {
+      "answer_key": "D__A-020",
+      "attempt": 1,
+      "completion_tokens": 572,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 18.674,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4694,
+      "qid": "FQ-020",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:37:14+08:00",
+      "total_tokens": 5266
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:37:33+08:00",
+  "group": "D",
+  "input_sha256": "7dccab151d1ffdb3403f8ebe431650b678defaa8d9574311d22f2293703c3aaf",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "回购数量、占比、价格、金额及监管指引名称均与证据9原文一致，落款日期与后续安排有证据4支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-020",
+  "raw_text": "{\"score\": 2, \"reason\": \"回购数量、占比、价格、金额及监管指引名称均与证据9原文一致，落款日期与后续安排有证据4支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

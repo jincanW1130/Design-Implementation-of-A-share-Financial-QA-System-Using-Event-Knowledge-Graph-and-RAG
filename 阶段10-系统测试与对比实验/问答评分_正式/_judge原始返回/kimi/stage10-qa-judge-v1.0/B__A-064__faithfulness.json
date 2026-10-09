@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-064",
+  "attempts": [
+    {
+      "answer_key": "B__A-064",
+      "attempt": 1,
+      "completion_tokens": 357,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 14.229,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5644,
+      "qid": "FQ-064",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:29:34+08:00",
+      "total_tokens": 6001
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:29:48+08:00",
+  "group": "B",
+  "input_sha256": "7ccbf9b827ea61606a0b4cca1e3ae61c707b03a0c67b54cb22e480e090b907ea",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "会议时间地点、两项重汽关联交易议案、潍柴集团回避并获通过、6项议案及刘义选举等均有证据1-9直接支撑，推断部分已明确标注为非公开事实，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-064",
+  "raw_text": "{\"score\": 2, \"reason\": \"会议时间地点、两项重汽关联交易议案、潍柴集团回避并获通过、6项议案及刘义选举等均有证据1-9直接支撑，推断部分已明确标注为非公开事实，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

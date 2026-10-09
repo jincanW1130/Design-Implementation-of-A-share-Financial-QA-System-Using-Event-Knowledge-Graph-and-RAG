@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-025",
+  "attempts": [
+    {
+      "answer_key": "A__A-025",
+      "attempt": 1,
+      "completion_tokens": 134,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 7.481,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3690,
+      "qid": "PE-25",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:44:52+08:00",
+      "total_tokens": 3824
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:45:00+08:00",
+  "group": "A",
+  "input_sha256": "a6b82b6fd89849fc7777273b7d51fd82f1d7e272e4249f558ec2e31ab3540702",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖招标人工商银行、中标人荣鑫科技，并含招标代理机构信息，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-25",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖招标人工商银行、中标人荣鑫科技，并含招标代理机构信息，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

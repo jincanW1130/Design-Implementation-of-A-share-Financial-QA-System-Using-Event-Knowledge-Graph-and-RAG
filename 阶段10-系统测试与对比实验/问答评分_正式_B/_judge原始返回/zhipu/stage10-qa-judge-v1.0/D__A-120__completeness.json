@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-120",
+  "attempts": [
+    {
+      "answer_key": "D__A-120",
+      "attempt": 1,
+      "completion_tokens": 2179,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 37.095,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4745,
+      "qid": "FQ-120",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:28:40+08:00",
+      "total_tokens": 6924
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:29:18+08:00",
+  "group": "D",
+  "input_sha256": "c5dd8863610c8f693400ca89d7548b37ff818303dfc311468b8e0b9de34ac599",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "关系（控股子公司）与品种（奥卡西平片0.15g）均已答出，但遗漏证书编号2026S03114，属基本覆盖。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-120",
+  "raw_text": "{\"score\": 1, \"reason\": \"关系（控股子公司）与品种（奥卡西平片0.15g）均已答出，但遗漏证书编号2026S03114，属基本覆盖。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

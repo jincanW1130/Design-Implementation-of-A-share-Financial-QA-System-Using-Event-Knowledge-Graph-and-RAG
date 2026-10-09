@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-026",
+  "attempts": [
+    {
+      "answer_key": "C__A-026",
+      "attempt": 1,
+      "completion_tokens": 1594,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 52.015,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6848,
+      "qid": "PE-26",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:38:19+08:00",
+      "total_tokens": 8442
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:39:11+08:00",
+  "group": "C",
+  "input_sha256": "1d3beb2b09b89b59e88dd41838e64f1a1c67f28bfbe5824d123ee6b88756f87f",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "确认的FTTR协议共同签署有证据9/4支撑，历史协议名称、日期、状态均与证据1/7/8相符，对天翼智屏及历史协议签署方如实标注证据不足，未编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-26",
+  "raw_text": "{\"score\": 2, \"reason\": \"确认的FTTR协议共同签署有证据9/4支撑，历史协议名称、日期、状态均与证据1/7/8相符，对天翼智屏及历史协议签署方如实标注证据不足，未编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

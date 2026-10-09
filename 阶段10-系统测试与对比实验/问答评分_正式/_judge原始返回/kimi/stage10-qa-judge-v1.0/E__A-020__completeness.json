@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-020",
+  "attempts": [
+    {
+      "answer_key": "E__A-020",
+      "attempt": 1,
+      "completion_tokens": 124,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 6.973,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4642,
+      "qid": "FQ-020",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:34:53+08:00",
+      "total_tokens": 4766
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:35:00+08:00",
+  "group": "E",
+  "input_sha256": "76e58738f694da3f36e8a7d8090cff1d26329f821f245a8c05b09f6cab9505e5",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖7月当月回购10,780,847股、截至7月31日累计13,316,606股及《深交所自律监管指引第9号——回购股份》，无关键信息遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-020",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖7月当月回购10,780,847股、截至7月31日累计13,316,606股及《深交所自律监管指引第9号——回购股份》，无关键信息遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

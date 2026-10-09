@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-073",
+  "attempts": [
+    {
+      "answer_key": "B__A-073",
+      "attempt": 1,
+      "completion_tokens": 1125,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 20.306,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5477,
+      "qid": "FQ-073",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:06:40+08:00",
+      "total_tokens": 6602
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:07:00+08:00",
+  "group": "B",
+  "input_sha256": "7fc97dfee78e65c16e5a295ac464691e7362d4a8406bf2c8b86ba95e6c2b3f06",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "票据笔数、8,000万美元金额、信托契据担保安排及6月18日CSI MTN补充信息均与证据2、6逐条吻合，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-073",
+  "raw_text": "{\"score\": 2, \"reason\": \"票据笔数、8,000万美元金额、信托契据担保安排及6月18日CSI MTN补充信息均与证据2、6逐条吻合，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

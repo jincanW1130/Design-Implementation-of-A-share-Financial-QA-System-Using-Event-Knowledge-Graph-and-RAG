@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-100",
+  "attempts": [
+    {
+      "answer_key": "E__A-100",
+      "attempt": 1,
+      "completion_tokens": 2444,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 75.984,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4271,
+      "qid": "FQ-100",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:44:28+08:00",
+      "total_tokens": 6715
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:45:44+08:00",
+  "group": "E",
+  "input_sha256": "f92f686adf5364593f45ec5cf9f2abd2cb0bfd8ba29bf96b5a6841627671d8ef",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "签约时间、总承包方身份、18,560万元合同价、关联交易、35/33/32股权结构及王广庆任职等说法均可由证据1/2/3/6直接支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-100",
+  "raw_text": "{\"score\": 2, \"reason\": \"签约时间、总承包方身份、18,560万元合同价、关联交易、35/33/32股权结构及王广庆任职等说法均可由证据1/2/3/6直接支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

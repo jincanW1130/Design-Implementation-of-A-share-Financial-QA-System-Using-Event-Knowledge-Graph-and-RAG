@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-092",
+  "attempts": [
+    {
+      "answer_key": "B__A-092",
+      "attempt": 1,
+      "completion_tokens": 125,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 7.038,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5182,
+      "qid": "FQ-092",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:40:17+08:00",
+      "total_tokens": 5307
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:40:24+08:00",
+  "group": "B",
+  "input_sha256": "a98a719fc150300c54d82348f891bbcb8af869d1c485f73110e52a8a1235c802",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "三项关键信息（上限153.59→151.01元、2026-07-16生效、管控事件2026-08-13）均与参考答案完全一致，额外说明未造成错误",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-092",
+  "raw_text": "{\"score\": 2, \"reason\": \"三项关键信息（上限153.59→151.01元、2026-07-16生效、管控事件2026-08-13）均与参考答案完全一致，额外说明未造成错误\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

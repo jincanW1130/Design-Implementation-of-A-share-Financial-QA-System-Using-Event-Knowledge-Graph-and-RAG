@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-006",
+  "attempts": [
+    {
+      "answer_key": "C__A-006",
+      "attempt": 1,
+      "completion_tokens": 294,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 10.509,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3695,
+      "qid": "FQ-006",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:37:13+08:00",
+      "total_tokens": 3989
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:37:23+08:00",
+  "group": "C",
+  "input_sha256": "37d8463b027cb38d7e26c00e2cef2129cd9460dff4e7aef7319f061e5afa476b",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "批复文号、400亿元上限、24个月有效期及可分期发行均逐字见于证据1，发布日期2026-09-16亦有证据元数据支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-006",
+  "raw_text": "{\"score\": 2, \"reason\": \"批复文号、400亿元上限、24个月有效期及可分期发行均逐字见于证据1，发布日期2026-09-16亦有证据元数据支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

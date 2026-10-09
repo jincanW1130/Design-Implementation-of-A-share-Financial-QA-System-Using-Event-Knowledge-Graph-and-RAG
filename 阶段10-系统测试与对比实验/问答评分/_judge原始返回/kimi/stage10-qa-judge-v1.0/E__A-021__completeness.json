@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-021",
+  "attempts": [
+    {
+      "answer_key": "E__A-021",
+      "attempt": 1,
+      "completion_tokens": 118,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 6.828,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4801,
+      "qid": "PE-21",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:25:05+08:00",
+      "total_tokens": 4919
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T18:25:12+08:00",
+  "group": "E",
+  "input_sha256": "b27c218073083b14ea964c9d95f87ec7da52423928f1ebc757c6ee684518a373",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案两大要点：中信证券受托管理人角色（含财产以其名义持有）及登记机构中登上海分公司，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-21",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案两大要点：中信证券受托管理人角色（含财产以其名义持有）及登记机构中登上海分公司，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

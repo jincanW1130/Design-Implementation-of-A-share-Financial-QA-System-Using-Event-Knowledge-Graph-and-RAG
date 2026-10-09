@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-091",
+  "attempts": [
+    {
+      "answer_key": "C__A-091",
+      "attempt": 1,
+      "completion_tokens": 469,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 16.247,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4996,
+      "qid": "FQ-091",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:14:26+08:00",
+      "total_tokens": 5465
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:14:42+08:00",
+  "group": "C",
+  "input_sha256": "4574b93acc793870edb8d1820c5506f9cb48421973b96efe8259d00dda512af3",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "回购数量与金额、价格调整、80,633股注销均逐字对应证据9和证据10；对221,000股仅如实转述并谨慎注明证据未显示为同次事项，无任何编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-091",
+  "raw_text": "{\"score\": 2, \"reason\": \"回购数量与金额、价格调整、80,633股注销均逐字对应证据9和证据10；对221,000股仅如实转述并谨慎注明证据未显示为同次事项，无任何编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

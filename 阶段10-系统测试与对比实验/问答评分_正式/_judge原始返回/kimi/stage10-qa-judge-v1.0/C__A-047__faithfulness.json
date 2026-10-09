@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-047",
+  "attempts": [
+    {
+      "answer_key": "C__A-047",
+      "attempt": 1,
+      "completion_tokens": 226,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 7.813,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4176,
+      "qid": "FQ-047",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:02:18+08:00",
+      "total_tokens": 4402
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:02:26+08:00",
+  "group": "C",
+  "input_sha256": "37af3153b4b94d9f480d3025de2a5ff0ba12df44cd6d26aad75e7db69bdec4e6",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "质押数量、比例、质权人、起止日期、累计质押数及披露日期均能在证据1/2/3/5中找到对应支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-047",
+  "raw_text": "{\"score\": 2, \"reason\": \"质押数量、比例、质权人、起止日期、累计质押数及披露日期均能在证据1/2/3/5中找到对应支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

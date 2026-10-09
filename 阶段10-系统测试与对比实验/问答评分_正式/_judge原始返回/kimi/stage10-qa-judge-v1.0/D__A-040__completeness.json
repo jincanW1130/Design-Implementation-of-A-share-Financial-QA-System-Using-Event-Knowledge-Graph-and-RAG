@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-040",
+  "attempts": [
+    {
+      "answer_key": "D__A-040",
+      "attempt": 1,
+      "completion_tokens": 145,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 5.484,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4383,
+      "qid": "FQ-040",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:49:19+08:00",
+      "total_tokens": 4528
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:49:25+08:00",
+  "group": "D",
+  "input_sha256": "9e25a0f9f5b1d2fd3c85b973c6d5828c5b86f6c9d81ba500ecede0dea9b75c8e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案两大要点（6月30日AI智算卡、7月与15家银行推AI智能体银行卡且平安/浦发/交通率先发卡）均已完整覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-040",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案两大要点（6月30日AI智算卡、7月与15家银行推AI智能体银行卡且平安/浦发/交通率先发卡）均已完整覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

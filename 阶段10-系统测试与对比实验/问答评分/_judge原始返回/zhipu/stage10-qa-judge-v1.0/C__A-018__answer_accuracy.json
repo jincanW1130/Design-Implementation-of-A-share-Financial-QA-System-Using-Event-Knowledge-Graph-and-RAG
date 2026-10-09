@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-018",
+  "attempts": [
+    {
+      "answer_key": "C__A-018",
+      "attempt": 1,
+      "completion_tokens": 326,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 8.126,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4820,
+      "qid": "PE-18",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:42:34+08:00",
+      "total_tokens": 5146
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:42:42+08:00",
+  "group": "C",
+  "input_sha256": "beb31c04b46df3d9f6800920199cca0c3f3ee955e704ec63834e6785cf8e4af5",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确指出批准机构为原中国银监会，并给出银监复〔2012〕137号文及2012年4月18日开业，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-18",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确指出批准机构为原中国银监会，并给出银监复〔2012〕137号文及2012年4月18日开业，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

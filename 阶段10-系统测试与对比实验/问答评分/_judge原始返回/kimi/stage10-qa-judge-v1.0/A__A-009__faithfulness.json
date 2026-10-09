@@ -1,0 +1,44 @@
+{
+  "answer_key": "A__A-009",
+  "attempts": [
+    {
+      "answer_key": "A__A-009",
+      "attempt": 1,
+      "completion_tokens": 107,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 8.929,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3718,
+      "qid": "PE-09",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:29:48+08:00",
+      "total_tokens": 3825
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:29:57+08:00",
+  "group": "A",
+  "input_sha256": "ed83201b505e7a83641b49d9208b75b84becd46443f40bb9bc746e628628b9ec",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中机构名称、通知书编号、日期、品种及400亿注册金额均与证据1、证据2原文一致，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-09",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中机构名称、通知书编号、日期、品种及400亿注册金额均与证据1、证据2原文一致，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

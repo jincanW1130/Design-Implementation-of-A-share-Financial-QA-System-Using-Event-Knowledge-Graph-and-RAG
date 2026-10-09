@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-019",
+  "attempts": [
+    {
+      "answer_key": "D__A-019",
+      "attempt": 1,
+      "completion_tokens": 872,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 28.382,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4921,
+      "qid": "FQ-019",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:36:26+08:00",
+      "total_tokens": 5793
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:36:54+08:00",
+  "group": "D",
+  "input_sha256": "3a87f3144eded96f993549b7d773089ff469050f51e6df4087360decd5a6d10a",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "文号财会〔2026〕7号、6月4日发布、自公布之日起施行及过渡期调整等说法均在证据1/2/3/5中有原文支撑，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-019",
+  "raw_text": "{\"score\": 2, \"reason\": \"文号财会〔2026〕7号、6月4日发布、自公布之日起施行及过渡期调整等说法均在证据1/2/3/5中有原文支撑，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

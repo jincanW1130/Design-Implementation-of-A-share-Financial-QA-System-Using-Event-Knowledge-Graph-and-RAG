@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-117",
+  "attempts": [
+    {
+      "answer_key": "A__A-117",
+      "attempt": 1,
+      "completion_tokens": 702,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 22.996,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4172,
+      "qid": "FQ-117",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:21:30+08:00",
+      "total_tokens": 4874
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:21:53+08:00",
+  "group": "A",
+  "input_sha256": "2d4d98909395dca698dd0c8f6138c01d49fa9d1e03ddb849d07375924e51145c",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核心事实（全资子公司、46.08亿合同、雅安云算为简称、30.62亿采购协议）均能在证据1中逐字对应，持股比例100%系“全资子公司”的释义，其余限制说明也如实反映证据边界，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-117",
+  "raw_text": "{\"score\": 2, \"reason\": \"核心事实（全资子公司、46.08亿合同、雅安云算为简称、30.62亿采购协议）均能在证据1中逐字对应，持股比例100%系“全资子公司”的释义，其余限制说明也如实反映证据边界，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

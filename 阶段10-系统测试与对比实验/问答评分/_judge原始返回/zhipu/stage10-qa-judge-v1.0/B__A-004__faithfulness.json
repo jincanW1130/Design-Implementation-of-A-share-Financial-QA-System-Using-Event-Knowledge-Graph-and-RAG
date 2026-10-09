@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-004",
+  "attempts": [
+    {
+      "answer_key": "B__A-004",
+      "attempt": 1,
+      "completion_tokens": 1438,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 30.39,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5990,
+      "qid": "PE-04",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:37:53+08:00",
+      "total_tokens": 7428
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:38:23+08:00",
+  "group": "B",
+  "input_sha256": "2a38a10a780d2e0c65103e7cc58e7be9dd01a41dc1d91423dac630a2ebcfd9af",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "郑弘孟、黄德才、许兴仁、李昕的表述均可在证据1、5、9中逐条找到，引用位置正确，且明确说明名单不完整，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-04",
+  "raw_text": "{\"score\": 2, \"reason\": \"郑弘孟、黄德才、许兴仁、李昕的表述均可在证据1、5、9中逐条找到，引用位置正确，且明确说明名单不完整，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

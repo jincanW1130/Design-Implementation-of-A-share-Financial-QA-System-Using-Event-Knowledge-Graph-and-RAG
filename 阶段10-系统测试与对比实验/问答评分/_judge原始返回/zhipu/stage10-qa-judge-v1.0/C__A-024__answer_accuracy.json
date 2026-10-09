@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-024",
+  "attempts": [
+    {
+      "answer_key": "C__A-024",
+      "attempt": 1,
+      "completion_tokens": 353,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 7.262,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5205,
+      "qid": "PE-24",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:43:06+08:00",
+      "total_tokens": 5558
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:43:14+08:00",
+  "group": "C",
+  "input_sha256": "6570873836da801c80417f04bd7a36d6f06d3acedc09ab63bab7172d853a57fe",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确给出回购价格上限由573元/股调整为571.60元/股、自2026年8月10日除权除息日起生效，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-24",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确给出回购价格上限由573元/股调整为571.60元/股、自2026年8月10日除权除息日起生效，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-114",
+  "attempts": [
+    {
+      "answer_key": "C__A-114",
+      "attempt": 1,
+      "completion_tokens": 221,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 5.378,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5124,
+      "qid": "FQ-114",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:19:02+08:00",
+      "total_tokens": 5345
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:19:08+08:00",
+  "group": "C",
+  "input_sha256": "f91c07ff44fdb08bed42ff687d6768172fb4a101d59261822b1da1d4cd16419e",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案关键信息：明确江西透景为上海透景的全资子公司，并提及取得江西省药监局1项医疗器械注册证。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-114",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案关键信息：明确江西透景为上海透景的全资子公司，并提及取得江西省药监局1项医疗器械注册证。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-054",
+  "attempts": [
+    {
+      "answer_key": "C__A-054",
+      "attempt": 1,
+      "completion_tokens": 493,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 22.984,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5293,
+      "qid": "FQ-054",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:09:40+08:00",
+      "total_tokens": 5786
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:10:03+08:00",
+  "group": "C",
+  "input_sha256": "c36ea3ba0001eb988908c41c1bf3672b514fa2bae4cd1884e41d548e756a02d8",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "所引回避表决原文、胡望明等三人董事身份、杨兆候选人身份及制度条文描述均能在证据1-10中找到支撑，且对证据不足处如实说明，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-054",
+  "raw_text": "{\"score\": 2, \"reason\": \"所引回避表决原文、胡望明等三人董事身份、杨兆候选人身份及制度条文描述均能在证据1-10中找到支撑，且对证据不足处如实说明，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

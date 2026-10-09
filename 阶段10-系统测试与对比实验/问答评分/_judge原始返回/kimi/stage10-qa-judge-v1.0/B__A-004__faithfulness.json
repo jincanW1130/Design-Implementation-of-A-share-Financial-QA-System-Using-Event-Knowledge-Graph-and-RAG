@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-004",
+  "attempts": [
+    {
+      "answer_key": "B__A-004",
+      "attempt": 1,
+      "completion_tokens": 481,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 18.537,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5716,
+      "qid": "PE-04",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:51:12+08:00",
+      "total_tokens": 6197
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:51:31+08:00",
+  "group": "B",
+  "input_sha256": "2a38a10a780d2e0c65103e7cc58e7be9dd01a41dc1d91423dac630a2ebcfd9af",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "郑弘孟、黄德才、许兴仁、李昕的职务与履历均可在证据9、1、5中找到原文支撑，不确定处也做了适当限定，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-04",
+  "raw_text": "{\"score\": 2, \"reason\": \"郑弘孟、黄德才、许兴仁、李昕的职务与履历均可在证据9、1、5中找到原文支撑，不确定处也做了适当限定，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

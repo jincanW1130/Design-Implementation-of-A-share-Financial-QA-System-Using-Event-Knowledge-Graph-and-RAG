@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-064",
+  "attempts": [
+    {
+      "answer_key": "E__A-064",
+      "attempt": 1,
+      "completion_tokens": 306,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 10.78,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5652,
+      "qid": "FQ-064",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:13:28+08:00",
+      "total_tokens": 5958
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:13:39+08:00",
+  "group": "E",
+  "input_sha256": "b6d8076b61f3111d03f6d36a8d496a66bd9da4b1d9bb65bdd5a1e95eceddd012",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "会议时间14:50有证据9、两项议案有证据2、回避表决及通过有证据3/4支撑，9月15日披露见证据元数据，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-064",
+  "raw_text": "{\"score\": 2, \"reason\": \"会议时间14:50有证据9、两项议案有证据2、回避表决及通过有证据3/4支撑，9月15日披露见证据元数据，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

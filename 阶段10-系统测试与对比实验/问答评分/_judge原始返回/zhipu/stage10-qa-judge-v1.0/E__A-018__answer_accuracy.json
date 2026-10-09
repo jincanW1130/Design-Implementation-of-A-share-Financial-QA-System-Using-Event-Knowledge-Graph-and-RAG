@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-018",
+  "attempts": [
+    {
+      "answer_key": "E__A-018",
+      "attempt": 1,
+      "completion_tokens": 230,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 4.536,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3728,
+      "qid": "PE-18",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:52:46+08:00",
+      "total_tokens": 3958
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:52:51+08:00",
+  "group": "E",
+  "input_sha256": "899f0a31c722fc4a7d4da1f39204b7232d6c344974eb4060266be6ba7cb5baeb",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "被评答案与参考答案一致，批准机构（原中国银监会）、文号（银监复〔2012〕137号）、日期（4月18日）均正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-18",
+  "raw_text": "{\"score\": 2, \"reason\": \"被评答案与参考答案一致，批准机构（原中国银监会）、文号（银监复〔2012〕137号）、日期（4月18日）均正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-120",
+  "attempts": [
+    {
+      "answer_key": "E__A-120",
+      "attempt": 1,
+      "completion_tokens": 838,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 15.154,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4789,
+      "qid": "FQ-120",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:37:36+08:00",
+      "total_tokens": 5627
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:37:51+08:00",
+  "group": "E",
+  "input_sha256": "189434ce0b2d888c36ddf5bc276f6084ed8faf9a2d67ae1f93f0c7ad2a7584dc",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "关系（控股子公司）、品种（奥卡西平片0.15g）、证书编号、批准文号、批准日期及各公告披露时间均能被证据1、2、5、6支撑，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-120",
+  "raw_text": "{\"score\": 2, \"reason\": \"关系（控股子公司）、品种（奥卡西平片0.15g）、证书编号、批准文号、批准日期及各公告披露时间均能被证据1、2、5、6支撑，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

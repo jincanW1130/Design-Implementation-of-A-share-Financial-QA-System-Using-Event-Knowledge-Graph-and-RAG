@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-014",
+  "attempts": [
+    {
+      "answer_key": "A__A-014",
+      "attempt": 1,
+      "completion_tokens": 1622,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 50.075,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5811,
+      "qid": "PE-14",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:35:13+08:00",
+      "total_tokens": 7433
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:36:03+08:00",
+  "group": "A",
+  "input_sha256": "b1c07ed6d9494dd0d0e0ce6b7c5d88a67de8ac937fb97e8ed25c733c3960b18e",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "各项事实（董事会审议、价格上限调整、首次回购25.30万股、进展200.13万股等）均能在检索证据中找到原文支撑，且对其他公司公告的排除说明也与证据相符，未见编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-14",
+  "raw_text": "{\"score\": 2, \"reason\": \"各项事实（董事会审议、价格上限调整、首次回购25.30万股、进展200.13万股等）均能在检索证据中找到原文支撑，且对其他公司公告的排除说明也与证据相符，未见编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

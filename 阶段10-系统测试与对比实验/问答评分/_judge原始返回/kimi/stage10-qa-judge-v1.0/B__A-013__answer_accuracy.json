@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-013",
+  "attempts": [
+    {
+      "answer_key": "B__A-013",
+      "attempt": 1,
+      "completion_tokens": 577,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 21.522,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6049,
+      "qid": "PE-13",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:57:00+08:00",
+      "total_tokens": 6626
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T16:57:21+08:00",
+  "group": "B",
+  "input_sha256": "c6fe4dbc040c068680836b7ca5760a79d6e40ce5a25b8a87ba069985458c1377",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案四个关键事件（7月27日方案、8月19日首次回购241.44万股、8月累计14,010,229股、实施完毕累计15,833,353股）均准确覆盖，金额与价格上限无误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-13",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案四个关键事件（7月27日方案、8月19日首次回购241.44万股、8月累计14,010,229股、实施完毕累计15,833,353股）均准确覆盖，金额与价格上限无误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

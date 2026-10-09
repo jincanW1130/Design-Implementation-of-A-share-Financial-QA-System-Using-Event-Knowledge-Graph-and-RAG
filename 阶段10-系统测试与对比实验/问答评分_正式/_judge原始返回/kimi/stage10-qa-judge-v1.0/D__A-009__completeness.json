@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-009",
+  "attempts": [
+    {
+      "answer_key": "D__A-009",
+      "attempt": 1,
+      "completion_tokens": 108,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 5.903,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4060,
+      "qid": "FQ-009",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:31:07+08:00",
+      "total_tokens": 4168
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:31:13+08:00",
+  "group": "D",
+  "input_sha256": "e241fe493c73931e2a6e4d7efa8c7b5d3344e9c4ace8f7f8fe9bdc11813a93e4",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "四项关键信息（上市日期、地点、年利率、期限）全部覆盖且与参考答案一致，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-009",
+  "raw_text": "{\"score\": 2, \"reason\": \"四项关键信息（上市日期、地点、年利率、期限）全部覆盖且与参考答案一致，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

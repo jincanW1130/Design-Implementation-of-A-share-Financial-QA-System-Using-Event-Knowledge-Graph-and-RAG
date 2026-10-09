@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-023",
+  "attempts": [
+    {
+      "answer_key": "C__A-023",
+      "attempt": 1,
+      "completion_tokens": 108,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 6.109,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3746,
+      "qid": "FQ-023",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:45:23+08:00",
+      "total_tokens": 3854
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:45:30+08:00",
+  "group": "C",
+  "input_sha256": "879d95224f941c4465157636c8f179408db1e303a4c7085e8fc4d83630e86708",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案两项关键信息：纳入医保目录与商保创新药目录安排，及2026年8月19日印发时间。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-023",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案两项关键信息：纳入医保目录与商保创新药目录安排，及2026年8月19日印发时间。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

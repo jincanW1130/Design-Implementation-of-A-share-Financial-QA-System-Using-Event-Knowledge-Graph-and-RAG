@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-091",
+  "attempts": [
+    {
+      "answer_key": "A__A-091",
+      "attempt": 1,
+      "completion_tokens": 330,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 13.141,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4455,
+      "qid": "FQ-091",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:03:18+08:00",
+      "total_tokens": 4785
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:03:31+08:00",
+  "group": "A",
+  "input_sha256": "d588cb95f7edf0fb2f96eb3b05a1fb0c97a614d6a0f16dc636f4d97e6d56f9ea",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案对证据1、2内容的转述均与可用证据原文一致，未编造任何数据，并基于证据缺口如实给出无法确定的结论。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-091",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案对证据1、2内容的转述均与可用证据原文一致，未编造任何数据，并基于证据缺口如实给出无法确定的结论。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-063",
+  "attempts": [
+    {
+      "answer_key": "E__A-063",
+      "attempt": 1,
+      "completion_tokens": 770,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 25.152,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4767,
+      "qid": "FQ-063",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:12:06+08:00",
+      "total_tokens": 5537
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:12:31+08:00",
+  "group": "E",
+  "input_sha256": "de5607001b1772507835651ebb304b98cd3eff40fd1ef22dc65002df071df488",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、69.95%→70.01%、各股东持股数及分红背景均可在证据1-5中直接找到，0.06个百分点为已声明的算术推导，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-063",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、69.95%→70.01%、各股东持股数及分红背景均可在证据1-5中直接找到，0.06个百分点为已声明的算术推导，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-066",
+  "attempts": [
+    {
+      "answer_key": "B__A-066",
+      "attempt": 1,
+      "completion_tokens": 658,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 20.539,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5234,
+      "qid": "FQ-066",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:30:54+08:00",
+      "total_tokens": 5892
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:31:14+08:00",
+  "group": "B",
+  "input_sha256": "98c5f0e87b4e2ac5be33645399acbb69e3f96ee553ecd46e697956dcdf20321b",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "异常波动日期、函询、经营稳定说明、备查回函及指定媒体等说法均见证据1/7，且对回函内容如实声明证据不足，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-066",
+  "raw_text": "{\"score\": 2, \"reason\": \"异常波动日期、函询、经营稳定说明、备查回函及指定媒体等说法均见证据1/7，且对回函内容如实声明证据不足，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

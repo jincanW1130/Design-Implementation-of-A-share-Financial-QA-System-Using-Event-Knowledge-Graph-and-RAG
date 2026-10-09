@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-010",
+  "attempts": [
+    {
+      "answer_key": "E__A-010",
+      "attempt": 1,
+      "completion_tokens": 1511,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 43.181,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4264,
+      "qid": "FQ-010",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:28:54+08:00",
+      "total_tokens": 5775
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:29:37+08:00",
+  "group": "E",
+  "input_sha256": "9f081e83d0db9d0e89688be2f51d581534f18ed45ab8e74919ff6bf7172fa4d2",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "拟行权数量2,269,777份、注销291,322份、66名离职对象均与证据4、6原文一致，发布日期有元数据支撑；对证据中确实缺失的符合行权条件人数明确声明证据不足而未编造，全部事实性说法均可被可用证据支撑。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-010",
+  "raw_text": "{\"score\": 2, \"reason\": \"拟行权数量2,269,777份、注销291,322份、66名离职对象均与证据4、6原文一致，发布日期有元数据支撑；对证据中确实缺失的符合行权条件人数明确声明证据不足而未编造，全部事实性说法均可被可用证据支撑。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-073",
+  "attempts": [
+    {
+      "answer_key": "A__A-073",
+      "attempt": 1,
+      "completion_tokens": 619,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 11.371,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4671,
+      "qid": "FQ-073",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T22:59:07+08:00",
+      "total_tokens": 5290
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:59:18+08:00",
+  "group": "A",
+  "input_sha256": "58e5597112c6309ce22cab5f86ee2e2b2bc3a83ca472982580bcb3b8c88642d4",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案准确给出6月17日发行两笔票据、金额8000万美元及无条件不可撤销担保安排，与参考答案一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-073",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案准确给出6月17日发行两笔票据、金额8000万美元及无条件不可撤销担保安排，与参考答案一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

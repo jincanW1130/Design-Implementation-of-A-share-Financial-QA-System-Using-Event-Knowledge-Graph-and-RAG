@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-023",
+  "attempts": [
+    {
+      "answer_key": "A__A-023",
+      "attempt": 1,
+      "completion_tokens": 464,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 18.863,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4065,
+      "qid": "PE-23",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:43:37+08:00",
+      "total_tokens": 4529
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:43:55+08:00",
+  "group": "A",
+  "input_sha256": "9a70d92b9081cccb419a45b5d3f9bfb5eef5520aed4cc3d591849f846e427629",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核心事实（薛驰任董事长、9名董事、杨兆仅为候选人）均有证据支撑且表述谨慎，但将证据8募集资金专项报告称为“定期报告”属少量不严谨。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-23",
+  "raw_text": "{\"score\": 1, \"reason\": \"核心事实（薛驰任董事长、9名董事、杨兆仅为候选人）均有证据支撑且表述谨慎，但将证据8募集资金专项报告称为“定期报告”属少量不严谨。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-082",
+  "attempts": [
+    {
+      "answer_key": "E__A-082",
+      "attempt": 1,
+      "completion_tokens": 743,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 13.354,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4109,
+      "qid": "FQ-082",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:12:56+08:00",
+      "total_tokens": 4852
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:13:09+08:00",
+  "group": "E",
+  "input_sha256": "d1b17f3ba71d82b448443d9225a3ded0f89a552863340d24e5498c92d0f0dc30",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "分拆事件、实物分派方式、保密递交等事实均与证据1原文一致，无编造且对证据外内容如实说明不足。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-082",
+  "raw_text": "{\"score\": 2, \"reason\": \"分拆事件、实物分派方式、保密递交等事实均与证据1原文一致，无编造且对证据外内容如实说明不足。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

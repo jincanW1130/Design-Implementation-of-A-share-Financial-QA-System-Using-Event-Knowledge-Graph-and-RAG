@@ -1,0 +1,46 @@
+{
+  "answer_key": "C__A-057",
+  "attempts": [
+    {
+      "answer_key": "C__A-057",
+      "attempt": 1,
+      "completion_tokens": 3424,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 64.259,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4602,
+      "qid": "FQ-057",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:32:02+08:00",
+      "total_tokens": 8026
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T00:33:06+08:00",
+  "group": "C",
+  "input_sha256": "82ff984e23b5fb98aa3a73475fd89a90c7362f5867282dca80e20534e862302d",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "disagreement_note": "主judge把题目未问的成立时间/注册号/注册地也计为关键信息，标准掌握偏严，并非答案处于量表边界。",
+    "final_score": 2,
+    "reason": "题目仅问人员、身份与公司类型，答案已完整覆盖三人名单及法定代表人/公司董事、SPV，并补充持股结构，未问的注册细节非关键信息遗漏。"
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-057",
+  "raw_text": "{\"final_score\": 2, \"reason\": \"题目仅问人员、身份与公司类型，答案已完整覆盖三人名单及法定代表人/公司董事、SPV，并补充持股结构，未问的注册细节非关键信息遗漏。\", \"disagreement_note\": \"主judge把题目未问的成立时间/注册号/注册地也计为关键信息，标准掌握偏严，并非答案处于量表边界。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

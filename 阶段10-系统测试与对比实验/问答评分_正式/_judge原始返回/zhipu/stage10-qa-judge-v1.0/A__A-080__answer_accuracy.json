@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-080",
+  "attempts": [
+    {
+      "answer_key": "A__A-080",
+      "attempt": 1,
+      "completion_tokens": 721,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 11.694,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4532,
+      "qid": "FQ-080",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:42:00+08:00",
+      "total_tokens": 5253
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T00:42:11+08:00",
+  "group": "A",
+  "input_sha256": "2561c1027c732e3ca7cd65b78b904cfbc2fc06ab1a0ebfe59793bfe59e646129",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "准确答出2025-10-31双方签署《药品上市许可转让合同》，转让乳果糖口服溶液（15ml:10g），与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-080",
+  "raw_text": "{\"score\": 2, \"reason\": \"准确答出2025-10-31双方签署《药品上市许可转让合同》，转让乳果糖口服溶液（15ml:10g），与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-047",
+  "attempts": [
+    {
+      "answer_key": "D__A-047",
+      "attempt": 1,
+      "completion_tokens": 127,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 15.445,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4399,
+      "qid": "FQ-047",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:56:11+08:00",
+      "total_tokens": 4526
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:56:27+08:00",
+  "group": "D",
+  "input_sha256": "f6e81c7aee2881f98653ac767e29afb3263d3403217c93940e58260a2eef6d60",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件定性为补充质押，数量68,909,674股、占其所持8.02%、质权人农行珠海分行等要素均与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-047",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件定性为补充质押，数量68,909,674股、占其所持8.02%、质权人农行珠海分行等要素均与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

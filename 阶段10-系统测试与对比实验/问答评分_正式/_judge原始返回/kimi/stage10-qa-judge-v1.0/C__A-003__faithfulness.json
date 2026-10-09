@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-003",
+  "attempts": [
+    {
+      "answer_key": "C__A-003",
+      "attempt": 1,
+      "completion_tokens": 139,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 8.222,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4689,
+      "qid": "FQ-003",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:36:03+08:00",
+      "total_tokens": 4828
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:36:11+08:00",
+  "group": "C",
+  "input_sha256": "f78c8840656b824bba87601f3fa0a1f003b3cdf4e041814ab0df864f7aef86d4",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案所有事实（规模100亿、首次/续发各50亿、3年期固定利率附息、利率1.57%、续发价格、募资用途）均与证据1原文一致，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-003",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案所有事实（规模100亿、首次/续发各50亿、3年期固定利率附息、利率1.57%、续发价格、募资用途）均与证据1原文一致，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

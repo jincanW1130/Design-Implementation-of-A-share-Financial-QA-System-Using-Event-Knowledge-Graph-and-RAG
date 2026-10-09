@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-104",
+  "attempts": [
+    {
+      "answer_key": "E__A-104",
+      "attempt": 1,
+      "completion_tokens": 417,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 7.429,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4497,
+      "qid": "FQ-104",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:34:15+08:00",
+      "total_tokens": 4914
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:34:22+08:00",
+  "group": "E",
+  "input_sha256": "5adff062f0decf491ee1edaa2d0a0874447b021587e6407d419a9edea1605cda",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确答出登记机构为中国结算上海分公司及授予367,989,000股，与参考答案要点一致，无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-104",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案正确答出登记机构为中国结算上海分公司及授予367,989,000股，与参考答案要点一致，无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

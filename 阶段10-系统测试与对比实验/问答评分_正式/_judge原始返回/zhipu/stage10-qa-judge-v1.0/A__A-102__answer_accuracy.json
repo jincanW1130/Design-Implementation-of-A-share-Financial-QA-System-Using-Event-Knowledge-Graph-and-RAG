@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-102",
+  "attempts": [
+    {
+      "answer_key": "A__A-102",
+      "attempt": 1,
+      "completion_tokens": 1463,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 25.203,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4832,
+      "qid": "FQ-102",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:49:01+08:00",
+      "total_tokens": 6295
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T00:49:26+08:00",
+  "group": "A",
+  "input_sha256": "53664d56be9582b97bca48629cccf9a3cd716af938e8d565b1da7dbd66d1270f",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "两事件及品种、2026S02025均正确，但缺第二次证书编号2026S03337/2026S03336，部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-102",
+  "raw_text": "{\"score\": 1, \"reason\": \"两事件及品种、2026S02025均正确，但缺第二次证书编号2026S03337/2026S03336，部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

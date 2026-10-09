@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-103",
+  "attempts": [
+    {
+      "answer_key": "D__A-103",
+      "attempt": 1,
+      "completion_tokens": 152,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 9.801,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4672,
+      "qid": "FQ-103",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:06:17+08:00",
+      "total_tokens": 4824
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:06:27+08:00",
+  "group": "D",
+  "input_sha256": "05c63505a4f265e9eb9377615e40ef18140e65df598bb750582c59fd99f8b917",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案三要素（接受机构、通知书编号DFI27号、自2025-4-28落款起2年有效）全部覆盖，无遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-103",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案三要素（接受机构、通知书编号DFI27号、自2025-4-28落款起2年有效）全部覆盖，无遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

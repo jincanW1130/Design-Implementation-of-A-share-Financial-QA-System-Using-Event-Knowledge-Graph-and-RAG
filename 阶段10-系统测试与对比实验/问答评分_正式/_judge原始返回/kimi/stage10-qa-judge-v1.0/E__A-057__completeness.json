@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-057",
+  "attempts": [
+    {
+      "answer_key": "E__A-057",
+      "attempt": 1,
+      "completion_tokens": 125,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 7.081,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3952,
+      "qid": "FQ-057",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:07:45+08:00",
+      "total_tokens": 4077
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:07:52+08:00",
+  "group": "E",
+  "input_sha256": "14af467afde166a2f7e50c4e449aafce2c4abbe174fe174740ee2513d3e585a6",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "被评答案称证据不足，未提供李凯、杨杰、郑颖三位董事及SPV公司类型等参考答案任何关键信息，属大量遗漏。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-057",
+  "raw_text": "{\"score\": 0, \"reason\": \"被评答案称证据不足，未提供李凯、杨杰、郑颖三位董事及SPV公司类型等参考答案任何关键信息，属大量遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-111",
+  "attempts": [
+    {
+      "answer_key": "D__A-111",
+      "attempt": 1,
+      "completion_tokens": 132,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 8.329,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4188,
+      "qid": "FQ-111",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:10:16+08:00",
+      "total_tokens": 4320
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:10:24+08:00",
+  "group": "D",
+  "input_sha256": "18c7d6d503070a4a6d31927a0c76b7ca49db46e51fab940946b777cde4bf1119",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确指出两家单位均为公司全资子公司，与参考答案完全一致，且附加细节与证据相符。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-111",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确指出两家单位均为公司全资子公司，与参考答案完全一致，且附加细节与证据相符。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

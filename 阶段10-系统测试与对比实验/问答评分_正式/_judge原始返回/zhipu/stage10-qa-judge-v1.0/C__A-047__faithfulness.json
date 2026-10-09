@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-047",
+  "attempts": [
+    {
+      "answer_key": "C__A-047",
+      "attempt": 1,
+      "completion_tokens": 886,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 13.512,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4366,
+      "qid": "FQ-047",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:45:13+08:00",
+      "total_tokens": 5252
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:45:27+08:00",
+  "group": "C",
+  "input_sha256": "37af3153b4b94d9f480d3025de2a5ff0ba12df44cd6d26aad75e7db69bdec4e6",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中质押数量、比例、质权人、日期及累计质押数据均见于证据1、3、5，无无依据事实，完全基于证据。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-047",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中质押数量、比例、质权人、日期及累计质押数据均见于证据1、3、5，无无依据事实，完全基于证据。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-006",
+  "attempts": [
+    {
+      "answer_key": "E__A-006",
+      "attempt": 1,
+      "completion_tokens": 301,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 5.058,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3810,
+      "qid": "FQ-006",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:03:55+08:00",
+      "total_tokens": 4111
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T00:04:00+08:00",
+  "group": "E",
+  "input_sha256": "4119b6364bde0dce81a572b5b29ee6bd733560bd33b7ec34891821b727dacb4f",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "文号证监许可〔2026〕2414号、400亿元面值上限、24个月有效期三项均与参考答案一致且证据支撑，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-006",
+  "raw_text": "{\"score\": 2, \"reason\": \"文号证监许可〔2026〕2414号、400亿元面值上限、24个月有效期三项均与参考答案一致且证据支撑，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-119",
+  "attempts": [
+    {
+      "answer_key": "C__A-119",
+      "attempt": 1,
+      "completion_tokens": 265,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 6.195,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4399,
+      "qid": "FQ-119",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:06:19+08:00",
+      "total_tokens": 4664
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T01:06:25+08:00",
+  "group": "C",
+  "input_sha256": "ae1b187ae997b80b935e5ab91a7f8b7a1c8efdc137af57cabbfeeaddab2c4462",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案关键信息：实际控制人未变化、信托担保登记完成不导致变化、不构成要约收购，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-119",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案关键信息：实际控制人未变化、信托担保登记完成不导致变化、不构成要约收购，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

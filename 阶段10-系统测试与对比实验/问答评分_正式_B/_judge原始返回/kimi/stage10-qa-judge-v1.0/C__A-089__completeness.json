@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-089",
+  "attempts": [
+    {
+      "answer_key": "C__A-089",
+      "attempt": 1,
+      "completion_tokens": 495,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 15.928,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5000,
+      "qid": "FQ-089",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:12:26+08:00",
+      "total_tokens": 5495
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:12:42+08:00",
+  "group": "C",
+  "input_sha256": "d101ac7b782da2affdc6926507556cb00c811a3c378ef9d0e30b75987dac5718",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两个日期及7月当月累计回购10,780,847股等参考答案关键信息均完整覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-089",
+  "raw_text": "{\"score\": 2, \"reason\": \"两个日期及7月当月累计回购10,780,847股等参考答案关键信息均完整覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

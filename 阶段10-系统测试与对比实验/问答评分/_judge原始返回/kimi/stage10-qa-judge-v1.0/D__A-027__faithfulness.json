@@ -1,0 +1,44 @@
+{
+  "answer_key": "D__A-027",
+  "attempts": [
+    {
+      "answer_key": "D__A-027",
+      "attempt": 1,
+      "completion_tokens": 581,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 19.774,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4787,
+      "qid": "PE-27",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:18:52+08:00",
+      "total_tokens": 5368
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:19:11+08:00",
+  "group": "D",
+  "input_sha256": "a87ae4969ee9d644d2a9437d741aeee4a1393d31e6297ae04b45a490db39f3ef",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "协议名称、卖方、成交人披露日（7月1日）、公告落款（7月17日）、有效期等均能在证据5/7/8中找到；对未披露的买方全称和签署时间如实说明，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-27",
+  "raw_text": "{\"score\": 2, \"reason\": \"协议名称、卖方、成交人披露日（7月1日）、公告落款（7月17日）、有效期等均能在证据5/7/8中找到；对未披露的买方全称和签署时间如实说明，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-116",
+  "attempts": [
+    {
+      "answer_key": "A__A-116",
+      "attempt": 1,
+      "completion_tokens": 1613,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 34.519,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3796,
+      "qid": "FQ-116",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:05:29+08:00",
+      "total_tokens": 5409
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:06:03+08:00",
+  "group": "A",
+  "input_sha256": "4a2b8f71f9231db3ddde8718252baedb2291c012b9dc352216bf106ede36db0a",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖核心关键信息“电气香港为上海电气全资子公司”，并提及由其担保，仅缺担保期限这一附带细节，属信息完整",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-116",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖核心关键信息“电气香港为上海电气全资子公司”，并提及由其担保，仅缺担保期限这一附带细节，属信息完整\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

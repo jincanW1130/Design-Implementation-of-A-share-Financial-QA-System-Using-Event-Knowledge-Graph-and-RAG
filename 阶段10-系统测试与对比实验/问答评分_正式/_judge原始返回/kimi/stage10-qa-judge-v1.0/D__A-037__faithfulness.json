@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-037",
+  "attempts": [
+    {
+      "answer_key": "D__A-037",
+      "attempt": 1,
+      "completion_tokens": 804,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 26.182,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4552,
+      "qid": "FQ-037",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:47:20+08:00",
+      "total_tokens": 5356
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:47:46+08:00",
+  "group": "D",
+  "input_sha256": "06518d891a3f9d57ae9e45b6af70dab109d51cb3ebf8ffb3dda5e3fa6e1e6304",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两次中标主体、金额、占比、风险提示及公告日期等事实均能在证据1/2/3及来源元数据中找到支撑，未见无依据编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-037",
+  "raw_text": "{\"score\": 2, \"reason\": \"两次中标主体、金额、占比、风险提示及公告日期等事实均能在证据1/2/3及来源元数据中找到支撑，未见无依据编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

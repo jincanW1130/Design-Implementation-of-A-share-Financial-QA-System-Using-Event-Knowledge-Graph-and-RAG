@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-084",
+  "attempts": [
+    {
+      "answer_key": "E__A-084",
+      "attempt": 1,
+      "completion_tokens": 230,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 11.632,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4221,
+      "qid": "FQ-084",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:28:32+08:00",
+      "total_tokens": 4451
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:28:43+08:00",
+  "group": "E",
+  "input_sha256": "74a755d08db98305cf0be18a37236717bddb03ba19d19f239eca2b602788f27f",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖授权事件、GLP-1标的、欧洲目标市场，并提及系8月10日三起重磅交易之一，关键信息无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-084",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖授权事件、GLP-1标的、欧洲目标市场，并提及系8月10日三起重磅交易之一，关键信息无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

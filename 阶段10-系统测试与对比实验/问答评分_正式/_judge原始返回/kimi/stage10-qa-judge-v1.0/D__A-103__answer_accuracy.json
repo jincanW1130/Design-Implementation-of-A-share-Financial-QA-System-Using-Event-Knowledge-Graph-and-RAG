@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-103",
+  "attempts": [
+    {
+      "answer_key": "D__A-103",
+      "attempt": 1,
+      "completion_tokens": 127,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 10.588,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4665,
+      "qid": "FQ-103",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:06:05+08:00",
+      "total_tokens": 4792
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:06:16+08:00",
+  "group": "D",
+  "input_sha256": "7ea601da797a70340f0d8ce53ae160cf228d770d7e97f72c0916d84d71c9a8f6",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "机构、通知书编号及有效期三项均与参考答案完全一致：交易商协会、中市协注[2025]DFI27号、自2025年4月28日起2年。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-103",
+  "raw_text": "{\"score\": 2, \"reason\": \"机构、通知书编号及有效期三项均与参考答案完全一致：交易商协会、中市协注[2025]DFI27号、自2025年4月28日起2年。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

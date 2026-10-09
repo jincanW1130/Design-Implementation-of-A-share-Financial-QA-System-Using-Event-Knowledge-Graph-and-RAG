@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-084",
+  "attempts": [
+    {
+      "answer_key": "A__A-084",
+      "attempt": 1,
+      "completion_tokens": 1251,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 22.526,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4059,
+      "qid": "FQ-084",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:00:46+08:00",
+      "total_tokens": 5310
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:01:09+08:00",
+  "group": "A",
+  "input_sha256": "4505a437187fe5043ba028e3970b05ad17e579a815a5ead8768ddaf15c506c1f",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "交易事件、授权标的博凡格鲁肽、39国市场、6200万欧元首付等均有证据2/7直接支撑，推断处已明确标注，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-084",
+  "raw_text": "{\"score\": 2, \"reason\": \"交易事件、授权标的博凡格鲁肽、39国市场、6200万欧元首付等均有证据2/7直接支撑，推断处已明确标注，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

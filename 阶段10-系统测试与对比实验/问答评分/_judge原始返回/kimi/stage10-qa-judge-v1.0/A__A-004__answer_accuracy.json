@@ -1,0 +1,44 @@
+{
+  "answer_key": "A__A-004",
+  "attempts": [
+    {
+      "answer_key": "A__A-004",
+      "attempt": 1,
+      "completion_tokens": 175,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 13.221,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5454,
+      "qid": "PE-04",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:22:17+08:00",
+      "total_tokens": 5629
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T16:22:31+08:00",
+  "group": "A",
+  "input_sha256": "8f8160eee556c501f2b759047199129b844ffc7bf95b344ef2e260e1160270ef",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "仅答出金标准中的许兴仁一人，郑弘孟、黄德才等多数名单缺失，且李昕不在参考答案内，属部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-04",
+  "raw_text": "{\"score\": 1, \"reason\": \"仅答出金标准中的许兴仁一人，郑弘孟、黄德才等多数名单缺失，且李昕不在参考答案内，属部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

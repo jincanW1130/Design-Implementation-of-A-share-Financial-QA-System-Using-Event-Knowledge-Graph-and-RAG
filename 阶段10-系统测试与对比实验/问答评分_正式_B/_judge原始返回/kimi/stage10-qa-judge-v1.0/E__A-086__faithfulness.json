@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-086",
+  "attempts": [
+    {
+      "answer_key": "E__A-086",
+      "attempt": 1,
+      "completion_tokens": 256,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 9.376,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5890,
+      "qid": "FQ-086",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:30:00+08:00",
+      "total_tokens": 6146
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:30:09+08:00",
+  "group": "E",
+  "input_sha256": "123915468f8feb0b7add8a0fb0adbd5be1c72f1a407d58064539951a9b69812a",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案所有事实性说法（3.02元、登记日9月23日、21.14亿元、第四期200亿元/1.86%、第三期1.89%等）均能被证据2、3、4、7、8明确支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-086",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案所有事实性说法（3.02元、登记日9月23日、21.14亿元、第四期200亿元/1.86%、第三期1.89%等）均能被证据2、3、4、7、8明确支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

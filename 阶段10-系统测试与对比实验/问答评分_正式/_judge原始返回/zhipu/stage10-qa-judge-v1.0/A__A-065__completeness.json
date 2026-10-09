@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-065",
+  "attempts": [
+    {
+      "answer_key": "A__A-065",
+      "attempt": 1,
+      "completion_tokens": 407,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 6.799,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3875,
+      "qid": "FQ-065",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:27:21+08:00",
+      "total_tokens": 4282
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:27:28+08:00",
+  "group": "A",
+  "input_sha256": "e4c1865033d1ed0a0fda80b4531fc40835b8358a12e1ff4efe32485c4fe66c90",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖两项关键信息：第五十四次会议通过的再授权议案及200亿元注册资本调整上限，并补充授权细节，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-065",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖两项关键信息：第五十四次会议通过的再授权议案及200亿元注册资本调整上限，并补充授权细节，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

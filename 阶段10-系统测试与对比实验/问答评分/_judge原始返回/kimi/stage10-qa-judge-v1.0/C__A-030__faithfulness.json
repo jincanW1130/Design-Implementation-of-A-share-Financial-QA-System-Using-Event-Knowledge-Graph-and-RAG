@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-030",
+  "attempts": [
+    {
+      "answer_key": "C__A-030",
+      "attempt": 1,
+      "completion_tokens": 277,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 13.39,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5758,
+      "qid": "PE-30",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:41:13+08:00",
+      "total_tokens": 6035
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:41:27+08:00",
+  "group": "C",
+  "input_sha256": "58a34771ed61a63cacc025814cff3b79148a09a38cd7d9f93490571d9b1671bf",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "过户完成事件、15,772,385股、0.21%占比及法规依据均见证据1/2/8，披露日期与证据发布时间一致，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-30",
+  "raw_text": "{\"score\": 2, \"reason\": \"过户完成事件、15,772,385股、0.21%占比及法规依据均见证据1/2/8，披露日期与证据发布时间一致，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-113",
+  "attempts": [
+    {
+      "answer_key": "A__A-113",
+      "attempt": 1,
+      "completion_tokens": 93,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 6.355,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3639,
+      "qid": "FQ-113",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:19:22+08:00",
+      "total_tokens": 3732
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:19:28+08:00",
+  "group": "A",
+  "input_sha256": "b171368c71b990e6115dcc7ca31b434c2b9987a7e82a69f3487a5eaf05f0507a",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案准确指出周锦明为控股股东、实际控制人，天津锦龙提供总包作业部分装备及配套服务，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-113",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案准确指出周锦明为控股股东、实际控制人，天津锦龙提供总包作业部分装备及配套服务，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

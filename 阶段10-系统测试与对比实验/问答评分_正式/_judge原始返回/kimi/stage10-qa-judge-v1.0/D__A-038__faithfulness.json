@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-038",
+  "attempts": [
+    {
+      "answer_key": "D__A-038",
+      "attempt": 1,
+      "completion_tokens": 676,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 21.51,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4627,
+      "qid": "FQ-038",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:48:12+08:00",
+      "total_tokens": 5303
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:48:34+08:00",
+  "group": "D",
+  "input_sha256": "fbef755e31d1a54551088e17c6659385a9b30e6963cff2c03c901b757c2215e7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "中标项目、金额、交易对方及子公司合同等事实均可在证据4/5/8/10等中找到原文支撑，未见无依据编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-038",
+  "raw_text": "{\"score\": 2, \"reason\": \"中标项目、金额、交易对方及子公司合同等事实均可在证据4/5/8/10等中找到原文支撑，未见无依据编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

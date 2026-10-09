@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-044",
+  "attempts": [
+    {
+      "answer_key": "D__A-044",
+      "attempt": 1,
+      "completion_tokens": 289,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 13.626,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4078,
+      "qid": "FQ-044",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:53:09+08:00",
+      "total_tokens": 4367
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:53:22+08:00",
+  "group": "D",
+  "input_sha256": "4ea0b34af6b12af15c2ee4ebf784b9a40a9455fae89a602a5bfe146d4048920e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "生效日期、签署历史、补充协议金额工期、积极影响及风险因素等说法均可由证据1、证据2直接支撑，未见无依据事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-044",
+  "raw_text": "{\"score\": 2, \"reason\": \"生效日期、签署历史、补充协议金额工期、积极影响及风险因素等说法均可由证据1、证据2直接支撑，未见无依据事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

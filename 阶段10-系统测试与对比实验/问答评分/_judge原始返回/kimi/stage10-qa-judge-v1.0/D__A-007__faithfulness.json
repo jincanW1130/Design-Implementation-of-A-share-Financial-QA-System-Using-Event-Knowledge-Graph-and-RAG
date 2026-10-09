@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-007",
+  "attempts": [
+    {
+      "answer_key": "D__A-007",
+      "attempt": 1,
+      "completion_tokens": 137,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 8.958,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4986,
+      "qid": "PE-07",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:44:38+08:00",
+      "total_tokens": 5123
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:44:47+08:00",
+  "group": "D",
+  "input_sha256": "35df361e49c3c69f12a15124cecb2031263abb98b0e9d40f82bf0e8e1999812b",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "工行任联席主承销商、渤海银行主承销等核心说法及期限、利率等细节均被证据5和证据2原文直接支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-07",
+  "raw_text": "{\"score\": 2, \"reason\": \"工行任联席主承销商、渤海银行主承销等核心说法及期限、利率等细节均被证据5和证据2原文直接支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

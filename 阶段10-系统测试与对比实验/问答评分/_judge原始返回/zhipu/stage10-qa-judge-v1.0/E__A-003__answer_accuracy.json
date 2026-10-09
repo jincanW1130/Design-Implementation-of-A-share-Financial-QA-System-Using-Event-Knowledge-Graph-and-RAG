@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-003",
+  "attempts": [
+    {
+      "answer_key": "E__A-003",
+      "attempt": 1,
+      "completion_tokens": 159,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 4.783,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4134,
+      "qid": "PE-03",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:49:49+08:00",
+      "total_tokens": 4293
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:49:54+08:00",
+  "group": "E",
+  "input_sha256": "10b26a8158955d2dce30acd4966725812684b4d882dd7dd0651b43c29abf44c4",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确指出已完成基金业协会备案，备案编码SEX000、备案时间2026-9-22，与参考答案完全一致且证据4可证。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-03",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确指出已完成基金业协会备案，备案编码SEX000、备案时间2026-9-22，与参考答案完全一致且证据4可证。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

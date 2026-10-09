@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-041",
+  "attempts": [
+    {
+      "answer_key": "A__A-041",
+      "attempt": 1,
+      "completion_tokens": 658,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 13.74,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4215,
+      "qid": "FQ-041",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:02:01+08:00",
+      "total_tokens": 4873
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:02:15+08:00",
+  "group": "A",
+  "input_sha256": "91b28ad8fe213f2c9e70733a78c8552684babd4c9e3559c60bb9484caf0169bf",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确说明证据未涉及中国银行，所述招行算力贷与信用卡行业数据均能在证据2、3、9中逐条对应，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-041",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确说明证据未涉及中国银行，所述招行算力贷与信用卡行业数据均能在证据2、3、9中逐条对应，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-092",
+  "attempts": [
+    {
+      "answer_key": "E__A-092",
+      "attempt": 1,
+      "completion_tokens": 142,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.101,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4980,
+      "qid": "FQ-092",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:35:35+08:00",
+      "total_tokens": 5122
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:35:43+08:00",
+  "group": "E",
+  "input_sha256": "40ebe5706687b2fa099b24bc6f36db43810301d3fe297b74f63c47e81b15dfed",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "价格上限153.59→151.01元、7月16日生效有证据2原文支撑，800元管控事件8月13日有证据1支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-092",
+  "raw_text": "{\"score\": 2, \"reason\": \"价格上限153.59→151.01元、7月16日生效有证据2原文支撑，800元管控事件8月13日有证据1支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

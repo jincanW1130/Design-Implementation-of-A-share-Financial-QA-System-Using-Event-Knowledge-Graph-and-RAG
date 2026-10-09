@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-001",
+  "attempts": [
+    {
+      "answer_key": "E__A-001",
+      "attempt": 1,
+      "completion_tokens": 296,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 5.924,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4412,
+      "qid": "FQ-001",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:03:36+08:00",
+      "total_tokens": 4708
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T00:03:42+08:00",
+  "group": "E",
+  "input_sha256": "30c83e6af9b452f42648f7eb661adc31777faeaf411353b2002c9397b4360868",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "购买价格26.5441元/股、数量8,476,357股、成交金额224,997,098.71元均与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-001",
+  "raw_text": "{\"score\": 2, \"reason\": \"购买价格26.5441元/股、数量8,476,357股、成交金额224,997,098.71元均与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

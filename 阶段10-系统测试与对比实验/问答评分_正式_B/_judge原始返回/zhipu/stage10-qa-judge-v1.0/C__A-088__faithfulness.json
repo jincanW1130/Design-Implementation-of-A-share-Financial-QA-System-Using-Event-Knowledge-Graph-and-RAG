@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-088",
+  "attempts": [
+    {
+      "answer_key": "C__A-088",
+      "attempt": 1,
+      "completion_tokens": 527,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 8.582,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5628,
+      "qid": "FQ-088",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:14:00+08:00",
+      "total_tokens": 6155
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:14:09+08:00",
+  "group": "C",
+  "input_sha256": "5a39b6b8a626045029595f716d192ff76017b75173ada2c5bcfe537265177eb1",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中80亿元、40亿元、8,000份期权、74,250股及辞职、审批程序等事实均可在证据1、2、3、6、7中找到支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-088",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中80亿元、40亿元、8,000份期权、74,250股及辞职、审批程序等事实均可在证据1、2、3、6、7中找到支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

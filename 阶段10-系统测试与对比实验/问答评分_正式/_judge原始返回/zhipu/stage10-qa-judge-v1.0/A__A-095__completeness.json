@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-095",
+  "attempts": [
+    {
+      "answer_key": "A__A-095",
+      "attempt": 1,
+      "completion_tokens": 772,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 14.039,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4552,
+      "qid": "FQ-095",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:02:22+08:00",
+      "total_tokens": 5324
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:02:36+08:00",
+  "group": "A",
+  "input_sha256": "73f03c534afd82d6c248fc90afd9c1de8897e80b83fe30fb9a2b61a93d09be10",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "覆盖股数、金额、A股资金下限三项，但H股回购授权上限5亿港元缺失，属基本覆盖",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-095",
+  "raw_text": "{\"score\": 1, \"reason\": \"覆盖股数、金额、A股资金下限三项，但H股回购授权上限5亿港元缺失，属基本覆盖\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-042",
+  "attempts": [
+    {
+      "answer_key": "D__A-042",
+      "attempt": 1,
+      "completion_tokens": 511,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 9.498,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4484,
+      "qid": "FQ-042",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:58:10+08:00",
+      "total_tokens": 4995
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:58:19+08:00",
+  "group": "D",
+  "input_sha256": "5a5061e96d92f6d32467658902b812953ffe32b4acb1877e98eef9f50dc82921",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考要点：2026年并表、审计费372万含292万年报与80万内控、较2025年增30万，及业绩预告中纳入合并报表范围说明，无关键遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-042",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考要点：2026年并表、审计费372万含292万年报与80万内控、较2025年增30万，及业绩预告中纳入合并报表范围说明，无关键遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

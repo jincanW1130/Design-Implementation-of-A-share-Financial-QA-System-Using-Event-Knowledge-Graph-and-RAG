@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-062",
+  "attempts": [
+    {
+      "answer_key": "B__A-062",
+      "attempt": 1,
+      "completion_tokens": 116,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 6.765,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4803,
+      "qid": "FQ-062",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:28:04+08:00",
+      "total_tokens": 4919
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:28:11+08:00",
+  "group": "B",
+  "input_sha256": "66be6f6ef6ac432aa465ee36ba7c20ae4c1cf2538e95915cd5029a936d5e8e5b",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案全部要点：交易内容、交易已完成、自2026年4月起并表及对上年同期数据追溯调整，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-062",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案全部要点：交易内容、交易已完成、自2026年4月起并表及对上年同期数据追溯调整，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

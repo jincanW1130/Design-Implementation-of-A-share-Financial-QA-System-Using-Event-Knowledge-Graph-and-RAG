@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-116",
+  "attempts": [
+    {
+      "answer_key": "E__A-116",
+      "attempt": 1,
+      "completion_tokens": 430,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 15.893,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4330,
+      "qid": "FQ-116",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:55:19+08:00",
+      "total_tokens": 4760
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:55:35+08:00",
+  "group": "E",
+  "input_sha256": "fd9e2eea18094651afb2148c80a59ca7ebcb401e20f414b414a9a33317cc4f9d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "全资子公司关系、发债细节及8月21日发布日期均有证据4及其元数据支撑，其他公告不涉及的表述也与证据1/8/9内容相符，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-116",
+  "raw_text": "{\"score\": 2, \"reason\": \"全资子公司关系、发债细节及8月21日发布日期均有证据4及其元数据支撑，其他公告不涉及的表述也与证据1/8/9内容相符，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

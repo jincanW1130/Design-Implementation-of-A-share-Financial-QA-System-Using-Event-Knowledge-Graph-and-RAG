@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-109",
+  "attempts": [
+    {
+      "answer_key": "D__A-109",
+      "attempt": 1,
+      "completion_tokens": 450,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 9.037,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4038,
+      "qid": "FQ-109",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:26:14+08:00",
+      "total_tokens": 4488
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:26:23+08:00",
+  "group": "D",
+  "input_sha256": "e9a169e99a875908f815ce8b58b00889a6e6001b806c13aacd331c0f6ebed6bd",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确答出公司、控股股东及实际控制人与招标人不存在关联关系，与参考答案一致且正确指明招标人，判定完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-109",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确答出公司、控股股东及实际控制人与招标人不存在关联关系，与参考答案一致且正确指明招标人，判定完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

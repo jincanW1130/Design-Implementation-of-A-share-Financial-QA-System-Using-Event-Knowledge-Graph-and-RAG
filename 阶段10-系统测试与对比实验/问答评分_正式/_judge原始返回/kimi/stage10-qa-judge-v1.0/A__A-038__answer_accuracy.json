@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-038",
+  "attempts": [
+    {
+      "answer_key": "A__A-038",
+      "attempt": 1,
+      "completion_tokens": 364,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 13.052,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4643,
+      "qid": "FQ-038",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:59:16+08:00",
+      "total_tokens": 5007
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T18:59:29+08:00",
+  "group": "A",
+  "input_sha256": "0c1fe49fefd359939d5a53cc797593df5c062db0d116e3382c3fc8ad08e7a8a3",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "中标项目名称、507,952,785.60元中标价、中建三局一公司钢结构分公司及签约方中建三局云采公司均与参考答案一致，另补充的子公司合同真实且有证据，不构成错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-038",
+  "raw_text": "{\"score\": 2, \"reason\": \"中标项目名称、507,952,785.60元中标价、中建三局一公司钢结构分公司及签约方中建三局云采公司均与参考答案一致，另补充的子公司合同真实且有证据，不构成错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

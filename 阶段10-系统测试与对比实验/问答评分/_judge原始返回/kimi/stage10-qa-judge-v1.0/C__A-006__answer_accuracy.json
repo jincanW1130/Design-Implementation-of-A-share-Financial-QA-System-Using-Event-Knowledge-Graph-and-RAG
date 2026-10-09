@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-006",
+  "attempts": [
+    {
+      "answer_key": "C__A-006",
+      "attempt": 1,
+      "completion_tokens": 72,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 4.277,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5317,
+      "qid": "PE-06",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:15:41+08:00",
+      "total_tokens": 5389
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:15:45+08:00",
+  "group": "C",
+  "input_sha256": "951a6c766634c6660fd8246fd48629dce9845e8ca575b410da95c35820e16a0d",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案给出第六期70亿、第七期45亿、合计115亿元，与金标准完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-06",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案给出第六期70亿、第七期45亿、合计115亿元，与金标准完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-055",
+  "attempts": [
+    {
+      "answer_key": "A__A-055",
+      "attempt": 1,
+      "completion_tokens": 239,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 11.943,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3968,
+      "qid": "FQ-055",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:14:02+08:00",
+      "total_tokens": 4207
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T19:14:14+08:00",
+  "group": "A",
+  "input_sha256": "dd112c8e1639bd7f9aa871ccbfd6817872c09d214ef66dbed893acc31f87401b",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案称无法列出人员，完全未提及参考答案核心周锦明及其控股股东/法定代表人身份，答非所问。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-055",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案称无法列出人员，完全未提及参考答案核心周锦明及其控股股东/法定代表人身份，答非所问。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-023",
+  "attempts": [
+    {
+      "answer_key": "A__A-023",
+      "attempt": 1,
+      "completion_tokens": 165,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 12.484,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4035,
+      "qid": "PE-23",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:43:09+08:00",
+      "total_tokens": 4200
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T16:43:21+08:00",
+  "group": "A",
+  "input_sha256": "b2dbeaeea5c3837c0ca42b55c8417049ffe8553c6bc387be69a08b6ac7e1068a",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "仅答对董事长薛驰一人，遗漏总经理陆伟、财务负责人高洪时、董秘胡梓木及三位独立董事，属部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-23",
+  "raw_text": "{\"score\": 1, \"reason\": \"仅答对董事长薛驰一人，遗漏总经理陆伟、财务负责人高洪时、董秘胡梓木及三位独立董事，属部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-070",
+  "attempts": [
+    {
+      "answer_key": "C__A-070",
+      "attempt": 1,
+      "completion_tokens": 138,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 6.329,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5592,
+      "qid": "FQ-070",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:24:45+08:00",
+      "total_tokens": 5730
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:24:51+08:00",
+  "group": "C",
+  "input_sha256": "ed97a5dd74d6e06cf33970dd032836b553583770d0f8cf9eae453e2e412f7bbc",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件认定（26通威GN006绿色超短期融资券发行）及主承销商中信、联席兴业与交通均与参考答案完全一致，关键要素无缺漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-070",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件认定（26通威GN006绿色超短期融资券发行）及主承销商中信、联席兴业与交通均与参考答案完全一致，关键要素无缺漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

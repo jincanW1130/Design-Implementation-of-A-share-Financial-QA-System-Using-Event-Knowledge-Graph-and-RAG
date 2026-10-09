@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-026",
+  "attempts": [
+    {
+      "answer_key": "A__A-026",
+      "attempt": 1,
+      "completion_tokens": 465,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 6.674,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4193,
+      "qid": "FQ-026",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:52:41+08:00",
+      "total_tokens": 4658
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T18:52:47+08:00",
+  "group": "A",
+  "input_sha256": "994a58dab34d67f3a1b538d28c48148c7eb0a998679b85fccc960193029e77ae",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "所有事实（两证编号、注册人、住所、组成、发布时间等）均可由证据1、证据2及其元数据支撑，截断说明亦属实，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-026",
+  "raw_text": "{\"score\": 2, \"reason\": \"所有事实（两证编号、注册人、住所、组成、发布时间等）均可由证据1、证据2及其元数据支撑，截断说明亦属实，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

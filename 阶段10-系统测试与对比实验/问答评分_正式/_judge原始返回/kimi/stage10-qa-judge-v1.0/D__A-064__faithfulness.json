@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-064",
+  "attempts": [
+    {
+      "answer_key": "D__A-064",
+      "attempt": 1,
+      "completion_tokens": 628,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 25.832,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5719,
+      "qid": "FQ-064",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:17:32+08:00",
+      "total_tokens": 6347
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:17:58+08:00",
+  "group": "D",
+  "input_sha256": "df088ef5ffc257c03950228e6627f65c617679b5bc413fbc0c0dc6bfd22230b1",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "会议时间、回避表决及通过、两项重汽关联交易议案、其他议案及刘义选举等说法均可在证据1-9中找到支撑，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-064",
+  "raw_text": "{\"score\": 2, \"reason\": \"会议时间、回避表决及通过、两项重汽关联交易议案、其他议案及刘义选举等说法均可在证据1-9中找到支撑，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

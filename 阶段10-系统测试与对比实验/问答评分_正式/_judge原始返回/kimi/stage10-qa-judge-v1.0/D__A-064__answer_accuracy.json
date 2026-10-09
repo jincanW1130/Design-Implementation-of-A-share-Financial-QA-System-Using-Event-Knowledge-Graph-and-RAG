@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-064",
+  "attempts": [
+    {
+      "answer_key": "D__A-064",
+      "attempt": 1,
+      "completion_tokens": 280,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 13.961,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5689,
+      "qid": "FQ-064",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:17:03+08:00",
+      "total_tokens": 5969
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:17:17+08:00",
+  "group": "D",
+  "input_sha256": "1b0f2b1304f803c5ef95690de1e4e13071311f6029ed3e7875154bce79717dbf",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件（2026年第二次临时股东会）及两项与中国重型汽车集团的关联交易议案（销售产品提供服务、调整采购产品接受服务）均与参考答案完全一致，补充信息亦无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-064",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件（2026年第二次临时股东会）及两项与中国重型汽车集团的关联交易议案（销售产品提供服务、调整采购产品接受服务）均与参考答案完全一致，补充信息亦无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

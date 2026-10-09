@@ -1,0 +1,46 @@
+{
+  "answer_key": "C__A-032",
+  "attempts": [
+    {
+      "answer_key": "C__A-032",
+      "attempt": 1,
+      "completion_tokens": 3890,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 72.682,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5734,
+      "qid": "FQ-032",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:25:48+08:00",
+      "total_tokens": 9624
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:27:01+08:00",
+  "group": "C",
+  "input_sha256": "8102f0f42667eb7c502fb85da9d6967e74a701bb3b04f04065fa282017b85d28",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "disagreement_note": "分歧在量表边界：主judge把已标注『非公开事实』的惯例推测计为不严谨，本判认为其非事实性说法。",
+    "final_score": 2,
+    "reason": "答案对各证据的描述与原文一致，拒答未编造任何数字；推测已明确标注为非事实，事实性说法均有据。"
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-032",
+  "raw_text": "{\"final_score\": 2, \"reason\": \"答案对各证据的描述与原文一致，拒答未编造任何数字；推测已明确标注为非事实，事实性说法均有据。\", \"disagreement_note\": \"分歧在量表边界：主judge把已标注『非公开事实』的惯例推测计为不严谨，本判认为其非事实性说法。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

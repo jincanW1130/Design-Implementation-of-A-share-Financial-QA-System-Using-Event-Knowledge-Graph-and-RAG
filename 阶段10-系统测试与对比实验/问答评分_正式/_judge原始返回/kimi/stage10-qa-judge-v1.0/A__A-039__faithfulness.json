@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-039",
+  "attempts": [
+    {
+      "answer_key": "A__A-039",
+      "attempt": 1,
+      "completion_tokens": 515,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 13.699,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4704,
+      "qid": "FQ-039",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:00:24+08:00",
+      "total_tokens": 5219
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:00:38+08:00",
+  "group": "A",
+  "input_sha256": "04443122fbca0f059520899d5bbe07130dbc5a1f0ab1e3acfd3d250c562a50e7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两次屠宰量（295.6万、281.8万头）、简报日期、全资子公司身份及「未经审计」等说法均见证据1/4/5/6，差额13.8万头计算正确，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-039",
+  "raw_text": "{\"score\": 2, \"reason\": \"两次屠宰量（295.6万、281.8万头）、简报日期、全资子公司身份及「未经审计」等说法均见证据1/4/5/6，差额13.8万头计算正确，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-066",
+  "attempts": [
+    {
+      "answer_key": "E__A-066",
+      "attempt": 1,
+      "completion_tokens": 513,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 16.232,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4782,
+      "qid": "FQ-066",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:14:22+08:00",
+      "total_tokens": 5295
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:14:39+08:00",
+  "group": "E",
+  "input_sha256": "6d28fa4724dc66673d51bebde997847fd480a88de634ae2b3275c809288e6994",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "涨幅偏离、函询深地铁、经营稳定说明、备查文件为回函及1788.6亿/530.8亿流动性数据均可在证据4、5中找到原文支撑，未披露部分明确标注证据不足，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-066",
+  "raw_text": "{\"score\": 2, \"reason\": \"涨幅偏离、函询深地铁、经营稳定说明、备查文件为回函及1788.6亿/530.8亿流动性数据均可在证据4、5中找到原文支撑，未披露部分明确标注证据不足，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

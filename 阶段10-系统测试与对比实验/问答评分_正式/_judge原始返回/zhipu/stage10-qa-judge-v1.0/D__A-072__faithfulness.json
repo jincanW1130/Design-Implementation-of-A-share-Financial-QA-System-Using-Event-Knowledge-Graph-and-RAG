@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-072",
+  "attempts": [
+    {
+      "answer_key": "D__A-072",
+      "attempt": 1,
+      "completion_tokens": 3167,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 55.552,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4903,
+      "qid": "FQ-072",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:02:39+08:00",
+      "total_tokens": 8070
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:03:34+08:00",
+  "group": "D",
+  "input_sha256": "371b53b7006671507ce8e623e6d0ad234c47c0b495f5824623ec1af6d3bf30db",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "标的、价格、发行对象、交易性质均有证据支撑，仅事件时间2026年6月12日证据原文未见支撑，属少量不严谨",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-072",
+  "raw_text": "{\"score\": 1, \"reason\": \"标的、价格、发行对象、交易性质均有证据支撑，仅事件时间2026年6月12日证据原文未见支撑，属少量不严谨\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

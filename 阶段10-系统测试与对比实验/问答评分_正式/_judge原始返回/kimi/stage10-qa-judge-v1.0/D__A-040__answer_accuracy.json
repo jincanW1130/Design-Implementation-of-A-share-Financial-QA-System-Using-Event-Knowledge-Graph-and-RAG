@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-040",
+  "attempts": [
+    {
+      "answer_key": "D__A-040",
+      "attempt": 1,
+      "completion_tokens": 252,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 14.357,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4376,
+      "qid": "FQ-040",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:49:04+08:00",
+      "total_tokens": 4628
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:49:18+08:00",
+  "group": "D",
+  "input_sha256": "da41e6ef360bbc0ab2be209a92307070a0b221045ed3265f3392cc49e925d615",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两件金标准事件（6月30日AI智算卡、7月与15家银行推AI智能体卡）均准确答出，且正确排除了非银联事件，细节无误",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-040",
+  "raw_text": "{\"score\": 2, \"reason\": \"两件金标准事件（6月30日AI智算卡、7月与15家银行推AI智能体卡）均准确答出，且正确排除了非银联事件，细节无误\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

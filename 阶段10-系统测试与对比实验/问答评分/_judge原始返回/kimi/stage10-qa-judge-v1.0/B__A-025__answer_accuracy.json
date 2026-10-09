@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-025",
+  "attempts": [
+    {
+      "answer_key": "B__A-025",
+      "attempt": 1,
+      "completion_tokens": 99,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 5.359,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4902,
+      "qid": "PE-25",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:07:01+08:00",
+      "total_tokens": 5001
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:07:06+08:00",
+  "group": "B",
+  "input_sha256": "6a98c8b7f3c9c3de4c802012002481778e1b3807f5cdf1bd4c142f4179772135",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确指出招标人为中国工商银行股份有限公司、中标人为威海新北洋荣鑫科技股份有限公司，并正确区分招标代理机构，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-25",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案正确指出招标人为中国工商银行股份有限公司、中标人为威海新北洋荣鑫科技股份有限公司，并正确区分招标代理机构，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

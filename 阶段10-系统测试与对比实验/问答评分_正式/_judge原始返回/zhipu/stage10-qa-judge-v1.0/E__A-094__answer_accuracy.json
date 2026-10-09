@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-094",
+  "attempts": [
+    {
+      "answer_key": "E__A-094",
+      "attempt": 1,
+      "completion_tokens": 494,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 8.955,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5173,
+      "qid": "FQ-094",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:32:51+08:00",
+      "total_tokens": 5667
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:33:00+08:00",
+  "group": "E",
+  "input_sha256": "459e0006799be84e891a4e8a01213507a7b8ad2b9b6d7a21f288d1b65fa2f840",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "业绩说明会日期2026年8月14日答对，但独立财务顾问机构未答出、仅称证据不足，两问只对一半，判部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-094",
+  "raw_text": "{\"score\": 1, \"reason\": \"业绩说明会日期2026年8月14日答对，但独立财务顾问机构未答出、仅称证据不足，两问只对一半，判部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

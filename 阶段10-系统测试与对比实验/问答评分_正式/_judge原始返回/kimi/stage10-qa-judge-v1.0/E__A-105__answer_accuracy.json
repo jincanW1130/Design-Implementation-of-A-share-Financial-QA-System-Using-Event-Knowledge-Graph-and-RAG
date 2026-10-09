@@ -1,0 +1,47 @@
+{
+  "answer_key": "E__A-105",
+  "attempts": [
+    {
+      "answer_key": "E__A-105",
+      "attempt": 1,
+      "completion_tokens": 107,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "json_recovered": true,
+      "judge": "kimi",
+      "latency_seconds": 5.26,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4012,
+      "qid": "FQ-105",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:49:36+08:00",
+      "total_tokens": 4119
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:49:42+08:00",
+  "group": "E",
+  "input_sha256": "cc0a8a3272916abe31a1dbef383cb36fa7db61e2179d96d8aa27fd87d5e7f3de",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "_recovered_from_malformed_json": true,
+    "reason": "答案给出中国证监会注册批复、文号证监许可〔2026〕234号及批复日期2026年2月5日，与参考答案完全一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-105",
+  "raw_text": "{\"score\": 2, \"reason\": 答案给出中国证监会注册批复、文号证监许可〔2026〕234号及批复日期2026年2月5日，与参考答案完全一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

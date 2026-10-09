@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-071",
+  "attempts": [
+    {
+      "answer_key": "B__A-071",
+      "attempt": 1,
+      "completion_tokens": 125,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 6.7,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5186,
+      "qid": "FQ-071",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:33:54+08:00",
+      "total_tokens": 5311
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:34:01+08:00",
+  "group": "B",
+  "input_sha256": "e32f19415179747dadb9f927be824955d784b952c9580c6d44b8f302b9726ee4",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案的四项关键信息（分红派息事件、股权登记日7月15日、除权除息日7月16日、两家自行派发股东）全部覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-071",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案的四项关键信息（分红派息事件、股权登记日7月15日、除权除息日7月16日、两家自行派发股东）全部覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

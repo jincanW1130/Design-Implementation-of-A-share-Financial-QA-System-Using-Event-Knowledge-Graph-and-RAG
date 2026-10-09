@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-120",
+  "attempts": [
+    {
+      "answer_key": "A__A-120",
+      "attempt": 1,
+      "completion_tokens": 1363,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 48.793,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4343,
+      "qid": "FQ-120",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:23:16+08:00",
+      "total_tokens": 5706
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:24:05+08:00",
+  "group": "A",
+  "input_sha256": "bf25837aaff5f180501a2e25d5cf55f2283d2e34ebab7a0afcc638197317e7d0",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案文中提及控股子公司关系及奥卡西平片，但以“证据不足”作结未作正面回答，且遗漏0.15g规格与证书编号2026S03114",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-120",
+  "raw_text": "{\"score\": 1, \"reason\": \"答案文中提及控股子公司关系及奥卡西平片，但以“证据不足”作结未作正面回答，且遗漏0.15g规格与证书编号2026S03114\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-033",
+  "attempts": [
+    {
+      "answer_key": "B__A-033",
+      "attempt": 1,
+      "completion_tokens": 373,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 13.236,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5053,
+      "qid": "FQ-033",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:02:44+08:00",
+      "total_tokens": 5426
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:02:57+08:00",
+  "group": "B",
+  "input_sha256": "ab34725a7431ac9897da0b2efeeeab2783aef2415609c6e7eac7cbfd1b03ce83",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "登记日、除息日、派息金额、股本基数、发放方式均能在证据1/2/9中找到原文支撑，分析部分亦为合理推断，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-033",
+  "raw_text": "{\"score\": 2, \"reason\": \"登记日、除息日、派息金额、股本基数、发放方式均能在证据1/2/9中找到原文支撑，分析部分亦为合理推断，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

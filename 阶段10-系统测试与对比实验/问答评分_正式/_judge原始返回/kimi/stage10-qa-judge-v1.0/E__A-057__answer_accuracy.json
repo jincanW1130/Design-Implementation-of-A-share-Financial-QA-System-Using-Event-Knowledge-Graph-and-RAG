@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-057",
+  "attempts": [
+    {
+      "answer_key": "E__A-057",
+      "attempt": 1,
+      "completion_tokens": 183,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 9.263,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3945,
+      "qid": "FQ-057",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:07:34+08:00",
+      "total_tokens": 4128
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:07:44+08:00",
+  "group": "E",
+  "input_sha256": "a65b44919c4c2b2c9d88a69eba311af0838eb29a82359628f53c587d5226f3c1",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案以证据不足拒答，未给出金标准中的李凯、杨杰、郑颖及SPV公司类型等任何正确内容，与参考答案对照为错误。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-057",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案以证据不足拒答，未给出金标准中的李凯、杨杰、郑颖及SPV公司类型等任何正确内容，与参考答案对照为错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

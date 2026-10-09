@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-032",
+  "attempts": [
+    {
+      "answer_key": "D__A-032",
+      "attempt": 1,
+      "completion_tokens": 1411,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 29.215,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5138,
+      "qid": "FQ-032",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:56:30+08:00",
+      "total_tokens": 6549
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:56:59+08:00",
+  "group": "D",
+  "input_sha256": "021f0275249829a8d324845a404b0a2b6cb8dd2892872e625a0e494166540a80",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案仅如实描述各证据内容并判定证据不足，未编造任何数字，事实性说法均被可用证据支撑。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-032",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案仅如实描述各证据内容并判定证据不足，未编造任何数字，事实性说法均被可用证据支撑。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

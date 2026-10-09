@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-115",
+  "attempts": [
+    {
+      "answer_key": "A__A-115",
+      "attempt": 1,
+      "completion_tokens": 92,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 6.18,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3733,
+      "qid": "FQ-115",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:20:14+08:00",
+      "total_tokens": 3825
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:20:21+08:00",
+  "group": "A",
+  "input_sha256": "a5f1eb807611712101cf83bba649b53280abdde3e28f61638d6cb81071429b96",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖控股股东名称及存款余额9.94亿、贷款本金余额12.63亿，与参考答案一致，无遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-115",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖控股股东名称及存款余额9.94亿、贷款本金余额12.63亿，与参考答案一致，无遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

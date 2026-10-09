@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-019",
+  "attempts": [
+    {
+      "answer_key": "C__A-019",
+      "attempt": 1,
+      "completion_tokens": 295,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 12.991,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5717,
+      "qid": "PE-19",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:32:22+08:00",
+      "total_tokens": 6012
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:32:35+08:00",
+  "group": "C",
+  "input_sha256": "cb587592c281a12ed140dc14d507d2f838d6c10851b91609c48af5d19a157fdb",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "不存在关联关系、长期客户、买方卖方签框架协议等说法均可在证据1/2原文中找到对应表述，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-19",
+  "raw_text": "{\"score\": 2, \"reason\": \"不存在关联关系、长期客户、买方卖方签框架协议等说法均可在证据1/2原文中找到对应表述，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

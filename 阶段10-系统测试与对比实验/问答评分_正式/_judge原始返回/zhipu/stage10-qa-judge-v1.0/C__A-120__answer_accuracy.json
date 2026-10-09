@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-120",
+  "attempts": [
+    {
+      "answer_key": "C__A-120",
+      "attempt": 1,
+      "completion_tokens": 1537,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 29.979,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 6151,
+      "qid": "FQ-120",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:19:21+08:00",
+      "total_tokens": 7688
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:19:51+08:00",
+  "group": "C",
+  "input_sha256": "f96777a7d35cf531ceb781dd283af43f98e41b99f63472d9ee5ce5ec13a92e04",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "控股子公司关系与奥卡西平片(0.15g)信息答对，但坚持披露口径称证据不足、未直接确认品种，与金标准结论不完全一致，属部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-120",
+  "raw_text": "{\"score\": 1, \"reason\": \"控股子公司关系与奥卡西平片(0.15g)信息答对，但坚持披露口径称证据不足、未直接确认品种，与金标准结论不完全一致，属部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

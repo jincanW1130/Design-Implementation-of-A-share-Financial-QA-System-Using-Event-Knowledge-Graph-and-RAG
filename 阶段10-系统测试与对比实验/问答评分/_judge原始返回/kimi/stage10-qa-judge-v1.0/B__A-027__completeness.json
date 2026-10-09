@@ -1,0 +1,44 @@
+{
+  "answer_key": "B__A-027",
+  "attempts": [
+    {
+      "answer_key": "B__A-027",
+      "attempt": 1,
+      "completion_tokens": 385,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 13.323,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4948,
+      "qid": "PE-27",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:15:02+08:00",
+      "total_tokens": 5333
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:15:15+08:00",
+  "group": "B",
+  "input_sha256": "30cb208acdfdd522488c1039d82e1cbaa0a8351efde5ddde19595600ff3a7a27",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案三项关键信息（买方两家电信公司、卖方、7月13日签署时间）中，答案仅答出卖方，买方与签署时间均称无法确定，关键信息大量遗漏。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-27",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案三项关键信息（买方两家电信公司、卖方、7月13日签署时间）中，答案仅答出卖方，买方与签署时间均称无法确定，关键信息大量遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

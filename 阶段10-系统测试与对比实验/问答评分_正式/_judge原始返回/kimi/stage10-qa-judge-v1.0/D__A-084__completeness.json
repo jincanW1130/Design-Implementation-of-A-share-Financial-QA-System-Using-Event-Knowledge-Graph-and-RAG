@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-084",
+  "attempts": [
+    {
+      "answer_key": "D__A-084",
+      "attempt": 1,
+      "completion_tokens": 244,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 9.374,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4210,
+      "qid": "FQ-084",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:50:46+08:00",
+      "total_tokens": 4454
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:50:55+08:00",
+  "group": "D",
+  "input_sha256": "9407c708d31b5aa8f48388578bacf7bb12f90b49b4b9bc8d7f1dd04755fa1664",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件（授权GLP-1创新药给美纳里尼布局欧洲市场、系8月10日三起BD交易之一）、授权标的与目标市场均完整覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-084",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件（授权GLP-1创新药给美纳里尼布局欧洲市场、系8月10日三起BD交易之一）、授权标的与目标市场均完整覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

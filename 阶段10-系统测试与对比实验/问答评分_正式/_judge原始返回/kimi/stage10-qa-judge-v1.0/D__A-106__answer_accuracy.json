@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-106",
+  "attempts": [
+    {
+      "answer_key": "D__A-106",
+      "attempt": 1,
+      "completion_tokens": 107,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 5.057,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4123,
+      "qid": "FQ-106",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:07:45+08:00",
+      "total_tokens": 4230
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:07:50+08:00",
+  "group": "D",
+  "input_sha256": "8f661c826db997fcf8a6222f7cdac8c56ef89fc07a21d7add2d85eb89c1cb28e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核准机构、证监许可[2021]3561号文号、7,000万张数及700,000.00万元发行总额均与参考答案完全一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-106",
+  "raw_text": "{\"score\": 2, \"reason\": \"核准机构、证监许可[2021]3561号文号、7,000万张数及700,000.00万元发行总额均与参考答案完全一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

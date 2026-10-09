@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-009",
+  "attempts": [
+    {
+      "answer_key": "C__A-009",
+      "attempt": 1,
+      "completion_tokens": 154,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 7.028,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4496,
+      "qid": "FQ-009",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:38:23+08:00",
+      "total_tokens": 4650
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:38:30+08:00",
+  "group": "C",
+  "input_sha256": "8acf9e795032106d97d7ccfd68da10c12e927bac334a9b8b5bdd860332288fcf",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案四项关键信息（上市日期2026-08-20、上市地点香港联交所、年利率1.8%、期限3年）全部被覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-009",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案四项关键信息（上市日期2026-08-20、上市地点香港联交所、年利率1.8%、期限3年）全部被覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

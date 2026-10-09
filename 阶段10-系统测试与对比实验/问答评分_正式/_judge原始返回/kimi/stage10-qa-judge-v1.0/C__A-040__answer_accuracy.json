@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-040",
+  "attempts": [
+    {
+      "answer_key": "C__A-040",
+      "attempt": 1,
+      "completion_tokens": 304,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 13.51,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4654,
+      "qid": "FQ-040",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:57:15+08:00",
+      "total_tokens": 4958
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:57:29+08:00",
+  "group": "C",
+  "input_sha256": "ecc88a8e657fccc61a22097804b954f171219f52448ab009f4f9aba79d500823",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案两条金标准事件均准确答出（AI智算卡与15家银行AI智能体卡），细节与实体无误，无错误内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-040",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案两条金标准事件均准确答出（AI智算卡与15家银行AI智能体卡），细节与实体无误，无错误内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

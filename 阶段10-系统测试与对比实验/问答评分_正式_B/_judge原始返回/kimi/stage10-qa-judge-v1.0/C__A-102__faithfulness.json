@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-102",
+  "attempts": [
+    {
+      "answer_key": "C__A-102",
+      "attempt": 1,
+      "completion_tokens": 727,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 23.476,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5518,
+      "qid": "FQ-102",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:29:23+08:00",
+      "total_tokens": 6245
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:29:47+08:00",
+  "group": "C",
+  "input_sha256": "558a1479cde600dcc522c6eca115352f480d339709364df65b748c650667b70f",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两项事件、品种、证书编号2026S02025、批准文号H20264736及持有人/生产企业均有证据1/3/9支撑；对依折麦布片证书编号如实说明证据不足，无编造",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-102",
+  "raw_text": "{\"score\": 2, \"reason\": \"两项事件、品种、证书编号2026S02025、批准文号H20264736及持有人/生产企业均有证据1/3/9支撑；对依折麦布片证书编号如实说明证据不足，无编造\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

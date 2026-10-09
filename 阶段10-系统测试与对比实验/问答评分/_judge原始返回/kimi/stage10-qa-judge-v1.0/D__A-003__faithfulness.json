@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-003",
+  "attempts": [
+    {
+      "answer_key": "D__A-003",
+      "attempt": 1,
+      "completion_tokens": 290,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 12.214,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4070,
+      "qid": "PE-03",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:42:13+08:00",
+      "total_tokens": 4360
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:42:25+08:00",
+  "group": "D",
+  "input_sha256": "c406c7c4407dc3952e5573163621a327a310e70842ae0834549ba190bd1f0a83",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "所有事实（参与方、出资额19,900万/19.90%、完成中基协备案、编码SEX000、备案时间2026-09-22）均可在证据1、证据2中找到支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-03",
+  "raw_text": "{\"score\": 2, \"reason\": \"所有事实（参与方、出资额19,900万/19.90%、完成中基协备案、编码SEX000、备案时间2026-09-22）均可在证据1、证据2中找到支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

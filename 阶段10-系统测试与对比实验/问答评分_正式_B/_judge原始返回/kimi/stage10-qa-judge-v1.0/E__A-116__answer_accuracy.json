@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-116",
+  "attempts": [
+    {
+      "answer_key": "E__A-116",
+      "attempt": 1,
+      "completion_tokens": 228,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 9.52,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4300,
+      "qid": "FQ-116",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:54:59+08:00",
+      "total_tokens": 4528
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:55:08+08:00",
+  "group": "E",
+  "input_sha256": "635760be9bb1b0366bd6c118c97358b00cbfd61764836e162e257cba7afa73c9",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确指出上海电气香港有限公司是上海电气集团股份有限公司的全资子公司，与金标准一致，担保期限等细节也与证据4相符。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-116",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案正确指出上海电气香港有限公司是上海电气集团股份有限公司的全资子公司，与金标准一致，担保期限等细节也与证据4相符。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

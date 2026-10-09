@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-119",
+  "attempts": [
+    {
+      "answer_key": "E__A-119",
+      "attempt": 1,
+      "completion_tokens": 360,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 8.96,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4430,
+      "qid": "FQ-119",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:15:39+08:00",
+      "total_tokens": 4790
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T01:15:48+08:00",
+  "group": "E",
+  "input_sha256": "d1d7de4257f1c4d93c2a8297075e9ff872a3a1b5f7cb5624bf6fd55ca75968f7",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确判定实际控制人未发生变化，并准确引用公告原文'不会导致控股股东及实际控制人发生变化'，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-119",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确判定实际控制人未发生变化，并准确引用公告原文'不会导致控股股东及实际控制人发生变化'，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

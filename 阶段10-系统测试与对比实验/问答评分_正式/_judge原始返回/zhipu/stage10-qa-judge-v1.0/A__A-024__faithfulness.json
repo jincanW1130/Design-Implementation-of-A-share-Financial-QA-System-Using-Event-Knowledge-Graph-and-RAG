@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-024",
+  "attempts": [
+    {
+      "answer_key": "A__A-024",
+      "attempt": 1,
+      "completion_tokens": 379,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 8.426,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3980,
+      "qid": "FQ-024",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:20:05+08:00",
+      "total_tokens": 4359
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:20:14+08:00",
+  "group": "A",
+  "input_sha256": "b9ebdb3e7a2db97486bc1c87b116be69f03b2aea46b77d59cd592bf49bc1137f",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案全部事实（接受机构、通知书编号、30亿元注册规模、6月10日收到）均由可用证据2直接支撑，无无依据说法",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-024",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案全部事实（接受机构、通知书编号、30亿元注册规模、6月10日收到）均由可用证据2直接支撑，无无依据说法\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

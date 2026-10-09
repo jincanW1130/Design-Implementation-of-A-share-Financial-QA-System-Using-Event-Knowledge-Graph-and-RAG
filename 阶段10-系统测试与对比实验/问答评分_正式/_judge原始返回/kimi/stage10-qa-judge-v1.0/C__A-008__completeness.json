@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-008",
+  "attempts": [
+    {
+      "answer_key": "C__A-008",
+      "attempt": 1,
+      "completion_tokens": 154,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 8.434,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5205,
+      "qid": "FQ-008",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:37:57+08:00",
+      "total_tokens": 5359
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:38:06+08:00",
+  "group": "C",
+  "input_sha256": "6d2ddf14d49158024ba3f0eb245ccd599b54d2ea8b0de9f0d8422e90c2d91140",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "被评答案完整覆盖参考答案全部关键信息：截至日期、累计股数、占比、金额（不含费用）及最高最低价格区间，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-008",
+  "raw_text": "{\"score\": 2, \"reason\": \"被评答案完整覆盖参考答案全部关键信息：截至日期、累计股数、占比、金额（不含费用）及最高最低价格区间，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

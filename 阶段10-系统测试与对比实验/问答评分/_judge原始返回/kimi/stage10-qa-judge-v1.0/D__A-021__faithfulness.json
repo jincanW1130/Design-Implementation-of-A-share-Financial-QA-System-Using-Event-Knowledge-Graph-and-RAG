@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-021",
+  "attempts": [
+    {
+      "answer_key": "D__A-021",
+      "attempt": 1,
+      "completion_tokens": 2226,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 59.077,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4953,
+      "qid": "PE-21",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:58:20+08:00",
+      "total_tokens": 7179
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:59:19+08:00",
+  "group": "D",
+  "input_sha256": "54ac7bebc3628f780e1baf2f9bba8466c249bad345768b06f28af8bd0a284687",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "受托管理人角色、登记机构、股数0.09%、董事会日期及发布时间等事实均可在证据1、3、4及其元数据中找到对应支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-21",
+  "raw_text": "{\"score\": 2, \"reason\": \"受托管理人角色、登记机构、股数0.09%、董事会日期及发布时间等事实均可在证据1、3、4及其元数据中找到对应支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

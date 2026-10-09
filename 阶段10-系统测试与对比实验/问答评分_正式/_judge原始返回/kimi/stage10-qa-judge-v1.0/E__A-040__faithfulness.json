@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-040",
+  "attempts": [
+    {
+      "answer_key": "E__A-040",
+      "attempt": 1,
+      "completion_tokens": 736,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 18.426,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4518,
+      "qid": "FQ-040",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:48:58+08:00",
+      "total_tokens": 5254
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:49:17+08:00",
+  "group": "E",
+  "input_sha256": "1d5ec4b0494fedd18448575b964fa82e77591b0f9308e37d9074a5f39f0a5e80",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "智算卡发布、三层权益、7月信用卡与申请渠道、三方分工、15家银行智能体卡及模型分析均可逐条对应证据1/2/3/4/5/10，未见无依据编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-040",
+  "raw_text": "{\"score\": 2, \"reason\": \"智算卡发布、三层权益、7月信用卡与申请渠道、三方分工、15家银行智能体卡及模型分析均可逐条对应证据1/2/3/4/5/10，未见无依据编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-018",
+  "attempts": [
+    {
+      "answer_key": "B__A-018",
+      "attempt": 1,
+      "completion_tokens": 530,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 17.099,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4988,
+      "qid": "PE-18",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:01:15+08:00",
+      "total_tokens": 5518
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:01:32+08:00",
+  "group": "B",
+  "input_sha256": "e97914e051c2e07003ea3596e90ac51aec819b3cf1107d55f05eedcf4adc1f7a",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "开业日期、批准机构及银监复〔2012〕137号文号均有证据1直接支撑，括注仅为'银监会'全称释义，未编造无依据事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-18",
+  "raw_text": "{\"score\": 2, \"reason\": \"开业日期、批准机构及银监复〔2012〕137号文号均有证据1直接支撑，括注仅为'银监会'全称释义，未编造无依据事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-024",
+  "attempts": [
+    {
+      "answer_key": "C__A-024",
+      "attempt": 1,
+      "completion_tokens": 1883,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 34.313,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5233,
+      "qid": "PE-24",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:56:01+08:00",
+      "total_tokens": 7116
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:56:36+08:00",
+  "group": "C",
+  "input_sha256": "189daaeab60aaddf5b1b1fb55c588f2e62286ecc049cbf4cb49dc15ab1e2db18",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "调整后价格571.60元/股、除权除息日8月10日、计算过程及153.59→151.01背景调整均见于证据1-4，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-24",
+  "raw_text": "{\"score\": 2, \"reason\": \"调整后价格571.60元/股、除权除息日8月10日、计算过程及153.59→151.01背景调整均见于证据1-4，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-042",
+  "attempts": [
+    {
+      "answer_key": "A__A-042",
+      "attempt": 1,
+      "completion_tokens": 484,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 16.576,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4137,
+      "qid": "FQ-042",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:02:48+08:00",
+      "total_tokens": 4621
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:03:05+08:00",
+  "group": "A",
+  "input_sha256": "9cf32de80961e50daea875417e12ff68487a5be6df688d1d7a6058fd65f49d84",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中并表事件、372万/292万/80万/增30万费用及追溯调整等说法均能在证据1-4中找到原文支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-042",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中并表事件、372万/292万/80万/增30万费用及追溯调整等说法均能在证据1-4中找到原文支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

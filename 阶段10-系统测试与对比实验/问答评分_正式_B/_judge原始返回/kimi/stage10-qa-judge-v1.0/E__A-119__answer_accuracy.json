@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-119",
+  "attempts": [
+    {
+      "answer_key": "E__A-119",
+      "attempt": 1,
+      "completion_tokens": 139,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 6.776,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4300,
+      "qid": "FQ-119",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:57:18+08:00",
+      "total_tokens": 4439
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:57:25+08:00",
+  "group": "E",
+  "input_sha256": "d1d7de4257f1c4d93c2a8297075e9ff872a3a1b5f7cb5624bf6fd55ca75968f7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确结论实际控制人地位未发生变化，并引用公告原文「不会导致控股股东及实际控制人发生变化，不构成要约收购」，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-119",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确结论实际控制人地位未发生变化，并引用公告原文「不会导致控股股东及实际控制人发生变化，不构成要约收购」，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

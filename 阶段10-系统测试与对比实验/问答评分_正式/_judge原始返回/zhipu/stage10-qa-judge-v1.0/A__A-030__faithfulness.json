@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-030",
+  "attempts": [
+    {
+      "answer_key": "A__A-030",
+      "attempt": 1,
+      "completion_tokens": 613,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 9.277,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3919,
+      "qid": "FQ-030",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:20:32+08:00",
+      "total_tokens": 4532
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:20:41+08:00",
+  "group": "A",
+  "input_sha256": "f2a3b351bb75354a676fb2172eb08f9ebff24aacaf5157bff6ebb86f7f88ba24",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "剥离内容、时间2022年6月、交易对方中天科技集团及剔除贸易收入均直接见于证据3，无无依据事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-030",
+  "raw_text": "{\"score\": 2, \"reason\": \"剥离内容、时间2022年6月、交易对方中天科技集团及剔除贸易收入均直接见于证据3，无无依据事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

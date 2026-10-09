@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-046",
+  "attempts": [
+    {
+      "answer_key": "D__A-046",
+      "attempt": 1,
+      "completion_tokens": 547,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 18.649,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4781,
+      "qid": "FQ-046",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:55:51+08:00",
+      "total_tokens": 5328
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:56:10+08:00",
+  "group": "D",
+  "input_sha256": "76b98e51e2487eb129a8795e76284204bfd97fc0acf4675a2808182e0d2d9604",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "关键事实（变更双方、文号不变、通知书编号2026B04881、生产企业、签约日期等）均可由证据1/2/3支撑，推断部分已明确标注为模型分析，未见编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-046",
+  "raw_text": "{\"score\": 2, \"reason\": \"关键事实（变更双方、文号不变、通知书编号2026B04881、生产企业、签约日期等）均可由证据1/2/3支撑，推断部分已明确标注为模型分析，未见编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-119",
+  "attempts": [
+    {
+      "answer_key": "E__A-119",
+      "attempt": 1,
+      "completion_tokens": 136,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 7.281,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4307,
+      "qid": "FQ-119",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:57:27+08:00",
+      "total_tokens": 4443
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:57:34+08:00",
+  "group": "E",
+  "input_sha256": "d384fbe414abcc5b55db6b542d47d16f262c2630b0a87c8bd023538d9ec2c2dd",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖金标准要点：明确未发生变化，并引用'不导致控股股东及实际控制人变化、不构成要约收购'，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-119",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖金标准要点：明确未发生变化，并引用'不导致控股股东及实际控制人变化、不构成要约收购'，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

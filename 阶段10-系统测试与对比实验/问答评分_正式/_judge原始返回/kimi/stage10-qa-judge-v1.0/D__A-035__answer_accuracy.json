@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-035",
+  "attempts": [
+    {
+      "answer_key": "D__A-035",
+      "attempt": 1,
+      "completion_tokens": 143,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 5.546,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4544,
+      "qid": "FQ-035",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:45:46+08:00",
+      "total_tokens": 4687
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:45:51+08:00",
+  "group": "D",
+  "input_sha256": "00377b4c76dc9f1d902812b7b8f057468da0f9395b60e8c6a3ca330dff58dc21",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两个核心答案（潜能蒙古承接总包、周锦明控股的天津锦龙提供装备及配套服务）均与金标准一致，且含董事会审议信息，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-035",
+  "raw_text": "{\"score\": 2, \"reason\": \"两个核心答案（潜能蒙古承接总包、周锦明控股的天津锦龙提供装备及配套服务）均与金标准一致，且含董事会审议信息，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

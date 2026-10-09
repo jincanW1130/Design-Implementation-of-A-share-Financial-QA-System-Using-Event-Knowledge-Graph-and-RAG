@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-025",
+  "attempts": [
+    {
+      "answer_key": "D__A-025",
+      "attempt": 1,
+      "completion_tokens": 121,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 5.347,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4794,
+      "qid": "FQ-025",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:39:47+08:00",
+      "total_tokens": 4915
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:39:52+08:00",
+  "group": "D",
+  "input_sha256": "7807954e8dac7d18995ea35437f0f290f6e0eac2672d13b871ded71eca0aeaed",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核准文号证监许可[2019]1949号、发行股数32,642,401股、每股发行价61.27元三项关键信息全部覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-025",
+  "raw_text": "{\"score\": 2, \"reason\": \"核准文号证监许可[2019]1949号、发行股数32,642,401股、每股发行价61.27元三项关键信息全部覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

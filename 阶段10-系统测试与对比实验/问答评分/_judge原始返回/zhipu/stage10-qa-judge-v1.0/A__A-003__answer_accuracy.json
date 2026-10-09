@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-003",
+  "attempts": [
+    {
+      "answer_key": "A__A-003",
+      "attempt": 1,
+      "completion_tokens": 325,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 7.259,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3778,
+      "qid": "PE-03",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:31:05+08:00",
+      "total_tokens": 4103
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:31:12+08:00",
+  "group": "A",
+  "input_sha256": "7c40c75440b2690469c3df6dc5d49808a71b33087ccdf3f06de22f4a83c288e8",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案与参考完全一致：已完成中国证券投资基金业协会备案，备案编码SEX000，备案时间2026年9月22日，细节均与证据相符。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-03",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案与参考完全一致：已完成中国证券投资基金业协会备案，备案编码SEX000，备案时间2026年9月22日，细节均与证据相符。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

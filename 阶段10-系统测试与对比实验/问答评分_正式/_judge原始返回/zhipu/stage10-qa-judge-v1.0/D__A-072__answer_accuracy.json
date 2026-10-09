@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-072",
+  "attempts": [
+    {
+      "answer_key": "D__A-072",
+      "attempt": 1,
+      "completion_tokens": 578,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 9.037,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4875,
+      "qid": "FQ-072",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:02:21+08:00",
+      "total_tokens": 5453
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T00:02:30+08:00",
+  "group": "D",
+  "input_sha256": "abd3e299fa1b2763f0bc4e0090b3052c0be7dbb1de643a1cc3a0a1575fc5ff9f",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、交易标的中芯北方49.00%股权、价格4,060,091.00万元及五名发行对象均与参考答案一致，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-072",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、交易标的中芯北方49.00%股权、价格4,060,091.00万元及五名发行对象均与参考答案一致，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

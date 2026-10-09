@@ -1,0 +1,44 @@
+{
+  "answer_key": "B__A-001",
+  "attempts": [
+    {
+      "answer_key": "B__A-001",
+      "attempt": 1,
+      "completion_tokens": 125,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 4.779,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4867,
+      "qid": "PE-01",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:14:43+08:00",
+      "total_tokens": 4992
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:14:48+08:00",
+  "group": "B",
+  "input_sha256": "32afc9bf70b475b685e4af93ce1c1f6d0580b24baa1375ffeb13af4eca138721",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中有效期、开始行权日、进入行权期日期及期权代码均与证据1原文完全一致，无任何无依据事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-01",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中有效期、开始行权日、进入行权期日期及期权代码均与证据1原文完全一致，无任何无依据事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

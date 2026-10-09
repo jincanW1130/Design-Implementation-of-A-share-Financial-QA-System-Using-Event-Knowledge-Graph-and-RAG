@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-064",
+  "attempts": [
+    {
+      "answer_key": "A__A-064",
+      "attempt": 1,
+      "completion_tokens": 337,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 10.235,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3907,
+      "qid": "FQ-064",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:20:39+08:00",
+      "total_tokens": 4244
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:20:49+08:00",
+  "group": "A",
+  "input_sha256": "003fc5845a5da0d91bdac108ed50bcc75a17c1d5a38f7c470f53ed1a24dede78",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "会议日期9月14日、两项议案名称、潍柴集团回避表决及获通过等事实均有证据2/4/5/7/8支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-064",
+  "raw_text": "{\"score\": 2, \"reason\": \"会议日期9月14日、两项议案名称、潍柴集团回避表决及获通过等事实均有证据2/4/5/7/8支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

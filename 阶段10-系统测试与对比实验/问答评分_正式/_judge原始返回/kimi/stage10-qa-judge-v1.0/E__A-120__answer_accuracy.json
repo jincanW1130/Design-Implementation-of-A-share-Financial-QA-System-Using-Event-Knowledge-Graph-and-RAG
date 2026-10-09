@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-120",
+  "attempts": [
+    {
+      "answer_key": "E__A-120",
+      "attempt": 1,
+      "completion_tokens": 967,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 36.183,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4629,
+      "qid": "FQ-120",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:57:50+08:00",
+      "total_tokens": 5596
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:58:26+08:00",
+  "group": "E",
+  "input_sha256": "9733a44ed1250b2da8c129f0103fffc4db9beaf272a72cb69365e1bb0a4ba876",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确指出双鹤湘中为华润双鹤控股子公司，品种为奥卡西平片0.15g、证书编号2026S03114，与金标准一致；披露日期的补充说明不影响核心结论正确性。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-120",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案正确指出双鹤湘中为华润双鹤控股子公司，品种为奥卡西平片0.15g、证书编号2026S03114，与金标准一致；披露日期的补充说明不影响核心结论正确性。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

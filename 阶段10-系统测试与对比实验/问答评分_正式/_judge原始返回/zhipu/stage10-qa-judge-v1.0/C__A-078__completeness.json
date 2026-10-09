@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-078",
+  "attempts": [
+    {
+      "answer_key": "C__A-078",
+      "attempt": 1,
+      "completion_tokens": 276,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 4.912,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5290,
+      "qid": "FQ-078",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:13:07+08:00",
+      "total_tokens": 5566
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:13:12+08:00",
+  "group": "C",
+  "input_sha256": "73f33b3d88396a79f4653504c1ce8a80b4ea506e85fe99b9771bcaa5aec500f1",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案全部关键信息：签订合同、作业者身份、勘探期6年100%勘探权益、商业发现后49%开采权益、生产期15年，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-078",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案全部关键信息：签订合同、作业者身份、勘探期6年100%勘探权益、商业发现后49%开采权益、生产期15年，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

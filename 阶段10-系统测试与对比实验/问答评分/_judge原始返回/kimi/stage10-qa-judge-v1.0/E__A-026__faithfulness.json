@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-026",
+  "attempts": [
+    {
+      "answer_key": "E__A-026",
+      "attempt": 1,
+      "completion_tokens": 1022,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 31.414,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6663,
+      "qid": "PE-26",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:28:51+08:00",
+      "total_tokens": 7685
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:29:23+08:00",
+  "group": "E",
+  "input_sha256": "7ebcd6be9660e5d1548e760162f2de2269144494d640009e6aa6a75bb5668869",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "所列各框架协议名称均能在证据7-10原文中找到，且关于签约主体全称缺失、证据不足以确认三方共同签署的判断与可用证据一致，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-26",
+  "raw_text": "{\"score\": 2, \"reason\": \"所列各框架协议名称均能在证据7-10原文中找到，且关于签约主体全称缺失、证据不足以确认三方共同签署的判断与可用证据一致，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

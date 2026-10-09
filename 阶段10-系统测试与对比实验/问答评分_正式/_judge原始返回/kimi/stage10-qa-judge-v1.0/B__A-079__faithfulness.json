@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-079",
+  "attempts": [
+    {
+      "answer_key": "B__A-079",
+      "attempt": 1,
+      "completion_tokens": 510,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 17.182,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5164,
+      "qid": "FQ-079",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:31:18+08:00",
+      "total_tokens": 5674
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:31:35+08:00",
+  "group": "B",
+  "input_sha256": "e6a128f7786518a2926548e37982576c06ee4686fbe3cf8d4e1325d9f2abf67a",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "WZ10-11W-1井的井别、井深-1700米、作业2个月、8月13日启动、中海油服为总包商等说法均见于证据6，合同条款亦获证据2/3/4支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-079",
+  "raw_text": "{\"score\": 2, \"reason\": \"WZ10-11W-1井的井别、井深-1700米、作业2个月、8月13日启动、中海油服为总包商等说法均见于证据6，合同条款亦获证据2/3/4支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

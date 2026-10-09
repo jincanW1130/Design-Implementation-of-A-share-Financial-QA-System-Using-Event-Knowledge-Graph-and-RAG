@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-093",
+  "attempts": [
+    {
+      "answer_key": "B__A-093",
+      "attempt": 1,
+      "completion_tokens": 382,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 3.552,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5380,
+      "qid": "FQ-093",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:08:51+08:00",
+      "total_tokens": 5762
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:08:55+08:00",
+  "group": "B",
+  "input_sha256": "c9fc2ae22c9d8d54f93e70d48064560ed6f07e55fee899c19146f42b5e0b291c",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "价格上限35.17→35.02元、起始日2026-9-29、回购22,303,291股、余45,157,255股均与参考答案一致，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-093",
+  "raw_text": "{\"score\": 2, \"reason\": \"价格上限35.17→35.02元、起始日2026-9-29、回购22,303,291股、余45,157,255股均与参考答案一致，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

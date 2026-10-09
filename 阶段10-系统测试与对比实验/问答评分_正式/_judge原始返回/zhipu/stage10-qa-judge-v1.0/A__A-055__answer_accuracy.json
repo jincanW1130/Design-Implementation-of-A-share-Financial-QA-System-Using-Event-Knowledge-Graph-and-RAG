@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-055",
+  "attempts": [
+    {
+      "answer_key": "A__A-055",
+      "attempt": 1,
+      "completion_tokens": 1094,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 23.169,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4050,
+      "qid": "FQ-055",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:24:57+08:00",
+      "total_tokens": 5144
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:25:20+08:00",
+  "group": "A",
+  "input_sha256": "dd112c8e1639bd7f9aa871ccbfd6817872c09d214ef66dbed893acc31f87401b",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案断言期内未披露任何自然人，完全遗漏金标准中的周锦明及其法定代表人身份，核心内容缺失且结论错误。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-055",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案断言期内未披露任何自然人，完全遗漏金标准中的周锦明及其法定代表人身份，核心内容缺失且结论错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

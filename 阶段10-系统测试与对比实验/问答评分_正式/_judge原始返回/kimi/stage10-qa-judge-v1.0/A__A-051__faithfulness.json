@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-051",
+  "attempts": [
+    {
+      "answer_key": "A__A-051",
+      "attempt": 1,
+      "completion_tokens": 1494,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 41.457,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4402,
+      "qid": "FQ-051",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:11:27+08:00",
+      "total_tokens": 5896
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:12:09+08:00",
+  "group": "A",
+  "input_sha256": "fa8e90101c254105b9795243f982526e31ab7c5a871ee9d0370c62968b3ea680",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "董事姓名职务、列席与请假情况、高管信息均可由证据1/2/6支撑，未披露部分如实说明，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-051",
+  "raw_text": "{\"score\": 2, \"reason\": \"董事姓名职务、列席与请假情况、高管信息均可由证据1/2/6支撑，未披露部分如实说明，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

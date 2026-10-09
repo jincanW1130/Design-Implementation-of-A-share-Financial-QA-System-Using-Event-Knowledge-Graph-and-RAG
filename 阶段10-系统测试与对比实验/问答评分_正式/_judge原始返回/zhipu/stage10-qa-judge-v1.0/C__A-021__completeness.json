@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-021",
+  "attempts": [
+    {
+      "answer_key": "C__A-021",
+      "attempt": 1,
+      "completion_tokens": 1158,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 21.02,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4953,
+      "qid": "FQ-021",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:41:02+08:00",
+      "total_tokens": 6111
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:41:23+08:00",
+  "group": "C",
+  "input_sha256": "8820939d683e31db3abe45ded6d3cbc517f590ec46616a31a6dbeb01ed22d573",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "完整覆盖批准机构、批准日期与研发投入等全部关键信息，仅缺申报受理的补充时间，信息完整",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-021",
+  "raw_text": "{\"score\": 2, \"reason\": \"完整覆盖批准机构、批准日期与研发投入等全部关键信息，仅缺申报受理的补充时间，信息完整\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

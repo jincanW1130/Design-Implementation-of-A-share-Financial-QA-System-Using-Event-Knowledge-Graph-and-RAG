@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-001",
+  "attempts": [
+    {
+      "answer_key": "E__A-001",
+      "attempt": 1,
+      "completion_tokens": 243,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.867,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4246,
+      "qid": "FQ-001",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:23:50+08:00",
+      "total_tokens": 4489
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:23:58+08:00",
+  "group": "E",
+  "input_sha256": "bd5a67627354972b51ed0da0e6b2306e5c3d2e21ce00f5207b1c20e41c4d88d1",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "购买价格、数量、占比有证据1支撑，成交金额、成交均价及完成时间有证据3支撑，全部事实性说法均可在可用证据中找到。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-001",
+  "raw_text": "{\"score\": 2, \"reason\": \"购买价格、数量、占比有证据1支撑，成交金额、成交均价及完成时间有证据3支撑，全部事实性说法均可在可用证据中找到。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

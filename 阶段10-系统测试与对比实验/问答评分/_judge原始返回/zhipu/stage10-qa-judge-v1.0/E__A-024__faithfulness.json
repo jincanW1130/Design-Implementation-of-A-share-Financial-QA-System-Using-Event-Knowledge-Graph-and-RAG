@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-024",
+  "attempts": [
+    {
+      "answer_key": "E__A-024",
+      "attempt": 1,
+      "completion_tokens": 847,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 15.707,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5238,
+      "qid": "PE-24",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:53:20+08:00",
+      "total_tokens": 6085
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:53:36+08:00",
+  "group": "E",
+  "input_sha256": "f591ed1cfb32ff914bc8e36d801c9de053cbc5373861f78043bd1a0de256ef98",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "调整后上限571.60元/股、573元调整、除权除息日8月10日、1.4019358元/股计算及待股东会审议均可在可用证据中找到支撑，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-24",
+  "raw_text": "{\"score\": 2, \"reason\": \"调整后上限571.60元/股、573元调整、除权除息日8月10日、1.4019358元/股计算及待股东会审议均可在可用证据中找到支撑，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

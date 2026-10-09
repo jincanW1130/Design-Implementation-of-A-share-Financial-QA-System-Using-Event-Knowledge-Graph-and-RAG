@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-027",
+  "attempts": [
+    {
+      "answer_key": "E__A-027",
+      "attempt": 1,
+      "completion_tokens": 887,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 17.364,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4066,
+      "qid": "FQ-027",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:06:25+08:00",
+      "total_tokens": 4953
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:06:42+08:00",
+  "group": "E",
+  "input_sha256": "650f20a4e3f6eee84301f4bb15fb4767eadcb87df10bbe3e4cf9412c2593ac86",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案各事实（登陆事件、日期、63家/24家、高瓴认定）均见于证据1和证据5，年份由发布时间与图谱事件时间支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-027",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案各事实（登陆事件、日期、63家/24家、高瓴认定）均见于证据1和证据5，年份由发布时间与图谱事件时间支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

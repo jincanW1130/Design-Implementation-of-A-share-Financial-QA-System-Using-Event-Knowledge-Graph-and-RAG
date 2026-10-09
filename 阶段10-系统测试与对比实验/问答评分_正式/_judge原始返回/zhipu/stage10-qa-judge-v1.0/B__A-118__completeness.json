@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-118",
+  "attempts": [
+    {
+      "answer_key": "B__A-118",
+      "attempt": 1,
+      "completion_tokens": 614,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 5.205,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5659,
+      "qid": "FQ-118",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:59:10+08:00",
+      "total_tokens": 6273
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T00:59:15+08:00",
+  "group": "B",
+  "input_sha256": "5a3497ed4c24b6b0f6b051332845163d4cf796495d1caa444fa27e5ece0d694b",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "完整覆盖参考要点：与控股股东、实控人无一致行动安排，并指出与其他存续员工持股计划为一致行动关系，无关键遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-118",
+  "raw_text": "{\"score\": 2, \"reason\": \"完整覆盖参考要点：与控股股东、实控人无一致行动安排，并指出与其他存续员工持股计划为一致行动关系，无关键遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

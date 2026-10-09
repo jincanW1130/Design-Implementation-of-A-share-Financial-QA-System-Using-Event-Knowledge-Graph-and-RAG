@@ -59,6 +59,12 @@
 6. **待消歧与跳过边的数量来自实际数据**（不写死）：待消歧列表读第 6 阶段落盘的
    `消歧\\unresolved.jsonl`（逐行），跳过边与已确认数读 `graph_stats.json` 的
    `unresolved`／`human_confirmation` 小节，并在响应里带上**出处路径**与其 `sha256`／行数。
+   **口径必须与现行图谱一致**（2026-10-05 修补）：v1.3 起消歧产物落 `图谱管线_v1_3\\` 而非
+   `图谱管线\\`，故「现行口径的待消歧清单在哪」**按第 6 阶段 `GRAPH_PIPELINE` 的
+   `profile_roots` 映射推导**，不在本文件写死目录名（见 `_pipeline_map()`）。降级链保留
+   （环境变量 → 现行 profile → 按目录名直拼 → 其余 profile／缓存目录），但**降级不再静默**：
+   落到非现行口径时响应体里给出 `degraded`／`degraded_reason`／`source_version`／
+   `expected_source`，调用方一眼看得见用的是哪一版的数据（此前只写日志，调用方看不到）。
 7. **人工确认不回写上游**：`POST /api/admin/extraction/disambiguation/{item_id}` 只往
    本项目自己的台账追加一条确认记录并返回新状态；**不改** `unresolved.jsonl`、不改
    `人工确认清单.json`、不重建图谱（重建要走第 6 阶段 `write_graph.py`，本阶段不动上游）。
@@ -155,45 +161,235 @@ DISAMBIG_LEDGER = os.path.join(config.WORK_DIR, "消歧人工确认台账.jsonl"
 _UNRESOLVED_PATH = None
 """待消歧原始清单（第 6 阶段落盘物），惰性定位并在响应里报出实际路径。"""
 
+_UNRESOLVED_STATE: dict = {}
+"""上一次定位的**如实状态**（来源 profile／版本／是否降级／降级原因）。
+
+与 `_UNRESOLVED_PATH` 同时写入，并由 `/api/admin/extraction/disambiguation` **整块回给
+调用方**。此前降级只写 `logger.warning`：调用方看不到日志，等于被静默换掉了数据源
+（旧版本照样返回 200 与一份看起来正常的列表），故这一块是修补的重点。
+"""
+
+
+# --------------------------------------------------------------------------
+# 1.1 现行口径的图谱管线工作目录：**取第 6 阶段的 profile → 目录映射**，不写死目录名
+# --------------------------------------------------------------------------
+_STAGE6_DIR = os.path.join(config.CODE_DIR, "抽取与图谱")
+_STAGE6_CACHE: dict = {}
+_STAGE6_LOCK = threading.Lock()
+
+
+def _stage6_config():
+    """按**文件路径**装载第 6 阶段的 `config.py`，取其目录常量；取不到返回 None。
+
+    **为什么不 `import config`**：`代码\\检索\\`／`代码\\问答\\`／第 5 阶段／本后端**各有
+    一个 `config.py`**，而这些模块内部一律写 `import config`（靠 `sys.path` 解析）——究竟
+    哪一个生效取决于导入顺序与 `sys.modules` 的既存项，`代码\\问答\\run_answer.py` 开头
+    第 29～33 行已把这个坑记在案。故这里沿用本文件 `_stage5_config()` 的同一套「换名装载」
+    手法：按**文件路径**装载、注册成唯一模块名 `_stage9_stage6_config`，期间不动 `sys.path`、
+    不碰 `sys.modules["config"]`。第 6 阶段的 `config.py` 顶部只 import 标准库
+    （`hashlib`／`json`／`os`／`re`），装载它既不顶掉后端自己的 `config`，也不产生文件或
+    网络副作用（已核：装载前后该目录文件清单不变、`sys.modules` 里不出现裸名 `config`）。
+    取不到时**不猜**：返回 `None`，调用方按老路走并在响应里如实标注。
+    """
+    with _STAGE6_LOCK:
+        if _STAGE6_CACHE.get("loaded"):
+            return _STAGE6_CACHE.get("cfg")
+        _STAGE6_CACHE["loaded"] = True
+        cfg_path = os.path.join(_STAGE6_DIR, "config.py")
+        if not os.path.isfile(cfg_path):
+            logger.warning("第 6 阶段参数文件缺失，图谱管线目录映射不可用：%s", cfg_path)
+        else:
+            try:
+                _STAGE6_CACHE["cfg"] = _load_file_module("_stage9_stage6_config", cfg_path)
+            except Exception as exc:                            # noqa: BLE001
+                logger.warning("装载第 6 阶段 config.py 失败（待消歧清单改按目录名直拼）：%s: %s",
+                               type(exc).__name__, exc)
+        return _STAGE6_CACHE.get("cfg")
+
+
+def _pipeline_map() -> tuple:
+    """返回 `(现行 profile, {profile: 图谱管线工作目录}, {profile: 图谱版本口径})`。
+
+    第 6 阶段常量取不到时返回 `("", {}, {})`——调用方走老路并在响应里标注。
+
+    **现行 profile 的判定不是猜**：在 `export_roots`（profile → 图谱导出目录）里找
+    「目录名恰好等于后端 `config.GRAPH_VERSION`」的那一项——`v21_v1_3` 的导出目录是
+    `图谱导出\\v2.1_v1_3`，目录名正是 `v2.1_v1_3`。于是两份常量一旦分叉（例如版本升到
+    v1.4），本函数**跟着变**，不需要在这里改一个字；万一没有唯一命中，再按 profile 名的
+    确定性折算（`v2.1_v1_3` → `v21_v1_3`，只去点）补一次；仍不唯一就返回空 profile。
+    """
+    cfg6 = _stage6_config()
+    if cfg6 is None:
+        return "", {}, {}
+    pipeline = getattr(cfg6, "GRAPH_PIPELINE", None) or {}
+    roots = {k: v for k, v in (pipeline.get("profile_roots") or {}).items() if _s(v).strip()}
+    versions = {k: os.path.basename(v)
+                for k, v in (pipeline.get("export_roots") or {}).items() if _s(v).strip()}
+    want = _s(config.GRAPH_VERSION).strip()
+    hit = sorted(k for k, label in versions.items() if want and label == want)
+    if len(hit) != 1:
+        folded = want.replace(".", "")
+        hit = sorted(k for k in roots if folded and k.replace(".", "") == folded)
+    return (hit[0] if len(hit) == 1 else ""), roots, versions
+
+
+def _cache_rel(path: str, cache_root: str) -> str:
+    """`_抽取缓存` 下的相对落点（如 `v2.1_v1_2\\图谱管线_v1_3`）；不在其下则原样返回。"""
+    try:
+        rel = os.path.relpath(path, cache_root)
+    except ValueError:                                          # 跨盘符等（本工程不会走到）
+        return path
+    return path if rel.startswith("..") else rel
+
+
+def _unresolved_candidates(cache_root: str) -> list:
+    """按优先级列出待消歧清单的候选，每项 `{path, kind, profile, version, pipeline}`。
+
+    * `kind="env"`     —— 环境变量 `ASHARE_UNRESOLVED` 显式指定（运维通道，最高优先）；
+    * `kind="current"` —— **现行 profile 的图谱管线工作目录**（由第 6 阶段映射给出，
+      `v21_v1_3` → `_抽取缓存\\v2.1_v1_2\\图谱管线_v1_3`；v1.3 起消歧产物不再落
+      `图谱管线\\`，而与 v1.2 的那一套物理分开）；
+    * `kind="by_name"` —— 老口径的 `_抽取缓存\\<GRAPH_VERSION>\\图谱管线\\` 按目录名直拼
+      （映射取不到时它就是正路；映射取得到时它是同一条路的等价写法）；
+    * `kind="sibling"` —— 其余 `_抽取缓存\\*` 下的同名文件（**降级档**，逐级回落）。
+      **扫描范围与原实现一致**：只在缓存根下扫；`pilot` 那一套试跑目录
+      （`阶段06-…\\_试跑_图谱管线`）**不进来**——试跑产物不是任何一版交付口径，
+      把它当降级来源等于凭空多出一档数据源（本函数初版补给 `sibling` 时曾误纳，
+      由 `决策者核验\\核验_消歧降级可见性.py` 的第 ④ 项核出）。
+
+    降级链**保留**原样，只是每回落一档都会在响应里被标出来（见 `_unresolved_state_of`）。
+    目录名一个都没有写死：`图谱管线_v1_3` 这一档来自第 6 阶段的 `GRAPH_PIPELINE`。
+    `version` 只在**能从既有常量或路径如实推出**时才给（映射反查命中 → 该 profile 的导出
+    目录名；否则 `图谱管线\\` 这一档取数据集目录名），推不出就留空——`source_pipeline`
+    无论如何都给出真实落点，不靠猜。
+    """
+    env = os.environ.get("ASHARE_UNRESOLVED") or ""
+    profile, roots, versions = _pipeline_map()
+    root_by_dir = {os.path.normcase(os.path.abspath(v)): k for k, v in roots.items()}
+    out, seen = [], set()
+
+    def add(path, kind, prof, version):
+        if not path:
+            return
+        key = os.path.normcase(os.path.abspath(path))
+        if key in seen:
+            return
+        seen.add(key)
+        out.append({"path": path, "kind": kind, "profile": prof, "version": version or "",
+                    "pipeline": _cache_rel(os.path.dirname(os.path.dirname(path)), cache_root)})
+
+    def label(pipeline_dir):
+        """该管线目录的版本口径标签：先反查第 6 阶段映射，再按目录名如实取。"""
+        prof = root_by_dir.get(os.path.normcase(os.path.abspath(pipeline_dir)), "")
+        if prof:
+            return prof, versions.get(prof) or ""
+        sub = os.path.basename(pipeline_dir)
+        if sub == "图谱管线":                       # `<数据集版本目录>\图谱管线\` 的老口径
+            return "", os.path.basename(os.path.dirname(pipeline_dir))
+        return "", ""
+
+    _p, _v = label(os.path.dirname(os.path.dirname(env))) if env else ("", "")
+    add(env, "env", _p, _v)
+    if profile and roots.get(profile):
+        add(os.path.join(roots[profile], "消歧", "unresolved.jsonl"), "current", profile,
+            versions.get(profile))
+    by_name_dir = os.path.join(cache_root, config.GRAPH_VERSION, "图谱管线")
+    _p, _v = label(by_name_dir)
+    add(os.path.join(by_name_dir, "消歧", "unresolved.jsonl"), "by_name", _p, _v)
+    if os.path.isdir(cache_root):
+        for name in sorted(os.listdir(cache_root)):
+            base = os.path.join(cache_root, name)
+            if not os.path.isdir(base):
+                continue
+            for sub in sorted(os.listdir(base)):
+                if sub == "图谱管线" or sub.startswith("图谱管线"):
+                    pipeline_dir = os.path.join(base, sub)
+                    _p, _v = label(pipeline_dir)
+                    add(os.path.join(pipeline_dir, "消歧", "unresolved.jsonl"), "sibling",
+                        _p, _v)
+    return out
+
+
+def _unresolved_state_of(hit: dict, candidates: list) -> dict:
+    """把「命中的是谁、现行该是谁、有没有降级、为什么」如实算出来（只**新增**字段）。"""
+    profile, _roots, versions = _pipeline_map()
+    expected = (next((c for c in candidates if c["kind"] == "current"), None)
+                or next((c for c in candidates if c["kind"] == "by_name"), None))
+    expected_source = (expected or {}).get("path")
+    same = bool(expected_source) and (os.path.normcase(os.path.abspath(hit["path"]))
+                                      == os.path.normcase(os.path.abspath(expected_source)))
+    degraded = not same
+    reason = None
+    if degraded:
+        bits = []
+        if expected_source:
+            bits.append("现行口径（profile=%s／图谱版本=%s）的待消歧清单不在位：%s"
+                        % (profile or "第 6 阶段目录映射未取到", config.GRAPH_VERSION,
+                           expected_source))
+        else:
+            bits.append("现行口径（图谱版本=%s）的目录映射未取到，按既有降级链回落"
+                        % config.GRAPH_VERSION)
+        if hit["kind"] == "env":
+            bits.append("实际来源由环境变量 ASHARE_UNRESOLVED 指定（运维通道，可能不是现行口径）")
+        else:
+            bits.append("已回落至 %s（kind=%s，来源落点 %s）"
+                        % (hit["path"], hit["kind"], hit["pipeline"] or "未知"))
+        bits.append("不同口径的待消歧条数、跳过边数、已确认边数都不同，本次读数**不代表现行口径**")
+        reason = "；".join(bits)
+    return {
+        "source_profile": hit.get("profile") or None,
+        "source_version": hit.get("version") or None,
+        "source_pipeline": hit.get("pipeline") or None,
+        "expected_profile": profile or None,
+        "expected_version": versions.get(profile) or None,
+        "expected_source": expected_source,
+        "degraded": degraded,
+        "degraded_reason": reason,
+    }
+
+
+def _unresolved_source() -> dict:
+    """`_UNRESOLVED_STATE` 的只读副本（先确保已定位过，再取）。"""
+    _unresolved_path()
+    return dict(_UNRESOLVED_STATE)
+
 
 def _unresolved_path() -> str:
     """定位第 6 阶段落盘的待消歧清单；取不到时按 3003（索引／数据不可用）如实报。
 
-    **不写死**，按三档优先级找，找到即用并把实际路径回给调用方（响应里带 `source`）：
-      1. 环境变量 `ASHARE_UNRESOLVED` 指定的路径；
-      2. `_抽取缓存\\<config.GRAPH_VERSION>\\图谱管线\\消歧\\unresolved.jsonl`
-         ——**与当前部署的图谱同一个 profile**（`v2.1_v1_2`），这是正常路径；
-      3. 其余 `_抽取缓存\\*` 下的同名文件（按名字排序，取不到第 2 档时的降级，
-         并**记一条告警**：不同 profile 的待消歧条数不同，报错数字会随之变化）。
-    探不到就报错，而不是回一个空列表——「查不到文件」与「没有待消歧项」是两件事。
+    **目录名不写死**：现行口径的图谱管线工作目录取第 6 阶段 `config.GRAPH_PIPELINE` 的
+    `profile_roots` 映射推导（见 `_pipeline_map()`）。找到即用，并把**实际路径**与**来源
+    口径**一起回给调用方（响应里带 `source`／`source_version`／`source_pipeline`）。
+
+    优先级（降级链，逐级回落）：环境变量 `ASHARE_UNRESOLVED` → 现行 profile 的图谱管线目录
+    → 按 `<config.GRAPH_VERSION>\\图谱管线\\` 直拼 → 其余 `_抽取缓存\\*` 下的同名文件。
+
+    **降级可见**：落到非现行口径时，`_UNRESOLVED_STATE` 给出 `degraded=true` 与
+    `degraded_reason`（含现行口径应有的路径），响应体一并带回，不再只写日志——调用方看不到
+    日志，静默降级的后果就是「拿旧版本的数据冒充当期数据」，这正是本函数此前的问题。
+    候选全都探不到就报错，而不是回一个空列表——「查不到文件」与「没有待消歧项」是两件事。
     """
     global _UNRESOLVED_PATH                                    # noqa: PLW0603
     if _UNRESOLVED_PATH:
         return _UNRESOLVED_PATH
     cache_root = os.path.join(config.ROOT, "阶段05-数据准备", "数据集", "_抽取缓存")
-    preferred = os.path.join(cache_root, config.GRAPH_VERSION, "图谱管线", "消歧",
-                             "unresolved.jsonl")
-    candidates = [os.environ.get("ASHARE_UNRESOLVED") or "", preferred]
-    others = []
-    if os.path.isdir(cache_root):
-        for name in sorted(os.listdir(cache_root)):
-            path = os.path.join(cache_root, name, "图谱管线", "消歧", "unresolved.jsonl")
-            if path != preferred:
-                others.append(path)
-    candidates += others
-    for pos, path in enumerate(candidates):
-        if not path or not os.path.isfile(path):
-            continue
-        if pos == 0:
-            logger.info("待消歧清单由环境变量 ASHARE_UNRESOLVED 指定：%s", path)
-        elif pos != 1:
-            logger.warning("未找到与图谱 profile（%s）同批的待消歧清单 %s，降级使用 %s"
-                           "——不同 profile 的待消歧条数不同，请核对",
-                           config.GRAPH_VERSION, preferred, path)
-        _UNRESOLVED_PATH = path
-        return path
-    raise errors.ApiError(3003, detail="待消歧清单 unresolved.jsonl 未找到（候选 %d 处，"
-                          "可用环境变量 ASHARE_UNRESOLVED 指定）" % len(candidates))
+    candidates = _unresolved_candidates(cache_root)
+    hit = next((c for c in candidates if os.path.isfile(c["path"])), None)
+    if hit is None:
+        raise errors.ApiError(3003, detail="待消歧清单 unresolved.jsonl 未找到（候选 %d 处，"
+                              "可用环境变量 ASHARE_UNRESOLVED 指定）" % len(candidates))
+    _UNRESOLVED_PATH = hit["path"]
+    _UNRESOLVED_STATE.clear()
+    _UNRESOLVED_STATE.update(_unresolved_state_of(hit, candidates))
+    if hit["kind"] == "env":
+        logger.info("待消歧清单由环境变量 ASHARE_UNRESOLVED 指定：%s", hit["path"])
+    elif _UNRESOLVED_STATE["degraded"]:
+        logger.warning("未找到与图谱口径（%s）同批的待消歧清单 %s，降级使用 %s"
+                       "（来源口径 %s）——不同口径的待消歧条数不同，请核对",
+                       config.GRAPH_VERSION, _UNRESOLVED_STATE["expected_source"], hit["path"],
+                       _UNRESOLVED_STATE["source_version"]
+                       or _UNRESOLVED_STATE["source_pipeline"])
+    return hit["path"]
 
 
 def _graph_stats() -> tuple:
@@ -1092,6 +1288,7 @@ async def disambiguation_list(page: str | None = None, page_size: str | None = N
     """
     page_no, size = _page_args(page, page_size)
     rows, path, digest = _disambig_rows()
+    src = _unresolved_source()
     latest = _confirmations()
     items = []
     for row in rows:
@@ -1142,6 +1339,18 @@ async def disambiguation_list(page: str | None = None, page_size: str | None = N
             "stats_source": stats_note,
             "ledger": DISAMBIG_LEDGER,
             "note": "数量均实读上游落盘物，未写死；本接口不改上游清单。",
+            # ---- 以下 8 项为 2026-10-05 修补**新增**（既有键名与语义一个都没动）----
+            # 用途：把「这份列表来自哪一版口径、有没有降级、现行口径该在哪」摊开给调用方。
+            # 此前 v1.3 起消歧产物落 `图谱管线_v1_3\`，而本函数按 `图谱管线\` 找，
+            # 于是逐级降级到 v1.1 的旧清单并**静默**返回，调用方看不出数据源已被换掉。
+            "source_profile": src.get("source_profile"),
+            "source_version": src.get("source_version"),
+            "source_pipeline": src.get("source_pipeline"),
+            "expected_profile": src.get("expected_profile"),
+            "expected_version": src.get("expected_version"),
+            "expected_source": src.get("expected_source"),
+            "degraded": src.get("degraded"),
+            "degraded_reason": src.get("degraded_reason"),
         }})
 
 

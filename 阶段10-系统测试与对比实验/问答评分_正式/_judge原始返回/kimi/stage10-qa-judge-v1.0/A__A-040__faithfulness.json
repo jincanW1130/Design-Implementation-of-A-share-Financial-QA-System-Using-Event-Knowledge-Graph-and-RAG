@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-040",
+  "attempts": [
+    {
+      "answer_key": "A__A-040",
+      "attempt": 1,
+      "completion_tokens": 1116,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 28.016,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4228,
+      "qid": "FQ-040",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:01:06+08:00",
+      "total_tokens": 5344
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:01:34+08:00",
+  "group": "A",
+  "input_sha256": "f37c5de4c5442d65f1799417f9758c90149f3a119783717c4f3027c3c0e3f36d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "各项事实（智算卡细节、三层权益、信用卡联动、三方分工、私有化部署等）均能在证据1-5、8中找到原文支撑，“今年7月”转写为2026年7月有证据发布时间及人民日报日期佐证，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-040",
+  "raw_text": "{\"score\": 2, \"reason\": \"各项事实（智算卡细节、三层权益、信用卡联动、三方分工、私有化部署等）均能在证据1-5、8中找到原文支撑，“今年7月”转写为2026年7月有证据发布时间及人民日报日期佐证，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

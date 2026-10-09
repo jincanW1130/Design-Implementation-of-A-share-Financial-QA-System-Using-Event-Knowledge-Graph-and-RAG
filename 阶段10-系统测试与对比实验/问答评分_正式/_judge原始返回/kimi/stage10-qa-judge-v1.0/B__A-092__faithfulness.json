@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-092",
+  "attempts": [
+    {
+      "answer_key": "B__A-092",
+      "attempt": 1,
+      "completion_tokens": 430,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 15.601,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5212,
+      "qid": "FQ-092",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:40:32+08:00",
+      "total_tokens": 5642
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:40:48+08:00",
+  "group": "B",
+  "input_sha256": "a2177e771c5793e0c227928559c691dc7f4bbf80823c77b594683f6abd6817cc",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "价格上限调整、生效日期、股本数据、回购金额及8月13日管控报道等说法均能在证据1/3/4/10中找到对应支撑，且对通知日期仅称「近期」的谨慎表述亦与证据一致，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-092",
+  "raw_text": "{\"score\": 2, \"reason\": \"价格上限调整、生效日期、股本数据、回购金额及8月13日管控报道等说法均能在证据1/3/4/10中找到对应支撑，且对通知日期仅称「近期」的谨慎表述亦与证据一致，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

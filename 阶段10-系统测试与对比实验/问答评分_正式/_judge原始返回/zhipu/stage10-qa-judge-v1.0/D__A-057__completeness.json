@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-057",
+  "attempts": [
+    {
+      "answer_key": "D__A-057",
+      "attempt": 1,
+      "completion_tokens": 500,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 8.569,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4032,
+      "qid": "FQ-057",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:00:27+08:00",
+      "total_tokens": 4532
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T00:00:36+08:00",
+  "group": "D",
+  "input_sha256": "dde13dd1364addbd678b256843724b86c3f79da9445e6b958d589c54dfd8d681",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案未覆盖任何关键信息：未提及李凯、杨杰、郑颖及董事身份，也未给出SPV公司类型，属大量遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-057",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案未覆盖任何关键信息：未提及李凯、杨杰、郑颖及董事身份，也未给出SPV公司类型，属大量遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-004",
+  "attempts": [
+    {
+      "answer_key": "C__A-004",
+      "attempt": 1,
+      "completion_tokens": 158,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 8.26,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4031,
+      "qid": "FQ-004",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:36:29+08:00",
+      "total_tokens": 4189
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:36:38+08:00",
+  "group": "C",
+  "input_sha256": "80ffbce41d93c37ad1099fc253d49dfda357c86c565f4ef63e340638feb1fa33",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中28,724亿元、-0.3%见证据4，2,129亿元、-1.2%见证据2，小幅下降的表述亦有依据，完全基于证据。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-004",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中28,724亿元、-0.3%见证据4，2,129亿元、-1.2%见证据2，小幅下降的表述亦有依据，完全基于证据。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

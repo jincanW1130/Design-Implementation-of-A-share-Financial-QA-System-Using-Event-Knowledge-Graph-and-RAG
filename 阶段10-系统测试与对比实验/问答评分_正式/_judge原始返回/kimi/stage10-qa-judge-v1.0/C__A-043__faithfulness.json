@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-043",
+  "attempts": [
+    {
+      "answer_key": "C__A-043",
+      "attempt": 1,
+      "completion_tokens": 341,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 13.177,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4073,
+      "qid": "FQ-043",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:59:48+08:00",
+      "total_tokens": 4414
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:00:01+08:00",
+  "group": "C",
+  "input_sha256": "3c575bd67e4115d6260645372e8c403199edd0d0f4ecf09f4e049f1e9f012261",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、债券代码简称、103%赎回价、9月14日摘牌等事实均可由证据1/2/3原文支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-043",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、债券代码简称、103%赎回价、9月14日摘牌等事实均可由证据1/2/3原文支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-011",
+  "attempts": [
+    {
+      "answer_key": "C__A-011",
+      "attempt": 1,
+      "completion_tokens": 1204,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 26.109,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5911,
+      "qid": "FQ-011",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:40:01+08:00",
+      "total_tokens": 7115
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:40:27+08:00",
+  "group": "C",
+  "input_sha256": "47f3ff4caa3b6b848b683fa5d0cf9c830aa317d79fedd8d8ecc7ff8bcf5076c0",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "业绩考核达成与解锁股数、占比两项覆盖完整，但标的股票过户情况整体缺失，三问漏一，属基本覆盖。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-011",
+  "raw_text": "{\"score\": 1, \"reason\": \"业绩考核达成与解锁股数、占比两项覆盖完整，但标的股票过户情况整体缺失，三问漏一，属基本覆盖。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-016",
+  "attempts": [
+    {
+      "answer_key": "A__A-016",
+      "attempt": 1,
+      "completion_tokens": 199,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 4.939,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4011,
+      "qid": "FQ-016",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:19:46+08:00",
+      "total_tokens": 4210
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:19:51+08:00",
+  "group": "A",
+  "input_sha256": "ef1544485c6c45fdaa87f635a532822c2d6174eba90eef0590c01aa96863ec7a",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中事实性说法与可用证据2原文逐字一致，国家金融监督管理总局复函及无异议表述均有支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-016",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中事实性说法与可用证据2原文逐字一致，国家金融监督管理总局复函及无异议表述均有支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

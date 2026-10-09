@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-018",
+  "attempts": [
+    {
+      "answer_key": "E__A-018",
+      "attempt": 1,
+      "completion_tokens": 133,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 5.744,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3728,
+      "qid": "PE-18",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:23:26+08:00",
+      "total_tokens": 3861
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:23:31+08:00",
+  "group": "E",
+  "input_sha256": "3f41bd8309941a166802332a42f29b87657b529761516f7166058b1b616ef78d",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案核心说法（原中国银监会批准、2012年4月18日、银监复〔2012〕137号文）与证据1原文完全一致，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-18",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案核心说法（原中国银监会批准、2012年4月18日、银监复〔2012〕137号文）与证据1原文完全一致，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

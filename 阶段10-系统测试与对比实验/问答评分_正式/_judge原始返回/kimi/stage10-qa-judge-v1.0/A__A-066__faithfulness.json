@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-066",
+  "attempts": [
+    {
+      "answer_key": "A__A-066",
+      "attempt": 1,
+      "completion_tokens": 323,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 11.702,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3842,
+      "qid": "FQ-066",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:21:31+08:00",
+      "total_tokens": 4165
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:21:43+08:00",
+  "group": "A",
+  "input_sha256": "a057373c6288a86f419e469472efd7dcb300f3176a833ae39b20eb1b5819a95d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中股价异动、函询、经营稳定说明及财务数据、备查文件等均能在证据1和证据7中找到原文支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-066",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中股价异动、函询、经营稳定说明及财务数据、备查文件等均能在证据1和证据7中找到原文支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

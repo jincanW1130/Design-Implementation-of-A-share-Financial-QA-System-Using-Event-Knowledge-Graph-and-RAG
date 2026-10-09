@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-010",
+  "attempts": [
+    {
+      "answer_key": "C__A-010",
+      "attempt": 1,
+      "completion_tokens": 574,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 19.181,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4876,
+      "qid": "FQ-010",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:39:19+08:00",
+      "total_tokens": 5450
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:39:38+08:00",
+  "group": "C",
+  "input_sha256": "a78d05a6e75b304e9a7ea822af122d213a136094b0a1bb6d23d43ac5b464a650",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "拟行权2,269,777份、66名离职注销291,322份及30名/47名历史数据均有对应证据支撑，人数未披露的判断亦属实，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-010",
+  "raw_text": "{\"score\": 2, \"reason\": \"拟行权2,269,777份、66名离职注销291,322份及30名/47名历史数据均有对应证据支撑，人数未披露的判断亦属实，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

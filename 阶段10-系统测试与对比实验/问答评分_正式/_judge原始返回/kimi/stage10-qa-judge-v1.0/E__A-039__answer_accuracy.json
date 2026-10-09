@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-039",
+  "attempts": [
+    {
+      "answer_key": "E__A-039",
+      "attempt": 1,
+      "completion_tokens": 95,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 6.981,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4595,
+      "qid": "FQ-039",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:47:37+08:00",
+      "total_tokens": 4690
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:47:44+08:00",
+  "group": "E",
+  "input_sha256": "4a8288c7fbb6a654d93de17f22d1781aca8b39c2cdc2b6f376631a9ec569ee54",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案与参考答案完全一致：6月屠宰295.6万头、8月屠宰281.8万头，事件披露说明也准确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-039",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案与参考答案完全一致：6月屠宰295.6万头、8月屠宰281.8万头，事件披露说明也准确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

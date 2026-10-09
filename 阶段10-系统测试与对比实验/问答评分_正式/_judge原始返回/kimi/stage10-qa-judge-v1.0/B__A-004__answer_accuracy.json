@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-004",
+  "attempts": [
+    {
+      "answer_key": "B__A-004",
+      "attempt": 1,
+      "completion_tokens": 136,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 11.759,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3971,
+      "qid": "FQ-004",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:46:01+08:00",
+      "total_tokens": 4107
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T19:46:13+08:00",
+  "group": "B",
+  "input_sha256": "1dcebaf623d3e457a37ce4f0f14528d93567230210bf22274dfa828cc600ae43",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "四项数据全部与金标准一致：新签28,724亿元、-0.3%，地产销售2,129亿元、-1.2%，表述为下降亦准确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-004",
+  "raw_text": "{\"score\": 2, \"reason\": \"四项数据全部与金标准一致：新签28,724亿元、-0.3%，地产销售2,129亿元、-1.2%，表述为下降亦准确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

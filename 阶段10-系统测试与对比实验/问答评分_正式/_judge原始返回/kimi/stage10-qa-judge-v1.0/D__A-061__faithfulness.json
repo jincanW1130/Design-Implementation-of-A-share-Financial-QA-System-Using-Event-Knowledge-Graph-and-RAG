@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-061",
+  "attempts": [
+    {
+      "answer_key": "D__A-061",
+      "attempt": 1,
+      "completion_tokens": 836,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 30.801,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4383,
+      "qid": "FQ-061",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:14:28+08:00",
+      "total_tokens": 5219
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:14:59+08:00",
+  "group": "D",
+  "input_sha256": "b7e12e72453581d0e7a49f5a2c71196c99969f4b7ae589257c42703ad65b213f",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "担保事件、15亿元、连带责任保证及三年期间等均见证据1/3，未编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-061",
+  "raw_text": "{\"score\":2,\"reason\":\"担保事件、15亿元、连带责任保证及三年期间等均见证据1/3，未编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

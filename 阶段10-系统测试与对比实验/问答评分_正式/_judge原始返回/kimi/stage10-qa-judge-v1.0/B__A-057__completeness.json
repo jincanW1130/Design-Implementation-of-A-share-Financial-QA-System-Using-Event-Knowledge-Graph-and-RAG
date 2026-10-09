@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-057",
+  "attempts": [
+    {
+      "answer_key": "B__A-057",
+      "attempt": 1,
+      "completion_tokens": 704,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 18.623,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4319,
+      "qid": "FQ-057",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:22:45+08:00",
+      "total_tokens": 5023
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:23:04+08:00",
+  "group": "B",
+  "input_sha256": "4da712074452b87bde72415b92ede10caa5d3c1fe85dece63d26a36dce0c1eb8",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "三名人员（李凯、杨杰、郑颖）及其法定代表人/公司董事身份、公司类型SPV、持股结构与注册地均已覆盖，参考答案关键信息无实质遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-057",
+  "raw_text": "{\"score\": 2, \"reason\": \"三名人员（李凯、杨杰、郑颖）及其法定代表人/公司董事身份、公司类型SPV、持股结构与注册地均已覆盖，参考答案关键信息无实质遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

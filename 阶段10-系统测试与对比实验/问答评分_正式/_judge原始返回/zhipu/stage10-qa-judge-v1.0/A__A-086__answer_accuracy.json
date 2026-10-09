@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-086",
+  "attempts": [
+    {
+      "answer_key": "A__A-086",
+      "attempt": 1,
+      "completion_tokens": 445,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 6.759,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4551,
+      "qid": "FQ-086",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:42:34+08:00",
+      "total_tokens": 4996
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T00:42:40+08:00",
+  "group": "A",
+  "input_sha256": "5275bc4e06531cd16c82333f593d724700f487aa8bd067c3f8fd0ba379fcf2f4",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "四个关键数据点（每股3.02元、登记日9月23日、发行规模200亿元、票面利率1.86%）均与参考答案完全一致，无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-086",
+  "raw_text": "{\"score\": 2, \"reason\": \"四个关键数据点（每股3.02元、登记日9月23日、发行规模200亿元、票面利率1.86%）均与参考答案完全一致，无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

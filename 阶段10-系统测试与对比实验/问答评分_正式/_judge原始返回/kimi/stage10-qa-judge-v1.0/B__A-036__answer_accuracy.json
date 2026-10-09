@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-036",
+  "attempts": [
+    {
+      "answer_key": "B__A-036",
+      "attempt": 1,
+      "completion_tokens": 105,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 5.29,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5379,
+      "qid": "FQ-036",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:04:00+08:00",
+      "total_tokens": 5484
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:04:06+08:00",
+  "group": "B",
+  "input_sha256": "20154b48761a32052e2e1a573e36adfd5d820d98f11ac08f10dc73b651492ac4",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中122人、2,915,367股、2026年7月13日及三位高管各解锁32,000股，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-036",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中122人、2,915,367股、2026年7月13日及三位高管各解锁32,000股，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

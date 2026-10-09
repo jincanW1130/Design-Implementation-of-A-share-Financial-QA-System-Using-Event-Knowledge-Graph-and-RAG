@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-042",
+  "attempts": [
+    {
+      "answer_key": "B__A-042",
+      "attempt": 1,
+      "completion_tokens": 604,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 9.558,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4800,
+      "qid": "FQ-042",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:33:41+08:00",
+      "total_tokens": 5404
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:33:51+08:00",
+  "group": "B",
+  "input_sha256": "bac5f9d7fdeb0fac9f652184597016f4f0da0962f6b2df3097ed7760be72043a",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "完整覆盖参考答案两点：2026年审计费372万（年报292万、内控80万、增30万）及半年度业绩预告并表说明，无关键信息遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-042",
+  "raw_text": "{\"score\": 2, \"reason\": \"完整覆盖参考答案两点：2026年审计费372万（年报292万、内控80万、增30万）及半年度业绩预告并表说明，无关键信息遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

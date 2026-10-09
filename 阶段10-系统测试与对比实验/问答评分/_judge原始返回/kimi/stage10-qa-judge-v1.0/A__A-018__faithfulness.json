@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-018",
+  "attempts": [
+    {
+      "answer_key": "A__A-018",
+      "attempt": 1,
+      "completion_tokens": 468,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 17.985,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3581,
+      "qid": "PE-18",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:39:11+08:00",
+      "total_tokens": 4049
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:39:29+08:00",
+  "group": "A",
+  "input_sha256": "40facce71efff73f80f2bdae49c236191aa4109570804ea5b5368a4f1929a439",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案核心事实（原中国银监会批准、银监复〔2012〕137号文、2012年4月18日开业）均与证据1原文一致，日期落于区间为简单事实，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-18",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案核心事实（原中国银监会批准、银监复〔2012〕137号文、2012年4月18日开业）均与证据1原文一致，日期落于区间为简单事实，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

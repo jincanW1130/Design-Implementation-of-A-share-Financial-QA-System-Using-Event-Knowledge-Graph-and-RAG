@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-011",
+  "attempts": [
+    {
+      "answer_key": "A__A-011",
+      "attempt": 1,
+      "completion_tokens": 1320,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 10.293,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4831,
+      "qid": "FQ-011",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:19:10+08:00",
+      "total_tokens": 6151
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:19:21+08:00",
+  "group": "A",
+  "input_sha256": "783a2e36709ec1db8373e0dcb787eb2ca5bd44bd826234342c39b3170282444b",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "业绩考核达成及解锁股数775,107股、占比0.02%均完整，但过户日期、股数、价格等关键信息缺失，属基本覆盖",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-011",
+  "raw_text": "{\"score\": 1, \"reason\": \"业绩考核达成及解锁股数775,107股、占比0.02%均完整，但过户日期、股数、价格等关键信息缺失，属基本覆盖\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

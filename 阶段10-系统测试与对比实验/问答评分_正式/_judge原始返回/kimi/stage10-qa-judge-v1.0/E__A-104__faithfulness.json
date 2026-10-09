@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-104",
+  "attempts": [
+    {
+      "answer_key": "E__A-104",
+      "attempt": 1,
+      "completion_tokens": 169,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 14.271,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4353,
+      "qid": "FQ-104",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:49:21+08:00",
+      "total_tokens": 4522
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:49:35+08:00",
+  "group": "E",
+  "input_sha256": "83df705508c3587ee21ff19519ab0fe1c6685b4526946d8ce90d7915370de96b",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "证据1明确载明授予367,989,000股且由中国结算上海分公司出具《证券变更登记证明》，答案两项事实均获支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-104",
+  "raw_text": "{\"score\": 2, \"reason\": \"证据1明确载明授予367,989,000股且由中国结算上海分公司出具《证券变更登记证明》，答案两项事实均获支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

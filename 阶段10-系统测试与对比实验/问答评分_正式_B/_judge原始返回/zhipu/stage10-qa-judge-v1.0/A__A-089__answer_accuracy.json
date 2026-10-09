@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-089",
+  "attempts": [
+    {
+      "answer_key": "A__A-089",
+      "attempt": 1,
+      "completion_tokens": 497,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 8.211,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4514,
+      "qid": "FQ-089",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:01:10+08:00",
+      "total_tokens": 5011
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:01:18+08:00",
+  "group": "A",
+  "input_sha256": "ea18340a8c8ff89a4687cda8a2ec05ae3254e2bbc5fc041c93c9d9add32eb952",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "股权登记日2026年7月15日正确，但除权除息日未答出，回购数量误答为2,535,759股（应为10,780,847股），属部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-089",
+  "raw_text": "{\"score\": 1, \"reason\": \"股权登记日2026年7月15日正确，但除权除息日未答出，回购数量误答为2,535,759股（应为10,780,847股），属部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

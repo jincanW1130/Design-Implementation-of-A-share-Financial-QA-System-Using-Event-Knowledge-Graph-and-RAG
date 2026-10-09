@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-058",
+  "attempts": [
+    {
+      "answer_key": "D__A-058",
+      "attempt": 1,
+      "completion_tokens": 573,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 20.113,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4128,
+      "qid": "FQ-058",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:11:53+08:00",
+      "total_tokens": 4701
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:12:13+08:00",
+  "group": "D",
+  "input_sha256": "f393565e7796e55f520925dfc2d9b5495d7cc2d6911148ec8142e2a52a9f3cf8",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "未指出吴磊为电气控股法定代表人，注册资本、成立日期、注册地址等关键信息全部缺失，仅名字沾边且身份不符",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-058",
+  "raw_text": "{\"score\": 0, \"reason\": \"未指出吴磊为电气控股法定代表人，注册资本、成立日期、注册地址等关键信息全部缺失，仅名字沾边且身份不符\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

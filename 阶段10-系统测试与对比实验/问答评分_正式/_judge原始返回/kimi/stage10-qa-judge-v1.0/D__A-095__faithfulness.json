@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-095",
+  "attempts": [
+    {
+      "answer_key": "D__A-095",
+      "attempt": 1,
+      "completion_tokens": 233,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 8.748,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4816,
+      "qid": "FQ-095",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:57:29+08:00",
+      "total_tokens": 5049
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:57:38+08:00",
+  "group": "D",
+  "input_sha256": "4c96eb5eb760097f6f7928d094e81b66a8039b53f882233cd260bedcf139d072",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "回购股数、金额、占比及A股10亿下限均有证据4/6/1支撑，H股上限如实说明证据不足，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-095",
+  "raw_text": "{\"score\": 2, \"reason\": \"回购股数、金额、占比及A股10亿下限均有证据4/6/1支撑，H股上限如实说明证据不足，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

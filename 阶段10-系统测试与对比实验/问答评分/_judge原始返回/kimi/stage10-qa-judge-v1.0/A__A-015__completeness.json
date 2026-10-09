@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-015",
+  "attempts": [
+    {
+      "answer_key": "A__A-015",
+      "attempt": 1,
+      "completion_tokens": 691,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 23.378,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4638,
+      "qid": "PE-15",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:36:30+08:00",
+      "total_tokens": 5329
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:36:53+08:00",
+  "group": "A",
+  "input_sha256": "53bb46c9f85b9f4b264a1fae26944acc166199833e098945a2730d048427e477",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "覆盖了权益分派实施、除权除息日及上限56.55→54.55元，但遗漏每10股派现20元的分红细节，属基本覆盖。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-15",
+  "raw_text": "{\"score\": 1, \"reason\": \"覆盖了权益分派实施、除权除息日及上限56.55→54.55元，但遗漏每10股派现20元的分红细节，属基本覆盖。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -17,6 +17,15 @@
 第 7 阶段冻结的 `per_question_trace.jsonl`；`--question` 与非 C 组**调用第 7 阶段的既有链路**
 （子进程方式跑 `代码\\检索\\run_query.py`，见下），只读、一个字节都不改。
 
+**失败契约**（评审 P1-9，2026-10-07 新增，见本文件 `_write_error_contract()`）
+------------------------------------------------------------------------------
+以 `SystemExit` 退出的任何一条路径，都会在 `--out-dir` 下落一份 `error_contract.json`
+（`{"schema","error_code","reason","exit_code","extra"}`），供**调用方**（第 9 阶段
+`代码\\后端\\services\\qa_service.py`）直接读错误码，**不再靠日志里的中文措辞猜**。
+成功路径、`--dry-run`、`--selftest`、参数非法（还没有 `--out-dir`）**都不写**这个文件。
+契约的 `error_code` 取值一律来自第 9 阶段 `代码\\后端\\errors.py` 的 `CODES`，
+本文件**不新增、不放宽**任何错误码语义。
+
 **为什么用子进程而不是 in-process import**：`代码\\检索\\` 与 `代码\\问答\\` **各有一个
 `config.py`**，而 `代码\\检索\\` 的模块内部一律写 `import config`（经 `sys.path` 解析）。若在
 本进程里把检索目录插到 `sys.path` 前面，`import config` 会解析到**哪一个**取决于导入顺序与
@@ -49,6 +58,78 @@ import rules                  # noqa: E402
 
 SCHEMA = "stage8-answer-trace-1.0"
 MANIFEST_SCHEMA = "stage8-run-manifest-1.0"
+
+# --------------------------------------------------------------------------
+# 失败契约（评审 P1-9：让**调用方**不再靠日志里的中文措辞猜错误码）
+# --------------------------------------------------------------------------
+# 落点选 `--out-dir\\error_contract.json`（**文件**，不是 stdout 上的一行 JSON）：
+#   * 调用方（第 9 阶段 `代码\后端\services\qa_service.py`）在非零退出时本来就只保留
+#     stdout／stderr 的**尾部 2000 字**做日志摘要——契约行一旦被后面的输出顶出尾部就丢了；
+#     落文件则与输出长度无关，且与 `answer_trace.jsonl`／`qa_records.jsonl` 同处一个
+#     `--out-dir`，调用方已经知道那个目录（`--out-dir` 就是它传进来的）。
+#   * **不新增 stdout 行**：`工具\验收第8阶段.py` 的 G1 逐字读 `模型调用次数 = N`、
+#     并数 `--out-dir` 里的产物个数，保持既有 stdout 形态是零风险的最小改动。
+# 取值口径：`error_code` 一律取第 9 阶段 `代码\后端\errors.py` 的 **CODES** 里的既有码
+# （3002 大模型接口超时／3003 向量索引不可用／3004 装配账目守卫未通过／1002 参数格式错误），
+# **本文件不新增任何错误码语义**；调用方按该码直接构造响应，不再解析任何日志文本。
+ERROR_CONTRACT_NAME = "error_contract.json"
+ERROR_CONTRACT_SCHEMA = "stage8-error-contract-1.0"
+# 进程内一次性状态：失败发生在哪、按哪个码回传。**只在失败路径被写入**。
+_CONTRACT = {"error_code": None, "reason": None, "extra": None}
+
+
+def _record_failure(error_code: int, reason: str, extra=None) -> None:
+    """登记本次失败的结构化归类（供进程退出前落盘；**不打印、不改变退出行为**）。"""
+    _CONTRACT["error_code"] = int(error_code)
+    _CONTRACT["reason"] = str(reason)
+    _CONTRACT["extra"] = extra
+
+
+def _write_error_contract(out_dir) -> str | None:
+    """把登记好的失败归类落成 `<out_dir>\\error_contract.json`；未登记失败时**不写任何文件**。
+
+    返回写盘路径（没写则 None）。`out_dir` 尚未确定（例如命令行参数本身就非法）时不写——
+    那种情况下调用方本来也没有这个目录可查，落盘只会污染别处。
+    """
+    if _CONTRACT["error_code"] is None or not out_dir:
+        return None
+    payload = {
+        "schema": ERROR_CONTRACT_SCHEMA,
+        "stage": "第 8 阶段：智能问答系统（run_answer.py 失败契约，评审 P1-9）",
+        "error_code": int(_CONTRACT["error_code"]),
+        "reason": _CONTRACT["reason"],
+        "exit_code": 1,
+        "error_code_source": "代码\\后端\\errors.py 的 CODES（本文件不新增错误码语义）",
+        "extra": _CONTRACT["extra"],
+    }
+    path = os.path.join(str(out_dir), ERROR_CONTRACT_NAME)
+    config.write_json(path, payload)
+    print("[失败契约] error_code=%d reason=%s → 已写 %s"
+          % (payload["error_code"], payload["reason"], path))
+    return path
+
+
+def _classify_model_failure(res: dict) -> tuple:
+    """模型调用失败 → `(error_code, reason, extra)`，**判据全部取自结构化字段**。
+
+    * `status is None` ⇒ 传输层就没走通（超时／连接失败／DNS）→ **3002**（大模型接口超时）；
+    * `status` 是 HTTP 码 ⇒ 服务可达但反复失败或正文为空 → **3003**；
+    * `status is False` ⇒ **我们自己拒绝发请求**（冻结哨兵／凭据缺失），不是远端故障 → **3002**。
+
+    这里**不看**任何错误文本（既不匹配中文措辞、也不匹配英文关键字）：唯一输入是
+    `attempts[].status` 与 `attempts[].empty_body` 这两个结构化读数——
+    这正是评审 P1-9 要求的"停止用措辞判定"。
+    """
+    attempts = res.get("attempts") or []
+    last = attempts[-1] if attempts else {}
+    status = last.get("status")
+    if status is False:
+        return 3002, "model_calls_forbidden", {"status": False, "attempts": len(attempts)}
+    if status is None:
+        return 3002, "model_transport_error", {"status": None, "attempts": len(attempts)}
+    if last.get("empty_body"):
+        return 3003, "model_empty_body", {"status": status, "attempts": len(attempts)}
+    return 3003, "model_http_error", {"status": status, "attempts": len(attempts)}
 
 # `answer_trace.jsonl` 的固定键序（《21》第六节 格式决策 1：固定键序；写盘再按 sort_keys 排）
 TRACE_ROW_FIELDS = ("qid", "question", "group", "k", "n", "context_token_budget",
@@ -255,6 +336,7 @@ def load_case_via_retrieval(args, params: dict) -> dict:
     """
     script = os.path.join(config.ROOT, "代码", "检索", "run_query.py")
     if not os.path.isfile(script):
+        _record_failure(3003, "retrieval_entry_missing", {"script": script})
         raise SystemExit("检索侧入口不存在，无法取该题的 trace：%s（本脚本不新增检索实现，"
                          "故拒绝用别的语义替代）" % script)
     group = args.group or "C"
@@ -272,6 +354,8 @@ def load_case_via_retrieval(args, params: dict) -> dict:
     if proc.returncode != 0 or not os.path.isfile(out):
         print(proc.stdout[-2000:])
         print(proc.stderr[-2000:], file=sys.stderr)
+        _record_failure(3003, "retrieval_chain_failed",
+                        {"exit_code": proc.returncode, "out": out})
         raise SystemExit("第 7 阶段链路未跑通（退出码 %s）——本脚本拒绝用别的语义替代，"
                          "如实报错退出。" % proc.returncode)
     rec = config.read_json(out)
@@ -435,6 +519,7 @@ def cmd_run(args) -> int:
     else:
         cases = load_cases_from_trace([args.qid] if args.qid else None)
     if not cases:
+        _record_failure(1002, "no_runnable_case", {"qid": args.qid, "group": args.group})
         raise SystemExit("没有可运行的题（--qid 是否存在于 trace？）")
     cases.sort(key=lambda c: c["qid"])
     print("装配完成：%d 题（Prompt 文本已固定，可逐字节复现）" % len(cases))
@@ -456,6 +541,10 @@ def cmd_run(args) -> int:
     if failed:
         for c, r in failed:
             print("调用失败：%s → %s" % (c["qid"], r.get("error")))
+        # 结构化归类：取**第一条**失败题，判据只看 attempts[].status／empty_body（不匹配任何措辞）。
+        code, reason, extra = _classify_model_failure(failed[0][1])
+        extra["failed_qids"] = [c["qid"] for c, _r in failed]
+        _record_failure(code, reason, extra)
         raise SystemExit("有题的调用未成功（%d 题）——不得写入空答案，非零退出。"
                          % len(failed))
 
@@ -464,6 +553,10 @@ def cmd_run(args) -> int:
     bad = _gate_failures(trace_rows)
     if bad:
         _dump_gate_failures(paths, pairs, bad)
+        # 门禁未通过是**单列一类**（不是图谱／模型故障），与第 9 阶段的 3004 同码。
+        _record_failure(3004, "answer_gate_failed",
+                        {"failed_qids": [item["qid"] for item in bad],
+                         "failures": {item["qid"]: (item["failures"] or []) for item in bad}})
         print("\n门禁未通过的题（不得进入正式产出）：")
         for item in bad:
             print("  %s 失败项=%s" % (item["qid"], "、".join(item["failures"] or [])))
@@ -793,12 +886,28 @@ def selftest() -> int:
 
 # --------------------------------------------------------------------------
 def main(argv=None) -> int:
+    """进程入口。**唯一**新增的动作：在本进程退出前把失败契约落到 `--out-dir`。
+
+    为什么包在 `main()` 里而不是散在各 `raise SystemExit` 处：失败出口有十来条
+    （取题、桥接、调用、门禁、装配复算……），逐条加"顺手写契约"必然漏；这里一处收口，
+    保证"以 SystemExit 退出"的任何一条路径都留下结构化归类。**没有登记失败就不写文件**
+    （成功、`--dry-run`、`--selftest`、参数非法等路径一个字节都不落盘）。
+    契约写盘本身失败（磁盘满／无权限）**不改变退出码**，只打一行提示。
+    """
     args = parse_args(argv)
-    if args.selftest:
-        return selftest()
-    if args.run_manifest:
-        return cmd_run_manifest(args)
-    return cmd_run(args)
+    try:
+        if args.selftest:
+            return selftest()
+        if args.run_manifest:
+            return cmd_run_manifest(args)
+        return cmd_run(args)
+    finally:
+        if _CONTRACT["error_code"] is not None:
+            try:
+                _write_error_contract(getattr(args, "out_dir", None) or config.OUTPUT_DIR)
+            except Exception as exc:                      # noqa: BLE001 —— 写不下去也不能改退出码
+                print("[失败契约] 写盘失败（%s: %s）——本次以日志措辞回落判定，退出码不变。"
+                      % (type(exc).__name__, exc), file=sys.stderr)
 
 
 if __name__ == "__main__":

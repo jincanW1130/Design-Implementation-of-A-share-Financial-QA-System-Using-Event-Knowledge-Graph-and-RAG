@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-023",
+  "attempts": [
+    {
+      "answer_key": "E__A-023",
+      "attempt": 1,
+      "completion_tokens": 104,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 5.01,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3703,
+      "qid": "FQ-023",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:35:53+08:00",
+      "total_tokens": 3807
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:35:58+08:00",
+  "group": "E",
+  "input_sha256": "51fa76eb1eba3c337bef345f3342426d7440eecc61118e71253f62c58379af1d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案与金标准完全一致：安排为按程序将符合条件的创新药纳入医保目录、完善商保创新药目录，印发时间为2026年8月19日。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-023",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案与金标准完全一致：安排为按程序将符合条件的创新药纳入医保目录、完善商保创新药目录，印发时间为2026年8月19日。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

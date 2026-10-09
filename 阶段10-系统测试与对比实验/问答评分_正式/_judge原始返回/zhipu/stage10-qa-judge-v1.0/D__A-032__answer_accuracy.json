@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-032",
+  "attempts": [
+    {
+      "answer_key": "D__A-032",
+      "attempt": 1,
+      "completion_tokens": 1737,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 35.934,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5110,
+      "qid": "FQ-032",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:55:35+08:00",
+      "total_tokens": 6847
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:56:11+08:00",
+  "group": "D",
+  "input_sha256": "75af581b0ff66a4f2a59cd4063a1f9e6704e247198c4b04a3241ba2bdd65a850",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案称证据不足而未给出资产总额、所有者权益、营业收入、净利润任一数值，与参考答案四项数据均不符，判错误。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-032",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案称证据不足而未给出资产总额、所有者权益、营业收入、净利润任一数值，与参考答案四项数据均不符，判错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

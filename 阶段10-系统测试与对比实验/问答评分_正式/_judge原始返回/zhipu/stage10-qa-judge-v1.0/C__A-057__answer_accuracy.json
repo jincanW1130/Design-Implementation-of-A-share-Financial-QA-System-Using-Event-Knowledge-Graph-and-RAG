@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-057",
+  "attempts": [
+    {
+      "answer_key": "C__A-057",
+      "attempt": 1,
+      "completion_tokens": 332,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 6.119,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4358,
+      "qid": "FQ-057",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:46:26+08:00",
+      "total_tokens": 4690
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:46:32+08:00",
+  "group": "C",
+  "input_sha256": "3c33de52a0f16a85b2a9b0b43dcc824297fedccc1cfce4bf8ad7a01691db01f1",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确列出李凯、杨杰、郑颖（法定代表人/公司董事）且公司类型为特殊目的公司（SPV），与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-057",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案正确列出李凯、杨杰、郑颖（法定代表人/公司董事）且公司类型为特殊目的公司（SPV），与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

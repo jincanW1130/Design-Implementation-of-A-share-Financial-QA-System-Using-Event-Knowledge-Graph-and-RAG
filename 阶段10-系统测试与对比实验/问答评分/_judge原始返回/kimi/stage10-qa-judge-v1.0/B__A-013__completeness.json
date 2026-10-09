@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-013",
+  "attempts": [
+    {
+      "answer_key": "B__A-013",
+      "attempt": 1,
+      "completion_tokens": 237,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 10.381,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6056,
+      "qid": "PE-13",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:57:23+08:00",
+      "total_tokens": 6293
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:57:33+08:00",
+  "group": "B",
+  "input_sha256": "5fb6fcc36436e2c9896d002748bbf72e213a4c7b3383a1b279c786b59a65aa93",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "方案审议（7月27日、10-20亿、103元上限）、8月19日首次回购、8月累计14,010,229股、实施完毕累计15,833,353股等关键信息全部覆盖",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-13",
+  "raw_text": "{\"score\": 2, \"reason\": \"方案审议（7月27日、10-20亿、103元上限）、8月19日首次回购、8月累计14,010,229股、实施完毕累计15,833,353股等关键信息全部覆盖\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

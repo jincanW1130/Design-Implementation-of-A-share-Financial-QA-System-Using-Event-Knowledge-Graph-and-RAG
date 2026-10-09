@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-050",
+  "attempts": [
+    {
+      "answer_key": "A__A-050",
+      "attempt": 1,
+      "completion_tokens": 2549,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 22.378,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5006,
+      "qid": "FQ-050",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:23:39+08:00",
+      "total_tokens": 7555
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:24:01+08:00",
+  "group": "A",
+  "input_sha256": "44a04a8cd7f0b73c197f77258d8708177f20b714362f8400aa1532fef011a2b2",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "未给出参考答案中任何董事或高管（程雪、管江华、柯莹等）及职务，仅提及名单外的杨兆、赵明璟，与金标准零重合，判错误。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-050",
+  "raw_text": "{\"score\": 0, \"reason\": \"未给出参考答案中任何董事或高管（程雪、管江华、柯莹等）及职务，仅提及名单外的杨兆、赵明璟，与金标准零重合，判错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

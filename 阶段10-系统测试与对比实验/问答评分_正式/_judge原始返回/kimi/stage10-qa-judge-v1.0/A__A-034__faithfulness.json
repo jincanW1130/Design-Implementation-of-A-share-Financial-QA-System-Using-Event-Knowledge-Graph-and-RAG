@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-034",
+  "attempts": [
+    {
+      "answer_key": "A__A-034",
+      "attempt": 1,
+      "completion_tokens": 313,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 12.337,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4238,
+      "qid": "FQ-034",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:57:06+08:00",
+      "total_tokens": 4551
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T18:57:18+08:00",
+  "group": "A",
+  "input_sha256": "d3e65e097d24536efc4294b8c2b5fc2654a1865f7ddcccd361a8828215969608",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案拒答且对证据1/9/10等具体数据的复述均与所检索证据原文一致，无任何无依据编造的事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-034",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案拒答且对证据1/9/10等具体数据的复述均与所检索证据原文一致，无任何无依据编造的事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

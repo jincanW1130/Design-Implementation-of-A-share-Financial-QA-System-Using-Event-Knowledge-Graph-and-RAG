@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-004",
+  "attempts": [
+    {
+      "answer_key": "C__A-004",
+      "attempt": 1,
+      "completion_tokens": 1475,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 30.559,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 6284,
+      "qid": "PE-04",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:41:31+08:00",
+      "total_tokens": 7759
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:42:02+08:00",
+  "group": "C",
+  "input_sha256": "4c773c4b08bc119ebd753d2c5ffd50aaf1097d04292801a0975029842edb1891",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "郑弘孟、黄德才、许兴仁、李昕的姓名与职务均可在可用证据中直接找到，推断部分明确标注非公开事实，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-04",
+  "raw_text": "{\"score\": 2, \"reason\": \"郑弘孟、黄德才、许兴仁、李昕的姓名与职务均可在可用证据中直接找到，推断部分明确标注非公开事实，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-041",
+  "attempts": [
+    {
+      "answer_key": "E__A-041",
+      "attempt": 1,
+      "completion_tokens": 168,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 14.455,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4218,
+      "qid": "FQ-041",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:49:18+08:00",
+      "total_tokens": 4386
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:49:33+08:00",
+  "group": "E",
+  "input_sha256": "6064ff7720eb86ef3355d6079a3a077f811896f3afb0cb68a70a57f64f45a7f3",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "信用卡部分（缤纷生活停服迁移）答对，但算力金融部分（算力Token贷、核心授信依据、3年3000万授信）完全缺失，仅部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-041",
+  "raw_text": "{\"score\": 1, \"reason\": \"信用卡部分（缤纷生活停服迁移）答对，但算力金融部分（算力Token贷、核心授信依据、3年3000万授信）完全缺失，仅部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

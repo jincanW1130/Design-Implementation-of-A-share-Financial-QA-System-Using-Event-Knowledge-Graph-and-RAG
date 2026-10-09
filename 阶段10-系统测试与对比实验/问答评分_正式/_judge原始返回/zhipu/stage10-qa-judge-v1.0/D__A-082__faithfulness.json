@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-082",
+  "attempts": [
+    {
+      "answer_key": "D__A-082",
+      "attempt": 1,
+      "completion_tokens": 2216,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 39.695,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4155,
+      "qid": "FQ-082",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:07:41+08:00",
+      "total_tokens": 6371
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:08:21+08:00",
+  "group": "D",
+  "input_sha256": "d14a525a3b5fd8d0725e8922a9842d0438eca82b459f8412c1bb950ec588560d",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "核心事实（8月31日实物分派分拆、保密递交）均由证据1支撑，但分析段'减少早期市场扰动'说法证据中无对应表述，属少量不严谨。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-082",
+  "raw_text": "{\"score\": 1, \"reason\": \"核心事实（8月31日实物分派分拆、保密递交）均由证据1支撑，但分析段'减少早期市场扰动'说法证据中无对应表述，属少量不严谨。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

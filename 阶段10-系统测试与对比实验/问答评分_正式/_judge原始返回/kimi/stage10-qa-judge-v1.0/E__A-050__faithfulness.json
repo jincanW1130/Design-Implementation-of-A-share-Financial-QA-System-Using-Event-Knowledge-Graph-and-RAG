@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-050",
+  "attempts": [
+    {
+      "answer_key": "E__A-050",
+      "attempt": 1,
+      "completion_tokens": 2088,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 67.902,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6133,
+      "qid": "FQ-050",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:00:51+08:00",
+      "total_tokens": 8221
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:01:59+08:00",
+  "group": "E",
+  "input_sha256": "38104579472d7cb8dfa6f7746007d2a0bf100ddb9efe4b6d0433141e790e9cd3",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "董事名单、赵明璟任联席公司秘书、杨兆为独立董事候选人均有证据3/1/9支撑，未披露的高管信息如实说明证据不足，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-050",
+  "raw_text": "{\"score\": 2, \"reason\": \"董事名单、赵明璟任联席公司秘书、杨兆为独立董事候选人均有证据3/1/9支撑，未披露的高管信息如实说明证据不足，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-092",
+  "attempts": [
+    {
+      "answer_key": "D__A-092",
+      "attempt": 1,
+      "completion_tokens": 515,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 8.407,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5239,
+      "qid": "FQ-092",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:08:52+08:00",
+      "total_tokens": 5754
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:09:01+08:00",
+  "group": "D",
+  "input_sha256": "2e352b752e7dddc52b0674c5ca71209a8fc74512634df56008afa164e486f98d",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "两项事实（151.01元/股上限、2026年7月16日生效、8月13日禁令）均被证据3和证据9直接支撑，无编造",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-092",
+  "raw_text": "{\"score\": 2, \"reason\": \"两项事实（151.01元/股上限、2026年7月16日生效、8月13日禁令）均被证据3和证据9直接支撑，无编造\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

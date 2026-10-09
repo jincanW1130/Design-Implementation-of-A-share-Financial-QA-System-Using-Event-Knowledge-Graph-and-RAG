@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-120",
+  "attempts": [
+    {
+      "answer_key": "D__A-120",
+      "attempt": 1,
+      "completion_tokens": 3718,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 73.526,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4740,
+      "qid": "FQ-120",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:27:26+08:00",
+      "total_tokens": 8458
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:28:39+08:00",
+  "group": "D",
+  "input_sha256": "befb4117266a91e6dcf2c206494e76f6aacbe2b12700458c4043d69ee0dafeb4",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案给出控股子公司关系与奥卡西平片品种等正确事实，但主结论称公告披露于9月、区间内证据不足，与金标准不完全一致，判部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-120",
+  "raw_text": "{\"score\": 1, \"reason\": \"答案给出控股子公司关系与奥卡西平片品种等正确事实，但主结论称公告披露于9月、区间内证据不足，与金标准不完全一致，判部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

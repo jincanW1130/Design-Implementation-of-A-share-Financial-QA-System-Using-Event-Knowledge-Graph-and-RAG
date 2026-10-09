@@ -1,0 +1,44 @@
+{
+  "answer_key": "A__A-004",
+  "attempts": [
+    {
+      "answer_key": "A__A-004",
+      "attempt": 1,
+      "completion_tokens": 180,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 15.409,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5461,
+      "qid": "PE-04",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:22:32+08:00",
+      "total_tokens": 5641
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:22:47+08:00",
+  "group": "A",
+  "input_sha256": "92f7af0bd940130c57005019e780eb3681b2c635361635f63844707a2074f8fb",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案8人中仅覆盖许兴仁1人，郑弘孟、黄德才、杨秋瑾、丁肇邦、林奂汝、张瑞雄、白家南等关键信息大量遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-04",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案8人中仅覆盖许兴仁1人，郑弘孟、黄德才、杨秋瑾、丁肇邦、林奂汝、张瑞雄、白家南等关键信息大量遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

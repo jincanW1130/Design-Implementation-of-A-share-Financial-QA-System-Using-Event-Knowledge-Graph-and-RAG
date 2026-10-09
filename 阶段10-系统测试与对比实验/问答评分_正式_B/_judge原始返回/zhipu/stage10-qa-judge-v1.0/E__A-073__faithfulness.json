@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-073",
+  "attempts": [
+    {
+      "answer_key": "E__A-073",
+      "attempt": 1,
+      "completion_tokens": 638,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 11.804,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5198,
+      "qid": "FQ-073",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:31:16+08:00",
+      "total_tokens": 5836
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:31:28+08:00",
+  "group": "E",
+  "input_sha256": "48a86dcff90b14799b060afe28c2a0813b4e351c44c59238f406ae975366193b",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "发行时间、两笔8,000万美元、信托契据担保及无反担保等说法均被证据1、2、9直接支撑，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-073",
+  "raw_text": "{\"score\": 2, \"reason\": \"发行时间、两笔8,000万美元、信托契据担保及无反担保等说法均被证据1、2、9直接支撑，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

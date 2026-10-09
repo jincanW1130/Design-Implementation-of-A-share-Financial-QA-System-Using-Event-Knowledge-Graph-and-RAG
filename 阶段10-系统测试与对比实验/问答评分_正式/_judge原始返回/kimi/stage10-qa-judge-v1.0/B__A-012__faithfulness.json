@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-012",
+  "attempts": [
+    {
+      "answer_key": "B__A-012",
+      "attempt": 1,
+      "completion_tokens": 111,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 7.36,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4632,
+      "qid": "FQ-012",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:52:00+08:00",
+      "total_tokens": 4743
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:52:08+08:00",
+  "group": "B",
+  "input_sha256": "ee0830bbf2f7268f48eae0192baf662aadf8375dfa1fffe8d6657b8af35ad196",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案两个日期均直接出自[证据4]原文第3、4条，无任何无依据说法",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-012",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案两个日期均直接出自[证据4]原文第3、4条，无任何无依据说法\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

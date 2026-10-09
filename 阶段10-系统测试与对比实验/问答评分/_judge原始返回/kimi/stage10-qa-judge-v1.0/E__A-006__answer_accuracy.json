@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-006",
+  "attempts": [
+    {
+      "answer_key": "E__A-006",
+      "attempt": 1,
+      "completion_tokens": 98,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.897,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5666,
+      "qid": "PE-06",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:13:14+08:00",
+      "total_tokens": 5764
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:13:23+08:00",
+  "group": "E",
+  "input_sha256": "e6d2bf3b3385af39b2f8c84dc19a35a2fbaa5ddad55174dce6ce90f3e95a70a6",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案给出两期合计115亿元（第六期70亿、第七期45亿），与金标准完全一致，计算与金额均正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-06",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案给出两期合计115亿元（第六期70亿、第七期45亿），与金标准完全一致，计算与金额均正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-057",
+  "attempts": [
+    {
+      "answer_key": "E__A-057",
+      "attempt": 1,
+      "completion_tokens": 390,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 14.879,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3975,
+      "qid": "FQ-057",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:07:54+08:00",
+      "total_tokens": 4365
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:08:08+08:00",
+  "group": "E",
+  "input_sha256": "46fa663f3106a2491da3873625387594ce223a4462172e8f09761caab7a7d137",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案如实声明证据不足且未编造人员信息，但「中文通常对应中信证券国际…」及熊猫债推测等说法无证据支撑，属少量不严谨",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-057",
+  "raw_text": "{\"score\": 1, \"reason\": \"答案如实声明证据不足且未编造人员信息，但「中文通常对应中信证券国际…」及熊猫债推测等说法无证据支撑，属少量不严谨\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

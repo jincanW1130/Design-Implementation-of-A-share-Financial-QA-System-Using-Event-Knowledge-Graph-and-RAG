@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-103",
+  "attempts": [
+    {
+      "answer_key": "E__A-103",
+      "attempt": 1,
+      "completion_tokens": 467,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 8.748,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4802,
+      "qid": "FQ-103",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:14:42+08:00",
+      "total_tokens": 5269
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:14:51+08:00",
+  "group": "E",
+  "input_sha256": "4872b90bf7189580c28491a09a0c4a4efca75f22967e5555fed5a300a404818c",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "受理机构、编号中市协注[2025]DFI27号、2年有效期及落款日期均被证据1/2直接支撑，无无依据说法。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-103",
+  "raw_text": "{\"score\": 2, \"reason\": \"受理机构、编号中市协注[2025]DFI27号、2年有效期及落款日期均被证据1/2直接支撑，无无依据说法。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

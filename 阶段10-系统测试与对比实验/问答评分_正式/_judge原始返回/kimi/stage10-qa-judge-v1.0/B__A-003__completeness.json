@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-003",
+  "attempts": [
+    {
+      "answer_key": "B__A-003",
+      "attempt": 1,
+      "completion_tokens": 113,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 4.54,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5195,
+      "qid": "FQ-003",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:45:39+08:00",
+      "total_tokens": 5308
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:45:44+08:00",
+  "group": "B",
+  "input_sha256": "38297e4f3d71f8a7b907c045bb52c0160c59cc5bd23c4b8cb14ab6128b64d761",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "发行规模100亿（首次50亿+续发50亿）、3年期固定利率附息普通金融债券、票面利率1.57%三项关键信息均完整覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-003",
+  "raw_text": "{\"score\": 2, \"reason\": \"发行规模100亿（首次50亿+续发50亿）、3年期固定利率附息普通金融债券、票面利率1.57%三项关键信息均完整覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

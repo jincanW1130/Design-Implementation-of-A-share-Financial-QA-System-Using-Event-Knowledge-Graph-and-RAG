@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-026",
+  "attempts": [
+    {
+      "answer_key": "B__A-026",
+      "attempt": 1,
+      "completion_tokens": 263,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 12.778,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4590,
+      "qid": "FQ-026",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:57:51+08:00",
+      "total_tokens": 4853
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T19:58:04+08:00",
+  "group": "B",
+  "input_sha256": "4cf9ee58155bf584764cfc206604fdb1dc04d8dafbd360175aae286302339805",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件主体（公司与子公司新华手术器械收到山东省药监局二类注册证）及注册证编号鲁械注准20262060279、注册人山东新华医疗器械股份有限公司均与参考答案一致，无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-026",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件主体（公司与子公司新华手术器械收到山东省药监局二类注册证）及注册证编号鲁械注准20262060279、注册人山东新华医疗器械股份有限公司均与参考答案一致，无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

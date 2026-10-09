@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-049",
+  "attempts": [
+    {
+      "answer_key": "D__A-049",
+      "attempt": 1,
+      "completion_tokens": 211,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 11.52,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4917,
+      "qid": "FQ-049",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:00:00+08:00",
+      "total_tokens": 5128
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:00:11+08:00",
+  "group": "D",
+  "input_sha256": "c2a6057938ceaae408bf6b6801886ca07156f9dde5e42ba9bf56512fdfd9759c",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "仅答对穆峰、李红栓、袁媛三名高管，遗漏魏建军等全部董事名单，所述无误但对照参考答案只覆盖部分，属部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-049",
+  "raw_text": "{\"score\": 1, \"reason\": \"仅答对穆峰、李红栓、袁媛三名高管，遗漏魏建军等全部董事名单，所述无误但对照参考答案只覆盖部分，属部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

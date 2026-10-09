@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-077",
+  "attempts": [
+    {
+      "answer_key": "B__A-077",
+      "attempt": 1,
+      "completion_tokens": 239,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 8.822,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4499,
+      "qid": "FQ-077",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:28:44+08:00",
+      "total_tokens": 4738
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:28:53+08:00",
+  "group": "B",
+  "input_sha256": "479612abe0584ea2aa476123bf8440f1d4ca26124cb246e770c64bc7c0238768",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件（钢管采购Ⅲ标中标）、招标人、招标代理机构角色及中标金额144,141,970.11元均完整覆盖，无遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-077",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件（钢管采购Ⅲ标中标）、招标人、招标代理机构角色及中标金额144,141,970.11元均完整覆盖，无遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

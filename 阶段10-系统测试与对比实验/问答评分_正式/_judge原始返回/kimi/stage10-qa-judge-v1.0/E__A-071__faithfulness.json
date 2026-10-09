@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-071",
+  "attempts": [
+    {
+      "answer_key": "E__A-071",
+      "attempt": 1,
+      "completion_tokens": 164,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 5.498,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4919,
+      "qid": "FQ-071",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:17:08+08:00",
+      "total_tokens": 5083
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:17:13+08:00",
+  "group": "E",
+  "input_sha256": "bf8ecbe733b2367e81520141151f38aef43d9af4fa77e856dae86fa266452654",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、登记日、除权除息日及自行派发对象均可在证据4、证据7原文中找到支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-071",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、登记日、除权除息日及自行派发对象均可在证据4、证据7原文中找到支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

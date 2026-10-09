@@ -1,0 +1,1487 @@
+{
+  "by_group": {
+    "A": {
+      "dimensions": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            8,
+            19,
+            86
+          ],
+          "mean": 1.6903,
+          "n_scored": 113
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            15,
+            13,
+            85
+          ],
+          "mean": 1.6195,
+          "n_scored": 113
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            2,
+            111
+          ],
+          "mean": 1.9823,
+          "n_scored": 113
+        }
+      },
+      "label": "A 组 · Vector RAG（基线）",
+      "n_answers": 113,
+      "n_scored_full": 113
+    },
+    "B": {
+      "dimensions": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            3,
+            13,
+            102
+          ],
+          "mean": 1.839,
+          "n_scored": 118
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            7,
+            11,
+            100
+          ],
+          "mean": 1.7881,
+          "n_scored": 118
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            1,
+            117
+          ],
+          "mean": 1.9915,
+          "n_scored": 118
+        }
+      },
+      "label": "B 组 · Vector RAG + 1-hop 图谱",
+      "n_answers": 118,
+      "n_scored_full": 118
+    },
+    "C": {
+      "dimensions": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            3,
+            16,
+            98
+          ],
+          "mean": 1.812,
+          "n_scored": 117
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            6,
+            15,
+            96
+          ],
+          "mean": 1.7692,
+          "n_scored": 117
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            5,
+            112
+          ],
+          "mean": 1.9573,
+          "n_scored": 117
+        }
+      },
+      "label": "C 组 · Vector RAG + 2-hop 图谱（Method）",
+      "n_answers": 117,
+      "n_scored_full": 117
+    },
+    "D": {
+      "dimensions": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            5,
+            18,
+            94
+          ],
+          "mean": 1.7607,
+          "n_scored": 117
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            11,
+            14,
+            92
+          ],
+          "mean": 1.6923,
+          "n_scored": 117
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            4,
+            113
+          ],
+          "mean": 1.9658,
+          "n_scored": 117
+        }
+      },
+      "label": "D 组 · C + 时间过滤",
+      "n_answers": 117,
+      "n_scored_full": 117
+    },
+    "E": {
+      "dimensions": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            4,
+            17,
+            96
+          ],
+          "mean": 1.7863,
+          "n_scored": 117
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            9,
+            15,
+            93
+          ],
+          "mean": 1.7179,
+          "n_scored": 117
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            8,
+            109
+          ],
+          "mean": 1.9316,
+          "n_scored": 117
+        }
+      },
+      "label": "E 组 · D + 证据排序",
+      "n_answers": 117,
+      "n_scored_full": 117
+    }
+  },
+  "caliber_statement": "本汇总的问答质量分由**跨厂商大模型**按《02》第12.7节 的 0／1／2 统一量表给出，**不是人工评分**，只反映模型判断；任何人读这些读数时不得把它们当作人工金标准。",
+  "call_account": {
+    "attempts_total": 2383,
+    "cache_hits_reused_not_billed": 521,
+    "completion_tokens": 1212748,
+    "failed": 61,
+    "failed_dimension_cells": 0,
+    "failed_records": 0,
+    "max_calls_including_retries": 3600,
+    "ok": 2322,
+    "prompt_tokens": 11003570,
+    "retries": 51,
+    "total_tokens": 12216318
+  },
+  "cross_model_adjudication": {
+    "by_dimension": {
+      "answer_accuracy": {
+        "adjudicated": 1,
+        "agree": 117,
+        "disagree": 2,
+        "n": 119
+      },
+      "completeness": {
+        "adjudicated": 1,
+        "agree": 118,
+        "disagree": 1,
+        "n": 119
+      },
+      "faithfulness": {
+        "adjudicated": 10,
+        "agree": 108,
+        "disagree": 11,
+        "n": 119
+      }
+    },
+    "disagreement_notes": [
+      {
+        "answer_key": "A__A-050",
+        "dimension": "answer_accuracy",
+        "final_score": null,
+        "group": "A",
+        "kimi_score": 1,
+        "note": "",
+        "qid": "FQ-050",
+        "zhipu_score": 0
+      },
+      {
+        "answer_key": "A__A-050",
+        "dimension": "faithfulness",
+        "final_score": 1,
+        "group": "A",
+        "kimi_score": 2,
+        "note": "答案处1/2边界：主judge把标题语境推断视为有据给2，副judge对超出证据明文的归属推断更严格给1。",
+        "qid": "FQ-050",
+        "zhipu_score": 1
+      },
+      {
+        "answer_key": "A__A-097",
+        "dimension": "answer_accuracy",
+        "final_score": 2,
+        "group": "A",
+        "kimi_score": 2,
+        "note": "分歧在边界情形：前次把参考之外但真实正确的额外事件视为扣分；本题开放式列举，额外项属实不构成错误。",
+        "qid": "FQ-097",
+        "zhipu_score": 1
+      },
+      {
+        "answer_key": "B__A-052",
+        "dimension": "faithfulness",
+        "final_score": 1,
+        "group": "B",
+        "kimi_score": 2,
+        "note": "主 judge 只核人物属实、未计较名称；答案处量表边界，该名称瑕疵使其未达'完全基于证据'。",
+        "qid": "FQ-052",
+        "zhipu_score": 1
+      },
+      {
+        "answer_key": "C__A-032",
+        "dimension": "faithfulness",
+        "final_score": 2,
+        "group": "C",
+        "kimi_score": 1,
+        "note": "分歧在量表边界：主judge把已标注『非公开事实』的惯例推测计为不严谨，本判认为其非事实性说法。",
+        "qid": "FQ-032",
+        "zhipu_score": 2
+      },
+      {
+        "answer_key": "C__A-037",
+        "dimension": "faithfulness",
+        "final_score": null,
+        "group": "C",
+        "kimi_score": 1,
+        "note": "",
+        "qid": "FQ-037",
+        "zhipu_score": 2
+      },
+      {
+        "answer_key": "C__A-052",
+        "dimension": "faithfulness",
+        "final_score": 1,
+        "group": "C",
+        "kimi_score": 1,
+        "note": "答案处量表边界：实质事实均有据，仅依据截断表格作出的否定性表述算不算不严谨，双方取舍不同。",
+        "qid": "FQ-052",
+        "zhipu_score": 2
+      },
+      {
+        "answer_key": "C__A-057",
+        "dimension": "completeness",
+        "final_score": 2,
+        "group": "C",
+        "kimi_score": 1,
+        "note": "主judge把题目未问的成立时间/注册号/注册地也计为关键信息，标准掌握偏严，并非答案处于量表边界。",
+        "qid": "FQ-057",
+        "zhipu_score": 2
+      },
+      {
+        "answer_key": "D__A-006",
+        "dimension": "faithfulness",
+        "final_score": 2,
+        "group": "D",
+        "kimi_score": 1,
+        "note": "主judge仅对照公告落款9月15日而看漏证据元数据09-16，该日期实有依据，不构成不严谨",
+        "qid": "FQ-006",
+        "zhipu_score": 2
+      },
+      {
+        "answer_key": "D__A-072",
+        "dimension": "faithfulness",
+        "final_score": 1,
+        "group": "D",
+        "kimi_score": 2,
+        "note": "分歧在图谱事件时间可否作支撑：主judge认可图谱三元组，副judge只认证据全文，答案处量表边界",
+        "qid": "FQ-072",
+        "zhipu_score": 1
+      },
+      {
+        "answer_key": "D__A-082",
+        "dimension": "faithfulness",
+        "final_score": 2,
+        "group": "D",
+        "kimi_score": 2,
+        "note": "分歧在是否把已标注'模型分析（非事实）'的解读段计为不严谨；该段属明确hedge的分析且'降低时间成本'见证据原文，不应计入。",
+        "qid": "FQ-082",
+        "zhipu_score": 1
+      },
+      {
+        "answer_key": "D__A-098",
+        "dimension": "faithfulness",
+        "final_score": 1,
+        "group": "D",
+        "kimi_score": 2,
+        "note": "答案处1/2边界：主judge漏看该日期误置判2，副judge据此判1，最终按量表取1。",
+        "qid": "FQ-098",
+        "zhipu_score": 1
+      },
+      {
+        "answer_key": "E__A-006",
+        "dimension": "faithfulness",
+        "final_score": 2,
+        "group": "E",
+        "kimi_score": 1,
+        "note": "主judge将落款9月15日与元数据发布时间9月16日误判为矛盾，落款日与发布日本可不同，答案无失实。",
+        "qid": "FQ-006",
+        "zhipu_score": 2
+      },
+      {
+        "answer_key": "E__A-057",
+        "dimension": "faithfulness",
+        "final_score": 1,
+        "group": "E",
+        "kimi_score": 1,
+        "note": "答案处量表边界：主judge把标注为推测及超证据的推断计为不严谨，副judge只核事实性拒答而未计这些表述",
+        "qid": "FQ-057",
+        "zhipu_score": 2
+      }
+    ],
+    "final_scores_by_group": {
+      "A": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            8,
+            18,
+            86
+          ],
+          "mean": 1.6964,
+          "n_scored": 112
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            15,
+            13,
+            85
+          ],
+          "mean": 1.6195,
+          "n_scored": 113
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            3,
+            110
+          ],
+          "mean": 1.9735,
+          "n_scored": 113
+        }
+      },
+      "B": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            3,
+            13,
+            102
+          ],
+          "mean": 1.839,
+          "n_scored": 118
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            7,
+            11,
+            100
+          ],
+          "mean": 1.7881,
+          "n_scored": 118
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            2,
+            116
+          ],
+          "mean": 1.9831,
+          "n_scored": 118
+        }
+      },
+      "C": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            3,
+            16,
+            98
+          ],
+          "mean": 1.812,
+          "n_scored": 117
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            6,
+            14,
+            97
+          ],
+          "mean": 1.7778,
+          "n_scored": 117
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            3,
+            113
+          ],
+          "mean": 1.9741,
+          "n_scored": 116
+        }
+      },
+      "D": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            5,
+            18,
+            94
+          ],
+          "mean": 1.7607,
+          "n_scored": 117
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            11,
+            14,
+            92
+          ],
+          "mean": 1.6923,
+          "n_scored": 117
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            5,
+            112
+          ],
+          "mean": 1.9573,
+          "n_scored": 117
+        }
+      },
+      "E": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            4,
+            17,
+            96
+          ],
+          "mean": 1.7863,
+          "n_scored": 117
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            9,
+            15,
+            93
+          ],
+          "mean": 1.7179,
+          "n_scored": 117
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            7,
+            110
+          ],
+          "mean": 1.9402,
+          "n_scored": 117
+        }
+      }
+    },
+    "n_adjudicated": 12,
+    "n_adjudication_failed": 2,
+    "n_agree": 343,
+    "n_answers_cross_checked": 119,
+    "n_cells": 357,
+    "n_disagree": 14
+  },
+  "cross_model_agreement": {
+    "n_answers_compared": 119,
+    "per_dimension": {
+      "answer_accuracy": {
+        "both_full_marks": 97,
+        "both_full_marks_rate": 0.8151,
+        "linear_weighted_kappa": 0.9621,
+        "mean_abs_diff": 0.0168,
+        "n": 119,
+        "simple_agreement": 0.9832
+      },
+      "completeness": {
+        "both_full_marks": 97,
+        "both_full_marks_rate": 0.8151,
+        "linear_weighted_kappa": 0.9833,
+        "mean_abs_diff": 0.0084,
+        "n": 119,
+        "simple_agreement": 0.9916
+      },
+      "faithfulness": {
+        "both_full_marks": 105,
+        "both_full_marks_rate": 0.8824,
+        "linear_weighted_kappa": 0.3034,
+        "mean_abs_diff": 0.0924,
+        "n": 119,
+        "simple_agreement": 0.9076
+      }
+    },
+    "per_group": {
+      "A": {
+        "answer_accuracy": {
+          "linear_weighted_kappa": 0.8693,
+          "n": 23,
+          "simple_agreement": 0.913
+        },
+        "completeness": {
+          "linear_weighted_kappa": 1.0,
+          "n": 23,
+          "simple_agreement": 1.0
+        },
+        "faithfulness": {
+          "linear_weighted_kappa": 0.0,
+          "n": 23,
+          "simple_agreement": 0.9565
+        }
+      },
+      "B": {
+        "answer_accuracy": {
+          "linear_weighted_kappa": 1.0,
+          "n": 24,
+          "simple_agreement": 1.0
+        },
+        "completeness": {
+          "linear_weighted_kappa": 1.0,
+          "n": 24,
+          "simple_agreement": 1.0
+        },
+        "faithfulness": {
+          "linear_weighted_kappa": 0.6471,
+          "n": 24,
+          "simple_agreement": 0.9583
+        }
+      },
+      "C": {
+        "answer_accuracy": {
+          "linear_weighted_kappa": 1.0,
+          "n": 24,
+          "simple_agreement": 1.0
+        },
+        "completeness": {
+          "linear_weighted_kappa": 0.8966,
+          "n": 24,
+          "simple_agreement": 0.9583
+        },
+        "faithfulness": {
+          "linear_weighted_kappa": 0.0,
+          "n": 24,
+          "simple_agreement": 0.875
+        }
+      },
+      "D": {
+        "answer_accuracy": {
+          "linear_weighted_kappa": 1.0,
+          "n": 24,
+          "simple_agreement": 1.0
+        },
+        "completeness": {
+          "linear_weighted_kappa": 1.0,
+          "n": 24,
+          "simple_agreement": 1.0
+        },
+        "faithfulness": {
+          "linear_weighted_kappa": 0.25,
+          "n": 24,
+          "simple_agreement": 0.8333
+        }
+      },
+      "E": {
+        "answer_accuracy": {
+          "linear_weighted_kappa": 1.0,
+          "n": 24,
+          "simple_agreement": 1.0
+        },
+        "completeness": {
+          "linear_weighted_kappa": 1.0,
+          "n": 24,
+          "simple_agreement": 1.0
+        },
+        "faithfulness": {
+          "linear_weighted_kappa": 0.4667,
+          "n": 24,
+          "simple_agreement": 0.9167
+        }
+      }
+    }
+  },
+  "doc02_version": "v3.12",
+  "generated_at": "2026-10-09T01:31:31+08:00",
+  "generated_by": "阶段10-系统测试与对比实验/工具/评分脚本.py",
+  "judgement_12_8_answer_accuracy_half": [
+    {
+      "aa_scope": "核心测试集 108 题内",
+      "answer_accuracy_A": 1.5556,
+      "answer_accuracy_C": 1.6571,
+      "answer_accuracy_gap_C_minus_A": 0.1015,
+      "answer_accuracy_half_holds": true,
+      "answer_accuracy_verdict": "不下降成立（提升 +0.1015）",
+      "cer_A": 0.638889,
+      "cer_C": 0.742857,
+      "cer_half_holds": true,
+      "combined_holds": true,
+      "n_questions": 36,
+      "n_questions_answered_A": 36,
+      "n_questions_answered_C": 35,
+      "subset": "关系型"
+    },
+    {
+      "aa_scope": "核心测试集 108 题内",
+      "answer_accuracy_A": 1.597,
+      "answer_accuracy_C": 1.7714,
+      "answer_accuracy_gap_C_minus_A": 0.1744,
+      "answer_accuracy_half_holds": true,
+      "answer_accuracy_verdict": "不下降成立（提升 +0.1744）",
+      "cer_A": 0.641791,
+      "cer_C": 0.757143,
+      "cer_half_holds": true,
+      "combined_holds": true,
+      "n_questions": 72,
+      "n_questions_answered_A": 67,
+      "n_questions_answered_C": 70,
+      "subset": "多跳型"
+    },
+    {
+      "aa_scope": "核心测试集 108 题内",
+      "answer_accuracy_A": 1.551,
+      "answer_accuracy_C": 1.7255,
+      "answer_accuracy_gap_C_minus_A": 0.1745,
+      "answer_accuracy_half_holds": true,
+      "answer_accuracy_verdict": "不下降成立（提升 +0.1745）",
+      "cer_A": 0.653061,
+      "cer_C": 0.823529,
+      "cer_half_holds": true,
+      "combined_holds": true,
+      "n_questions": 54,
+      "n_questions_answered_A": 49,
+      "n_questions_answered_C": 51,
+      "subset": "时序型"
+    }
+  ],
+  "judges": {
+    "kimi": {
+      "base_source": "config.local:kimi_base_url",
+      "checked_at": "2026-10-08T18:29:48+08:00",
+      "has_key": true,
+      "key_source": "config.local:kimi_api_key",
+      "label": "Moonshot Kimi",
+      "model_requested": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "model_source": "config.local.json 的 kimi_model_hint（Moonshot 直连）",
+      "note": "此处只登记 key 的**来源标签**，不含凭据取值。",
+      "temperature_used": 1.0
+    },
+    "zhipu": {
+      "base_source": "config.local:zhipu_base_url",
+      "checked_at": "2026-10-08T18:29:58+08:00",
+      "has_key": true,
+      "key_source": "config.local:zhipu_api_key",
+      "label": "智谱 Zhipu",
+      "model_requested": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "model_source": "config.local.json 的 zhipu_base_url（智谱直连）",
+      "note": "此处只登记 key 的**来源标签**，不含凭据取值。",
+      "temperature_used": 0.0
+    }
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "sample": {
+    "answer_chars_mean": 2041.4,
+    "answers_by_group": {
+      "A": 113,
+      "B": 118,
+      "C": 117,
+      "D": 117,
+      "E": 117
+    },
+    "answers_total": 582,
+    "cross_judge_answers": 119,
+    "cross_judge_by_group": {
+      "A": 23,
+      "B": 24,
+      "C": 24,
+      "D": 24,
+      "E": 24
+    },
+    "cross_judge_calls_planned": 357,
+    "cross_judge_qids": [
+      "FQ-001",
+      "FQ-006",
+      "FQ-011",
+      "FQ-016",
+      "FQ-021",
+      "FQ-024",
+      "FQ-027",
+      "FQ-030",
+      "FQ-032",
+      "FQ-035",
+      "FQ-037",
+      "FQ-040",
+      "FQ-042",
+      "FQ-045",
+      "FQ-047",
+      "FQ-050",
+      "FQ-052",
+      "FQ-055",
+      "FQ-057",
+      "FQ-060",
+      "FQ-062",
+      "FQ-065",
+      "FQ-067",
+      "FQ-070",
+      "FQ-072",
+      "FQ-075",
+      "FQ-077",
+      "FQ-080",
+      "FQ-082",
+      "FQ-086",
+      "FQ-087",
+      "FQ-091",
+      "FQ-092",
+      "FQ-097",
+      "FQ-098",
+      "FQ-102",
+      "FQ-103",
+      "FQ-107",
+      "FQ-108",
+      "FQ-112",
+      "FQ-113",
+      "FQ-118",
+      "FQ-119"
+    ],
+    "cross_judge_share": 0.2045,
+    "dataset": "formal",
+    "dataset_label": "正式集（120 题题集的 582 条有效答案：A 113／B 118／C 117／D 117／E 117）",
+    "empty_answer_bodies": 0,
+    "groups": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+    ],
+    "primary_judge_answers": 582,
+    "primary_judge_calls_planned": 1746,
+    "qids_answered_unique": 119,
+    "qids_per_group": null,
+    "sample_desc": "120 题题集（有效答案 582 条；FQ-022 在 A～E 五组均未成功产出，故五组合计 582 而非 600）"
+  },
+  "scale_source": "《02-项目执行总控文档》第12.7节「评价指标与定义」",
+  "scale_verbatim": "Answer Accuracy：0 = 错误，1 = 部分正确，2 = 完全正确。Completeness：0 = 关键信息大量遗漏，1 = 基本覆盖，2 = 信息完整。Faithfulness：0 = 存在明显无依据事实，1 = 少量不严谨，2 = 完全基于证据。",
+  "schema": "stage10-qa-judge-summary-v1",
+  "subsets": [
+    {
+      "name": "关系型",
+      "per_group": {
+        "A": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                4,
+                9,
+                34
+              ],
+              "mean": 1.6383,
+              "n_scored": 47
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                9,
+                5,
+                33
+              ],
+              "mean": 1.5106,
+              "n_scored": 47
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                1,
+                46
+              ],
+              "mean": 1.9787,
+              "n_scored": 47
+            }
+          },
+          "n_questions": 47
+        },
+        "B": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                2,
+                7,
+                38
+              ],
+              "mean": 1.766,
+              "n_scored": 47
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                5,
+                6,
+                36
+              ],
+              "mean": 1.6596,
+              "n_scored": 47
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                0,
+                47
+              ],
+              "mean": 2.0,
+              "n_scored": 47
+            }
+          },
+          "n_questions": 47
+        },
+        "C": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                2,
+                9,
+                36
+              ],
+              "mean": 1.7234,
+              "n_scored": 47
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                5,
+                8,
+                34
+              ],
+              "mean": 1.617,
+              "n_scored": 47
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                2,
+                45
+              ],
+              "mean": 1.9574,
+              "n_scored": 47
+            }
+          },
+          "n_questions": 47
+        },
+        "D": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                4,
+                7,
+                36
+              ],
+              "mean": 1.6809,
+              "n_scored": 47
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                7,
+                7,
+                33
+              ],
+              "mean": 1.5532,
+              "n_scored": 47
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                1,
+                46
+              ],
+              "mean": 1.9787,
+              "n_scored": 47
+            }
+          },
+          "n_questions": 47
+        },
+        "E": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                3,
+                7,
+                37
+              ],
+              "mean": 1.7234,
+              "n_scored": 47
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                8,
+                4,
+                35
+              ],
+              "mean": 1.5745,
+              "n_scored": 47
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                4,
+                43
+              ],
+              "mean": 1.9149,
+              "n_scored": 47
+            }
+          },
+          "n_questions": 47
+        }
+      },
+      "qids": [
+        "FQ-049",
+        "FQ-050",
+        "FQ-051",
+        "FQ-052",
+        "FQ-053",
+        "FQ-054",
+        "FQ-055",
+        "FQ-056",
+        "FQ-057",
+        "FQ-058",
+        "FQ-059",
+        "FQ-060",
+        "FQ-061",
+        "FQ-062",
+        "FQ-063",
+        "FQ-064",
+        "FQ-065",
+        "FQ-066",
+        "FQ-067",
+        "FQ-068",
+        "FQ-069",
+        "FQ-070",
+        "FQ-071",
+        "FQ-072",
+        "FQ-073",
+        "FQ-074",
+        "FQ-075",
+        "FQ-076",
+        "FQ-077",
+        "FQ-078",
+        "FQ-079",
+        "FQ-080",
+        "FQ-081",
+        "FQ-082",
+        "FQ-083",
+        "FQ-084",
+        "FQ-109",
+        "FQ-110",
+        "FQ-111",
+        "FQ-112",
+        "FQ-113",
+        "FQ-114",
+        "FQ-115",
+        "FQ-116",
+        "FQ-117",
+        "FQ-118",
+        "FQ-119",
+        "FQ-120"
+      ]
+    },
+    {
+      "name": "多跳型",
+      "per_group": {
+        "A": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                6,
+                16,
+                56
+              ],
+              "mean": 1.641,
+              "n_scored": 78
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                13,
+                10,
+                55
+              ],
+              "mean": 1.5385,
+              "n_scored": 78
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                2,
+                76
+              ],
+              "mean": 1.9744,
+              "n_scored": 78
+            }
+          },
+          "n_questions": 78
+        },
+        "B": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                2,
+                10,
+                71
+              ],
+              "mean": 1.8313,
+              "n_scored": 83
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                6,
+                7,
+                70
+              ],
+              "mean": 1.7711,
+              "n_scored": 83
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                0,
+                83
+              ],
+              "mean": 2.0,
+              "n_scored": 83
+            }
+          },
+          "n_questions": 83
+        },
+        "C": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                2,
+                13,
+                67
+              ],
+              "mean": 1.7927,
+              "n_scored": 82
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                5,
+                13,
+                64
+              ],
+              "mean": 1.7195,
+              "n_scored": 82
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                4,
+                78
+              ],
+              "mean": 1.9512,
+              "n_scored": 82
+            }
+          },
+          "n_questions": 82
+        },
+        "D": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                4,
+                15,
+                63
+              ],
+              "mean": 1.7195,
+              "n_scored": 82
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                10,
+                10,
+                62
+              ],
+              "mean": 1.6341,
+              "n_scored": 82
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                3,
+                79
+              ],
+              "mean": 1.9634,
+              "n_scored": 82
+            }
+          },
+          "n_questions": 82
+        },
+        "E": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                3,
+                15,
+                64
+              ],
+              "mean": 1.7439,
+              "n_scored": 82
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                8,
+                12,
+                62
+              ],
+              "mean": 1.6585,
+              "n_scored": 82
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                6,
+                76
+              ],
+              "mean": 1.9268,
+              "n_scored": 82
+            }
+          },
+          "n_questions": 82
+        }
+      },
+      "qids": [
+        "FQ-013",
+        "FQ-014",
+        "FQ-015",
+        "FQ-016",
+        "FQ-017",
+        "FQ-018",
+        "FQ-019",
+        "FQ-020",
+        "FQ-021",
+        "FQ-022",
+        "FQ-023",
+        "FQ-024",
+        "FQ-037",
+        "FQ-038",
+        "FQ-039",
+        "FQ-040",
+        "FQ-041",
+        "FQ-042",
+        "FQ-043",
+        "FQ-044",
+        "FQ-045",
+        "FQ-046",
+        "FQ-047",
+        "FQ-048",
+        "FQ-049",
+        "FQ-050",
+        "FQ-051",
+        "FQ-052",
+        "FQ-053",
+        "FQ-054",
+        "FQ-055",
+        "FQ-056",
+        "FQ-057",
+        "FQ-058",
+        "FQ-059",
+        "FQ-060",
+        "FQ-061",
+        "FQ-062",
+        "FQ-063",
+        "FQ-064",
+        "FQ-065",
+        "FQ-066",
+        "FQ-067",
+        "FQ-068",
+        "FQ-069",
+        "FQ-070",
+        "FQ-071",
+        "FQ-072",
+        "FQ-073",
+        "FQ-074",
+        "FQ-075",
+        "FQ-076",
+        "FQ-077",
+        "FQ-078",
+        "FQ-079",
+        "FQ-080",
+        "FQ-081",
+        "FQ-082",
+        "FQ-083",
+        "FQ-084",
+        "FQ-085",
+        "FQ-086",
+        "FQ-087",
+        "FQ-088",
+        "FQ-089",
+        "FQ-090",
+        "FQ-091",
+        "FQ-092",
+        "FQ-093",
+        "FQ-094",
+        "FQ-095",
+        "FQ-096",
+        "FQ-097",
+        "FQ-098",
+        "FQ-099",
+        "FQ-100",
+        "FQ-101",
+        "FQ-102",
+        "FQ-103",
+        "FQ-104",
+        "FQ-105",
+        "FQ-106",
+        "FQ-107",
+        "FQ-108"
+      ]
+    },
+    {
+      "name": "时序型",
+      "per_group": {
+        "A": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                6,
+                11,
+                43
+              ],
+              "mean": 1.6167,
+              "n_scored": 60
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                8,
+                10,
+                42
+              ],
+              "mean": 1.5667,
+              "n_scored": 60
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                0,
+                60
+              ],
+              "mean": 2.0,
+              "n_scored": 60
+            }
+          },
+          "n_questions": 60
+        },
+        "B": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                3,
+                8,
+                53
+              ],
+              "mean": 1.7812,
+              "n_scored": 64
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                4,
+                9,
+                51
+              ],
+              "mean": 1.7344,
+              "n_scored": 64
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                0,
+                64
+              ],
+              "mean": 2.0,
+              "n_scored": 64
+            }
+          },
+          "n_questions": 64
+        },
+        "C": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                3,
+                9,
+                51
+              ],
+              "mean": 1.7619,
+              "n_scored": 63
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                3,
+                11,
+                49
+              ],
+              "mean": 1.7302,
+              "n_scored": 63
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                2,
+                61
+              ],
+              "mean": 1.9683,
+              "n_scored": 63
+            }
+          },
+          "n_questions": 63
+        },
+        "D": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                5,
+                11,
+                47
+              ],
+              "mean": 1.6667,
+              "n_scored": 63
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                7,
+                10,
+                46
+              ],
+              "mean": 1.619,
+              "n_scored": 63
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                1,
+                62
+              ],
+              "mean": 1.9841,
+              "n_scored": 63
+            }
+          },
+          "n_questions": 63
+        },
+        "E": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                4,
+                9,
+                50
+              ],
+              "mean": 1.7302,
+              "n_scored": 63
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                6,
+                10,
+                47
+              ],
+              "mean": 1.6508,
+              "n_scored": 63
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                3,
+                60
+              ],
+              "mean": 1.9524,
+              "n_scored": 63
+            }
+          },
+          "n_questions": 63
+        }
+      },
+      "qids": [
+        "FQ-007",
+        "FQ-008",
+        "FQ-009",
+        "FQ-010",
+        "FQ-011",
+        "FQ-012",
+        "FQ-019",
+        "FQ-020",
+        "FQ-021",
+        "FQ-022",
+        "FQ-023",
+        "FQ-024",
+        "FQ-031",
+        "FQ-032",
+        "FQ-033",
+        "FQ-034",
+        "FQ-035",
+        "FQ-036",
+        "FQ-043",
+        "FQ-044",
+        "FQ-045",
+        "FQ-046",
+        "FQ-047",
+        "FQ-048",
+        "FQ-055",
+        "FQ-056",
+        "FQ-057",
+        "FQ-058",
+        "FQ-059",
+        "FQ-060",
+        "FQ-067",
+        "FQ-068",
+        "FQ-069",
+        "FQ-070",
+        "FQ-071",
+        "FQ-072",
+        "FQ-073",
+        "FQ-074",
+        "FQ-075",
+        "FQ-076",
+        "FQ-077",
+        "FQ-078",
+        "FQ-079",
+        "FQ-080",
+        "FQ-081",
+        "FQ-082",
+        "FQ-083",
+        "FQ-084",
+        "FQ-091",
+        "FQ-092",
+        "FQ-093",
+        "FQ-094",
+        "FQ-095",
+        "FQ-096",
+        "FQ-103",
+        "FQ-104",
+        "FQ-105",
+        "FQ-106",
+        "FQ-107",
+        "FQ-108",
+        "FQ-115",
+        "FQ-116",
+        "FQ-117",
+        "FQ-118",
+        "FQ-119",
+        "FQ-120"
+      ]
+    }
+  ],
+  "temperature_requested": 0.0
+}

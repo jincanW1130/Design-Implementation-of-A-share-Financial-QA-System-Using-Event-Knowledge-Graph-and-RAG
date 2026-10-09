@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-038",
+  "attempts": [
+    {
+      "answer_key": "D__A-038",
+      "attempt": 1,
+      "completion_tokens": 223,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 10.61,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4604,
+      "qid": "FQ-038",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:48:01+08:00",
+      "total_tokens": 4827
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:48:11+08:00",
+  "group": "D",
+  "input_sha256": "74ae4316e994dbeef79b4dfced90a88cd5b30474f4888122c5f3be7b1cdbe9e6",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案要点全覆盖：中标项目名称、中标价507,952,785.60元、中标通知书签发方及与中建三局云采科技有限公司的采购合同均完整给出，无关键遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-038",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案要点全覆盖：中标项目名称、中标价507,952,785.60元、中标通知书签发方及与中建三局云采科技有限公司的采购合同均完整给出，无关键遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

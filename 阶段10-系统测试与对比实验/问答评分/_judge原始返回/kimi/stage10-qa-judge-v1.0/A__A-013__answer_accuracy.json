@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-013",
+  "attempts": [
+    {
+      "answer_key": "A__A-013",
+      "attempt": 1,
+      "completion_tokens": 491,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 19.035,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5218,
+      "qid": "PE-13",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:33:19+08:00",
+      "total_tokens": 5709
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T16:33:38+08:00",
+  "group": "A",
+  "input_sha256": "3acb2bb8d383c1c0743d1db824532f74233f5917e19585463b0977b683ce9b27",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "董事会审议（7月27日、10-20亿、上限103元）、8月19日首购2,414,402股、8月累计14,010,229股、实施完毕累计15,833,353股四个关键事件全部答对且数据准确",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-13",
+  "raw_text": "{\"score\": 2, \"reason\": \"董事会审议（7月27日、10-20亿、上限103元）、8月19日首购2,414,402股、8月累计14,010,229股、实施完毕累计15,833,353股四个关键事件全部答对且数据准确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-104",
+  "attempts": [
+    {
+      "answer_key": "D__A-104",
+      "attempt": 1,
+      "completion_tokens": 168,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 13.467,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4397,
+      "qid": "FQ-104",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:07:01+08:00",
+      "total_tokens": 4565
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:07:14+08:00",
+  "group": "D",
+  "input_sha256": "0fc29f79b7615b79a7127ca8e90745857960b115e4f74262df6e61cfb8f9241e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "登记机构、证明名称、6月8日取得、367,989,000股及6月9日披露等事实均由证据1原文直接支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-104",
+  "raw_text": "{\"score\": 2, \"reason\": \"登记机构、证明名称、6月8日取得、367,989,000股及6月9日披露等事实均由证据1原文直接支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

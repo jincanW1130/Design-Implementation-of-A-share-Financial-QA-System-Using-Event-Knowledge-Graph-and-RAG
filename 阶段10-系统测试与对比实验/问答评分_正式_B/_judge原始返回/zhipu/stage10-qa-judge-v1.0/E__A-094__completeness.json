@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-094",
+  "attempts": [
+    {
+      "answer_key": "E__A-094",
+      "attempt": 1,
+      "completion_tokens": 1293,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 26.395,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5178,
+      "qid": "FQ-094",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:33:01+08:00",
+      "total_tokens": 6471
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:33:27+08:00",
+  "group": "E",
+  "input_sha256": "a1721e7f3d6fbf922b7fc19002adbccddba9c5636bb24cbb404d5aaa49e213a3",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "业绩说明会日期回答正确，但独立财务顾问（国泰海通证券）这一关键信息完全遗漏，两问仅覆盖一问",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-094",
+  "raw_text": "{\"score\": 1, \"reason\": \"业绩说明会日期回答正确，但独立财务顾问（国泰海通证券）这一关键信息完全遗漏，两问仅覆盖一问\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

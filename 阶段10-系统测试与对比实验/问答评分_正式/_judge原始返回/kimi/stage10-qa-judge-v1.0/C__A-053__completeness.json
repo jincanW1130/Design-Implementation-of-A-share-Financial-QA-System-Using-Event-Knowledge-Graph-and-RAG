@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-053",
+  "attempts": [
+    {
+      "answer_key": "C__A-053",
+      "attempt": 1,
+      "completion_tokens": 208,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 9.144,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4662,
+      "qid": "FQ-053",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:08:11+08:00",
+      "total_tokens": 4870
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:08:20+08:00",
+  "group": "C",
+  "input_sha256": "95294ca6ca6e7c42ac70002e6d695e6be4ac1aecbde547aaed7ecd2aa33aa838",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "完整覆盖参考答案全部九人及各自职务，并补充曾毓群兼任总经理，关键信息无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-053",
+  "raw_text": "{\"score\": 2, \"reason\": \"完整覆盖参考答案全部九人及各自职务，并补充曾毓群兼任总经理，关键信息无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

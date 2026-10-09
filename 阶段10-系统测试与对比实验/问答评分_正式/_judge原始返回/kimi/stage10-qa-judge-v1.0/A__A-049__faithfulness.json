@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-049",
+  "attempts": [
+    {
+      "answer_key": "A__A-049",
+      "attempt": 1,
+      "completion_tokens": 503,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 16.521,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4339,
+      "qid": "FQ-049",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:08:32+08:00",
+      "total_tokens": 4842
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:08:49+08:00",
+  "group": "A",
+  "input_sha256": "cf9bc1982ffea3c862d72131e8372b8b29bc3dd2a4180d54ab0d495363e3e8a5",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "三位高管姓名职务有证据2支撑，但答案称证据4、7为“上汽集团文件或通用治理制度”，实则均为长城汽车文件，属少量不严谨。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-049",
+  "raw_text": "{\"score\": 1, \"reason\": \"三位高管姓名职务有证据2支撑，但答案称证据4、7为“上汽集团文件或通用治理制度”，实则均为长城汽车文件，属少量不严谨。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

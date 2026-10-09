@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-019",
+  "attempts": [
+    {
+      "answer_key": "B__A-019",
+      "attempt": 1,
+      "completion_tokens": 82,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 7.12,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5639,
+      "qid": "PE-19",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:01:34+08:00",
+      "total_tokens": 5721
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:01:41+08:00",
+  "group": "B",
+  "input_sha256": "219d670094c4b49fe485c9181707ca2560789b77b9c3c261ce209201d69fb32d",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确「不存在关联关系」，并说明两家长期客户身份及履约能力有保证，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-19",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确「不存在关联关系」，并说明两家长期客户身份及履约能力有保证，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

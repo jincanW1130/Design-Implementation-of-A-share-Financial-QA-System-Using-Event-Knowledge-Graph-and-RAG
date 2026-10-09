@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-094",
+  "attempts": [
+    {
+      "answer_key": "A__A-094",
+      "attempt": 1,
+      "completion_tokens": 243,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 9.694,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3987,
+      "qid": "FQ-094",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:04:57+08:00",
+      "total_tokens": 4230
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:05:07+08:00",
+  "group": "A",
+  "input_sha256": "5ece719665e83cc29a2909f256f740a9dc5a9f1b033adc09c21d65ffe168c422",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答对业绩说明会日期，但完全遗漏独立财务顾问国泰海通证券这一半关键信息，属部分覆盖而非大量遗漏。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-094",
+  "raw_text": "{\"score\": 1, \"reason\": \"答对业绩说明会日期，但完全遗漏独立财务顾问国泰海通证券这一半关键信息，属部分覆盖而非大量遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

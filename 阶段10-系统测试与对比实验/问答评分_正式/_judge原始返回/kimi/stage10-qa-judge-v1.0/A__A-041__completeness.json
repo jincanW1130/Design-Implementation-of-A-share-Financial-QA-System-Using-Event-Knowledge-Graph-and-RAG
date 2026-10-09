@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-041",
+  "attempts": [
+    {
+      "answer_key": "A__A-041",
+      "attempt": 1,
+      "completion_tokens": 241,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 13.466,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4192,
+      "qid": "FQ-041",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:01:46+08:00",
+      "total_tokens": 4433
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:02:00+08:00",
+  "group": "A",
+  "input_sha256": "5b2c595c126875ab673b8d4dab7192aa4b27a4430919977293443222bfce6e79",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案称无法回答，完全未覆盖参考答案中中国银行算力Token贷产品设计、最长3年最高3000万授信及缤纷生活APP停服迁移两项关键信息，属大量遗漏。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-041",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案称无法回答，完全未覆盖参考答案中中国银行算力Token贷产品设计、最长3年最高3000万授信及缤纷生活APP停服迁移两项关键信息，属大量遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

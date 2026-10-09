@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-114",
+  "attempts": [
+    {
+      "answer_key": "D__A-114",
+      "attempt": 1,
+      "completion_tokens": 356,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 21.889,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4562,
+      "qid": "FQ-114",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:12:24+08:00",
+      "total_tokens": 4918
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:12:46+08:00",
+  "group": "D",
+  "input_sha256": "a9804fb499fb6f556c2503b42c1ffba3464ccef6b5e203fabffc54f39958544f",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "母子公司关系、全资子公司表述、承接湖南透景产品注册及洁净厂房与生产许可证等说法均可在证据1、2中找到支撑，模型分析已明确标注为推断，未见编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-114",
+  "raw_text": "{\"score\": 2, \"reason\": \"母子公司关系、全资子公司表述、承接湖南透景产品注册及洁净厂房与生产许可证等说法均可在证据1、2中找到支撑，模型分析已明确标注为推断，未见编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

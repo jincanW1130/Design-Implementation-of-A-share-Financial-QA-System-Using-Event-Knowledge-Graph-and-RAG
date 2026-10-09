@@ -1,0 +1,3204 @@
+{
+  "schema": "stage10-extraction-eval-1.0",
+  "title": "RQ1 抽取评测指标（模型参照集口径）",
+  "caliber": {
+    "label": "模型参照集口径下的抽取表现",
+    "reference_primary": "阶段05-数据准备/数据集/抽取评测集/v2.1/自动标注/提准/{dev,test}.auto.repaired.jsonl",
+    "reference_secondary": "阶段05-数据准备/数据集/抽取评测集/v2.1/自动标注/{dev,test}.auto.jsonl",
+    "is_reference_human_annotated": false,
+    "statement": "参照集为模型自动标注（deepseek-flash，与抽取器同模型）经 lint 定向修复后的产物，另有一次由本项目决策者执行的 40 条独立复核修正；它不是人工标注，也未逐条人工复核。",
+    "rebuild_command": "python 阶段10-系统测试与对比实验\\工具\\评测抽取.py",
+    "model_calls": 0
+  },
+  "scope": {
+    "items": 260,
+    "dev": 60,
+    "test": 200,
+    "unit": "chunk（文本块）",
+    "ontology": {
+      "entity_types": [
+        "Company",
+        "Person",
+        "Industry",
+        "Institution",
+        "Policy"
+      ],
+      "event_types": [
+        "业绩",
+        "监管",
+        "股权",
+        "投资并购",
+        "重大合同",
+        "产品",
+        "政策",
+        "重大经营"
+      ],
+      "relations": [
+        "BELONGS_TO",
+        "SUPPLIES",
+        "CUSTOMER_OF",
+        "COMPETES_WITH",
+        "HAS_EXECUTIVE",
+        "PARTICIPATES_IN",
+        "ISSUED_BY",
+        "RELATED_TO",
+        "EVIDENCED_BY"
+      ],
+      "relations_scored": [
+        "BELONGS_TO",
+        "SUPPLIES",
+        "CUSTOMER_OF",
+        "COMPETES_WITH",
+        "HAS_EXECUTIVE",
+        "PARTICIPATES_IN",
+        "ISSUED_BY",
+        "RELATED_TO"
+      ],
+      "time_types": [
+        "event_time",
+        "valid_from",
+        "valid_to"
+      ]
+    }
+  },
+  "diagnostics": {
+    "norm_ws_source": "norm_ws 与 工具/标注助手.py 逐例一致（5 例）；名字规范化＝config.normalize_entity_name(norm_ws(x))，取自 代码/抽取与图谱/auto_annotate_compare.py",
+    "extract_products": {
+      "raw_cache_dir": "阶段05-数据准备/数据集/_抽取缓存/v2.1_v1_2/",
+      "raw_cache_note": "709 篇，一篇文档一条原始返回；不按文本块",
+      "raw_cache_model_resolved": [
+        "deepseek-flash"
+      ],
+      "t3_records": "代码/抽取与图谱/_全量/v2.1_v1_2/extracted.jsonl",
+      "t3_docs": 709,
+      "t3_records_schema": [
+        "stage6-pilot-record-1.0"
+      ],
+      "t3_prompt_version": [
+        "stage6-extract-v1.2"
+      ],
+      "backfill_schema": "stage6-time-backfill-1.0",
+      "backfill_profile": "v21_v1_2"
+    },
+    "reference_models": {
+      "repaired": {
+        "path": "阶段05-数据准备/数据集/抽取评测集/v2.1/自动标注/提准/{dev,test}.auto.repaired.jsonl",
+        "model_resolved": [
+          "deepseek-flash"
+        ],
+        "prompt_versions": [
+          "stage6-auto-annotate-flash-repair-v1.0",
+          "stage6-auto-annotate-v1.0-flash"
+        ],
+        "temperatures": [
+          0
+        ],
+        "status": [
+          "auto_annotated"
+        ]
+      },
+      "pro": {
+        "path": "阶段05-数据准备/数据集/抽取评测集/v2.1/自动标注/{dev,test}.auto.jsonl",
+        "model_resolved": [
+          "deepseek-v4-pro"
+        ],
+        "prompt_versions": [
+          "stage6-auto-annotate-v1.0"
+        ],
+        "status": [
+          "auto_annotated"
+        ]
+      }
+    },
+    "reference_sizes_raw": {
+      "repaired": {
+        "entities": 633,
+        "events": 267,
+        "relations": 581,
+        "times": 107
+      },
+      "pro": {
+        "entities": 653,
+        "events": 235,
+        "relations": 455,
+        "times": 87
+      }
+    },
+    "reference_times_vs_events": {
+      "times_event_time_entries": 87,
+      "events_with_time": 84,
+      "relations_valid_from_nonempty": 0,
+      "relations_valid_to_nonempty": 0
+    }
+  },
+  "results": {
+    "variant_notes": {
+      "main": "主判据：键＝类型＋规范化名字（关系为「关系名|两端身份」，端点为实体/事件身份）；quote 与 role 不参与",
+      "quote_pair": "宽松配对（**主判据的上界**）：先按键逐字配对，剩下的行再按「类型字段相等且两侧 quote 去空白后互含」贪心配对",
+      "strict_quote": "严格读数：在命中键上再要求两侧 quote 去空白后互含",
+      "strict_quote_role": "严格读数：再叠加 role 一致（仅关系类有该字段）",
+      "compat": "兼容读数：键形状与既有 auto_annotate_compare.key_sets 完全同形（关系端点不解到事件身份、时间键只用 value）"
+    },
+    "metrics": {
+      "dev": {
+        "entities": {
+          "main": {
+            "tp": 57,
+            "fp": 12,
+            "fn": 93,
+            "support_reference": 150,
+            "predicted_system": 69,
+            "precision": 0.826087,
+            "recall": 0.38,
+            "f1": 0.520548
+          },
+          "quote_pair": {
+            "tp": 61,
+            "fp": 8,
+            "fn": 89,
+            "support_reference": 150,
+            "predicted_system": 69,
+            "precision": 0.884058,
+            "recall": 0.406667,
+            "f1": 0.557078
+          },
+          "strict_quote": {
+            "tp": 51,
+            "fp": 12,
+            "fn": 93,
+            "support_reference": 144,
+            "predicted_system": 63,
+            "precision": 0.809524,
+            "recall": 0.354167,
+            "f1": 0.492754
+          },
+          "compat": {
+            "tp": 57,
+            "fp": 12,
+            "fn": 93,
+            "support_reference": 150,
+            "predicted_system": 69,
+            "precision": 0.826087,
+            "recall": 0.38,
+            "f1": 0.520548
+          }
+        },
+        "events": {
+          "main": {
+            "tp": 5,
+            "fp": 21,
+            "fn": 62,
+            "support_reference": 67,
+            "predicted_system": 26,
+            "precision": 0.192308,
+            "recall": 0.074627,
+            "f1": 0.107527
+          },
+          "quote_pair": {
+            "tp": 20,
+            "fp": 6,
+            "fn": 47,
+            "support_reference": 67,
+            "predicted_system": 26,
+            "precision": 0.769231,
+            "recall": 0.298507,
+            "f1": 0.430108
+          },
+          "strict_quote": {
+            "tp": 5,
+            "fp": 21,
+            "fn": 62,
+            "support_reference": 67,
+            "predicted_system": 26,
+            "precision": 0.192308,
+            "recall": 0.074627,
+            "f1": 0.107527
+          },
+          "compat": {
+            "tp": 5,
+            "fp": 21,
+            "fn": 62,
+            "support_reference": 67,
+            "predicted_system": 26,
+            "precision": 0.192308,
+            "recall": 0.074627,
+            "f1": 0.107527
+          }
+        },
+        "relations": {
+          "main": {
+            "tp": 11,
+            "fp": 50,
+            "fn": 126,
+            "support_reference": 137,
+            "predicted_system": 61,
+            "precision": 0.180328,
+            "recall": 0.080292,
+            "f1": 0.111111
+          },
+          "quote_pair": {
+            "tp": 49,
+            "fp": 12,
+            "fn": 88,
+            "support_reference": 137,
+            "predicted_system": 61,
+            "precision": 0.803279,
+            "recall": 0.357664,
+            "f1": 0.494949
+          },
+          "strict_quote": {
+            "tp": 9,
+            "fp": 50,
+            "fn": 126,
+            "support_reference": 135,
+            "predicted_system": 59,
+            "precision": 0.152542,
+            "recall": 0.066667,
+            "f1": 0.092784
+          },
+          "strict_quote_role": {
+            "tp": 9,
+            "fp": 50,
+            "fn": 126,
+            "support_reference": 135,
+            "predicted_system": 59,
+            "precision": 0.152542,
+            "recall": 0.066667,
+            "f1": 0.092784
+          },
+          "compat": {
+            "tp": 45,
+            "fp": 11,
+            "fn": 75,
+            "support_reference": 120,
+            "predicted_system": 56,
+            "precision": 0.803571,
+            "recall": 0.375,
+            "f1": 0.511364
+          }
+        },
+        "times": {
+          "main": {
+            "tp": 8,
+            "fp": 2,
+            "fn": 20,
+            "support_reference": 28,
+            "predicted_system": 10,
+            "precision": 0.8,
+            "recall": 0.285714,
+            "f1": 0.421053
+          },
+          "quote_pair": {
+            "tp": 8,
+            "fp": 2,
+            "fn": 20,
+            "support_reference": 28,
+            "predicted_system": 10,
+            "precision": 0.8,
+            "recall": 0.285714,
+            "f1": 0.421053
+          },
+          "compat": {
+            "tp": 9,
+            "fp": 1,
+            "fn": 19,
+            "support_reference": 28,
+            "predicted_system": 10,
+            "precision": 0.9,
+            "recall": 0.321429,
+            "f1": 0.473684
+          }
+        }
+      },
+      "test": {
+        "entities": {
+          "main": {
+            "tp": 200,
+            "fp": 57,
+            "fn": 283,
+            "support_reference": 483,
+            "predicted_system": 257,
+            "precision": 0.77821,
+            "recall": 0.414079,
+            "f1": 0.540541
+          },
+          "quote_pair": {
+            "tp": 209,
+            "fp": 48,
+            "fn": 274,
+            "support_reference": 483,
+            "predicted_system": 257,
+            "precision": 0.81323,
+            "recall": 0.432712,
+            "f1": 0.564865
+          },
+          "strict_quote": {
+            "tp": 159,
+            "fp": 57,
+            "fn": 283,
+            "support_reference": 442,
+            "predicted_system": 216,
+            "precision": 0.736111,
+            "recall": 0.359729,
+            "f1": 0.483283
+          },
+          "compat": {
+            "tp": 200,
+            "fp": 57,
+            "fn": 283,
+            "support_reference": 483,
+            "predicted_system": 257,
+            "precision": 0.77821,
+            "recall": 0.414079,
+            "f1": 0.540541
+          }
+        },
+        "events": {
+          "main": {
+            "tp": 14,
+            "fp": 84,
+            "fn": 186,
+            "support_reference": 200,
+            "predicted_system": 98,
+            "precision": 0.142857,
+            "recall": 0.07,
+            "f1": 0.09396
+          },
+          "quote_pair": {
+            "tp": 65,
+            "fp": 33,
+            "fn": 135,
+            "support_reference": 200,
+            "predicted_system": 98,
+            "precision": 0.663265,
+            "recall": 0.325,
+            "f1": 0.436242
+          },
+          "strict_quote": {
+            "tp": 11,
+            "fp": 84,
+            "fn": 186,
+            "support_reference": 197,
+            "predicted_system": 95,
+            "precision": 0.115789,
+            "recall": 0.055838,
+            "f1": 0.075342
+          },
+          "compat": {
+            "tp": 14,
+            "fp": 84,
+            "fn": 186,
+            "support_reference": 200,
+            "predicted_system": 98,
+            "precision": 0.142857,
+            "recall": 0.07,
+            "f1": 0.09396
+          }
+        },
+        "relations": {
+          "main": {
+            "tp": 41,
+            "fp": 182,
+            "fn": 403,
+            "support_reference": 444,
+            "predicted_system": 223,
+            "precision": 0.183857,
+            "recall": 0.092342,
+            "f1": 0.122939
+          },
+          "quote_pair": {
+            "tp": 143,
+            "fp": 80,
+            "fn": 301,
+            "support_reference": 444,
+            "predicted_system": 223,
+            "precision": 0.641256,
+            "recall": 0.322072,
+            "f1": 0.428786
+          },
+          "strict_quote": {
+            "tp": 31,
+            "fp": 182,
+            "fn": 403,
+            "support_reference": 434,
+            "predicted_system": 213,
+            "precision": 0.14554,
+            "recall": 0.071429,
+            "f1": 0.095827
+          },
+          "strict_quote_role": {
+            "tp": 30,
+            "fp": 182,
+            "fn": 403,
+            "support_reference": 433,
+            "predicted_system": 212,
+            "precision": 0.141509,
+            "recall": 0.069284,
+            "f1": 0.093023
+          },
+          "compat": {
+            "tp": 163,
+            "fp": 51,
+            "fn": 248,
+            "support_reference": 411,
+            "predicted_system": 214,
+            "precision": 0.761682,
+            "recall": 0.396594,
+            "f1": 0.5216
+          }
+        },
+        "times": {
+          "main": {
+            "tp": 22,
+            "fp": 15,
+            "fn": 55,
+            "support_reference": 77,
+            "predicted_system": 37,
+            "precision": 0.594595,
+            "recall": 0.285714,
+            "f1": 0.385965
+          },
+          "quote_pair": {
+            "tp": 22,
+            "fp": 15,
+            "fn": 55,
+            "support_reference": 77,
+            "predicted_system": 37,
+            "precision": 0.594595,
+            "recall": 0.285714,
+            "f1": 0.385965
+          },
+          "compat": {
+            "tp": 23,
+            "fp": 14,
+            "fn": 52,
+            "support_reference": 75,
+            "predicted_system": 37,
+            "precision": 0.621622,
+            "recall": 0.306667,
+            "f1": 0.410714
+          }
+        }
+      },
+      "合计": {
+        "entities": {
+          "main": {
+            "tp": 257,
+            "fp": 69,
+            "fn": 376,
+            "support_reference": 633,
+            "predicted_system": 326,
+            "precision": 0.788344,
+            "recall": 0.406003,
+            "f1": 0.535975
+          },
+          "quote_pair": {
+            "tp": 270,
+            "fp": 56,
+            "fn": 363,
+            "support_reference": 633,
+            "predicted_system": 326,
+            "precision": 0.828221,
+            "recall": 0.42654,
+            "f1": 0.563087
+          },
+          "strict_quote": {
+            "tp": 210,
+            "fp": 69,
+            "fn": 376,
+            "support_reference": 586,
+            "predicted_system": 279,
+            "precision": 0.752688,
+            "recall": 0.358362,
+            "f1": 0.485549
+          },
+          "compat": {
+            "tp": 257,
+            "fp": 69,
+            "fn": 376,
+            "support_reference": 633,
+            "predicted_system": 326,
+            "precision": 0.788344,
+            "recall": 0.406003,
+            "f1": 0.535975
+          }
+        },
+        "events": {
+          "main": {
+            "tp": 19,
+            "fp": 105,
+            "fn": 248,
+            "support_reference": 267,
+            "predicted_system": 124,
+            "precision": 0.153226,
+            "recall": 0.071161,
+            "f1": 0.097187
+          },
+          "quote_pair": {
+            "tp": 85,
+            "fp": 39,
+            "fn": 182,
+            "support_reference": 267,
+            "predicted_system": 124,
+            "precision": 0.685484,
+            "recall": 0.318352,
+            "f1": 0.434783
+          },
+          "strict_quote": {
+            "tp": 16,
+            "fp": 105,
+            "fn": 248,
+            "support_reference": 264,
+            "predicted_system": 121,
+            "precision": 0.132231,
+            "recall": 0.060606,
+            "f1": 0.083117
+          },
+          "compat": {
+            "tp": 19,
+            "fp": 105,
+            "fn": 248,
+            "support_reference": 267,
+            "predicted_system": 124,
+            "precision": 0.153226,
+            "recall": 0.071161,
+            "f1": 0.097187
+          }
+        },
+        "relations": {
+          "main": {
+            "tp": 52,
+            "fp": 232,
+            "fn": 529,
+            "support_reference": 581,
+            "predicted_system": 284,
+            "precision": 0.183099,
+            "recall": 0.089501,
+            "f1": 0.120231
+          },
+          "quote_pair": {
+            "tp": 192,
+            "fp": 92,
+            "fn": 389,
+            "support_reference": 581,
+            "predicted_system": 284,
+            "precision": 0.676056,
+            "recall": 0.330465,
+            "f1": 0.443931
+          },
+          "strict_quote": {
+            "tp": 40,
+            "fp": 232,
+            "fn": 529,
+            "support_reference": 569,
+            "predicted_system": 272,
+            "precision": 0.147059,
+            "recall": 0.070299,
+            "f1": 0.095125
+          },
+          "strict_quote_role": {
+            "tp": 39,
+            "fp": 232,
+            "fn": 529,
+            "support_reference": 568,
+            "predicted_system": 271,
+            "precision": 0.143911,
+            "recall": 0.068662,
+            "f1": 0.092968
+          },
+          "compat": {
+            "tp": 208,
+            "fp": 62,
+            "fn": 323,
+            "support_reference": 531,
+            "predicted_system": 270,
+            "precision": 0.77037,
+            "recall": 0.391714,
+            "f1": 0.519351
+          }
+        },
+        "times": {
+          "main": {
+            "tp": 30,
+            "fp": 17,
+            "fn": 75,
+            "support_reference": 105,
+            "predicted_system": 47,
+            "precision": 0.638298,
+            "recall": 0.285714,
+            "f1": 0.394737
+          },
+          "quote_pair": {
+            "tp": 30,
+            "fp": 17,
+            "fn": 75,
+            "support_reference": 105,
+            "predicted_system": 47,
+            "precision": 0.638298,
+            "recall": 0.285714,
+            "f1": 0.394737
+          },
+          "compat": {
+            "tp": 32,
+            "fp": 15,
+            "fn": 71,
+            "support_reference": 103,
+            "predicted_system": 47,
+            "precision": 0.680851,
+            "recall": 0.31068,
+            "f1": 0.426667
+          }
+        }
+      }
+    },
+    "type_metrics": {
+      "dev": {
+        "entities": {
+          "Company": {
+            "tp": 32,
+            "fp": 5,
+            "fn": 52,
+            "support_reference": 84,
+            "predicted_system": 37,
+            "precision": 0.864865,
+            "recall": 0.380952,
+            "f1": 0.528926
+          },
+          "Person": {
+            "tp": 6,
+            "fp": 0,
+            "fn": 18,
+            "support_reference": 24,
+            "predicted_system": 6,
+            "precision": 1.0,
+            "recall": 0.25,
+            "f1": 0.4
+          },
+          "Industry": {
+            "tp": 0,
+            "fp": 2,
+            "fn": 6,
+            "support_reference": 6,
+            "predicted_system": 2,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "Institution": {
+            "tp": 15,
+            "fp": 5,
+            "fn": 12,
+            "support_reference": 27,
+            "predicted_system": 20,
+            "precision": 0.75,
+            "recall": 0.555556,
+            "f1": 0.638298
+          },
+          "Policy": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 5,
+            "support_reference": 9,
+            "predicted_system": 4,
+            "precision": 1.0,
+            "recall": 0.444444,
+            "f1": 0.615385
+          }
+        },
+        "events": {
+          "业绩": {
+            "tp": 1,
+            "fp": 1,
+            "fn": 6,
+            "support_reference": 7,
+            "predicted_system": 2,
+            "precision": 0.5,
+            "recall": 0.142857,
+            "f1": 0.222222
+          },
+          "监管": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 2,
+            "support_reference": 2,
+            "predicted_system": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "股权": {
+            "tp": 1,
+            "fp": 7,
+            "fn": 21,
+            "support_reference": 22,
+            "predicted_system": 8,
+            "precision": 0.125,
+            "recall": 0.045455,
+            "f1": 0.066667
+          },
+          "投资并购": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 3,
+            "support_reference": 3,
+            "predicted_system": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "重大合同": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 5,
+            "support_reference": 5,
+            "predicted_system": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "产品": {
+            "tp": 1,
+            "fp": 3,
+            "fn": 10,
+            "support_reference": 11,
+            "predicted_system": 4,
+            "precision": 0.25,
+            "recall": 0.090909,
+            "f1": 0.133333
+          },
+          "政策": {
+            "tp": 1,
+            "fp": 1,
+            "fn": 2,
+            "support_reference": 3,
+            "predicted_system": 2,
+            "precision": 0.5,
+            "recall": 0.333333,
+            "f1": 0.4
+          },
+          "重大经营": {
+            "tp": 1,
+            "fp": 6,
+            "fn": 13,
+            "support_reference": 14,
+            "predicted_system": 7,
+            "precision": 0.142857,
+            "recall": 0.071429,
+            "f1": 0.095238
+          }
+        },
+        "relations": {
+          "BELONGS_TO": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "SUPPLIES": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 1,
+            "predicted_system": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "CUSTOMER_OF": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "COMPETES_WITH": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "HAS_EXECUTIVE": {
+            "tp": 3,
+            "fp": 2,
+            "fn": 10,
+            "support_reference": 13,
+            "predicted_system": 5,
+            "precision": 0.6,
+            "recall": 0.230769,
+            "f1": 0.333333
+          },
+          "PARTICIPATES_IN": {
+            "tp": 5,
+            "fp": 42,
+            "fn": 104,
+            "support_reference": 109,
+            "predicted_system": 47,
+            "precision": 0.106383,
+            "recall": 0.045872,
+            "f1": 0.064103
+          },
+          "ISSUED_BY": {
+            "tp": 1,
+            "fp": 4,
+            "fn": 4,
+            "support_reference": 5,
+            "predicted_system": 5,
+            "precision": 0.2,
+            "recall": 0.2,
+            "f1": 0.2
+          },
+          "RELATED_TO": {
+            "tp": 1,
+            "fp": 2,
+            "fn": 8,
+            "support_reference": 9,
+            "predicted_system": 3,
+            "precision": 0.333333,
+            "recall": 0.111111,
+            "f1": 0.166667
+          },
+          "EVIDENCED_BY": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        "times": {
+          "event_time": {
+            "tp": 8,
+            "fp": 2,
+            "fn": 11,
+            "support_reference": 19,
+            "predicted_system": 10,
+            "precision": 0.8,
+            "recall": 0.421053,
+            "f1": 0.551724
+          },
+          "valid_from": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 5,
+            "support_reference": 5,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          },
+          "valid_to": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 4,
+            "support_reference": 4,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      },
+      "test": {
+        "entities": {
+          "Company": {
+            "tp": 110,
+            "fp": 28,
+            "fn": 153,
+            "support_reference": 263,
+            "predicted_system": 138,
+            "precision": 0.797101,
+            "recall": 0.418251,
+            "f1": 0.548628
+          },
+          "Person": {
+            "tp": 38,
+            "fp": 0,
+            "fn": 28,
+            "support_reference": 66,
+            "predicted_system": 38,
+            "precision": 1.0,
+            "recall": 0.575758,
+            "f1": 0.730769
+          },
+          "Industry": {
+            "tp": 1,
+            "fp": 4,
+            "fn": 10,
+            "support_reference": 11,
+            "predicted_system": 5,
+            "precision": 0.2,
+            "recall": 0.090909,
+            "f1": 0.125
+          },
+          "Institution": {
+            "tp": 41,
+            "fp": 21,
+            "fn": 55,
+            "support_reference": 96,
+            "predicted_system": 62,
+            "precision": 0.66129,
+            "recall": 0.427083,
+            "f1": 0.518987
+          },
+          "Policy": {
+            "tp": 10,
+            "fp": 4,
+            "fn": 37,
+            "support_reference": 47,
+            "predicted_system": 14,
+            "precision": 0.714286,
+            "recall": 0.212766,
+            "f1": 0.327869
+          }
+        },
+        "events": {
+          "业绩": {
+            "tp": 1,
+            "fp": 8,
+            "fn": 22,
+            "support_reference": 23,
+            "predicted_system": 9,
+            "precision": 0.111111,
+            "recall": 0.043478,
+            "f1": 0.0625
+          },
+          "监管": {
+            "tp": 1,
+            "fp": 9,
+            "fn": 10,
+            "support_reference": 11,
+            "predicted_system": 10,
+            "precision": 0.1,
+            "recall": 0.090909,
+            "f1": 0.095238
+          },
+          "股权": {
+            "tp": 1,
+            "fp": 17,
+            "fn": 62,
+            "support_reference": 63,
+            "predicted_system": 18,
+            "precision": 0.055556,
+            "recall": 0.015873,
+            "f1": 0.024691
+          },
+          "投资并购": {
+            "tp": 1,
+            "fp": 3,
+            "fn": 4,
+            "support_reference": 5,
+            "predicted_system": 4,
+            "precision": 0.25,
+            "recall": 0.2,
+            "f1": 0.222222
+          },
+          "重大合同": {
+            "tp": 2,
+            "fp": 17,
+            "fn": 34,
+            "support_reference": 36,
+            "predicted_system": 19,
+            "precision": 0.105263,
+            "recall": 0.055556,
+            "f1": 0.072727
+          },
+          "产品": {
+            "tp": 2,
+            "fp": 11,
+            "fn": 21,
+            "support_reference": 23,
+            "predicted_system": 13,
+            "precision": 0.153846,
+            "recall": 0.086957,
+            "f1": 0.111111
+          },
+          "政策": {
+            "tp": 3,
+            "fp": 5,
+            "fn": 14,
+            "support_reference": 17,
+            "predicted_system": 8,
+            "precision": 0.375,
+            "recall": 0.176471,
+            "f1": 0.24
+          },
+          "重大经营": {
+            "tp": 3,
+            "fp": 14,
+            "fn": 19,
+            "support_reference": 22,
+            "predicted_system": 17,
+            "precision": 0.176471,
+            "recall": 0.136364,
+            "f1": 0.153846
+          }
+        },
+        "relations": {
+          "BELONGS_TO": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "support_reference": 1,
+            "predicted_system": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "SUPPLIES": {
+            "tp": 0,
+            "fp": 3,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 3,
+            "precision": 0.0,
+            "recall": null,
+            "f1": null
+          },
+          "CUSTOMER_OF": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "COMPETES_WITH": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "HAS_EXECUTIVE": {
+            "tp": 22,
+            "fp": 5,
+            "fn": 24,
+            "support_reference": 46,
+            "predicted_system": 27,
+            "precision": 0.814815,
+            "recall": 0.478261,
+            "f1": 0.60274
+          },
+          "PARTICIPATES_IN": {
+            "tp": 17,
+            "fp": 147,
+            "fn": 325,
+            "support_reference": 342,
+            "predicted_system": 164,
+            "precision": 0.103659,
+            "recall": 0.049708,
+            "f1": 0.067194
+          },
+          "ISSUED_BY": {
+            "tp": 2,
+            "fp": 15,
+            "fn": 14,
+            "support_reference": 16,
+            "predicted_system": 17,
+            "precision": 0.117647,
+            "recall": 0.125,
+            "f1": 0.121212
+          },
+          "RELATED_TO": {
+            "tp": 0,
+            "fp": 11,
+            "fn": 39,
+            "support_reference": 39,
+            "predicted_system": 11,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "EVIDENCED_BY": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        "times": {
+          "event_time": {
+            "tp": 22,
+            "fp": 15,
+            "fn": 44,
+            "support_reference": 66,
+            "predicted_system": 37,
+            "precision": 0.594595,
+            "recall": 0.333333,
+            "f1": 0.427184
+          },
+          "valid_from": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 8,
+            "support_reference": 8,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          },
+          "valid_to": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "support_reference": 3,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      },
+      "合计": {
+        "entities": {
+          "Company": {
+            "tp": 142,
+            "fp": 33,
+            "fn": 205,
+            "support_reference": 347,
+            "predicted_system": 175,
+            "precision": 0.811429,
+            "recall": 0.409222,
+            "f1": 0.544061
+          },
+          "Person": {
+            "tp": 44,
+            "fp": 0,
+            "fn": 46,
+            "support_reference": 90,
+            "predicted_system": 44,
+            "precision": 1.0,
+            "recall": 0.488889,
+            "f1": 0.656716
+          },
+          "Industry": {
+            "tp": 1,
+            "fp": 6,
+            "fn": 16,
+            "support_reference": 17,
+            "predicted_system": 7,
+            "precision": 0.142857,
+            "recall": 0.058824,
+            "f1": 0.083333
+          },
+          "Institution": {
+            "tp": 56,
+            "fp": 26,
+            "fn": 67,
+            "support_reference": 123,
+            "predicted_system": 82,
+            "precision": 0.682927,
+            "recall": 0.455285,
+            "f1": 0.546341
+          },
+          "Policy": {
+            "tp": 14,
+            "fp": 4,
+            "fn": 42,
+            "support_reference": 56,
+            "predicted_system": 18,
+            "precision": 0.777778,
+            "recall": 0.25,
+            "f1": 0.378378
+          }
+        },
+        "events": {
+          "业绩": {
+            "tp": 2,
+            "fp": 9,
+            "fn": 28,
+            "support_reference": 30,
+            "predicted_system": 11,
+            "precision": 0.181818,
+            "recall": 0.066667,
+            "f1": 0.097561
+          },
+          "监管": {
+            "tp": 1,
+            "fp": 10,
+            "fn": 12,
+            "support_reference": 13,
+            "predicted_system": 11,
+            "precision": 0.090909,
+            "recall": 0.076923,
+            "f1": 0.083333
+          },
+          "股权": {
+            "tp": 2,
+            "fp": 24,
+            "fn": 83,
+            "support_reference": 85,
+            "predicted_system": 26,
+            "precision": 0.076923,
+            "recall": 0.023529,
+            "f1": 0.036036
+          },
+          "投资并购": {
+            "tp": 1,
+            "fp": 4,
+            "fn": 7,
+            "support_reference": 8,
+            "predicted_system": 5,
+            "precision": 0.2,
+            "recall": 0.125,
+            "f1": 0.153846
+          },
+          "重大合同": {
+            "tp": 2,
+            "fp": 18,
+            "fn": 39,
+            "support_reference": 41,
+            "predicted_system": 20,
+            "precision": 0.1,
+            "recall": 0.04878,
+            "f1": 0.065574
+          },
+          "产品": {
+            "tp": 3,
+            "fp": 14,
+            "fn": 31,
+            "support_reference": 34,
+            "predicted_system": 17,
+            "precision": 0.176471,
+            "recall": 0.088235,
+            "f1": 0.117647
+          },
+          "政策": {
+            "tp": 4,
+            "fp": 6,
+            "fn": 16,
+            "support_reference": 20,
+            "predicted_system": 10,
+            "precision": 0.4,
+            "recall": 0.2,
+            "f1": 0.266667
+          },
+          "重大经营": {
+            "tp": 4,
+            "fp": 20,
+            "fn": 32,
+            "support_reference": 36,
+            "predicted_system": 24,
+            "precision": 0.166667,
+            "recall": 0.111111,
+            "f1": 0.133333
+          }
+        },
+        "relations": {
+          "BELONGS_TO": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "support_reference": 1,
+            "predicted_system": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "SUPPLIES": {
+            "tp": 1,
+            "fp": 3,
+            "fn": 0,
+            "support_reference": 1,
+            "predicted_system": 4,
+            "precision": 0.25,
+            "recall": 1.0,
+            "f1": 0.4
+          },
+          "CUSTOMER_OF": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "COMPETES_WITH": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "HAS_EXECUTIVE": {
+            "tp": 25,
+            "fp": 7,
+            "fn": 34,
+            "support_reference": 59,
+            "predicted_system": 32,
+            "precision": 0.78125,
+            "recall": 0.423729,
+            "f1": 0.549451
+          },
+          "PARTICIPATES_IN": {
+            "tp": 22,
+            "fp": 189,
+            "fn": 429,
+            "support_reference": 451,
+            "predicted_system": 211,
+            "precision": 0.104265,
+            "recall": 0.04878,
+            "f1": 0.066465
+          },
+          "ISSUED_BY": {
+            "tp": 3,
+            "fp": 19,
+            "fn": 18,
+            "support_reference": 21,
+            "predicted_system": 22,
+            "precision": 0.136364,
+            "recall": 0.142857,
+            "f1": 0.139535
+          },
+          "RELATED_TO": {
+            "tp": 1,
+            "fp": 13,
+            "fn": 47,
+            "support_reference": 48,
+            "predicted_system": 14,
+            "precision": 0.071429,
+            "recall": 0.020833,
+            "f1": 0.032258
+          },
+          "EVIDENCED_BY": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        "times": {
+          "event_time": {
+            "tp": 30,
+            "fp": 17,
+            "fn": 55,
+            "support_reference": 85,
+            "predicted_system": 47,
+            "precision": 0.638298,
+            "recall": 0.352941,
+            "f1": 0.454545
+          },
+          "valid_from": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 13,
+            "support_reference": 13,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          },
+          "valid_to": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 7,
+            "support_reference": 7,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      }
+    },
+    "doc_scope_metrics": {
+      "dev": {
+        "entities": {
+          "reference_support": 150,
+          "block_key_tp": 57,
+          "block_key_recall": 0.38,
+          "doc_key_tp": 99,
+          "doc_key_recall": 0.66,
+          "block_pair_tp": 61,
+          "block_pair_recall": 0.406667,
+          "doc_pair_tp": 103,
+          "doc_pair_recall": 0.686667,
+          "missing_even_at_doc_scope": 47,
+          "system_block_facts": 69,
+          "system_doc_facts": 296,
+          "system_block_fp": 12,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "events": {
+          "reference_support": 67,
+          "block_key_tp": 5,
+          "block_key_recall": 0.074627,
+          "doc_key_tp": 7,
+          "doc_key_recall": 0.104478,
+          "block_pair_tp": 20,
+          "block_pair_recall": 0.298507,
+          "doc_pair_tp": 22,
+          "doc_pair_recall": 0.328358,
+          "missing_even_at_doc_scope": 45,
+          "system_block_facts": 26,
+          "system_doc_facts": 112,
+          "system_block_fp": 21,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "relations": {
+          "reference_support": 137,
+          "block_key_tp": 11,
+          "block_key_recall": 0.080292,
+          "doc_key_tp": 12,
+          "doc_key_recall": 0.087591,
+          "block_pair_tp": 49,
+          "block_pair_recall": 0.357664,
+          "doc_pair_tp": 51,
+          "doc_pair_recall": 0.372263,
+          "missing_even_at_doc_scope": 86,
+          "system_block_facts": 61,
+          "system_doc_facts": 218,
+          "system_block_fp": 50,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "times": {
+          "reference_support": 28,
+          "block_key_tp": 8,
+          "block_key_recall": 0.285714,
+          "doc_key_tp": 9,
+          "doc_key_recall": 0.321429,
+          "block_pair_tp": 8,
+          "block_pair_recall": 0.285714,
+          "doc_pair_tp": 9,
+          "doc_pair_recall": 0.321429,
+          "missing_even_at_doc_scope": 19,
+          "system_block_facts": 10,
+          "system_doc_facts": 37,
+          "system_block_fp": 2,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        }
+      },
+      "test": {
+        "entities": {
+          "reference_support": 483,
+          "block_key_tp": 200,
+          "block_key_recall": 0.414079,
+          "doc_key_tp": 349,
+          "doc_key_recall": 0.722567,
+          "block_pair_tp": 209,
+          "block_pair_recall": 0.432712,
+          "doc_pair_tp": 360,
+          "doc_pair_recall": 0.745342,
+          "missing_even_at_doc_scope": 123,
+          "system_block_facts": 257,
+          "system_doc_facts": 922,
+          "system_block_fp": 57,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "events": {
+          "reference_support": 200,
+          "block_key_tp": 14,
+          "block_key_recall": 0.07,
+          "doc_key_tp": 19,
+          "doc_key_recall": 0.095,
+          "block_pair_tp": 65,
+          "block_pair_recall": 0.325,
+          "doc_pair_tp": 71,
+          "doc_pair_recall": 0.355,
+          "missing_even_at_doc_scope": 129,
+          "system_block_facts": 98,
+          "system_doc_facts": 329,
+          "system_block_fp": 84,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "relations": {
+          "reference_support": 444,
+          "block_key_tp": 41,
+          "block_key_recall": 0.092342,
+          "doc_key_tp": 49,
+          "doc_key_recall": 0.11036,
+          "block_pair_tp": 143,
+          "block_pair_recall": 0.322072,
+          "doc_pair_tp": 158,
+          "doc_pair_recall": 0.355856,
+          "missing_even_at_doc_scope": 286,
+          "system_block_facts": 223,
+          "system_doc_facts": 742,
+          "system_block_fp": 182,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "times": {
+          "reference_support": 77,
+          "block_key_tp": 22,
+          "block_key_recall": 0.285714,
+          "doc_key_tp": 32,
+          "doc_key_recall": 0.415584,
+          "block_pair_tp": 22,
+          "block_pair_recall": 0.285714,
+          "doc_pair_tp": 32,
+          "doc_pair_recall": 0.415584,
+          "missing_even_at_doc_scope": 45,
+          "system_block_facts": 37,
+          "system_doc_facts": 128,
+          "system_block_fp": 15,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        }
+      },
+      "合计": {
+        "entities": {
+          "reference_support": 633,
+          "block_key_tp": 257,
+          "block_key_recall": 0.406003,
+          "doc_key_tp": 448,
+          "doc_key_recall": 0.707741,
+          "block_pair_tp": 270,
+          "block_pair_recall": 0.42654,
+          "doc_pair_tp": 463,
+          "doc_pair_recall": 0.731438,
+          "missing_even_at_doc_scope": 170,
+          "system_block_facts": 326,
+          "system_doc_facts": 1218,
+          "system_block_fp": 69,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "events": {
+          "reference_support": 267,
+          "block_key_tp": 19,
+          "block_key_recall": 0.071161,
+          "doc_key_tp": 26,
+          "doc_key_recall": 0.097378,
+          "block_pair_tp": 85,
+          "block_pair_recall": 0.318352,
+          "doc_pair_tp": 93,
+          "doc_pair_recall": 0.348315,
+          "missing_even_at_doc_scope": 174,
+          "system_block_facts": 124,
+          "system_doc_facts": 441,
+          "system_block_fp": 105,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "relations": {
+          "reference_support": 581,
+          "block_key_tp": 52,
+          "block_key_recall": 0.089501,
+          "doc_key_tp": 61,
+          "doc_key_recall": 0.104991,
+          "block_pair_tp": 192,
+          "block_pair_recall": 0.330465,
+          "doc_pair_tp": 209,
+          "doc_pair_recall": 0.359725,
+          "missing_even_at_doc_scope": 372,
+          "system_block_facts": 284,
+          "system_doc_facts": 960,
+          "system_block_fp": 232,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "times": {
+          "reference_support": 105,
+          "block_key_tp": 30,
+          "block_key_recall": 0.285714,
+          "doc_key_tp": 41,
+          "doc_key_recall": 0.390476,
+          "block_pair_tp": 30,
+          "block_pair_recall": 0.285714,
+          "doc_pair_tp": 41,
+          "doc_pair_recall": 0.390476,
+          "missing_even_at_doc_scope": 64,
+          "system_block_facts": 47,
+          "system_doc_facts": 165,
+          "system_block_fp": 17,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        }
+      }
+    },
+    "event_time_nonempty_rate": {
+      "dev": {
+        "reference_events": 67,
+        "reference_events_with_time": 19,
+        "reference_nonempty_rate": 0.283582,
+        "system_events": 26,
+        "system_events_with_time": 10,
+        "system_nonempty_rate": 0.384615,
+        "system_events_with_time_after_backfill": 14,
+        "system_nonempty_rate_after_backfill": 0.538462
+      },
+      "test": {
+        "reference_events": 200,
+        "reference_events_with_time": 65,
+        "reference_nonempty_rate": 0.325,
+        "system_events": 98,
+        "system_events_with_time": 37,
+        "system_nonempty_rate": 0.377551,
+        "system_events_with_time_after_backfill": 51,
+        "system_nonempty_rate_after_backfill": 0.520408
+      },
+      "合计": {
+        "reference_events": 267,
+        "reference_events_with_time": 84,
+        "reference_nonempty_rate": 0.314607,
+        "system_events": 124,
+        "system_events_with_time": 47,
+        "system_nonempty_rate": 0.379032,
+        "system_events_with_time_after_backfill": 65,
+        "system_nonempty_rate_after_backfill": 0.524194
+      }
+    },
+    "duplicate_key_diagnostics": {
+      "entities": {
+        "reference_multi": 633,
+        "reference_uniq": 633,
+        "system_multi": 326,
+        "system_uniq": 326
+      },
+      "events": {
+        "reference_multi": 267,
+        "reference_uniq": 267,
+        "system_multi": 124,
+        "system_uniq": 124
+      },
+      "relations": {
+        "reference_multi": 581,
+        "reference_uniq": 581,
+        "system_multi": 284,
+        "system_uniq": 284
+      },
+      "times": {
+        "reference_multi": 107,
+        "reference_uniq": 105,
+        "system_multi": 47,
+        "system_uniq": 47
+      }
+    },
+    "uncovered_chunks": {
+      "dev": {
+        "items": 17,
+        "items_with_reference_facts": 13,
+        "reference_facts_on_uncovered": 79
+      },
+      "test": {
+        "items": 56,
+        "items_with_reference_facts": 46,
+        "reference_facts_on_uncovered": 221
+      }
+    }
+  },
+  "counter_reference_readings": {
+    "note": "把参照集换成 deepseek-v4-pro 未修复版的对照读数；不是主口径。",
+    "metrics": {
+      "dev": {
+        "entities": {
+          "main": {
+            "tp": 46,
+            "fp": 23,
+            "fn": 91,
+            "support_reference": 137,
+            "predicted_system": 69,
+            "precision": 0.666667,
+            "recall": 0.335766,
+            "f1": 0.446602
+          },
+          "quote_pair": {
+            "tp": 51,
+            "fp": 18,
+            "fn": 86,
+            "support_reference": 137,
+            "predicted_system": 69,
+            "precision": 0.73913,
+            "recall": 0.372263,
+            "f1": 0.495146
+          },
+          "strict_quote": {
+            "tp": 39,
+            "fp": 23,
+            "fn": 91,
+            "support_reference": 130,
+            "predicted_system": 62,
+            "precision": 0.629032,
+            "recall": 0.3,
+            "f1": 0.40625
+          },
+          "compat": {
+            "tp": 46,
+            "fp": 23,
+            "fn": 91,
+            "support_reference": 137,
+            "predicted_system": 69,
+            "precision": 0.666667,
+            "recall": 0.335766,
+            "f1": 0.446602
+          }
+        },
+        "events": {
+          "main": {
+            "tp": 2,
+            "fp": 24,
+            "fn": 63,
+            "support_reference": 65,
+            "predicted_system": 26,
+            "precision": 0.076923,
+            "recall": 0.030769,
+            "f1": 0.043956
+          },
+          "quote_pair": {
+            "tp": 16,
+            "fp": 10,
+            "fn": 49,
+            "support_reference": 65,
+            "predicted_system": 26,
+            "precision": 0.615385,
+            "recall": 0.246154,
+            "f1": 0.351648
+          },
+          "strict_quote": {
+            "tp": 1,
+            "fp": 24,
+            "fn": 63,
+            "support_reference": 64,
+            "predicted_system": 25,
+            "precision": 0.04,
+            "recall": 0.015625,
+            "f1": 0.022472
+          },
+          "compat": {
+            "tp": 2,
+            "fp": 24,
+            "fn": 63,
+            "support_reference": 65,
+            "predicted_system": 26,
+            "precision": 0.076923,
+            "recall": 0.030769,
+            "f1": 0.043956
+          }
+        },
+        "relations": {
+          "main": {
+            "tp": 4,
+            "fp": 57,
+            "fn": 111,
+            "support_reference": 115,
+            "predicted_system": 61,
+            "precision": 0.065574,
+            "recall": 0.034783,
+            "f1": 0.045455
+          },
+          "quote_pair": {
+            "tp": 31,
+            "fp": 30,
+            "fn": 84,
+            "support_reference": 115,
+            "predicted_system": 61,
+            "precision": 0.508197,
+            "recall": 0.269565,
+            "f1": 0.352273
+          },
+          "strict_quote": {
+            "tp": 1,
+            "fp": 57,
+            "fn": 111,
+            "support_reference": 112,
+            "predicted_system": 58,
+            "precision": 0.017241,
+            "recall": 0.008929,
+            "f1": 0.011765
+          },
+          "strict_quote_role": {
+            "tp": 1,
+            "fp": 57,
+            "fn": 111,
+            "support_reference": 112,
+            "predicted_system": 58,
+            "precision": 0.017241,
+            "recall": 0.008929,
+            "f1": 0.011765
+          },
+          "compat": {
+            "tp": 31,
+            "fp": 25,
+            "fn": 73,
+            "support_reference": 104,
+            "predicted_system": 56,
+            "precision": 0.553571,
+            "recall": 0.298077,
+            "f1": 0.3875
+          }
+        },
+        "times": {
+          "main": {
+            "tp": 7,
+            "fp": 3,
+            "fn": 17,
+            "support_reference": 24,
+            "predicted_system": 10,
+            "precision": 0.7,
+            "recall": 0.291667,
+            "f1": 0.411765
+          },
+          "quote_pair": {
+            "tp": 7,
+            "fp": 3,
+            "fn": 17,
+            "support_reference": 24,
+            "predicted_system": 10,
+            "precision": 0.7,
+            "recall": 0.291667,
+            "f1": 0.411765
+          },
+          "compat": {
+            "tp": 7,
+            "fp": 3,
+            "fn": 17,
+            "support_reference": 24,
+            "predicted_system": 10,
+            "precision": 0.7,
+            "recall": 0.291667,
+            "f1": 0.411765
+          }
+        }
+      },
+      "test": {
+        "entities": {
+          "main": {
+            "tp": 198,
+            "fp": 59,
+            "fn": 318,
+            "support_reference": 516,
+            "predicted_system": 257,
+            "precision": 0.770428,
+            "recall": 0.383721,
+            "f1": 0.51229
+          },
+          "quote_pair": {
+            "tp": 204,
+            "fp": 53,
+            "fn": 312,
+            "support_reference": 516,
+            "predicted_system": 257,
+            "precision": 0.793774,
+            "recall": 0.395349,
+            "f1": 0.527814
+          },
+          "strict_quote": {
+            "tp": 158,
+            "fp": 59,
+            "fn": 318,
+            "support_reference": 476,
+            "predicted_system": 217,
+            "precision": 0.728111,
+            "recall": 0.331933,
+            "f1": 0.455988
+          },
+          "compat": {
+            "tp": 198,
+            "fp": 59,
+            "fn": 318,
+            "support_reference": 516,
+            "predicted_system": 257,
+            "precision": 0.770428,
+            "recall": 0.383721,
+            "f1": 0.51229
+          }
+        },
+        "events": {
+          "main": {
+            "tp": 13,
+            "fp": 85,
+            "fn": 157,
+            "support_reference": 170,
+            "predicted_system": 98,
+            "precision": 0.132653,
+            "recall": 0.076471,
+            "f1": 0.097015
+          },
+          "quote_pair": {
+            "tp": 56,
+            "fp": 42,
+            "fn": 114,
+            "support_reference": 170,
+            "predicted_system": 98,
+            "precision": 0.571429,
+            "recall": 0.329412,
+            "f1": 0.41791
+          },
+          "strict_quote": {
+            "tp": 9,
+            "fp": 85,
+            "fn": 157,
+            "support_reference": 166,
+            "predicted_system": 94,
+            "precision": 0.095745,
+            "recall": 0.054217,
+            "f1": 0.069231
+          },
+          "compat": {
+            "tp": 13,
+            "fp": 85,
+            "fn": 157,
+            "support_reference": 170,
+            "predicted_system": 98,
+            "precision": 0.132653,
+            "recall": 0.076471,
+            "f1": 0.097015
+          }
+        },
+        "relations": {
+          "main": {
+            "tp": 29,
+            "fp": 194,
+            "fn": 311,
+            "support_reference": 340,
+            "predicted_system": 223,
+            "precision": 0.130045,
+            "recall": 0.085294,
+            "f1": 0.10302
+          },
+          "quote_pair": {
+            "tp": 107,
+            "fp": 116,
+            "fn": 233,
+            "support_reference": 340,
+            "predicted_system": 223,
+            "precision": 0.479821,
+            "recall": 0.314706,
+            "f1": 0.380107
+          },
+          "strict_quote": {
+            "tp": 24,
+            "fp": 194,
+            "fn": 311,
+            "support_reference": 335,
+            "predicted_system": 218,
+            "precision": 0.110092,
+            "recall": 0.071642,
+            "f1": 0.086799
+          },
+          "strict_quote_role": {
+            "tp": 21,
+            "fp": 194,
+            "fn": 311,
+            "support_reference": 332,
+            "predicted_system": 215,
+            "precision": 0.097674,
+            "recall": 0.063253,
+            "f1": 0.076782
+          },
+          "compat": {
+            "tp": 124,
+            "fp": 90,
+            "fn": 194,
+            "support_reference": 318,
+            "predicted_system": 214,
+            "precision": 0.579439,
+            "recall": 0.389937,
+            "f1": 0.466165
+          }
+        },
+        "times": {
+          "main": {
+            "tp": 18,
+            "fp": 19,
+            "fn": 44,
+            "support_reference": 62,
+            "predicted_system": 37,
+            "precision": 0.486486,
+            "recall": 0.290323,
+            "f1": 0.363636
+          },
+          "quote_pair": {
+            "tp": 18,
+            "fp": 19,
+            "fn": 44,
+            "support_reference": 62,
+            "predicted_system": 37,
+            "precision": 0.486486,
+            "recall": 0.290323,
+            "f1": 0.363636
+          },
+          "compat": {
+            "tp": 18,
+            "fp": 19,
+            "fn": 43,
+            "support_reference": 61,
+            "predicted_system": 37,
+            "precision": 0.486486,
+            "recall": 0.295082,
+            "f1": 0.367347
+          }
+        }
+      },
+      "合计": {
+        "entities": {
+          "main": {
+            "tp": 244,
+            "fp": 82,
+            "fn": 409,
+            "support_reference": 653,
+            "predicted_system": 326,
+            "precision": 0.748466,
+            "recall": 0.37366,
+            "f1": 0.498468
+          },
+          "quote_pair": {
+            "tp": 255,
+            "fp": 71,
+            "fn": 398,
+            "support_reference": 653,
+            "predicted_system": 326,
+            "precision": 0.782209,
+            "recall": 0.390505,
+            "f1": 0.52094
+          },
+          "strict_quote": {
+            "tp": 197,
+            "fp": 82,
+            "fn": 409,
+            "support_reference": 606,
+            "predicted_system": 279,
+            "precision": 0.706093,
+            "recall": 0.325083,
+            "f1": 0.445198
+          },
+          "compat": {
+            "tp": 244,
+            "fp": 82,
+            "fn": 409,
+            "support_reference": 653,
+            "predicted_system": 326,
+            "precision": 0.748466,
+            "recall": 0.37366,
+            "f1": 0.498468
+          }
+        },
+        "events": {
+          "main": {
+            "tp": 15,
+            "fp": 109,
+            "fn": 220,
+            "support_reference": 235,
+            "predicted_system": 124,
+            "precision": 0.120968,
+            "recall": 0.06383,
+            "f1": 0.083565
+          },
+          "quote_pair": {
+            "tp": 72,
+            "fp": 52,
+            "fn": 163,
+            "support_reference": 235,
+            "predicted_system": 124,
+            "precision": 0.580645,
+            "recall": 0.306383,
+            "f1": 0.401114
+          },
+          "strict_quote": {
+            "tp": 10,
+            "fp": 109,
+            "fn": 220,
+            "support_reference": 230,
+            "predicted_system": 119,
+            "precision": 0.084034,
+            "recall": 0.043478,
+            "f1": 0.057307
+          },
+          "compat": {
+            "tp": 15,
+            "fp": 109,
+            "fn": 220,
+            "support_reference": 235,
+            "predicted_system": 124,
+            "precision": 0.120968,
+            "recall": 0.06383,
+            "f1": 0.083565
+          }
+        },
+        "relations": {
+          "main": {
+            "tp": 33,
+            "fp": 251,
+            "fn": 422,
+            "support_reference": 455,
+            "predicted_system": 284,
+            "precision": 0.116197,
+            "recall": 0.072527,
+            "f1": 0.08931
+          },
+          "quote_pair": {
+            "tp": 138,
+            "fp": 146,
+            "fn": 317,
+            "support_reference": 455,
+            "predicted_system": 284,
+            "precision": 0.485915,
+            "recall": 0.303297,
+            "f1": 0.373478
+          },
+          "strict_quote": {
+            "tp": 25,
+            "fp": 251,
+            "fn": 422,
+            "support_reference": 447,
+            "predicted_system": 276,
+            "precision": 0.09058,
+            "recall": 0.055928,
+            "f1": 0.069156
+          },
+          "strict_quote_role": {
+            "tp": 22,
+            "fp": 251,
+            "fn": 422,
+            "support_reference": 444,
+            "predicted_system": 273,
+            "precision": 0.080586,
+            "recall": 0.04955,
+            "f1": 0.061367
+          },
+          "compat": {
+            "tp": 155,
+            "fp": 115,
+            "fn": 267,
+            "support_reference": 422,
+            "predicted_system": 270,
+            "precision": 0.574074,
+            "recall": 0.367299,
+            "f1": 0.447977
+          }
+        },
+        "times": {
+          "main": {
+            "tp": 25,
+            "fp": 22,
+            "fn": 61,
+            "support_reference": 86,
+            "predicted_system": 47,
+            "precision": 0.531915,
+            "recall": 0.290698,
+            "f1": 0.37594
+          },
+          "quote_pair": {
+            "tp": 25,
+            "fp": 22,
+            "fn": 61,
+            "support_reference": 86,
+            "predicted_system": 47,
+            "precision": 0.531915,
+            "recall": 0.290698,
+            "f1": 0.37594
+          },
+          "compat": {
+            "tp": 25,
+            "fp": 22,
+            "fn": 60,
+            "support_reference": 85,
+            "predicted_system": 47,
+            "precision": 0.531915,
+            "recall": 0.294118,
+            "f1": 0.378788
+          }
+        }
+      }
+    },
+    "type_metrics": {
+      "dev": {
+        "entities": {
+          "Company": {
+            "tp": 30,
+            "fp": 7,
+            "fn": 53,
+            "support_reference": 83,
+            "predicted_system": 37,
+            "precision": 0.810811,
+            "recall": 0.361446,
+            "f1": 0.5
+          },
+          "Person": {
+            "tp": 4,
+            "fp": 2,
+            "fn": 17,
+            "support_reference": 21,
+            "predicted_system": 6,
+            "precision": 0.666667,
+            "recall": 0.190476,
+            "f1": 0.296296
+          },
+          "Industry": {
+            "tp": 0,
+            "fp": 2,
+            "fn": 1,
+            "support_reference": 1,
+            "predicted_system": 2,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "Institution": {
+            "tp": 9,
+            "fp": 11,
+            "fn": 11,
+            "support_reference": 20,
+            "predicted_system": 20,
+            "precision": 0.45,
+            "recall": 0.45,
+            "f1": 0.45
+          },
+          "Policy": {
+            "tp": 3,
+            "fp": 1,
+            "fn": 9,
+            "support_reference": 12,
+            "predicted_system": 4,
+            "precision": 0.75,
+            "recall": 0.25,
+            "f1": 0.375
+          }
+        },
+        "events": {
+          "业绩": {
+            "tp": 0,
+            "fp": 2,
+            "fn": 8,
+            "support_reference": 8,
+            "predicted_system": 2,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "监管": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 3,
+            "support_reference": 3,
+            "predicted_system": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "股权": {
+            "tp": 1,
+            "fp": 7,
+            "fn": 22,
+            "support_reference": 23,
+            "predicted_system": 8,
+            "precision": 0.125,
+            "recall": 0.043478,
+            "f1": 0.064516
+          },
+          "投资并购": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 4,
+            "support_reference": 4,
+            "predicted_system": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "重大合同": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 3,
+            "support_reference": 3,
+            "predicted_system": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "产品": {
+            "tp": 1,
+            "fp": 3,
+            "fn": 8,
+            "support_reference": 9,
+            "predicted_system": 4,
+            "precision": 0.25,
+            "recall": 0.111111,
+            "f1": 0.153846
+          },
+          "政策": {
+            "tp": 0,
+            "fp": 2,
+            "fn": 3,
+            "support_reference": 3,
+            "predicted_system": 2,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "重大经营": {
+            "tp": 0,
+            "fp": 7,
+            "fn": 12,
+            "support_reference": 12,
+            "predicted_system": 7,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          }
+        },
+        "relations": {
+          "BELONGS_TO": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "SUPPLIES": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 1,
+            "precision": 0.0,
+            "recall": null,
+            "f1": null
+          },
+          "CUSTOMER_OF": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "COMPETES_WITH": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "HAS_EXECUTIVE": {
+            "tp": 1,
+            "fp": 4,
+            "fn": 15,
+            "support_reference": 16,
+            "predicted_system": 5,
+            "precision": 0.2,
+            "recall": 0.0625,
+            "f1": 0.095238
+          },
+          "PARTICIPATES_IN": {
+            "tp": 2,
+            "fp": 45,
+            "fn": 85,
+            "support_reference": 87,
+            "predicted_system": 47,
+            "precision": 0.042553,
+            "recall": 0.022989,
+            "f1": 0.029851
+          },
+          "ISSUED_BY": {
+            "tp": 0,
+            "fp": 5,
+            "fn": 4,
+            "support_reference": 4,
+            "predicted_system": 5,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "RELATED_TO": {
+            "tp": 1,
+            "fp": 2,
+            "fn": 7,
+            "support_reference": 8,
+            "predicted_system": 3,
+            "precision": 0.333333,
+            "recall": 0.125,
+            "f1": 0.181818
+          },
+          "EVIDENCED_BY": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        "times": {
+          "event_time": {
+            "tp": 7,
+            "fp": 3,
+            "fn": 8,
+            "support_reference": 15,
+            "predicted_system": 10,
+            "precision": 0.7,
+            "recall": 0.466667,
+            "f1": 0.56
+          },
+          "valid_from": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 5,
+            "support_reference": 5,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          },
+          "valid_to": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 4,
+            "support_reference": 4,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      },
+      "test": {
+        "entities": {
+          "Company": {
+            "tp": 116,
+            "fp": 22,
+            "fn": 160,
+            "support_reference": 276,
+            "predicted_system": 138,
+            "precision": 0.84058,
+            "recall": 0.42029,
+            "f1": 0.560386
+          },
+          "Person": {
+            "tp": 32,
+            "fp": 6,
+            "fn": 29,
+            "support_reference": 61,
+            "predicted_system": 38,
+            "precision": 0.842105,
+            "recall": 0.52459,
+            "f1": 0.646465
+          },
+          "Industry": {
+            "tp": 0,
+            "fp": 5,
+            "fn": 13,
+            "support_reference": 13,
+            "predicted_system": 5,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "Institution": {
+            "tp": 39,
+            "fp": 23,
+            "fn": 63,
+            "support_reference": 102,
+            "predicted_system": 62,
+            "precision": 0.629032,
+            "recall": 0.382353,
+            "f1": 0.47561
+          },
+          "Policy": {
+            "tp": 11,
+            "fp": 3,
+            "fn": 53,
+            "support_reference": 64,
+            "predicted_system": 14,
+            "precision": 0.785714,
+            "recall": 0.171875,
+            "f1": 0.282051
+          }
+        },
+        "events": {
+          "业绩": {
+            "tp": 0,
+            "fp": 9,
+            "fn": 24,
+            "support_reference": 24,
+            "predicted_system": 9,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "监管": {
+            "tp": 1,
+            "fp": 9,
+            "fn": 7,
+            "support_reference": 8,
+            "predicted_system": 10,
+            "precision": 0.1,
+            "recall": 0.125,
+            "f1": 0.111111
+          },
+          "股权": {
+            "tp": 3,
+            "fp": 15,
+            "fn": 51,
+            "support_reference": 54,
+            "predicted_system": 18,
+            "precision": 0.166667,
+            "recall": 0.055556,
+            "f1": 0.083333
+          },
+          "投资并购": {
+            "tp": 1,
+            "fp": 3,
+            "fn": 4,
+            "support_reference": 5,
+            "predicted_system": 4,
+            "precision": 0.25,
+            "recall": 0.2,
+            "f1": 0.222222
+          },
+          "重大合同": {
+            "tp": 2,
+            "fp": 17,
+            "fn": 24,
+            "support_reference": 26,
+            "predicted_system": 19,
+            "precision": 0.105263,
+            "recall": 0.076923,
+            "f1": 0.088889
+          },
+          "产品": {
+            "tp": 0,
+            "fp": 13,
+            "fn": 20,
+            "support_reference": 20,
+            "predicted_system": 13,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "政策": {
+            "tp": 3,
+            "fp": 5,
+            "fn": 10,
+            "support_reference": 13,
+            "predicted_system": 8,
+            "precision": 0.375,
+            "recall": 0.230769,
+            "f1": 0.285714
+          },
+          "重大经营": {
+            "tp": 3,
+            "fp": 14,
+            "fn": 17,
+            "support_reference": 20,
+            "predicted_system": 17,
+            "precision": 0.176471,
+            "recall": 0.15,
+            "f1": 0.162162
+          }
+        },
+        "relations": {
+          "BELONGS_TO": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "support_reference": 1,
+            "predicted_system": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "SUPPLIES": {
+            "tp": 0,
+            "fp": 3,
+            "fn": 5,
+            "support_reference": 5,
+            "predicted_system": 3,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "CUSTOMER_OF": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "COMPETES_WITH": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "HAS_EXECUTIVE": {
+            "tp": 11,
+            "fp": 16,
+            "fn": 6,
+            "support_reference": 17,
+            "predicted_system": 27,
+            "precision": 0.407407,
+            "recall": 0.647059,
+            "f1": 0.5
+          },
+          "PARTICIPATES_IN": {
+            "tp": 15,
+            "fp": 149,
+            "fn": 244,
+            "support_reference": 259,
+            "predicted_system": 164,
+            "precision": 0.091463,
+            "recall": 0.057915,
+            "f1": 0.070922
+          },
+          "ISSUED_BY": {
+            "tp": 2,
+            "fp": 15,
+            "fn": 11,
+            "support_reference": 13,
+            "predicted_system": 17,
+            "precision": 0.117647,
+            "recall": 0.153846,
+            "f1": 0.133333
+          },
+          "RELATED_TO": {
+            "tp": 1,
+            "fp": 10,
+            "fn": 44,
+            "support_reference": 45,
+            "predicted_system": 11,
+            "precision": 0.090909,
+            "recall": 0.022222,
+            "f1": 0.035714
+          },
+          "EVIDENCED_BY": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        "times": {
+          "event_time": {
+            "tp": 18,
+            "fp": 19,
+            "fn": 35,
+            "support_reference": 53,
+            "predicted_system": 37,
+            "precision": 0.486486,
+            "recall": 0.339623,
+            "f1": 0.4
+          },
+          "valid_from": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 5,
+            "support_reference": 5,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          },
+          "valid_to": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 4,
+            "support_reference": 4,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      },
+      "合计": {
+        "entities": {
+          "Company": {
+            "tp": 146,
+            "fp": 29,
+            "fn": 213,
+            "support_reference": 359,
+            "predicted_system": 175,
+            "precision": 0.834286,
+            "recall": 0.406685,
+            "f1": 0.546816
+          },
+          "Person": {
+            "tp": 36,
+            "fp": 8,
+            "fn": 46,
+            "support_reference": 82,
+            "predicted_system": 44,
+            "precision": 0.818182,
+            "recall": 0.439024,
+            "f1": 0.571429
+          },
+          "Industry": {
+            "tp": 0,
+            "fp": 7,
+            "fn": 14,
+            "support_reference": 14,
+            "predicted_system": 7,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "Institution": {
+            "tp": 48,
+            "fp": 34,
+            "fn": 74,
+            "support_reference": 122,
+            "predicted_system": 82,
+            "precision": 0.585366,
+            "recall": 0.393443,
+            "f1": 0.470588
+          },
+          "Policy": {
+            "tp": 14,
+            "fp": 4,
+            "fn": 62,
+            "support_reference": 76,
+            "predicted_system": 18,
+            "precision": 0.777778,
+            "recall": 0.184211,
+            "f1": 0.297872
+          }
+        },
+        "events": {
+          "业绩": {
+            "tp": 0,
+            "fp": 11,
+            "fn": 32,
+            "support_reference": 32,
+            "predicted_system": 11,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "监管": {
+            "tp": 1,
+            "fp": 10,
+            "fn": 10,
+            "support_reference": 11,
+            "predicted_system": 11,
+            "precision": 0.090909,
+            "recall": 0.090909,
+            "f1": 0.090909
+          },
+          "股权": {
+            "tp": 4,
+            "fp": 22,
+            "fn": 73,
+            "support_reference": 77,
+            "predicted_system": 26,
+            "precision": 0.153846,
+            "recall": 0.051948,
+            "f1": 0.07767
+          },
+          "投资并购": {
+            "tp": 1,
+            "fp": 4,
+            "fn": 8,
+            "support_reference": 9,
+            "predicted_system": 5,
+            "precision": 0.2,
+            "recall": 0.111111,
+            "f1": 0.142857
+          },
+          "重大合同": {
+            "tp": 2,
+            "fp": 18,
+            "fn": 27,
+            "support_reference": 29,
+            "predicted_system": 20,
+            "precision": 0.1,
+            "recall": 0.068966,
+            "f1": 0.081633
+          },
+          "产品": {
+            "tp": 1,
+            "fp": 16,
+            "fn": 28,
+            "support_reference": 29,
+            "predicted_system": 17,
+            "precision": 0.058824,
+            "recall": 0.034483,
+            "f1": 0.043478
+          },
+          "政策": {
+            "tp": 3,
+            "fp": 7,
+            "fn": 13,
+            "support_reference": 16,
+            "predicted_system": 10,
+            "precision": 0.3,
+            "recall": 0.1875,
+            "f1": 0.230769
+          },
+          "重大经营": {
+            "tp": 3,
+            "fp": 21,
+            "fn": 29,
+            "support_reference": 32,
+            "predicted_system": 24,
+            "precision": 0.125,
+            "recall": 0.09375,
+            "f1": 0.107143
+          }
+        },
+        "relations": {
+          "BELONGS_TO": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "support_reference": 1,
+            "predicted_system": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "SUPPLIES": {
+            "tp": 0,
+            "fp": 4,
+            "fn": 5,
+            "support_reference": 5,
+            "predicted_system": 4,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "CUSTOMER_OF": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "COMPETES_WITH": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "HAS_EXECUTIVE": {
+            "tp": 12,
+            "fp": 20,
+            "fn": 21,
+            "support_reference": 33,
+            "predicted_system": 32,
+            "precision": 0.375,
+            "recall": 0.363636,
+            "f1": 0.369231
+          },
+          "PARTICIPATES_IN": {
+            "tp": 17,
+            "fp": 194,
+            "fn": 329,
+            "support_reference": 346,
+            "predicted_system": 211,
+            "precision": 0.080569,
+            "recall": 0.049133,
+            "f1": 0.061041
+          },
+          "ISSUED_BY": {
+            "tp": 2,
+            "fp": 20,
+            "fn": 15,
+            "support_reference": 17,
+            "predicted_system": 22,
+            "precision": 0.090909,
+            "recall": 0.117647,
+            "f1": 0.102564
+          },
+          "RELATED_TO": {
+            "tp": 2,
+            "fp": 12,
+            "fn": 51,
+            "support_reference": 53,
+            "predicted_system": 14,
+            "precision": 0.142857,
+            "recall": 0.037736,
+            "f1": 0.059701
+          },
+          "EVIDENCED_BY": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "support_reference": 0,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        "times": {
+          "event_time": {
+            "tp": 25,
+            "fp": 22,
+            "fn": 43,
+            "support_reference": 68,
+            "predicted_system": 47,
+            "precision": 0.531915,
+            "recall": 0.367647,
+            "f1": 0.434783
+          },
+          "valid_from": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 10,
+            "support_reference": 10,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          },
+          "valid_to": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 8,
+            "support_reference": 8,
+            "predicted_system": 0,
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      }
+    },
+    "doc_scope_metrics": {
+      "dev": {
+        "entities": {
+          "reference_support": 137,
+          "block_key_tp": 46,
+          "block_key_recall": 0.335766,
+          "doc_key_tp": 87,
+          "doc_key_recall": 0.635036,
+          "block_pair_tp": 51,
+          "block_pair_recall": 0.372263,
+          "doc_pair_tp": 93,
+          "doc_pair_recall": 0.678832,
+          "missing_even_at_doc_scope": 44,
+          "system_block_facts": 69,
+          "system_doc_facts": 296,
+          "system_block_fp": 23,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "events": {
+          "reference_support": 65,
+          "block_key_tp": 2,
+          "block_key_recall": 0.030769,
+          "doc_key_tp": 2,
+          "doc_key_recall": 0.030769,
+          "block_pair_tp": 16,
+          "block_pair_recall": 0.246154,
+          "doc_pair_tp": 16,
+          "doc_pair_recall": 0.246154,
+          "missing_even_at_doc_scope": 49,
+          "system_block_facts": 26,
+          "system_doc_facts": 112,
+          "system_block_fp": 24,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "relations": {
+          "reference_support": 115,
+          "block_key_tp": 4,
+          "block_key_recall": 0.034783,
+          "doc_key_tp": 5,
+          "doc_key_recall": 0.043478,
+          "block_pair_tp": 31,
+          "block_pair_recall": 0.269565,
+          "doc_pair_tp": 33,
+          "doc_pair_recall": 0.286957,
+          "missing_even_at_doc_scope": 82,
+          "system_block_facts": 61,
+          "system_doc_facts": 218,
+          "system_block_fp": 57,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "times": {
+          "reference_support": 24,
+          "block_key_tp": 7,
+          "block_key_recall": 0.291667,
+          "doc_key_tp": 10,
+          "doc_key_recall": 0.416667,
+          "block_pair_tp": 7,
+          "block_pair_recall": 0.291667,
+          "doc_pair_tp": 10,
+          "doc_pair_recall": 0.416667,
+          "missing_even_at_doc_scope": 14,
+          "system_block_facts": 10,
+          "system_doc_facts": 37,
+          "system_block_fp": 3,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        }
+      },
+      "test": {
+        "entities": {
+          "reference_support": 516,
+          "block_key_tp": 198,
+          "block_key_recall": 0.383721,
+          "doc_key_tp": 354,
+          "doc_key_recall": 0.686047,
+          "block_pair_tp": 204,
+          "block_pair_recall": 0.395349,
+          "doc_pair_tp": 362,
+          "doc_pair_recall": 0.70155,
+          "missing_even_at_doc_scope": 154,
+          "system_block_facts": 257,
+          "system_doc_facts": 922,
+          "system_block_fp": 59,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "events": {
+          "reference_support": 170,
+          "block_key_tp": 13,
+          "block_key_recall": 0.076471,
+          "doc_key_tp": 18,
+          "doc_key_recall": 0.105882,
+          "block_pair_tp": 56,
+          "block_pair_recall": 0.329412,
+          "doc_pair_tp": 64,
+          "doc_pair_recall": 0.376471,
+          "missing_even_at_doc_scope": 106,
+          "system_block_facts": 98,
+          "system_doc_facts": 329,
+          "system_block_fp": 85,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "relations": {
+          "reference_support": 340,
+          "block_key_tp": 29,
+          "block_key_recall": 0.085294,
+          "doc_key_tp": 38,
+          "doc_key_recall": 0.111765,
+          "block_pair_tp": 107,
+          "block_pair_recall": 0.314706,
+          "doc_pair_tp": 120,
+          "doc_pair_recall": 0.352941,
+          "missing_even_at_doc_scope": 220,
+          "system_block_facts": 223,
+          "system_doc_facts": 742,
+          "system_block_fp": 194,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "times": {
+          "reference_support": 62,
+          "block_key_tp": 18,
+          "block_key_recall": 0.290323,
+          "doc_key_tp": 24,
+          "doc_key_recall": 0.387097,
+          "block_pair_tp": 18,
+          "block_pair_recall": 0.290323,
+          "doc_pair_tp": 24,
+          "doc_pair_recall": 0.387097,
+          "missing_even_at_doc_scope": 38,
+          "system_block_facts": 37,
+          "system_doc_facts": 128,
+          "system_block_fp": 19,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        }
+      },
+      "合计": {
+        "entities": {
+          "reference_support": 653,
+          "block_key_tp": 244,
+          "block_key_recall": 0.37366,
+          "doc_key_tp": 441,
+          "doc_key_recall": 0.675345,
+          "block_pair_tp": 255,
+          "block_pair_recall": 0.390505,
+          "doc_pair_tp": 455,
+          "doc_pair_recall": 0.696784,
+          "missing_even_at_doc_scope": 198,
+          "system_block_facts": 326,
+          "system_doc_facts": 1218,
+          "system_block_fp": 82,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "events": {
+          "reference_support": 235,
+          "block_key_tp": 15,
+          "block_key_recall": 0.06383,
+          "doc_key_tp": 20,
+          "doc_key_recall": 0.085106,
+          "block_pair_tp": 72,
+          "block_pair_recall": 0.306383,
+          "doc_pair_tp": 80,
+          "doc_pair_recall": 0.340426,
+          "missing_even_at_doc_scope": 155,
+          "system_block_facts": 124,
+          "system_doc_facts": 441,
+          "system_block_fp": 109,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "relations": {
+          "reference_support": 455,
+          "block_key_tp": 33,
+          "block_key_recall": 0.072527,
+          "doc_key_tp": 43,
+          "doc_key_recall": 0.094505,
+          "block_pair_tp": 138,
+          "block_pair_recall": 0.303297,
+          "doc_pair_tp": 153,
+          "doc_pair_recall": 0.336264,
+          "missing_even_at_doc_scope": 302,
+          "system_block_facts": 284,
+          "system_doc_facts": 960,
+          "system_block_fp": 251,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        },
+        "times": {
+          "reference_support": 86,
+          "block_key_tp": 25,
+          "block_key_recall": 0.290698,
+          "doc_key_tp": 34,
+          "doc_key_recall": 0.395349,
+          "block_pair_tp": 25,
+          "block_pair_recall": 0.290698,
+          "doc_pair_tp": 34,
+          "doc_pair_recall": 0.395349,
+          "missing_even_at_doc_scope": 52,
+          "system_block_facts": 47,
+          "system_doc_facts": 165,
+          "system_block_fp": 22,
+          "block_fp_same_key_elsewhere_in_doc": 0
+        }
+      }
+    }
+  }
+}

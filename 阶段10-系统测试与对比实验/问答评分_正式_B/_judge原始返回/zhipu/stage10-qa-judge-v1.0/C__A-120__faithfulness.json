@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-120",
+  "attempts": [
+    {
+      "answer_key": "C__A-120",
+      "attempt": 1,
+      "completion_tokens": 1470,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 26.729,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 6179,
+      "qid": "FQ-120",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:20:36+08:00",
+      "total_tokens": 7649
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:21:03+08:00",
+  "group": "C",
+  "input_sha256": "46e9f14d3a9b8cdd6bfbb260f92c9de476e62fb1cf97a5d7e3dbdf2b149a4f9e",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "控股关系、披露日期、获批日期2026-08-25、品种与适应症等事实均可被证据逐条支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-120",
+  "raw_text": "{\"score\": 2, \"reason\": \"控股关系、披露日期、获批日期2026-08-25、品种与适应症等事实均可被证据逐条支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

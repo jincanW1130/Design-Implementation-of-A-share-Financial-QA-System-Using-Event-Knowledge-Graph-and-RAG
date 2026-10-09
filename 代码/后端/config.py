@@ -364,6 +364,45 @@ def mysql_configured() -> bool:
 
 
 # --------------------------------------------------------------------------
+# 6.1 日志落盘（评审 P1-11：`errors.setup_logging()` 原先只挂 stderr、不落盘、无轮转）
+# --------------------------------------------------------------------------
+# 口径（"可选"的含义写清楚，便于门禁与论文逐条核对）：
+#   * `config.local.json` 里**给了非空 `log_path`** → `errors.setup_logging()` 额外挂一个
+#     `RotatingFileHandler`（轮转参数见下面的 LOG_ROTATION），**同时保留 stderr**；
+#   * **没给 / 空串 / 不是字符串 / 全是空白** → `LOG_PATH is None`，**不落文件**，
+#     `setup_logging()` 的行为与改动前**完全一致**（只有 stderr）。
+# 为什么用 `.get()` 而不是并进 `_REQUIRED_KEYS`：本文件第 6 节的纪律是"必填键缺失即 SystemExit"，
+# 而这一项按《24》/评审的口径是**可选**——并进必填会让所有**现存**的 `config.local.json`
+# （它们没有这个键）在后端启动时直接退出，那是把"可选"做成了"破坏性变更"。
+# 本项本身**不含任何口令**：只在自检里报「文件路径 ＋ 是否已配置」，不回显任何凭据取值。
+_log_path_raw = _LOCAL.get("log_path")
+# 非字符串 / 空串 / 全空白 / 指向目录 —— 四种"给了也不算数"的取值都归到「未配置」，
+# 统一在自检里如实登记（`LOG_PATH_REJECTED`），**不猜文件名、不静默改成别的路径**。
+if isinstance(_log_path_raw, str) and _log_path_raw.strip() \
+        and not os.path.isdir(os.path.abspath(_log_path_raw.strip())):
+    LOG_PATH = os.path.abspath(_log_path_raw.strip())
+    LOG_PATH_REJECTED = None
+else:
+    LOG_PATH = None                     # 未配置（或取值不可用）→ 不落文件，行为与改动前一致
+    LOG_PATH_REJECTED = None if _log_path_raw in (None, "") else repr(_log_path_raw)
+del _log_path_raw
+
+LOG_ROTATION = {
+    "max_bytes": 10 * 1024 * 1024,      # 单文件上限 10 MiB，超出即轮转
+    "backup_count": 5,                  # 保留 5 个历史文件（app.log.1 … app.log.5）
+    "encoding": "utf-8",                # 中文日志一律 UTF-8（与全仓库口径一致）
+}
+
+# 凭据键：日志落盘后**必须**确认这些取值不出现在任何一条日志里（自证脚本会逐项扫描）
+CREDENTIAL_KEYS = ("mysql_password", "neo4j_password", "api_key")
+
+
+def log_file_configured() -> bool:
+    """只回答「日志落盘配了没有」，**不返回也不打印任何凭据取值**。"""
+    return LOG_PATH is not None
+
+
+# --------------------------------------------------------------------------
 # 7. 接口层门槛参数（输入校验与频率限制；《24》第八节 G2「在文档中登记限制参数」）
 # --------------------------------------------------------------------------
 RATE_LIMIT = {
@@ -594,6 +633,16 @@ def selftest() -> int:
     print("  backend_port        = %s" % BACKEND_PORT)
     print("  frontend_port       = %s" % FRONTEND_PORT)
     print("  CORS 允许来源       = %s" % "、".join(CORS_ORIGINS))
+    print()
+    print("--- 日志落盘（评审 P1-11；本项只报路径与是否配置，不回显任何凭据）---")
+    print("  log_path 是否配置   = %s" % ("已配置" if log_file_configured() else "未配置（只出 stderr、不落文件）"))
+    print("  log_path            = %s" % (LOG_PATH if LOG_PATH else "（无）"))
+    print("  取值不可用的 log_path = %s"
+          % (LOG_PATH_REJECTED if LOG_PATH_REJECTED else "（无；键缺失或空串）"))
+    print("  轮转参数            = %d 字节／保留 %d 个历史文件／编码 %s"
+          % (LOG_ROTATION["max_bytes"], LOG_ROTATION["backup_count"], LOG_ROTATION["encoding"]))
+    print("  凭据纪律            = 日志格式与日志内容均不含 %s 的取值（由 决策者核验\\自证_评审P1-9与P1-11.py 逐项扫描）"
+          % "／".join(CREDENTIAL_KEYS))
     print()
 
     print("--- 六张表（恒为六张）---")

@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-032",
+  "attempts": [
+    {
+      "answer_key": "B__A-032",
+      "attempt": 1,
+      "completion_tokens": 2461,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 48.032,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5209,
+      "qid": "FQ-032",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:31:18+08:00",
+      "total_tokens": 7670
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:32:06+08:00",
+  "group": "B",
+  "input_sha256": "a5d6da41d32ce2ee50bc1b140dca72bbeabfbf2f85f86323443a389696ded53f",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案以证据不足为由拒答，四项所问指标数值均未给出，与参考答案对照零项正确，判错误。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-032",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案以证据不足为由拒答，四项所问指标数值均未给出，与参考答案对照零项正确，判错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

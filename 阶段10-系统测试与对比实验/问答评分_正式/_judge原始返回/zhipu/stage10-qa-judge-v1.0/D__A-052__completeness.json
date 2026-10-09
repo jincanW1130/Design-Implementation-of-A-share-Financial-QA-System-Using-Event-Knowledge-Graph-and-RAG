@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-052",
+  "attempts": [
+    {
+      "answer_key": "D__A-052",
+      "attempt": 1,
+      "completion_tokens": 711,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 13.045,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5264,
+      "qid": "FQ-052",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:59:44+08:00",
+      "total_tokens": 5975
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:59:57+08:00",
+  "group": "D",
+  "input_sha256": "fa54159671fdc4c9d9a24cf18eb6bad3912429b78eb1cb0e07a30b1b09dfaa1e",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "仅覆盖董事长郑宗强一人，遗漏副董事长总经理罗汉武、独立董事窦晓波、总会计师李芳、董秘胡顺靖等关键信息，属大量遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-052",
+  "raw_text": "{\"score\": 0, \"reason\": \"仅覆盖董事长郑宗强一人，遗漏副董事长总经理罗汉武、独立董事窦晓波、总会计师李芳、董秘胡顺靖等关键信息，属大量遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-015",
+  "attempts": [
+    {
+      "answer_key": "B__A-015",
+      "attempt": 1,
+      "completion_tokens": 200,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 9.758,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5043,
+      "qid": "PE-15",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:59:05+08:00",
+      "total_tokens": 5243
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T16:59:15+08:00",
+  "group": "B",
+  "input_sha256": "3fe7a3831f88ae7e40e6dd6056a6835b16479fe626c1a28cf49e61a06168da34",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确指出8月27日实施2025年度权益分派并据此将回购上限由56.55元调至54.55元/股，与参考答案一致，新增半年报内容无误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-15",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案正确指出8月27日实施2025年度权益分派并据此将回购上限由56.55元调至54.55元/股，与参考答案一致，新增半年报内容无误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-028",
+  "attempts": [
+    {
+      "answer_key": "E__A-028",
+      "attempt": 1,
+      "completion_tokens": 185,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 9.358,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4202,
+      "qid": "FQ-028",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:39:45+08:00",
+      "total_tokens": 4387
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:39:54+08:00",
+  "group": "E",
+  "input_sha256": "39964018d74c4576e238a014d745b03301e2b185f667fbc51419e8931ba45e3c",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "披露时间（8月13日交易时段后）、说明会时间（8月14日8:30-9:30）及网络/电话会议方式均与参考答案一致，补充业绩数据亦有证据支撑且无误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-028",
+  "raw_text": "{\"score\": 2, \"reason\": \"披露时间（8月13日交易时段后）、说明会时间（8月14日8:30-9:30）及网络/电话会议方式均与参考答案一致，补充业绩数据亦有证据支撑且无误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

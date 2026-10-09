@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-120",
+  "attempts": [
+    {
+      "answer_key": "D__A-120",
+      "attempt": 1,
+      "completion_tokens": 432,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 19.129,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4640,
+      "qid": "FQ-120",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:17:17+08:00",
+      "total_tokens": 5072
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:17:36+08:00",
+  "group": "D",
+  "input_sha256": "1eb5ef0c0a6a862c3304e707000939108ee94785e36c485a0c1c7ef79196f6fb",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案所述控股子公司关系、奥卡西平片0.15g、8月25日获批、9月1日披露及证据6内容均有检索证据支撑，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-120",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案所述控股子公司关系、奥卡西平片0.15g、8月25日获批、9月1日披露及证据6内容均有检索证据支撑，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

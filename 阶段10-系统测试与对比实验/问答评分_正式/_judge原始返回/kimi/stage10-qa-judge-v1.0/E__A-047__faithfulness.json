@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-047",
+  "attempts": [
+    {
+      "answer_key": "E__A-047",
+      "attempt": 1,
+      "completion_tokens": 592,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 16.91,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4167,
+      "qid": "FQ-047",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:54:37+08:00",
+      "total_tokens": 4759
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:54:54+08:00",
+  "group": "E",
+  "input_sha256": "d5d7a3a7130faba38de6a035b06b365e2e6cc213be465cb1bb8635409581608e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "质押数量68,909,674股、8.02%、质权人农行珠海分行、质押起始日、累计质押情况及不涉新增融资等说法均能在证据1-5中找到原文支撑",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-047",
+  "raw_text": "{\"score\": 2, \"reason\": \"质押数量68,909,674股、8.02%、质权人农行珠海分行、质押起始日、累计质押情况及不涉新增融资等说法均能在证据1-5中找到原文支撑\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

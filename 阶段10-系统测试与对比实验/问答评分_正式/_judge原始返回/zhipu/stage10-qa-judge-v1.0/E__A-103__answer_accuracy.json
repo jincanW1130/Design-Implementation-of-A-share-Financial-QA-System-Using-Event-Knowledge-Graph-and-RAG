@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-103",
+  "attempts": [
+    {
+      "answer_key": "E__A-103",
+      "attempt": 1,
+      "completion_tokens": 247,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 5.887,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4774,
+      "qid": "FQ-103",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:14:29+08:00",
+      "total_tokens": 5021
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T01:14:35+08:00",
+  "group": "E",
+  "input_sha256": "fea495092f0374cabc8d88fb2c26dcbee060d555b8fbec7ea0649c7a02cf4af8",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "接受机构、通知书编号中市协注[2025]DFI27号、2025年4月28日起2年有效均与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-103",
+  "raw_text": "{\"score\": 2, \"reason\": \"接受机构、通知书编号中市协注[2025]DFI27号、2025年4月28日起2年有效均与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

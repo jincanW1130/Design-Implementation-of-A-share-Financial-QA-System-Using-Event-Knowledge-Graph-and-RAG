@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-092",
+  "attempts": [
+    {
+      "answer_key": "B__A-092",
+      "attempt": 1,
+      "completion_tokens": 624,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 9.778,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5488,
+      "qid": "FQ-092",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:55:43+08:00",
+      "total_tokens": 6112
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:55:52+08:00",
+  "group": "B",
+  "input_sha256": "a2177e771c5793e0c227928559c691dc7f4bbf80823c77b594683f6abd6817cc",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案各事实（153.59→151.01元、2026-07-16生效、800元禁令报道于8月13日等）均有对应证据支撑，并如实注明通知日期证据仅表述为近期，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-092",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案各事实（153.59→151.01元、2026-07-16生效、800元禁令报道于8月13日等）均有对应证据支撑，并如实注明通知日期证据仅表述为近期，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

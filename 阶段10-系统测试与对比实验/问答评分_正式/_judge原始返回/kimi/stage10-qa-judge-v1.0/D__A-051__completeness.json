@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-051",
+  "attempts": [
+    {
+      "answer_key": "D__A-051",
+      "attempt": 1,
+      "completion_tokens": 2890,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 86.145,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5658,
+      "qid": "FQ-051",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:02:48+08:00",
+      "total_tokens": 8548
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:04:14+08:00",
+  "group": "D",
+  "input_sha256": "0d708b1ff40d91b2c78a994b702656774247d27c096c7d9c47c85b96b3ac8d67",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "具名董事、董秘、职务及请假/列席基本覆盖，但漏张长岩主持股东会这一金标准要点。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-051",
+  "raw_text": "{\"score\":1,\"reason\":\"具名董事、董秘、职务及请假/列席基本覆盖，但漏张长岩主持股东会这一金标准要点。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

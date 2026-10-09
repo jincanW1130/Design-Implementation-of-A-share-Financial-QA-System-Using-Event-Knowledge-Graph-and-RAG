@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-063",
+  "attempts": [
+    {
+      "answer_key": "E__A-063",
+      "attempt": 1,
+      "completion_tokens": 186,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 11.056,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4744,
+      "qid": "FQ-063",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:11:53+08:00",
+      "total_tokens": 4930
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:12:05+08:00",
+  "group": "E",
+  "input_sha256": "ac33a0c7782f060842f806d64a1bd278ec421bd06e7fa53341e73a0394d897d0",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件（回购注销致持股比例被动变动）、合计比例69.95%升至70.01%、数量不变、跨越1%及5%整数倍等关键信息全覆盖",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-063",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件（回购注销致持股比例被动变动）、合计比例69.95%升至70.01%、数量不变、跨越1%及5%整数倍等关键信息全覆盖\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

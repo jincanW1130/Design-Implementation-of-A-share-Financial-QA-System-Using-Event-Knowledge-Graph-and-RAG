@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-120",
+  "attempts": [
+    {
+      "answer_key": "E__A-120",
+      "attempt": 1,
+      "completion_tokens": 3703,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 74.764,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4761,
+      "qid": "FQ-120",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:36:06+08:00",
+      "total_tokens": 8464
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:37:21+08:00",
+  "group": "E",
+  "input_sha256": "9733a44ed1250b2da8c129f0103fffc4db9beaf272a72cb69365e1bb0a4ba876",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案准确给出控股子公司关系及奥卡西平片0.15g、证书号2026S03114，与参考一致；披露时间的补充说明有证据支撑，无事实错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-120",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案准确给出控股子公司关系及奥卡西平片0.15g、证书号2026S03114，与参考一致；披露时间的补充说明有证据支撑，无事实错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

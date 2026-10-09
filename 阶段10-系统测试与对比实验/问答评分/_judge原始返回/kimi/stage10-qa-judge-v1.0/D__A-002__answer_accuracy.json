@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-002",
+  "attempts": [
+    {
+      "answer_key": "D__A-002",
+      "attempt": 1,
+      "completion_tokens": 90,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 9.977,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5502,
+      "qid": "PE-02",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:41:28+08:00",
+      "total_tokens": 5592
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:41:38+08:00",
+  "group": "D",
+  "input_sha256": "a29f7821cc0cad88d400cc000ce93e6e282872d626bcd0b6e5035b30d6593b9f",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案三项要素（10亿元、3+N年、2.1%）与参考答案完全一致，无错误，判完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-02",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案三项要素（10亿元、3+N年、2.1%）与参考答案完全一致，无错误，判完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

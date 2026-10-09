@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-032",
+  "attempts": [
+    {
+      "answer_key": "A__A-032",
+      "attempt": 1,
+      "completion_tokens": 209,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 6.132,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3900,
+      "qid": "FQ-032",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:55:55+08:00",
+      "total_tokens": 4109
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T18:56:01+08:00",
+  "group": "A",
+  "input_sha256": "1cb64de6b061c8aeacbf430cac957f228ad034d6a0486a142d50d9861c542373",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案以证据不足为由未给出四项指标任何数值，与参考答案对照无一项答对，判定为错误。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-032",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案以证据不足为由未给出四项指标任何数值，与参考答案对照无一项答对，判定为错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-011",
+  "attempts": [
+    {
+      "answer_key": "C__A-011",
+      "attempt": 1,
+      "completion_tokens": 761,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 12.053,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5906,
+      "qid": "FQ-011",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:39:48+08:00",
+      "total_tokens": 6667
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:40:00+08:00",
+  "group": "C",
+  "input_sha256": "f271e15caba81c641bcd40b5a163ec059f90f591829c422c16d3885c2a1c9923",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "过户情况一问未答称证据不足，但业绩考核指标达成及解锁份额775,107股、占比0.02%均与参考答案一致，属部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-011",
+  "raw_text": "{\"score\": 1, \"reason\": \"过户情况一问未答称证据不足，但业绩考核指标达成及解锁份额775,107股、占比0.02%均与参考答案一致，属部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

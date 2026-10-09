@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-088",
+  "attempts": [
+    {
+      "answer_key": "E__A-088",
+      "attempt": 1,
+      "completion_tokens": 324,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 5.242,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5525,
+      "qid": "FQ-088",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:32:31+08:00",
+      "total_tokens": 5849
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:32:36+08:00",
+  "group": "E",
+  "input_sha256": "60530bb5cec77b1b28f1881705e2e514006df64210ff13663b9a0a4672e0ccac",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "四项数值均与参考答案一致：债务融资工具80亿元、ABCP40亿元、唐飞未行权期权8000股、持股74250股，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-088",
+  "raw_text": "{\"score\": 2, \"reason\": \"四项数值均与参考答案一致：债务融资工具80亿元、ABCP40亿元、唐飞未行权期权8000股、持股74250股，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

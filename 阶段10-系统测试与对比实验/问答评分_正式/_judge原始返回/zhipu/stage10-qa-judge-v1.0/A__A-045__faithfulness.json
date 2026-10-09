@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-045",
+  "attempts": [
+    {
+      "answer_key": "A__A-045",
+      "attempt": 1,
+      "completion_tokens": 723,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 15.967,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4014,
+      "qid": "FQ-045",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:23:22+08:00",
+      "total_tokens": 4737
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:23:38+08:00",
+  "group": "A",
+  "input_sha256": "7c798e101177a9ded200f4e0b31e204b7558747076e812e1701a8bf0334c0d06",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "复产事件、涉及装置、2026-07-17停产起始日、临2026-46号公告等说法均出自证据1，无证据外编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-045",
+  "raw_text": "{\"score\": 2, \"reason\": \"复产事件、涉及装置、2026-07-17停产起始日、临2026-46号公告等说法均出自证据1，无证据外编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

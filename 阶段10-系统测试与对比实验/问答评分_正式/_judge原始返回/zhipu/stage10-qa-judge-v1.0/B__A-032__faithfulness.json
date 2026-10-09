@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-032",
+  "attempts": [
+    {
+      "answer_key": "B__A-032",
+      "attempt": 1,
+      "completion_tokens": 928,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 17.014,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5237,
+      "qid": "FQ-032",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:32:19+08:00",
+      "total_tokens": 6165
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:32:36+08:00",
+  "group": "B",
+  "input_sha256": "9fac4465fe1f8ddf81be3da844aac131c0aac87bfb2d172a91091da123bb3544",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案如实声明证据不足未作答，所引报告披露时间、注册资本等陈述均与证据一致，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-032",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案如实声明证据不足未作答，所引报告披露时间、注册资本等陈述均与证据一致，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

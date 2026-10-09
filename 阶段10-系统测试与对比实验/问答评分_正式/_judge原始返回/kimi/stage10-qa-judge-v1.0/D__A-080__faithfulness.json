@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-080",
+  "attempts": [
+    {
+      "answer_key": "D__A-080",
+      "attempt": 1,
+      "completion_tokens": 377,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 18.176,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4585,
+      "qid": "FQ-080",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:46:14+08:00",
+      "total_tokens": 4962
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:46:32+08:00",
+  "group": "D",
+  "input_sha256": "b52684eea40bb6b19583added13cf688558cce96e99a4285ccefb6e282cb2fe7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "签署日期、品种规格、剂型、注册分类、批准文号、生产条件不变及7月31日披露时间等说法均能在证据1/2/3中找到原文支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-080",
+  "raw_text": "{\"score\": 2, \"reason\": \"签署日期、品种规格、剂型、注册分类、批准文号、生产条件不变及7月31日披露时间等说法均能在证据1/2/3中找到原文支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

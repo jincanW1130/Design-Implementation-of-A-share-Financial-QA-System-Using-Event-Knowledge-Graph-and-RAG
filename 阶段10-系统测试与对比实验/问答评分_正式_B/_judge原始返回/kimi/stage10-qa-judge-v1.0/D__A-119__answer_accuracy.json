@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-119",
+  "attempts": [
+    {
+      "answer_key": "D__A-119",
+      "attempt": 1,
+      "completion_tokens": 81,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 5.968,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4301,
+      "qid": "FQ-119",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:15:26+08:00",
+      "total_tokens": 4382
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:15:32+08:00",
+  "group": "D",
+  "input_sha256": "b2d4962237bc869f065fe967537f7bc5faea6abd1dcba59edfbc36eec369ae20",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案与参考答案一致：实际控制人地位未发生变化，信托担保登记完成后不导致控股股东及实控人变更，不构成要约收购。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-119",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案与参考答案一致：实际控制人地位未发生变化，信托担保登记完成后不导致控股股东及实控人变更，不构成要约收购。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-058",
+  "attempts": [
+    {
+      "answer_key": "E__A-058",
+      "attempt": 1,
+      "completion_tokens": 432,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 13.249,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4071,
+      "qid": "FQ-058",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:08:10+08:00",
+      "total_tokens": 4503
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:08:23+08:00",
+  "group": "E",
+  "input_sha256": "9a58e258334d4006131cffed55a368001d939eac71291e06aae63a3c8937eebd",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案含吴磊但身份标为“关联董事”而非电气控股法定代表人，且多出朱兆开、王晨皓两名金标准之外人员，仅部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-058",
+  "raw_text": "{\"score\": 1, \"reason\": \"答案含吴磊但身份标为“关联董事”而非电气控股法定代表人，且多出朱兆开、王晨皓两名金标准之外人员，仅部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

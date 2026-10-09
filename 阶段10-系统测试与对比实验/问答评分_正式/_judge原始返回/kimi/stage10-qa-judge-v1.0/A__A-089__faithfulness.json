@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-089",
+  "attempts": [
+    {
+      "answer_key": "A__A-089",
+      "attempt": 1,
+      "completion_tokens": 646,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 22.139,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4340,
+      "qid": "FQ-089",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:01:55+08:00",
+      "total_tokens": 4986
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:02:17+08:00",
+  "group": "A",
+  "input_sha256": "a0583d186b5d7b3401849c17fd1f386657462205a072951da10d85170f5c5d89",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "登记日7月15日、回购专户2,535,759股及不参与分派等说法均在证据2/3/4中有原文支撑，对未披露项也如实说明，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-089",
+  "raw_text": "{\"score\": 2, \"reason\": \"登记日7月15日、回购专户2,535,759股及不参与分派等说法均在证据2/3/4中有原文支撑，对未披露项也如实说明，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

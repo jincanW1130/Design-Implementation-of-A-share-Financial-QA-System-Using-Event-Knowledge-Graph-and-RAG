@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-114",
+  "attempts": [
+    {
+      "answer_key": "B__A-114",
+      "attempt": 1,
+      "completion_tokens": 148,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 13.782,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5103,
+      "qid": "FQ-114",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:54:05+08:00",
+      "total_tokens": 5251
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:54:19+08:00",
+  "group": "B",
+  "input_sha256": "8646fae754ef95660208b1aea2a92232dd04eb9920bd4581ffab96d11d5c78df",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确指出江西透景是上海透景的全资子公司，与金标准完全一致，所述细节亦与证据相符，无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-114",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确指出江西透景是上海透景的全资子公司，与金标准完全一致，所述细节亦与证据相符，无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

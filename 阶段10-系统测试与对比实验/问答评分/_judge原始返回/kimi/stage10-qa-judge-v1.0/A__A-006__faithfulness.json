@@ -1,0 +1,44 @@
+{
+  "answer_key": "A__A-006",
+  "attempts": [
+    {
+      "answer_key": "A__A-006",
+      "attempt": 1,
+      "completion_tokens": 332,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 202.037,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4363,
+      "qid": "PE-06",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:25:04+08:00",
+      "total_tokens": 4695
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:28:26+08:00",
+  "group": "A",
+  "input_sha256": "82b0dc18c96426d01f50628adb6d6e7ef20a5714c37d6afddd1388c84d65064e",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两期发行日期、总额70亿/45亿及品种拆分58+12、40+5均见证据1/2/8/9，合计115亿为算术结果，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-06",
+  "raw_text": "{\"score\": 2, \"reason\": \"两期发行日期、总额70亿/45亿及品种拆分58+12、40+5均见证据1/2/8/9，合计115亿为算术结果，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

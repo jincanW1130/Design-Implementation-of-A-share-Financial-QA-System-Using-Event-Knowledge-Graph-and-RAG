@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-004",
+  "attempts": [
+    {
+      "answer_key": "A__A-004",
+      "attempt": 1,
+      "completion_tokens": 273,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 10.325,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4084,
+      "qid": "FQ-004",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:42:10+08:00",
+      "total_tokens": 4357
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T18:42:21+08:00",
+  "group": "A",
+  "input_sha256": "394044e911ee758312697e41c0a8111f0515c97fe3b42546cb06a5d437691f93",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "28,724亿/-0.3%见证据4，2,129亿/-1.2%及落款日期、表格位置均见证据2，全部事实均有证据支撑",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-004",
+  "raw_text": "{\"score\": 2, \"reason\": \"28,724亿/-0.3%见证据4，2,129亿/-1.2%及落款日期、表格位置均见证据2，全部事实均有证据支撑\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

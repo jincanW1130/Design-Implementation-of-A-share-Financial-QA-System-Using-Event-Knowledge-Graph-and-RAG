@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-104",
+  "attempts": [
+    {
+      "answer_key": "D__A-104",
+      "attempt": 1,
+      "completion_tokens": 223,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 4.449,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4544,
+      "qid": "FQ-104",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:25:53+08:00",
+      "total_tokens": 4767
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:25:58+08:00",
+  "group": "D",
+  "input_sha256": "0bc9405d33663bfb4e4999f7fdbc0a76e03bb6f85b30b0b96ce951edeb152ba8",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案与参考答案完全一致：登记机构、证明名称、取得日期2026年6月8日及授予数量367,989,000股均正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-104",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案与参考答案完全一致：登记机构、证明名称、取得日期2026年6月8日及授予数量367,989,000股均正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-032",
+  "attempts": [
+    {
+      "answer_key": "E__A-032",
+      "attempt": 1,
+      "completion_tokens": 1429,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 28.647,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5388,
+      "qid": "FQ-032",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:07:24+08:00",
+      "total_tokens": 6817
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:07:53+08:00",
+  "group": "E",
+  "input_sha256": "7a8bf7a2deb8126ac746be874761b3f9fc543886f7d53b9344fa9aabb715eb47",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案各项事实均与给定证据一致，未编造四项指标数字，明确以证据不足拒答，完全基于证据。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-032",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案各项事实均与给定证据一致，未编造四项指标数字，明确以证据不足拒答，完全基于证据。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-023",
+  "attempts": [
+    {
+      "answer_key": "B__A-023",
+      "attempt": 1,
+      "completion_tokens": 217,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 8.656,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4487,
+      "qid": "PE-23",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:05:32+08:00",
+      "total_tokens": 4704
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:05:41+08:00",
+  "group": "B",
+  "input_sha256": "5759949580e9e07afcd88bd08e1a30fdac079c7eb67c78ab363eb9ee4fd50719",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "被评答案拒绝作答，未给出参考答案中薛驰、陆伟、高洪时等任何一人，对照金标准无正确内容，判错误。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-23",
+  "raw_text": "{\"score\": 0, \"reason\": \"被评答案拒绝作答，未给出参考答案中薛驰、陆伟、高洪时等任何一人，对照金标准无正确内容，判错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

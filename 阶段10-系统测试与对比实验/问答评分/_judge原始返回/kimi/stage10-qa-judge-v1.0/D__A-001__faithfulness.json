@@ -1,0 +1,44 @@
+{
+  "answer_key": "D__A-001",
+  "attempts": [
+    {
+      "answer_key": "D__A-001",
+      "attempt": 1,
+      "completion_tokens": 180,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 14.682,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4870,
+      "qid": "PE-01",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:17:58+08:00",
+      "total_tokens": 5050
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:18:12+08:00",
+  "group": "D",
+  "input_sha256": "da67cbee23f2424dbc65a321e46e014fe1d3c53d8d8666b2c5bf1eefd97f4907",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核心日期、期权代码、进入行权期时间及预留授予、限制行权期等说法均可由证据1/2原文支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-01",
+  "raw_text": "{\"score\": 2, \"reason\": \"核心日期、期权代码、进入行权期时间及预留授予、限制行权期等说法均可由证据1/2原文支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

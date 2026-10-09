@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-045",
+  "attempts": [
+    {
+      "answer_key": "A__A-045",
+      "attempt": 1,
+      "completion_tokens": 1011,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 17.001,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3991,
+      "qid": "FQ-045",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:23:03+08:00",
+      "total_tokens": 5002
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:23:20+08:00",
+  "group": "A",
+  "input_sha256": "1d792d8bdf8c5b8fb9ed03687a9f56108517511fdc4d0f931f56c2de460f91df",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案关键信息：复产事件、MDI（40万吨/年）、TDI（25万吨/年）及配套装置、2026年7月17日起始日期，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-045",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案关键信息：复产事件、MDI（40万吨/年）、TDI（25万吨/年）及配套装置、2026年7月17日起始日期，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

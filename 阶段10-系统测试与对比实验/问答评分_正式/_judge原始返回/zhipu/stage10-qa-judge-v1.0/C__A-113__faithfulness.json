@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-113",
+  "attempts": [
+    {
+      "answer_key": "C__A-113",
+      "attempt": 1,
+      "completion_tokens": 685,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 11.71,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4409,
+      "qid": "FQ-113",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:05:59+08:00",
+      "total_tokens": 5094
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:06:11+08:00",
+  "group": "C",
+  "input_sha256": "104a68e5241a9cab26c020ab2c9e90eae8d785ad5e8042f95704367c5b132e8c",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "周锦明控股股东/实控人身份、天津锦龙提供部分装备及配套服务、关联交易审议及周锦明任法定代表人均见于证据5、9，无无据事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-113",
+  "raw_text": "{\"score\": 2, \"reason\": \"周锦明控股股东/实控人身份、天津锦龙提供部分装备及配套服务、关联交易审议及周锦明任法定代表人均见于证据5、9，无无据事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

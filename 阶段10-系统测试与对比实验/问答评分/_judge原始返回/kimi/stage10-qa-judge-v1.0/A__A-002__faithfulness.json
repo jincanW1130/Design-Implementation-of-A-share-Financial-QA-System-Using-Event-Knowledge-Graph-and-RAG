@@ -1,0 +1,44 @@
+{
+  "answer_key": "A__A-002",
+  "attempts": [
+    {
+      "answer_key": "A__A-002",
+      "attempt": 1,
+      "completion_tokens": 318,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 15.281,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4055,
+      "qid": "PE-02",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:21:19+08:00",
+      "total_tokens": 4373
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:21:34+08:00",
+  "group": "A",
+  "input_sha256": "8c677b8d607cf596bacb0cb05daaad878ccb22cd8b96c3caf545f29debe74f26",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "发行额度10亿、期限3+N年、利率2.1%及起息日、面值、主承销商、到账等说法均由证据1原文支撑，PDFI注册背景有证据2支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-02",
+  "raw_text": "{\"score\": 2, \"reason\": \"发行额度10亿、期限3+N年、利率2.1%及起息日、面值、主承销商、到账等说法均由证据1原文支撑，PDFI注册背景有证据2支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

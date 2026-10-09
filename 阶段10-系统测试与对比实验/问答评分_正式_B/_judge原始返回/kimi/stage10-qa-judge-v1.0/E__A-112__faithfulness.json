@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-112",
+  "attempts": [
+    {
+      "answer_key": "E__A-112",
+      "attempt": 1,
+      "completion_tokens": 201,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 11.831,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4551,
+      "qid": "FQ-112",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:53:40+08:00",
+      "total_tokens": 4752
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:53:52+08:00",
+  "group": "E",
+  "input_sha256": "2b79bdfcd5eb6c4a27e0725fe1ae1237b514e1854b38666b785ca2f876d4bdf6",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "控股股东表述、106.36亿股/43.47%、53.23%合计持股等事实均能在证据4、8、10中找到对应支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-112",
+  "raw_text": "{\"score\": 2, \"reason\": \"控股股东表述、106.36亿股/43.47%、53.23%合计持股等事实均能在证据4、8、10中找到对应支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

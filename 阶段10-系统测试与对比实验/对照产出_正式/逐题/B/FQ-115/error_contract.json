@@ -1,0 +1,18 @@
+{
+  "error_code": 3004,
+  "error_code_source": "代码\\后端\\errors.py 的 CODES（本文件不新增错误码语义）",
+  "exit_code": 1,
+  "extra": {
+    "failed_qids": [
+      "FQ-115"
+    ],
+    "failures": {
+      "FQ-115": [
+        "date_unverifiable"
+      ]
+    }
+  },
+  "reason": "answer_gate_failed",
+  "schema": "stage8-error-contract-1.0",
+  "stage": "第 8 阶段：智能问答系统（run_answer.py 失败契约，评审 P1-9）"
+}

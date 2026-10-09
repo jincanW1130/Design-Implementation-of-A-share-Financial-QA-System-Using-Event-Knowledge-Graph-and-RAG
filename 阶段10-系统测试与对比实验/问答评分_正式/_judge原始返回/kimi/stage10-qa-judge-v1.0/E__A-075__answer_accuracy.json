@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-075",
+  "attempts": [
+    {
+      "answer_key": "E__A-075",
+      "attempt": 1,
+      "completion_tokens": 236,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 12.494,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4126,
+      "qid": "FQ-075",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:19:07+08:00",
+      "total_tokens": 4362
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:19:19+08:00",
+  "group": "E",
+  "input_sha256": "62deb5c2fe4aca1ae591a9908b589f21b2627d6f9992f21e032a9209e6a9a94e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件名称、预中标合计12,950万元、占比5.09%均与参考答案一致，核心事实完全正确，仅额外说明披露主体全称为通光电子线缆，不影响准确性",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-075",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件名称、预中标合计12,950万元、占比5.09%均与参考答案一致，核心事实完全正确，仅额外说明披露主体全称为通光电子线缆，不影响准确性\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

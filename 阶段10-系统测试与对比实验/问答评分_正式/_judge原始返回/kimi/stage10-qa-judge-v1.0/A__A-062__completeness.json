@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-062",
+  "attempts": [
+    {
+      "answer_key": "A__A-062",
+      "attempt": 1,
+      "completion_tokens": 257,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 11.424,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3999,
+      "qid": "FQ-062",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:18:41+08:00",
+      "total_tokens": 4256
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:18:53+08:00",
+  "group": "A",
+  "input_sha256": "71718630e823b39ecfddb382fbd8b73d8ca62a4cbfded10ab34c22a6ace9390f",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "完整覆盖交易已完成、自2026年4月起并入资产纳入运营数据并追溯调整上年同期。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-062",
+  "raw_text": "{\"score\": 2, \"reason\": \"完整覆盖交易已完成、自2026年4月起并入资产纳入运营数据并追溯调整上年同期。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

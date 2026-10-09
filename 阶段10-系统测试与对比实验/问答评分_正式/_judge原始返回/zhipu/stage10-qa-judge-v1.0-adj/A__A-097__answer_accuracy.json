@@ -1,0 +1,46 @@
+{
+  "answer_key": "A__A-097",
+  "attempts": [
+    {
+      "answer_key": "A__A-097",
+      "attempt": 1,
+      "completion_tokens": 3259,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 61.951,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4714,
+      "qid": "FQ-097",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:23:41+08:00",
+      "total_tokens": 7973
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T01:24:43+08:00",
+  "group": "A",
+  "input_sha256": "b74a079af218d085e8e5878fbb7e5281d3b2834a95f0e21999cb6a066274ce85",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "disagreement_note": "分歧在边界情形：前次把参考之外但真实正确的额外事件视为扣分；本题开放式列举，额外项属实不构成错误。",
+    "final_score": 2,
+    "reason": "参考三项事件（133/148获批、136受理）全部答对且细节无误；另列GenSci161与曲普瑞林均属两家共同事件且有证据支撑，无事实错误，判完全正确。"
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-097",
+  "raw_text": "{\"final_score\": 2, \"reason\": \"参考三项事件（133/148获批、136受理）全部答对且细节无误；另列GenSci161与曲普瑞林均属两家共同事件且有证据支撑，无事实错误，判完全正确。\", \"disagreement_note\": \"分歧在边界情形：前次把参考之外但真实正确的额外事件视为扣分；本题开放式列举，额外项属实不构成错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

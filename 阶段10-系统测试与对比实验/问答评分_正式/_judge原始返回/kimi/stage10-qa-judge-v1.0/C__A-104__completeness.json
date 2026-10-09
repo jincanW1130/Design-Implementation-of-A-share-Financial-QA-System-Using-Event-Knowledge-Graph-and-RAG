@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-104",
+  "attempts": [
+    {
+      "answer_key": "C__A-104",
+      "attempt": 1,
+      "completion_tokens": 120,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 7.946,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5026,
+      "qid": "FQ-104",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:30:26+08:00",
+      "total_tokens": 5146
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:30:34+08:00",
+  "group": "C",
+  "input_sha256": "1a807b30a3a84eaffafbc86c9c8c144cd7a193bb49bc2442af71a3fa643dc09a",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖登记机构（中国结算上海分公司）、证明名称、授予数量367,989,000股及取得日期2026年6月8日，无遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-104",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖登记机构（中国结算上海分公司）、证明名称、授予数量367,989,000股及取得日期2026年6月8日，无遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

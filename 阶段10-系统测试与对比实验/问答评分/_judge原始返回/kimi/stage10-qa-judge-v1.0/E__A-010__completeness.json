@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-010",
+  "attempts": [
+    {
+      "answer_key": "E__A-010",
+      "attempt": 1,
+      "completion_tokens": 164,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 12.146,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4932,
+      "qid": "PE-10",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:15:10+08:00",
+      "total_tokens": 5096
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T18:15:23+08:00",
+  "group": "E",
+  "input_sha256": "11c29657dd6c4ad13cf362f3889cabd36bedcf6092c26ff8904476cde7efa9b7",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案含五项议案，被评答案仅确认第一项，其余四项明确称无法确认，遗漏约八成关键信息，属大量遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-10",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案含五项议案，被评答案仅确认第一项，其余四项明确称无法确认，遗漏约八成关键信息，属大量遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

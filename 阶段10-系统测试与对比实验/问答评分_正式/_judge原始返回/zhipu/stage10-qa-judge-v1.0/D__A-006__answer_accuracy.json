@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-006",
+  "attempts": [
+    {
+      "answer_key": "D__A-006",
+      "attempt": 1,
+      "completion_tokens": 318,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 5.827,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3815,
+      "qid": "FQ-006",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:52:48+08:00",
+      "total_tokens": 4133
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:52:54+08:00",
+  "group": "D",
+  "input_sha256": "9b86175bed53f3ef9259b624e9f46e304abe73cabd3979a3f8b7ea6539c0d456",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "被评答案三要素与参考答案完全一致：文号2414号、400亿元上限、24个月有效期，均正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-006",
+  "raw_text": "{\"score\": 2, \"reason\": \"被评答案三要素与参考答案完全一致：文号2414号、400亿元上限、24个月有效期，均正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

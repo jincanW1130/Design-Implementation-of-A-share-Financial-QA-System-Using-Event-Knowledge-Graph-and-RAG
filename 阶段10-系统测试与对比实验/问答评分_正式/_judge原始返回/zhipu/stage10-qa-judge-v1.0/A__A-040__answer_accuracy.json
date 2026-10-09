@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-040",
+  "attempts": [
+    {
+      "answer_key": "A__A-040",
+      "attempt": 1,
+      "completion_tokens": 573,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 11.545,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4391,
+      "qid": "FQ-040",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:21:16+08:00",
+      "total_tokens": 4964
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:21:28+08:00",
+  "group": "A",
+  "input_sha256": "b2108dafad56ca0ad48c821c31fb9e6a98d0f3f26e501133007917e41490feaf",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "两件核心事件（2026年6月30日AI智算卡、7月15家银行AI智能体银行卡）均与参考答案一致，细节有证据支撑，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-040",
+  "raw_text": "{\"score\": 2, \"reason\": \"两件核心事件（2026年6月30日AI智算卡、7月15家银行AI智能体银行卡）均与参考答案一致，细节有证据支撑，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

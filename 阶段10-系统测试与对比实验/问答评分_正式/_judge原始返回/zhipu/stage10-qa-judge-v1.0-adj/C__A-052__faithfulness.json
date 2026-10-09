@@ -1,0 +1,46 @@
+{
+  "answer_key": "C__A-052",
+  "attempts": [
+    {
+      "answer_key": "C__A-052",
+      "attempt": 1,
+      "completion_tokens": 3736,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 69.651,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5438,
+      "qid": "FQ-052",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:30:51+08:00",
+      "total_tokens": 9174
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:32:01+08:00",
+  "group": "C",
+  "input_sha256": "9fd8ba74460756627b7172e856f4ebe2e440e670fb90c05bc59a61c41a448115",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "disagreement_note": "答案处量表边界：实质事实均有据，仅依据截断表格作出的否定性表述算不算不严谨，双方取舍不同。",
+    "final_score": 1,
+    "reason": "郑宗强任董事长、陈刚职工董事及离任等说法均有原文支撑，唯“公告未载明具体职务”因证据表格截断无法证实，属少量不严谨。"
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-052",
+  "raw_text": "{\"final_score\": 1, \"reason\": \"郑宗强任董事长、陈刚职工董事及离任等说法均有原文支撑，唯“公告未载明具体职务”因证据表格截断无法证实，属少量不严谨。\", \"disagreement_note\": \"答案处量表边界：实质事实均有据，仅依据截断表格作出的否定性表述算不算不严谨，双方取舍不同。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

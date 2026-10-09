@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-119",
+  "attempts": [
+    {
+      "answer_key": "C__A-119",
+      "attempt": 1,
+      "completion_tokens": 1482,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 13.06,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4422,
+      "qid": "FQ-119",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:06:27+08:00",
+      "total_tokens": 5904
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:06:40+08:00",
+  "group": "C",
+  "input_sha256": "ed663e40f878023756dd69d572cc9135f51d5d93fe6fa666858e3d425ab7e5f9",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "持股106.36亿股、43.47%、不导致实控人变化等表述均逐字出自证据2，无无依据事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-119",
+  "raw_text": "{\"score\": 2, \"reason\": \"持股106.36亿股、43.47%、不导致实控人变化等表述均逐字出自证据2，无无依据事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-119",
+  "attempts": [
+    {
+      "answer_key": "E__A-119",
+      "attempt": 1,
+      "completion_tokens": 1108,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 19.837,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4458,
+      "qid": "FQ-119",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:16:00+08:00",
+      "total_tokens": 5566
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:16:20+08:00",
+  "group": "E",
+  "input_sha256": "677a3a05ff89a9e08306765a8698fcb70bcf65ebfd5efc485c285baee06838e7",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "结论与引文均直接来自证据10原文，公告日期、21,531,000股等细节亦有证据2支撑，无无依据事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-119",
+  "raw_text": "{\"score\": 2, \"reason\": \"结论与引文均直接来自证据10原文，公告日期、21,531,000股等细节亦有证据2支撑，无无依据事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

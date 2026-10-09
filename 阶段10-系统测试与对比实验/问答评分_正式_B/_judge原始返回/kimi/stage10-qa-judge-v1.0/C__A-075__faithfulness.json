@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-075",
+  "attempts": [
+    {
+      "answer_key": "C__A-075",
+      "attempt": 1,
+      "completion_tokens": 819,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 27.19,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4189,
+      "qid": "FQ-075",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:00:57+08:00",
+      "total_tokens": 5008
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:01:24+08:00",
+  "group": "C",
+  "input_sha256": "c4579d23a33aeb986fe3eb5c27c960d90d6f097006791f72721f40a49cd6be82",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参与主体、项目名称、12,950万元、5.09%、分项金额及后续调整均见于证据1/3/4/5/10，名称差异与模型推测均已明确标注，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-075",
+  "raw_text": "{\"score\": 2, \"reason\": \"参与主体、项目名称、12,950万元、5.09%、分项金额及后续调整均见于证据1/3/4/5/10，名称差异与模型推测均已明确标注，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

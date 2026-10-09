@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-053",
+  "attempts": [
+    {
+      "answer_key": "D__A-053",
+      "attempt": 1,
+      "completion_tokens": 313,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 15.24,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4785,
+      "qid": "FQ-053",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:06:15+08:00",
+      "total_tokens": 5098
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:06:30+08:00",
+  "group": "D",
+  "input_sha256": "a21f5ae6730c7ebd16cda032136dd22ca0a9d154dbec91a5c1be28e039c21e30",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "名单与职务逐人可由证据9（H股公告）支撑，对其余证据内容的描述也与实际检索证据相符，未见无依据事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-053",
+  "raw_text": "{\"score\": 2, \"reason\": \"名单与职务逐人可由证据9（H股公告）支撑，对其余证据内容的描述也与实际检索证据相符，未见无依据事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

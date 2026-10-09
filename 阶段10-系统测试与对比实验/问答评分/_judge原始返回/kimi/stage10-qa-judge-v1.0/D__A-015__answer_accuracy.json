@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-015",
+  "attempts": [
+    {
+      "answer_key": "D__A-015",
+      "attempt": 1,
+      "completion_tokens": 1446,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 41.95,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5180,
+      "qid": "PE-15",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:52:08+08:00",
+      "total_tokens": 6626
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:52:50+08:00",
+  "group": "D",
+  "input_sha256": "16be73ed5dd97e58d2cfcd9943f4cc2f0933d07d833a372d8e01212b2f2493b5",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核心事实与参考答案一致：权益分派除权除息日2026-08-27、回购上限由56.55元/股调整为54.55元/股均答对，另补充的半年报事件亦有证据支撑，无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-15",
+  "raw_text": "{\"score\": 2, \"reason\": \"核心事实与参考答案一致：权益分派除权除息日2026-08-27、回购上限由56.55元/股调整为54.55元/股均答对，另补充的半年报事件亦有证据支撑，无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

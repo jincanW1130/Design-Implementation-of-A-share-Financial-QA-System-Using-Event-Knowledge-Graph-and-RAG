@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-074",
+  "attempts": [
+    {
+      "answer_key": "C__A-074",
+      "attempt": 1,
+      "completion_tokens": 179,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 9.315,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5057,
+      "qid": "FQ-074",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:59:57+08:00",
+      "total_tokens": 5236
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:00:06+08:00",
+  "group": "C",
+  "input_sha256": "afd71cc0008b524f9cc4930c21dc52c1a0c3022f6b95411d09da2e6011ceba9c",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案关键信息：事件性质、收购方赢合科技、100%收购及电气控股58.02%比例、两笔金额20,434.84万与11,856.29万元，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-074",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案关键信息：事件性质、收购方赢合科技、100%收购及电气控股58.02%比例、两笔金额20,434.84万与11,856.29万元，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

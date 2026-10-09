@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-091",
+  "attempts": [
+    {
+      "answer_key": "C__A-091",
+      "attempt": 1,
+      "completion_tokens": 559,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 18.738,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4966,
+      "qid": "FQ-091",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:13:49+08:00",
+      "total_tokens": 5525
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:14:08+08:00",
+  "group": "C",
+  "input_sha256": "6968603180defd0c3fc2d073c5de1dbbef878e193c6a7674712e3a8f399dbfcf",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "回购数量84,339,356股、金额6,716,277,930元、价格16.97→13.17元及221,000股、80,633股注销数量均与参考答案一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-091",
+  "raw_text": "{\"score\": 2, \"reason\": \"回购数量84,339,356股、金额6,716,277,930元、价格16.97→13.17元及221,000股、80,633股注销数量均与参考答案一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

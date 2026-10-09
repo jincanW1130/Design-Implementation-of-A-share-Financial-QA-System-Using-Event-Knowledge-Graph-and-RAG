@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-042",
+  "attempts": [
+    {
+      "answer_key": "B__A-042",
+      "attempt": 1,
+      "completion_tokens": 1698,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 29.818,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4823,
+      "qid": "FQ-042",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:33:52+08:00",
+      "total_tokens": 6521
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:34:22+08:00",
+  "group": "B",
+  "input_sha256": "cc679729801abac00f9374658f943178a77b2d0952935ec85d50c660adb9c3da",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "并表、追溯调整、372/292/80万元费用、增30万元原因、天职国际等说法均见于证据1-4，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-042",
+  "raw_text": "{\"score\": 2, \"reason\": \"并表、追溯调整、372/292/80万元费用、增30万元原因、天职国际等说法均见于证据1-4，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-011",
+  "attempts": [
+    {
+      "answer_key": "E__A-011",
+      "attempt": 1,
+      "completion_tokens": 252,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 10.421,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6039,
+      "qid": "FQ-011",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:29:38+08:00",
+      "total_tokens": 6291
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:29:49+08:00",
+  "group": "E",
+  "input_sha256": "428b55cfea122357f54d5e4ef612d60dd903d76353555fb320a1ef48bc3f9696",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "业绩考核达成与解锁股数775,107股、占比0.02%均与参考答案一致，但过户情况（2023年9月13日3,658,800股、9.19元/股）未答出，仅称证据不足，故部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-011",
+  "raw_text": "{\"score\": 1, \"reason\": \"业绩考核达成与解锁股数775,107股、占比0.02%均与参考答案一致，但过户情况（2023年9月13日3,658,800股、9.19元/股）未答出，仅称证据不足，故部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

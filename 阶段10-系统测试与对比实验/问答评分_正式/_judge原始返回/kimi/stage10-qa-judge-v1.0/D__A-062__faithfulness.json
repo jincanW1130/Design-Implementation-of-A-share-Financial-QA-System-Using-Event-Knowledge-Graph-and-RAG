@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-062",
+  "attempts": [
+    {
+      "answer_key": "D__A-062",
+      "attempt": 1,
+      "completion_tokens": 177,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 11.136,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5071,
+      "qid": "FQ-062",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:15:18+08:00",
+      "total_tokens": 5248
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:15:29+08:00",
+  "group": "D",
+  "input_sha256": "975df021b6a85028397076f4c94bea86ad5f262072b8a3b7b7241594aa722e4f",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案全部事实均与证据2原文一致：购买控股股东相关资产交易已完成、自2026年4月起运营数据含新资产并追溯调整，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-062",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案全部事实均与证据2原文一致：购买控股股东相关资产交易已完成、自2026年4月起运营数据含新资产并追溯调整，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

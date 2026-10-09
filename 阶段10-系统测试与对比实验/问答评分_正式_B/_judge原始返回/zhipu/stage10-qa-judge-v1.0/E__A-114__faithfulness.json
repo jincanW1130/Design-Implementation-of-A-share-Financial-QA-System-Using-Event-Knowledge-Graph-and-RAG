@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-114",
+  "attempts": [
+    {
+      "answer_key": "E__A-114",
+      "attempt": 1,
+      "completion_tokens": 1610,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 31.139,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4706,
+      "qid": "FQ-114",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:35:33+08:00",
+      "total_tokens": 6316
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:36:05+08:00",
+  "group": "E",
+  "input_sha256": "e16b8edccadb0385c9901da761f1be943b323e6623fd0844993ac0d7f02b7aa9",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "江西透景为全资子公司直接见证据8、证据3，其余说法均有据可查，无证据处已明确标注为推断",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-114",
+  "raw_text": "{\"score\": 2, \"reason\": \"江西透景为全资子公司直接见证据8、证据3，其余说法均有据可查，无证据处已明确标注为推断\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

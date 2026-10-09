@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-016",
+  "attempts": [
+    {
+      "answer_key": "C__A-016",
+      "attempt": 1,
+      "completion_tokens": 149,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 9.906,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5177,
+      "qid": "PE-16",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:27:16+08:00",
+      "total_tokens": 5326
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:27:25+08:00",
+  "group": "C",
+  "input_sha256": "01b0e791a071b5c21a3406df1505e0a2e37fac9fb02a2d30d45d6e623bf59953",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答对了伊利DFI注册事件及通知书编号，但未答出平安银行是联席主承销商这一关键角色，仅说无法确认，属部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-16",
+  "raw_text": "{\"score\": 1, \"reason\": \"答对了伊利DFI注册事件及通知书编号，但未答出平安银行是联席主承销商这一关键角色，仅说无法确认，属部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

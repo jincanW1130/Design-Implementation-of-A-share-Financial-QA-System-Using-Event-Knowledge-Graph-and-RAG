@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-050",
+  "attempts": [
+    {
+      "answer_key": "B__A-050",
+      "attempt": 1,
+      "completion_tokens": 2196,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 68.238,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5649,
+      "qid": "FQ-050",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:17:02+08:00",
+      "total_tokens": 7845
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:18:11+08:00",
+  "group": "B",
+  "input_sha256": "ec0a0675f9dcbfd973e50a32b1b6a32b746845eb2682b41359a421f1b5bb77e4",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "9名董事及其类别已完整列出，但漏掉总裁管江华、董秘柯莹、财务负责人李军及程雪的董事长职务，高管部分整体缺失，属基本覆盖。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-050",
+  "raw_text": "{\"score\": 1, \"reason\": \"9名董事及其类别已完整列出，但漏掉总裁管江华、董秘柯莹、财务负责人李军及程雪的董事长职务，高管部分整体缺失，属基本覆盖。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

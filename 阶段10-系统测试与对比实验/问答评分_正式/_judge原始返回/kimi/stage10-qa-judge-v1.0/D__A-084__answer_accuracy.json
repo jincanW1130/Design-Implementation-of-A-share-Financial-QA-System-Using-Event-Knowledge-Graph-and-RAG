@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-084",
+  "attempts": [
+    {
+      "answer_key": "D__A-084",
+      "attempt": 1,
+      "completion_tokens": 197,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 8.073,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4203,
+      "qid": "FQ-084",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:50:36+08:00",
+      "total_tokens": 4400
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:50:44+08:00",
+  "group": "D",
+  "input_sha256": "681892f63c58d451ac18f05a4dbd9288f4fa8545e1c7d12dc6256f20720a5161",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "正确指出授权GLP-1创新药给美纳里尼、布局欧洲市场，且补充的品种、39国范围、交易金额均有证据2支撑，与金标准一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-084",
+  "raw_text": "{\"score\": 2, \"reason\": \"正确指出授权GLP-1创新药给美纳里尼、布局欧洲市场，且补充的品种、39国范围、交易金额均有证据2支撑，与金标准一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

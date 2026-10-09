@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-062",
+  "attempts": [
+    {
+      "answer_key": "B__A-062",
+      "attempt": 1,
+      "completion_tokens": 152,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 3.732,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4885,
+      "qid": "FQ-062",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:37:56+08:00",
+      "total_tokens": 5037
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:38:00+08:00",
+  "group": "B",
+  "input_sha256": "66be6f6ef6ac432aa465ee36ba7c20ae4c1cf2538e95915cd5029a936d5e8e5b",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案三个要点：交易性质及完成状态、2026年4月起纳入新资产数据、上年同期追溯调整，无关键信息遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-062",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案三个要点：交易性质及完成状态、2026年4月起纳入新资产数据、上年同期追溯调整，无关键信息遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-035",
+  "attempts": [
+    {
+      "answer_key": "E__A-035",
+      "attempt": 1,
+      "completion_tokens": 137,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 7.927,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4549,
+      "qid": "FQ-035",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:44:43+08:00",
+      "total_tokens": 4686
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:44:51+08:00",
+  "group": "E",
+  "input_sha256": "1bc84a074493cb8f350479ce7711fa21d0562826aadaad96522006586e16adcf",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案的全部关键信息——承接子公司潜能蒙古、装备配套提供方天津锦龙及周锦明关联关系、董事会审议信息——均已覆盖，还补充了金额上限，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-035",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案的全部关键信息——承接子公司潜能蒙古、装备配套提供方天津锦龙及周锦明关联关系、董事会审议信息——均已覆盖，还补充了金额上限，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

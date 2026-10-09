@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-081",
+  "attempts": [
+    {
+      "answer_key": "E__A-081",
+      "attempt": 1,
+      "completion_tokens": 665,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 21.455,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5355,
+      "qid": "FQ-081",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:26:27+08:00",
+      "total_tokens": 6020
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:26:49+08:00",
+  "group": "E",
+  "input_sha256": "c8d264f1b3341a3895616a90f522aef52eb5895394336af17a60b76b18fe90c8",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整含金标准全部要素：2026年7月20日签署两份协议、32套GPU、期限8年（5+3）、含税2.9957亿元，所述补充的9月进展合同亦准确无误",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-081",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整含金标准全部要素：2026年7月20日签署两份协议、32套GPU、期限8年（5+3）、含税2.9957亿元，所述补充的9月进展合同亦准确无误\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

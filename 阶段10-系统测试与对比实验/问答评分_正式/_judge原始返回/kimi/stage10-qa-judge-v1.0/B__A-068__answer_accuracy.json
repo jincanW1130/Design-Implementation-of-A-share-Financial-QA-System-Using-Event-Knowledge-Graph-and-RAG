@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-068",
+  "attempts": [
+    {
+      "answer_key": "B__A-068",
+      "attempt": 1,
+      "completion_tokens": 210,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 9.1,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5176,
+      "qid": "FQ-068",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:31:53+08:00",
+      "total_tokens": 5386
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:32:02+08:00",
+  "group": "B",
+  "input_sha256": "2b52d0a122113b3a2c3d3ee93338955c70e5a810a061c00af88a17316e9a64c7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整准确：事件为股东会审议通过变更募投议案，金额20,000.00万元，新实施主体中天储能科技有限公司，与参考答案一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-068",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整准确：事件为股东会审议通过变更募投议案，金额20,000.00万元，新实施主体中天储能科技有限公司，与参考答案一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

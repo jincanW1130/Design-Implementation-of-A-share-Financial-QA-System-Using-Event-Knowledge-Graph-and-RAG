@@ -1,0 +1,44 @@
+{
+  "answer_key": "A__A-008",
+  "attempts": [
+    {
+      "answer_key": "A__A-008",
+      "attempt": 1,
+      "completion_tokens": 79,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 6.716,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3937,
+      "qid": "PE-08",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:29:05+08:00",
+      "total_tokens": 4016
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:29:11+08:00",
+  "group": "A",
+  "input_sha256": "c5a4e90790d4c29f7b14050051050aad2c01a808d9e7e8befefeef2758c63d58",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "买方名称与合同预估总金额18,000万元两项关键信息均完整覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-08",
+  "raw_text": "{\"score\": 2, \"reason\": \"买方名称与合同预估总金额18,000万元两项关键信息均完整覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

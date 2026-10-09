@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-056",
+  "attempts": [
+    {
+      "answer_key": "D__A-056",
+      "attempt": 1,
+      "completion_tokens": 1521,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 41.371,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4028,
+      "qid": "FQ-056",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:08:44+08:00",
+      "total_tokens": 5549
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:09:25+08:00",
+  "group": "D",
+  "input_sha256": "5d59125b01dc81f55373d3fa78850ac51843f0a9d4d0f66348ba1f25f79bbd03",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案以“证据不足”拒答，未给出控股股东王维及其一致行动人等参考内容，仅在被排除的分析中提及，与金标准不符。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-056",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案以“证据不足”拒答，未给出控股股东王维及其一致行动人等参考内容，仅在被排除的分析中提及，与金标准不符。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

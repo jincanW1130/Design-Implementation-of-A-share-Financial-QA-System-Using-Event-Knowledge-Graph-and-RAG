@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-036",
+  "attempts": [
+    {
+      "answer_key": "C__A-036",
+      "attempt": 1,
+      "completion_tokens": 628,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 20.616,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5311,
+      "qid": "FQ-036",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:53:16+08:00",
+      "total_tokens": 5939
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:53:36+08:00",
+  "group": "C",
+  "input_sha256": "40acc489cf008b3134c6db0cc69ccf9f2cac9c884a077817c53b34f57545705d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "122人、2,915,367股、0.04%、7月13日流通、高管明细表及业绩条件19.70%等均能在证据1/2/4/5/6中找到对应原文，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-036",
+  "raw_text": "{\"score\": 2, \"reason\": \"122人、2,915,367股、0.04%、7月13日流通、高管明细表及业绩条件19.70%等均能在证据1/2/4/5/6中找到对应原文，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-011",
+  "attempts": [
+    {
+      "answer_key": "D__A-011",
+      "attempt": 1,
+      "completion_tokens": 548,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 10.752,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5849,
+      "qid": "FQ-011",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:53:22+08:00",
+      "total_tokens": 6397
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:53:33+08:00",
+  "group": "D",
+  "input_sha256": "91a32ec586d2e51785259e7d0e75c9a61dc2e4885255d34630aa935a5eb1b1d2",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "业绩考核指标（39.40亿元、262.13%、达成）与解锁份额（775,107股、0.02%）均正确，但过户情况缺失，三问仅答对两问，属部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-011",
+  "raw_text": "{\"score\": 1, \"reason\": \"业绩考核指标（39.40亿元、262.13%、达成）与解锁份额（775,107股、0.02%）均正确，但过户情况缺失，三问仅答对两问，属部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

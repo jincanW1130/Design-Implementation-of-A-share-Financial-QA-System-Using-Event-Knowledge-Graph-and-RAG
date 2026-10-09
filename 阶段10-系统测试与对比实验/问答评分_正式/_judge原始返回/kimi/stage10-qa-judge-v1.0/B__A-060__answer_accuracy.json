@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-060",
+  "attempts": [
+    {
+      "answer_key": "B__A-060",
+      "attempt": 1,
+      "completion_tokens": 220,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 10.313,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3933,
+      "qid": "FQ-060",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:27:24+08:00",
+      "total_tokens": 4153
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:27:34+08:00",
+  "group": "B",
+  "input_sha256": "5089e647e49d3069c79230f6d1050633a725d63778027fffa8d35d47a656108e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案称证据不足无法回答，未给出参考答案中的程忠、副总经理/财务总监身份及688001代码，对照金标准属于答错。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-060",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案称证据不足无法回答，未给出参考答案中的程忠、副总经理/财务总监身份及688001代码，对照金标准属于答错。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-017",
+  "attempts": [
+    {
+      "answer_key": "D__A-017",
+      "attempt": 1,
+      "completion_tokens": 193,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 10.3,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4491,
+      "qid": "FQ-017",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:35:18+08:00",
+      "total_tokens": 4684
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:35:28+08:00",
+  "group": "D",
+  "input_sha256": "9baffed9f1173aec3a9e23ed6b13ce7e7e6708dea1f61ac897cadba5ccad02bf",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "文件名《关于印发〈企业会计准则解释第20号〉的通知》、文号财会〔2026〕7号、日期2026年6月17日，三项均与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-017",
+  "raw_text": "{\"score\": 2, \"reason\": \"文件名《关于印发〈企业会计准则解释第20号〉的通知》、文号财会〔2026〕7号、日期2026年6月17日，三项均与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

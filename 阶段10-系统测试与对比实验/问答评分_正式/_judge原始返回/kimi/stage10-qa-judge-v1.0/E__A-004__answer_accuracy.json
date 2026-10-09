@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-004",
+  "attempts": [
+    {
+      "answer_key": "E__A-004",
+      "attempt": 1,
+      "completion_tokens": 99,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 9.744,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4047,
+      "qid": "FQ-004",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:25:13+08:00",
+      "total_tokens": 4146
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:25:23+08:00",
+  "group": "E",
+  "input_sha256": "e1c4679bc4748f0757290ff146fb4bba2d0277340f771ae038c767c9bb9eb087",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "四项数据与参考答案完全一致：新签合同总额28,724亿元增-0.3%，地产合约销售额2,129亿元增-1.2%。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-004",
+  "raw_text": "{\"score\": 2, \"reason\": \"四项数据与参考答案完全一致：新签合同总额28,724亿元增-0.3%，地产合约销售额2,129亿元增-1.2%。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-103",
+  "attempts": [
+    {
+      "answer_key": "A__A-103",
+      "attempt": 1,
+      "completion_tokens": 121,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 6.035,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4291,
+      "qid": "FQ-103",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:15:16+08:00",
+      "total_tokens": 4412
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:15:22+08:00",
+  "group": "A",
+  "input_sha256": "f53eb5db04035645c8212f18ed17ec6c0ea38e5e0f8a11ccc9be455c4194d9e4",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "接受机构、通知书编号、有效期及可发行产品等说法均与证据5原文一致，完全有据可依。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-103",
+  "raw_text": "{\"score\": 2, \"reason\": \"接受机构、通知书编号、有效期及可发行产品等说法均与证据5原文一致，完全有据可依。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-068",
+  "attempts": [
+    {
+      "answer_key": "C__A-068",
+      "attempt": 1,
+      "completion_tokens": 589,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 20.921,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5503,
+      "qid": "FQ-068",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:23:43+08:00",
+      "total_tokens": 6092
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:24:04+08:00",
+  "group": "C",
+  "input_sha256": "1a392694d25c9a28eaa70788cd53d6f338972df6c3cee2a7bd86d1bc1df5100e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "变更事项、股东会日期、20,000万元金额、实施主体及投产时间均能在证据1/2/4/9中找到原文支撑，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-068",
+  "raw_text": "{\"score\": 2, \"reason\": \"变更事项、股东会日期、20,000万元金额、实施主体及投产时间均能在证据1/2/4/9中找到原文支撑，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

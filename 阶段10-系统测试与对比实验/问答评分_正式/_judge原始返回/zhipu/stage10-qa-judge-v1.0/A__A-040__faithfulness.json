@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-040",
+  "attempts": [
+    {
+      "answer_key": "A__A-040",
+      "attempt": 1,
+      "completion_tokens": 1399,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 22.81,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4419,
+      "qid": "FQ-040",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:21:38+08:00",
+      "total_tokens": 5818
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:22:01+08:00",
+  "group": "A",
+  "input_sha256": "f37c5de4c5442d65f1799417f9758c90149f3a119783717c4f3027c3c0e3f36d",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "各事实性说法均可在可用证据中找到对应原文支撑，无编造，仅\"今年7月\"按发布时间合理转写为2026年7月。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-040",
+  "raw_text": "{\"score\": 2, \"reason\": \"各事实性说法均可在可用证据中找到对应原文支撑，无编造，仅\\\"今年7月\\\"按发布时间合理转写为2026年7月。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

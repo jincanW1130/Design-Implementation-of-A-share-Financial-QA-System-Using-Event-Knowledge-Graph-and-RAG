@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-083",
+  "attempts": [
+    {
+      "answer_key": "E__A-083",
+      "attempt": 1,
+      "completion_tokens": 477,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 8.598,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4687,
+      "qid": "FQ-083",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:31:59+08:00",
+      "total_tokens": 5164
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:32:08+08:00",
+  "group": "E",
+  "input_sha256": "7fb8ba0859cf5316b20df520391887c8c9cd97587ee153a0a40d2eb7f4959e83",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、时间（8月19日）、试验编号INTerpath-001、联合用药Keytruda、适应症及关键终点均与参考答案一致，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-083",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、时间（8月19日）、试验编号INTerpath-001、联合用药Keytruda、适应症及关键终点均与参考答案一致，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

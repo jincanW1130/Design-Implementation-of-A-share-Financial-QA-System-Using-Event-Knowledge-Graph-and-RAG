@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-027",
+  "attempts": [
+    {
+      "answer_key": "D__A-027",
+      "attempt": 1,
+      "completion_tokens": 1309,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 23.088,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4201,
+      "qid": "FQ-027",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:55:10+08:00",
+      "total_tokens": 5510
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:55:33+08:00",
+  "group": "D",
+  "input_sha256": "5a1c31fba4f33cc905c0d6b4b3d703196832707f0f9c4d8db53871af0c1e4f7e",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "日期、63家/24家统计、高瓴认定等事实性说法均能在可用证据中找到原文支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-027",
+  "raw_text": "{\"score\": 2, \"reason\": \"日期、63家/24家统计、高瓴认定等事实性说法均能在可用证据中找到原文支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

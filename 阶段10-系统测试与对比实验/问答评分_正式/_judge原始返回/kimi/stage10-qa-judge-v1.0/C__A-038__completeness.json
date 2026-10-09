@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-038",
+  "attempts": [
+    {
+      "answer_key": "C__A-038",
+      "attempt": 1,
+      "completion_tokens": 149,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 8.958,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5131,
+      "qid": "FQ-038",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:55:47+08:00",
+      "total_tokens": 5280
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:55:56+08:00",
+  "group": "C",
+  "input_sha256": "bf76b438c36a2987e115cd8ad23d5eef615930ff9bd80e1622ba3050cd25c825",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案的中标通知书、项目名称、中标价507,952,785.60元及云采科技合同等关键信息全部被覆盖，且有额外补充，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-038",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案的中标通知书、项目名称、中标价507,952,785.60元及云采科技合同等关键信息全部被覆盖，且有额外补充，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

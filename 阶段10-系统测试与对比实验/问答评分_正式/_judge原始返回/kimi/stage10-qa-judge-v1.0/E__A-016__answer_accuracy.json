@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-016",
+  "attempts": [
+    {
+      "answer_key": "E__A-016",
+      "attempt": 1,
+      "completion_tokens": 70,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 10.38,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4350,
+      "qid": "FQ-016",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:32:37+08:00",
+      "total_tokens": 4420
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:32:48+08:00",
+  "group": "E",
+  "input_sha256": "2d2a2f07596a8212338dafb4b06d809a97fd5f56af8ea50194040e78dea61a28",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确指出以国家金融监督管理总局的复函为依据且该局无异议、赎回条件已满足，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-016",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确指出以国家金融监督管理总局的复函为依据且该局无异议、赎回条件已满足，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

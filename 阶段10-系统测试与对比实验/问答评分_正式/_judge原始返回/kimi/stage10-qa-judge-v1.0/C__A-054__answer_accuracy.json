@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-054",
+  "attempts": [
+    {
+      "answer_key": "C__A-054",
+      "attempt": 1,
+      "completion_tokens": 347,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 13.905,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5263,
+      "qid": "FQ-054",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:09:10+08:00",
+      "total_tokens": 5610
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:09:24+08:00",
+  "group": "C",
+  "input_sha256": "8fa42bf4db0a4a48a5866917552b786d24566bebf71e59709dc1d218aad001a6",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案仅正确确认胡望明、高祥明、姚林龙的董事身份，但未答出胡望明任董事长及刘宝军、周学东等其余董事职务，对照参考答案仅部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-054",
+  "raw_text": "{\"score\": 1, \"reason\": \"答案仅正确确认胡望明、高祥明、姚林龙的董事身份，但未答出胡望明任董事长及刘宝军、周学东等其余董事职务，对照参考答案仅部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-077",
+  "attempts": [
+    {
+      "answer_key": "A__A-077",
+      "attempt": 1,
+      "completion_tokens": 116,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 5.007,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4014,
+      "qid": "FQ-077",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:54:47+08:00",
+      "total_tokens": 4130
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:54:52+08:00",
+  "group": "A",
+  "input_sha256": "1d5f31d518f62b8f8724bc695cc9474d17493d59fbee18dfe17a0297f59e48c7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件名称、双方角色（中标人/招标代理机构）、招标人及中标金额144,141,970.11元全部覆盖，无遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-077",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件名称、双方角色（中标人/招标代理机构）、招标人及中标金额144,141,970.11元全部覆盖，无遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

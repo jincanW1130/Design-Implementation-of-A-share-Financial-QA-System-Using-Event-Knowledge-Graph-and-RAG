@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-098",
+  "attempts": [
+    {
+      "answer_key": "A__A-098",
+      "attempt": 1,
+      "completion_tokens": 1746,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 46.632,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4816,
+      "qid": "FQ-098",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:11:42+08:00",
+      "total_tokens": 6562
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:12:29+08:00",
+  "group": "A",
+  "input_sha256": "6ef0d92b50107324a627c59e8346bdb2dd6f958fc6854cf2a3e4952d23c2fce3",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核心事实（中标、签约、金额、对手方信息）均有证据支撑，但称侧岭德思项目联合体仅由水电公司与海河水利组成，遗漏证据9中的大禹节水集团股份有限公司，属少量不严谨。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-098",
+  "raw_text": "{\"score\": 1, \"reason\": \"核心事实（中标、签约、金额、对手方信息）均有证据支撑，但称侧岭德思项目联合体仅由水电公司与海河水利组成，遗漏证据9中的大禹节水集团股份有限公司，属少量不严谨。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

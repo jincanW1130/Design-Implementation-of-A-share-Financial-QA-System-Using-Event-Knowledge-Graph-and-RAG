@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-070",
+  "attempts": [
+    {
+      "answer_key": "D__A-070",
+      "attempt": 1,
+      "completion_tokens": 160,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 11.89,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5151,
+      "qid": "FQ-070",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:22:01+08:00",
+      "total_tokens": 5311
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:22:13+08:00",
+  "group": "D",
+  "input_sha256": "b379d9e4ba2a219d99ee57df25825fa8d60a82d2e63da5baecf440e16b402135",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案要点全部覆盖：事件为第六期绿色超短融发行（简称、期限、起息日、金额、利率俱在），主承销商中信、联席兴业与交通银行均明确，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-070",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案要点全部覆盖：事件为第六期绿色超短融发行（简称、期限、起息日、金额、利率俱在），主承销商中信、联席兴业与交通银行均明确，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

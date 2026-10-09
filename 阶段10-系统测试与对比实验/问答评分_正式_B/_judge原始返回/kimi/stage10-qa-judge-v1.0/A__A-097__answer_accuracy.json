@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-097",
+  "attempts": [
+    {
+      "answer_key": "A__A-097",
+      "attempt": 1,
+      "completion_tokens": 444,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 16.131,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4351,
+      "qid": "FQ-097",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:08:51+08:00",
+      "total_tokens": 4795
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:09:07+08:00",
+  "group": "A",
+  "input_sha256": "f89ca444da47453204e80ad15eda41570a7e0d26283e38f5eb86e62e4814d380",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案三项事件（GenSci133获批、GenSci148获批、GenSci136获受理）均完整正确覆盖；额外列举的GenSci161、曲普瑞林亦为证据支持的真实共同参与事件，不构成错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-097",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案三项事件（GenSci133获批、GenSci148获批、GenSci136获受理）均完整正确覆盖；额外列举的GenSci161、曲普瑞林亦为证据支持的真实共同参与事件，不构成错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

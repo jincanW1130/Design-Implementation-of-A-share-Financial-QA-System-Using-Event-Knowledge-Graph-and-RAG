@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-005",
+  "attempts": [
+    {
+      "answer_key": "B__A-005",
+      "attempt": 1,
+      "completion_tokens": 369,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 13.062,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5568,
+      "qid": "PE-05",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:51:48+08:00",
+      "total_tokens": 5937
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:52:01+08:00",
+  "group": "B",
+  "input_sha256": "8931a7f605997b5e132a0e8724bc533add93c56328ef06f1bbb9c286cb9d4850",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两期发行日期、金额、代码、利率、起息日等均可在证据1/2/4/8中逐一找到对应，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-05",
+  "raw_text": "{\"score\": 2, \"reason\": \"两期发行日期、金额、代码、利率、起息日等均可在证据1/2/4/8中逐一找到对应，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

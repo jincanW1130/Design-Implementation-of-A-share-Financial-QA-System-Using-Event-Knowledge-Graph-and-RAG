@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-082",
+  "attempts": [
+    {
+      "answer_key": "B__A-082",
+      "attempt": 1,
+      "completion_tokens": 219,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 4.061,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4067,
+      "qid": "FQ-082",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:54:30+08:00",
+      "total_tokens": 4286
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T00:54:34+08:00",
+  "group": "B",
+  "input_sha256": "7709b77c75b4ad449156dc10e416a4a2d43b332492778c4183f38b6e2af578b5",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案全部关键信息：分拆上市事项、实物分派方式及保密形式递交，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-082",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案全部关键信息：分拆上市事项、实物分派方式及保密形式递交，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

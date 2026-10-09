@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-099",
+  "attempts": [
+    {
+      "answer_key": "D__A-099",
+      "attempt": 1,
+      "completion_tokens": 242,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 5.039,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5425,
+      "qid": "FQ-099",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:24:59+08:00",
+      "total_tokens": 5667
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:25:04+08:00",
+  "group": "D",
+  "input_sha256": "af3e5b549ed420b5409d7397c4cb9dad83f95f13634f6e8bb29bc403e607d30a",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖合同类型、工程名称及承包人/分包人双方角色，关键信息无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-099",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖合同类型、工程名称及承包人/分包人双方角色，关键信息无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

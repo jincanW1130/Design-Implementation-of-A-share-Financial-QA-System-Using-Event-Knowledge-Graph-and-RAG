@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-098",
+  "attempts": [
+    {
+      "answer_key": "D__A-098",
+      "attempt": 1,
+      "completion_tokens": 3535,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 56.185,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5299,
+      "qid": "FQ-098",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:09:28+08:00",
+      "total_tokens": 8834
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:10:24+08:00",
+  "group": "D",
+  "input_sha256": "34b4d6efabe55371b287214fcee7eba120f8ef1d976616489d405bb8c8c49918",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "主要事实均有可用证据支撑，但将公告落款2026年6月21日当作收到中标结果公告之日，属少量不严谨。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-098",
+  "raw_text": "{\"score\": 1, \"reason\": \"主要事实均有可用证据支撑，但将公告落款2026年6月21日当作收到中标结果公告之日，属少量不严谨。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

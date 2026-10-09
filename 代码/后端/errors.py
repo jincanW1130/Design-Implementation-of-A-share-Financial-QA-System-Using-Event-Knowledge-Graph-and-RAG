@@ -26,6 +26,8 @@
 from __future__ import annotations
 
 import logging
+import logging.handlers  # noqa: F401  （RotatingFileHandler 用；本文件 setup_logging 里显式引用）
+import os
 import sys
 
 from starlette.responses import JSONResponse
@@ -177,12 +179,56 @@ def ok_empty(meta: dict | None = None, page: int = 1, page_size: int = 0) -> dic
 # 4. 日志
 # --------------------------------------------------------------------------
 def setup_logging(level: int = logging.INFO) -> None:
-    """配置后端日志（stderr，UTF-8）。detail 与未捕获异常堆栈只落这里。"""
+    """配置后端日志（**始终** stderr；**可选**再落一份轮转文件）。detail 与未捕获异常堆栈只落这里。
+
+    评审 P1-11 的落地（口径逐条写清，便于门禁核查）
+    -----------------------------------------------
+    * ① **stderr 一直在**：容器形态靠 stdout／stderr 采集，故 `StreamHandler(stderr)` 保留为
+      第一个 handler，本函数的行为对**未配置落盘**的部署与改动前**完全一致**；
+    * ② **落盘是"可选"**：路径取 `config.LOG_PATH`（即 `代码\\后端\\config.local.json` 的
+      `log_path`，由 `config.py` 读取）。取不到（键缺失／空串／写成目录）时 `LOG_PATH is None`
+      → **一个 FileHandler 都不挂**，只出 stderr；
+    * ③ **轮转**：用 `logging.handlers.RotatingFileHandler`，参数取 `config.LOG_ROTATION`
+      （当前＝单文件 10 MiB、保留 5 个历史文件、UTF-8）——`backup_count>0` 即轮转，
+      `app.log` → `app.log.1` → … → `app.log.5`，不会无限长大；
+    * ④ **不写凭据**：日志格式里只有时间／级别／logger 名／消息，**不含**任何连接串或口令；
+      格式字符串本身不引用 `config` 的任何凭据取值（本函数只读 `LOG_PATH`／`LOG_ROTATION`）。
+    * ⑤ **文件打不开不阻断开服**：路径所在目录不存在或没有写权限时，`RotatingFileHandler`
+      会抛 `OSError`／`FileNotFoundError`。这里**如实记一条 WARNING 到 stderr 并继续**，
+      不静默吞掉、也不让后端起不来——"日志落不下去"是运维问题，不该等于"服务不可用"。
+      目录不存在时先尝试 `os.makedirs`（`log_path` 允许指向尚未创建的目录）。
+    """
     handler = logging.StreamHandler(stream=sys.stderr)
     handler.setFormatter(logging.Formatter(
         "%(asctime)s %(levelname)s %(name)s %(message)s"))
+    handlers = [handler]
+
+    log_path = getattr(config, "LOG_PATH", None)
+    if log_path:
+        rotation = getattr(config, "LOG_ROTATION", {}) or {}
+        try:
+            directory = os.path.dirname(log_path)
+            if directory:
+                os.makedirs(directory, exist_ok=True)
+            # 延迟导入：只在本函数真正要用时才 import，不给导入期添负担。
+            from logging.handlers import RotatingFileHandler
+            file_handler = RotatingFileHandler(
+                log_path,
+                maxBytes=int(rotation.get("max_bytes", 10 * 1024 * 1024)),
+                backupCount=int(rotation.get("backup_count", 5)),
+                encoding=str(rotation.get("encoding", "utf-8")),
+                delay=True)
+            file_handler.setFormatter(logging.Formatter(
+                "%(asctime)s %(levelname)s %(name)s %(message)s"))
+            handlers.append(file_handler)
+        except OSError as exc:
+            # detail 只进日志：这里只报**路径与异常类型**，绝不回显任何凭据取值。
+            logging.getLogger("ashare_qa.backend").warning(
+                "日志落盘不可用（log_path=%s，%s: %s）——本次只出 stderr，服务照常启动。",
+                log_path, type(exc).__name__, exc)
+
     root = logging.getLogger("ashare_qa")
-    root.handlers[:] = [handler]
+    root.handlers[:] = handlers
     root.setLevel(level)
     root.propagate = False
 
@@ -290,11 +336,27 @@ def selftest() -> int:
           http_status_of(4002)) == (404, 409, 503, 504, 500, 401, 403)),
         ("1004 限流码为 HTTP 429（第 9 阶段新增，须在《25》登记）",
          http_status_of(1004) == 429),
+        # 评审 P1-11：日志落盘是**可选**的，且 stderr 必须在（本项只判源码形态，不触盘）。
+        ("setup_logging 始终挂 stderr 且仅在 log_path 存在时追加轮转文件",
+         _setup_logging_shape_ok()),
     ]
     for label, good in checks:
         print("  [%s] %s" % ("OK " if good else "FAIL", label))
     print(line)
     return 0 if all(g for _, g in checks) and bad == 0 else 1
+
+
+def _setup_logging_shape_ok() -> bool:
+    """判 `setup_logging()` 的源码形态（**不写盘、不改全局 logging 状态**）。
+
+    两条：① 必须有 `StreamHandler(stream=sys.stderr)`；② 追加文件 handler 必须**由
+    `config.LOG_PATH` 把关**、且用的是 `RotatingFileHandler`（有轮转、不是裸 FileHandler）。
+    """
+    import inspect
+    src = inspect.getsource(setup_logging)
+    return ("StreamHandler(stream=sys.stderr)" in src
+            and "RotatingFileHandler" in src
+            and "config" in src and "LOG_PATH" in src)
 
 
 if __name__ == "__main__":

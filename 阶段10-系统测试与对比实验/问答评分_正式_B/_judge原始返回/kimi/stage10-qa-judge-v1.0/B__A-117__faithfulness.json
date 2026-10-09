@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-117",
+  "attempts": [
+    {
+      "answer_key": "B__A-117",
+      "attempt": 1,
+      "completion_tokens": 142,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 10.209,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4129,
+      "qid": "FQ-117",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:56:02+08:00",
+      "total_tokens": 4271
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:56:12+08:00",
+  "group": "B",
+  "input_sha256": "2bcb564c1c7f899c3643f4e4f0aaebbdc55276cc9b1b50395a066631af98f2b2",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案所述全资子公司关系及8月披露时间均被证据1原文直接支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-117",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案所述全资子公司关系及8月披露时间均被证据1原文直接支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

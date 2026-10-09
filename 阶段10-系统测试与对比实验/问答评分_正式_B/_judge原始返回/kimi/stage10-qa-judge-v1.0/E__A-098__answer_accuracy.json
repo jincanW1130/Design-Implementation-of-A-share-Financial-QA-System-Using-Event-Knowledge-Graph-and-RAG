@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-098",
+  "attempts": [
+    {
+      "answer_key": "E__A-098",
+      "attempt": 1,
+      "completion_tokens": 121,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 6.806,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4999,
+      "qid": "FQ-098",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:42:23+08:00",
+      "total_tokens": 5120
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:42:29+08:00",
+  "group": "E",
+  "input_sha256": "ad44d92ab13619e86b05ee771e74ddce33329eb73a8f0aaef0061665a4d72a34",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整涵盖参考答案的两个事件：中标龙江河谷灌区PCCP管材采购项目及签订采购合同，内容准确无误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-098",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整涵盖参考答案的两个事件：中标龙江河谷灌区PCCP管材采购项目及签订采购合同，内容准确无误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-053",
+  "attempts": [
+    {
+      "answer_key": "B__A-053",
+      "attempt": 1,
+      "completion_tokens": 174,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 9.148,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4614,
+      "qid": "FQ-053",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:20:03+08:00",
+      "total_tokens": 4788
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:20:13+08:00",
+  "group": "B",
+  "input_sha256": "58d08afab3f0999deb42bc770649109d3f80b745c263e8ca504e64980292a398",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "九名董事及职务全部列出且与参考答案一致，并说明高管中仅曾毓群任总经理有证据，关键信息无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-053",
+  "raw_text": "{\"score\": 2, \"reason\": \"九名董事及职务全部列出且与参考答案一致，并说明高管中仅曾毓群任总经理有证据，关键信息无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

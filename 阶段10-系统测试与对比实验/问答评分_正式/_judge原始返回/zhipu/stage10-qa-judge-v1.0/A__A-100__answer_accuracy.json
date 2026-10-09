@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-100",
+  "attempts": [
+    {
+      "answer_key": "A__A-100",
+      "attempt": 1,
+      "completion_tokens": 1765,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 33.852,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4264,
+      "qid": "FQ-100",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:02:51+08:00",
+      "total_tokens": 6029
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:03:24+08:00",
+  "group": "A",
+  "input_sha256": "717ea6a2a436bb077ab877e0743d4c90982df69e5f5fe52890cbc17b65456a99",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖金标准两项事件（签约与中标公示），日期金额均正确，补充内容亦有证据支撑，无事实错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-100",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖金标准两项事件（签约与中标公示），日期金额均正确，补充内容亦有证据支撑，无事实错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

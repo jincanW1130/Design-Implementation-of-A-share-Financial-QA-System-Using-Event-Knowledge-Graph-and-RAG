@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-112",
+  "attempts": [
+    {
+      "answer_key": "B__A-112",
+      "attempt": 1,
+      "completion_tokens": 446,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 16.613,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4591,
+      "qid": "FQ-112",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:53:14+08:00",
+      "total_tokens": 5037
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:53:31+08:00",
+  "group": "B",
+  "input_sha256": "d31daa7b806a746a98951c8f13d578ea53d0a91ab4fb90aabbf0b8f5e97a5491",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核心说法「中国三峡集团是控股股东」及发债、直接持股、合计持股超50%、不影响上市地位等均能被证据2-5明确支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-112",
+  "raw_text": "{\"score\": 2, \"reason\": \"核心说法「中国三峡集团是控股股东」及发债、直接持股、合计持股超50%、不影响上市地位等均能被证据2-5明确支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

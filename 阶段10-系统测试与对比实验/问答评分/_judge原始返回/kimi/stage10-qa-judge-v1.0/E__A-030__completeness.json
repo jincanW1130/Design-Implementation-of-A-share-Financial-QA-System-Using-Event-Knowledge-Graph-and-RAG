@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-030",
+  "attempts": [
+    {
+      "answer_key": "E__A-030",
+      "attempt": 1,
+      "completion_tokens": 269,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 10.605,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5092,
+      "qid": "PE-30",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:30:43+08:00",
+      "total_tokens": 5361
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T18:30:53+08:00",
+  "group": "E",
+  "input_sha256": "98812eaceaaa1be1ca7d89e6cc0e34c4a2825d3c670f188a20a13b34f7bd0dad",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、过户数量15,772,385股及占比0.21%均已覆盖，但遗漏参考答案中的锁定期（2026年9月3日至2028年9月2日），属基本覆盖而非完整。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-30",
+  "raw_text": "{\"score\": 1, \"reason\": \"事件、过户数量15,772,385股及占比0.21%均已覆盖，但遗漏参考答案中的锁定期（2026年9月3日至2028年9月2日），属基本覆盖而非完整。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

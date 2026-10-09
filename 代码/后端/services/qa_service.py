@@ -19,10 +19,13 @@
   本文件据此落库并组装接口载荷；
 * `answer_trace.jsonl` —— 检索与生成的逐跳轨迹（只用于日志与排障，不进响应体）。
 
-失败归类（《24》第五节的错误码纪律）
-------------------------------------
+失败归类（《24》第五节的错误码纪律；**评审 P1-9 已把判据换成结构化契约**）
+----------------------------------------------------------------------------
 * 子进程**超时**（阈值取 `config.ANSWER["timeout_seconds"]`，配置唯一来源）→ `ApiError(3002)`；
-* 子进程**非零退出** → 由日志尾部判 3001（图谱服务不可用）／3003（向量索引不可用）；
+* 子进程**非零退出** → **先读上游落在 `--out-dir\\error_contract.json` 的结构化失败契约**
+  （由 `run_answer.py` 以 `SystemExit` 退出前写盘，`error_code` 取值出自 `errors.CODES`），
+  契约有效即以它为准、**一条日志文本都不看**；**只有契约缺失／不可解析时**才回落到
+  `_classify_failure()` 原有的中文措辞匹配，并在回落时打一条 **WARNING**（不静默）。
 * 子进程**退出码为 0 但没有产物** → 3003（链路没跑完，按不可用处理）。
 三类都把 stdout／stderr 摘要写**日志**，**绝不进响应体**（硬约束 7）。
 
@@ -110,6 +113,13 @@ SUMMARY_LIMIT = 100
 
 NEIGHBOR_RADIUS = 2
 """`GET /api/documents/{doc_id}/chunks/{chunk_id}` 的相邻块半径（前后各 2 块）。"""
+
+CONTRACT_FILENAME = "error_contract.json"
+"""上游第 8 阶段 `run_answer.py` 落下的**失败契约**文件名（评审 P1-9）。
+
+契约放在调用方传进去的 `--out-dir` 下，故本层无需新增任何约定参数即可读到它。
+契约的 `error_code` 取值一律来自 `errors.CODES`；本层**先读契约，读不到才回落措辞匹配**。
+"""
 
 EVIDENCE_TYPES = ("回答来源", "新闻来源", "公告来源", "相关事件")
 """`answer_evidence.evidence_type` 的四个取值（表 4-6 规定）。"""
@@ -254,10 +264,61 @@ def _summary(answer_text) -> str:
 # --------------------------------------------------------------------------
 # 2. 链路调用（复用第 8 阶段入口，不重写检索与生成）
 # --------------------------------------------------------------------------
-def _classify_failure(text: str) -> int:
-    """子进程非零退出时，按日志尾部判错误码。
+def read_error_contract(out_dir: str):
+    """读上游 `run_answer.py` 落下的失败契约 `<out_dir>\\error_contract.json`。
 
-    判定顺序：**先判守卫，再判索引／图谱，最后判模型侧**。
+    返回 `{"error_code","reason","schema","extra"}`（**已按 `errors.CODES` 校验**）或 `None`。
+    `None` 有三种情况，调用方只需知道"没有可用的结构化契约"：
+    ① 文件不存在（上游在改动前跑出的运行目录、或失败发生在落盘之前——如被杀进程）；
+    ② 文件在但**读不动**（不是 UTF-8、权限不足）；
+    ③ 文件能读但不是契约（JSON 坏、顶层不是对象、`error_code` 不是整数、**码不在 `errors.CODES` 里**）。
+
+    第 ③ 种最要紧：**不认识的码一律当"没有契约"处理**，绝不把上游写错的一个数字透传给响应体
+    （`ApiError` 对未登记码会告警并按 9999 取 message／http，但响应体里仍回那个码——那等于把
+    "上游写错"变成一个凭空出现的错误码）。宁可回落到措辞匹配，也不引入未登记码。
+    """
+    path = os.path.join(str(out_dir or ""), CONTRACT_FILENAME)
+    if not out_dir or not os.path.isfile(path):
+        return None
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+    except (OSError, ValueError, UnicodeDecodeError) as exc:
+        logger.warning("失败契约存在但读不动（%s：%s）——按「契约缺失」处理，回落措辞匹配。",
+                       type(exc).__name__, exc)
+        return None
+    if not isinstance(payload, dict):
+        return None
+    try:
+        code = int(payload.get("error_code"))
+    except (TypeError, ValueError):
+        return None
+    if code not in errors.CODES:
+        logger.warning("失败契约里的 error_code=%r 不在 errors.CODES 里（上游写错？）——"
+                       "按「契约缺失」处理，回落措辞匹配，不透传未登记的码。", payload.get("error_code"))
+        return None
+    return {"error_code": code, "reason": payload.get("reason"),
+            "schema": payload.get("schema"), "extra": payload.get("extra")}
+
+
+def _classify_failure(text: str, contract_path: str | None = None,
+                      exit_code=None, out_dir: str | None = None) -> int:
+    """子进程非零退出时定错误码。**先读结构化契约，契约不可用时才回落措辞匹配（并告警）。**
+
+    判定顺序（评审 P1-9 落地后的口径）
+    ----------------------------------
+    ① **结构化契约优先**：读 `<out_dir>\\error_contract.json`（由上游第 8 阶段的
+       `run_answer.py` 在每次以 `SystemExit` 退出前落盘，判据全是结构化字段、**不含任何措辞**）。
+       契约有效即以它为准，**一条日志文本都不看**；命中时会记一条 INFO 说明码的来源。
+    ② **契约缺失／不可解析时才回落**到本函数原有的中文措辞匹配（守卫 → 索引 → 图谱 → 模型），
+       并在**回落时打一条 WARNING**（"回落到措辞匹配"）——**不静默**。回落分支的判据与取值
+       **一个字节都没改**（`test_d_backend_errors.py` 的 D5／D6／D7 逐条钉住的正是它）。
+
+    两种入口都能用：
+    * `_classify_failure(日志文本)`（既有调用形态，等同于"契约缺失"）；
+    * `_classify_failure(日志文本, contract_path=…, exit_code=…, out_dir=…)`（`_run_chain` 用）。
+
+    回落时的判定顺序（**不变**）：**先判守卫，再判索引／图谱，最后判模型侧**。
 
     * `3004` 上游第 8 阶段的「装配账目守卫」——它既不是图谱故障也不是模型故障，故先认这一条
       （2026-09-30 实测 PE-03 落在这条上，早期版本会被误标成 3001）。
@@ -276,7 +337,22 @@ def _classify_failure(text: str) -> int:
     ② 新增 `model_marks` 分支返回 **3002**——该码早已登记在 `errors.py` 的 `CODES` 里
        （"大模型接口超时"，HTTP 504）却**从未被返回过**，是一枚死码，此处正好启用；
     ③ 兜底由 `3001` 改为 **9999（未归类）**：判不出类别时如实说"不知道"，而不是替图谱认领故障。
+
+    **2026-10-07（评审 P1-9）**：① 的结构化契约上线后，上面这批措辞判据**只在回落路径**生效；
+    正常路径（上游正常落盘契约）由 `error_contract.json` 直接给码。
     """
+    out_dir = out_dir or (os.path.dirname(contract_path) if contract_path else None)
+    contract = read_error_contract(out_dir) if out_dir else None
+    if contract is not None:
+        logger.info("问答链路错误码取自上游结构化契约（非措辞匹配）：error_code=%s reason=%s "
+                    "exit=%s out_dir=%s", contract["error_code"], contract.get("reason"),
+                    exit_code, out_dir)
+        return int(contract["error_code"])
+
+    logger.warning("上游未提供可用的失败契约（out_dir=%s）——**回落到措辞匹配**判定错误码"
+                   "（该路径依赖中文措辞，属已知技术债，评审 P1-9）；"
+                   "exit=%s；日志尾部前 300 字：%s", out_dir, exit_code, (text or "")[:300])
+
     low = (text or "").lower()
     guard_marks = ("token 账现场重算与上游 trace 不一致", "预算守卫", "现场 text+path+event_triple")
     index_marks = ("faiss", "向量索引", "索引文件", "vector_map", "build_meta",
@@ -335,7 +411,10 @@ def _run_chain(question: str, group: str, session_id: str, now_iso: str) -> dict
 
     elapsed = (datetime.now() - started).total_seconds()
     if proc.returncode != 0:
-        code = _classify_failure((proc.stdout or "") + "\n" + (proc.stderr or ""))
+        # 评审 P1-9：**先读上游的结构化失败契约**（判据不含任何措辞）；
+        # 契约缺失／不可解析时 _classify_failure 才回落措辞匹配，并打 WARNING（不静默）。
+        code = _classify_failure((proc.stdout or "") + "\n" + (proc.stderr or ""),
+                                 exit_code=proc.returncode, out_dir=out_dir)
         logger.warning("问答链路非零退出：exit=%s 耗时=%.1fs out_dir=%s\n--- stdout 尾部 ---\n%s"
                        "\n--- stderr 尾部 ---\n%s", proc.returncode, elapsed, out_dir,
                        _tail(proc.stdout), _tail(proc.stderr))

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-073",
+  "attempts": [
+    {
+      "answer_key": "E__A-073",
+      "attempt": 1,
+      "completion_tokens": 262,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 10.36,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4963,
+      "qid": "FQ-073",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:17:37+08:00",
+      "total_tokens": 5225
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:17:48+08:00",
+  "group": "E",
+  "input_sha256": "bcfe0af164369799194a5f971b2891db063c244a74eaf64a4cf679a157a6556b",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、两笔、8000万美元、2026年6月17日发行及《信托契据》下无条件不可撤销担保均与参考答案一致，且正确排除区间外CSI MTN事项。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-073",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、两笔、8000万美元、2026年6月17日发行及《信托契据》下无条件不可撤销担保均与参考答案一致，且正确排除区间外CSI MTN事项。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

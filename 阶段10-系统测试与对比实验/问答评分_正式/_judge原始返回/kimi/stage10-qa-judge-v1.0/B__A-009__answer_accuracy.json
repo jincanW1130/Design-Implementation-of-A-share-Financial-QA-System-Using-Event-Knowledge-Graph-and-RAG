@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-009",
+  "attempts": [
+    {
+      "answer_key": "B__A-009",
+      "attempt": 1,
+      "completion_tokens": 113,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 4.784,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4452,
+      "qid": "FQ-009",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:49:50+08:00",
+      "total_tokens": 4565
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T19:49:55+08:00",
+  "group": "B",
+  "input_sha256": "efb6e6708e0c7bdee52e39cad8b7dddf5b367e93349dce891947642acad4a8aa",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "四项要素与金标准完全一致：2026年8月20日、香港联合交易所有限公司上市、年利率1.8%、期限3年。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-009",
+  "raw_text": "{\"score\": 2, \"reason\": \"四项要素与金标准完全一致：2026年8月20日、香港联合交易所有限公司上市、年利率1.8%、期限3年。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

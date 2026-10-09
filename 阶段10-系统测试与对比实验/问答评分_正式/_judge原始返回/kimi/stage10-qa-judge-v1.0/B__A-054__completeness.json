@@ -1,0 +1,47 @@
+{
+  "answer_key": "B__A-054",
+  "attempts": [
+    {
+      "answer_key": "B__A-054",
+      "attempt": 1,
+      "completion_tokens": 354,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "json_recovered": true,
+      "judge": "kimi",
+      "latency_seconds": 10.701,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5150,
+      "qid": "FQ-054",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:20:47+08:00",
+      "total_tokens": 5504
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:20:58+08:00",
+  "group": "B",
+  "input_sha256": "9fdba83fad2183103768fc593773ef4092fbc051ff333dcfe20070233cb711e0",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "_recovered_from_malformed_json": true,
+    "reason": "答案以证据不足为由未作答，参考答案中董事长胡望明及刘宝军、周学东、关新平、苏敏、李志青等董事职务几乎全部遗漏，属关键信息大量遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-054",
+  "raw_text": "{\"score\": 0, \"reason\": 答案以证据不足为由未作答，参考答案中董事长胡望明及刘宝军、周学东、关新平、苏敏、李志青等董事职务几乎全部遗漏，属关键信息大量遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

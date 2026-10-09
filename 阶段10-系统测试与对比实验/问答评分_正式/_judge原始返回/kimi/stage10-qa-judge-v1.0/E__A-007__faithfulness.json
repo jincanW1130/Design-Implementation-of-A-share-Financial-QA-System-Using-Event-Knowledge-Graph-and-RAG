@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-007",
+  "attempts": [
+    {
+      "answer_key": "E__A-007",
+      "attempt": 1,
+      "completion_tokens": 190,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 10.559,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4878,
+      "qid": "FQ-007",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:27:10+08:00",
+      "total_tokens": 5068
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:27:21+08:00",
+  "group": "E",
+  "input_sha256": "b69d91ea1cad68b0b50c18cf344bb9cfc7340f9a6c3d184ecdd1dc8430457575",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "金额区间、用途、进展等关键事实均见于证据3/4/5，无无依据编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-007",
+  "raw_text": "{\"score\": 2, \"reason\": \"金额区间、用途、进展等关键事实均见于证据3/4/5，无无依据编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-023",
+  "attempts": [
+    {
+      "answer_key": "E__A-023",
+      "attempt": 1,
+      "completion_tokens": 169,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 6.659,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4397,
+      "qid": "PE-23",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:26:22+08:00",
+      "total_tokens": 4566
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T18:26:29+08:00",
+  "group": "E",
+  "input_sha256": "0471437768d568df2a6165100b8c1bcad6d6cf87bf920f3c7984faa9f7cc6a61",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案列有薛驰、陆伟等7名董事及高管，被评答案称无法作答，未覆盖任何一人，关键信息全部遗漏。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-23",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案列有薛驰、陆伟等7名董事及高管，被评答案称无法作答，未覆盖任何一人，关键信息全部遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

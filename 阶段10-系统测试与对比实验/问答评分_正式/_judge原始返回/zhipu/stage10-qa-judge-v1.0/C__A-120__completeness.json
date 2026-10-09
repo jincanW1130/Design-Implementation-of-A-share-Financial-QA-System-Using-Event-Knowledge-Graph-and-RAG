@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-120",
+  "attempts": [
+    {
+      "answer_key": "C__A-120",
+      "attempt": 1,
+      "completion_tokens": 2298,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 42.158,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 6156,
+      "qid": "FQ-120",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:19:52+08:00",
+      "total_tokens": 8454
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:20:34+08:00",
+  "group": "C",
+  "input_sha256": "cf418f22c1604f97847f8533ab2095b775f12318559516e7566c3889582e572f",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "控股子公司关系、奥卡西平片0.15g规格及证书编号2026S03114等参考答案关键信息全部覆盖，无遗漏，另补充获批时间等细节。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-120",
+  "raw_text": "{\"score\": 2, \"reason\": \"控股子公司关系、奥卡西平片0.15g规格及证书编号2026S03114等参考答案关键信息全部覆盖，无遗漏，另补充获批时间等细节。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

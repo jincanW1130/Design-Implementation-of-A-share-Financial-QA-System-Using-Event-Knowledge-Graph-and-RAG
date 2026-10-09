@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-114",
+  "attempts": [
+    {
+      "answer_key": "E__A-114",
+      "attempt": 1,
+      "completion_tokens": 128,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 5.859,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4609,
+      "qid": "FQ-114",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:54:30+08:00",
+      "total_tokens": 4737
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:54:36+08:00",
+  "group": "E",
+  "input_sha256": "eabe13a8209a223ac3510ac25a8102d159a2e32471a99c1b807e7b82462db5d9",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确给出全资子公司关系，并提及该子公司取得江西省药监局1项医疗器械注册证，完整覆盖金标准两项关键信息。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-114",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确给出全资子公司关系，并提及该子公司取得江西省药监局1项医疗器械注册证，完整覆盖金标准两项关键信息。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

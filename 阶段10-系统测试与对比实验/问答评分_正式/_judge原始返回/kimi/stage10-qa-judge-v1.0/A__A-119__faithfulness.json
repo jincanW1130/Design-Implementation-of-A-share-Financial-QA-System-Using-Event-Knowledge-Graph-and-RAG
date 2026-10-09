@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-119",
+  "attempts": [
+    {
+      "answer_key": "A__A-119",
+      "attempt": 1,
+      "completion_tokens": 267,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 12.02,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4065,
+      "qid": "FQ-119",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:22:39+08:00",
+      "total_tokens": 4332
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:22:51+08:00",
+  "group": "A",
+  "input_sha256": "6e6de5a2982bab07dcaebfa2f3ebe9b85293f78107009257e0468a5bc11dd23d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "持股数据、43.47%比例及“不会导致控股股东及实际控制人发生变化”的引文均可在证据2原文中找到，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-119",
+  "raw_text": "{\"score\": 2, \"reason\": \"持股数据、43.47%比例及“不会导致控股股东及实际控制人发生变化”的引文均可在证据2原文中找到，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

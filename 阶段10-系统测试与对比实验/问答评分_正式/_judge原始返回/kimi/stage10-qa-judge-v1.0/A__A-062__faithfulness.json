@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-062",
+  "attempts": [
+    {
+      "answer_key": "A__A-062",
+      "attempt": 1,
+      "completion_tokens": 539,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 17.864,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4022,
+      "qid": "FQ-062",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:18:54+08:00",
+      "total_tokens": 4561
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:19:12+08:00",
+  "group": "A",
+  "input_sha256": "d72c2255b3f738367b869657043ea160c452d58802e16f71432b71f185b2ffe5",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核心事实（交易完成、2026年4月起并表并追溯调整）与证据2原文一致；5/7/8月公告'2025年（已重述）'标注在证据8/7/6中均有；模型分析明确标注为推断且承认证据不足，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-062",
+  "raw_text": "{\"score\": 2, \"reason\": \"核心事实（交易完成、2026年4月起并表并追溯调整）与证据2原文一致；5/7/8月公告'2025年（已重述）'标注在证据8/7/6中均有；模型分析明确标注为推断且承认证据不足，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

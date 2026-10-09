@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-052",
+  "attempts": [
+    {
+      "answer_key": "E__A-052",
+      "attempt": 1,
+      "completion_tokens": 210,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 9.414,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5091,
+      "qid": "FQ-052",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:03:03+08:00",
+      "total_tokens": 5301
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:03:12+08:00",
+  "group": "E",
+  "input_sha256": "3f5219323b1853ac8af5dbde8082368d3719e8b54c3323b7b425222e607954e1",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "仅答对董事长郑宗强，遗漏参考答案中罗汉武、窦晓波、李芳、胡顺靖四人，且多答已离任的陈刚，属部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-052",
+  "raw_text": "{\"score\": 1, \"reason\": \"仅答对董事长郑宗强，遗漏参考答案中罗汉武、窦晓波、李芳、胡顺靖四人，且多答已离任的陈刚，属部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

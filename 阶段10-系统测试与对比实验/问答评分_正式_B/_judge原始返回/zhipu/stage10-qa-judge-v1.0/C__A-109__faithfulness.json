@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-109",
+  "attempts": [
+    {
+      "answer_key": "C__A-109",
+      "attempt": 1,
+      "completion_tokens": 1870,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 39.234,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4671,
+      "qid": "FQ-109",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:18:15+08:00",
+      "total_tokens": 6541
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:18:55+08:00",
+  "group": "C",
+  "input_sha256": "2fffa1cff0e5a6053b7ccf0f9611353d5e4fdf8b8dc7058c1d5374ddbf769836",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "不存在关联关系、招标人名称等事实均被证据1/5/6/8直接支撑；万华项目无法回答的说明属实，解读部分已明确标注非公告原意。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-109",
+  "raw_text": "{\"score\": 2, \"reason\": \"不存在关联关系、招标人名称等事实均被证据1/5/6/8直接支撑；万华项目无法回答的说明属实，解读部分已明确标注非公告原意。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

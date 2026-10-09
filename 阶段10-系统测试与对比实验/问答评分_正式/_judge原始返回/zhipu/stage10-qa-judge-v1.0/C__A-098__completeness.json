@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-098",
+  "attempts": [
+    {
+      "answer_key": "C__A-098",
+      "attempt": 1,
+      "completion_tokens": 301,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 5.919,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5454,
+      "qid": "FQ-098",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:04:22+08:00",
+      "total_tokens": 5755
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T01:04:28+08:00",
+  "group": "C",
+  "input_sha256": "d06faa0b64c8ada80239c8d066db612ee4ad5fb9817bdd25d4200c32f45f66b8",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案两个关键事件：中标PCCP管材采购项目与签订采购合同，且细节充分，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-098",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案两个关键事件：中标PCCP管材采购项目与签订采购合同，且细节充分，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

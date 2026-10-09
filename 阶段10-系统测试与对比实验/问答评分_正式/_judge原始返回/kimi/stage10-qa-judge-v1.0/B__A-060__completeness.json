@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-060",
+  "attempts": [
+    {
+      "answer_key": "B__A-060",
+      "attempt": 1,
+      "completion_tokens": 162,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 6.8,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3940,
+      "qid": "FQ-060",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:27:36+08:00",
+      "total_tokens": 4102
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:27:42+08:00",
+  "group": "B",
+  "input_sha256": "9a8f148226b93e36a7e7154382022daa2e915e0aa5619a1721350827962af6e0",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案的关键信息（程忠及其副总经理/财务总监身份、688001代码、科创板第一股）全部未覆盖，答案仅称证据不足，属关键信息大量遗漏。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-060",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案的关键信息（程忠及其副总经理/财务总监身份、688001代码、科创板第一股）全部未覆盖，答案仅称证据不足，属关键信息大量遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

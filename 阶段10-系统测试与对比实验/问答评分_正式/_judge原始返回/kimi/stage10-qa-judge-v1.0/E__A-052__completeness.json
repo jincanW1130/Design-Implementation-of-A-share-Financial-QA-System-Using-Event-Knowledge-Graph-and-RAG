@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-052",
+  "attempts": [
+    {
+      "answer_key": "E__A-052",
+      "attempt": 1,
+      "completion_tokens": 313,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 11.446,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5098,
+      "qid": "FQ-052",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:03:14+08:00",
+      "total_tokens": 5411
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:03:25+08:00",
+  "group": "E",
+  "input_sha256": "92c03a2f1fd07ff8ecdf771df83268d585fde7b56f94ae54cd5189bd5509079d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案共5人，被评答案仅答出郑宗强，漏掉罗汉武、窦晓波、李芳、胡顺靖4人，关键信息大量遗漏。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-052",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案共5人，被评答案仅答出郑宗强，漏掉罗汉武、窦晓波、李芳、胡顺靖4人，关键信息大量遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

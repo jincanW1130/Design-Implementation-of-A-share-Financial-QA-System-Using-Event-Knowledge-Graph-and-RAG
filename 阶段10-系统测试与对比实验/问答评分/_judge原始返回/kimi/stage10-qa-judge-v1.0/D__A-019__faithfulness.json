@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-019",
+  "attempts": [
+    {
+      "answer_key": "D__A-019",
+      "attempt": 1,
+      "completion_tokens": 282,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 11.59,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5603,
+      "qid": "PE-19",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:56:02+08:00",
+      "total_tokens": 5885
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:56:14+08:00",
+  "group": "D",
+  "input_sha256": "d7ab511864c6a9ad266b2025e0fa548f8b2cb3b78c993a8237871247d761da13",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "无关联关系、买卖双方、长期客户及履约能力、证据8交易对手方介绍、证据9移动同类表述、图谱CUSTOMER_OF路径均被可用证据支撑，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-19",
+  "raw_text": "{\"score\": 2, \"reason\": \"无关联关系、买卖双方、长期客户及履约能力、证据8交易对手方介绍、证据9移动同类表述、图谱CUSTOMER_OF路径均被可用证据支撑，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

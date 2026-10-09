@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-071",
+  "attempts": [
+    {
+      "answer_key": "D__A-071",
+      "attempt": 1,
+      "completion_tokens": 123,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 7.211,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4949,
+      "qid": "FQ-071",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:22:29+08:00",
+      "total_tokens": 5072
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:22:36+08:00",
+  "group": "D",
+  "input_sha256": "568e70ed61182f455ff183062fb59a966da1fd8af4936c7e88968344a8cc408b",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、股权登记日7月15日、除权除息日7月16日及两家自行派发对象均与参考答案完全一致，判完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-071",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、股权登记日7月15日、除权除息日7月16日及两家自行派发对象均与参考答案完全一致，判完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

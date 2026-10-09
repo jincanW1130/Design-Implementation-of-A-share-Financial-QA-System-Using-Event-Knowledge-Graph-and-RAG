@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-118",
+  "attempts": [
+    {
+      "answer_key": "B__A-118",
+      "attempt": 1,
+      "completion_tokens": 292,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 7.277,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5654,
+      "qid": "FQ-118",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:59:01+08:00",
+      "total_tokens": 5946
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T00:59:09+08:00",
+  "group": "B",
+  "input_sha256": "f255f3e0dfbbbfc90185803e756bcad42f8ddee862182594026b87b11f78d6b6",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "结论“不存在”与参考答案完全一致，并准确区分了一致行动关系仅存在于与其他员工持股计划之间，无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-118",
+  "raw_text": "{\"score\": 2, \"reason\": \"结论“不存在”与参考答案完全一致，并准确区分了一致行动关系仅存在于与其他员工持股计划之间，无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

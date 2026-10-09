@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-029",
+  "attempts": [
+    {
+      "answer_key": "D__A-029",
+      "attempt": 1,
+      "completion_tokens": 228,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 12.3,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5868,
+      "qid": "FQ-029",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:42:14+08:00",
+      "total_tokens": 6096
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:42:27+08:00",
+  "group": "D",
+  "input_sha256": "73875e3110276bce381f98572f015f979b0f361fb427dcbbdb4936a569e97b48",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "新增股份数、验资基准日、登记完成日、对价金额、实收股本变更及登记后A股总数等关键信息全部覆盖，无遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-029",
+  "raw_text": "{\"score\": 2, \"reason\": \"新增股份数、验资基准日、登记完成日、对价金额、实收股本变更及登记后A股总数等关键信息全部覆盖，无遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

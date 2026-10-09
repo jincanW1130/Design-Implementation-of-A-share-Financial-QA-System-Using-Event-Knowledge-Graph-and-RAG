@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-051",
+  "attempts": [
+    {
+      "answer_key": "E__A-051",
+      "attempt": 1,
+      "completion_tokens": 523,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 17.326,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5718,
+      "qid": "FQ-051",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:02:00+08:00",
+      "total_tokens": 6241
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:02:17+08:00",
+  "group": "E",
+  "input_sha256": "f780a16fbc514ae813a811e0d462d35e7267603721ce12b9379a9902dc88c38a",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确列出张长岩、康凤伟、李新华、袁国强、陈汉文职务及缺席情况和董秘宋静刚，但遗漏了参考答案中叶礼德、张梦娇两位独立董事候选人，证据3中本有此信息，故为部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-051",
+  "raw_text": "{\"score\": 1, \"reason\": \"答案正确列出张长岩、康凤伟、李新华、袁国强、陈汉文职务及缺席情况和董秘宋静刚，但遗漏了参考答案中叶礼德、张梦娇两位独立董事候选人，证据3中本有此信息，故为部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

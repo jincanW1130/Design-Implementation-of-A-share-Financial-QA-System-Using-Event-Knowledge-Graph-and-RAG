@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-067",
+  "attempts": [
+    {
+      "answer_key": "D__A-067",
+      "attempt": 1,
+      "completion_tokens": 254,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 11.329,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4455,
+      "qid": "FQ-067",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:19:32+08:00",
+      "total_tokens": 4709
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:19:44+08:00",
+  "group": "D",
+  "input_sha256": "62058e67d2ce7f3a680123f81a1bd8c2179a1eb7516723e1cbf27045adb5b8c6",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件（与阳光新能源共同设立苏州华旭新能合伙企业）、出资总额100,000万元、认缴19,900万元及占比19.90%等关键信息均完整覆盖",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-067",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件（与阳光新能源共同设立苏州华旭新能合伙企业）、出资总额100,000万元、认缴19,900万元及占比19.90%等关键信息均完整覆盖\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

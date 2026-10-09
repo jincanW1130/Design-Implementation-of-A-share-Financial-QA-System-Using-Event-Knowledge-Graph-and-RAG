@@ -1,0 +1,46 @@
+{
+  "answer_key": "E__A-006",
+  "attempts": [
+    {
+      "answer_key": "E__A-006",
+      "attempt": 1,
+      "completion_tokens": 2439,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 41.54,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4080,
+      "qid": "FQ-006",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:30:47+08:00",
+      "total_tokens": 6519
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:31:29+08:00",
+  "group": "E",
+  "input_sha256": "41667a3ef68d0cf51296b0c258e8ed4cd7f6b796fcb52958555e7f732825f986",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "disagreement_note": "主judge将落款9月15日与元数据发布时间9月16日误判为矛盾，落款日与发布日本可不同，答案无失实。",
+    "final_score": 2,
+    "reason": "文号、400亿上限、24个月有效期均与证据1逐字一致，发布日期与证据元数据2026-09-16相符，无编造。"
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-006",
+  "raw_text": "{\"final_score\": 2, \"reason\": \"文号、400亿上限、24个月有效期均与证据1逐字一致，发布日期与证据元数据2026-09-16相符，无编造。\", \"disagreement_note\": \"主judge将落款9月15日与元数据发布时间9月16日误判为矛盾，落款日与发布日本可不同，答案无失实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

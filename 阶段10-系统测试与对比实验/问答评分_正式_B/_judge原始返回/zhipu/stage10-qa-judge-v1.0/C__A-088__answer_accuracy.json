@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-088",
+  "attempts": [
+    {
+      "answer_key": "C__A-088",
+      "attempt": 1,
+      "completion_tokens": 334,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 5.477,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5600,
+      "qid": "FQ-088",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:13:47+08:00",
+      "total_tokens": 5934
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:13:53+08:00",
+  "group": "C",
+  "input_sha256": "d52a021ea1042b69fa42e549ede0d7b81b334b885af797fe0002cbc27b357811",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "四个关键数值（债务融资工具80亿元、ABCP 40亿元、期权8,000股、股份74,250股）均与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-088",
+  "raw_text": "{\"score\": 2, \"reason\": \"四个关键数值（债务融资工具80亿元、ABCP 40亿元、期权8,000股、股份74,250股）均与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

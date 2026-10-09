@@ -1,0 +1,46 @@
+[22:57:45] 续跑开始
+[22:57:45] A 组：pass1 失败 8 题；逐题产物有效 87 题
+[22:57:45] RUN fix1_A :: --groups A --only-qids FQ-020,FQ-022,FQ-023,FQ-027,FQ-056,FQ-083,FQ-093,FQ-108
+[23:00:07] fix1_A 退出码=1 用时=142.3s 失败标记=7
+[23:00:10] B 组：pass1 失败 9 题；逐题产物有效 111 题
+[23:00:10] RUN fix1_B :: --groups B --only-qids FQ-022,FQ-036,FQ-037,FQ-043,FQ-071,FQ-072,FQ-103,FQ-112,FQ-115
+[23:02:22] fix1_B 退出码=1 用时=131.3s 失败标记=2
+[23:02:25] D 组：已完成 37 题，缺 83 题
+[23:02:25] D 组：已用脚本自身 collect_rows/merge_jsonl 预置 37 题
+[23:02:25] RUN fix1_D :: --groups D --only-qids FQ-022,FQ-037,FQ-038,FQ-041,FQ-042,FQ-043,FQ-044,FQ-045,FQ-046,FQ-047,FQ-048,FQ-049,FQ-050,FQ-051,FQ-052,FQ-053,FQ-054,FQ-055,FQ-056,FQ-057,FQ-058,FQ-059,FQ-060,FQ-061,FQ-062,FQ-063,FQ-064,FQ-065,FQ-066,FQ-067,FQ-068,FQ-069,FQ-070,FQ-071,FQ-072,FQ-073,FQ-074,FQ-075,FQ-076,FQ-077,FQ-078,FQ-079,FQ-080,FQ-081,FQ-082,FQ-083,FQ-084,FQ-085,FQ-086,FQ-087,FQ-088,FQ-089,FQ-090,FQ-091,FQ-092,FQ-093,FQ-094,FQ-095,FQ-096,FQ-097,FQ-098,FQ-099,FQ-100,FQ-101,FQ-102,FQ-103,FQ-104,FQ-105,FQ-106,FQ-107,FQ-108,FQ-109,FQ-110,FQ-111,FQ-112,FQ-113,FQ-114,FQ-115,FQ-116,FQ-117,FQ-118,FQ-119,FQ-120
+[23:22:53] fix1_D 退出码=1 用时=1227.8s 失败标记=4
+[23:22:56] RUN pass_E :: --groups E
+[23:50:19] pass_E 退出码=1 用时=1643.8s 失败标记=6
+[23:50:22] RUN pass_B1 :: --groups B1
+[23:55:30] pass_B1 退出码=0 用时=307.6s 失败标记=0
+[23:55:33] 第 1 轮补跑：{'A': 7, 'B': 2, 'D': 4, 'E': 6}
+[23:55:33] RUN retry1_A :: --groups A --only-qids FQ-020,FQ-022,FQ-023,FQ-027,FQ-083,FQ-093,FQ-108
+[23:57:02] retry1_A 退出码=1 用时=89.1s 失败标记=7
+[23:57:05] RUN retry1_B :: --groups B --only-qids FQ-022,FQ-115
+[23:57:36] retry1_B 退出码=1 用时=31.0s 失败标记=2
+[23:57:39] RUN retry1_D :: --groups D --only-qids FQ-022,FQ-060,FQ-093,FQ-115
+[23:58:39] retry1_D 退出码=1 用时=59.4s 失败标记=3
+[23:58:42] RUN retry1_E :: --groups E --only-qids FQ-022,FQ-032,FQ-040,FQ-059,FQ-093,FQ-115
+[00:00:36] retry1_E 退出码=1 用时=114.0s 失败标记=3
+[00:00:39] 第 2 轮补跑：{'A': 7, 'B': 2, 'D': 3, 'E': 3}
+[00:00:39] RUN retry2_A :: --groups A --only-qids FQ-020,FQ-022,FQ-023,FQ-027,FQ-083,FQ-093,FQ-108
+[00:02:16] retry2_A 退出码=1 用时=97.1s 失败标记=7
+[00:02:19] RUN retry2_B :: --groups B --only-qids FQ-022,FQ-115
+[00:02:47] retry2_B 退出码=1 用时=28.5s 失败标记=2
+[00:02:50] RUN retry2_D :: --groups D --only-qids FQ-022,FQ-093,FQ-115
+[00:03:34] retry2_D 退出码=1 用时=43.7s 失败标记=3
+[00:03:37] RUN retry2_E :: --groups E --only-qids FQ-022,FQ-093,FQ-115
+[00:04:24] retry2_E 退出码=1 用时=47.3s 失败标记=3
+[00:04:27] 第 3 轮补跑：{'A': 7, 'B': 2, 'D': 3, 'E': 3}
+[00:04:27] RUN retry3_A :: --groups A --only-qids FQ-020,FQ-022,FQ-023,FQ-027,FQ-083,FQ-093,FQ-108
+[00:06:07] retry3_A 退出码=1 用时=99.5s 失败标记=7
+[00:06:10] RUN retry3_B :: --groups B --only-qids FQ-022,FQ-115
+[00:06:39] retry3_B 退出码=1 用时=28.9s 失败标记=2
+[00:06:42] RUN retry3_D :: --groups D --only-qids FQ-022,FQ-093,FQ-115
+[00:07:30] retry3_D 退出码=1 用时=48.4s 失败标记=3
+[00:07:33] RUN retry3_E :: --groups E --only-qids FQ-022,FQ-093,FQ-115
+[00:08:16] retry3_E 退出码=1 用时=43.1s 失败标记=3
+[00:08:19] 出报告（--report-only，零调用）
+[00:08:19] RUN report :: --report-only
+[00:08:19] report 退出码=0 用时=0.2s 失败标记=0
+[00:08:19] 续跑结束

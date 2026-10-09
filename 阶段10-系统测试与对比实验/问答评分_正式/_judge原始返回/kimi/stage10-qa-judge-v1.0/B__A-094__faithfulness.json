@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-094",
+  "attempts": [
+    {
+      "answer_key": "B__A-094",
+      "attempt": 1,
+      "completion_tokens": 154,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 8.771,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4998,
+      "qid": "FQ-094",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:41:28+08:00",
+      "total_tokens": 5152
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:41:36+08:00",
+  "group": "B",
+  "input_sha256": "e3fc350904dd2fec7e0e47415213efbd99b99d937b7e97d86065e50fc4272a04",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "召开日期与时段见证据1原文，国泰海通为独立财务顾问由证据10标题佐证，两处事实均有证据支撑",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-094",
+  "raw_text": "{\"score\": 2, \"reason\": \"召开日期与时段见证据1原文，国泰海通为独立财务顾问由证据10标题佐证，两处事实均有证据支撑\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

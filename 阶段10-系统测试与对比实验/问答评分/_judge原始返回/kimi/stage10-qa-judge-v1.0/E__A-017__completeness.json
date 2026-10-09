@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-017",
+  "attempts": [
+    {
+      "answer_key": "E__A-017",
+      "attempt": 1,
+      "completion_tokens": 195,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 7.814,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4639,
+      "qid": "PE-17",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:22:30+08:00",
+      "total_tokens": 4834
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T18:22:37+08:00",
+  "group": "E",
+  "input_sha256": "ba92b079c748046b19e1d2584d2fda6fb4f6c0103b86ebebcd39bea4081509d8",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案关键信息：交易对方安徽元控储充、合同名称及金额112,738.00万元，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-17",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案关键信息：交易对方安徽元控储充、合同名称及金额112,738.00万元，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

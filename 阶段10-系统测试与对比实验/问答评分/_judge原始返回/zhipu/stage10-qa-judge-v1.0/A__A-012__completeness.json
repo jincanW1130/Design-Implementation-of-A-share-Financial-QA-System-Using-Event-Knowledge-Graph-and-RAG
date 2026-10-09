@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-012",
+  "attempts": [
+    {
+      "answer_key": "A__A-012",
+      "attempt": 1,
+      "completion_tokens": 387,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 8.248,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4265,
+      "qid": "PE-12",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:32:32+08:00",
+      "total_tokens": 4652
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T18:32:40+08:00",
+  "group": "A",
+  "input_sha256": "51ff0644e121be93f463fb106b268ecd33a5852f7270d7231fadd28c0955d869",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖关键信息：协议名称、2026年9月7日签订、互供协议期限至2027年12月31日，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-12",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖关键信息：协议名称、2026年9月7日签订、互供协议期限至2027年12月31日，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

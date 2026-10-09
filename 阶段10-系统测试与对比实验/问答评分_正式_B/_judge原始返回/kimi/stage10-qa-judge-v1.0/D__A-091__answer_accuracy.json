@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-091",
+  "attempts": [
+    {
+      "answer_key": "D__A-091",
+      "attempt": 1,
+      "completion_tokens": 207,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 9.275,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4834,
+      "qid": "FQ-091",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:55:11+08:00",
+      "total_tokens": 5041
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:55:21+08:00",
+  "group": "D",
+  "input_sha256": "ddca605b858333c7f600659bf686f29c86e22be168cfb4df713102d4d2b182ca",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "回购数量84,339,356股与总金额6,716,277,930元与金标准一致，但回购价格调整（16.97→13.17元）及注销数量（221,000股、80,633股）未作答，仅部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-091",
+  "raw_text": "{\"score\": 1, \"reason\": \"回购数量84,339,356股与总金额6,716,277,930元与金标准一致，但回购价格调整（16.97→13.17元）及注销数量（221,000股、80,633股）未作答，仅部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

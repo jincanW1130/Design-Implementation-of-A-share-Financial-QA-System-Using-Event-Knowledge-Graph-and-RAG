@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-038",
+  "attempts": [
+    {
+      "answer_key": "A__A-038",
+      "attempt": 1,
+      "completion_tokens": 970,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 27.496,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4673,
+      "qid": "FQ-038",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:59:39+08:00",
+      "total_tokens": 5643
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:00:07+08:00",
+  "group": "A",
+  "input_sha256": "dab6fbf9ed05975eddf014767697d466b7edab2be65958f0c336c925f16fa0e3",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两起事件的主体、金额、占比、豁免披露等事实均可在证据4/5/8/10/6/2/3中逐项核实，唯一推测已明确标注为模型分析而非事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-038",
+  "raw_text": "{\"score\": 2, \"reason\": \"两起事件的主体、金额、占比、豁免披露等事实均可在证据4/5/8/10/6/2/3中逐项核实，唯一推测已明确标注为模型分析而非事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

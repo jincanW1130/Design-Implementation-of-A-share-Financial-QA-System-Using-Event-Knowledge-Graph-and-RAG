@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-001",
+  "attempts": [
+    {
+      "answer_key": "E__A-001",
+      "attempt": 1,
+      "completion_tokens": 298,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 4.767,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4440,
+      "qid": "FQ-001",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:03:49+08:00",
+      "total_tokens": 4738
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:03:54+08:00",
+  "group": "E",
+  "input_sha256": "bd5a67627354972b51ed0da0e6b2306e5c3d2e21ce00f5207b1c20e41c4d88d1",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中价格、数量、占比、成交金额及完成时间均直接见于证据1和证据3，无任何无依据说法。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-001",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中价格、数量、占比、成交金额及完成时间均直接见于证据1和证据3，无任何无依据说法。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

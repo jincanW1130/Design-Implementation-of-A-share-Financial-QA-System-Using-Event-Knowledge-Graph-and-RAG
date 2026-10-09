@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-042",
+  "attempts": [
+    {
+      "answer_key": "E__A-042",
+      "attempt": 1,
+      "completion_tokens": 516,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 9.044,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4323,
+      "qid": "FQ-042",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:08:50+08:00",
+      "total_tokens": 4839
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T00:08:59+08:00",
+  "group": "E",
+  "input_sha256": "4dc5a34a17be751f870c28d39931bb54e9d67797ac03d49ff6bd818ab42cb16a",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案两点：审计费用372/292/80/30万元及业绩预告并表说明均与证据一致，无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-042",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案两点：审计费用372/292/80/30万元及业绩预告并表说明均与证据一致，无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-112",
+  "attempts": [
+    {
+      "answer_key": "A__A-112",
+      "attempt": 1,
+      "completion_tokens": 168,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 8.959,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4096,
+      "qid": "FQ-112",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:19:02+08:00",
+      "total_tokens": 4264
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:19:11+08:00",
+  "group": "A",
+  "input_sha256": "1fc5bc3e070d008d7fa0c0a6a8c6e000260c21ae7724ac04319f8f71b82ada94",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确给出'三峡集团是长江电力的控股股东'，完整覆盖参考答案的唯一关键信息，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-112",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确给出'三峡集团是长江电力的控股股东'，完整覆盖参考答案的唯一关键信息，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

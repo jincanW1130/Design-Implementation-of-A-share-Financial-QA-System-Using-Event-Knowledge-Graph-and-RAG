@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-096",
+  "attempts": [
+    {
+      "answer_key": "A__A-096",
+      "attempt": 1,
+      "completion_tokens": 1047,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 34.341,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4211,
+      "qid": "FQ-096",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:07:56+08:00",
+      "total_tokens": 5258
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:08:30+08:00",
+  "group": "A",
+  "input_sha256": "5f8d45121052efbdb2cfd85ae430e03a7fdea08cf338369d01acb015d922b2a3",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两问只答了每股派现，质押专户持股422,627,942股这一关键信息完全缺失，遗漏一半核心内容。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-096",
+  "raw_text": "{\"score\": 0, \"reason\": \"两问只答了每股派现，质押专户持股422,627,942股这一关键信息完全缺失，遗漏一半核心内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

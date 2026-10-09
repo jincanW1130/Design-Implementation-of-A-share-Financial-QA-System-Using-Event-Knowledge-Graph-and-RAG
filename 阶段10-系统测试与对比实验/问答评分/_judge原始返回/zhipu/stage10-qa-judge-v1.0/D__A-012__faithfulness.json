@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-012",
+  "attempts": [
+    {
+      "answer_key": "D__A-012",
+      "attempt": 1,
+      "completion_tokens": 1485,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 33.98,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4751,
+      "qid": "PE-12",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:47:59+08:00",
+      "total_tokens": 6236
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:48:33+08:00",
+  "group": "D",
+  "input_sha256": "a24a8b2d6eba517dcdc1ab9efa4bb0d1be19fe154fa148e1cb5220d9cb9f4f9f",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "协议名称、2026年9月7日签订日、期限至2027年12月31日及释义、股东会审议均见于证据2/3/4/6，无编造，仅引文有极微小措辞差。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-12",
+  "raw_text": "{\"score\": 2, \"reason\": \"协议名称、2026年9月7日签订日、期限至2027年12月31日及释义、股东会审议均见于证据2/3/4/6，无编造，仅引文有极微小措辞差。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

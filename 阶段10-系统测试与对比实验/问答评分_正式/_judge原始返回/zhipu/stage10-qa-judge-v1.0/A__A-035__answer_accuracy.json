@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-035",
+  "attempts": [
+    {
+      "answer_key": "A__A-035",
+      "attempt": 1,
+      "completion_tokens": 417,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 8.228,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4458,
+      "qid": "FQ-035",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:20:42+08:00",
+      "total_tokens": 4875
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:20:50+08:00",
+  "group": "A",
+  "input_sha256": "620bc7dca2b4dbd544ed858f1e1d0997b488a457a932e1a3419826576f3f1bd6",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案准确指出总包由全资子公司潜能蒙古承接、装备及配套服务关联提供方为周锦明控股的天津锦龙，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-035",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案准确指出总包由全资子公司潜能蒙古承接、装备及配套服务关联提供方为周锦明控股的天津锦龙，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

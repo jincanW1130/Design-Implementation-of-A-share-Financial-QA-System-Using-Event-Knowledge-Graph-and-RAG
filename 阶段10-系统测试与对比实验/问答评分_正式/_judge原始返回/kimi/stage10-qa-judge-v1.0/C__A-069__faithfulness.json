@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-069",
+  "attempts": [
+    {
+      "answer_key": "C__A-069",
+      "attempt": 1,
+      "completion_tokens": 530,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 14.578,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4562,
+      "qid": "FQ-069",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:24:29+08:00",
+      "total_tokens": 5092
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:24:43+08:00",
+  "group": "C",
+  "input_sha256": "d11bffbba2887a59c1f767f8c31540e9ab120871b5301a76e88e2f334ef6ca9c",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中担保主体、被担保人、金额2,137.84万元、连带责任担保/保函担保、受益人建行陕西省分行、起止日期及无反担保等事实均能在证据1原文中逐条对应，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-069",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中担保主体、被担保人、金额2,137.84万元、连带责任担保/保函担保、受益人建行陕西省分行、起止日期及无反担保等事实均能在证据1原文中逐条对应，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

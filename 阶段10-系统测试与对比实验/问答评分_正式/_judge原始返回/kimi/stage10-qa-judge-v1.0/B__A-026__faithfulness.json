@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-026",
+  "attempts": [
+    {
+      "answer_key": "B__A-026",
+      "attempt": 1,
+      "completion_tokens": 783,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 27.789,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4620,
+      "qid": "FQ-026",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:58:17+08:00",
+      "total_tokens": 5403
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:58:45+08:00",
+  "group": "B",
+  "input_sha256": "6210a3037eb0a937977a86f391a8bd104658a7c28691ea4201c39c0336725bce",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两项注册证事实、编号鲁械注准20262060279及注册人名称均可在证据1/2/3中找到，且对证据3未展开部分如实说明，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-026",
+  "raw_text": "{\"score\": 2, \"reason\": \"两项注册证事实、编号鲁械注准20262060279及注册人名称均可在证据1/2/3中找到，且对证据3未展开部分如实说明，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

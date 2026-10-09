@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-013",
+  "attempts": [
+    {
+      "answer_key": "E__A-013",
+      "attempt": 1,
+      "completion_tokens": 234,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 7.904,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5635,
+      "qid": "PE-13",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:17:35+08:00",
+      "total_tokens": 5869
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:17:43+08:00",
+  "group": "E",
+  "input_sha256": "b96ac70482f5320a9136ec1e3040d310ccc77ec81fe4fc20181ddfdab3af3fce",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖金标准四项事件（7月27日董事会审议、8月19日首次回购、8月累计回购、实施完毕累计15,833,353股），关键数据均正确，无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-13",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖金标准四项事件（7月27日董事会审议、8月19日首次回购、8月累计回购、实施完毕累计15,833,353股），关键数据均正确，无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

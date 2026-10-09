@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-028",
+  "attempts": [
+    {
+      "answer_key": "E__A-028",
+      "attempt": 1,
+      "completion_tokens": 336,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.939,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3974,
+      "qid": "PE-28",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:29:24+08:00",
+      "total_tokens": 4310
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:29:33+08:00",
+  "group": "E",
+  "input_sha256": "5688ff52786f5943c8296756b8be87b1792bfbd8e11d3e7f5f3c8654a2db108f",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确识别出9月15日发布的'隆22转债'预计满足转股价格向下修正条件的提示性公告，与金标准事件一致，无事实错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-28",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案正确识别出9月15日发布的'隆22转债'预计满足转股价格向下修正条件的提示性公告，与金标准事件一致，无事实错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

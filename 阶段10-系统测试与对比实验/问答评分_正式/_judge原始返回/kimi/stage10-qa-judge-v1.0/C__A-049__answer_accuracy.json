@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-049",
+  "attempts": [
+    {
+      "answer_key": "C__A-049",
+      "attempt": 1,
+      "completion_tokens": 165,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 7.519,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5085,
+      "qid": "FQ-049",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:03:46+08:00",
+      "total_tokens": 5250
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:03:54+08:00",
+  "group": "C",
+  "input_sha256": "6a025204d4c8cc5d2d51a9cb038ad09c790f17f78375c2a5adee3be32bbf086d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "仅答对总经理穆峰、财务负责人李红栓、董秘袁媛三位高管，全部董事名单未答出，对照金标准属部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-049",
+  "raw_text": "{\"score\": 1, \"reason\": \"仅答对总经理穆峰、财务负责人李红栓、董秘袁媛三位高管，全部董事名单未答出，对照金标准属部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

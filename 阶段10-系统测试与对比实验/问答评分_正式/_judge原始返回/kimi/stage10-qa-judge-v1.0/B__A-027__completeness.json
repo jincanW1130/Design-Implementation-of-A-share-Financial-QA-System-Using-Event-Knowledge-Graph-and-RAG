@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-027",
+  "attempts": [
+    {
+      "answer_key": "B__A-027",
+      "attempt": 1,
+      "completion_tokens": 171,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 7.459,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4081,
+      "qid": "FQ-027",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:58:55+08:00",
+      "total_tokens": 4252
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:59:03+08:00",
+  "group": "B",
+  "input_sha256": "bac78118384ebb6ca4abdfa4685dba3c0045119a7d872dacf359a4bf8189f822",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案全部关键信息：事件内容、2026年7月21日日期、63家未盈利企业及其中第五套24家。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-027",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案全部关键信息：事件内容、2026年7月21日日期、63家未盈利企业及其中第五套24家。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

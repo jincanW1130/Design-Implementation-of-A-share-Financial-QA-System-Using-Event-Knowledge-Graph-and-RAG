@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-061",
+  "attempts": [
+    {
+      "answer_key": "E__A-061",
+      "attempt": 1,
+      "completion_tokens": 1300,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 33.893,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4417,
+      "qid": "FQ-061",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:10:38+08:00",
+      "total_tokens": 5717
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:11:12+08:00",
+  "group": "E",
+  "input_sha256": "ddd602dd3fa4297f2872411830e935c890c8495df43c80cc153c75fdd90f5d97",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "担保事件、15.00亿元最高余额、最高额连带责任保证、三年保证期间及补充的担保范围、22.15亿元担保余额等事实均有证据3/4/5原文支撑，唯一推断句已明确标注为模型分析而非证据事实，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-061",
+  "raw_text": "{\"score\": 2, \"reason\": \"担保事件、15.00亿元最高余额、最高额连带责任保证、三年保证期间及补充的担保范围、22.15亿元担保余额等事实均有证据3/4/5原文支撑，唯一推断句已明确标注为模型分析而非证据事实，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

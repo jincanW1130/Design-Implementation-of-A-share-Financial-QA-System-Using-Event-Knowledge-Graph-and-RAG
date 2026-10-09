@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-019",
+  "attempts": [
+    {
+      "answer_key": "E__A-019",
+      "attempt": 1,
+      "completion_tokens": 167,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 6.15,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5465,
+      "qid": "PE-19",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:23:54+08:00",
+      "total_tokens": 5632
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:24:01+08:00",
+  "group": "E",
+  "input_sha256": "24c8d9d21f049879199403e04bd45257caecf8a842dd38c1297874ea09679b61",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案所述无关联关系、买卖双方角色及长期客户履约能力有保证，均被证据2、3、7原文直接支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-19",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案所述无关联关系、买卖双方角色及长期客户履约能力有保证，均被证据2、3、7原文直接支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-119",
+  "attempts": [
+    {
+      "answer_key": "B__A-119",
+      "attempt": 1,
+      "completion_tokens": 278,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 6.284,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4485,
+      "qid": "FQ-119",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:11:03+08:00",
+      "total_tokens": 4763
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:11:09+08:00",
+  "group": "B",
+  "input_sha256": "f6d385ba927301f774b12c029df5205d13ff3325301deaa41acc7e56529a6ffa",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案结论「实际控制人未发生变化」与参考答案完全一致，且准确引用了公告中不导致变化的原文表述。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-119",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案结论「实际控制人未发生变化」与参考答案完全一致，且准确引用了公告中不导致变化的原文表述。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

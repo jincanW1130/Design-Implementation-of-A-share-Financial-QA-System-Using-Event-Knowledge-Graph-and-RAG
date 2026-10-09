@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-062",
+  "attempts": [
+    {
+      "answer_key": "D__A-062",
+      "attempt": 1,
+      "completion_tokens": 121,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 6.323,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5041,
+      "qid": "FQ-062",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:15:00+08:00",
+      "total_tokens": 5162
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:15:06+08:00",
+  "group": "D",
+  "input_sha256": "50aef14ee2255b9377b4f60a0193e26662d7aed3475ee710714780e152d2f6c7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案与金标准一致：事件为发行股份及支付现金购买国家能源集团资产且已完成，自2026年4月起影响运营数据并追溯调整，全部答对",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-062",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案与金标准一致：事件为发行股份及支付现金购买国家能源集团资产且已完成，自2026年4月起影响运营数据并追溯调整，全部答对\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

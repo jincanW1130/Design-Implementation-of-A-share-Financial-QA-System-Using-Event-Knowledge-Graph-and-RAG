@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-070",
+  "attempts": [
+    {
+      "answer_key": "C__A-070",
+      "attempt": 1,
+      "completion_tokens": 162,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 9.357,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5622,
+      "qid": "FQ-070",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:25:01+08:00",
+      "total_tokens": 5784
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:25:10+08:00",
+  "group": "C",
+  "input_sha256": "231664f2e882a0125ce6507575254e9dc79aeb12f4dc481e3717d16ef59c114a",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "债券要素、募集资金到账、主承销商及联席主承销商均由证据4支撑，DFI注册发行背景由证据1支撑，全部事实有据可查",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-070",
+  "raw_text": "{\"score\": 2, \"reason\": \"债券要素、募集资金到账、主承销商及联席主承销商均由证据4支撑，DFI注册发行背景由证据1支撑，全部事实有据可查\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

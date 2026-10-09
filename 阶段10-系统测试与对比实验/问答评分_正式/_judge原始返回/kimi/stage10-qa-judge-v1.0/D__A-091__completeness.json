@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-091",
+  "attempts": [
+    {
+      "answer_key": "D__A-091",
+      "attempt": 1,
+      "completion_tokens": 889,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 30.864,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4841,
+      "qid": "FQ-091",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:55:22+08:00",
+      "total_tokens": 5730
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:55:53+08:00",
+  "group": "D",
+  "input_sha256": "1b7685f20c832aab4a490f462ad177f335253a8f859eb59580d1f7b9e7e441f5",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "仅覆盖累计回购数量与总金额；回购价格由16.97元调至13.17元及221,000股、80,633股回购注销等关键信息全部缺失，遗漏过半。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-091",
+  "raw_text": "{\"score\": 0, \"reason\": \"仅覆盖累计回购数量与总金额；回购价格由16.97元调至13.17元及221,000股、80,633股回购注销等关键信息全部缺失，遗漏过半。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

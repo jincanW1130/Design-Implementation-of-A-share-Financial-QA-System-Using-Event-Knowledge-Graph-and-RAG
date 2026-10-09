@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-055",
+  "attempts": [
+    {
+      "answer_key": "A__A-055",
+      "attempt": 1,
+      "completion_tokens": 3568,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 64.45,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4078,
+      "qid": "FQ-055",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:25:31+08:00",
+      "total_tokens": 7646
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:26:36+08:00",
+  "group": "A",
+  "input_sha256": "ffa4e7bf7ab2e4bb9ad62c7e98827a5dc95a8d15ce85477f5a994d6d2c182a1a",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案未编造人员，署名主体、日期、相关机构及智慧石油作业者身份等表述均见于所引证据，并如实说明证据不足以列举人员。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-055",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案未编造人员，署名主体、日期、相关机构及智慧石油作业者身份等表述均见于所引证据，并如实说明证据不足以列举人员。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

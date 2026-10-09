@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-034",
+  "attempts": [
+    {
+      "answer_key": "D__A-034",
+      "attempt": 1,
+      "completion_tokens": 608,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 18.792,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4132,
+      "qid": "FQ-034",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:45:17+08:00",
+      "total_tokens": 4740
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:45:36+08:00",
+  "group": "D",
+  "input_sha256": "0577862a5e0b7c2d70b7b0f97a4b2721e5f47eafabe7cfc57f7ac719be5c28d1",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "题目所问三项——资金总额区间15-25亿元、价格上限41.5元/股、实际回购77,474,592股——全部完整覆盖，另含0.29%占比，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-034",
+  "raw_text": "{\"score\": 2, \"reason\": \"题目所问三项——资金总额区间15-25亿元、价格上限41.5元/股、实际回购77,474,592股——全部完整覆盖，另含0.29%占比，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

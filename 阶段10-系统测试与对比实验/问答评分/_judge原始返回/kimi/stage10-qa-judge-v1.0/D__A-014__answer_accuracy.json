@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-014",
+  "attempts": [
+    {
+      "answer_key": "D__A-014",
+      "attempt": 1,
+      "completion_tokens": 768,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 24.492,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6434,
+      "qid": "PE-14",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:50:42+08:00",
+      "total_tokens": 7202
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:51:06+08:00",
+  "group": "D",
+  "input_sha256": "38b2389702881aa985b6ce0a546f11e222139cd542077799dbe822f475fba0cc",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "回购价格上限、首次回购、累计进展正确；但漏第二期员工持股解锁与1665万股过户，第五期表述不全。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-14",
+  "raw_text": "{\"score\":1,\"reason\":\"回购价格上限、首次回购、累计进展正确；但漏第二期员工持股解锁与1665万股过户，第五期表述不全。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

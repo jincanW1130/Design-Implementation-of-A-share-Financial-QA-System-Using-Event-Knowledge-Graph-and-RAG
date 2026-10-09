@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-014",
+  "attempts": [
+    {
+      "answer_key": "D__A-014",
+      "attempt": 1,
+      "completion_tokens": 1100,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 31.908,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6464,
+      "qid": "PE-14",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:51:35+08:00",
+      "total_tokens": 7564
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:52:07+08:00",
+  "group": "D",
+  "input_sha256": "67a8941a6cf3fde1ca8761cf268cb594bdb445b7cf7d015a3d4094c1eef41ba7",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "各事实（回购方案、调价、首次回购、进展、第三期持股过户、差异化分派、董事会决议）均能在证据1-10中找到对应支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-14",
+  "raw_text": "{\"score\": 2, \"reason\": \"各事实（回购方案、调价、首次回购、进展、第三期持股过户、差异化分派、董事会决议）均能在证据1-10中找到对应支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

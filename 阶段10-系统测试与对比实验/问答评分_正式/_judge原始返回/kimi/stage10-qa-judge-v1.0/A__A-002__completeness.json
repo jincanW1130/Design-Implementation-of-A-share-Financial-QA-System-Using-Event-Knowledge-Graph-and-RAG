@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-002",
+  "attempts": [
+    {
+      "answer_key": "A__A-002",
+      "attempt": 1,
+      "completion_tokens": 110,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 5.319,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4098,
+      "qid": "FQ-002",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:41:16+08:00",
+      "total_tokens": 4208
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T18:41:21+08:00",
+  "group": "A",
+  "input_sha256": "1632500cf3e8318f4f9e5964173b1fcdc83023605ba1a15a1c418a0b6e1b6f4d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案全部关键信息：任期起止时间（2026年9月22日至第十三届董事会届满）及霍达任风险与资本管理委员会主任委员。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-002",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案全部关键信息：任期起止时间（2026年9月22日至第十三届董事会届满）及霍达任风险与资本管理委员会主任委员。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

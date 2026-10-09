@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-119",
+  "attempts": [
+    {
+      "answer_key": "C__A-119",
+      "attempt": 1,
+      "completion_tokens": 271,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 5.88,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4394,
+      "qid": "FQ-119",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:06:12+08:00",
+      "total_tokens": 4665
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T01:06:18+08:00",
+  "group": "C",
+  "input_sha256": "039a792efd7bd8ce738e81839d5049b94b08bd8eccd1457edb8f6a36f208d98f",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案结论「实际控制人未发生变化」与参考答案一致，并准确援引公告中不导致变化、不构成要约收购的表述。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-119",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案结论「实际控制人未发生变化」与参考答案一致，并准确援引公告中不导致变化、不构成要约收购的表述。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

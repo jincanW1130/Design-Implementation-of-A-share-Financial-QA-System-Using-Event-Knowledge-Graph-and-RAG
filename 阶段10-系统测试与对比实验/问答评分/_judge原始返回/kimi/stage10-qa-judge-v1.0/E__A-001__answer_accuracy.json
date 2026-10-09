@@ -1,0 +1,44 @@
+{
+  "answer_key": "E__A-001",
+  "attempts": [
+    {
+      "answer_key": "E__A-001",
+      "attempt": 1,
+      "completion_tokens": 121,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.982,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4714,
+      "qid": "PE-01",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:19:13+08:00",
+      "total_tokens": 4835
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T16:19:22+08:00",
+  "group": "E",
+  "input_sha256": "5a9d1a3e6bf86185f18f141a62bfe48feb3e1b6f07a990aa1f0a3eb242a8b07f",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案给出的行权期有效期2026年9月11日至2027年1月25日及开始行权日与参考答案完全一致，附加的限制行权说明不影响正确性。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-01",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案给出的行权期有效期2026年9月11日至2027年1月25日及开始行权日与参考答案完全一致，附加的限制行权说明不影响正确性。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

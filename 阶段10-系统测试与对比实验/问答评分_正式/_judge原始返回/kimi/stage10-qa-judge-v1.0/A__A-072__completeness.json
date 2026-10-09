@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-072",
+  "attempts": [
+    {
+      "answer_key": "A__A-072",
+      "attempt": 1,
+      "completion_tokens": 281,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 10.773,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4602,
+      "qid": "FQ-072",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:24:26+08:00",
+      "total_tokens": 4883
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:24:37+08:00",
+  "group": "A",
+  "input_sha256": "74bf541592c18a71ce947bca1e8b35846c710685da1b5e943edd3b360f14d155",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案覆盖了事件、交易标的（中芯北方49%股权）与发行对象五方，但关键的交易价格4,060,091.00万元缺失，属基本覆盖非完整",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-072",
+  "raw_text": "{\"score\": 1, \"reason\": \"答案覆盖了事件、交易标的（中芯北方49%股权）与发行对象五方，但关键的交易价格4,060,091.00万元缺失，属基本覆盖非完整\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

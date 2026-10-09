@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-098",
+  "attempts": [
+    {
+      "answer_key": "B__A-098",
+      "attempt": 1,
+      "completion_tokens": 114,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 7.023,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5193,
+      "qid": "FQ-098",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:44:22+08:00",
+      "total_tokens": 5307
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:44:29+08:00",
+  "group": "B",
+  "input_sha256": "34da5324581e6e902f456be37719063658bbb60a0aac1775a590069c44d9c9aa",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案两个关键事件——中标PCCP管材采购项目与签订采购合同——均被完整覆盖，还补充澄清了未参与事件，信息完整无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-098",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案两个关键事件——中标PCCP管材采购项目与签订采购合同——均被完整覆盖，还补充澄清了未参与事件，信息完整无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

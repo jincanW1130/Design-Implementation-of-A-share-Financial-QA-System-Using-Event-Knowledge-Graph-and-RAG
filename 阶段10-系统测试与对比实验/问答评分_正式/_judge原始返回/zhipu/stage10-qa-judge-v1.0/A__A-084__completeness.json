@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-084",
+  "attempts": [
+    {
+      "answer_key": "A__A-084",
+      "attempt": 1,
+      "completion_tokens": 729,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 14.657,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4036,
+      "qid": "FQ-084",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:00:30+08:00",
+      "total_tokens": 4765
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:00:45+08:00",
+  "group": "A",
+  "input_sha256": "2f67db2aa383052a3604f84dd1964bd225f4cecaf9f13a28e3a06403cb47f45b",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖事件、授权标的、欧洲目标市场及8月10日三起BD交易背景，并有超参考答案的细化信息，无关键遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-084",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖事件、授权标的、欧洲目标市场及8月10日三起BD交易背景，并有超参考答案的细化信息，无关键遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

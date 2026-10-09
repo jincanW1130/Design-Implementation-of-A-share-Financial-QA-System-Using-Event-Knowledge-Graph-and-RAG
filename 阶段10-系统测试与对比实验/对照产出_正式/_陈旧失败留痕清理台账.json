@@ -1,0 +1,1732 @@
+{
+  "schema": "stage10-stale-error-contract-cleanup-1.0",
+  "note": "仅删除「同目录 qa_records.jsonl 有效」的陈旧失败契约；无有效答案的失败契约一律保留（那是真实终局失败）。",
+  "script": "阶段10-系统测试与对比实验/对照产出_正式/_清陈旧失败.py",
+  "removed_count": 40,
+  "removed": [
+    {
+      "group": "A",
+      "qid": "FQ-053",
+      "stale_error_code": 3004,
+      "stale_reason": "answer_gate_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-056",
+      "stale_error_code": 3004,
+      "stale_reason": "answer_gate_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-059",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-060",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-061",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-062",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-063",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-064",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-065",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-066",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-067",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-068",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-069",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-070",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-071",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-072",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-073",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-074",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-075",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-076",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-077",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-078",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-079",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-080",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-081",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "A",
+      "qid": "FQ-082",
+      "stale_error_code": 3002,
+      "stale_reason": "model_transport_error",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "B",
+      "qid": "FQ-036",
+      "stale_error_code": 3004,
+      "stale_reason": "answer_gate_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "B",
+      "qid": "FQ-037",
+      "stale_error_code": 3003,
+      "stale_reason": "retrieval_chain_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "B",
+      "qid": "FQ-043",
+      "stale_error_code": 3003,
+      "stale_reason": "retrieval_chain_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "B",
+      "qid": "FQ-071",
+      "stale_error_code": 3003,
+      "stale_reason": "retrieval_chain_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "B",
+      "qid": "FQ-072",
+      "stale_error_code": 3003,
+      "stale_reason": "retrieval_chain_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "B",
+      "qid": "FQ-103",
+      "stale_error_code": 3004,
+      "stale_reason": "answer_gate_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "B",
+      "qid": "FQ-112",
+      "stale_error_code": 3004,
+      "stale_reason": "answer_gate_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "D",
+      "qid": "FQ-037",
+      "stale_error_code": 3003,
+      "stale_reason": "retrieval_chain_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "D",
+      "qid": "FQ-038",
+      "stale_error_code": 3003,
+      "stale_reason": "retrieval_chain_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "D",
+      "qid": "FQ-041",
+      "stale_error_code": 3003,
+      "stale_reason": "retrieval_chain_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "D",
+      "qid": "FQ-060",
+      "stale_error_code": 3004,
+      "stale_reason": "answer_gate_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "E",
+      "qid": "FQ-032",
+      "stale_error_code": 3004,
+      "stale_reason": "answer_gate_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "E",
+      "qid": "FQ-040",
+      "stale_error_code": 3004,
+      "stale_reason": "answer_gate_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    },
+    {
+      "group": "E",
+      "qid": "FQ-059",
+      "stale_error_code": 3004,
+      "stale_reason": "answer_gate_failed",
+      "kept_because": "同目录 qa_records.jsonl 有效"
+    }
+  ],
+  "kept_count": 135,
+  "kept": [
+    {
+      "group": "A",
+      "qid": "FQ-020",
+      "error_code": 3004,
+      "reason": "answer_gate_failed",
+      "failed_qids_extra": {
+        "failed_qids": [
+          "FQ-020"
+        ],
+        "failures": {
+          "FQ-020": [
+            "date_unverifiable"
+          ]
+        }
+      }
+    },
+    {
+      "group": "A",
+      "qid": "FQ-022",
+      "error_code": 3004,
+      "reason": "answer_gate_failed",
+      "failed_qids_extra": {
+        "failed_qids": [
+          "FQ-022"
+        ],
+        "failures": {
+          "FQ-022": [
+            "date_unverifiable"
+          ]
+        }
+      }
+    },
+    {
+      "group": "A",
+      "qid": "FQ-023",
+      "error_code": 3004,
+      "reason": "answer_gate_failed",
+      "failed_qids_extra": {
+        "failed_qids": [
+          "FQ-023"
+        ],
+        "failures": {
+          "FQ-023": [
+            "date_unverifiable"
+          ]
+        }
+      }
+    },
+    {
+      "group": "A",
+      "qid": "FQ-027",
+      "error_code": 3004,
+      "reason": "answer_gate_failed",
+      "failed_qids_extra": {
+        "failed_qids": [
+          "FQ-027"
+        ],
+        "failures": {
+          "FQ-027": [
+            "date_unverifiable"
+          ]
+        }
+      }
+    },
+    {
+      "group": "A",
+      "qid": "FQ-083",
+      "error_code": 3004,
+      "reason": "answer_gate_failed",
+      "failed_qids_extra": {
+        "failed_qids": [
+          "FQ-083"
+        ],
+        "failures": {
+          "FQ-083": [
+            "date_unverifiable"
+          ]
+        }
+      }
+    },
+    {
+      "group": "A",
+      "qid": "FQ-093",
+      "error_code": 3004,
+      "reason": "answer_gate_failed",
+      "failed_qids_extra": {
+        "failed_qids": [
+          "FQ-093"
+        ],
+        "failures": {
+          "FQ-093": [
+            "date_unverifiable"
+          ]
+        }
+      }
+    },
+    {
+      "group": "A",
+      "qid": "FQ-108",
+      "error_code": 3004,
+      "reason": "answer_gate_failed",
+      "failed_qids_extra": {
+        "failed_qids": [
+          "FQ-108"
+        ],
+        "failures": {
+          "FQ-108": [
+            "date_unverifiable"
+          ]
+        }
+      }
+    },
+    {
+      "group": "B",
+      "qid": "FQ-022",
+      "error_code": 3004,
+      "reason": "answer_gate_failed",
+      "failed_qids_extra": {
+        "failed_qids": [
+          "FQ-022"
+        ],
+        "failures": {
+          "FQ-022": [
+            "date_unverifiable"
+          ]
+        }
+      }
+    },
+    {
+      "group": "B",
+      "qid": "FQ-115",
+      "error_code": 3004,
+      "reason": "answer_gate_failed",
+      "failed_qids_extra": {
+        "failed_qids": [
+          "FQ-115"
+        ],
+        "failures": {
+          "FQ-115": [
+            "date_unverifiable"
+          ]
+        }
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-001",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-001"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-002",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-002"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-003",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-003"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-004",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-004"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-005",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-005"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-006",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-006"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-007",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-007"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-008",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-008"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-009",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-009"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-010",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-010"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-011",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-011"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-012",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-012"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-013",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-013"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-014",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-014"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-015",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-015"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-016",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-016"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-017",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-017"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-018",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-018"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-019",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-019"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-020",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-020"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-021",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-021"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-022",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-022"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-023",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-023"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-024",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-024"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-025",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-025"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-026",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-026"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-027",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-027"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-028",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-028"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-029",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-029"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-030",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-030"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-031",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-031"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-032",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-032"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-033",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-033"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-034",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-034"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-035",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-035"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-036",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-036"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-037",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-037"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-038",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-038"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-039",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-039"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-040",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-040"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-041",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-041"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-042",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-042"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-043",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-043"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-044",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-044"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-045",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-045"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-046",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-046"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-047",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-047"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-048",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-048"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-049",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-049"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-050",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-050"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-051",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-051"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-052",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-052"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-053",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-053"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-054",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-054"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-055",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-055"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-056",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-056"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-057",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-057"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-058",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-058"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-059",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-059"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-060",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-060"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-061",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-061"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-062",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-062"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-063",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-063"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-064",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-064"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-065",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-065"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-066",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-066"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-067",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-067"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-068",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-068"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-069",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-069"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-070",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-070"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-071",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-071"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-072",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-072"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-073",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-073"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-074",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-074"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-075",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-075"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-076",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-076"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-077",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-077"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-078",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-078"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-079",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-079"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-080",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-080"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-081",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-081"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-082",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-082"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-083",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-083"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-084",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-084"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-085",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-085"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-086",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-086"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-087",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-087"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-088",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-088"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-089",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-089"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-090",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-090"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-091",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-091"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-092",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-092"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-093",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-093"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-094",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-094"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-095",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-095"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-096",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-096"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-097",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-097"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-098",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-098"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-099",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-099"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-100",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-100"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-101",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-101"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-102",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-102"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-103",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-103"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-104",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-104"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-105",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-105"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-106",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-106"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-107",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-107"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-108",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-108"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-109",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-109"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-110",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-110"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-111",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-111"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-112",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-112"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-113",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-113"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-114",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-114"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-115",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-115"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-116",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-116"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-117",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-117"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-118",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-118"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-119",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-119"
+      }
+    },
+    {
+      "group": "C",
+      "qid": "FQ-120",
+      "error_code": 1002,
+      "reason": "no_runnable_case",
+      "failed_qids_extra": {
+        "group": "C",
+        "qid": "FQ-120"
+      }
+    },
+    {
+      "group": "D",
+      "qid": "FQ-022",
+      "error_code": 3004,
+      "reason": "answer_gate_failed",
+      "failed_qids_extra": {
+        "failed_qids": [
+          "FQ-022"
+        ],
+        "failures": {
+          "FQ-022": [
+            "date_unverifiable"
+          ]
+        }
+      }
+    },
+    {
+      "group": "D",
+      "qid": "FQ-093",
+      "error_code": 3004,
+      "reason": "answer_gate_failed",
+      "failed_qids_extra": {
+        "failed_qids": [
+          "FQ-093"
+        ],
+        "failures": {
+          "FQ-093": [
+            "date_unverifiable"
+          ]
+        }
+      }
+    },
+    {
+      "group": "D",
+      "qid": "FQ-115",
+      "error_code": 3004,
+      "reason": "answer_gate_failed",
+      "failed_qids_extra": {
+        "failed_qids": [
+          "FQ-115"
+        ],
+        "failures": {
+          "FQ-115": [
+            "citation_missing",
+            "date_unverifiable"
+          ]
+        }
+      }
+    },
+    {
+      "group": "E",
+      "qid": "FQ-022",
+      "error_code": 3004,
+      "reason": "answer_gate_failed",
+      "failed_qids_extra": {
+        "failed_qids": [
+          "FQ-022"
+        ],
+        "failures": {
+          "FQ-022": [
+            "date_unverifiable"
+          ]
+        }
+      }
+    },
+    {
+      "group": "E",
+      "qid": "FQ-093",
+      "error_code": 3004,
+      "reason": "answer_gate_failed",
+      "failed_qids_extra": {
+        "failed_qids": [
+          "FQ-093"
+        ],
+        "failures": {
+          "FQ-093": [
+            "date_unverifiable"
+          ]
+        }
+      }
+    },
+    {
+      "group": "E",
+      "qid": "FQ-115",
+      "error_code": 3004,
+      "reason": "answer_gate_failed",
+      "failed_qids_extra": {
+        "failed_qids": [
+          "FQ-115"
+        ],
+        "failures": {
+          "FQ-115": [
+            "date_unverifiable"
+          ]
+        }
+      }
+    }
+  ]
+}

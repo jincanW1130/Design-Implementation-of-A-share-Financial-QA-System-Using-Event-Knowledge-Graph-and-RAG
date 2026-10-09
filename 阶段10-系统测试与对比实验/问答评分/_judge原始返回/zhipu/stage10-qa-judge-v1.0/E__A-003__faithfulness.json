@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-003",
+  "attempts": [
+    {
+      "answer_key": "E__A-003",
+      "attempt": 1,
+      "completion_tokens": 405,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 7.722,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4162,
+      "qid": "PE-03",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:50:01+08:00",
+      "total_tokens": 4567
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:50:09+08:00",
+  "group": "E",
+  "input_sha256": "6468949fed32c3eb782926b00dcb0ec55d524c16374e266310609c9dc73f2218",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "备案、编码SEX000、管理人、托管人、备案时间及公告日期均见于证据3、4，无无依据事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-03",
+  "raw_text": "{\"score\": 2, \"reason\": \"备案、编码SEX000、管理人、托管人、备案时间及公告日期均见于证据3、4，无无依据事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

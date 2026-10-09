@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-011",
+  "attempts": [
+    {
+      "answer_key": "C__A-011",
+      "attempt": 1,
+      "completion_tokens": 843,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 6.528,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5934,
+      "qid": "FQ-011",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:40:29+08:00",
+      "total_tokens": 6777
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:40:35+08:00",
+  "group": "C",
+  "input_sha256": "d6436b08c14fbacb96d8aa3c906faa82eb2cec746c26dbdb64b3b954d6b0f06a",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案事实均被可用证据逐字支撑；过户信息缺失时如实说明证据不足，未编造任何无依据事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-011",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案事实均被可用证据逐字支撑；过户信息缺失时如实说明证据不足，未编造任何无依据事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-094",
+  "attempts": [
+    {
+      "answer_key": "D__A-094",
+      "attempt": 1,
+      "completion_tokens": 109,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 5.452,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5055,
+      "qid": "FQ-094",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:56:57+08:00",
+      "total_tokens": 5164
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:57:02+08:00",
+  "group": "D",
+  "input_sha256": "5e442cf8f8fa97830c79cb573102047ad3c8ca1c752950dadb1de21003ab50eb",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "说明会日期8月14日等说法均有证据1支撑，对独立财务顾问如实声明证据不足，未编造任何事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-094",
+  "raw_text": "{\"score\": 2, \"reason\": \"说明会日期8月14日等说法均有证据1支撑，对独立财务顾问如实声明证据不足，未编造任何事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

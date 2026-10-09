@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-020",
+  "attempts": [
+    {
+      "answer_key": "B__A-020",
+      "attempt": 1,
+      "completion_tokens": 573,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 20.542,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4902,
+      "qid": "PE-20",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:02:20+08:00",
+      "total_tokens": 5475
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:02:41+08:00",
+  "group": "B",
+  "input_sha256": "df9702cb1cd36b8dbccdc0b18e5e276768a059c28819f09b9d92ffb0df28b528",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确给出合并计算（含盛骏间接持股）69.95%及回购后70.01%，与金标准69.95%含间接持股一致，数字无误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-20",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确给出合并计算（含盛骏间接持股）69.95%及回购后70.01%，与金标准69.95%含间接持股一致，数字无误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

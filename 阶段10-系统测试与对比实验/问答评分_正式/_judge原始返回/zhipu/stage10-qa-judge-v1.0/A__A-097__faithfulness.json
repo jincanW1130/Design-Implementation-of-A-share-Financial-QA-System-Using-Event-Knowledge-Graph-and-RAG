@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-097",
+  "attempts": [
+    {
+      "answer_key": "A__A-097",
+      "attempt": 1,
+      "completion_tokens": 2635,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 47.917,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4489,
+      "qid": "FQ-097",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:48:12+08:00",
+      "total_tokens": 7124
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:49:00+08:00",
+  "group": "A",
+  "input_sha256": "d881ff3b1a4989ac71b48b41e84e66cef3f221f828386bd90bfc7d615ef7f5f3",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "所列各事件的受理号、适应症、审批结论及日期均能在可用证据中逐一对应，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-097",
+  "raw_text": "{\"score\": 2, \"reason\": \"所列各事件的受理号、适应症、审批结论及日期均能在可用证据中逐一对应，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-104",
+  "attempts": [
+    {
+      "answer_key": "D__A-104",
+      "attempt": 1,
+      "completion_tokens": 376,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 7.576,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4572,
+      "qid": "FQ-104",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:26:05+08:00",
+      "total_tokens": 4948
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:26:12+08:00",
+  "group": "D",
+  "input_sha256": "0fc29f79b7615b79a7127ca8e90745857960b115e4f74262df6e61cfb8f9241e",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中机构、证明名称、授予数量367,989,000股及6月8日、6月9日等事实均被证据1逐句支撑，无无依据说法。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-104",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中机构、证明名称、授予数量367,989,000股及6月8日、6月9日等事实均被证据1逐句支撑，无无依据说法。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

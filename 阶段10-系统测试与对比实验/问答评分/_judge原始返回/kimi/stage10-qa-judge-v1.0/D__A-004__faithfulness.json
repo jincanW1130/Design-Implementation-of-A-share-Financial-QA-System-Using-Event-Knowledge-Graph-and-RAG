@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-004",
+  "attempts": [
+    {
+      "answer_key": "D__A-004",
+      "attempt": 1,
+      "completion_tokens": 469,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 17.943,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5720,
+      "qid": "PE-04",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:42:53+08:00",
+      "total_tokens": 6189
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:43:11+08:00",
+  "group": "D",
+  "input_sha256": "44ecb29a50173f86569697cc0d695061fa4887671809944ba58cfba710c21ba0",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "许兴仁、李昕两段履历均逐字对应证据1、证据5，其余仅为对证据范围的如实说明，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-04",
+  "raw_text": "{\"score\": 2, \"reason\": \"许兴仁、李昕两段履历均逐字对应证据1、证据5，其余仅为对证据范围的如实说明，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

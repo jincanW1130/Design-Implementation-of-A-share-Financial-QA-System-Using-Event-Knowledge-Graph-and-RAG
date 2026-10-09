@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-008",
+  "attempts": [
+    {
+      "answer_key": "E__A-008",
+      "attempt": 1,
+      "completion_tokens": 242,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 10.463,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4869,
+      "qid": "FQ-008",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:27:44+08:00",
+      "total_tokens": 5111
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:27:54+08:00",
+  "group": "E",
+  "input_sha256": "4fe76dacd86c0fbe0ebdaad523176d02664ee47d596cee975dae3e45a9e22986",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "回购股数、金额、价格区间、方案要素及注销事项均有证据1/4/5/6/7直接支撑，无编造事实，推测部分已明确标注非事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-008",
+  "raw_text": "{\"score\": 2, \"reason\": \"回购股数、金额、价格区间、方案要素及注销事项均有证据1/4/5/6/7直接支撑，无编造事实，推测部分已明确标注非事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

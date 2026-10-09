@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-096",
+  "attempts": [
+    {
+      "answer_key": "D__A-096",
+      "attempt": 1,
+      "completion_tokens": 1076,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 30.981,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4622,
+      "qid": "FQ-096",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:58:37+08:00",
+      "total_tokens": 5698
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:59:08+08:00",
+  "group": "D",
+  "input_sha256": "90f32e39adfca1fca6957b01abf26b06af4f7c4279d3198f48a481f3f3a64f66",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "每10股派1.8元、回购专户42,987,413股等说法均有证据6原文支撑，质押专户数量如实说明证据不足，未编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-096",
+  "raw_text": "{\"score\": 2, \"reason\": \"每10股派1.8元、回购专户42,987,413股等说法均有证据6原文支撑，质押专户数量如实说明证据不足，未编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-027",
+  "attempts": [
+    {
+      "answer_key": "B__A-027",
+      "attempt": 1,
+      "completion_tokens": 779,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 24.368,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4104,
+      "qid": "FQ-027",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:59:04+08:00",
+      "total_tokens": 4883
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:59:28+08:00",
+  "group": "B",
+  "input_sha256": "a4a8d5029ffc3f8258639e21c1f8cbe07bd9d159c9258c1c124134c390e59b5d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "上市日期、未盈利定位、1+6改革内容、珠海高瓴认定、63家/24家/28家摘U等事实均可逐条对应证据1、2、10及图谱三元组，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-027",
+  "raw_text": "{\"score\": 2, \"reason\": \"上市日期、未盈利定位、1+6改革内容、珠海高瓴认定、63家/24家/28家摘U等事实均可逐条对应证据1、2、10及图谱三元组，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

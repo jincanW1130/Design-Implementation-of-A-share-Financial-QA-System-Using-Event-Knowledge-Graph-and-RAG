@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-022",
+  "attempts": [
+    {
+      "answer_key": "A__A-022",
+      "attempt": 1,
+      "completion_tokens": 922,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 27.948,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4376,
+      "qid": "PE-22",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:41:58+08:00",
+      "total_tokens": 5298
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T16:42:26+08:00",
+  "group": "A",
+  "input_sha256": "aafc2ea2c20d4b5eec45cd17e370fae4a49c6cd5986c3ce3d1548ffbe3ef23ab",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案所列谢永林、冀光恒、郭晓涛、付欣、蔡方方、项有志、高鹏、吴雷鸣全部覆盖且身份基本正确，另增补的独立董事名单亦有据，无误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-22",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案所列谢永林、冀光恒、郭晓涛、付欣、蔡方方、项有志、高鹏、吴雷鸣全部覆盖且身份基本正确，另增补的独立董事名单亦有据，无误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

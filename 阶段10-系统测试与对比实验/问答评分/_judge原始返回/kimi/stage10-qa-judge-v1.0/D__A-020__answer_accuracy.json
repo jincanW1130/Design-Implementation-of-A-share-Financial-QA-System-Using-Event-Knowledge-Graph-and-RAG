@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-020",
+  "attempts": [
+    {
+      "answer_key": "D__A-020",
+      "attempt": 1,
+      "completion_tokens": 895,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 27.276,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4840,
+      "qid": "PE-20",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:56:15+08:00",
+      "total_tokens": 5735
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:56:42+08:00",
+  "group": "D",
+  "input_sha256": "aedc90a0df9a3c8a800b802073ff6fdcfe00599917508be788f30b0c3050e9c0",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确披露直接持股68.85%、与一致行动人合计由69.95%被动增至70.01%，涵盖金标准69.95%且与最新公告一致，内容正确完整。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-20",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确披露直接持股68.85%、与一致行动人合计由69.95%被动增至70.01%，涵盖金标准69.95%且与最新公告一致，内容正确完整。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

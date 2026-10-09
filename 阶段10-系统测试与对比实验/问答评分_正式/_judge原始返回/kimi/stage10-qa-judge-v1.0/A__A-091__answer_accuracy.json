@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-091",
+  "attempts": [
+    {
+      "answer_key": "A__A-091",
+      "attempt": 1,
+      "completion_tokens": 345,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 14.201,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4425,
+      "qid": "FQ-091",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:02:54+08:00",
+      "total_tokens": 4770
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:03:08+08:00",
+  "group": "A",
+  "input_sha256": "05a8bd17803a5efdaf66b196a9ce5b18f09c5f48388ce2bb4824bda83ab2203d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案的全部关键数值（84,339,356股、6,716,277,930元、16.97→13.17元、221,000股、80,633股）被评答案均未给出，仅称无法确定，对照金标准完全未答对。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-091",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案的全部关键数值（84,339,356股、6,716,277,930元、16.97→13.17元、221,000股、80,633股）被评答案均未给出，仅称无法确定，对照金标准完全未答对。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

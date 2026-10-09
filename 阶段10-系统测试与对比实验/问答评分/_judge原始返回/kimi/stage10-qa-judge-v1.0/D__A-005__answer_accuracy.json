@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-005",
+  "attempts": [
+    {
+      "answer_key": "D__A-005",
+      "attempt": 1,
+      "completion_tokens": 88,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 8.531,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5631,
+      "qid": "PE-05",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:43:12+08:00",
+      "total_tokens": 5719
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:43:21+08:00",
+  "group": "D",
+  "input_sha256": "9b06fb2817df63f21c1fb4582acc48e1bff531a28abb365ef91bc36a3d72ca93",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确给出第六期2026年8月26日、第七期2026年9月21日，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-05",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确给出第六期2026年8月26日、第七期2026年9月21日，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

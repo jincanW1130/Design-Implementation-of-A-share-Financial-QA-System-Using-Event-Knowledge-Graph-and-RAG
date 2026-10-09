@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-028",
+  "attempts": [
+    {
+      "answer_key": "B__A-028",
+      "attempt": 1,
+      "completion_tokens": 186,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 6.685,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4087,
+      "qid": "FQ-028",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:59:39+08:00",
+      "total_tokens": 4273
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:59:45+08:00",
+  "group": "B",
+  "input_sha256": "8abc09a8552a2098732f5903b13de057448269c07b37524ac285f313b8a75842",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "披露时间（8月13日交易时段后）、说明会时间（8月14日周五8:30-9:30）、方式（网络/电话会议）及事件内容均完整覆盖参考答案要点。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-028",
+  "raw_text": "{\"score\": 2, \"reason\": \"披露时间（8月13日交易时段后）、说明会时间（8月14日周五8:30-9:30）、方式（网络/电话会议）及事件内容均完整覆盖参考答案要点。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

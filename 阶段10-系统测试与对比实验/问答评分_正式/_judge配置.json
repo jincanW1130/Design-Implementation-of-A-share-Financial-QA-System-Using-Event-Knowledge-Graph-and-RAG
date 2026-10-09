@@ -1,0 +1,30 @@
+{
+  "judges": {
+    "kimi": {
+      "base_source": "config.local:kimi_base_url",
+      "checked_at": "2026-10-08T18:29:48+08:00",
+      "has_key": true,
+      "key_source": "config.local:kimi_api_key",
+      "label": "Moonshot Kimi",
+      "model_requested": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "model_source": "config.local.json 的 kimi_model_hint（Moonshot 直连）",
+      "note": "此处只登记 key 的**来源标签**，不含凭据取值。",
+      "temperature_used": 1.0
+    },
+    "zhipu": {
+      "base_source": "config.local:zhipu_base_url",
+      "checked_at": "2026-10-08T18:29:58+08:00",
+      "has_key": true,
+      "key_source": "config.local:zhipu_api_key",
+      "label": "智谱 Zhipu",
+      "model_requested": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "model_source": "config.local.json 的 zhipu_base_url（智谱直连）",
+      "note": "此处只登记 key 的**来源标签**，不含凭据取值。",
+      "temperature_used": 0.0
+    }
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "temperature_requested": 0.0
+}

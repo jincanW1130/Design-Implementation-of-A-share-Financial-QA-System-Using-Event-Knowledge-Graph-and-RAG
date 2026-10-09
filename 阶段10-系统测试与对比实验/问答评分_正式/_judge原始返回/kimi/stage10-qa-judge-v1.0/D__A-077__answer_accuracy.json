@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-077",
+  "attempts": [
+    {
+      "answer_key": "D__A-077",
+      "attempt": 1,
+      "completion_tokens": 131,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 8.404,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4341,
+      "qid": "FQ-077",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:43:17+08:00",
+      "total_tokens": 4472
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:43:26+08:00",
+  "group": "D",
+  "input_sha256": "a8e4c0a05cd054ac82f16e5894003f17b21ac83d9c03cbe8d285d149aaff0a65",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、招标人（水利电力物资公司）、代理机构角色及中标金额144,141,970.11元均与参考答案一致，完全正确",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-077",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、招标人（水利电力物资公司）、代理机构角色及中标金额144,141,970.11元均与参考答案一致，完全正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

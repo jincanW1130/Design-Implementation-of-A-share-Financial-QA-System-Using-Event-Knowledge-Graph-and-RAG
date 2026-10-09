@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-012",
+  "attempts": [
+    {
+      "answer_key": "C__A-012",
+      "attempt": 1,
+      "completion_tokens": 601,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 11.642,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4666,
+      "qid": "PE-12",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:42:21+08:00",
+      "total_tokens": 5267
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:42:32+08:00",
+  "group": "C",
+  "input_sha256": "195e694b267baddc1b295b3f721f35508cc337008c10c153c5713623d48fbb73",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "协议名称、签订日期、期限、修订内容及临时股东会审议等说法均能在可用证据中找到原文支撑，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-12",
+  "raw_text": "{\"score\": 2, \"reason\": \"协议名称、签订日期、期限、修订内容及临时股东会审议等说法均能在可用证据中找到原文支撑，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

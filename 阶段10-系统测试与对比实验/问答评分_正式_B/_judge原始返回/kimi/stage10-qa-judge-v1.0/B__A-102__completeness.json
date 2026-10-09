@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-102",
+  "attempts": [
+    {
+      "answer_key": "B__A-102",
+      "attempt": 1,
+      "completion_tokens": 979,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 29.715,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5701,
+      "qid": "FQ-102",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:47:02+08:00",
+      "total_tokens": 6680
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:47:31+08:00",
+  "group": "B",
+  "input_sha256": "3f79f38fd31b37c627f88fa7dc9ebe81a2e0bbaac16281ea6fafdfe51bc63e42",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两次事件及品种均覆盖，利格列汀二甲双胍片(Ⅱ)编号2026S02025正确，但遗漏依折麦布阿托伐他汀钙片的证书编号2026S03337、2026S03336，信息不完整。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-102",
+  "raw_text": "{\"score\": 1, \"reason\": \"两次事件及品种均覆盖，利格列汀二甲双胍片(Ⅱ)编号2026S02025正确，但遗漏依折麦布阿托伐他汀钙片的证书编号2026S03337、2026S03336，信息不完整。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

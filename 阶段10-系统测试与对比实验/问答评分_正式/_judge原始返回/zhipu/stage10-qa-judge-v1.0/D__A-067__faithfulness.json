@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-067",
+  "attempts": [
+    {
+      "answer_key": "D__A-067",
+      "attempt": 1,
+      "completion_tokens": 1782,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 29.967,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4630,
+      "qid": "FQ-067",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:01:50+08:00",
+      "total_tokens": 6412
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:02:20+08:00",
+  "group": "D",
+  "input_sha256": "b762ee8f68522a0e1b15d3cbd9ca364a7453a747c04410f8d8d9deb0ba9979be",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "事件内容、出资总额100,000万元、认缴19,900万元占19.90%及备案信息均被证据1、2直接支撑，无编造",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-067",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件内容、出资总额100,000万元、认缴19,900万元占19.90%及备案信息均被证据1、2直接支撑，无编造\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

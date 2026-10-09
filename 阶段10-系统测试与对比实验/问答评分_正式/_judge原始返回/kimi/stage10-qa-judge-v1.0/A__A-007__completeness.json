@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-007",
+  "attempts": [
+    {
+      "answer_key": "A__A-007",
+      "attempt": 1,
+      "completion_tokens": 103,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 10.493,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4352,
+      "qid": "FQ-007",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:43:21+08:00",
+      "total_tokens": 4455
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T18:43:32+08:00",
+  "group": "A",
+  "input_sha256": "f76694e14fc29718b9e86c39cf3343faf5ceeb9c1538fd99d42ce56eabb45508",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案全部关键信息：金额区间4亿~8亿、用途为员工持股计划或股权激励、截至8月31日尚未回购，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-007",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案全部关键信息：金额区间4亿~8亿、用途为员工持股计划或股权激励、截至8月31日尚未回购，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

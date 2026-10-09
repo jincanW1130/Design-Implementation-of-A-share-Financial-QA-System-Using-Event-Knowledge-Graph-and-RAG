@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-003",
+  "attempts": [
+    {
+      "answer_key": "B__A-003",
+      "attempt": 1,
+      "completion_tokens": 263,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 7.509,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4106,
+      "qid": "PE-03",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:35:18+08:00",
+      "total_tokens": 4369
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:35:26+08:00",
+  "group": "B",
+  "input_sha256": "800febd5e9833871c45aa78b819fc18bca3066dbab8c2fb708a581788fa15bc8",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整命中参考要点：完成中基协备案、编码SEX000、备案时间2026-09-22均正确，无错误信息。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-03",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整命中参考要点：完成中基协备案、编码SEX000、备案时间2026-09-22均正确，无错误信息。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

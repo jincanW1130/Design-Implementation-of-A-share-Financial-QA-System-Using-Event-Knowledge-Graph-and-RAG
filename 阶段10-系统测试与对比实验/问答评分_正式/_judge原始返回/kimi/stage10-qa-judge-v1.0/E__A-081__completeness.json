@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-081",
+  "attempts": [
+    {
+      "answer_key": "E__A-081",
+      "attempt": 1,
+      "completion_tokens": 175,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 7.079,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5362,
+      "qid": "FQ-081",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:26:50+08:00",
+      "total_tokens": 5537
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:26:57+08:00",
+  "group": "E",
+  "input_sha256": "7e2a39dc674fa5ddf2808e127f32f817558765da471510aa9ee90f575b8761e5",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖签署日期、两份合同名称、32套、8年（5+3）期限及2.9957亿元含税总额，无关键遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-081",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖签署日期、两份合同名称、32套、8年（5+3）期限及2.9957亿元含税总额，无关键遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

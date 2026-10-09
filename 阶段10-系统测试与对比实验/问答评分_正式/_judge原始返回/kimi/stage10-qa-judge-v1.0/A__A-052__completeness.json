@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-052",
+  "attempts": [
+    {
+      "answer_key": "A__A-052",
+      "attempt": 1,
+      "completion_tokens": 202,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 8.028,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4145,
+      "qid": "FQ-052",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:12:20+08:00",
+      "total_tokens": 4347
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:12:28+08:00",
+  "group": "A",
+  "input_sha256": "0c8023a8b5e5601a52bb6ba543a9716f9fab5ba156082d011a3170056463038b",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案5名关键人物中仅覆盖郑宗强1人，遗漏罗汉武、窦晓波、李芳、胡顺靖4人，属关键信息大量遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-052",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案5名关键人物中仅覆盖郑宗强1人，遗漏罗汉武、窦晓波、李芳、胡顺靖4人，属关键信息大量遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

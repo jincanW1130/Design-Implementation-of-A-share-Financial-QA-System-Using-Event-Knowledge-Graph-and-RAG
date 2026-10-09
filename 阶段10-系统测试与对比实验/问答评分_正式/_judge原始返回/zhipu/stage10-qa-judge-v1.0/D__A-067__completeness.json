@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-067",
+  "attempts": [
+    {
+      "answer_key": "D__A-067",
+      "attempt": 1,
+      "completion_tokens": 260,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 5.546,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4607,
+      "qid": "FQ-067",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:01:43+08:00",
+      "total_tokens": 4867
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T00:01:48+08:00",
+  "group": "D",
+  "input_sha256": "62058e67d2ce7f3a680123f81a1bd8c2179a1eb7516723e1cbf27045adb5b8c6",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖事件名称、合伙协议、出资总额100,000万元及阳光新能源19,900万元/19.90%认缴比例等全部关键信息，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-067",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖事件名称、合伙协议、出资总额100,000万元及阳光新能源19,900万元/19.90%认缴比例等全部关键信息，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

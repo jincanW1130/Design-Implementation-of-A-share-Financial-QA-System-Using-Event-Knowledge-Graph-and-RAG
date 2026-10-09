@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-033",
+  "attempts": [
+    {
+      "answer_key": "A__A-033",
+      "attempt": 1,
+      "completion_tokens": 183,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 8.598,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4588,
+      "qid": "FQ-033",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:56:39+08:00",
+      "total_tokens": 4771
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T18:56:48+08:00",
+  "group": "A",
+  "input_sha256": "18e71627ef090c6f876f41abc931344c1d1ad1b8983b0d0470e8c5a791207b16",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "登记日8月12日、除权除息日8月13日见证据2，每10股派3.74元（含税）见证据1，区间归属为日期比较非事实编造，均有支撑",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-033",
+  "raw_text": "{\"score\": 2, \"reason\": \"登记日8月12日、除权除息日8月13日见证据2，每10股派3.74元（含税）见证据1，区间归属为日期比较非事实编造，均有支撑\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-022",
+  "attempts": [
+    {
+      "answer_key": "D__A-022",
+      "attempt": 1,
+      "completion_tokens": 633,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 16.699,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6278,
+      "qid": "PE-22",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:59:42+08:00",
+      "total_tokens": 6911
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:59:58+08:00",
+  "group": "D",
+  "input_sha256": "a89db6bf6c3e57c37d4f2e49cd930622250ca39efef827b5df3426bbb9fdc558",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "12名董事名单、高鹏董事核准、吴雷鸣副行长核准、冀光恒行长表述均逐字对应证据7/1/2/9，推断部分已明确标注为模型分析且日期有据，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-22",
+  "raw_text": "{\"score\": 2, \"reason\": \"12名董事名单、高鹏董事核准、吴雷鸣副行长核准、冀光恒行长表述均逐字对应证据7/1/2/9，推断部分已明确标注为模型分析且日期有据，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

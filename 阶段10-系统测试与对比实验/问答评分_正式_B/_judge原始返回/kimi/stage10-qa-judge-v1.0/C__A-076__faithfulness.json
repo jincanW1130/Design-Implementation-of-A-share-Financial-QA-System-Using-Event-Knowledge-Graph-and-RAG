@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-076",
+  "attempts": [
+    {
+      "answer_key": "C__A-076",
+      "attempt": 1,
+      "completion_tokens": 1061,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 37.678,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5334,
+      "qid": "FQ-076",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:03:16+08:00",
+      "total_tokens": 6395
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:03:54+08:00",
+  "group": "C",
+  "input_sha256": "9a7ce53a31275c243f126d52c8659ceaf4254528001ad0a12fb31bbd3cd9258d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件与12,950万、5.09%、2,188万均有证据支撑，但2,188万出自预中标公示，答案将其直接作为补充名单后的包3最终金额，证据未直接确认，属少量不严谨",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-076",
+  "raw_text": "{\"score\": 1, \"reason\": \"事件与12,950万、5.09%、2,188万均有证据支撑，但2,188万出自预中标公示，答案将其直接作为补充名单后的包3最终金额，证据未直接确认，属少量不严谨\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

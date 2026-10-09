@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-083",
+  "attempts": [
+    {
+      "answer_key": "D__A-083",
+      "attempt": 1,
+      "completion_tokens": 434,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 8.256,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4698,
+      "qid": "FQ-083",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:22:27+08:00",
+      "total_tokens": 5132
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:22:35+08:00",
+  "group": "D",
+  "input_sha256": "d284f2cf72098a3ac8751243e1c64fbd6849fa08383500be2a2d7e725a375d6c",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、日期、试验编号INTerpath-001、联合Keytruda、黑色素瘤辅助治疗及关键终点均与参考答案一致，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-083",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、日期、试验编号INTerpath-001、联合Keytruda、黑色素瘤辅助治疗及关键终点均与参考答案一致，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

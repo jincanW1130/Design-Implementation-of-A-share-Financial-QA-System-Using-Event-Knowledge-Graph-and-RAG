@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-072",
+  "attempts": [
+    {
+      "answer_key": "B__A-072",
+      "attempt": 1,
+      "completion_tokens": 124,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 5.809,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5874,
+      "qid": "FQ-072",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:34:24+08:00",
+      "total_tokens": 5998
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:34:29+08:00",
+  "group": "B",
+  "input_sha256": "582679e831da338de108967248379ee9a8fa5fa8bf916ac8fb0ac282c772a217",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、交易标的（中芯北方49%股权）、交易价格（4,060,091.00万元）及5名发行对象均完整覆盖参考答案，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-072",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、交易标的（中芯北方49%股权）、交易价格（4,060,091.00万元）及5名发行对象均完整覆盖参考答案，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-023",
+  "attempts": [
+    {
+      "answer_key": "E__A-023",
+      "attempt": 1,
+      "completion_tokens": 797,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 23.261,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4420,
+      "qid": "PE-23",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:26:30+08:00",
+      "total_tokens": 5217
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:26:53+08:00",
+  "group": "E",
+  "input_sha256": "a510e4a5dc8919d22b59b2f2f91f4cb74694d16740c7a98e5d8bdd274ff0a52a",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "主要说法均有证据支撑且拒答与证据相符，但称证据10《公司章程》出自上汽集团文件并无证据依据，属少量不严谨。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-23",
+  "raw_text": "{\"score\": 1, \"reason\": \"主要说法均有证据支撑且拒答与证据相符，但称证据10《公司章程》出自上汽集团文件并无证据依据，属少量不严谨。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

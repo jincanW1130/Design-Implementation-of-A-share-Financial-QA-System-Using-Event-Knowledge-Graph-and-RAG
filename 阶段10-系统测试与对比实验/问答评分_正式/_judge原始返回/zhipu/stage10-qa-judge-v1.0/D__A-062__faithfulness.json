@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-062",
+  "attempts": [
+    {
+      "answer_key": "D__A-062",
+      "attempt": 1,
+      "completion_tokens": 412,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 7.342,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5153,
+      "qid": "FQ-062",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:01:20+08:00",
+      "total_tokens": 5565
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:01:27+08:00",
+  "group": "D",
+  "input_sha256": "975df021b6a85028397076f4c94bea86ad5f262072b8a3b7b7241594aa722e4f",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案的两个事实性说法（交易已完成、2026年4月起并入数据并追溯调整）均可被[证据2]原文逐句支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-062",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案的两个事实性说法（交易已完成、2026年4月起并入数据并追溯调整）均可被[证据2]原文逐句支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

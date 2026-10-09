@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-026",
+  "attempts": [
+    {
+      "answer_key": "E__A-026",
+      "attempt": 1,
+      "completion_tokens": 391,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 14.993,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6633,
+      "qid": "PE-26",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:28:16+08:00",
+      "total_tokens": 7024
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:28:31+08:00",
+  "group": "E",
+  "input_sha256": "6beae3f09692a2169e8288949488e57619463299127c0a5e603f81d1fb5e563c",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案虽列出金标准中两份协议，但否认能确认与两法人共同签署，且混入多份额外协议、缺少签署时间，仅部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-26",
+  "raw_text": "{\"score\": 1, \"reason\": \"答案虽列出金标准中两份协议，但否认能确认与两法人共同签署，且混入多份额外协议、缺少签署时间，仅部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

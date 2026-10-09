@@ -1,0 +1,44 @@
+{
+  "answer_key": "C__A-027",
+  "attempts": [
+    {
+      "answer_key": "C__A-027",
+      "attempt": 1,
+      "completion_tokens": 677,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 23.108,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5292,
+      "qid": "PE-27",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:17:06+08:00",
+      "total_tokens": 5969
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:17:29+08:00",
+  "group": "C",
+  "input_sha256": "15447f86c22f30d58b3104749f0cbb28895f4e0bec3d7ba9b65ed14a2264903f",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案所有事实性说法（协议名称、卖方、披露日、7月1日成交通知书）均能在证据4/5/7/8中找到，对证据未载明的买方与签署日期如实说明不足，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-27",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案所有事实性说法（协议名称、卖方、披露日、7月1日成交通知书）均能在证据4/5/7/8中找到，对证据未载明的买方与签署日期如实说明不足，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

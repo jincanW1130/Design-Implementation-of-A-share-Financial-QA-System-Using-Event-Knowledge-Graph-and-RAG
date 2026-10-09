@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-028",
+  "attempts": [
+    {
+      "answer_key": "C__A-028",
+      "attempt": 1,
+      "completion_tokens": 340,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 13.764,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4554,
+      "qid": "PE-28",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:39:37+08:00",
+      "total_tokens": 4894
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T17:39:51+08:00",
+  "group": "C",
+  "input_sha256": "9f20768d587bf33b683def046335d038bdcc56c44d58082cc17e04cf61b93195",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "正确识别9月15日提示性公告事件，但遗漏参考答案中'9月1日至14日十个交易日收盘价低于转股价85%'这一关键触发细节，属基本覆盖。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-28",
+  "raw_text": "{\"score\": 1, \"reason\": \"正确识别9月15日提示性公告事件，但遗漏参考答案中'9月1日至14日十个交易日收盘价低于转股价85%'这一关键触发细节，属基本覆盖。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

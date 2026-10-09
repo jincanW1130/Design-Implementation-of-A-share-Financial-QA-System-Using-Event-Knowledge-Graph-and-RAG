@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-055",
+  "attempts": [
+    {
+      "answer_key": "E__A-055",
+      "attempt": 1,
+      "completion_tokens": 188,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.761,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3785,
+      "qid": "FQ-055",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:05:46+08:00",
+      "total_tokens": 3973
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:05:54+08:00",
+  "group": "E",
+  "input_sha256": "98f0f9a4bf3dba07f9beb0c6950a2fff44d903430753718ae37f2625a7d2cd66",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案所述公告主体、落款及“未披露自然人姓名”的说法均能在证据1-5中找到对应支撑，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-055",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案所述公告主体、落款及“未披露自然人姓名”的说法均能在证据1-5中找到对应支撑，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

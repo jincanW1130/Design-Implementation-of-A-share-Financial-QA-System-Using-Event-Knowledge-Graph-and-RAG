@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-021",
+  "attempts": [
+    {
+      "answer_key": "D__A-021",
+      "attempt": 1,
+      "completion_tokens": 213,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 9.907,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4975,
+      "qid": "FQ-021",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:38:00+08:00",
+      "total_tokens": 5188
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:38:10+08:00",
+  "group": "D",
+  "input_sha256": "01ec12753217e368b2f9d8382a30f2c21597566242df77cc0939aa988309471b",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "批准机构、批准日期2026-08-25、研发投入236.14万元及持有人/生产企业均可在证据1、2、3中直接找到支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-021",
+  "raw_text": "{\"score\": 2, \"reason\": \"批准机构、批准日期2026-08-25、研发投入236.14万元及持有人/生产企业均可在证据1、2、3中直接找到支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-010",
+  "attempts": [
+    {
+      "answer_key": "D__A-010",
+      "attempt": 1,
+      "completion_tokens": 120,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 9.097,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4952,
+      "qid": "PE-10",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:45:55+08:00",
+      "total_tokens": 5072
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:46:05+08:00",
+  "group": "D",
+  "input_sha256": "e1a46631bc0149e488915f203305740b7a425709c0a6578e2179331248235779",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "会议时间地点、出席人数、第一项议案及表决结果均见证据1，9月6日会议议案有证据10支撑，且如实声明证据截断不臆测，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-10",
+  "raw_text": "{\"score\": 2, \"reason\": \"会议时间地点、出席人数、第一项议案及表决结果均见证据1，9月6日会议议案有证据10支撑，且如实声明证据截断不臆测，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

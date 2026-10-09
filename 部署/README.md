@@ -101,6 +101,14 @@ Python 依赖的单一来源，与 `部署\Dockerfile` 同源——Dockerfile �
    7999e1d3359715c523056ef9478215996d62a620`），挂载命令：
    * WSL2 内执行：`-v /mnt/d/Cache/huggingface:/app/hf:ro`
    * Windows／Docker Desktop：`-v D:/Cache/huggingface:/app/hf:ro`
+8. **日志默认只出 stderr、不落盘**（评审 P1-11 已给可选开关）：`errors.setup_logging()` **始终**
+   挂 `StreamHandler(stderr)`（容器形态靠 stdout／stderr 采集），**只有当** `代码\后端\config.local.json`
+   里给了非空的 `log_path` 时**才追加**一个 `logging.handlers.RotatingFileHandler`
+   （单文件 10 MiB、保留 5 个历史文件、UTF-8；目录不存在会自动创建）。**没配就不落文件**，
+   行为与本次改动前完全一致。**为什么要配**：错误码的 `detail` 按硬约束「只进日志、不进响应体」，
+   日志丢了就没有任何排障依据（第 9 阶段排查 PE-03 时正踩在这条上）。容器形态建议把 `log_path`
+   指到挂载出来的卷（`-v <宿主目录>:/app/logs` ＋ `"log_path": "/app/logs/backend.log"`），
+   否则容器一删日志即丢。日志格式与日志内容**不含**任何凭据取值。
 
 ---
 

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-060",
+  "attempts": [
+    {
+      "answer_key": "A__A-060",
+      "attempt": 1,
+      "completion_tokens": 639,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 12.706,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4202,
+      "qid": "FQ-060",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:26:37+08:00",
+      "total_tokens": 4841
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:26:50+08:00",
+  "group": "A",
+  "input_sha256": "386379e2336da7d1826abcb3f677ab1467c3f486fa2065c7202ae9aed68a49e1",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案仅称证据不足未作答，未给出程忠、副总经理兼财务总监身份及688001代码等任何参考要点，与参考答案无重合。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-060",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案仅称证据不足未作答，未给出程忠、副总经理兼财务总监身份及688001代码等任何参考要点，与参考答案无重合。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

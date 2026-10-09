@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-015",
+  "attempts": [
+    {
+      "answer_key": "B__A-015",
+      "attempt": 1,
+      "completion_tokens": 1120,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 28.537,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5050,
+      "qid": "PE-15",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:59:16+08:00",
+      "total_tokens": 6170
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:59:45+08:00",
+  "group": "B",
+  "input_sha256": "920593e8e77b1a7cd40e1df68f94f0ebd17e9b1cc975d0a29ba056275c6e6646",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核心事件（8月27日权益分派实施）与调整后上限54.55元/股均已覆盖，但漏掉参考答案中每10股派现20.00元这一关键分红细节，属基本覆盖。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-15",
+  "raw_text": "{\"score\": 1, \"reason\": \"核心事件（8月27日权益分派实施）与调整后上限54.55元/股均已覆盖，但漏掉参考答案中每10股派现20.00元这一关键分红细节，属基本覆盖。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

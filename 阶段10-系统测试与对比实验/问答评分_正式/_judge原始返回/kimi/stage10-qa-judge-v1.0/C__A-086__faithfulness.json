@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-086",
+  "attempts": [
+    {
+      "answer_key": "C__A-086",
+      "attempt": 1,
+      "completion_tokens": 392,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 13.944,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5647,
+      "qid": "FQ-086",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:10:41+08:00",
+      "total_tokens": 6039
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:10:55+08:00",
+  "group": "C",
+  "input_sha256": "289d9cedcdb2b340970821e8182147ecb68f11941bdf159b3be8eacd1e049c0b",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "3.02元股息（税前/含税）、9月23日登记日、9月24日发放日、第四期200亿/1.86%及第三期1.89%等全部事实均有检索证据原文支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-086",
+  "raw_text": "{\"score\": 2, \"reason\": \"3.02元股息（税前/含税）、9月23日登记日、9月24日发放日、第四期200亿/1.86%及第三期1.89%等全部事实均有检索证据原文支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

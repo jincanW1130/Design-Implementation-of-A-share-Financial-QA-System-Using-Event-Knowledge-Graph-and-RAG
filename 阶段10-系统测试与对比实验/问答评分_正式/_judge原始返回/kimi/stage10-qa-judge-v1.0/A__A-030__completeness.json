@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-030",
+  "attempts": [
+    {
+      "answer_key": "A__A-030",
+      "attempt": 1,
+      "completion_tokens": 100,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 7.143,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3802,
+      "qid": "FQ-030",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:54:16+08:00",
+      "total_tokens": 3902
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T18:54:24+08:00",
+  "group": "A",
+  "input_sha256": "8273b1474c9461dbb3502daa8c0276399adfd9ed58107995925acea26e346606",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "完整覆盖参考答案全部关键信息：剥离时间2022年6月、交易对方中天科技集团、出售上海国际贸易公司100%股权及聚焦主业背景，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-030",
+  "raw_text": "{\"score\": 2, \"reason\": \"完整覆盖参考答案全部关键信息：剥离时间2022年6月、交易对方中天科技集团、出售上海国际贸易公司100%股权及聚焦主业背景，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

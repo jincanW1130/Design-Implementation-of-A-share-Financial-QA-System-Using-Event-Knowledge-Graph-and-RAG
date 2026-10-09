@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-012",
+  "attempts": [
+    {
+      "answer_key": "E__A-012",
+      "attempt": 1,
+      "completion_tokens": 127,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 6.238,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4686,
+      "qid": "FQ-012",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:30:38+08:00",
+      "total_tokens": 4813
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:30:44+08:00",
+  "group": "E",
+  "input_sha256": "73a80125aaf0670f2c3534cf9d33aab8cc0909c96150e46495082ca913ca23fb",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整给出三个日期：登记日8月7日、除权除息日与红利发放日8月10日，与参考答案关键信息全覆盖。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-012",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整给出三个日期：登记日8月7日、除权除息日与红利发放日8月10日，与参考答案关键信息全覆盖。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

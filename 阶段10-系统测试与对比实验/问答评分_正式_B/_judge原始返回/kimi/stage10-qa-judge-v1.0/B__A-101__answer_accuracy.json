@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-101",
+  "attempts": [
+    {
+      "answer_key": "B__A-101",
+      "attempt": 1,
+      "completion_tokens": 141,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 8.726,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5152,
+      "qid": "FQ-101",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:46:11+08:00",
+      "total_tokens": 5293
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:46:20+08:00",
+  "group": "B",
+  "input_sha256": "d12d4f4a2cd0f4790dde114bc62a7ca97e3ec27a17b67086eeb17c572600487e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件（签订金刚石芯片基板建设项目一期总承包合同）、签约价107,380,000元含设计费328万元及通创九州为持股40%参股公司，均与参考答案一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-101",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件（签订金刚石芯片基板建设项目一期总承包合同）、签约价107,380,000元含设计费328万元及通创九州为持股40%参股公司，均与参考答案一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

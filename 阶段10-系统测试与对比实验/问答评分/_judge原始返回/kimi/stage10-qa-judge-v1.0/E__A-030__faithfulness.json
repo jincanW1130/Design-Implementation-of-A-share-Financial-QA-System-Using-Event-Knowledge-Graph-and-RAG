@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-030",
+  "attempts": [
+    {
+      "answer_key": "E__A-030",
+      "attempt": 1,
+      "completion_tokens": 185,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.749,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5115,
+      "qid": "PE-30",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:30:55+08:00",
+      "total_tokens": 5300
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:31:03+08:00",
+  "group": "E",
+  "input_sha256": "98467be0e4a4e46011987319b10eba853036e9ad6b6422342d0f74ac4d45262b",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件名称、过户账户、15,772,385股、占0.21%及9月3日披露日均可由证据3/4/5直接支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-30",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件名称、过户账户、15,772,385股、占0.21%及9月3日披露日均可由证据3/4/5直接支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-007",
+  "attempts": [
+    {
+      "answer_key": "C__A-007",
+      "attempt": 1,
+      "completion_tokens": 123,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 6.073,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4961,
+      "qid": "PE-07",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:16:42+08:00",
+      "total_tokens": 5084
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T17:16:48+08:00",
+  "group": "C",
+  "input_sha256": "4c4d94dcef77f5503038438efea1fda596ac15f6a4e3c5ed2f6100a745e24a0e",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确指出工行担任联席主承销商，并完整覆盖参考答案中主承销为渤海银行等全部关键信息，无遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-07",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确指出工行担任联席主承销商，并完整覆盖参考答案中主承销为渤海银行等全部关键信息，无遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

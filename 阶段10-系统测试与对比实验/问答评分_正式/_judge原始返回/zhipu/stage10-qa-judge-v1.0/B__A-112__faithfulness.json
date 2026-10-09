@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-112",
+  "attempts": [
+    {
+      "answer_key": "B__A-112",
+      "attempt": 1,
+      "completion_tokens": 961,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 18.244,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4664,
+      "qid": "FQ-112",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:58:42+08:00",
+      "total_tokens": 5625
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:59:00+08:00",
+  "group": "B",
+  "input_sha256": "d31daa7b806a746a98951c8f13d578ea53d0a91ab4fb90aabbf0b8f5e97a5491",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "核心结论及各项事实（控股股东身份、直接持股、增持方及持股超50%）均能在可用证据4/5/3中找到直接支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-112",
+  "raw_text": "{\"score\": 2, \"reason\": \"核心结论及各项事实（控股股东身份、直接持股、增持方及持股超50%）均能在可用证据4/5/3中找到直接支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

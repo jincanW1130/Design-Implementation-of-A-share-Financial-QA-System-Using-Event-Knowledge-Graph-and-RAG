@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-055",
+  "attempts": [
+    {
+      "answer_key": "D__A-055",
+      "attempt": 1,
+      "completion_tokens": 143,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 8.207,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3960,
+      "qid": "FQ-055",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:07:49+08:00",
+      "total_tokens": 4103
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:07:57+08:00",
+  "group": "D",
+  "input_sha256": "23410f66d11ecf465bb993a4feacb0701236ea3266a0b7875995b6ebd6144be7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案为周锦明（控股股东、实控人、蒙古服务商法定代表人），被评答案称无法列出任何人员，未答对任何要点",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-055",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案为周锦明（控股股东、实控人、蒙古服务商法定代表人），被评答案称无法列出任何人员，未答对任何要点\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-073",
+  "attempts": [
+    {
+      "answer_key": "C__A-073",
+      "attempt": 1,
+      "completion_tokens": 754,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 25.563,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5915,
+      "qid": "FQ-073",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:59:18+08:00",
+      "total_tokens": 6669
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:59:43+08:00",
+  "group": "C",
+  "input_sha256": "068e9733f81663570ec71bea6d00f22462bd80936151dbc8858efd4e74489773",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中各事实性说法（6月17日两笔票据8,000万美元及担保安排、6月18日发行、8月25日发行、主体注册信息等）均能在实际检索证据中找到支撑，未编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-073",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中各事实性说法（6月17日两笔票据8,000万美元及担保安排、6月18日发行、8月25日发行、主体注册信息等）均能在实际检索证据中找到支撑，未编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

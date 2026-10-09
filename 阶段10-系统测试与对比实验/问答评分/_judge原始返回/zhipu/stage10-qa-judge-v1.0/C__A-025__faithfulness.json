@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-025",
+  "attempts": [
+    {
+      "answer_key": "C__A-025",
+      "attempt": 1,
+      "completion_tokens": 489,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 8.791,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5047,
+      "qid": "PE-25",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:45:01+08:00",
+      "total_tokens": 5536
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:45:10+08:00",
+  "group": "C",
+  "input_sha256": "b89f47818b29faf8eb2d4267948dc3aa4df93532c2375db30d067ecabfdc8700",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "招标人、中标人、项目名称、编号、代理机构及合同风险提示均可由证据1、2、4直接支撑，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-25",
+  "raw_text": "{\"score\": 2, \"reason\": \"招标人、中标人、项目名称、编号、代理机构及合同风险提示均可由证据1、2、4直接支撑，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-078",
+  "attempts": [
+    {
+      "answer_key": "B__A-078",
+      "attempt": 1,
+      "completion_tokens": 173,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 8.269,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4835,
+      "qid": "FQ-078",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:29:18+08:00",
+      "total_tokens": 5008
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:29:26+08:00",
+  "group": "B",
+  "input_sha256": "52fdbc3be730380741d4310c1a9c6604ce9c78afa38e6b18e775798b942554b2",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖签订22/05合同、作业者身份、6年勘探期100%勘探权益、商业发现后49%开采权益及15年生产期，无遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-078",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖签订22/05合同、作业者身份、6年勘探期100%勘探权益、商业发现后49%开采权益及15年生产期，无遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

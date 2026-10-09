@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-047",
+  "attempts": [
+    {
+      "answer_key": "C__A-047",
+      "attempt": 1,
+      "completion_tokens": 154,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 3.885,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4338,
+      "qid": "FQ-047",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:44:59+08:00",
+      "total_tokens": 4492
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:45:03+08:00",
+  "group": "C",
+  "input_sha256": "ca75905c8a38e8d573ef10117566df0e0e011d081319ad7d1a4d8a10b24312a5",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "事件性质、质押数量68,909,674股、占比8.02%及质权人农业银行珠海分行均与参考答案一致，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-047",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件性质、质押数量68,909,674股、占比8.02%及质权人农业银行珠海分行均与参考答案一致，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

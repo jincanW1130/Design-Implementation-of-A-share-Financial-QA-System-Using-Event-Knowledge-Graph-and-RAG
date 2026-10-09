@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-109",
+  "attempts": [
+    {
+      "answer_key": "D__A-109",
+      "attempt": 1,
+      "completion_tokens": 310,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 9.256,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4068,
+      "qid": "FQ-109",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:09:38+08:00",
+      "total_tokens": 4378
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:09:48+08:00",
+  "group": "D",
+  "input_sha256": "7bc6106903cd16edae7197d6c3942cb9d9fb685cbffe4c4d35969cb8866de603",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两个项目的招标人名称及'不存在关联关系'的表述均能在证据1、5、6、8中逐字找到支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-109",
+  "raw_text": "{\"score\": 2, \"reason\": \"两个项目的招标人名称及'不存在关联关系'的表述均能在证据1、5、6、8中逐字找到支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

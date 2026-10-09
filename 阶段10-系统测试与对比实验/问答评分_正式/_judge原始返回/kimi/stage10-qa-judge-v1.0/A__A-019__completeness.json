@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-019",
+  "attempts": [
+    {
+      "answer_key": "A__A-019",
+      "attempt": 1,
+      "completion_tokens": 125,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 5.918,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3947,
+      "qid": "FQ-019",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:50:35+08:00",
+      "total_tokens": 4072
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T18:50:41+08:00",
+  "group": "A",
+  "input_sha256": "62b7697a3de094571a3fd878de80c08f663ed8c732910aabd6d76b35941f6470",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案的两项关键信息——文号财会〔2026〕7号及施行要求（自公布之日起施行、新增业务按解释调整）——均被完整覆盖。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-019",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案的两项关键信息——文号财会〔2026〕7号及施行要求（自公布之日起施行、新增业务按解释调整）——均被完整覆盖。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

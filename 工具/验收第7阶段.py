@@ -323,6 +323,30 @@ def section_text(text, start_heading, end_heading=None):
     return "\n".join(lines[start:])
 
 
+def section_text_prefix(text, start_prefix, end_heading=None):
+    """同 `section_text`，但**起始标题按前缀匹配**。
+
+    用途：起始标题里含**会随时间合法变化**的编号范围时（例如《00》第三节 1 的标题
+    「### 1. 文档编号（01～19）——项目自己的文档序列」，编号扩到 29 后该标题随之变为
+    「（01～29）」）。`section_text()` 是整行精确匹配，一旦范围变化就取到空串、
+    让下游断言**误报**；本函数只依赖标题里不随范围变化的前缀，对此类扩展免疫。
+    """
+    lines = text.split("\n")
+    start = None
+    for i, line in enumerate(lines):
+        if line.strip().startswith(start_prefix):
+            start = i
+            break
+    if start is None:
+        return ""
+    if end_heading is None:
+        return "\n".join(lines[start:])
+    for j in range(start + 1, len(lines)):
+        if lines[j].strip() == end_heading:
+            return "\n".join(lines[start:j])
+    return "\n".join(lines[start:])
+
+
 # ---------------------------------------------------------------------------
 # 镜像重跑（唯一一次进程链，供 4／7／8／10～24／27／28 组共用）
 # ---------------------------------------------------------------------------
@@ -1814,8 +1838,16 @@ print("Z、《18》第八节 第 26 行：索引登记（《18》与《19》均�
       "与第四节 文件地图中）")
 print("=" * 78)
 t00 = read_text(P00, "")
-sec3 = section_text(t00, "### 1. 文档编号（01～19）——项目自己的文档序列",
-                    "### 2. 文献池编号（KG-n／RAG-n／FIN-n／SYS-n）——检索阶段的内部编号")
+# 2026-10-09 判据随事实失效 → 重基线为**更稳的锚点**：
+#   原锚点把《00》第三节 1 的标题**整条写死**，含「（01～19）」这一编号范围。
+#   文档编号随后合法扩到 01～29（新增 20～29 十条登记，见《00》第三节 1 的表），
+#   标题随之变为「### 1. 文档编号（01～29）——项目自己的文档序列」，
+#   于是原锚点匹配不到、`section_text()` 返回空串，Z1 误报「《18》《19》不在编号表里」。
+#   现改为**只用不随编号范围变化的标题前缀**「### 1. 文档编号」作锚点——
+#   判据覆盖的内容一条未删、断言仍是「《18》《19》的文件名必须出现在该节内」，
+#   且对今后编号范围再扩展免疫。**这是判据随事实变更后的正确化，不是放宽。**
+sec3 = section_text_prefix(t00, "### 1. 文档编号",
+                           "### 2. 文献池编号（KG-n／RAG-n／FIN-n／SYS-n）——检索阶段的内部编号")
 sec4 = section_text(t00, "## 四、文件地图", "## 五、冻结口径速查")
 n18 = "18-第7阶段任务书（RAG检索系统）"
 n19 = "19-第7阶段产出文档（RAG检索系统）"

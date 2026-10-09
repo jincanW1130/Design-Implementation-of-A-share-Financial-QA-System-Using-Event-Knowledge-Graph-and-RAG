@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-037",
+  "attempts": [
+    {
+      "answer_key": "D__A-037",
+      "attempt": 1,
+      "completion_tokens": 189,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 8.479,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4529,
+      "qid": "FQ-037",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:47:10+08:00",
+      "total_tokens": 4718
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:47:18+08:00",
+  "group": "D",
+  "input_sha256": "d8ea7464badbec40d7b521bbce158fc1c682bac49cc76cc3c1e2bf3e106cb390",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两次中标事件、中标主体（赛博引擎与公司本身）及金额（约1.7亿、30,441.89万元）均完整覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-037",
+  "raw_text": "{\"score\": 2, \"reason\": \"两次中标事件、中标主体（赛博引擎与公司本身）及金额（约1.7亿、30,441.89万元）均完整覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

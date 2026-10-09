@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-017",
+  "attempts": [
+    {
+      "answer_key": "E__A-017",
+      "attempt": 1,
+      "completion_tokens": 147,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.008,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4662,
+      "qid": "PE-17",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:22:39+08:00",
+      "total_tokens": 4809
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:22:47+08:00",
+  "group": "E",
+  "input_sha256": "3e1b78859ba224a1daadca42b3af505826dbeff837e8ae9b5ed8dadbf2fc4931",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "签约方、项目名称、金额112,738.00万元及暂估总价调整机制均被证据5、证据6原文直接支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-17",
+  "raw_text": "{\"score\": 2, \"reason\": \"签约方、项目名称、金额112,738.00万元及暂估总价调整机制均被证据5、证据6原文直接支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

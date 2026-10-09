@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-032",
+  "attempts": [
+    {
+      "answer_key": "A__A-032",
+      "attempt": 1,
+      "completion_tokens": 151,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 7.666,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3930,
+      "qid": "FQ-032",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:56:11+08:00",
+      "total_tokens": 4081
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T18:56:19+08:00",
+  "group": "A",
+  "input_sha256": "a5f73adaf369c0d04f899e0de6510db6373e34ca77ee633be059c150acfe2169",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案仅如实说明各证据内容并结论证据不足，未编造任何数值，对各证据的描述均与证据原文相符",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-032",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案仅如实说明各证据内容并结论证据不足，未编造任何数值，对各证据的描述均与证据原文相符\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

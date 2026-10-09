@@ -1,0 +1,44 @@
+{
+  "answer_key": "A__A-012",
+  "attempts": [
+    {
+      "answer_key": "A__A-012",
+      "attempt": 1,
+      "completion_tokens": 108,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 8.155,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4114,
+      "qid": "PE-12",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:31:03+08:00",
+      "total_tokens": 4222
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T16:31:11+08:00",
+  "group": "A",
+  "input_sha256": "c078f8c7b275b5bbdf9dbc90af8c54d5304853cf63d29904de95183fb71850be",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案准确给出第八补充协议、2026年9月7日签订及期限至2027年12月31日，与参考答案完全一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-12",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案准确给出第八补充协议、2026年9月7日签订及期限至2027年12月31日，与参考答案完全一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-061",
+  "attempts": [
+    {
+      "answer_key": "E__A-061",
+      "attempt": 1,
+      "completion_tokens": 100,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 6.429,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4387,
+      "qid": "FQ-061",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:10:24+08:00",
+      "total_tokens": 4487
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:10:30+08:00",
+  "group": "E",
+  "input_sha256": "3d866ebba8eb5c986e9f276024d83c118599d67da2bcdefbadb2f0ba8def7cea",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、15.00亿元最高余额、最高额连带责任保证方式及三年保证期间均与参考答案一致，无错误内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-061",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、15.00亿元最高余额、最高额连带责任保证方式及三年保证期间均与参考答案一致，无错误内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

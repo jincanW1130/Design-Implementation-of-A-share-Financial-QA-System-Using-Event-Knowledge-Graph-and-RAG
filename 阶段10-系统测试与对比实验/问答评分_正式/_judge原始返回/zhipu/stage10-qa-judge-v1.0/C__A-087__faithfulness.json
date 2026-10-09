@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-087",
+  "attempts": [
+    {
+      "answer_key": "C__A-087",
+      "attempt": 1,
+      "completion_tokens": 435,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 6.811,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5035,
+      "qid": "FQ-087",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:03:36+08:00",
+      "total_tokens": 5470
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:03:43+08:00",
+  "group": "C",
+  "input_sha256": "2a4cf49d191bee6415179f2f982986ca34e3f4f690ecf6685a29dd5150294924",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "可行权期限、4,506人/5,205.9492万份/17.62元、注销0.45万份与459人303.006万份及303.456万份合计、2026-9-2办毕均见于证据1-4、6、9，无无依据说法。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-087",
+  "raw_text": "{\"score\": 2, \"reason\": \"可行权期限、4,506人/5,205.9492万份/17.62元、注销0.45万份与459人303.006万份及303.456万份合计、2026-9-2办毕均见于证据1-4、6、9，无无依据说法。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

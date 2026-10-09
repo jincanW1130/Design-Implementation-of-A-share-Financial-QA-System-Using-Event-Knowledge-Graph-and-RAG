@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-052",
+  "attempts": [
+    {
+      "answer_key": "C__A-052",
+      "attempt": 1,
+      "completion_tokens": 615,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 12.732,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5173,
+      "qid": "FQ-052",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:45:28+08:00",
+      "total_tokens": 5788
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:45:41+08:00",
+  "group": "C",
+  "input_sha256": "65c4f0d296d14c0a0a6bec93282b3b9408eafa1db83bf5be909132f38c35321d",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "仅正确给出董事长郑宗强及陈刚，遗漏参考答案中的副董事长总经理罗汉武、独董窦晓波、总会计师李芳、董秘胡顺靖，属部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-052",
+  "raw_text": "{\"score\": 1, \"reason\": \"仅正确给出董事长郑宗强及陈刚，遗漏参考答案中的副董事长总经理罗汉武、独董窦晓波、总会计师李芳、董秘胡顺靖，属部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

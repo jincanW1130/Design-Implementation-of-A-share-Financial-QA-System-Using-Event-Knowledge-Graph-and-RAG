@@ -1,0 +1,44 @@
+{
+  "answer_key": "_probe",
+  "attempts": [
+    {
+      "answer_key": "_probe",
+      "attempt": 1,
+      "completion_tokens": 103,
+      "dimension": "_probe",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "_probe",
+      "judge": "zhipu",
+      "latency_seconds": 3.664,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 43,
+      "qid": "_probe",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T16:12:53+08:00",
+      "total_tokens": 146
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "_probe",
+  "finished_at": "2026-10-07T16:12:56+08:00",
+  "group": "_probe",
+  "input_sha256": "e3ffe26235c9ee59c8d485538ac245f19dfd25541018ce34e7e8346f374d3629",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "连通性自检",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "_probe",
+  "raw_text": "{\"score\": 1, \"reason\": \"连通性自检\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-060",
+  "attempts": [
+    {
+      "answer_key": "B__A-060",
+      "attempt": 1,
+      "completion_tokens": 244,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 10.174,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3963,
+      "qid": "FQ-060",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:27:44+08:00",
+      "total_tokens": 4207
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:27:54+08:00",
+  "group": "B",
+  "input_sha256": "27b9aba43181d670e6e4842faf818c3de81925a6933bc73cb18307006edf9d39",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案仅陈述证据涉及北方华创、富士康、阳光电源、中兴且无华兴源创信息，均与所给证据全文一致，并如实表示证据不足，无任何编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-060",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案仅陈述证据涉及北方华创、富士康、阳光电源、中兴且无华兴源创信息，均与所给证据全文一致，并如实表示证据不足，无任何编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

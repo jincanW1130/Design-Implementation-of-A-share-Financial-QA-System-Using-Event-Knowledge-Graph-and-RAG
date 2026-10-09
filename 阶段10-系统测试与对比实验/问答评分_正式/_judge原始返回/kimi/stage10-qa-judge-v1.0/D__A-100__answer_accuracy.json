@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-100",
+  "attempts": [
+    {
+      "answer_key": "D__A-100",
+      "attempt": 1,
+      "completion_tokens": 466,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 14.756,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4184,
+      "qid": "FQ-100",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:01:55+08:00",
+      "total_tokens": 4650
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:02:10+08:00",
+  "group": "D",
+  "input_sha256": "4d34217eb9c3d9fca23cc4a93683f11fb8f017626155ee4de61ed29e905cf5e3",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "签约事件（时间、金额、项目）答对，但共同参与方识别为韶关复通而非金标准的北京中兰，且遗漏中标候选人公示事件，属部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-100",
+  "raw_text": "{\"score\": 1, \"reason\": \"签约事件（时间、金额、项目）答对，但共同参与方识别为韶关复通而非金标准的北京中兰，且遗漏中标候选人公示事件，属部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

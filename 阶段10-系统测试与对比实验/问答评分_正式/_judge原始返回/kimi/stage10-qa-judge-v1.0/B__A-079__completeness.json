@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-079",
+  "attempts": [
+    {
+      "answer_key": "B__A-079",
+      "attempt": 1,
+      "completion_tokens": 1759,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 41.913,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5141,
+      "qid": "FQ-079",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:30:35+08:00",
+      "total_tokens": 6900
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:31:17+08:00",
+  "group": "B",
+  "input_sha256": "22c6ea1942e58413ad91583a2ab16138eba7c749e7f5f68295a81cb90ed45080",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "题目所问的事件（WZ10-11W-1钻井总包）、井别初探井、设计井深-1700米、作业时间2个月及8月13日启动、服务商中海油服均已覆盖，仅注册资本47.72亿元等次要细节未提。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-079",
+  "raw_text": "{\"score\": 2, \"reason\": \"题目所问的事件（WZ10-11W-1钻井总包）、井别初探井、设计井深-1700米、作业时间2个月及8月13日启动、服务商中海油服均已覆盖，仅注册资本47.72亿元等次要细节未提。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

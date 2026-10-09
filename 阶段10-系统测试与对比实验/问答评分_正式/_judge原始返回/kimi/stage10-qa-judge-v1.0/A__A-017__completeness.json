@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-017",
+  "attempts": [
+    {
+      "answer_key": "A__A-017",
+      "attempt": 1,
+      "completion_tokens": 105,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 7.513,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3755,
+      "qid": "FQ-017",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:48:15+08:00",
+      "total_tokens": 3860
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T18:48:23+08:00",
+  "group": "A",
+  "input_sha256": "7ae2345bf3ceecc082adaf1456be8c513bf188fb419854a0f00562fe8e56af22",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "文件名称、文号财会〔2026〕7号及颁布日期2026年6月17日三要素均完整覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-017",
+  "raw_text": "{\"score\": 2, \"reason\": \"文件名称、文号财会〔2026〕7号及颁布日期2026年6月17日三要素均完整覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

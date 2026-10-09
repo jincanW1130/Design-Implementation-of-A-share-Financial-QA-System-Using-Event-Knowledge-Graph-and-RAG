@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-020",
+  "attempts": [
+    {
+      "answer_key": "D__A-020",
+      "attempt": 1,
+      "completion_tokens": 177,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 6.627,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4664,
+      "qid": "FQ-020",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:36:55+08:00",
+      "total_tokens": 4841
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:37:02+08:00",
+  "group": "D",
+  "input_sha256": "0c4f52bc3a9df1071687513cbf1c0170f28c75608c2c1c78414e20c30bb090c3",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "当月10,780,847股、截至7月31日累计13,316,606股及占比均与金标准一致，监管指引第9号名称也正确，完全答对。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-020",
+  "raw_text": "{\"score\": 2, \"reason\": \"当月10,780,847股、截至7月31日累计13,316,606股及占比均与金标准一致，监管指引第9号名称也正确，完全答对。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-021",
+  "attempts": [
+    {
+      "answer_key": "C__A-021",
+      "attempt": 1,
+      "completion_tokens": 221,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 4.437,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4948,
+      "qid": "FQ-021",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:40:56+08:00",
+      "total_tokens": 5169
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:41:01+08:00",
+  "group": "C",
+  "input_sha256": "6c46a49225d9519a75287617037e287775dcfc2f087c70b3679b21bb4b99f7c4",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "批准机构（国家药监局）、批准日期（2026年8月25日）、累计研发投入（236.14万元，未经审计）三项均与参考答案一致，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-021",
+  "raw_text": "{\"score\": 2, \"reason\": \"批准机构（国家药监局）、批准日期（2026年8月25日）、累计研发投入（236.14万元，未经审计）三项均与参考答案一致，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

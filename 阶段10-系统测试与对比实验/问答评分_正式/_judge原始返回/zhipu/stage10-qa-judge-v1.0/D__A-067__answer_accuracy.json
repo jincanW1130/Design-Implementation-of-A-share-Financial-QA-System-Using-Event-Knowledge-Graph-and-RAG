@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-067",
+  "attempts": [
+    {
+      "answer_key": "D__A-067",
+      "attempt": 1,
+      "completion_tokens": 696,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 12.994,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4602,
+      "qid": "FQ-067",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:01:28+08:00",
+      "total_tokens": 5298
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T00:01:41+08:00",
+  "group": "D",
+  "input_sha256": "a7f083eff55632cac331c8e0f9ce909c63acb8b994e24c59f88ed7d81c76614c",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "事件（共同设立苏州华旭新能合伙企业）、出资总额100,000万元、认缴19,900万元及占比19.90%均与参考答案一致，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-067",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件（共同设立苏州华旭新能合伙企业）、出资总额100,000万元、认缴19,900万元及占比19.90%均与参考答案一致，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-049",
+  "attempts": [
+    {
+      "answer_key": "D__A-049",
+      "attempt": 1,
+      "completion_tokens": 1012,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 29.921,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4947,
+      "qid": "FQ-049",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:00:25+08:00",
+      "total_tokens": 5959
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:00:55+08:00",
+  "group": "D",
+  "input_sha256": "fd3af920ef2ff3157706ba3154d8ab3cd73f3aa0e611d644fefcddda82fd7b98",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "三名高管职务直接引自证据2原文，章程条款与8票表决结果均与证据8、10一致，董事人数推断已明确标注为推断，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-049",
+  "raw_text": "{\"score\": 2, \"reason\": \"三名高管职务直接引自证据2原文，章程条款与8票表决结果均与证据8、10一致，董事人数推断已明确标注为推断，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

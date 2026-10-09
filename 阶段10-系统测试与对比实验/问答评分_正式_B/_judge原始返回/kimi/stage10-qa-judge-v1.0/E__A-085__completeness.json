@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-085",
+  "attempts": [
+    {
+      "answer_key": "E__A-085",
+      "attempt": 1,
+      "completion_tokens": 209,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 7.409,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4992,
+      "qid": "FQ-085",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:29:05+08:00",
+      "total_tokens": 5201
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:29:12+08:00",
+  "group": "E",
+  "input_sha256": "ddfa6714b970dd1f74b941e8bbe38b3dde46fc73afd0362ae0d0a9f7283daf69",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖每10股派5元（含税）、拟派现总额3,724,298,992元及7,448,597,984股基数等全部关键信息，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-085",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖每10股派5元（含税）、拟派现总额3,724,298,992元及7,448,597,984股基数等全部关键信息，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

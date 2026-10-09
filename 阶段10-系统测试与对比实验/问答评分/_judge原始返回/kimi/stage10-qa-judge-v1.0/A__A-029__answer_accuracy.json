@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-029",
+  "attempts": [
+    {
+      "answer_key": "A__A-029",
+      "attempt": 1,
+      "completion_tokens": 147,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 7.332,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4552,
+      "qid": "PE-29",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:47:44+08:00",
+      "total_tokens": 4699
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T16:47:51+08:00",
+  "group": "A",
+  "input_sha256": "866c524e40a62c033ef68ab4fbfbc88f8cc6c198fa8b0bbcad06c2b70758086f",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整准确地给出了两起行权事件、期权代码、有效期及2026年9月11日开始行权，与参考答案一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-29",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整准确地给出了两起行权事件、期权代码、有效期及2026年9月11日开始行权，与参考答案一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

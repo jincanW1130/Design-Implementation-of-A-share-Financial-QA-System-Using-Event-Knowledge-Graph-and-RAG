@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-103",
+  "attempts": [
+    {
+      "answer_key": "A__A-103",
+      "attempt": 1,
+      "completion_tokens": 143,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 7.381,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4268,
+      "qid": "FQ-103",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:15:08+08:00",
+      "total_tokens": 4411
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:15:15+08:00",
+  "group": "A",
+  "input_sha256": "2463de4a353982bfceee4cfb2bfae7d839e69596fd9a49c5508950c23017525a",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "接受机构、通知书编号中市协注[2025]DFI27号及自落款日2025年4月28日起2年有效期均完整覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-103",
+  "raw_text": "{\"score\": 2, \"reason\": \"接受机构、通知书编号中市协注[2025]DFI27号及自落款日2025年4月28日起2年有效期均完整覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

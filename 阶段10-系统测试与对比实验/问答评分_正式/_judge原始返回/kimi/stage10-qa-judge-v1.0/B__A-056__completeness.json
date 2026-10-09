@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-056",
+  "attempts": [
+    {
+      "answer_key": "B__A-056",
+      "attempt": 1,
+      "completion_tokens": 149,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 7.331,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4578,
+      "qid": "FQ-056",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:22:03+08:00",
+      "total_tokens": 4727
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:22:11+08:00",
+  "group": "B",
+  "input_sha256": "ebea724a82fee5e156a8b0871f8d11d44c1ae77a845154e4d44f0dcdb9cc1d6c",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案以证据不足拒答，未给出王维及其一致行动人云拥合伙的增持信息，关键信息全部遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-056",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案以证据不足拒答，未给出王维及其一致行动人云拥合伙的增持信息，关键信息全部遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

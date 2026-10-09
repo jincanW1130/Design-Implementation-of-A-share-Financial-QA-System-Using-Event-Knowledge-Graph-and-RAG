@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-002",
+  "attempts": [
+    {
+      "answer_key": "A__A-002",
+      "attempt": 1,
+      "completion_tokens": 100,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 5.156,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4091,
+      "qid": "FQ-002",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:41:09+08:00",
+      "total_tokens": 4191
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T18:41:14+08:00",
+  "group": "A",
+  "input_sha256": "3e015b384e1f6705b64fadebe75ac76445fcf9999d60a5f6a806a853a92036f6",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "任期起止时间与霍达的风险与资本管理委员会主任委员职务均与参考答案完全一致，附加信息亦无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-002",
+  "raw_text": "{\"score\": 2, \"reason\": \"任期起止时间与霍达的风险与资本管理委员会主任委员职务均与参考答案完全一致，附加信息亦无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

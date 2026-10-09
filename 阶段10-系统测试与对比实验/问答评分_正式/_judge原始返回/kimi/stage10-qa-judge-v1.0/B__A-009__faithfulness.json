@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-009",
+  "attempts": [
+    {
+      "answer_key": "B__A-009",
+      "attempt": 1,
+      "completion_tokens": 128,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 7.72,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4482,
+      "qid": "FQ-009",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:50:04+08:00",
+      "total_tokens": 4610
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:50:12+08:00",
+  "group": "B",
+  "input_sha256": "d059fbc345c9d19fb9bd5a7cbfc9b0a742009e8e70c1943688146634cc851b10",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "四项要素均由证据1直接支撑，发行主体、董事会决议、规模与期限等补充说法也见于证据2，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-009",
+  "raw_text": "{\"score\": 2, \"reason\": \"四项要素均由证据1直接支撑，发行主体、董事会决议、规模与期限等补充说法也见于证据2，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

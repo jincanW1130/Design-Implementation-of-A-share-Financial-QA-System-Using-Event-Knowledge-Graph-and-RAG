@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-089",
+  "attempts": [
+    {
+      "answer_key": "B__A-089",
+      "attempt": 1,
+      "completion_tokens": 275,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 11.409,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4870,
+      "qid": "FQ-089",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:38:03+08:00",
+      "total_tokens": 5145
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:38:14+08:00",
+  "group": "B",
+  "input_sha256": "0f8a7aa0d566275af690cfedb34ec198f86d03ae57e1e4d1864437c16809a0b6",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两个日期（7月15日、7月16日）与7月回购10,780,847股均已答出，参考答案关键信息全覆盖，0.28%占比仅括号补充，不影响完整性。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-089",
+  "raw_text": "{\"score\": 2, \"reason\": \"两个日期（7月15日、7月16日）与7月回购10,780,847股均已答出，参考答案关键信息全覆盖，0.28%占比仅括号补充，不影响完整性。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

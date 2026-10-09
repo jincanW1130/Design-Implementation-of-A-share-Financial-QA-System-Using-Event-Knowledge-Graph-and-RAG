@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-041",
+  "attempts": [
+    {
+      "answer_key": "A__A-041",
+      "attempt": 1,
+      "completion_tokens": 206,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 9.689,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4185,
+      "qid": "FQ-041",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:01:35+08:00",
+      "total_tokens": 4391
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T19:01:45+08:00",
+  "group": "A",
+  "input_sha256": "397bd5a203a8aa4aee35514648881b611cab1d0c2569e02ef52e6d82d6c36c30",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案的两个要点（算力Token贷授信、缤纷生活APP关停迁移）被评答案均未给出，仅称证据未覆盖中国银行，正确内容为零。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-041",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案的两个要点（算力Token贷授信、缤纷生活APP关停迁移）被评答案均未给出，仅称证据未覆盖中国银行，正确内容为零。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

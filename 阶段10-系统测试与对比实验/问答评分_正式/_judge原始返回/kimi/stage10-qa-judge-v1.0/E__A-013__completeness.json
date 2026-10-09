@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-013",
+  "attempts": [
+    {
+      "answer_key": "E__A-013",
+      "attempt": 1,
+      "completion_tokens": 87,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 9.82,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4189,
+      "qid": "FQ-013",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:31:15+08:00",
+      "total_tokens": 4276
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:31:25+08:00",
+  "group": "E",
+  "input_sha256": "b414b10eb5b7142892ae25a5af70928a9bbf85d17def119c3d18c655bf2276d3",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案两项关键信息：文件名称《经营者集中反垄断审查不予禁止决定书》与出具机构国家市场监督管理总局，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-013",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案两项关键信息：文件名称《经营者集中反垄断审查不予禁止决定书》与出具机构国家市场监督管理总局，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

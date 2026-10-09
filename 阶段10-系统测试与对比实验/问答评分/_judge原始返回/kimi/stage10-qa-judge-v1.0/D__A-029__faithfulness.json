@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-029",
+  "attempts": [
+    {
+      "answer_key": "D__A-029",
+      "attempt": 1,
+      "completion_tokens": 263,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 12.033,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5329,
+      "qid": "PE-29",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:05:53+08:00",
+      "total_tokens": 5592
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:06:05+08:00",
+  "group": "D",
+  "input_sha256": "2527664f7257e37998e6a3a7fe8e7568c0d5755ebafac6d23f76bbf19fd01557",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "期权代码、行权期、有效期、法规依据及限制行权期等说法均能在证据1、证据2中找到对应支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-29",
+  "raw_text": "{\"score\": 2, \"reason\": \"期权代码、行权期、有效期、法规依据及限制行权期等说法均能在证据1、证据2中找到对应支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

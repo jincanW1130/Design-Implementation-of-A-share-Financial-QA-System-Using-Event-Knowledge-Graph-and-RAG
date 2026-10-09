@@ -1,0 +1,47 @@
+{
+  "answer_key": "E__A-056",
+  "attempts": [
+    {
+      "answer_key": "E__A-056",
+      "attempt": 1,
+      "completion_tokens": 316,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "json_recovered": true,
+      "judge": "kimi",
+      "latency_seconds": 13.697,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4066,
+      "qid": "FQ-056",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:06:12+08:00",
+      "total_tokens": 4382
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:06:26+08:00",
+  "group": "E",
+  "input_sha256": "0eef4e33eac3648b9788c95e8f87f1285b8cda1f5685318c306ed7b6153ca752",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "_recovered_from_malformed_json": true,
+    "reason": "答案以披露日期超出区间为由拒绝作答，未给出王维一致行动人云拥合伙等关键信息，属大量遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-056",
+  "raw_text": "{\"score\": 0, \"reason\": 答案以披露日期超出区间为由拒绝作答，未给出王维一致行动人云拥合伙等关键信息，属大量遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-080",
+  "attempts": [
+    {
+      "answer_key": "A__A-080",
+      "attempt": 1,
+      "completion_tokens": 1699,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 11.471,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4560,
+      "qid": "FQ-080",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:42:21+08:00",
+      "total_tokens": 6259
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:42:32+08:00",
+  "group": "A",
+  "input_sha256": "a3bfbb96f01db14e76e2de7d871eb8e95ddcde7dc9cc82973c84427b2f39473b",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "签署日期、品种规格、批准文号、持有人变更及地址等所有事实性说法均能在可用证据中找到原文支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-080",
+  "raw_text": "{\"score\": 2, \"reason\": \"签署日期、品种规格、批准文号、持有人变更及地址等所有事实性说法均能在可用证据中找到原文支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

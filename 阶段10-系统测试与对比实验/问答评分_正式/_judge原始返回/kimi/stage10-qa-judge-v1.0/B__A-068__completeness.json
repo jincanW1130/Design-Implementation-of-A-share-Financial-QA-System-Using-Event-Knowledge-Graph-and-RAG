@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-068",
+  "attempts": [
+    {
+      "answer_key": "B__A-068",
+      "attempt": 1,
+      "completion_tokens": 199,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 8.706,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5183,
+      "qid": "FQ-068",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:32:03+08:00",
+      "total_tokens": 5382
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:32:12+08:00",
+  "group": "B",
+  "input_sha256": "6b5c8319d63b02df71bc2871e0f8eaf85f0b51a3c410424109bd7b5fb4bdce56",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案全部关键信息（议案名称、2亿元金额、原项目与新项目、实施主体中天储能、2027年10月投产）均被完整覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-068",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案全部关键信息（议案名称、2亿元金额、原项目与新项目、实施主体中天储能、2027年10月投产）均被完整覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

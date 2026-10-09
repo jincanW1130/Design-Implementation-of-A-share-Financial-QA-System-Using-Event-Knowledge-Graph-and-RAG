@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-094",
+  "attempts": [
+    {
+      "answer_key": "E__A-094",
+      "attempt": 1,
+      "completion_tokens": 154,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 7.678,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5060,
+      "qid": "FQ-094",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:36:11+08:00",
+      "total_tokens": 5214
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:36:19+08:00",
+  "group": "E",
+  "input_sha256": "d6f60d27c71c2b32b3bb68135893da67ba2b145461187d8f344fd6fc53e0f9b6",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "说明会日期、时间、方式均有证据3原文支撑；第二问明确声明证据不足未编造机构，全部事实性说法均基于可用证据",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-094",
+  "raw_text": "{\"score\": 2, \"reason\": \"说明会日期、时间、方式均有证据3原文支撑；第二问明确声明证据不足未编造机构，全部事实性说法均基于可用证据\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

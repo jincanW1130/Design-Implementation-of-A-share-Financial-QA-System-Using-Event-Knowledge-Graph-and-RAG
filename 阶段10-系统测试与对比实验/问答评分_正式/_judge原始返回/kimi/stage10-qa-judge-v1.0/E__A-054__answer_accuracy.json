@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-054",
+  "attempts": [
+    {
+      "answer_key": "E__A-054",
+      "attempt": 1,
+      "completion_tokens": 398,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 13.305,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5270,
+      "qid": "FQ-054",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:04:20+08:00",
+      "total_tokens": 5668
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:04:34+08:00",
+  "group": "E",
+  "input_sha256": "f80a056081eac2fc3ea5173500d6c8fe33a18a3389923fb62917e7c104bddd37",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "仅正确确认胡望明、高祥明、姚林龙三人董事身份，但漏掉董事长职务及刘宝军、周学东等多数人员，还混入未当选的杨兆，属部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-054",
+  "raw_text": "{\"score\": 1, \"reason\": \"仅正确确认胡望明、高祥明、姚林龙三人董事身份，但漏掉董事长职务及刘宝军、周学东等多数人员，还混入未当选的杨兆，属部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

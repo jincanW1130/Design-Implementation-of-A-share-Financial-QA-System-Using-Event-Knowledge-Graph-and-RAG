@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-079",
+  "attempts": [
+    {
+      "answer_key": "A__A-079",
+      "attempt": 1,
+      "completion_tokens": 1087,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 32.172,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4305,
+      "qid": "FQ-079",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:56:17+08:00",
+      "total_tokens": 5392
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:56:49+08:00",
+  "group": "A",
+  "input_sha256": "0fe4e83d38f6cacbebbb7c042560974fd1d5e8bfc97e48a7ff344f6c5bae0231",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件及井别、设计井深、作业时间、总包服务商均已覆盖，但漏掉金标准中注册资本47.72亿元及地理位置等细节，属基本覆盖。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-079",
+  "raw_text": "{\"score\": 1, \"reason\": \"事件及井别、设计井深、作业时间、总包服务商均已覆盖，但漏掉金标准中注册资本47.72亿元及地理位置等细节，属基本覆盖。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-104",
+  "attempts": [
+    {
+      "answer_key": "E__A-104",
+      "attempt": 1,
+      "completion_tokens": 110,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 6.45,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4323,
+      "qid": "FQ-104",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:48:15+08:00",
+      "total_tokens": 4433
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:48:21+08:00",
+  "group": "E",
+  "input_sha256": "5adff062f0decf491ee1edaa2d0a0874447b021587e6407d419a9edea1605cda",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确给出登记机构为中国证券登记结算有限责任公司上海分公司、授予数量367,989,000股，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-104",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案正确给出登记机构为中国证券登记结算有限责任公司上海分公司、授予数量367,989,000股，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

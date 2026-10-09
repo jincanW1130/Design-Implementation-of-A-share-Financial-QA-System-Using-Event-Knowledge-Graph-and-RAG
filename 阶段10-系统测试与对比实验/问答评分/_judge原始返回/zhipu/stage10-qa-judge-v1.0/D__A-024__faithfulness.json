@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-024",
+  "attempts": [
+    {
+      "answer_key": "D__A-024",
+      "attempt": 1,
+      "completion_tokens": 486,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 9.993,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5014,
+      "qid": "PE-24",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:49:15+08:00",
+      "total_tokens": 5500
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:49:25+08:00",
+  "group": "D",
+  "input_sha256": "ee3ab4a626a50912980e9df33212887baf838f5784fc0f9e56432e6c8e680145",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案核心事实（573→571.60元/股、计算公式、8月10日除权除息生效）均可在证据2中逐句对应，无无依据编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-24",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案核心事实（573→571.60元/股、计算公式、8月10日除权除息生效）均可在证据2中逐句对应，无无依据编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

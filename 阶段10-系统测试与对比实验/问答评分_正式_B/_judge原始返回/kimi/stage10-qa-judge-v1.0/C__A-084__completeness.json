@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-084",
+  "attempts": [
+    {
+      "answer_key": "C__A-084",
+      "attempt": 1,
+      "completion_tokens": 443,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 17.94,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5308,
+      "qid": "FQ-084",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:09:17+08:00",
+      "total_tokens": 5751
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:09:35+08:00",
+  "group": "C",
+  "input_sha256": "361505e80bf3562bb89dbbde0c946057b04498f92e26f05b11dec9a5089f5798",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "授权事件、标的（博凡格鲁肽/GLP-1）与欧洲市场均覆盖，但漏掉参考答案中‘8月10日单日落地三起重磅BD交易之一’这一关键信息",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-084",
+  "raw_text": "{\"score\": 1, \"reason\": \"授权事件、标的（博凡格鲁肽/GLP-1）与欧洲市场均覆盖，但漏掉参考答案中‘8月10日单日落地三起重磅BD交易之一’这一关键信息\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-077",
+  "attempts": [
+    {
+      "answer_key": "D__A-077",
+      "attempt": 1,
+      "completion_tokens": 1401,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 26.256,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4360,
+      "qid": "FQ-077",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:07:01+08:00",
+      "total_tokens": 5761
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:07:28+08:00",
+  "group": "D",
+  "input_sha256": "bd6e20728fe7b790de2f94c19d035521553c1c5482a241347a11e2544bfacbeb",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "项目名、招标人、中标金额、公示日期等均有证据支撑，仅引述「代理招标机构」与证据原文「招标代理机构」不符，属少量不严谨",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-077",
+  "raw_text": "{\"score\": 1, \"reason\": \"项目名、招标人、中标金额、公示日期等均有证据支撑，仅引述「代理招标机构」与证据原文「招标代理机构」不符，属少量不严谨\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

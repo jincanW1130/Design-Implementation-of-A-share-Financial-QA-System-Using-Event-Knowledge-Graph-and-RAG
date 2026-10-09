@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-012",
+  "attempts": [
+    {
+      "answer_key": "B__A-012",
+      "attempt": 1,
+      "completion_tokens": 131,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 6.718,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4590,
+      "qid": "PE-12",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:56:39+08:00",
+      "total_tokens": 4721
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:56:46+08:00",
+  "group": "B",
+  "input_sha256": "cc2dbed1cd44cce8fa3c31e56874db405bc769ba9132aae225a270aa2e87f808",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案全部关键信息：协议名称、2026年9月7日签订、期限至2027年12月31日，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-12",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案全部关键信息：协议名称、2026年9月7日签订、期限至2027年12月31日，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-087",
+  "attempts": [
+    {
+      "answer_key": "B__A-087",
+      "attempt": 1,
+      "completion_tokens": 131,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 6.159,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5170,
+      "qid": "FQ-087",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:36:53+08:00",
+      "total_tokens": 5301
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:36:59+08:00",
+  "group": "B",
+  "input_sha256": "b9244158feb47bd0254b23087caf990996bcb3a9e712116a0544fa82b4cc4283",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "行权期限、数量、人数、行权价及两类注销份数（0.45万份、303.006万份）均与参考答案一致，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-087",
+  "raw_text": "{\"score\": 2, \"reason\": \"行权期限、数量、人数、行权价及两类注销份数（0.45万份、303.006万份）均与参考答案一致，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

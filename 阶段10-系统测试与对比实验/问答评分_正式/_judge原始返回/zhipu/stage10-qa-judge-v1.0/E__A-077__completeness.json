@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-077",
+  "attempts": [
+    {
+      "answer_key": "E__A-077",
+      "attempt": 1,
+      "completion_tokens": 590,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 9.386,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4060,
+      "qid": "FQ-077",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:12:21+08:00",
+      "total_tokens": 4650
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T01:12:30+08:00",
+  "group": "E",
+  "input_sha256": "d6be78d5dc26e4c6a0ee444ae2b3ddf521d81b58ade98edcf8ff017f158e471d",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案关键信息：项目名称、双方角色、招标人及中标金额144,141,970.11元均无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-077",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案关键信息：项目名称、双方角色、招标人及中标金额144,141,970.11元均无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

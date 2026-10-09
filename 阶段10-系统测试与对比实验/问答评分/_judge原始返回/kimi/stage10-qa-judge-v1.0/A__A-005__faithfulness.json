@@ -1,0 +1,44 @@
+{
+  "answer_key": "A__A-005",
+  "attempts": [
+    {
+      "answer_key": "A__A-005",
+      "attempt": 1,
+      "completion_tokens": 368,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 19.57,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4219,
+      "qid": "PE-05",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:24:04+08:00",
+      "total_tokens": 4587
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:24:24+08:00",
+  "group": "A",
+  "input_sha256": "4c42604136ea48d147de67d7eca55180726105c1d3fd98a345d8fe93e0e39ed3",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两期债券的发行日、到账日、起息日、品种简称、金额与利率，以及对第二期科创公司债的区分说明均可在所给证据中逐条找到支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-05",
+  "raw_text": "{\"score\": 2, \"reason\": \"两期债券的发行日、到账日、起息日、品种简称、金额与利率，以及对第二期科创公司债的区分说明均可在所给证据中逐条找到支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

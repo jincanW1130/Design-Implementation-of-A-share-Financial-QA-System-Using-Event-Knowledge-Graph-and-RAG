@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-064",
+  "attempts": [
+    {
+      "answer_key": "E__A-064",
+      "attempt": 1,
+      "completion_tokens": 252,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 10.337,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5622,
+      "qid": "FQ-064",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:12:32+08:00",
+      "total_tokens": 5874
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:12:43+08:00",
+  "group": "E",
+  "input_sha256": "e590d24b5e93f500636fedcb1168eeba36dc05c395c9805e926ebba6494d1110",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确识别事件为2026年第二次临时股东会，并准确列出涉及中国重型汽车集团的两项关联交易议案，与金标准一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-064",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案正确识别事件为2026年第二次临时股东会，并准确列出涉及中国重型汽车集团的两项关联交易议案，与金标准一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-110",
+  "attempts": [
+    {
+      "answer_key": "D__A-110",
+      "attempt": 1,
+      "completion_tokens": 280,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 10.086,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4493,
+      "qid": "FQ-110",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:10:04+08:00",
+      "total_tokens": 4773
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:10:15+08:00",
+  "group": "D",
+  "input_sha256": "9c76f222d98c68028fd03a879ee00c4be59baf5c3a5c01aa708b647fe0377ef5",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "控股股东表述、持股数据、质押担保等事实均可在证据3、4、7中逐一对应，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-110",
+  "raw_text": "{\"score\": 2, \"reason\": \"控股股东表述、持股数据、质押担保等事实均可在证据3、4、7中逐一对应，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

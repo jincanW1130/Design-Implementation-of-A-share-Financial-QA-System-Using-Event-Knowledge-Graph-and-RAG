@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-048",
+  "attempts": [
+    {
+      "answer_key": "E__A-048",
+      "attempt": 1,
+      "completion_tokens": 680,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 22.509,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5261,
+      "qid": "FQ-048",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:54:55+08:00",
+      "total_tokens": 5941
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:55:18+08:00",
+  "group": "E",
+  "input_sha256": "e3124be985d085e07c9070a7466198a04e6457d50f2c0557d2f76cba40502354",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "覆盖参考答案②（8月22日半年报披露、8月24日业绩说明会），但完全遗漏①固定资产投资调整至170.15亿元事项，属部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-048",
+  "raw_text": "{\"score\": 1, \"reason\": \"覆盖参考答案②（8月22日半年报披露、8月24日业绩说明会），但完全遗漏①固定资产投资调整至170.15亿元事项，属部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

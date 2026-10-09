@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-089",
+  "attempts": [
+    {
+      "answer_key": "A__A-089",
+      "attempt": 1,
+      "completion_tokens": 1482,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 24.623,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4542,
+      "qid": "FQ-089",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:01:41+08:00",
+      "total_tokens": 6024
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:02:05+08:00",
+  "group": "A",
+  "input_sha256": "a0583d186b5d7b3401849c17fd1f386657462205a072951da10d85170f5c5d89",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "登记日、专户持股2,535,759股等说法均有可用证据支撑，未编造7月回购数，缺项如实声明",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-089",
+  "raw_text": "{\"score\": 2, \"reason\": \"登记日、专户持股2,535,759股等说法均有可用证据支撑，未编造7月回购数，缺项如实声明\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

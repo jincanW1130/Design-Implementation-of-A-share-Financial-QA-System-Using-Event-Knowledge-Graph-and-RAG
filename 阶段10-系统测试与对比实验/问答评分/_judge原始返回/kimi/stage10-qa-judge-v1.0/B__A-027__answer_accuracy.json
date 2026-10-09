@@ -1,0 +1,44 @@
+{
+  "answer_key": "B__A-027",
+  "attempts": [
+    {
+      "answer_key": "B__A-027",
+      "attempt": 1,
+      "completion_tokens": 228,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 11.103,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4941,
+      "qid": "PE-27",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:14:49+08:00",
+      "total_tokens": 5169
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T16:15:00+08:00",
+  "group": "B",
+  "input_sha256": "1ff7db46a0761549ca088facc6a6694201323b9af9cf1be32d7ba032461f79d4",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "仅卖方（四川天邑康和通信股份有限公司）答对；买方两家主体与签署时间2026年7月13日均未答出，属部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-27",
+  "raw_text": "{\"score\": 1, \"reason\": \"仅卖方（四川天邑康和通信股份有限公司）答对；买方两家主体与签署时间2026年7月13日均未答出，属部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

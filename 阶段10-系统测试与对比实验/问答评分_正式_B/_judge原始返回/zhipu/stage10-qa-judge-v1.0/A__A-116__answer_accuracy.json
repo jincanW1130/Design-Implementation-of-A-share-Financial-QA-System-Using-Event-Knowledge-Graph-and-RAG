@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-116",
+  "attempts": [
+    {
+      "answer_key": "A__A-116",
+      "attempt": 1,
+      "completion_tokens": 379,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 6.795,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3791,
+      "qid": "FQ-116",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:05:21+08:00",
+      "total_tokens": 4170
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:05:27+08:00",
+  "group": "A",
+  "input_sha256": "6852fab92cbd1694731cf1996e7bdb2e8e2adfd834fd30750484fc37ba4ebc73",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案依据2026-08-21公告明确指出电气香港为上海电气集团全资子公司，与参考答案核心事实完全一致，判2分。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-116",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案依据2026-08-21公告明确指出电气香港为上海电气集团全资子公司，与参考答案核心事实完全一致，判2分。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

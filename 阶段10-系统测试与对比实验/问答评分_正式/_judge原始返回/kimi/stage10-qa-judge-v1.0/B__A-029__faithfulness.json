@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-029",
+  "attempts": [
+    {
+      "answer_key": "B__A-029",
+      "attempt": 1,
+      "completion_tokens": 566,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 19.454,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5965,
+      "qid": "FQ-029",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:00:27+08:00",
+      "total_tokens": 6531
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:00:47+08:00",
+  "group": "B",
+  "input_sha256": "15269db0a4f937e71fe5b9b412d6b6a55d45eff43b8451b6a4eb7ff36b7a98f0",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "交易结构、批复文号、过户、验资数据、登记日期、新增股数及锁定期等全部事实均可被证据3/5/6/7/8逐条支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-029",
+  "raw_text": "{\"score\": 2, \"reason\": \"交易结构、批复文号、过户、验资数据、登记日期、新增股数及锁定期等全部事实均可被证据3/5/6/7/8逐条支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

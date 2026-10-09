@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-045",
+  "attempts": [
+    {
+      "answer_key": "A__A-045",
+      "attempt": 1,
+      "completion_tokens": 552,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 20.133,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3997,
+      "qid": "FQ-045",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:04:08+08:00",
+      "total_tokens": 4549
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T19:04:28+08:00",
+  "group": "A",
+  "input_sha256": "eaa1e587ba8228952dfddf8c3f706e910c18968f1b8dda6c5c8387fbf44151d7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件（停产检修结束、复产）、装置（MDI 40万吨/年、TDI 25万吨/年等）及起始日期2026年7月17日均与参考答案一致，核心事实全部答对。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-045",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件（停产检修结束、复产）、装置（MDI 40万吨/年、TDI 25万吨/年等）及起始日期2026年7月17日均与参考答案一致，核心事实全部答对。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

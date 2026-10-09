@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-095",
+  "attempts": [
+    {
+      "answer_key": "A__A-095",
+      "attempt": 1,
+      "completion_tokens": 778,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 13.84,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4547,
+      "qid": "FQ-095",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:02:07+08:00",
+      "total_tokens": 5325
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:02:20+08:00",
+  "group": "A",
+  "input_sha256": "0f1e77946e90efb050040a484820651f8b5aefb424cfc55f5f3f7cc4763314da",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "累计回购股数、金额及A股资金下限10亿元均正确，但H股回购授权上限5亿港元未答出，属部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-095",
+  "raw_text": "{\"score\": 1, \"reason\": \"累计回购股数、金额及A股资金下限10亿元均正确，但H股回购授权上限5亿港元未答出，属部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

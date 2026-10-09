@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-026",
+  "attempts": [
+    {
+      "answer_key": "B__A-026",
+      "attempt": 1,
+      "completion_tokens": 358,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 14.083,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5473,
+      "qid": "PE-26",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:07:27+08:00",
+      "total_tokens": 5831
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:07:41+08:00",
+  "group": "B",
+  "input_sha256": "22c176c023808d0af8a198c142aeefa27ab630f85bdf5c2925059daa6cac6192",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案为两份框架协议，答案仅答对家庭FTTR（2026-2027）一份且正确，遗漏天翼智屏（2026）一份，属部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-26",
+  "raw_text": "{\"score\": 1, \"reason\": \"参考答案为两份框架协议，答案仅答对家庭FTTR（2026-2027）一份且正确，遗漏天翼智屏（2026）一份，属部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-042",
+  "attempts": [
+    {
+      "answer_key": "B__A-042",
+      "attempt": 1,
+      "completion_tokens": 154,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 8.97,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4658,
+      "qid": "FQ-042",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:08:34+08:00",
+      "total_tokens": 4812
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:08:43+08:00",
+  "group": "B",
+  "input_sha256": "95d17d0e5deb4768478c99d7b653e8a12a09aeaaf88746ae16067b210b7cb19e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖金标准两点：审计费用372万（292+80）、增30万，及业绩预告中纳入合并范围的说明，且无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-042",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖金标准两点：审计费用372万（292+80）、增30万，及业绩预告中纳入合并范围的说明，且无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

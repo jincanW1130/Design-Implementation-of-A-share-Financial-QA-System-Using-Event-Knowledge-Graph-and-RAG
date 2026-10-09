@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-078",
+  "attempts": [
+    {
+      "answer_key": "E__A-078",
+      "attempt": 1,
+      "completion_tokens": 460,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 8.122,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4716,
+      "qid": "FQ-078",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:31:30+08:00",
+      "total_tokens": 5176
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:31:38+08:00",
+  "group": "E",
+  "input_sha256": "f277d896b897c1a71133c3203ac32e329457b5c6ac3704d880214da41b7671e6",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "事件为2022-02-15签订22/05石油合同，100%勘探权益、49%开采权益、15年生产期均与参考答案一致，完全正确",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-078",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件为2022-02-15签订22/05石油合同，100%勘探权益、49%开采权益、15年生产期均与参考答案一致，完全正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

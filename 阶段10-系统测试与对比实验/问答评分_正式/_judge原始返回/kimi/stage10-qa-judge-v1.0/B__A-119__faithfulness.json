@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-119",
+  "attempts": [
+    {
+      "answer_key": "B__A-119",
+      "attempt": 1,
+      "completion_tokens": 588,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 17.787,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4369,
+      "qid": "FQ-119",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:57:00+08:00",
+      "total_tokens": 4957
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:57:18+08:00",
+  "group": "B",
+  "input_sha256": "6d0620ecfeae8435672756a32710ead77cafc142e861cff77ef9de349235893d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "持股比例、担保信托登记安排、表决权委托及'实际控制人不变、不构成要约收购'等说法均与证据2、证据9原文一致，无编造",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-119",
+  "raw_text": "{\"score\": 2, \"reason\": \"持股比例、担保信托登记安排、表决权委托及'实际控制人不变、不构成要约收购'等说法均与证据2、证据9原文一致，无编造\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-016",
+  "attempts": [
+    {
+      "answer_key": "C__A-016",
+      "attempt": 1,
+      "completion_tokens": 380,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 6.305,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4738,
+      "qid": "FQ-016",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:40:49+08:00",
+      "total_tokens": 5118
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:40:55+08:00",
+  "group": "C",
+  "input_sha256": "ec4a8e4881b7b052746b085e7603dba0d412bb3a404bc2763fdb6beabd151638",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "复函机构及债券发行时间、金额、赎回日等事实性说法均被证据1、证据2逐字支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-016",
+  "raw_text": "{\"score\": 2, \"reason\": \"复函机构及债券发行时间、金额、赎回日等事实性说法均被证据1、证据2逐字支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

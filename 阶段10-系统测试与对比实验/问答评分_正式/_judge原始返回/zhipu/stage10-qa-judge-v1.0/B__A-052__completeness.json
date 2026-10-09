@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-052",
+  "attempts": [
+    {
+      "answer_key": "B__A-052",
+      "attempt": 1,
+      "completion_tokens": 577,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 10.895,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5310,
+      "qid": "FQ-052",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:35:04+08:00",
+      "total_tokens": 5887
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:35:15+08:00",
+  "group": "B",
+  "input_sha256": "1193ad734f4f924581bdd4b8e8c5c2058eb15b8defcbe3daaeecefe332f66843",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案含5人，被评答案仅覆盖董事长郑宗强1人，罗汉武、窦晓波、李芳、胡顺靖全部遗漏，关键信息大量遗漏，判0。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-052",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案含5人，被评答案仅覆盖董事长郑宗强1人，罗汉武、窦晓波、李芳、胡顺靖全部遗漏，关键信息大量遗漏，判0。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

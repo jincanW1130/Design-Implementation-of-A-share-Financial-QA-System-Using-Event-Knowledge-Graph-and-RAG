@@ -1,0 +1,32 @@
+{
+  "checks": {
+    "failed": [],
+    "question_counts": {
+      "all": 120,
+      "core": 108,
+      "stress": 12
+    },
+    "question_set": "阶段10-系统测试与对比实验/测试集/questions.jsonl",
+    "warned": [
+      {
+        "detail": "42 题的 gold 文档全部落在「含 <2 个不同事件日期」的文档里（例如 FQ-001、FQ-002、FQ-003、FQ-004、FQ-005、FQ-006）。D／E 的时间过滤只作用于**图谱侧候选**，故这不是阻断项；但这类题上「时间约束」很难产生可观察差异，建议登记为已知限制",
+        "item": "时间可过滤性（软提示）"
+      }
+    ]
+  },
+  "frozen_sentinel": "STAGE8_FORBID_MODEL_CALLS（代码\\问答\\config.assert_model_calls_allowed）",
+  "generated_at": "2026-10-07T20:51:23",
+  "generated_by": "阶段10-系统测试与对比实验/工具/跑正式对照.py",
+  "groups_requested": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "B1"
+  ],
+  "guarantee": "本档不含任何生成路径：--dry-run／--preflight／--report-only／--check-token-account 四档在代码上都不进入逐题生成循环；--preflight 的 B1 子进程自检另用冻结哨兵 STAGE8_FORBID_MODEL_CALLS=1 在发请求前拦下。",
+  "mode": "--preflight",
+  "model_calls_made_by_this_mode": 0,
+  "note": "本文件是「本次没有发生模型调用」的登记，用于与 跑法说明.md 的门槛条款互相印证；它不是模型调用次数的权威计数——权威计数在正式跑的 answer_trace.jsonl 的 attempts 字段里逐题可数。"
+}

@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-023",
+  "attempts": [
+    {
+      "answer_key": "D__A-023",
+      "attempt": 1,
+      "completion_tokens": 1493,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 40.265,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4445,
+      "qid": "PE-23",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:00:24+08:00",
+      "total_tokens": 5938
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:01:04+08:00",
+  "group": "D",
+  "input_sha256": "4e8b6afcd88021b01ff47f1e6db8e9d39718b2d79ee98aa0f10e935f4983aaeb",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案如实说明证据不足，对各证据的描述均与原文相符，唯一具名说法（杨兆为独立董事候选人）直接源自证据1标题，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-23",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案如实说明证据不足，对各证据的描述均与原文相符，唯一具名说法（杨兆为独立董事候选人）直接源自证据1标题，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

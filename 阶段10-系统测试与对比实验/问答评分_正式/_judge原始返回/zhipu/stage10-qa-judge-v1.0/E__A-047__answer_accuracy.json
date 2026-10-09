@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-047",
+  "attempts": [
+    {
+      "answer_key": "E__A-047",
+      "attempt": 1,
+      "completion_tokens": 504,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 9.211,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4333,
+      "qid": "FQ-047",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:09:23+08:00",
+      "total_tokens": 4837
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T00:09:32+08:00",
+  "group": "E",
+  "input_sha256": "4ed71c7535af71aeb97be009a8b427e1773dc2b435a7b22deeddbb2c7c3b9643",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "事件（补充质押）、质押数量68,909,674股、占比8.02%、质权人农行珠海分行均与参考答案一致，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-047",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件（补充质押）、质押数量68,909,674股、占比8.02%、质权人农行珠海分行均与参考答案一致，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

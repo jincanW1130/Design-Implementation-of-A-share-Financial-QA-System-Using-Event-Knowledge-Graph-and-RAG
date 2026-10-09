@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-098",
+  "attempts": [
+    {
+      "answer_key": "B__A-098",
+      "attempt": 1,
+      "completion_tokens": 320,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 9.562,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5216,
+      "qid": "FQ-098",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:44:30+08:00",
+      "total_tokens": 5536
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:44:40+08:00",
+  "group": "B",
+  "input_sha256": "eb364e888ebb653586e092ddf71993bc2be56d71c4e17c5e5f67ba7e458a9d8a",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "中标、签约各项细节均能在证据3/1/6/8中找到原文，大禹节水联合体及青龙管业未参与的表述也有证据9/7支撑，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-098",
+  "raw_text": "{\"score\": 2, \"reason\": \"中标、签约各项细节均能在证据3/1/6/8中找到原文，大禹节水联合体及青龙管业未参与的表述也有证据9/7支撑，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

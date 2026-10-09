@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-037",
+  "attempts": [
+    {
+      "answer_key": "D__A-037",
+      "attempt": 1,
+      "completion_tokens": 1203,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 23.289,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4630,
+      "qid": "FQ-037",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:57:30+08:00",
+      "total_tokens": 5833
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:57:53+08:00",
+  "group": "D",
+  "input_sha256": "06518d891a3f9d57ae9e45b6af70dab109d51cb3ebf8ffb3dda5e3fa6e1e6304",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "两次中标主体、金额（30441.89万元/1.7亿元）、占比及风险提示均见于证据1-3，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-037",
+  "raw_text": "{\"score\": 2, \"reason\": \"两次中标主体、金额（30441.89万元/1.7亿元）、占比及风险提示均见于证据1-3，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

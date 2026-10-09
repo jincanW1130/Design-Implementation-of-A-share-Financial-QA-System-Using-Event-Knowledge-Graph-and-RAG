@@ -1,0 +1,44 @@
+{
+  "answer_key": "A__A-027",
+  "attempts": [
+    {
+      "answer_key": "A__A-027",
+      "attempt": 1,
+      "completion_tokens": 471,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 19.024,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4619,
+      "qid": "PE-27",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:14:10+08:00",
+      "total_tokens": 5090
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:14:29+08:00",
+  "group": "A",
+  "input_sha256": "1b9d8352bc481387c6b802c2af871398eb1c22b93b05e26a981fc0ff81e27c02",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案所有事实性表述（协议名称、卖方、披露日7月17日、有效期至2027年2月28日等）均能在可用证据中找到支撑，且对证据未载明的买方全称和签署日期如实声明证据不足，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-27",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案所有事实性表述（协议名称、卖方、披露日7月17日、有效期至2027年2月28日等）均能在可用证据中找到支撑，且对证据未载明的买方全称和签署日期如实声明证据不足，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

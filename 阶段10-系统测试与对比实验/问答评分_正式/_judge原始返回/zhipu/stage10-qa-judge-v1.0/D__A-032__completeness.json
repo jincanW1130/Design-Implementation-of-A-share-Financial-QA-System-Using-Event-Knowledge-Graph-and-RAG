@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-032",
+  "attempts": [
+    {
+      "answer_key": "D__A-032",
+      "attempt": 1,
+      "completion_tokens": 883,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 16.497,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5115,
+      "qid": "FQ-032",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:56:12+08:00",
+      "total_tokens": 5998
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:56:29+08:00",
+  "group": "D",
+  "input_sha256": "d93b02ab754cba5580649c014fc5caba8fa9cd73aacaa2d2525de0185cfb5ba7",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案以证据不足为由拒答，资产总额、所有者权益、营业收入、净利润四项关键数据均未覆盖，属大量遗漏。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-032",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案以证据不足为由拒答，资产总额、所有者权益、营业收入、净利润四项关键数据均未覆盖，属大量遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

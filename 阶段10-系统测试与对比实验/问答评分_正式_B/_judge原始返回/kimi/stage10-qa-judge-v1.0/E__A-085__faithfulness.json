@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-085",
+  "attempts": [
+    {
+      "answer_key": "E__A-085",
+      "attempt": 1,
+      "completion_tokens": 520,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 23.401,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5015,
+      "qid": "FQ-085",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:29:13+08:00",
+      "total_tokens": 5535
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:29:37+08:00",
+  "group": "E",
+  "input_sha256": "f9e751b097a03a0c3a3a043dfb66089583368ddf1a21c23031cbce168a8e8933",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核心数据（每10股派5元、总额3,724,298,992元、基数、14.08%比例）均有证据3/4支撑，但“不送红股”一说在可用证据中无表述，属少量不严谨。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-085",
+  "raw_text": "{\"score\": 1, \"reason\": \"核心数据（每10股派5元、总额3,724,298,992元、基数、14.08%比例）均有证据3/4支撑，但“不送红股”一说在可用证据中无表述，属少量不严谨。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

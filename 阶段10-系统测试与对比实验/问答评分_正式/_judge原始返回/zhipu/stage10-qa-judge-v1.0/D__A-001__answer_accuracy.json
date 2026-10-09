@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-001",
+  "attempts": [
+    {
+      "answer_key": "D__A-001",
+      "attempt": 1,
+      "completion_tokens": 218,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 3.961,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4421,
+      "qid": "FQ-001",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:52:31+08:00",
+      "total_tokens": 4639
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:52:35+08:00",
+  "group": "D",
+  "input_sha256": "2e98ce7f47956eadd5063197d8f669d246db80cd086da396a95868df74af4352",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "价格26.5441元/股、数量8,476,357股（占0.13%）、成交金额224,997,098.71元均与参考答案完全一致，无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-001",
+  "raw_text": "{\"score\": 2, \"reason\": \"价格26.5441元/股、数量8,476,357股（占0.13%）、成交金额224,997,098.71元均与参考答案完全一致，无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

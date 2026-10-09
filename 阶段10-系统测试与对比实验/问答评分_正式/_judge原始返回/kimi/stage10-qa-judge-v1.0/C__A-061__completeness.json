@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-061",
+  "attempts": [
+    {
+      "answer_key": "C__A-061",
+      "attempt": 1,
+      "completion_tokens": 454,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 16.17,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5074,
+      "qid": "FQ-061",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:32:24+08:00",
+      "total_tokens": 5528
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T18:32:40+08:00",
+  "group": "C",
+  "input_sha256": "986d396a7aa94bc73abca3c336d8bb278578865c4eeae8c079ac79c8c8d71038",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件性质、主债权最高余额15亿元、最高额连带责任保证方式及三年保证期间四项关键信息全部覆盖，且有证据支撑，信息完整",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-061",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件性质、主债权最高余额15亿元、最高额连带责任保证方式及三年保证期间四项关键信息全部覆盖，且有证据支撑，信息完整\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

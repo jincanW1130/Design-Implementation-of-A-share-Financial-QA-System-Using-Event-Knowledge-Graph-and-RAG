@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-099",
+  "attempts": [
+    {
+      "answer_key": "D__A-099",
+      "attempt": 1,
+      "completion_tokens": 2611,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 46.467,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5448,
+      "qid": "FQ-099",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:25:06+08:00",
+      "total_tokens": 8059
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:25:52+08:00",
+  "group": "D",
+  "input_sha256": "2eab21d3d05933581b8467724b5472fb38d9deebc19f16ef6b20d3f3f094f139",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "合同类型、工程名称、承包与分包主体、金额、关联关系及总承包背景均有可用证据直接支撑，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-099",
+  "raw_text": "{\"score\": 2, \"reason\": \"合同类型、工程名称、承包与分包主体、金额、关联关系及总承包背景均有可用证据直接支撑，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

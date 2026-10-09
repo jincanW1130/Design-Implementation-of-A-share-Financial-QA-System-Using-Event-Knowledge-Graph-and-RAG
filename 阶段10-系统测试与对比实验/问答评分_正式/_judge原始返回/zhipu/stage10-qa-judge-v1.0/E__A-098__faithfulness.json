@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-098",
+  "attempts": [
+    {
+      "answer_key": "E__A-098",
+      "attempt": 1,
+      "completion_tokens": 939,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 14.327,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5213,
+      "qid": "FQ-098",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:14:13+08:00",
+      "total_tokens": 6152
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:14:28+08:00",
+  "group": "E",
+  "input_sha256": "99385568901d934bf3c18d2155bea3c0ee5dacc5ed32526d650ed5cfddaf5322",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "中标金额、48个月交货期、2026-6-21公告日、合同双方及签约细节均能在证据3/6/7/10中找到，联合体成员描述与证据1/2/4一致，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-098",
+  "raw_text": "{\"score\": 2, \"reason\": \"中标金额、48个月交货期、2026-6-21公告日、合同双方及签约细节均能在证据3/6/7/10中找到，联合体成员描述与证据1/2/4一致，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

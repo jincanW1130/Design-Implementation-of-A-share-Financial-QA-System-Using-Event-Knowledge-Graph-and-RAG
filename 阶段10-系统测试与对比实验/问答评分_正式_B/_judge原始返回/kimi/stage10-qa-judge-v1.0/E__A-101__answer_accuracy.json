@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-101",
+  "attempts": [
+    {
+      "answer_key": "E__A-101",
+      "attempt": 1,
+      "completion_tokens": 136,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 6.184,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4422,
+      "qid": "FQ-101",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:45:45+08:00",
+      "total_tokens": 4558
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:45:52+08:00",
+  "group": "E",
+  "input_sha256": "d3fd4c2ecd9ed4a970f5b3ae949e443a1125117028c2412be195c9e004395a1c",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、签约价107,380,000元（含税）、设计费3,280,000元及通创九州40%参股关系均与参考答案一致，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-101",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、签约价107,380,000元（含税）、设计费3,280,000元及通创九州40%参股关系均与参考答案一致，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

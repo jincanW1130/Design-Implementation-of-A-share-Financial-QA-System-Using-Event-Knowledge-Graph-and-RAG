@@ -1,0 +1,436 @@
+{
+ "field_stats": {
+  "candidate_diff_added": {
+   "diff": 0,
+   "same": 30
+  },
+  "candidate_diff_counts": {
+   "diff": 0,
+   "same": 30
+  },
+  "candidate_diff_measurable": {
+   "diff": 0,
+   "same": 30
+  },
+  "candidate_diff_removed": {
+   "diff": 0,
+   "same": 30
+  },
+  "candidates_filtered": {
+   "diff": 0,
+   "same": 30
+  },
+  "candidates_unfiltered": {
+   "diff": 0,
+   "same": 30
+  },
+  "checks": {
+   "diff": 0,
+   "same": 30
+  },
+  "context_token_budget": {
+   "diff": 0,
+   "same": 30
+  },
+  "dual_hit_in_final": {
+   "diff": 0,
+   "same": 30
+  },
+  "evidence": {
+   "diff": 0,
+   "same": 30
+  },
+  "evidence_size": {
+   "diff": 0,
+   "same": 30
+  },
+  "final_evidence_chunk_ids": {
+   "diff": 0,
+   "same": 30
+  },
+  "g6_chunk_id_diff": {
+   "diff": 0,
+   "same": 30
+  },
+  "graph_audit": {
+   "diff": 0,
+   "same": 30
+  },
+  "graph_calls": {
+   "diff": 0,
+   "same": 30
+  },
+  "graph_events": {
+   "diff": 0,
+   "same": 30
+  },
+  "graph_evidence_in_final": {
+   "diff": 0,
+   "same": 30
+  },
+  "graph_evidence_in_final_count": {
+   "diff": 0,
+   "same": 30
+  },
+  "graph_path_count": {
+   "diff": 0,
+   "same": 30
+  },
+  "graph_payload": {
+   "diff": 0,
+   "same": 30
+  },
+  "group": {
+   "diff": 0,
+   "same": 30
+  },
+  "k": {
+   "diff": 0,
+   "same": 30
+  },
+  "n": {
+   "diff": 0,
+   "same": 30
+  },
+  "precision_fill": {
+   "diff": 0,
+   "same": 30
+  },
+  "priority_rule": {
+   "diff": 0,
+   "same": 30
+  },
+  "qid": {
+   "diff": 0,
+   "same": 30
+  },
+  "question": {
+   "diff": 0,
+   "same": 30
+  },
+  "schema": {
+   "diff": 0,
+   "same": 30
+  },
+  "segments": {
+   "diff": 0,
+   "same": 30
+  },
+  "structural_note": {
+   "diff": 0,
+   "same": 1
+  },
+  "switches": {
+   "diff": 0,
+   "same": 30
+  },
+  "time_filter": {
+   "diff": 0,
+   "same": 30
+  },
+  "token_account": {
+   "diff": 0,
+   "same": 30
+  }
+ },
+ "frozen_key_count": [
+  32,
+  33
+ ],
+ "frozen_rows": 30,
+ "frozen_schema": [
+  "stage7-pipeline-trace-1.0"
+ ],
+ "frozen_trace": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段07-RAG检索系统\\检索产出\\per_question_trace.jsonl",
+ "new_key_count": [
+  32,
+  33
+ ],
+ "new_rows": 30,
+ "new_schema": [
+  "stage7-pipeline-trace-1.0"
+ ],
+ "new_trace": "C:\\Users\\15129\\AppData\\Local\\Temp\\pre_C_trace.jsonl",
+ "per_question": [
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-01"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 9,
+   "evidence_len_old": 9,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-02"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-03"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-04"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-05"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-06"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-07"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-08"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-09"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-10"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-11"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 9,
+   "evidence_len_old": 9,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-12"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-13"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-14"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-15"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 8,
+   "evidence_len_old": 8,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-16"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-17"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-18"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 9,
+   "evidence_len_old": 9,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-19"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-20"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-21"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-22"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-23"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-24"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-25"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 9,
+   "evidence_len_old": 9,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-26"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-27"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-28"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 9,
+   "evidence_len_old": 9,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-29"
+  },
+  {
+   "differing_fields": [],
+   "diffs": {},
+   "evidence_len_new": 10,
+   "evidence_len_old": 10,
+   "evidence_order_identical": true,
+   "evidence_set_identical": true,
+   "qid": "PE-30"
+  }
+ ],
+ "qid_order_identical": true,
+ "qid_sets_identical": true,
+ "schema": "stage10-c-trace-equivalence-1.0",
+ "summary": {
+  "evidence_order_identical": 30,
+  "evidence_order_identical_rate": 1.0,
+  "evidence_set_identical": 30,
+  "questions": 30,
+  "rows_identical_on_all_fields": 30
+ }
+}

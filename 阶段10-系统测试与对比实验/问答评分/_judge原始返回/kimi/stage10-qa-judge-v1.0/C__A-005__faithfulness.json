@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-005",
+  "attempts": [
+    {
+      "answer_key": "C__A-005",
+      "attempt": 1,
+      "completion_tokens": 463,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 10.912,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5097,
+      "qid": "PE-05",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:15:28+08:00",
+      "total_tokens": 5560
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:15:39+08:00",
+  "group": "C",
+  "input_sha256": "b5ee7e30a227cd90fb0c090083fc673b1cbf0384255b120234caecdebe0ec52b",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "第六期8月26日发行、8月27日到账起息，第七期9月21日发行、9月22日到账起息及品种一/二简称、26CATLK2于6月17日询价等说法均能在证据1-8中找到原文支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-05",
+  "raw_text": "{\"score\": 2, \"reason\": \"第六期8月26日发行、8月27日到账起息，第七期9月21日发行、9月22日到账起息及品种一/二简称、26CATLK2于6月17日询价等说法均能在证据1-8中找到原文支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

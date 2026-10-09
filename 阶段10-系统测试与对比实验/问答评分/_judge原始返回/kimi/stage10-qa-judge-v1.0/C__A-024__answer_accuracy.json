@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-024",
+  "attempts": [
+    {
+      "answer_key": "C__A-024",
+      "attempt": 1,
+      "completion_tokens": 105,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 6.819,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5033,
+      "qid": "PE-24",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:36:43+08:00",
+      "total_tokens": 5138
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:36:50+08:00",
+  "group": "C",
+  "input_sha256": "6570873836da801c80417f04bd7a36d6f06d3acedc09ab63bab7172d853a57fe",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案给出由573元/股调整为571.60元/股、自2026年8月10日除权除息日起生效，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-24",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案给出由573元/股调整为571.60元/股、自2026年8月10日除权除息日起生效，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

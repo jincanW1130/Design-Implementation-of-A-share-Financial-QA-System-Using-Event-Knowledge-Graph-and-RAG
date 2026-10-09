@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-073",
+  "attempts": [
+    {
+      "answer_key": "A__A-073",
+      "attempt": 1,
+      "completion_tokens": 965,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 17.953,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4699,
+      "qid": "FQ-073",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T22:59:26+08:00",
+      "total_tokens": 5664
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:59:44+08:00",
+  "group": "A",
+  "input_sha256": "539d40a0e55a0611ed47c8f014c07c53a40dd8b23f4ac1aefa60dfd0f960b595",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "两笔票据、8000万美元、信托契据担保、额度内且无反担保等说法均可在证据2/6/10中找到支撑，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-073",
+  "raw_text": "{\"score\": 2, \"reason\": \"两笔票据、8000万美元、信托契据担保、额度内且无反担保等说法均可在证据2/6/10中找到支撑，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

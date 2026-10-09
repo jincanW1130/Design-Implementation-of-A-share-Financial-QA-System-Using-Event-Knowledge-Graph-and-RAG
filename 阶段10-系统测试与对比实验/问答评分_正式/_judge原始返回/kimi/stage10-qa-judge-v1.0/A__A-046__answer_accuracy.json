@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-046",
+  "attempts": [
+    {
+      "answer_key": "A__A-046",
+      "attempt": 1,
+      "completion_tokens": 292,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 11.221,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4338,
+      "qid": "FQ-046",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:05:04+08:00",
+      "total_tokens": 4630
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T19:05:16+08:00",
+  "group": "A",
+  "input_sha256": "4b8f2de282abf4feb470396bae8fb463f7c68fc0de11117f928d014da6e03d7c",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确指出乳果糖口服溶液(15ml:10g)持有人由安徽美来变更为国药致君坪山、批准文号不变，与金标准完全一致，补充细节亦不矛盾",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-046",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案正确指出乳果糖口服溶液(15ml:10g)持有人由安徽美来变更为国药致君坪山、批准文号不变，与金标准完全一致，补充细节亦不矛盾\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

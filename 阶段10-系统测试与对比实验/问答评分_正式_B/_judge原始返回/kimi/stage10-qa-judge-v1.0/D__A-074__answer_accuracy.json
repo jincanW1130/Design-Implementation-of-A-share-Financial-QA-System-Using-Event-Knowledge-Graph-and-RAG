@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-074",
+  "attempts": [
+    {
+      "answer_key": "D__A-074",
+      "attempt": 1,
+      "completion_tokens": 130,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 6.801,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4650,
+      "qid": "FQ-074",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:39:31+08:00",
+      "total_tokens": 4780
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:39:38+08:00",
+  "group": "D",
+  "input_sha256": "4b53b682995ec8b02cdd625ab56c29af8338b9524ccd4b542680f52a0fb2a6cb",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、收购方（赢合科技）、比例（100%，其中向电气控股购58.02%）、金额（20,434.84万及11,856.29万）均与参考答案一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-074",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、收购方（赢合科技）、比例（100%，其中向电气控股购58.02%）、金额（20,434.84万及11,856.29万）均与参考答案一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

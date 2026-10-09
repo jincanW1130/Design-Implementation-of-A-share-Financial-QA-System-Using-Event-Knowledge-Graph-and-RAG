@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-055",
+  "attempts": [
+    {
+      "answer_key": "E__A-055",
+      "attempt": 1,
+      "completion_tokens": 135,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 5.846,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3762,
+      "qid": "FQ-055",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:05:38+08:00",
+      "total_tokens": 3897
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:05:44+08:00",
+  "group": "E",
+  "input_sha256": "3dc720f885e707ec288131b48cd132f0ee7423a8528f7cccfef9e7a1e7a808d6",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案核心人物周锦明及其控股股东、实控人、蒙古公司法定代表人身份全部未提及，答称无自然人信息，关键信息完全遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-055",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案核心人物周锦明及其控股股东、实控人、蒙古公司法定代表人身份全部未提及，答称无自然人信息，关键信息完全遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

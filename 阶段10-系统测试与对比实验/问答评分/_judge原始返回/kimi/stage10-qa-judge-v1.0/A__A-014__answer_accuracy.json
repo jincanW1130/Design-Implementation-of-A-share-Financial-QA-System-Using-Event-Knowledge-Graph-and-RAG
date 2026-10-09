@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-014",
+  "attempts": [
+    {
+      "answer_key": "A__A-014",
+      "attempt": 1,
+      "completion_tokens": 811,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 21.838,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5781,
+      "qid": "PE-14",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:34:31+08:00",
+      "total_tokens": 6592
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T16:34:53+08:00",
+  "group": "A",
+  "input_sha256": "f4de276b38f417522303b655208e22d36300d97ea89fbc89837cf937bba77fe4",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答对价格上限调整、首次回购、回购进展三项，但遗漏第五期回购完毕、员工持股计划锁定期届满及1665万股过户，并错误否认有员工持股计划披露",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-14",
+  "raw_text": "{\"score\": 1, \"reason\": \"答对价格上限调整、首次回购、回购进展三项，但遗漏第五期回购完毕、员工持股计划锁定期届满及1665万股过户，并错误否认有员工持股计划披露\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

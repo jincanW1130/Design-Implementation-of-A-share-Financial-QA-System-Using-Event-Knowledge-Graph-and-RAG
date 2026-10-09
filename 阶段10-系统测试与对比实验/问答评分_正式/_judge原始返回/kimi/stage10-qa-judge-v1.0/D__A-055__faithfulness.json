@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-055",
+  "attempts": [
+    {
+      "answer_key": "D__A-055",
+      "attempt": 1,
+      "completion_tokens": 960,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 35.29,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3990,
+      "qid": "FQ-055",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:08:07+08:00",
+      "total_tokens": 4950
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:08:43+08:00",
+  "group": "D",
+  "input_sha256": "a9137d25f8717be294a57f562b8d98390d2a357c29516c44f6343da0aeb5c156",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案各条事实描述（公告署名、智慧石油/中国海油等法人主体、他公司文件内容）均与所给证据一致，未编造人员信息，证据不足结论亦有依据。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-055",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案各条事实描述（公告署名、智慧石油/中国海油等法人主体、他公司文件内容）均与所给证据一致，未编造人员信息，证据不足结论亦有依据。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

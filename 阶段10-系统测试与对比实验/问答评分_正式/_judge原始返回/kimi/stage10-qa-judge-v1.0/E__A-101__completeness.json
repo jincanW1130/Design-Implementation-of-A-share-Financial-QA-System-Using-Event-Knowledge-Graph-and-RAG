@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-101",
+  "attempts": [
+    {
+      "answer_key": "E__A-101",
+      "attempt": 1,
+      "completion_tokens": 141,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 7.378,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4429,
+      "qid": "FQ-101",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:45:53+08:00",
+      "total_tokens": 4570
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:46:00+08:00",
+  "group": "E",
+  "input_sha256": "4da3a6667a4351e548ff37c36c2b68f2459fb49f6fb83917db153bb65d0bf0b0",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖签订总承包合同、含税价107,380,000元、设计费328万元及持通创九州40%股权等参考答案全部关键信息，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-101",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖签订总承包合同、含税价107,380,000元、设计费328万元及持通创九州40%股权等参考答案全部关键信息，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

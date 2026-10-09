@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-003",
+  "attempts": [
+    {
+      "answer_key": "D__A-003",
+      "attempt": 1,
+      "completion_tokens": 713,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 13.325,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4205,
+      "qid": "PE-03",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:45:24+08:00",
+      "total_tokens": 4918
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:45:37+08:00",
+  "group": "D",
+  "input_sha256": "c406c7c4407dc3952e5573163621a327a310e70842ae0834549ba190bd1f0a83",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中设立背景、备案完成、备案编码SEX000、备案时间2026-9-22及董事会披露日期均被证据1、2逐句支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-03",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中设立背景、备案完成、备案编码SEX000、备案时间2026-9-22及董事会披露日期均被证据1、2逐句支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

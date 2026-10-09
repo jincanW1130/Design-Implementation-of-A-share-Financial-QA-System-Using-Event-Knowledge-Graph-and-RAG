@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-070",
+  "attempts": [
+    {
+      "answer_key": "B__A-070",
+      "attempt": 1,
+      "completion_tokens": 95,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 4.816,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4992,
+      "qid": "FQ-070",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:33:07+08:00",
+      "total_tokens": 5087
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:33:12+08:00",
+  "group": "B",
+  "input_sha256": "b81e195591ff6445d185b01d5e4a6a587b4d82de84692ff0a91fd16020d4c3a1",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、债券要素、主承销商中信银行及联席主承销商兴业、交通银行均与参考答案一致，无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-070",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、债券要素、主承销商中信银行及联席主承销商兴业、交通银行均与参考答案一致，无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

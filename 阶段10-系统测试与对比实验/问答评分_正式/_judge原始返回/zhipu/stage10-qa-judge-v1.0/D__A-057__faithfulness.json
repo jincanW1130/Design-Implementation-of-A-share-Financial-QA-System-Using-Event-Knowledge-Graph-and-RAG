@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-057",
+  "attempts": [
+    {
+      "answer_key": "D__A-057",
+      "attempt": 1,
+      "completion_tokens": 1293,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 23.017,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4055,
+      "qid": "FQ-057",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:00:37+08:00",
+      "total_tokens": 5348
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:01:00+08:00",
+  "group": "D",
+  "input_sha256": "47b956d30fa206bf9b4b668255de95ea980be8343b50bbc267e6941532ff71d4",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案如实指出检索证据均未出现CITIC Securities Finance MTN相关信息并拒绝作答，各事实性陈述均可由证据验证，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-057",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案如实指出检索证据均未出现CITIC Securities Finance MTN相关信息并拒绝作答，各事实性陈述均可由证据验证，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

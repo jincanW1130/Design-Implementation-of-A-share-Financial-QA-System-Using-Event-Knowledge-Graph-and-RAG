@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-011",
+  "attempts": [
+    {
+      "answer_key": "A__A-011",
+      "attempt": 1,
+      "completion_tokens": 840,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 14.569,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4854,
+      "qid": "FQ-011",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:19:22+08:00",
+      "total_tokens": 5694
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:19:36+08:00",
+  "group": "A",
+  "input_sha256": "062770081c90c1c4bb959836f566190086b588650f9dd2c4ceb9048aaa03eb00",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中届满日期、考核指标、净利润39.40亿元/增262.13%、解锁775,107股占0.02%等均有对应证据支撑，未编造事实，过户明细缺失也如实说明。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-011",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中届满日期、考核指标、净利润39.40亿元/增262.13%、解锁775,107股占0.02%等均有对应证据支撑，未编造事实，过户明细缺失也如实说明。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

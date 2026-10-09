@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-102",
+  "attempts": [
+    {
+      "answer_key": "A__A-102",
+      "attempt": 1,
+      "completion_tokens": 574,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 18.01,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4753,
+      "qid": "FQ-102",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:14:39+08:00",
+      "total_tokens": 5327
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:14:57+08:00",
+  "group": "A",
+  "input_sha256": "fb9820749fc8af3036c7aa9a3ca15232a2bcbc7b7657cfa91a80c2728b8b4145",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两次事件、品种对应、证书编号2026S02025及「第二次编号证据未披露」的说法均可由证据1、3、5、8支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-102",
+  "raw_text": "{\"score\": 2, \"reason\": \"两次事件、品种对应、证书编号2026S02025及「第二次编号证据未披露」的说法均可由证据1、3、5、8支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

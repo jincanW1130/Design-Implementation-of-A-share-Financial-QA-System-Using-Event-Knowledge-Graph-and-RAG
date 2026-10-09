@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-101",
+  "attempts": [
+    {
+      "answer_key": "D__A-101",
+      "attempt": 1,
+      "completion_tokens": 157,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 8.43,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4436,
+      "qid": "FQ-101",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:04:16+08:00",
+      "total_tokens": 4593
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:04:24+08:00",
+  "group": "D",
+  "input_sha256": "660983a3489591b9b8b614c349457e71b395cc6aa9034a62d53220470195e769",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件（签订一期总承包合同）、含税签约价107,380,000元及设计费328万、通创九州为持股40%参股公司等关键信息全部覆盖",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-101",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件（签订一期总承包合同）、含税签约价107,380,000元及设计费328万、通创九州为持股40%参股公司等关键信息全部覆盖\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

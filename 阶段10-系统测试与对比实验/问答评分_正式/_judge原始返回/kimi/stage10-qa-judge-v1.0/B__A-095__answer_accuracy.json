@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-095",
+  "attempts": [
+    {
+      "answer_key": "B__A-095",
+      "attempt": 1,
+      "completion_tokens": 212,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 11.253,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5053,
+      "qid": "FQ-095",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:41:38+08:00",
+      "total_tokens": 5265
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:41:49+08:00",
+  "group": "B",
+  "input_sha256": "66185f6e11adfbaa15e0f636a14c361082a8cdf6593d10180d7aadbd0af96427",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "已回购股数、金额及A股回购下限10亿元均与金标准一致，但H股授权上限5亿港元答成“无法确认”，四项缺一，属部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-095",
+  "raw_text": "{\"score\": 1, \"reason\": \"已回购股数、金额及A股回购下限10亿元均与金标准一致，但H股授权上限5亿港元答成“无法确认”，四项缺一，属部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-095",
+  "attempts": [
+    {
+      "answer_key": "D__A-095",
+      "attempt": 1,
+      "completion_tokens": 192,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 11.26,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4786,
+      "qid": "FQ-095",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:57:03+08:00",
+      "total_tokens": 4978
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:57:15+08:00",
+  "group": "D",
+  "input_sha256": "1ed032ef8c3923a7be53e9ae0d7d8142795230e6a6dda02e828b086174f0cff2",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "已回购股数、金额及A股下限10亿元均答对，但H股授权上限答成『证据不足』，漏掉金标准的5亿港元，四问只答对三问。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-095",
+  "raw_text": "{\"score\": 1, \"reason\": \"已回购股数、金额及A股下限10亿元均答对，但H股授权上限答成『证据不足』，漏掉金标准的5亿港元，四问只答对三问。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

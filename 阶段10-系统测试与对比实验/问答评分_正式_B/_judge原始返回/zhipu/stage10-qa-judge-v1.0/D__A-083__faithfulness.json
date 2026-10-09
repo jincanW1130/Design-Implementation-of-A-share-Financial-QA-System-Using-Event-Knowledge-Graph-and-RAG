@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-083",
+  "attempts": [
+    {
+      "answer_key": "D__A-083",
+      "attempt": 1,
+      "completion_tokens": 1686,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 34.257,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4726,
+      "qid": "FQ-083",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:22:45+08:00",
+      "total_tokens": 6412
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:23:19+08:00",
+  "group": "D",
+  "input_sha256": "9b57c9f962c9096658b22c98b602b94746dea9ad9385d44a78701213bb62a842",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "试验编号INTerpath-001、联合Keytruda、超1100例高危黑色素瘤辅助治疗及终点均与证据1逐句对应，其余为标注的分析性表述，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-083",
+  "raw_text": "{\"score\": 2, \"reason\": \"试验编号INTerpath-001、联合Keytruda、超1100例高危黑色素瘤辅助治疗及终点均与证据1逐句对应，其余为标注的分析性表述，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

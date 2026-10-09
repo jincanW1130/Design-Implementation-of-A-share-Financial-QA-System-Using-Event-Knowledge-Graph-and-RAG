@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-015",
+  "attempts": [
+    {
+      "answer_key": "C__A-015",
+      "attempt": 1,
+      "completion_tokens": 287,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 10.143,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5539,
+      "qid": "PE-15",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:26:42+08:00",
+      "total_tokens": 5826
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T17:26:52+08:00",
+  "group": "C",
+  "input_sha256": "b927793671000c725188bff3c21144b3f2bcfa058477111b7202b1449867652e",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件日期与54.55元/股调整结果均覆盖，但遗漏每10股派现20元这一分红方案关键细节，属基本覆盖",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-15",
+  "raw_text": "{\"score\": 1, \"reason\": \"事件日期与54.55元/股调整结果均覆盖，但遗漏每10股派现20元这一分红方案关键细节，属基本覆盖\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

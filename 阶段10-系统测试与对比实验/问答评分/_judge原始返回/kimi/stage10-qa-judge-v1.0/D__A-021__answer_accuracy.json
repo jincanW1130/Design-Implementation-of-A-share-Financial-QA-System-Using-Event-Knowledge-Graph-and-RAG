@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-021",
+  "attempts": [
+    {
+      "answer_key": "D__A-021",
+      "attempt": 1,
+      "completion_tokens": 92,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 7.873,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4923,
+      "qid": "PE-21",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:58:02+08:00",
+      "total_tokens": 5015
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:58:10+08:00",
+  "group": "D",
+  "input_sha256": "9d607370b39f93a4ae93135e93eb1bab30d7d2c58860e9d82ebdf706eac5c5b0",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "中信证券角色（受托管理人，以其名义持有担保及信托财产）与登记机构（中登上海分公司）均与参考答案一致，完全正确",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-21",
+  "raw_text": "{\"score\": 2, \"reason\": \"中信证券角色（受托管理人，以其名义持有担保及信托财产）与登记机构（中登上海分公司）均与参考答案一致，完全正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

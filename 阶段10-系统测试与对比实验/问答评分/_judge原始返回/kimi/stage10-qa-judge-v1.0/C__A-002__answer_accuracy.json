@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-002",
+  "attempts": [
+    {
+      "answer_key": "C__A-002",
+      "attempt": 1,
+      "completion_tokens": 78,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 6.411,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5495,
+      "qid": "PE-02",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:11:18+08:00",
+      "total_tokens": 5573
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:11:24+08:00",
+  "group": "C",
+  "input_sha256": "d2782a0f5dac450c46e5548d9e2c39db3e4d3de3ba3b05bfdb802956faa1114f",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案给出发行额度10亿元、期限3+N年、利率2.1%，三项与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-02",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案给出发行额度10亿元、期限3+N年、利率2.1%，三项与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

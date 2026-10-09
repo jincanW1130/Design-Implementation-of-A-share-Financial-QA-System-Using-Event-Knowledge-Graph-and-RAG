@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-107",
+  "attempts": [
+    {
+      "answer_key": "B__A-107",
+      "attempt": 1,
+      "completion_tokens": 219,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 3.902,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5167,
+      "qid": "FQ-107",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:58:27+08:00",
+      "total_tokens": 5386
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:58:31+08:00",
+  "group": "B",
+  "input_sha256": "b989aed1e088181ee6be6db869a0642e7c63fe679c151872d800e14404bf8fff",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "核准机构、文号、发行张数、总额及上市信息均与证据1、2逐字相符，无无依据事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-107",
+  "raw_text": "{\"score\": 2, \"reason\": \"核准机构、文号、发行张数、总额及上市信息均与证据1、2逐字相符，无无依据事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

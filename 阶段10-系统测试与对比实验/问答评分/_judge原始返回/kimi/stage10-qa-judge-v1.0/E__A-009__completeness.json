@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-009",
+  "attempts": [
+    {
+      "answer_key": "E__A-009",
+      "attempt": 1,
+      "completion_tokens": 177,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 6.11,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4242,
+      "qid": "PE-09",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:14:45+08:00",
+      "total_tokens": 4419
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T18:14:52+08:00",
+  "group": "E",
+  "input_sha256": "677239a2adbce441fbf9d3078514a7c0aa0b8ccd69c877049a7b7380cdaf90e0",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案关键信息：机构名中国银行间市场交易商协会、4月23日《接受注册通知书》及文号MTN339号，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-09",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案关键信息：机构名中国银行间市场交易商协会、4月23日《接受注册通知书》及文号MTN339号，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

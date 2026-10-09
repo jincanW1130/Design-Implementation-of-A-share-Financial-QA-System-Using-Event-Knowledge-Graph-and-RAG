@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-043",
+  "attempts": [
+    {
+      "answer_key": "A__A-043",
+      "attempt": 1,
+      "completion_tokens": 130,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 7.583,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4279,
+      "qid": "FQ-043",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:03:15+08:00",
+      "total_tokens": 4409
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:03:23+08:00",
+  "group": "A",
+  "input_sha256": "3c22a4ad36b8a69f72c8b4145a55ca305cb6f0319a856331bc61375727ec5274",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "完整覆盖参考答案全部关键信息：赎回及摘牌事件、103%（含最后一期利息）赎回价格、2026年9月14日完成摘牌日期。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-043",
+  "raw_text": "{\"score\": 2, \"reason\": \"完整覆盖参考答案全部关键信息：赎回及摘牌事件、103%（含最后一期利息）赎回价格、2026年9月14日完成摘牌日期。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

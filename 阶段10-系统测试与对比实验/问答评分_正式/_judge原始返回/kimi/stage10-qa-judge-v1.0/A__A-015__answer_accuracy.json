@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-015",
+  "attempts": [
+    {
+      "answer_key": "A__A-015",
+      "attempt": 1,
+      "completion_tokens": 90,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 4.27,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3941,
+      "qid": "FQ-015",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:47:26+08:00",
+      "total_tokens": 4031
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T18:47:30+08:00",
+  "group": "A",
+  "input_sha256": "704d9b6c00a437de2118bb5848f80df64f8022aaa0308049d4bd7ce1c7fb89a8",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "审核机构、合计303.456万份、2026年9月2日办理完毕三项均与参考答案完全一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-015",
+  "raw_text": "{\"score\": 2, \"reason\": \"审核机构、合计303.456万份、2026年9月2日办理完毕三项均与参考答案完全一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

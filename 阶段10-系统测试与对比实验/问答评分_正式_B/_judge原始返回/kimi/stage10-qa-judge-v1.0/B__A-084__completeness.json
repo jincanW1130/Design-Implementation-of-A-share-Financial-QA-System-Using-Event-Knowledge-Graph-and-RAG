@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-084",
+  "attempts": [
+    {
+      "answer_key": "B__A-084",
+      "attempt": 1,
+      "completion_tokens": 679,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 21.399,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4859,
+      "qid": "FQ-084",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:35:14+08:00",
+      "total_tokens": 5538
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:35:35+08:00",
+  "group": "B",
+  "input_sha256": "ff306f1590e6ecfcbc0692fc96e8e973810d320eae3059292377647d71c7e818",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件（GLP-1创新药授权给美纳里尼）、授权标的（博凡格鲁肽肥胖/超重适应症海外权益）、目标市场（欧洲39国）全部覆盖且更具体，无关键遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-084",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件（GLP-1创新药授权给美纳里尼）、授权标的（博凡格鲁肽肥胖/超重适应症海外权益）、目标市场（欧洲39国）全部覆盖且更具体，无关键遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-031",
+  "attempts": [
+    {
+      "answer_key": "E__A-031",
+      "attempt": 1,
+      "completion_tokens": 138,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 9.258,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4931,
+      "qid": "FQ-031",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:41:35+08:00",
+      "total_tokens": 5069
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:41:45+08:00",
+  "group": "E",
+  "input_sha256": "3fdb32ada144a871dc81d39452b6151c2ebf37f42d3571026d4adee2c3afb3db",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "三项核心数据（营收161.46亿/增6.01%、归母净利41.90亿/增7.13%、营养健康系列增27.09%）与金标准完全一致，无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-031",
+  "raw_text": "{\"score\": 2, \"reason\": \"三项核心数据（营收161.46亿/增6.01%、归母净利41.90亿/增7.13%、营养健康系列增27.09%）与金标准完全一致，无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

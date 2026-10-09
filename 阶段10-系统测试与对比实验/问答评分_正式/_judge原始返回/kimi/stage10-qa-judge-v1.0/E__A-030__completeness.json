@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-030",
+  "attempts": [
+    {
+      "answer_key": "E__A-030",
+      "attempt": 1,
+      "completion_tokens": 262,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 11.104,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5169,
+      "qid": "FQ-030",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:41:10+08:00",
+      "total_tokens": 5431
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:41:21+08:00",
+  "group": "E",
+  "input_sha256": "7586e7b92995b79c17159124319beb622dc7fb0b48865055a51417855073ebe1",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案的全部关键信息（2022年6月、聚焦绿色能源与通信网络、剥离大宗商品贸易、交易对方中天科技集团有限公司、出售上海国贸100%股权）均已完整覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-030",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案的全部关键信息（2022年6月、聚焦绿色能源与通信网络、剥离大宗商品贸易、交易对方中天科技集团有限公司、出售上海国贸100%股权）均已完整覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

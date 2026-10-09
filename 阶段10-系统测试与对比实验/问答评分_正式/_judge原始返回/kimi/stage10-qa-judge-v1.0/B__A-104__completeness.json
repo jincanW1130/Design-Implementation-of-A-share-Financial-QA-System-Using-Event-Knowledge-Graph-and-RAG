@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-104",
+  "attempts": [
+    {
+      "answer_key": "B__A-104",
+      "attempt": 1,
+      "completion_tokens": 140,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 6.006,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5062,
+      "qid": "FQ-104",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:48:42+08:00",
+      "total_tokens": 5202
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:48:48+08:00",
+  "group": "B",
+  "input_sha256": "b8d85daa4b3a12abce0a49f6462b3a1dd8bc7b4404297d31c462c1eaba72fa50",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "登记机构、《证券变更登记证明》、授予数量367,989,000股及6月8日取得证明等关键信息均已完整覆盖，无遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-104",
+  "raw_text": "{\"score\": 2, \"reason\": \"登记机构、《证券变更登记证明》、授予数量367,989,000股及6月8日取得证明等关键信息均已完整覆盖，无遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

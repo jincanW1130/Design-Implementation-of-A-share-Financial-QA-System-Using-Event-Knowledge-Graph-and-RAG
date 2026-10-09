@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-103",
+  "attempts": [
+    {
+      "answer_key": "E__A-103",
+      "attempt": 1,
+      "completion_tokens": 121,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 4.919,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4637,
+      "qid": "FQ-103",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:47:52+08:00",
+      "total_tokens": 4758
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:47:57+08:00",
+  "group": "E",
+  "input_sha256": "fea495092f0374cabc8d88fb2c26dcbee060d555b8fbec7ea0649c7a02cf4af8",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "接受机构、通知书编号（中市协注[2025]DFI27号）及注册有效期（自2025年4月28日起2年）均与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-103",
+  "raw_text": "{\"score\": 2, \"reason\": \"接受机构、通知书编号（中市协注[2025]DFI27号）及注册有效期（自2025年4月28日起2年）均与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

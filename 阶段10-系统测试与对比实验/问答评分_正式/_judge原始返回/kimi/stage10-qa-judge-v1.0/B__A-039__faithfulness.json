@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-039",
+  "attempts": [
+    {
+      "answer_key": "B__A-039",
+      "attempt": 1,
+      "completion_tokens": 421,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 17.795,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5020,
+      "qid": "FQ-039",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:06:37+08:00",
+      "total_tokens": 5441
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:06:55+08:00",
+  "group": "B",
+  "input_sha256": "abb0d137bd79e64a79bd2d5ee61210dc3ee4eeff8f96a7c0e302d2cd76fee12b",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "6月295.6万头、8月281.8万头及发布时间等关键事实均能在证据1、4、5、6中找到原文，13.8万头降幅为明确标注的推算且计算正确，其余关于证据无关性的陈述亦与证据7-10相符，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-039",
+  "raw_text": "{\"score\": 2, \"reason\": \"6月295.6万头、8月281.8万头及发布时间等关键事实均能在证据1、4、5、6中找到原文，13.8万头降幅为明确标注的推算且计算正确，其余关于证据无关性的陈述亦与证据7-10相符，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

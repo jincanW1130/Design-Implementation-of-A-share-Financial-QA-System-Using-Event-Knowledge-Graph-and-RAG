@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-104",
+  "attempts": [
+    {
+      "answer_key": "B__A-104",
+      "attempt": 1,
+      "completion_tokens": 102,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 6.613,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5055,
+      "qid": "FQ-104",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:48:34+08:00",
+      "total_tokens": 5157
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:48:40+08:00",
+  "group": "B",
+  "input_sha256": "f8820b0b724ecf7fa0c275b07c1ec1a62961d24887b9a414cc49c6186d5bb483",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案与参考答案完全一致：出具机构为中证登上海分公司，授予367,989,000股，6月8日取得证明，均正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-104",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案与参考答案完全一致：出具机构为中证登上海分公司，授予367,989,000股，6月8日取得证明，均正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

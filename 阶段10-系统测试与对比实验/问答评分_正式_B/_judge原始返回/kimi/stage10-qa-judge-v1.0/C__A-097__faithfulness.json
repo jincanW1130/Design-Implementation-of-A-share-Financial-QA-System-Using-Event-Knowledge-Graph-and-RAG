@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-097",
+  "attempts": [
+    {
+      "answer_key": "C__A-097",
+      "attempt": 1,
+      "completion_tokens": 135,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 8.365,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5602,
+      "qid": "FQ-097",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:22:58+08:00",
+      "total_tokens": 5737
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:23:06+08:00",
+  "group": "C",
+  "input_sha256": "99adc6a5288592a8cf82e847b6c07092196c58e1571603e2a8c4800f2931c9cd",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "GenSci148获批与GenSci136获受理两项事件及其受理号、申请人、适应症均与证据2、证据4原文一致，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-097",
+  "raw_text": "{\"score\": 2, \"reason\": \"GenSci148获批与GenSci136获受理两项事件及其受理号、申请人、适应症均与证据2、证据4原文一致，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

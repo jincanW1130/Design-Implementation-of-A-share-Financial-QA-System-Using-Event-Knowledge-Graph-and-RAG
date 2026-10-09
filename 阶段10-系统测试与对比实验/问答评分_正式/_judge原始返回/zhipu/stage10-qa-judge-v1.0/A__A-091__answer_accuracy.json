@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-091",
+  "attempts": [
+    {
+      "answer_key": "A__A-091",
+      "attempt": 1,
+      "completion_tokens": 1266,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 24.425,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4617,
+      "qid": "FQ-091",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:43:00+08:00",
+      "total_tokens": 5883
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T00:43:25+08:00",
+  "group": "A",
+  "input_sha256": "05a8bd17803a5efdaf66b196a9ce5b18f09c5f48388ce2bb4824bda83ab2203d",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案以证据不足为由未给出任何参考数据，回购数量、金额、价格调整及注销股数四个要点均未答对，属错误。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-091",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案以证据不足为由未给出任何参考数据，回购数量、金额、价格调整及注销股数四个要点均未答对，属错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

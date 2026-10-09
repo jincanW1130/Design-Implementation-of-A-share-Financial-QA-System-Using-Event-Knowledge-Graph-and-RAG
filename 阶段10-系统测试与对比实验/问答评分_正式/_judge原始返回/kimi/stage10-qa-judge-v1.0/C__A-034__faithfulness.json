@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-034",
+  "attempts": [
+    {
+      "answer_key": "C__A-034",
+      "attempt": 1,
+      "completion_tokens": 133,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 9.07,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4370,
+      "qid": "FQ-034",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:52:20+08:00",
+      "total_tokens": 4503
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:52:30+08:00",
+  "group": "C",
+  "input_sha256": "33e5ebc57c5601e449bdb0288b65bbc05f0341955f25b4606ebda7c6a037ae38",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "金额区间15-25亿、价格上限41.5元/股、回购77,474,592股占0.29%及4月14日实施完毕，均由证据10直接支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-034",
+  "raw_text": "{\"score\": 2, \"reason\": \"金额区间15-25亿、价格上限41.5元/股、回购77,474,592股占0.29%及4月14日实施完毕，均由证据10直接支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-087",
+  "attempts": [
+    {
+      "answer_key": "B__A-087",
+      "attempt": 1,
+      "completion_tokens": 459,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 7.752,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5235,
+      "qid": "FQ-087",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:54:59+08:00",
+      "total_tokens": 5694
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T00:55:07+08:00",
+  "group": "B",
+  "input_sha256": "5c2b080350e1f92e5da39e770d0d58d3c56a3d687f61570bf434d702db59a7a7",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案全部关键信息：行权期限2026/9/8-2027/8/27、4506人可行权5205.9492万份及价格、注销0.45万份与303.006万份，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-087",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案全部关键信息：行权期限2026/9/8-2027/8/27、4506人可行权5205.9492万份及价格、注销0.45万份与303.006万份，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

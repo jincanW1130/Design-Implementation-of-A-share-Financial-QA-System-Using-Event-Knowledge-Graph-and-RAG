@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-072",
+  "attempts": [
+    {
+      "answer_key": "B__A-072",
+      "attempt": 1,
+      "completion_tokens": 673,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 22.289,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5897,
+      "qid": "FQ-072",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:34:31+08:00",
+      "total_tokens": 6570
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:34:53+08:00",
+  "group": "B",
+  "input_sha256": "9cd0ab94d92d0a8f68faf8291861c5215d0fc8e05b4c6ddcafe8d73c0079a1b9",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件性质、标的、价格、发行对象等说法均被证据3（交易对方/本次交易定义）与证据9（方案概况、交易价格）直接支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-072",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件性质、标的、价格、发行对象等说法均被证据3（交易对方/本次交易定义）与证据9（方案概况、交易价格）直接支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

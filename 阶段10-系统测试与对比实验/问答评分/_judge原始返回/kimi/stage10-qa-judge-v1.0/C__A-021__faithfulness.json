@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-021",
+  "attempts": [
+    {
+      "answer_key": "C__A-021",
+      "attempt": 1,
+      "completion_tokens": 647,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 18.169,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4737,
+      "qid": "PE-21",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:34:53+08:00",
+      "total_tokens": 5384
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:35:11+08:00",
+  "group": "C",
+  "input_sha256": "b4ab0e81a1df6565bf30a665baf770aa35296fd64d0def0c903734079d528c72",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "受托管理人角色、专户名称、代为行使表决权及向中证登上海分公司申请登记等说法均被证据1/2/3/4原文直接支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-21",
+  "raw_text": "{\"score\": 2, \"reason\": \"受托管理人角色、专户名称、代为行使表决权及向中证登上海分公司申请登记等说法均被证据1/2/3/4原文直接支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

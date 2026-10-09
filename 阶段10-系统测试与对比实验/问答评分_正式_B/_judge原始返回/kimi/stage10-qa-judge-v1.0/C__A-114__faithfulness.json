@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-114",
+  "attempts": [
+    {
+      "answer_key": "C__A-114",
+      "attempt": 1,
+      "completion_tokens": 1106,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 39.535,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5073,
+      "qid": "FQ-114",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:35:28+08:00",
+      "total_tokens": 6179
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:36:08+08:00",
+  "group": "C",
+  "input_sha256": "bb1ae59cbde89bd7441c71721b0225c4b22590dd0ae08918cc6063f4f9552c71",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "母公司与全资子公司关系及引用均直接见证据1/2，补充分析未超披露且注明股权细节未披露。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-114",
+  "raw_text": "{\"score\":2,\"reason\":\"母公司与全资子公司关系及引用均直接见证据1/2，补充分析未超披露且注明股权细节未披露。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

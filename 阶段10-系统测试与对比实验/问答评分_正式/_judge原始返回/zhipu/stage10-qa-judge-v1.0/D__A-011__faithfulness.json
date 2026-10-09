@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-011",
+  "attempts": [
+    {
+      "answer_key": "D__A-011",
+      "attempt": 1,
+      "completion_tokens": 816,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 13.782,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5877,
+      "qid": "FQ-011",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:53:53+08:00",
+      "total_tokens": 6693
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:54:07+08:00",
+  "group": "D",
+  "input_sha256": "193d16b61d5a33ddd389dea4fe87acef5e77558af6e2e91c61fbb2098ea9feb2",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中业绩指标、净利润数据、775,107股/0.02%等事实均见于可用证据，过户信息缺失处明确声明证据不足，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-011",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中业绩指标、净利润数据、775,107股/0.02%等事实均见于可用证据，过户信息缺失处明确声明证据不足，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

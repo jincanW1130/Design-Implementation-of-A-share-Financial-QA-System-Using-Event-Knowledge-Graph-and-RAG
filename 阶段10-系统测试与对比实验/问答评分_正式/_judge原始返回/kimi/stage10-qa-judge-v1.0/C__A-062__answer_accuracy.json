@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-062",
+  "attempts": [
+    {
+      "answer_key": "C__A-062",
+      "attempt": 1,
+      "completion_tokens": 99,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 7.392,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5476,
+      "qid": "FQ-062",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:19:29+08:00",
+      "total_tokens": 5575
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:19:37+08:00",
+  "group": "C",
+  "input_sha256": "6513b8d38a4b12c1225af60ce00ff0b72079b833f3a4e1f2e9513758c505d77e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案准确指出交易事件及自2026年4月起并入运营数据并追溯调整，与参考答案完全一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-062",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案准确指出交易事件及自2026年4月起并入运营数据并追溯调整，与参考答案完全一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

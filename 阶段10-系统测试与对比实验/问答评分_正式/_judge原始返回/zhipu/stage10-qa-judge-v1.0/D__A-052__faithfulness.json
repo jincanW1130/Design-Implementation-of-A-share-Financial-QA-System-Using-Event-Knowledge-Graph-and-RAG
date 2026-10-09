@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-052",
+  "attempts": [
+    {
+      "answer_key": "D__A-052",
+      "attempt": 1,
+      "completion_tokens": 918,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 14.999,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5287,
+      "qid": "FQ-052",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:59:59+08:00",
+      "total_tokens": 6205
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:00:14+08:00",
+  "group": "D",
+  "input_sha256": "11107c8ba52b78935e4c9b6c2f322e772e05f15efe70c952e1c6efc4ec39dcfe",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "郑宗强任董事长、陈刚职工董事离任细节均有证据1/3/6/7/9直接支撑，无编造，未列出的人员也如实说明证据不足",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-052",
+  "raw_text": "{\"score\": 2, \"reason\": \"郑宗强任董事长、陈刚职工董事离任细节均有证据1/3/6/7/9直接支撑，无编造，未列出的人员也如实说明证据不足\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

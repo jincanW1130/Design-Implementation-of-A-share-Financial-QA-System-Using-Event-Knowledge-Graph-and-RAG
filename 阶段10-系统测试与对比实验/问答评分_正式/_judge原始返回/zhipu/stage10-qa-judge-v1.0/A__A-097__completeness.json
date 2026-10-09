@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-097",
+  "attempts": [
+    {
+      "answer_key": "A__A-097",
+      "attempt": 1,
+      "completion_tokens": 676,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 12.748,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4466,
+      "qid": "FQ-097",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:47:58+08:00",
+      "total_tokens": 5142
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T00:48:11+08:00",
+  "group": "A",
+  "input_sha256": "464dfd0bd5ceb8c354b51a5ebe8983a52fc02549789b88c85fda5a449836f1b5",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案三项关键事件GenSci133获批、GenSci148获批、GenSci136受理均被覆盖，无关键信息遗漏，信息完整。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-097",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案三项关键事件GenSci133获批、GenSci148获批、GenSci136受理均被覆盖，无关键信息遗漏，信息完整。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

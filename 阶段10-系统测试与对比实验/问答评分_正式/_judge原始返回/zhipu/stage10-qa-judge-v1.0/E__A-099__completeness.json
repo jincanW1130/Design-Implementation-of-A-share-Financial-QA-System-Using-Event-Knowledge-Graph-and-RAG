@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-099",
+  "attempts": [
+    {
+      "answer_key": "E__A-099",
+      "attempt": 1,
+      "completion_tokens": 321,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 5.88,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5306,
+      "qid": "FQ-099",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:33:53+08:00",
+      "total_tokens": 5627
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:33:59+08:00",
+  "group": "E",
+  "input_sha256": "e985a8bcd550eb6df8593264d0680af33032e583f7bc7f1037205b43c2f60a0d",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖合同类型（建设工程施工专业分包合同）、工程名称（金刚石芯片基板建设项目一期变配电工程）及双方承包人/分包人角色，无关键遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-099",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖合同类型（建设工程施工专业分包合同）、工程名称（金刚石芯片基板建设项目一期变配电工程）及双方承包人/分包人角色，无关键遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

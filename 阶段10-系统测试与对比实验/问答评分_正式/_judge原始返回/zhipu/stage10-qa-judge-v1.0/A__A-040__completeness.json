@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-040",
+  "attempts": [
+    {
+      "answer_key": "A__A-040",
+      "attempt": 1,
+      "completion_tokens": 361,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 7.609,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4396,
+      "qid": "FQ-040",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:21:29+08:00",
+      "total_tokens": 4757
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:21:37+08:00",
+  "group": "A",
+  "input_sha256": "b1c24f4bee1bc69250ff0f7eefaa62d51492565e0c54ddba2753c119fc42d54c",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案两条关键事件（6月30日AI智算卡发布、7月与15家银行推AI智能体银行卡）均被完整覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-040",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案两条关键事件（6月30日AI智算卡发布、7月与15家银行推AI智能体银行卡）均被完整覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

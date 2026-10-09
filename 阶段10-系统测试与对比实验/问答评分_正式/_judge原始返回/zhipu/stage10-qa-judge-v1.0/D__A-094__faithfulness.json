@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-094",
+  "attempts": [
+    {
+      "answer_key": "D__A-094",
+      "attempt": 1,
+      "completion_tokens": 1453,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 30.084,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5196,
+      "qid": "FQ-094",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:24:15+08:00",
+      "total_tokens": 6649
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:24:45+08:00",
+  "group": "D",
+  "input_sha256": "5e442cf8f8fa97830c79cb573102047ad3c8ca1c752950dadb1de21003ab50eb",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "说明会日期与业绩披露时点均有证据1支撑；财务顾问部分如实说明证据缺失，未编造任何事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-094",
+  "raw_text": "{\"score\": 2, \"reason\": \"说明会日期与业绩披露时点均有证据1支撑；财务顾问部分如实说明证据缺失，未编造任何事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

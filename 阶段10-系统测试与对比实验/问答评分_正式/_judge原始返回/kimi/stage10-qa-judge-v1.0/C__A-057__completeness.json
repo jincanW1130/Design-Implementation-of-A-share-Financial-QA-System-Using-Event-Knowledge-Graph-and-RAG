@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-057",
+  "attempts": [
+    {
+      "answer_key": "C__A-057",
+      "attempt": 1,
+      "completion_tokens": 296,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 12.35,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4269,
+      "qid": "FQ-057",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:12:43+08:00",
+      "total_tokens": 4565
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:12:55+08:00",
+  "group": "C",
+  "input_sha256": "6d385c7c0c453985eacef8fc658032864e0a3554a2e03809544e32edeb8fc6ff",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "人员姓名、身份、SPV类型及持股结构均已覆盖，但漏了参考答案中的成立时间、注册号1840773和注册地BVI，属基本覆盖非完整。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-057",
+  "raw_text": "{\"score\": 1, \"reason\": \"人员姓名、身份、SPV类型及持股结构均已覆盖，但漏了参考答案中的成立时间、注册号1840773和注册地BVI，属基本覆盖非完整。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

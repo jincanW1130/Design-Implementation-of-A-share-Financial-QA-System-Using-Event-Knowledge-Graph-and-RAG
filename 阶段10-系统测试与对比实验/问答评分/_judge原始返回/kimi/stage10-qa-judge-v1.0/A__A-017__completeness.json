@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-017",
+  "attempts": [
+    {
+      "answer_key": "A__A-017",
+      "attempt": 1,
+      "completion_tokens": 140,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 5.614,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4244,
+      "qid": "PE-17",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:38:22+08:00",
+      "total_tokens": 4384
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:38:28+08:00",
+  "group": "A",
+  "input_sha256": "5df156a8e543141b5dd6bb28ec2eb96c741542a8c84bdd43790645d5aa275df6",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "签约对方安徽元控储充新能源科技有限公司与合同金额112,738.00万元等参考答案关键信息均已完整覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-17",
+  "raw_text": "{\"score\": 2, \"reason\": \"签约对方安徽元控储充新能源科技有限公司与合同金额112,738.00万元等参考答案关键信息均已完整覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

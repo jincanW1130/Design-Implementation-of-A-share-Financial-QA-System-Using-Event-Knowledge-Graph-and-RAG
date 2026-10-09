@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-014",
+  "attempts": [
+    {
+      "answer_key": "E__A-014",
+      "attempt": 1,
+      "completion_tokens": 1287,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 41.097,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6406,
+      "qid": "PE-14",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:18:22+08:00",
+      "total_tokens": 7693
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:19:03+08:00",
+  "group": "E",
+  "input_sha256": "533e09a67e3a66e11e736d9d1a1b1d399de660fbfda294b5557a941940646134",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "命中价格上限调整、首次回购和累计回购等要点，但漏掉第二期员工持股锁定期届满及1665万股过户，且混入第三期持股内容。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-14",
+  "raw_text": "{\"score\":1,\"reason\":\"命中价格上限调整、首次回购和累计回购等要点，但漏掉第二期员工持股锁定期届满及1665万股过户，且混入第三期持股内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

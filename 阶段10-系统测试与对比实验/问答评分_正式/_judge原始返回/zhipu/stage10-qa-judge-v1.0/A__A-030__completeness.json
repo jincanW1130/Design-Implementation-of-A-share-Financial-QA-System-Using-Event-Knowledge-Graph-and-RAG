@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-030",
+  "attempts": [
+    {
+      "answer_key": "A__A-030",
+      "attempt": 1,
+      "completion_tokens": 453,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 7.943,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3896,
+      "qid": "FQ-030",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:20:22+08:00",
+      "total_tokens": 4349
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:20:30+08:00",
+  "group": "A",
+  "input_sha256": "8273b1474c9461dbb3502daa8c0276399adfd9ed58107995925acea26e346606",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案全部关键点：2022年6月剥离、聚焦先进制造业、向中天科技集团出售100%股权，信息完整。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-030",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案全部关键点：2022年6月剥离、聚焦先进制造业、向中天科技集团出售100%股权，信息完整。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

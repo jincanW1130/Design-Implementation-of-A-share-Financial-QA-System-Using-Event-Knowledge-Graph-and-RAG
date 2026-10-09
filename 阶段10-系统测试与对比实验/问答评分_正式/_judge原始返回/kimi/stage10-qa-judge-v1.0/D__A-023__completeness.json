@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-023",
+  "attempts": [
+    {
+      "answer_key": "D__A-023",
+      "attempt": 1,
+      "completion_tokens": 156,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 12.348,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3944,
+      "qid": "FQ-023",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:38:19+08:00",
+      "total_tokens": 4100
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:38:31+08:00",
+  "group": "D",
+  "input_sha256": "b973d2473fc1ba624c4a7a7374e372d42248ac4d3abb9e885ebbeeed47f6f025",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案两个要点——纳入医保目录与完善商保目录的安排、2026年8月19日印发——均被完整覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-023",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案两个要点——纳入医保目录与完善商保目录的安排、2026年8月19日印发——均被完整覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

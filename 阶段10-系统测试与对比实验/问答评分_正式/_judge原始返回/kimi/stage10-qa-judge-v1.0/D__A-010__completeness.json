@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-010",
+  "attempts": [
+    {
+      "answer_key": "D__A-010",
+      "attempt": 1,
+      "completion_tokens": 210,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 9.204,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4221,
+      "qid": "FQ-010",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:31:44+08:00",
+      "total_tokens": 4431
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:31:53+08:00",
+  "group": "D",
+  "input_sha256": "9d79a75ec1326f137aa2b859b88c326ceecb9fe857a8783ebf790e7d122e4e4b",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "行权份数与注销份数均正确覆盖，但核心的激励对象人数650名未答出（称无法确认），漏一项关键信息，属基本覆盖。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-010",
+  "raw_text": "{\"score\": 1, \"reason\": \"行权份数与注销份数均正确覆盖，但核心的激励对象人数650名未答出（称无法确认），漏一项关键信息，属基本覆盖。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

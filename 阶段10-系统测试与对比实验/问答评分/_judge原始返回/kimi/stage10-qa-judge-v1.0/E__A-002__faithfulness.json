@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-002",
+  "attempts": [
+    {
+      "answer_key": "E__A-002",
+      "attempt": 1,
+      "completion_tokens": 141,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 10.179,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5517,
+      "qid": "PE-02",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:07:17+08:00",
+      "total_tokens": 5658
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:07:27+08:00",
+  "group": "E",
+  "input_sha256": "2ea7327a64f9057a6cc20a31b2586f9a4c689f9f25cdfcf71e6fb6169ba4313e",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案所有事实（额度10亿、期限3+N年、利率2.1%、起息日、面值、主承销商、到账）均被可用证据6原文完整支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-02",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案所有事实（额度10亿、期限3+N年、利率2.1%、起息日、面值、主承销商、到账）均被可用证据6原文完整支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

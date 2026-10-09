@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-021",
+  "attempts": [
+    {
+      "answer_key": "C__A-021",
+      "attempt": 1,
+      "completion_tokens": 160,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 8.339,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4840,
+      "qid": "FQ-021",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:45:04+08:00",
+      "total_tokens": 5000
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:45:12+08:00",
+  "group": "C",
+  "input_sha256": "54a1f37a46778e59d6bc496811d7d250fb6d2630e3da986abd2f2fef50b22c47",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "批准机构、2026年8月25日上市日期及236.14万元（未经审计）研发投入均被证据1、2原文直接支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-021",
+  "raw_text": "{\"score\": 2, \"reason\": \"批准机构、2026年8月25日上市日期及236.14万元（未经审计）研发投入均被证据1、2原文直接支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

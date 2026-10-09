@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-057",
+  "attempts": [
+    {
+      "answer_key": "B__A-057",
+      "attempt": 1,
+      "completion_tokens": 1010,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 18.109,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4420,
+      "qid": "FQ-057",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:37:18+08:00",
+      "total_tokens": 5430
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:37:36+08:00",
+  "group": "B",
+  "input_sha256": "4da712074452b87bde72415b92ede10caa5d3c1fe85dece63d26a36dce0c1eb8",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "人员李凯、杨杰、郑颖，身份法定代表人/董事，公司类型SPV均完整覆盖，无关键遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-057",
+  "raw_text": "{\"score\": 2, \"reason\": \"人员李凯、杨杰、郑颖，身份法定代表人/董事，公司类型SPV均完整覆盖，无关键遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

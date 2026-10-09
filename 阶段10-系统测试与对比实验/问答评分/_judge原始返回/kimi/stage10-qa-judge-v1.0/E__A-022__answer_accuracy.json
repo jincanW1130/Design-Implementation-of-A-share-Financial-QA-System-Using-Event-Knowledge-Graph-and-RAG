@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-022",
+  "attempts": [
+    {
+      "answer_key": "E__A-022",
+      "attempt": 1,
+      "completion_tokens": 254,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 10.422,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6134,
+      "qid": "PE-22",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:25:24+08:00",
+      "total_tokens": 6388
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:25:35+08:00",
+  "group": "E",
+  "input_sha256": "54c21b0215f05ff74341f6a043832f9e5cd0a1d33619372a8f9722182c4cf66a",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案全部要点（谢永林、冀光恒、郭晓涛、付欣、蔡方方、项有志、高鹏、吴雷鸣）均被正确覆盖，额外董事信息有证据支撑且无错误，判完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-22",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案全部要点（谢永林、冀光恒、郭晓涛、付欣、蔡方方、项有志、高鹏、吴雷鸣）均被正确覆盖，额外董事信息有证据支撑且无错误，判完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

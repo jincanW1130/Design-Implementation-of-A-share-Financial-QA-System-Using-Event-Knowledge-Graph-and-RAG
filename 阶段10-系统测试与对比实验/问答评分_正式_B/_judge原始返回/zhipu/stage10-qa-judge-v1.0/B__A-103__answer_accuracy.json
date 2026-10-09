@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-103",
+  "attempts": [
+    {
+      "answer_key": "B__A-103",
+      "attempt": 1,
+      "completion_tokens": 305,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 5.115,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5031,
+      "qid": "FQ-103",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:09:59+08:00",
+      "total_tokens": 5336
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:10:04+08:00",
+  "group": "B",
+  "input_sha256": "b857185447dbe4cefb14b573f9a0cf5455b1b9b2cbc6100c018e2963cb9e7bd1",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案的接受机构、通知书编号中市协注[2025]DFI27号及注册有效期均与参考答案完全一致，判完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-103",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案的接受机构、通知书编号中市协注[2025]DFI27号及注册有效期均与参考答案完全一致，判完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

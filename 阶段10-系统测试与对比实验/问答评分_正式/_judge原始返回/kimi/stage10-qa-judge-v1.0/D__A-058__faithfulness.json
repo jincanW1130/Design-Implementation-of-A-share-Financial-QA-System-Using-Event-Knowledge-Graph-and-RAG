@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-058",
+  "attempts": [
+    {
+      "answer_key": "D__A-058",
+      "attempt": 1,
+      "completion_tokens": 381,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 17.338,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4151,
+      "qid": "FQ-058",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:12:14+08:00",
+      "total_tokens": 4532
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:12:32+08:00",
+  "group": "D",
+  "input_sha256": "7b4c9662ec985dfd45fa6972971767c52fa40cbff38e79e7d9c578a1f8206622",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "三名关联董事姓名、回避表决、6票同意0反对0弃权、落款日期2026年6月17日及控股股东关联关系均见于证据4与证据10，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-058",
+  "raw_text": "{\"score\": 2, \"reason\": \"三名关联董事姓名、回避表决、6票同意0反对0弃权、落款日期2026年6月17日及控股股东关联关系均见于证据4与证据10，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

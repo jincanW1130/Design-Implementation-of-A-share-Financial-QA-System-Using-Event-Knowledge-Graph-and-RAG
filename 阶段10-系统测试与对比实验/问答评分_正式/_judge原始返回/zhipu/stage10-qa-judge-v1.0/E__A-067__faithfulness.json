@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-067",
+  "attempts": [
+    {
+      "answer_key": "E__A-067",
+      "attempt": 1,
+      "completion_tokens": 948,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 16.175,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4617,
+      "qid": "FQ-067",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:13:56+08:00",
+      "total_tokens": 5565
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:14:12+08:00",
+  "group": "E",
+  "input_sha256": "5472bc789a9f396ec573a3a541884b39111be63410eec67374c0dfc290bac641",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中设立基金、出资总额、阳光新能源占比、管理人及备案信息等说法均有证据1、2支撑，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-067",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中设立基金、出资总额、阳光新能源占比、管理人及备案信息等说法均有证据1、2支撑，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

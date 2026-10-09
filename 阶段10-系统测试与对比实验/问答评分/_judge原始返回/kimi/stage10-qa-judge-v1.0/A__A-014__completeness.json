@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-014",
+  "attempts": [
+    {
+      "answer_key": "A__A-014",
+      "attempt": 1,
+      "completion_tokens": 442,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 17.044,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5788,
+      "qid": "PE-14",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:34:54+08:00",
+      "total_tokens": 6230
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:35:11+08:00",
+  "group": "A",
+  "input_sha256": "4e49b63e85519840082e52c50d7bfb5c4d382542a7a7e06741f2d66a8103c715",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "仅覆盖第六期回购三点，遗漏第五期回购完成及第二期员工持股计划锁定期届满、非交易过户等全部员工持股事件，遗漏近半关键信息。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-14",
+  "raw_text": "{\"score\": 0, \"reason\": \"仅覆盖第六期回购三点，遗漏第五期回购完成及第二期员工持股计划锁定期届满、非交易过户等全部员工持股事件，遗漏近半关键信息。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

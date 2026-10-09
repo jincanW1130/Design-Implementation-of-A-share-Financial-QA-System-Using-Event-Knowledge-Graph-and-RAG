@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-104",
+  "attempts": [
+    {
+      "answer_key": "E__A-104",
+      "attempt": 1,
+      "completion_tokens": 1730,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 56.711,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4330,
+      "qid": "FQ-104",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:48:23+08:00",
+      "total_tokens": 6060
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:49:19+08:00",
+  "group": "E",
+  "input_sha256": "265fe706f7813447d6b53a7a0a3434b44f575c6f2bc0cc95f2fa9e95ac543f3c",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答对登记机构与367,989,000股两项核心信息，但遗漏参考答案中2026年6月8日取得证明的时间，属基本覆盖",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-104",
+  "raw_text": "{\"score\": 1, \"reason\": \"答对登记机构与367,989,000股两项核心信息，但遗漏参考答案中2026年6月8日取得证明的时间，属基本覆盖\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

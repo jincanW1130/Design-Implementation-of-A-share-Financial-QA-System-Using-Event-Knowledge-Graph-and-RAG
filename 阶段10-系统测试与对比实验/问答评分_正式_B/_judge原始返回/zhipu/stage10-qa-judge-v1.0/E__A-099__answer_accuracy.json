@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-099",
+  "attempts": [
+    {
+      "answer_key": "E__A-099",
+      "attempt": 1,
+      "completion_tokens": 515,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 9.551,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5301,
+      "qid": "FQ-099",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:33:42+08:00",
+      "total_tokens": 5816
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:33:52+08:00",
+  "group": "E",
+  "input_sha256": "6e423af3c478e93ee7b1902bcc1d8cb9d4774454259ae90fcd37dca0d6697730",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案与金标准完全一致：合同类型为专业分包合同、工程名称为金刚石芯片基板建设项目（一期）变配电工程，双方承包人/分包人角色均正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-099",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案与金标准完全一致：合同类型为专业分包合同、工程名称为金刚石芯片基板建设项目（一期）变配电工程，双方承包人/分包人角色均正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

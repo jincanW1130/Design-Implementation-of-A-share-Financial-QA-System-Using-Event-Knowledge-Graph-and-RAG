@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-035",
+  "attempts": [
+    {
+      "answer_key": "E__A-035",
+      "attempt": 1,
+      "completion_tokens": 114,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 7.455,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4542,
+      "qid": "FQ-035",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:44:34+08:00",
+      "total_tokens": 4656
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:44:42+08:00",
+  "group": "E",
+  "input_sha256": "2079c3f5704ccc7ad697d4ef3f1648af8c1cf92d021e4a531b1fc25a4daa3447",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "总包方潜能蒙古与关联提供方天津锦龙（周锦明控股）及董事会审议信息均与参考答案一致，完全正确",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-035",
+  "raw_text": "{\"score\": 2, \"reason\": \"总包方潜能蒙古与关联提供方天津锦龙（周锦明控股）及董事会审议信息均与参考答案一致，完全正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

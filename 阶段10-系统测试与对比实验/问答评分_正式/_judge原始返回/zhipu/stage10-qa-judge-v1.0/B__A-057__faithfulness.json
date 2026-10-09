@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-057",
+  "attempts": [
+    {
+      "answer_key": "B__A-057",
+      "attempt": 1,
+      "completion_tokens": 626,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 11.337,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4443,
+      "qid": "FQ-057",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:37:37+08:00",
+      "total_tokens": 5069
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:37:49+08:00",
+  "group": "B",
+  "input_sha256": "f180f7aeebaf8b7f496ca86e178e1eb96f4f3b7f415320eeebdd5d5558cb36c2",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "人员、身份、公司类型、持股结构、注册地及票据发行事项均与证据9、10逐项相符，无无依据事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-057",
+  "raw_text": "{\"score\": 2, \"reason\": \"人员、身份、公司类型、持股结构、注册地及票据发行事项均与证据9、10逐项相符，无无依据事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

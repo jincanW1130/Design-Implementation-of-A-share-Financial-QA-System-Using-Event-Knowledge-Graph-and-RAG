@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-074",
+  "attempts": [
+    {
+      "answer_key": "D__A-074",
+      "attempt": 1,
+      "completion_tokens": 465,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 15.179,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4680,
+      "qid": "FQ-074",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:39:49+08:00",
+      "total_tokens": 5145
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:40:05+08:00",
+  "group": "D",
+  "input_sha256": "81d462561bf1fad273141291e62b054240e92868d3a6267fc2d50ade3b83d9af",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、收购方、58.02%及11,856.29万元、100%及20,434.84万元等事实均见证据1/5/6，日期亦有证据支持，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-074",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、收购方、58.02%及11,856.29万元、100%及20,434.84万元等事实均见证据1/5/6，日期亦有证据支持，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

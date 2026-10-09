@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-040",
+  "attempts": [
+    {
+      "answer_key": "E__A-040",
+      "attempt": 1,
+      "completion_tokens": 779,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 33.522,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4495,
+      "qid": "FQ-040",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:48:24+08:00",
+      "total_tokens": 5274
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:48:57+08:00",
+  "group": "E",
+  "input_sha256": "76176f6d3ed9fd30d8e880fcde62d8ae0b153440d60d44f6f09c31977dcd6f07",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案两条关键事件（6月30日AI智算卡、与15家银行推AI智能体银行卡及三家率先发卡）均已覆盖，仅②未标\"7月\"时间，属极轻微缺失。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-040",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案两条关键事件（6月30日AI智算卡、与15家银行推AI智能体银行卡及三家率先发卡）均已覆盖，仅②未标\\\"7月\\\"时间，属极轻微缺失。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

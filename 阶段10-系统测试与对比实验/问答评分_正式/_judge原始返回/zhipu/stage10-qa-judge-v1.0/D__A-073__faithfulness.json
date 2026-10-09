@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-073",
+  "attempts": [
+    {
+      "answer_key": "D__A-073",
+      "attempt": 1,
+      "completion_tokens": 1128,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 18.03,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5171,
+      "qid": "FQ-073",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:21:25+08:00",
+      "total_tokens": 6299
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:21:43+08:00",
+  "group": "D",
+  "input_sha256": "0b5b09918062ffcd98c4ff0c8f63d6abafd6bfec0d6cfd5efb8f68dd1604dc7c",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中6月17日发行两笔8,000万美元票据、《信托契据》无条件不可撤销担保、担保名单金额等说法均被证据2、6、10直接支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-073",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中6月17日发行两笔8,000万美元票据、《信托契据》无条件不可撤销担保、担保名单金额等说法均被证据2、6、10直接支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

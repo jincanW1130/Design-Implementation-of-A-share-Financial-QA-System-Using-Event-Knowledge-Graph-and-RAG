@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-041",
+  "attempts": [
+    {
+      "answer_key": "B__A-041",
+      "attempt": 1,
+      "completion_tokens": 718,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 25.718,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4478,
+      "qid": "FQ-041",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:08:07+08:00",
+      "total_tokens": 5196
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:08:32+08:00",
+  "group": "B",
+  "input_sha256": "9a1cd01dc521cb6d9019795d38fef8b74c9af13e9d4a6cb8c6d87cbdef577b08",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "算力Token贷授信细节、APP停服迁移、停止新增注册、1985年首发中银卡等说法均可在证据9、10中找到支撑，2026年份可由证据发布时间合理推得，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-041",
+  "raw_text": "{\"score\": 2, \"reason\": \"算力Token贷授信细节、APP停服迁移、停止新增注册、1985年首发中银卡等说法均可在证据9、10中找到支撑，2026年份可由证据发布时间合理推得，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

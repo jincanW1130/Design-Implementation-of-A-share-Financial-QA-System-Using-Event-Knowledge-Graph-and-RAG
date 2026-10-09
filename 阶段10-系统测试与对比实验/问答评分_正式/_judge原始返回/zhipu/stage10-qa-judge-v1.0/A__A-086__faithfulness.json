@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-086",
+  "attempts": [
+    {
+      "answer_key": "A__A-086",
+      "attempt": 1,
+      "completion_tokens": 691,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 10.032,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4579,
+      "qid": "FQ-086",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:42:49+08:00",
+      "total_tokens": 5270
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:42:59+08:00",
+  "group": "A",
+  "input_sha256": "bf63229556fda17e05d8f065fb201e85e0781b3ae6c15f79f57267b163b33c6a",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中股息3.02元、登记日9月23日、发行规模200亿元、前5年利率1.86%等全部事实均可在可用证据中找到，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-086",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中股息3.02元、登记日9月23日、发行规模200亿元、前5年利率1.86%等全部事实均可在可用证据中找到，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

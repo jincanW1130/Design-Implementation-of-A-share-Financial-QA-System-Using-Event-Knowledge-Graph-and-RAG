@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-031",
+  "attempts": [
+    {
+      "answer_key": "A__A-031",
+      "attempt": 1,
+      "completion_tokens": 1860,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 53.119,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3893,
+      "qid": "FQ-031",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:55:01+08:00",
+      "total_tokens": 5753
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T18:55:54+08:00",
+  "group": "A",
+  "input_sha256": "8f8f6657763217b3420ba8870db81ad47e5ae0e095ece2e1995d8cefcc1f2f0a",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "营收、归母净利、营养健康增速及分产品收入均可由证据1/3直接支撑，日期表述也有证据1依据。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-031",
+  "raw_text": "{\"score\":2,\"reason\":\"营收、归母净利、营养健康增速及分产品收入均可由证据1/3直接支撑，日期表述也有证据1依据。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

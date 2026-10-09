@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-044",
+  "attempts": [
+    {
+      "answer_key": "A__A-044",
+      "attempt": 1,
+      "completion_tokens": 271,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 10.606,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3952,
+      "qid": "FQ-044",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:03:35+08:00",
+      "total_tokens": 4223
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T19:03:45+08:00",
+  "group": "A",
+  "input_sha256": "4763f7188899a9df87a3f26f8ce86379f84164adc38ac216800f74861f5f80f5",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案准确指出2026年9月17日收到预付款、合同正式生效，与参考答案完全一致，且明确回答已生效。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-044",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案准确指出2026年9月17日收到预付款、合同正式生效，与参考答案完全一致，且明确回答已生效。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

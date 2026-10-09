@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-036",
+  "attempts": [
+    {
+      "answer_key": "B__A-036",
+      "attempt": 1,
+      "completion_tokens": 652,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 22.057,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5409,
+      "qid": "FQ-036",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:04:17+08:00",
+      "total_tokens": 6061
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:04:39+08:00",
+  "group": "B",
+  "input_sha256": "f12111a1b8dbd76ffa4490f91efa22e32c997d60d6fc13510484b1016ec6e7bf",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "122人、2,915,367股、高管各32,000股、结构表、上市流通日2026-07-13、律师意见及回购注销等事实均可在证据1/4/5/6中找到对应支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-036",
+  "raw_text": "{\"score\": 2, \"reason\": \"122人、2,915,367股、高管各32,000股、结构表、上市流通日2026-07-13、律师意见及回购注销等事实均可在证据1/4/5/6中找到对应支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

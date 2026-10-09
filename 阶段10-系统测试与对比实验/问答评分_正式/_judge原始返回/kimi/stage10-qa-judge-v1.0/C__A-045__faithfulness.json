@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-045",
+  "attempts": [
+    {
+      "answer_key": "C__A-045",
+      "attempt": 1,
+      "completion_tokens": 142,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 7.044,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4356,
+      "qid": "FQ-045",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:01:17+08:00",
+      "total_tokens": 4498
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:01:24+08:00",
+  "group": "C",
+  "input_sha256": "0e4d7fe68f7d7e20b2d40b2ca5f45f23bfb7fbc616448282915dedba82548195",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "复产事件、装置明细、7月17日停产起点、8月26日公告日及'未给复产具体日期'的说法均被证据1原文完整支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-045",
+  "raw_text": "{\"score\": 2, \"reason\": \"复产事件、装置明细、7月17日停产起点、8月26日公告日及'未给复产具体日期'的说法均被证据1原文完整支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-082",
+  "attempts": [
+    {
+      "answer_key": "B__A-082",
+      "attempt": 1,
+      "completion_tokens": 386,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 7.402,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4062,
+      "qid": "FQ-082",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:54:21+08:00",
+      "total_tokens": 4448
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T00:54:28+08:00",
+  "group": "B",
+  "input_sha256": "76a13ad2fb338f73fc262e61d6bb91ff1b7538107f85dfe1156ed45f216fa226",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整给出分拆上市事件、保密形式递交及实物分派方式，与参考答案一致，判定完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-082",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整给出分拆上市事件、保密形式递交及实物分派方式，与参考答案一致，判定完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

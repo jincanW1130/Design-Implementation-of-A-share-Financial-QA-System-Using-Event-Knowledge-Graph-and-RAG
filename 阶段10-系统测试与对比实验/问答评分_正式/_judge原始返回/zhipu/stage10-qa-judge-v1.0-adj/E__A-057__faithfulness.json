@@ -1,0 +1,46 @@
+{
+  "answer_key": "E__A-057",
+  "attempts": [
+    {
+      "answer_key": "E__A-057",
+      "attempt": 1,
+      "completion_tokens": 3741,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 75.199,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4246,
+      "qid": "FQ-057",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:38:04+08:00",
+      "total_tokens": 7987
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:39:20+08:00",
+  "group": "E",
+  "input_sha256": "cdee00f854284570ebb5c513c6fd2bde46eb9a3572547d0778c60026ac903712",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "disagreement_note": "答案处量表边界：主judge把标注为推测及超证据的推断计为不严谨，副judge只核事实性拒答而未计这些表述",
+    "final_score": 1,
+    "reason": "核心为如实拒答且未编造目标主体信息，但将证据4归于中国神华、中文名对应等说法超出证据原文，属少量不严谨"
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-057",
+  "raw_text": "{\"final_score\": 1, \"reason\": \"核心为如实拒答且未编造目标主体信息，但将证据4归于中国神华、中文名对应等说法超出证据原文，属少量不严谨\", \"disagreement_note\": \"答案处量表边界：主judge把标注为推测及超证据的推断计为不严谨，副judge只核事实性拒答而未计这些表述\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

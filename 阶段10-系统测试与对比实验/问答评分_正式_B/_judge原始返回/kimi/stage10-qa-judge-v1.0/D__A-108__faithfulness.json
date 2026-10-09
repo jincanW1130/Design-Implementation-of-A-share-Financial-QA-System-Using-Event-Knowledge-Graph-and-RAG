@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-108",
+  "attempts": [
+    {
+      "answer_key": "D__A-108",
+      "attempt": 1,
+      "completion_tokens": 428,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 17.102,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4344,
+      "qid": "FQ-108",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:09:01+08:00",
+      "total_tokens": 4772
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:09:18+08:00",
+  "group": "D",
+  "input_sha256": "20a82c5ae82cd0a8161ea2fa3032ff4ecf2d2e9b1c7b8e95bc240ec3a1147695",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核心事实（上交所并购重组委、7月16日）及概伦电子、华虹宏力两单注册批复均直接出自证据1，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-108",
+  "raw_text": "{\"score\": 2, \"reason\": \"核心事实（上交所并购重组委、7月16日）及概伦电子、华虹宏力两单注册批复均直接出自证据1，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

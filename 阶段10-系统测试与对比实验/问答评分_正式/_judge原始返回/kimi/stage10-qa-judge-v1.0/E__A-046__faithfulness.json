@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-046",
+  "attempts": [
+    {
+      "answer_key": "E__A-046",
+      "attempt": 1,
+      "completion_tokens": 410,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 11.883,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4782,
+      "qid": "FQ-046",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:53:38+08:00",
+      "total_tokens": 5192
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:53:50+08:00",
+  "group": "E",
+  "input_sha256": "2e1965606f8c9e9f5772d0705ca06ef5d85940e0408e69924107df96639df1e3",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "变更主体、地址、批准文号H20253075、通知书编号、生产企业、签约时间及影响表述均能在证据1-3中找到对应，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-046",
+  "raw_text": "{\"score\": 2, \"reason\": \"变更主体、地址、批准文号H20253075、通知书编号、生产企业、签约时间及影响表述均能在证据1-3中找到对应，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

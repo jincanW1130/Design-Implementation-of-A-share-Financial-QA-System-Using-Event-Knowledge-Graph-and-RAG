@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-013",
+  "attempts": [
+    {
+      "answer_key": "E__A-013",
+      "attempt": 1,
+      "completion_tokens": 143,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 9.005,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4212,
+      "qid": "FQ-013",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:31:26+08:00",
+      "total_tokens": 4355
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:31:35+08:00",
+  "group": "E",
+  "input_sha256": "606bd74e931a8177a671b578eb0c70c4f973a734720624f28b66338fe0d5560c",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "文件名称、出具机构及审计评估初步完成等说法均被证据6原文直接支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-013",
+  "raw_text": "{\"score\": 2, \"reason\": \"文件名称、出具机构及审计评估初步完成等说法均被证据6原文直接支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

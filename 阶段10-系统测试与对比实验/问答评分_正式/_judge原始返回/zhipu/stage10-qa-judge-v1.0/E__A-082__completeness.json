@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-082",
+  "attempts": [
+    {
+      "answer_key": "E__A-082",
+      "attempt": 1,
+      "completion_tokens": 279,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 5.693,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4086,
+      "qid": "FQ-082",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:12:49+08:00",
+      "total_tokens": 4365
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T01:12:55+08:00",
+  "group": "E",
+  "input_sha256": "3979f6ccc99db4a958300d92dc24f6c5913286c9964fcd3f5800151304722f87",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案关键信息：实物分派方式分拆上市、上市申请以保密形式递交，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-082",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案关键信息：实物分派方式分拆上市、上市申请以保密形式递交，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

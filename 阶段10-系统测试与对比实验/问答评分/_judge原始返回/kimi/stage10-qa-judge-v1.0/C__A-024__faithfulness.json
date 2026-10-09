@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-024",
+  "attempts": [
+    {
+      "answer_key": "C__A-024",
+      "attempt": 1,
+      "completion_tokens": 302,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 13.53,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5063,
+      "qid": "PE-24",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:36:59+08:00",
+      "total_tokens": 5365
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:37:13+08:00",
+  "group": "C",
+  "input_sha256": "189daaeab60aaddf5b1b1fb55c588f2e62286ecc049cbf4cb49dc15ab1e2db18",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "571.60元/股、573→571.60、除权除息日8月10日、计算式及14.11元/14.019358元口径均由证据1/2/3支撑，2025年度分红调整153.59→151.01元由证据4支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-24",
+  "raw_text": "{\"score\": 2, \"reason\": \"571.60元/股、573→571.60、除权除息日8月10日、计算式及14.11元/14.019358元口径均由证据1/2/3支撑，2025年度分红调整153.59→151.01元由证据4支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

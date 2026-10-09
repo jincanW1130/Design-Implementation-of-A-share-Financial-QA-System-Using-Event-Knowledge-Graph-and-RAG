@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-062",
+  "attempts": [
+    {
+      "answer_key": "E__A-062",
+      "attempt": 1,
+      "completion_tokens": 613,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 5.208,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5237,
+      "qid": "FQ-062",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:13:13+08:00",
+      "total_tokens": 5850
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T00:13:18+08:00",
+  "group": "E",
+  "input_sha256": "32326b403bb48125c696e622a26668efb21c88463efa7fb33b965ef54bda33c4",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案全部关键点：交易事项及已完成、2026年4月起并入新资产、上年同期追溯调整，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-062",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案全部关键点：交易事项及已完成、2026年4月起并入新资产、上年同期追溯调整，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

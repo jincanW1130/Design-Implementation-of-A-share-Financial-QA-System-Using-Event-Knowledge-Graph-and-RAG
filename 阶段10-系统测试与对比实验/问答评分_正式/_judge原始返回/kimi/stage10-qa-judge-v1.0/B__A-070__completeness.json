@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-070",
+  "attempts": [
+    {
+      "answer_key": "B__A-070",
+      "attempt": 1,
+      "completion_tokens": 786,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 25.012,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4999,
+      "qid": "FQ-070",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:33:13+08:00",
+      "total_tokens": 5785
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:33:38+08:00",
+  "group": "B",
+  "input_sha256": "b8c79bbf8a3ad2ad9f6239981fca80b4a8eb6fd83e0be3864c3aa95b82992f28",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖事件、债券简称、期限、起息日、发行总额、利率及主承销商与联席主承销商，参考答案关键信息无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-070",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖事件、债券简称、期限、起息日、发行总额、利率及主承销商与联席主承销商，参考答案关键信息无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

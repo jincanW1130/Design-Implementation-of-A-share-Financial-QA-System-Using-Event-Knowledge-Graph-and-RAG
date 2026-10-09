@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-047",
+  "attempts": [
+    {
+      "answer_key": "E__A-047",
+      "attempt": 1,
+      "completion_tokens": 1216,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 21.769,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4338,
+      "qid": "FQ-047",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:09:33+08:00",
+      "total_tokens": 5554
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T00:09:55+08:00",
+  "group": "E",
+  "input_sha256": "01a78c49bbb1979bf2d5b64338cfa879686b44c25b7e2b3bbea12ac9532712e4",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖事件（补充质押）、质押数量68,909,674股、8.02%、1.23%、起始日及质权人等全部关键信息，判信息完整",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-047",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖事件（补充质押）、质押数量68,909,674股、8.02%、1.23%、起始日及质权人等全部关键信息，判信息完整\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

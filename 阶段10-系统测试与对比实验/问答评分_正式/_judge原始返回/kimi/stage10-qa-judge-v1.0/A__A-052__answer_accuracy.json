@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-052",
+  "attempts": [
+    {
+      "answer_key": "A__A-052",
+      "attempt": 1,
+      "completion_tokens": 166,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 8.719,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4138,
+      "qid": "FQ-052",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:12:10+08:00",
+      "total_tokens": 4304
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T19:12:19+08:00",
+  "group": "A",
+  "input_sha256": "ac7de21b113897349bbee28bc9b431f12b959df3f28f24819b27481f806cc24f",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "仅答对郑宗强董事长一人，遗漏参考答案中罗汉武、窦晓波、李芳、胡顺靖四人，属部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-052",
+  "raw_text": "{\"score\": 1, \"reason\": \"仅答对郑宗强董事长一人，遗漏参考答案中罗汉武、窦晓波、李芳、胡顺靖四人，属部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

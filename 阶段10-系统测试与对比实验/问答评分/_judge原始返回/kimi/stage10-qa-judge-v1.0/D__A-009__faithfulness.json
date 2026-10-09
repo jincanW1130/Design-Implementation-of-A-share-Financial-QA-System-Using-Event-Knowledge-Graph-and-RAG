@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-009",
+  "attempts": [
+    {
+      "answer_key": "D__A-009",
+      "attempt": 1,
+      "completion_tokens": 264,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 10.551,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4364,
+      "qid": "PE-09",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:45:27+08:00",
+      "total_tokens": 4628
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:45:37+08:00",
+  "group": "D",
+  "input_sha256": "ad1e44192a3b610549e5073a1170d1c82cf93869a15bf2283b7d538f8410b1e2",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "注册机构、通知书文号、400亿元额度及50亿元公司债证监会批复等说法均与证据1/2/3原文一致，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-09",
+  "raw_text": "{\"score\": 2, \"reason\": \"注册机构、通知书文号、400亿元额度及50亿元公司债证监会批复等说法均与证据1/2/3原文一致，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-025",
+  "attempts": [
+    {
+      "answer_key": "D__A-025",
+      "attempt": 1,
+      "completion_tokens": 118,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 7.676,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4787,
+      "qid": "FQ-025",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:39:38+08:00",
+      "total_tokens": 4905
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:39:45+08:00",
+  "group": "D",
+  "input_sha256": "6c24e7f96690417044bfcfd4c0161894b92ca4a9e21e6c388b502a8e4fe42e0a",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核准文号证监许可[2019]1949号、发行股数32,642,401股、每股61.27元均与参考答案完全一致，且未与2021年发行混同。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-025",
+  "raw_text": "{\"score\": 2, \"reason\": \"核准文号证监许可[2019]1949号、发行股数32,642,401股、每股61.27元均与参考答案完全一致，且未与2021年发行混同。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

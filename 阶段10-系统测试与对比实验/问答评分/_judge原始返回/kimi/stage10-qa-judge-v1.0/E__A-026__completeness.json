@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-026",
+  "attempts": [
+    {
+      "answer_key": "E__A-026",
+      "attempt": 1,
+      "completion_tokens": 540,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 17.961,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6640,
+      "qid": "PE-26",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:28:32+08:00",
+      "total_tokens": 7180
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T18:28:50+08:00",
+  "group": "E",
+  "input_sha256": "bf5ccf0feb60c76528a685a85662722752fe81369b915425095c167f1aa8bce4",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两份目标协议均已提及（FTTR全称、天翼智屏项目），但后者缺协议全称，且两份签署日期均未给出，属基本覆盖而非完整。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-26",
+  "raw_text": "{\"score\": 1, \"reason\": \"两份目标协议均已提及（FTTR全称、天翼智屏项目），但后者缺协议全称，且两份签署日期均未给出，属基本覆盖而非完整。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

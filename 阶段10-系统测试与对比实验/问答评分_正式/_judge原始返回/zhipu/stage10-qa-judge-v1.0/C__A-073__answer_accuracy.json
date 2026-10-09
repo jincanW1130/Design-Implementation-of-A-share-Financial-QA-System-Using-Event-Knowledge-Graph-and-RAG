@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-073",
+  "attempts": [
+    {
+      "answer_key": "C__A-073",
+      "attempt": 1,
+      "completion_tokens": 1343,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 26.726,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 6164,
+      "qid": "FQ-073",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:11:35+08:00",
+      "total_tokens": 7507
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:12:02+08:00",
+  "group": "C",
+  "input_sha256": "15fe9a6b1b2e18fd389de9973dca2c0cbf79f4e636692854c5a7947a14450233",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确给出6月17日CS MTN发行两笔票据、8000万美元、中信证券无条件不可撤销担保，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-073",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确给出6月17日CS MTN发行两笔票据、8000万美元、中信证券无条件不可撤销担保，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

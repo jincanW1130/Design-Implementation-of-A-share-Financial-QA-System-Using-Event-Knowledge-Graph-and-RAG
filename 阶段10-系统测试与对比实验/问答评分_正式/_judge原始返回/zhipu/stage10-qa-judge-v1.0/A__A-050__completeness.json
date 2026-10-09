@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-050",
+  "attempts": [
+    {
+      "answer_key": "A__A-050",
+      "attempt": 1,
+      "completion_tokens": 662,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 13.372,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5011,
+      "qid": "FQ-050",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:24:03+08:00",
+      "total_tokens": 5673
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:24:16+08:00",
+  "group": "A",
+  "input_sha256": "5ad45b338d798867b582019abc189471508d030a9184c96386aa105d76da0c8e",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案仅提杨兆、赵明璟，参考答案中程雪、管江华等董事及高管信息全部遗漏，关键信息大量缺失。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-050",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案仅提杨兆、赵明璟，参考答案中程雪、管江华等董事及高管信息全部遗漏，关键信息大量缺失。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

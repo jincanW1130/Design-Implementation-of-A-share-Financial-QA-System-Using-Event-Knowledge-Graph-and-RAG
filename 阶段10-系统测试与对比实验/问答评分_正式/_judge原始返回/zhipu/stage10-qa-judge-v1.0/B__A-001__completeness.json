@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-001",
+  "attempts": [
+    {
+      "answer_key": "B__A-001",
+      "attempt": 1,
+      "completion_tokens": 231,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 3.838,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4449,
+      "qid": "FQ-001",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:28:25+08:00",
+      "total_tokens": 4680
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:28:29+08:00",
+  "group": "B",
+  "input_sha256": "a6b1143c40262b156fd77caf929df745966adf8741f3beae541568293e0aa563",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "被评答案完整覆盖购买价格26.5441元/股、数量8,476,357股占比0.13%、成交金额224,997,098.71元，无关键信息遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-001",
+  "raw_text": "{\"score\": 2, \"reason\": \"被评答案完整覆盖购买价格26.5441元/股、数量8,476,357股占比0.13%、成交金额224,997,098.71元，无关键信息遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

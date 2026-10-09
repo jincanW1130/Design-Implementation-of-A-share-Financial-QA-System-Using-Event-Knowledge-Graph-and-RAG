@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-038",
+  "attempts": [
+    {
+      "answer_key": "D__A-038",
+      "attempt": 1,
+      "completion_tokens": 290,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 11.858,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4597,
+      "qid": "FQ-038",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:47:47+08:00",
+      "total_tokens": 4887
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:47:59+08:00",
+  "group": "D",
+  "input_sha256": "f1a2f5a2eddef65e0e2d54fcc33db7a75bf11816be2657ee12d09be328e8b0e7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "中标项目名称、507,952,785.60元中标价及交易对方中建三局云采科技均与参考答案一致，额外内容亦有证据无误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-038",
+  "raw_text": "{\"score\": 2, \"reason\": \"中标项目名称、507,952,785.60元中标价及交易对方中建三局云采科技均与参考答案一致，额外内容亦有证据无误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

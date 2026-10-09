@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-117",
+  "attempts": [
+    {
+      "answer_key": "C__A-117",
+      "attempt": 1,
+      "completion_tokens": 130,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 5.571,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4247,
+      "qid": "FQ-117",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:36:35+08:00",
+      "total_tokens": 4377
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:36:41+08:00",
+  "group": "C",
+  "input_sha256": "169e5e64238915ff6e76865df49741cb61881069e5c748e6fceed3a5c5cda0c7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确指出雅安云智算力技术有限公司是蜂助手的全资子公司，与参考答案核心结论完全一致，问题所问关系答对。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-117",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确指出雅安云智算力技术有限公司是蜂助手的全资子公司，与参考答案核心结论完全一致，问题所问关系答对。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

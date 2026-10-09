@@ -1,0 +1,43 @@
+{
+  "answer_key": "B__A-012",
+  "attempts": [
+    {
+      "answer_key": "B__A-012",
+      "attempt": 1,
+      "completion_tokens": 419,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 7.933,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4778,
+      "qid": "PE-12",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:38:40+08:00",
+      "total_tokens": 5197
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:38:48+08:00",
+  "group": "B",
+  "input_sha256": "06a764319f3d563b932d302892ec0d3c00197b4d8635d65a8b9d1d3dcc88701b",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中协议名称、签订日期、期限、年度上限及待审议等事实均可在可用证据中找到支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-12",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中协议名称、签订日期、期限、年度上限及待审议等事实均可在可用证据中找到支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

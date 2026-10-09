@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-032",
+  "attempts": [
+    {
+      "answer_key": "D__A-032",
+      "attempt": 1,
+      "completion_tokens": 334,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 11.678,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4944,
+      "qid": "FQ-032",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:43:52+08:00",
+      "total_tokens": 5278
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:44:03+08:00",
+  "group": "D",
+  "input_sha256": "75af581b0ff66a4f2a59cd4063a1f9e6704e247198c4b04a3241ba2bdd65a850",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "被评答案以「证据不足」拒答，未给出资产总额、权益、营收、净利润任一数值，与参考答案四项数据完全不符，故判0分。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-032",
+  "raw_text": "{\"score\": 0, \"reason\": \"被评答案以「证据不足」拒答，未给出资产总额、权益、营收、净利润任一数值，与参考答案四项数据完全不符，故判0分。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

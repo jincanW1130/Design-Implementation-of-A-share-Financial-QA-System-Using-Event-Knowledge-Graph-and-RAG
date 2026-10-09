@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-038",
+  "attempts": [
+    {
+      "answer_key": "E__A-038",
+      "attempt": 1,
+      "completion_tokens": 353,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 12.98,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4879,
+      "qid": "FQ-038",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:46:42+08:00",
+      "total_tokens": 5232
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:46:55+08:00",
+  "group": "E",
+  "input_sha256": "e45780844b5b7f0998bc49903d710327f24416519d0f85f67c74623b971c6153",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案全部要点（中标通知书签发方、江夏/孝感楚能项目名称、中标价507,952,785.60元、与中建三局云采签订采购合同及金额）均已覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-038",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案全部要点（中标通知书签发方、江夏/孝感楚能项目名称、中标价507,952,785.60元、与中建三局云采签订采购合同及金额）均已覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

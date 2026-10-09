@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-094",
+  "attempts": [
+    {
+      "answer_key": "B__A-094",
+      "attempt": 1,
+      "completion_tokens": 88,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 5.168,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4968,
+      "qid": "FQ-094",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:41:12+08:00",
+      "total_tokens": 5056
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:41:18+08:00",
+  "group": "B",
+  "input_sha256": "5e1af4ca50009d2f3b2aa9a416dbe4a4eb34d9b259b33804ff4deae4c65058da",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案给出的说明会日期2026年8月14日与独立财务顾问国泰海通证券股份有限公司均与参考答案完全一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-094",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案给出的说明会日期2026年8月14日与独立财务顾问国泰海通证券股份有限公司均与参考答案完全一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-030",
+  "attempts": [
+    {
+      "answer_key": "A__A-030",
+      "attempt": 1,
+      "completion_tokens": 322,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 5.635,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3891,
+      "qid": "FQ-030",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:20:15+08:00",
+      "total_tokens": 4213
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:20:21+08:00",
+  "group": "A",
+  "input_sha256": "2a347f745bcd252c8222b0d73b0c0354b6f6dc4a6c1349e8c5dbdfce248fbaa9",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案与参考答案完全一致：2022年6月剥离、交易对方中天科技集团有限公司及剥离内容均正确，无误答。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-030",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案与参考答案完全一致：2022年6月剥离、交易对方中天科技集团有限公司及剥离内容均正确，无误答。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

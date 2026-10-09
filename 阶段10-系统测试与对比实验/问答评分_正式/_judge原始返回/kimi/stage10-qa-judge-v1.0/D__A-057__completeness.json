@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-057",
+  "attempts": [
+    {
+      "answer_key": "D__A-057",
+      "attempt": 1,
+      "completion_tokens": 684,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 21.435,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4000,
+      "qid": "FQ-057",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:10:37+08:00",
+      "total_tokens": 4684
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:10:58+08:00",
+  "group": "D",
+  "input_sha256": "dde13dd1364addbd678b256843724b86c3f79da9445e6b958d589c54dfd8d681",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案自称无法回答，完全未覆盖金标准中李凯、杨杰、郑颖三名董事及其法定代表人/董事身份、SPV公司类型等关键信息，属大量遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-057",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案自称无法回答，完全未覆盖金标准中李凯、杨杰、郑颖三名董事及其法定代表人/董事身份、SPV公司类型等关键信息，属大量遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

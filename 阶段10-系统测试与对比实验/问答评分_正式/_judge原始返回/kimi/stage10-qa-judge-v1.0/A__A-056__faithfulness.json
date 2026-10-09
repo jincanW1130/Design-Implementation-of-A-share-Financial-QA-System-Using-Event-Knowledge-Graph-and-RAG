@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-056",
+  "attempts": [
+    {
+      "answer_key": "A__A-056",
+      "attempt": 1,
+      "completion_tokens": 361,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 11.535,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4076,
+      "qid": "FQ-056",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:15:07+08:00",
+      "total_tokens": 4437
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:15:19+08:00",
+  "group": "A",
+  "input_sha256": "e34e5ff77eb2078536e2f1b54206e410be7c053be5059318f42dfabfad3b391b",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "王维身份、一致行动人增持、无其他变动、法律意见书未具名等说法均能在证据1/2/5中找到支撑，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-056",
+  "raw_text": "{\"score\": 2, \"reason\": \"王维身份、一致行动人增持、无其他变动、法律意见书未具名等说法均能在证据1/2/5中找到支撑，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

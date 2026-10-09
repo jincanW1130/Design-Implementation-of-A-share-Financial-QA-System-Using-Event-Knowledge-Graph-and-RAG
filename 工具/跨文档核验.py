@@ -633,7 +633,17 @@ WANT_STAGES = ['阶段01-选题与项目规划', '阶段02-文献调研与开题
                # 2026-10-02 第 10 阶段开工：《02》第16.1节 的「第10阶段 系统测试 + 对比实验」，
                # 本阶段产出落 `阶段10-系统测试与对比实验\`（A vs C 对照、正式测试集与消融）。
                # 同一处理：该目录必须进期望表，否则 B-28 的反向断言会把它判成「计划外的阶段目录」。
-               '阶段10-系统测试与对比实验']
+               '阶段10-系统测试与对比实验',
+               # 2026-10-04 第 12 阶段开工：《02》第16.1节 的「第12阶段 答辩准备」，产出落
+               # `阶段12-答辩准备\`（答辩 PPT 内容规格、讲稿、Demo 演示脚本、追问预案）。
+               # 同一处理：该目录必须进期望表，否则 B-28 的反向断言会把它判成「计划外的阶段目录」。
+               # （2026-10-07 补记：上面「第 11 阶段目录尚未创建」一句已由下方登记取代。）
+               # 2026-10-07 第 11 阶段登记：《02》第16.1节 的「第11阶段 论文撰写与材料整理」，
+               # 产出落 `阶段11-论文撰写\`（任务书《28》、交付文档《29》与 `_分章源文件\`）。
+               # **这是登记，不是放宽判据**：B-28 反向断言的目的是抓「计划外的阶段目录」，
+               # 而第 11 阶段是 16.1 节 十二阶段总流程里的正式阶段。**只加这一项，其余判据一字未改。**
+               '阶段11-论文撰写',
+               '阶段12-答辩准备']
 have = {os.path.basename(d) for d in STAGES}
 for s in WANT_STAGES:
     report(s in have, '阶段目录存在：%s' % s)
@@ -754,9 +764,72 @@ if n2:
 #   O2 《03》第二节总表 22 行的 槽位／题名／年 与指纹一致（**直接按表格列解析，不依赖反引号**）；
 #   O3 《03》总表「全文」列的文件名与指纹一致，且该文件在 `文献PDF/` 下真实存在；
 #   O4 《04》参考文献表 22 行与指纹逐条一致（题名与首作者均须出现在该行）；
+#      **2026-10-04 判据口径修订（作者序，不影响严格性）**：`04-开题报告.md` 的 22 条参考文献
+#      已按外部评审 P1-1 改写为 GB/T 7714—2015 著录，英文首作者由 `P. Lewis` 式改为 `LEWIS P` 式；
+#      而指纹（外部金标准）里的首作者仍是替换前的原名写法，两者**逐字互斥**。若继续按原名逐字比对，
+#      则「合 GB/T」与「过 O4」不可兼得。故 O4 对首作者改为**归一化比较**：
+#      把「名首字母＋姓」与「姓＋名首字母」两种写法都归一到「姓＋名首字母」（英文全大写、
+#      去缩写点与逗号），任一归一化形式命中该行即通过。**题名仍按逐字比对**（不归一化、不放宽），
+#      编号 1..22、正文首现顺序与出现次数（O5）也一字未改——故本项**仍能抓住「换文献／换作者／
+#      错编号／错题名」，只是不再因著录格式的合规改写而误报**。
+#      这条修订按项目惯例登记在 `工具\README.md`（同一处也记了 2026-09-27 T5「不得用拼接绕过判据」
+#      的教训：凡判据语义变更，必须同时改源码与说明，不得靠写法取巧）。
 #   O5 《04》正文引用编号：集合＝[1,22]、按首次出现顺序严格递增、每条的出现次数与指纹一致
 #      （出现次数这一条是为“把某次出现的编号错一位”而设：只查集合与首现顺序抓不到它）。
 # 只增不减：不修改 A～N 的任何判据。
+def _norm_author_tokens(s):
+    """把一个作者名串归一化成「字母／汉字 token 列表」，用于 O4 的作者序无关比较。
+
+    * 去掉缩写点、逗号、多余空白；ASCII 一律大写。
+    * 例：`P. Lewis` → ['P', 'LEWIS']；`LEWIS P` → ['LEWIS', 'P']；`刘政昊` → ['刘政昊']。
+    """
+    s = re.sub(r'[.,]', ' ', s or '')
+    out = []
+    for tok in s.split():
+        out.append(tok.upper() if tok.isascii() else tok)
+    return out
+
+
+def _author_forms(name):
+    """给出一个首作者的两种可接受归一化写法（均为「姓 名首字母…」或「名首字母… 姓」）。"""
+    toks = _norm_author_tokens(name)
+    if len(toks) < 2:
+        return {''.join(toks)}
+    # 形如「P LEWIS」：前面全是单字母、最后一个是姓 → 归一为「LEWIS P」
+    if all(len(t) == 1 and t.isascii() for t in toks[:-1]):
+        return {toks[-1] + ' ' + ' '.join(toks[:-1])}
+    # 形如「LEWIS P」：首个是姓、后面全是单字母 → 归一为「LEWIS P」
+    if all(len(t) == 1 and t.isascii() for t in toks[1:]):
+        return {toks[0] + ' ' + ' '.join(toks[1:])}
+    return {' '.join(toks)}
+
+
+def _author_in_line(first_author, line):
+    """O4 的首作者判定（题名仍逐字比对，本函数只作用于作者）。
+
+    三条通路任一命中即通过：
+      ① 原名逐字出现在该行（中文作者、以及未改写的英文写法都走这条）；
+      ② 把「该行」与「首作者」都归一化后，规范形式「姓 名首字母」命中；
+      ③ 反向形式「名首字母 姓」命中（兼容 GB/T 与替换前两种写法）。
+    """
+    if not first_author:
+        return True
+    if first_author in line:
+        return True
+    norm_line = ' '.join(_norm_author_tokens(line))
+    for form in _author_forms(first_author):
+        if form and form in norm_line:
+            return True
+    # 反向：把行按「名首字母 姓」也拼一遍再比一次
+    toks = _norm_author_tokens(line)
+    rev = ' '.join(toks)
+    for form in _author_forms(first_author):
+        parts = form.split()
+        if len(parts) >= 2 and (' '.join(parts[1:] + parts[:1])) in rev:
+            return True
+    return False
+
+
 print(); print('=' * 78); print('O 题录指纹（22 条）一致性：以 _替换执行/22条题录指纹.json 为外部金标准'); print('=' * 78)
 _o3 = next((n for n in D if n.startswith('03-')), None)
 _o4 = next((n for n in D if n.startswith('04-')), None)
@@ -843,8 +916,9 @@ if _fp is not None and _o3 and _o4:
         _firstauthor = r['作者'].split(',')[0].strip()
         if r['题名'] not in _ln:
             _rbad.append('[%d] 题名未出现：%r' % (_n, r['题名']))
-        if _firstauthor and _firstauthor not in _ln:
-            _rbad.append('[%d] 首作者 %r 未出现' % (_n, _firstauthor))
+        if _firstauthor and not _author_in_line(_firstauthor, _ln):
+            _rbad.append('[%d] 首作者 %r 未出现（已按 GB/T 7714 与原名两种写法归一化比较）'
+                         % (_n, _firstauthor))
     for _x in _rbad:
         print('    !! %s' % _x)
     report(not _rbad, 'O4 《04》参考文献表 22 行与指纹逐条一致（题名＋首作者）', '%d 处不一致' % len(_rbad))

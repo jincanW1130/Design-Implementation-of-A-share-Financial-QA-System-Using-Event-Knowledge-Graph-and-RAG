@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-074",
+  "attempts": [
+    {
+      "answer_key": "B__A-074",
+      "attempt": 1,
+      "completion_tokens": 341,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 14.048,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4865,
+      "qid": "FQ-074",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:25:34+08:00",
+      "total_tokens": 5206
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:25:48+08:00",
+  "group": "B",
+  "input_sha256": "5fd03fd2663aac8698f7ae6726b4cdb7e529d05cdbe5a1dcced3b993a327867e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "收购方赢合科技、100%整体收购及58.02%比例、总金额20,434.84万元与11,856.29万元均已覆盖，关键信息无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-074",
+  "raw_text": "{\"score\": 2, \"reason\": \"收购方赢合科技、100%整体收购及58.02%比例、总金额20,434.84万元与11,856.29万元均已覆盖，关键信息无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

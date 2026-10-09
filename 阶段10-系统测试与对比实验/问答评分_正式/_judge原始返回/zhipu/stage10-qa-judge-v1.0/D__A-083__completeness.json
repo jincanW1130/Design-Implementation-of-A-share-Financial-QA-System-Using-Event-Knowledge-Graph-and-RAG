@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-083",
+  "attempts": [
+    {
+      "answer_key": "D__A-083",
+      "attempt": 1,
+      "completion_tokens": 410,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 6.992,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4703,
+      "qid": "FQ-083",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:22:36+08:00",
+      "total_tokens": 5113
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:22:43+08:00",
+  "group": "D",
+  "input_sha256": "89f22fa4ceaf85aa380352a44f321ddd0e9aa8f5fa38ad282f6c83653c12570d",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案全部关键信息：8月19日联合宣布、intismeran autogene、INTerpath-001、联合Keytruda、超1100例高危黑色素瘤辅助治疗及关键终点。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-083",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案全部关键信息：8月19日联合宣布、intismeran autogene、INTerpath-001、联合Keytruda、超1100例高危黑色素瘤辅助治疗及关键终点。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

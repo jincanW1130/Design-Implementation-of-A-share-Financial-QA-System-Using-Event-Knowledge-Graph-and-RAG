@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-015",
+  "attempts": [
+    {
+      "answer_key": "E__A-015",
+      "attempt": 1,
+      "completion_tokens": 141,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 12.256,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4777,
+      "qid": "FQ-015",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:32:08+08:00",
+      "total_tokens": 4918
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:32:20+08:00",
+  "group": "E",
+  "input_sha256": "ef50f3f73097ee6bc414ad79b94ff0f2a6137440ab519269b7de3bdb7f1fb154",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖审核机构（中国结算深圳分公司）、注销份数303.456万份及办理完毕日期2026年9月2日，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-015",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖审核机构（中国结算深圳分公司）、注销份数303.456万份及办理完毕日期2026年9月2日，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

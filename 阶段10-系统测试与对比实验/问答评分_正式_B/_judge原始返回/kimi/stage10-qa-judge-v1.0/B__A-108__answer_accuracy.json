@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-108",
+  "attempts": [
+    {
+      "answer_key": "B__A-108",
+      "attempt": 1,
+      "completion_tokens": 81,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 3.633,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4291,
+      "qid": "FQ-108",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:50:50+08:00",
+      "total_tokens": 4372
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:50:53+08:00",
+  "group": "B",
+  "input_sha256": "87ca1e53145d19b2dde2ee7e91d386cc53ddcd79d4470d82f474f7dcca41a2ec",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确给出审核机构为上交所并购重组委、通过日期为2026年7月16日，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-108",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确给出审核机构为上交所并购重组委、通过日期为2026年7月16日，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-006",
+  "attempts": [
+    {
+      "answer_key": "D__A-006",
+      "attempt": 1,
+      "completion_tokens": 2450,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 19.94,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3843,
+      "qid": "FQ-006",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:53:00+08:00",
+      "total_tokens": 6293
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:53:20+08:00",
+  "group": "D",
+  "input_sha256": "814eb7eb2d0537e488f9de422827932fb78a6ed082d3fa12125f525603efe752",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "批复文号、400亿元上限、24个月有效期均与证据1原文逐字一致，发布日期与证据元数据相符，无编造",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-006",
+  "raw_text": "{\"score\": 2, \"reason\": \"批复文号、400亿元上限、24个月有效期均与证据1原文逐字一致，发布日期与证据元数据相符，无编造\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

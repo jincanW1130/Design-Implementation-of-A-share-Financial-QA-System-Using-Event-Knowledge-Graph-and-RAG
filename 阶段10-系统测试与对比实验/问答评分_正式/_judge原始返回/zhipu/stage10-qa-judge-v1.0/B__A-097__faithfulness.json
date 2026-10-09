@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-097",
+  "attempts": [
+    {
+      "answer_key": "B__A-097",
+      "attempt": 1,
+      "completion_tokens": 1621,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 31.62,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5665,
+      "qid": "FQ-097",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:56:11+08:00",
+      "total_tokens": 7286
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:56:42+08:00",
+  "group": "B",
+  "input_sha256": "ec955ca2cf63738a1a56a8ba710b0083ee7b4c50834aa8ee7a7a0d78691225a9",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "三项事件的受理号、适应症、申请人及公告日期均能在可用证据或其元数据中找到支撑，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-097",
+  "raw_text": "{\"score\": 2, \"reason\": \"三项事件的受理号、适应症、申请人及公告日期均能在可用证据或其元数据中找到支撑，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

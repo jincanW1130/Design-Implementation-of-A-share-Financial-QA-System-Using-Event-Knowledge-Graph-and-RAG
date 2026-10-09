@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-078",
+  "attempts": [
+    {
+      "answer_key": "D__A-078",
+      "attempt": 1,
+      "completion_tokens": 1128,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 20.647,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4647,
+      "qid": "FQ-078",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:21:45+08:00",
+      "total_tokens": 5775
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:22:05+08:00",
+  "group": "D",
+  "input_sha256": "bd1d9757e3aab5f918826d4ae28de86a77437b2eb1151902a2fc861c65cd5269",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整指出双方签订22/05石油合同、智慧石油任作业者，100%勘探权益、49%开采权益、15年生产期均与参考一致，30年期限有证据支撑。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-078",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整指出双方签订22/05石油合同、智慧石油任作业者，100%勘探权益、49%开采权益、15年生产期均与参考一致，30年期限有证据支撑。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

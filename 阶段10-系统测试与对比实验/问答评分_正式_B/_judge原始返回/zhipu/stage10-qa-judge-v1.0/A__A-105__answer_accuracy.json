@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-105",
+  "attempts": [
+    {
+      "answer_key": "A__A-105",
+      "attempt": 1,
+      "completion_tokens": 228,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 2.378,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3840,
+      "qid": "FQ-105",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:04:32+08:00",
+      "total_tokens": 4068
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:04:35+08:00",
+  "group": "A",
+  "input_sha256": "f7555060b9d8a0a9e59a68d795b3328162daca8aba91cb43559ad420a0eb366d",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确给出证监会注册批复、文号证监许可〔2026〕234号及2026年2月5日日期，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-105",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确给出证监会注册批复、文号证监许可〔2026〕234号及2026年2月5日日期，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

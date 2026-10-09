@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-056",
+  "attempts": [
+    {
+      "answer_key": "B__A-056",
+      "attempt": 1,
+      "completion_tokens": 550,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 15.925,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4571,
+      "qid": "FQ-056",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:21:46+08:00",
+      "total_tokens": 5121
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:22:02+08:00",
+  "group": "B",
+  "input_sha256": "a3bfd43685cf4d8354d2e13b97c4720e23add93b3fc576dbdc08bf0fa9a139bf",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案的王维及其一致行动人云拥合伙在证据2中明确出现（增持公告为5月8日，属区间内），答案却以时间不符为由判'证据不足'，未给出正确人员，与金标准相悖。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-056",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案的王维及其一致行动人云拥合伙在证据2中明确出现（增持公告为5月8日，属区间内），答案却以时间不符为由判'证据不足'，未给出正确人员，与金标准相悖。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

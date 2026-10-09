@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-113",
+  "attempts": [
+    {
+      "answer_key": "D__A-113",
+      "attempt": 1,
+      "completion_tokens": 416,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 7.298,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4298,
+      "qid": "FQ-113",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:11:26+08:00",
+      "total_tokens": 4714
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:11:33+08:00",
+  "group": "D",
+  "input_sha256": "4cb89ac5c6dee5489ea68adb0727d7e81098b8579a6e375d5adc0eed46ac5a48",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "控股股东/实控人、法定代表人、天津锦龙提供部分装备及配套服务、董事会审议等说法均见于证据5、9，无编造",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-113",
+  "raw_text": "{\"score\": 2, \"reason\": \"控股股东/实控人、法定代表人、天津锦龙提供部分装备及配套服务、董事会审议等说法均见于证据5、9，无编造\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-077",
+  "attempts": [
+    {
+      "answer_key": "C__A-077",
+      "attempt": 1,
+      "completion_tokens": 924,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 15.058,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4247,
+      "qid": "FQ-077",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:02:46+08:00",
+      "total_tokens": 5171
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:03:01+08:00",
+  "group": "C",
+  "input_sha256": "e70f9efb6c792b2c6deab42f2c3e88aab2d6e0eaaea372baacc08747796d26a0",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "项目名称、招标人、代理机构、中标金额及9月1日公示、9月3日公告披露等说法均可被证据1-3逐句支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-077",
+  "raw_text": "{\"score\": 2, \"reason\": \"项目名称、招标人、代理机构、中标金额及9月1日公示、9月3日公告披露等说法均可被证据1-3逐句支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

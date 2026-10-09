@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-010",
+  "attempts": [
+    {
+      "answer_key": "E__A-010",
+      "attempt": 1,
+      "completion_tokens": 972,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 26.363,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4955,
+      "qid": "PE-10",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:15:24+08:00",
+      "total_tokens": 5927
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:15:50+08:00",
+  "group": "E",
+  "input_sha256": "7aebb2f6bf7c6ea84ef95b7acb53223a89c9955b8898b2bc30fa058b0cd15a9d",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "会议时间地点、出席及主持情况、首项议案与表决结果均有证据3支撑，证据2的区分说明亦与原文一致，且明确标注证据局限，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-10",
+  "raw_text": "{\"score\": 2, \"reason\": \"会议时间地点、出席及主持情况、首项议案与表决结果均有证据3支撑，证据2的区分说明亦与原文一致，且明确标注证据局限，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

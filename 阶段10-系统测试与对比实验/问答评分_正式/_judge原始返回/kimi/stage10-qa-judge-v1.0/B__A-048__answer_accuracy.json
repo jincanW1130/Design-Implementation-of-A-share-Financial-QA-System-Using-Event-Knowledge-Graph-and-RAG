@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-048",
+  "attempts": [
+    {
+      "answer_key": "B__A-048",
+      "attempt": 1,
+      "completion_tokens": 1006,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 31.859,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6082,
+      "qid": "FQ-048",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:14:05+08:00",
+      "total_tokens": 7088
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:14:37+08:00",
+  "group": "B",
+  "input_sha256": "2b76100195e951193804c7e88fd7596cf7097abc884456b0d2f978163b5f9eff",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确覆盖了8月22日披露半年报、8月24日召开业绩说明会，但完全遗漏金标准要点①：8月21日董事会批准固定资产投资规模调整至170.15亿元、调增23.91亿元，仅部分正确。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-048",
+  "raw_text": "{\"score\": 1, \"reason\": \"答案正确覆盖了8月22日披露半年报、8月24日召开业绩说明会，但完全遗漏金标准要点①：8月21日董事会批准固定资产投资规模调整至170.15亿元、调增23.91亿元，仅部分正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

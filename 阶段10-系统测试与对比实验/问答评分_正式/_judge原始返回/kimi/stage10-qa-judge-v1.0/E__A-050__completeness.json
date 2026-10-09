@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-050",
+  "attempts": [
+    {
+      "answer_key": "E__A-050",
+      "attempt": 1,
+      "completion_tokens": 412,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 15.521,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6110,
+      "qid": "FQ-050",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:00:34+08:00",
+      "total_tokens": 6522
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:00:49+08:00",
+  "group": "E",
+  "input_sha256": "a7d75c54af1c6fd182ece8e92bdf0f74b1e827d7b35ecde6434290c1a8d6c14e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "董事名单完整覆盖，但漏掉程雪董事长职务及管江华总裁、柯莹董秘、李军财务负责人等高管关键信息，仅属基本覆盖",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-050",
+  "raw_text": "{\"score\": 1, \"reason\": \"董事名单完整覆盖，但漏掉程雪董事长职务及管江华总裁、柯莹董秘、李军财务负责人等高管关键信息，仅属基本覆盖\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

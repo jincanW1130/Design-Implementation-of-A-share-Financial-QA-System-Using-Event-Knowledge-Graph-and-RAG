@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-026",
+  "attempts": [
+    {
+      "answer_key": "D__A-026",
+      "attempt": 1,
+      "completion_tokens": 561,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 21.863,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 6637,
+      "qid": "PE-26",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:02:03+08:00",
+      "total_tokens": 7198
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:02:25+08:00",
+  "group": "D",
+  "input_sha256": "5b15dde831fec61a5d39702a7b5839e8d0539ae8f6c5b81af241427decd42fa9",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案准确锁定与两家中国电信主体共同签署的两份框架协议（天翼智屏、家庭FTTR），与金标准一致，所列其他协议明确排除且日期表述为披露日无误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-26",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案准确锁定与两家中国电信主体共同签署的两份框架协议（天翼智屏、家庭FTTR），与金标准一致，所列其他协议明确排除且日期表述为披露日无误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

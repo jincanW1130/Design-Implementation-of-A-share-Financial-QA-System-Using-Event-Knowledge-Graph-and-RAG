@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-046",
+  "attempts": [
+    {
+      "answer_key": "C__A-046",
+      "attempt": 1,
+      "completion_tokens": 173,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 9.231,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4637,
+      "qid": "FQ-046",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:01:34+08:00",
+      "total_tokens": 4810
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:01:43+08:00",
+  "group": "C",
+  "input_sha256": "a78d45a7ab66b9e2e02e942e1de8e22ca4a1604029e42d8e25ea5e0ea6c25114",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖金标准关键信息：事件、持有人由安徽美来变更为国药致君坪山、批准文号不变及生产场地等与原文一致，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-046",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖金标准关键信息：事件、持有人由安徽美来变更为国药致君坪山、批准文号不变及生产场地等与原文一致，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

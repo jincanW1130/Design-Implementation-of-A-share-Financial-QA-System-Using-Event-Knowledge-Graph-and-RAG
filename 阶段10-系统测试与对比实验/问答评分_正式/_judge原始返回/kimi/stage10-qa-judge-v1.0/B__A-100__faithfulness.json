@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-100",
+  "attempts": [
+    {
+      "answer_key": "B__A-100",
+      "attempt": 1,
+      "completion_tokens": 892,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 27.578,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4235,
+      "qid": "FQ-100",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:45:42+08:00",
+      "total_tokens": 5127
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:46:10+08:00",
+  "group": "B",
+  "input_sha256": "c892daa48879ecffca874b0940f30fa7951a2a0772d442a34647c3674705b857",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "签约日期、18,560万金额、关联关系、35%持股、王广庆任职、公示阶段等说法均可由证据1/2/3/4/8支撑；分析段已自标为推断且与证据一致，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-100",
+  "raw_text": "{\"score\": 2, \"reason\": \"签约日期、18,560万金额、关联关系、35%持股、王广庆任职、公示阶段等说法均可由证据1/2/3/4/8支撑；分析段已自标为推断且与证据一致，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

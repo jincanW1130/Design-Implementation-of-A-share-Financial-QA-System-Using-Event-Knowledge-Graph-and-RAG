@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-059",
+  "attempts": [
+    {
+      "answer_key": "B__A-059",
+      "attempt": 1,
+      "completion_tokens": 901,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 25.225,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4272,
+      "qid": "FQ-059",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:26:38+08:00",
+      "total_tokens": 5173
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:27:03+08:00",
+  "group": "B",
+  "input_sha256": "2523579faa11d623c7857fc904f0d2f48e51d2bc0c5a81c917b5ac642b266a13",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核心人员侯启军及其法定代表人身份已覆盖，但遗漏参考答案中公司性质、成立时间、注册资本、股东等关键信息",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-059",
+  "raw_text": "{\"score\": 1, \"reason\": \"核心人员侯启军及其法定代表人身份已覆盖，但遗漏参考答案中公司性质、成立时间、注册资本、股东等关键信息\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

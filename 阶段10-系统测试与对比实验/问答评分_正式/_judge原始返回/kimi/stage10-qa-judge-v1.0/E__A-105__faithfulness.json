@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-105",
+  "attempts": [
+    {
+      "answer_key": "E__A-105",
+      "attempt": 1,
+      "completion_tokens": 487,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 16.678,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4042,
+      "qid": "FQ-105",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:49:52+08:00",
+      "total_tokens": 4529
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:50:09+08:00",
+  "group": "E",
+  "input_sha256": "a65d86144d6b27b106ea5b74b63f453776e6312d3714697a76360993870fae1e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核心事实（证监会批复、证监许可〔2026〕234号、2月5日）直接见于证据1，其余说明（第二期20亿额度、MTN339号区别）亦均有证据2-8支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-105",
+  "raw_text": "{\"score\": 2, \"reason\": \"核心事实（证监会批复、证监许可〔2026〕234号、2月5日）直接见于证据1，其余说明（第二期20亿额度、MTN339号区别）亦均有证据2-8支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

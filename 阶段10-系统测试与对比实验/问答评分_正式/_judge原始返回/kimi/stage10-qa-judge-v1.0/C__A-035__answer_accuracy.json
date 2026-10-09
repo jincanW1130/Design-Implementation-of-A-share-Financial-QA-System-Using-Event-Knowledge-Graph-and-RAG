@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-035",
+  "attempts": [
+    {
+      "answer_key": "C__A-035",
+      "attempt": 1,
+      "completion_tokens": 110,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 7.588,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4521,
+      "qid": "FQ-035",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:52:31+08:00",
+      "total_tokens": 4631
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:52:38+08:00",
+  "group": "C",
+  "input_sha256": "46ecfddae070b16483684bc61e3e9382d2911e2d9088f3fcbd34e68521118a84",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "总包方（潜能蒙古）与关联提供方（天津锦龙）均与金标准一致，额外金额信息亦有证据支持，判定完全正确",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-035",
+  "raw_text": "{\"score\": 2, \"reason\": \"总包方（潜能蒙古）与关联提供方（天津锦龙）均与金标准一致，额外金额信息亦有证据支持，判定完全正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

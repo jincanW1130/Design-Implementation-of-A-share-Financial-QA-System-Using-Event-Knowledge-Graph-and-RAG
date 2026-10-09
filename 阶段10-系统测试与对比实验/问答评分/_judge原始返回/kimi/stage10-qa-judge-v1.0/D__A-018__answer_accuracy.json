@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-018",
+  "attempts": [
+    {
+      "answer_key": "D__A-018",
+      "attempt": 1,
+      "completion_tokens": 163,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "json_recovered": true,
+      "judge": "kimi",
+      "latency_seconds": 7.019,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3706,
+      "qid": "PE-18",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:54:17+08:00",
+      "total_tokens": 3869
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:54:24+08:00",
+  "group": "D",
+  "input_sha256": "0712a10c36e3c02e0eb2a8f79c8472c6f032ee0cb97a4ff2afc7cdc7fcd65bf2",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "_recovered_from_malformed_json": true,
+    "reason": "答案指出批准机构为原中国银监会、文号银监复〔2012〕137号、日期2012年4月18日，与参考答案完全一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-18",
+  "raw_text": "{\"score\": 2, \"reason\": 答案指出批准机构为原中国银监会、文号银监复〔2012〕137号、日期2012年4月18日，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

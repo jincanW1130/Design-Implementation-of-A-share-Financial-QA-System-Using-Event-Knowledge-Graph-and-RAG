@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-002",
+  "attempts": [
+    {
+      "answer_key": "D__A-002",
+      "attempt": 1,
+      "completion_tokens": 278,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 10.632,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4715,
+      "qid": "FQ-002",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:27:36+08:00",
+      "total_tokens": 4993
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:27:47+08:00",
+  "group": "D",
+  "input_sha256": "3f7100a33343054cd01938c09169d84f811783ca217b3c26e582c7a6cedb518c",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "任期起止由证据2原文支撑，霍达任风险与资本管理委员会主任委员及江朝阳卸任由证据1支撑，'未载明届满日期'亦与证据一致，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-002",
+  "raw_text": "{\"score\": 2, \"reason\": \"任期起止由证据2原文支撑，霍达任风险与资本管理委员会主任委员及江朝阳卸任由证据1支撑，'未载明届满日期'亦与证据一致，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

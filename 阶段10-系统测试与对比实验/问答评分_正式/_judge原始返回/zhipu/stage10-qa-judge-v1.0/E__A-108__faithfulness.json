@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-108",
+  "attempts": [
+    {
+      "answer_key": "E__A-108",
+      "attempt": 1,
+      "completion_tokens": 437,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 9.203,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4301,
+      "qid": "FQ-108",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:15:01+08:00",
+      "total_tokens": 4738
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:15:10+08:00",
+  "group": "E",
+  "input_sha256": "ff56c736226d5222731a2b3ceb8f75b8e12228397db0b2283bd670958d129b82",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "审核机构、通过日期及补链强链标杆案例等事实性说法均被证据1直接支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-108",
+  "raw_text": "{\"score\": 2, \"reason\": \"审核机构、通过日期及补链强链标杆案例等事实性说法均被证据1直接支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

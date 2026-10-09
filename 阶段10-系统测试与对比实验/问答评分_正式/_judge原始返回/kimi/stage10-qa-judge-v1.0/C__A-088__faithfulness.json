@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-088",
+  "attempts": [
+    {
+      "answer_key": "C__A-088",
+      "attempt": 1,
+      "completion_tokens": 385,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 12.149,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5363,
+      "qid": "FQ-088",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:11:54+08:00",
+      "total_tokens": 5748
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:12:06+08:00",
+  "group": "C",
+  "input_sha256": "5a39b6b8a626045029595f716d192ff76017b75173ada2c5bcfe537265177eb1",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "80亿/40亿额度、股东会及交易商协会审批、唐飞8000股期权与74250股股份等事实均能在证据1/2/3/6/7中找到原文支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-088",
+  "raw_text": "{\"score\": 2, \"reason\": \"80亿/40亿额度、股东会及交易商协会审批、唐飞8000股期权与74250股股份等事实均能在证据1/2/3/6/7中找到原文支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-087",
+  "attempts": [
+    {
+      "answer_key": "D__A-087",
+      "attempt": 1,
+      "completion_tokens": 414,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 6.875,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5027,
+      "qid": "FQ-087",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:08:34+08:00",
+      "total_tokens": 5441
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:08:41+08:00",
+  "group": "D",
+  "input_sha256": "7a6be9baf0335bc757299f5f19df8dcf4494400f5a2f5afacd6405cf1c44f3cb",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "可行权期限、数量、价格、注销0.45万份与303.006万份及合计、注销后数量均与证据一致，无编造",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-087",
+  "raw_text": "{\"score\": 2, \"reason\": \"可行权期限、数量、价格、注销0.45万份与303.006万份及合计、注销后数量均与证据一致，无编造\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

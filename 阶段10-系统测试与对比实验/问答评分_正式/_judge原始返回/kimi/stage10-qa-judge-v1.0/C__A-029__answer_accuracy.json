@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-029",
+  "attempts": [
+    {
+      "answer_key": "C__A-029",
+      "attempt": 1,
+      "completion_tokens": 133,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 6.055,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5939,
+      "qid": "FQ-029",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:48:17+08:00",
+      "total_tokens": 6072
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:48:23+08:00",
+  "group": "C",
+  "input_sha256": "b86b2eea94607414a87a0c817db746cd4a42e05f48deba1a0c71b6d875b0d128",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "新增股份547,182,073股、验资基准日2026年6月12日、登记完成日2026年6月23日及交易主要内容均与参考答案一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-029",
+  "raw_text": "{\"score\": 2, \"reason\": \"新增股份547,182,073股、验资基准日2026年6月12日、登记完成日2026年6月23日及交易主要内容均与参考答案一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

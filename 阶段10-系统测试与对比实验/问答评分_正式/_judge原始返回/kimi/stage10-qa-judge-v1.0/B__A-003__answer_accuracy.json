@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-003",
+  "attempts": [
+    {
+      "answer_key": "B__A-003",
+      "attempt": 1,
+      "completion_tokens": 111,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 8.266,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5188,
+      "qid": "FQ-003",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:45:30+08:00",
+      "total_tokens": 5299
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T19:45:38+08:00",
+  "group": "B",
+  "input_sha256": "19ae5c3c6522991ef85976f4b7465c32f3ff45f52af69ced78e0fad9043a103e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案的发行规模100亿（首发50亿、续发50亿）、3年期固定利率附息普通金融债券、票面利率1.57%均与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-003",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案的发行规模100亿（首发50亿、续发50亿）、3年期固定利率附息普通金融债券、票面利率1.57%均与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

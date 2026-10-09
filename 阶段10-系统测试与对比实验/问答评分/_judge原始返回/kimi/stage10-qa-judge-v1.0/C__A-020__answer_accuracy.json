@@ -1,0 +1,43 @@
+{
+  "answer_key": "C__A-020",
+  "attempts": [
+    {
+      "answer_key": "C__A-020",
+      "attempt": 1,
+      "completion_tokens": 1526,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 49.592,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4901,
+      "qid": "PE-20",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:32:36+08:00",
+      "total_tokens": 6427
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T17:33:26+08:00",
+  "group": "C",
+  "input_sha256": "765bfd32860a313cbe64586b9289bee69252d21a89adf6cceb68f8c6622e60cb",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确给出与金标准一致的69.95%（与盛骏合并计算、即含间接持股），并说明构成关联交易/关联人，另补充回购注销后升至70.01%的最新披露，核心事实完全覆盖参考答案。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-20",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确给出与金标准一致的69.95%（与盛骏合并计算、即含间接持股），并说明构成关联交易/关联人，另补充回购注销后升至70.01%的最新披露，核心事实完全覆盖参考答案。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-091",
+  "attempts": [
+    {
+      "answer_key": "A__A-091",
+      "attempt": 1,
+      "completion_tokens": 2956,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 47.714,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4645,
+      "qid": "FQ-091",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:43:48+08:00",
+      "total_tokens": 7601
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:44:36+08:00",
+  "group": "A",
+  "input_sha256": "d588cb95f7edf0fb2f96eb3b05a1fb0c97a614d6a0f16dc636f4d97e6d56f9ea",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案对证据1、2内容及证据缺口的描述均与可用证据逐条相符，结论为证据不足而非编造数字，无任何无依据事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-091",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案对证据1、2内容及证据缺口的描述均与可用证据逐条相符，结论为证据不足而非编造数字，无任何无依据事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

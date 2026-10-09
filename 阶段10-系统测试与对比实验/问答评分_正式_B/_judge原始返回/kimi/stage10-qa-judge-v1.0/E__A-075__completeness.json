@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-075",
+  "attempts": [
+    {
+      "answer_key": "E__A-075",
+      "attempt": 1,
+      "completion_tokens": 97,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 7.123,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4133,
+      "qid": "FQ-075",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:19:20+08:00",
+      "total_tokens": 4230
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:19:28+08:00",
+  "group": "E",
+  "input_sha256": "550f4d08e812a128e437e3a193ad8358df5cd6a8b8702eec15d09a1b346a2289",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件名称、两公司参与、预中标合计12,950万元及占2025年经审计营收5.09%等关键信息全部覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-075",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件名称、两公司参与、预中标合计12,950万元及占2025年经审计营收5.09%等关键信息全部覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

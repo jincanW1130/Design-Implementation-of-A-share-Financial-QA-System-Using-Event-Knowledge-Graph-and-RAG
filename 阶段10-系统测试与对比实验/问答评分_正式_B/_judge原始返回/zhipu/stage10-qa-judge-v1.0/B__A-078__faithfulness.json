@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-078",
+  "attempts": [
+    {
+      "answer_key": "B__A-078",
+      "attempt": 1,
+      "completion_tokens": 431,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 8.518,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4881,
+      "qid": "FQ-078",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:07:22+08:00",
+      "total_tokens": 5312
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:07:30+08:00",
+  "group": "B",
+  "input_sha256": "38934740733bdc85982b0c6b054985a6a95e2023317b3076ef2a7082ad854417",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "合同签订时间、30年期限、作业者身份、100%勘探权益、49%开采权益及15年生产期均能被证据1/2/3直接支撑，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-078",
+  "raw_text": "{\"score\": 2, \"reason\": \"合同签订时间、30年期限、作业者身份、100%勘探权益、49%开采权益及15年生产期均能被证据1/2/3直接支撑，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-102",
+  "attempts": [
+    {
+      "answer_key": "A__A-102",
+      "attempt": 1,
+      "completion_tokens": 1722,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 33.461,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4860,
+      "qid": "FQ-102",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:51:58+08:00",
+      "total_tokens": 6582
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:52:31+08:00",
+  "group": "A",
+  "input_sha256": "fb9820749fc8af3036c7aa9a3ca15232a2bcbc7b7657cfa91a80c2728b8b4145",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "两次公告、品种、编号2026S02025及编号未披露均见于可用证据，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-102",
+  "raw_text": "{\"score\": 2, \"reason\": \"两次公告、品种、编号2026S02025及编号未披露均见于可用证据，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

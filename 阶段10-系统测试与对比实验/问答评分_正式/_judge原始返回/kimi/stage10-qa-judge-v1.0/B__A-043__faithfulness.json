@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-043",
+  "attempts": [
+    {
+      "answer_key": "B__A-043",
+      "attempt": 1,
+      "completion_tokens": 157,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 7.362,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4052,
+      "qid": "FQ-043",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:09:57+08:00",
+      "total_tokens": 4209
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:10:04+08:00",
+  "group": "B",
+  "input_sha256": "6ad12884b79e98104f261eefb7df689cdb6f618f602fa53ead8f0b62513ad076",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "赎回摘牌事件、债券代码简称、103%赎回价格及9月14日摘牌日期均能在证据1/2/3中找到原文支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-043",
+  "raw_text": "{\"score\": 2, \"reason\": \"赎回摘牌事件、债券代码简称、103%赎回价格及9月14日摘牌日期均能在证据1/2/3中找到原文支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-075",
+  "attempts": [
+    {
+      "answer_key": "D__A-075",
+      "attempt": 1,
+      "completion_tokens": 513,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 15.837,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4179,
+      "qid": "FQ-075",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:40:26+08:00",
+      "total_tokens": 4692
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:40:42+08:00",
+  "group": "D",
+  "input_sha256": "551c8832d66cc74900a6f376e079c2720d8b64caa7f1ce73d9b4e0e3e8e4de9d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件名称、公示日期、各子公司包号及金额（10762/2188/12950万元）、5.09%占比、公示期3日均能在证据1/3/4/10中找到对应支撑，名称差异也如实说明，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-075",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件名称、公示日期、各子公司包号及金额（10762/2188/12950万元）、5.09%占比、公示期3日均能在证据1/3/4/10中找到对应支撑，名称差异也如实说明，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

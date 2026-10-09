@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-022",
+  "attempts": [
+    {
+      "answer_key": "A__A-022",
+      "attempt": 1,
+      "completion_tokens": 490,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 12.382,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4406,
+      "qid": "PE-22",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:42:55+08:00",
+      "total_tokens": 4896
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:43:08+08:00",
+  "group": "A",
+  "input_sha256": "b739a928dcf49380312866e2b5b206d01bbff3b057318f15044de3272a13c1e3",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "董事12人名单及独董5人有证据7支撑，高鹏职工董事、吴雷鸣副行长核准分别见证据1、2，均无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-22",
+  "raw_text": "{\"score\": 2, \"reason\": \"董事12人名单及独董5人有证据7支撑，高鹏职工董事、吴雷鸣副行长核准分别见证据1、2，均无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

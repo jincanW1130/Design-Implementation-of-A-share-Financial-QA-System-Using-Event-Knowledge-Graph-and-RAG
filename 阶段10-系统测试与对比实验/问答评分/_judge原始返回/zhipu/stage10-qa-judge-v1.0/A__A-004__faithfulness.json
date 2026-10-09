@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-004",
+  "attempts": [
+    {
+      "answer_key": "A__A-004",
+      "attempt": 1,
+      "completion_tokens": 1034,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 20.152,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5752,
+      "qid": "PE-04",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:32:03+08:00",
+      "total_tokens": 6786
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:32:24+08:00",
+  "group": "A",
+  "input_sha256": "da0f0d6ef964fc174ecfc8a4d0a4822b803e0eb8eade4b5040306b13150584a4",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中许兴仁、李昕的简历细节及对各证据内容的描述均与可用证据逐条相符，无证据外编造的事实，明确不作推测，完全基于证据。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-04",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中许兴仁、李昕的简历细节及对各证据内容的描述均与可用证据逐条相符，无证据外编造的事实，明确不作推测，完全基于证据。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

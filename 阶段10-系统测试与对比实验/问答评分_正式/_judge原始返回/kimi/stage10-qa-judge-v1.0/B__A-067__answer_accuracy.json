@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-067",
+  "attempts": [
+    {
+      "answer_key": "B__A-067",
+      "attempt": 1,
+      "completion_tokens": 119,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 7.488,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4493,
+      "qid": "FQ-067",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:31:16+08:00",
+      "total_tokens": 4612
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:31:23+08:00",
+  "group": "B",
+  "input_sha256": "78ba919195b5088537883d72a33a0854c89307ad7bde495bb7691c5153474f58",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、出资总额100,000万元及阳光新能源认缴19,900万元占19.90%均与参考答案一致，判完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-067",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、出资总额100,000万元及阳光新能源认缴19,900万元占19.90%均与参考答案一致，判完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

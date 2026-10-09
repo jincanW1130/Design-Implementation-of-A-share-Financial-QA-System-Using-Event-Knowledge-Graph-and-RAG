@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-087",
+  "attempts": [
+    {
+      "answer_key": "E__A-087",
+      "attempt": 1,
+      "completion_tokens": 961,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 12.87,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5051,
+      "qid": "FQ-087",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:13:23+08:00",
+      "total_tokens": 6012
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:13:36+08:00",
+  "group": "E",
+  "input_sha256": "163ba3ffd84850ab4d710c1ae428741f56d0590418358fc92edd977ade04bc23",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "可行权期限、数量、价格、两笔注销份数、合计303.456万份及注销完成日期均可在证据1-9中找到直接支撑，无编造",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-087",
+  "raw_text": "{\"score\": 2, \"reason\": \"可行权期限、数量、价格、两笔注销份数、合计303.456万份及注销完成日期均可在证据1-9中找到直接支撑，无编造\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-023",
+  "attempts": [
+    {
+      "answer_key": "A__A-023",
+      "attempt": 1,
+      "completion_tokens": 313,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 12.415,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4042,
+      "qid": "PE-23",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:43:23+08:00",
+      "total_tokens": 4355
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:43:35+08:00",
+  "group": "A",
+  "input_sha256": "9ae1a2825873eca972fc2c57ec10049206a2b529c2c7b2610bfea25f33d61e76",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案含薛驰、陆伟、高洪时、胡梓木、王益民、王军、沈洁七人，被评答案仅确认薛驰一人，其余六人全部遗漏，属关键信息大量遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-23",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案含薛驰、陆伟、高洪时、胡梓木、王益民、王军、沈洁七人，被评答案仅确认薛驰一人，其余六人全部遗漏，属关键信息大量遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

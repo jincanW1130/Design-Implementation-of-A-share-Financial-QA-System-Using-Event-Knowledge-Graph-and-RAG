@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-029",
+  "attempts": [
+    {
+      "answer_key": "E__A-029",
+      "attempt": 1,
+      "completion_tokens": 253,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 9.767,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5306,
+      "qid": "PE-29",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:30:23+08:00",
+      "total_tokens": 5559
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:30:33+08:00",
+  "group": "E",
+  "input_sha256": "52a7035fdd0f3484fa219313bd904fd83d89983c5ee2e175ea213da5bf0b2bb0",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "两起行权事件、期权代码、行权起始日、有效期及10月限制行权期等说法均被证据1、2原文支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-29",
+  "raw_text": "{\"score\": 2, \"reason\": \"两起行权事件、期权代码、行权起始日、有效期及10月限制行权期等说法均被证据1、2原文支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

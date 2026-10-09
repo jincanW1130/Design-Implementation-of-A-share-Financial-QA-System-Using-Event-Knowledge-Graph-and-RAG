@@ -1,0 +1,44 @@
+{
+  "answer_key": "A__A-003",
+  "attempts": [
+    {
+      "answer_key": "A__A-003",
+      "attempt": 1,
+      "completion_tokens": 269,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 15.058,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3702,
+      "qid": "PE-03",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:22:01+08:00",
+      "total_tokens": 3971
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:22:16+08:00",
+  "group": "A",
+  "input_sha256": "62c4544ac086f9237e8514aa9d11c353e659087a2035db744b14b52a60cac85f",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "备案完成、编码SEX000、9月22日备案时间、管理人/托管人及出资额、占比、公告编号等均有证据1、2支撑，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-03",
+  "raw_text": "{\"score\": 2, \"reason\": \"备案完成、编码SEX000、9月22日备案时间、管理人/托管人及出资额、占比、公告编号等均有证据1、2支撑，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

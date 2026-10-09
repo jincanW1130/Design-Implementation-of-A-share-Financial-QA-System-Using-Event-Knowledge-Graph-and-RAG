@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-023",
+  "attempts": [
+    {
+      "answer_key": "D__A-023",
+      "attempt": 1,
+      "completion_tokens": 274,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 12.806,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4415,
+      "qid": "PE-23",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:00:00+08:00",
+      "total_tokens": 4689
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:00:13+08:00",
+  "group": "D",
+  "input_sha256": "80aa54c2c76fec1c02f9d7573c7ec7c2352ed5d5c193caa40e04c62ed35a79a9",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案称证据不足未作答，未列出薛驰、陆伟等任何正确人员，唯一提到的杨兆也不在参考答案名单中，与金标准完全不符。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-23",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案称证据不足未作答，未列出薛驰、陆伟等任何正确人员，唯一提到的杨兆也不在参考答案名单中，与金标准完全不符。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

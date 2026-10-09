@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-099",
+  "attempts": [
+    {
+      "answer_key": "A__A-099",
+      "attempt": 1,
+      "completion_tokens": 287,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 11.001,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4424,
+      "qid": "FQ-099",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:12:36+08:00",
+      "total_tokens": 4711
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:12:47+08:00",
+  "group": "A",
+  "input_sha256": "368bed0c2ff9582bba798e451940474b04aa077e90a107d71539e14ddf527448",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖合同类型（专业分包合同）、工程名称（一期变配电工程）及双方角色（九州一轨承包、海兰齐力分包），无关键遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-099",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖合同类型（专业分包合同）、工程名称（一期变配电工程）及双方角色（九州一轨承包、海兰齐力分包），无关键遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

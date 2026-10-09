@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-032",
+  "attempts": [
+    {
+      "answer_key": "B__A-032",
+      "attempt": 1,
+      "completion_tokens": 213,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 9.559,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5033,
+      "qid": "FQ-032",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:02:00+08:00",
+      "total_tokens": 5246
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:02:10+08:00",
+  "group": "B",
+  "input_sha256": "a5d6da41d32ce2ee50bc1b140dca72bbeabfbf2f85f86323443a389696ded53f",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案含资产总额1091.35亿等四项具体数值，被评答案以证据不足为由未给出任何一项，对照金标准完全未答对。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-032",
+  "raw_text": "{\"score\": 0, \"reason\": \"参考答案含资产总额1091.35亿等四项具体数值，被评答案以证据不足为由未给出任何一项，对照金标准完全未答对。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

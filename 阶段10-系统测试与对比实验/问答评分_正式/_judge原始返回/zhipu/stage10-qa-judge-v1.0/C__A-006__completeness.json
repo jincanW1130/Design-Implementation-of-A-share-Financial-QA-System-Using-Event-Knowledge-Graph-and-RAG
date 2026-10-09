@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-006",
+  "attempts": [
+    {
+      "answer_key": "C__A-006",
+      "attempt": 1,
+      "completion_tokens": 148,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 3.706,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3835,
+      "qid": "FQ-006",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:39:31+08:00",
+      "total_tokens": 3983
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:39:34+08:00",
+  "group": "C",
+  "input_sha256": "c1b3bc65f8eebc34a705a9b3e6221280dc27b0eb34d4daa3b6f9fbb30142bc97",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖批复文号〔2026〕2414号、400亿元面值上限、24个月有效期三项关键信息，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-006",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖批复文号〔2026〕2414号、400亿元面值上限、24个月有效期三项关键信息，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

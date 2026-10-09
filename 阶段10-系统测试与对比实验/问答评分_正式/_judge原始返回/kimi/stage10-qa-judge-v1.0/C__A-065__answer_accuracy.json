@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-065",
+  "attempts": [
+    {
+      "answer_key": "C__A-065",
+      "attempt": 1,
+      "completion_tokens": 112,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 7.232,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4673,
+      "qid": "FQ-065",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:21:23+08:00",
+      "total_tokens": 4785
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:21:30+08:00",
+  "group": "C",
+  "input_sha256": "f1fe8d0009c3ea7626b43a2738c33b14ed965b0e29fa16615cecdb892b6124aa",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确指出第八届董事会第五十四次会议审议通过再授权议案，且授权上限为注册资本金最高不超过200亿元，与参考答案一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-065",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案正确指出第八届董事会第五十四次会议审议通过再授权议案，且授权上限为注册资本金最高不超过200亿元，与参考答案一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

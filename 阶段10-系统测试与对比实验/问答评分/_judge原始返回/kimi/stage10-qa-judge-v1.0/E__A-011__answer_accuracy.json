@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-011",
+  "attempts": [
+    {
+      "answer_key": "E__A-011",
+      "attempt": 1,
+      "completion_tokens": 187,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 6.553,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5965,
+      "qid": "PE-11",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:15:52+08:00",
+      "total_tokens": 6152
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:15:58+08:00",
+  "group": "E",
+  "input_sha256": "93534c80c8e20e58e0d81e191c82a71d2da163e8fb8949b68223bc0fd07c1e63",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "所列7家均正确，但缺少鲁班工业品（天津）、中铁物贸西安、中铁物贸武汉3家，未答全10家，属部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-11",
+  "raw_text": "{\"score\": 1, \"reason\": \"所列7家均正确，但缺少鲁班工业品（天津）、中铁物贸西安、中铁物贸武汉3家，未答全10家，属部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

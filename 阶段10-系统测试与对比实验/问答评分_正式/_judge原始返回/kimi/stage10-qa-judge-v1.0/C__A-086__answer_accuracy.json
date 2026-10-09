@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-086",
+  "attempts": [
+    {
+      "answer_key": "C__A-086",
+      "attempt": 1,
+      "completion_tokens": 188,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 7.946,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5617,
+      "qid": "FQ-086",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:10:17+08:00",
+      "total_tokens": 5805
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:10:25+08:00",
+  "group": "C",
+  "input_sha256": "a1d82376094ba51ab5d41e9487edd60ff63af2d62284585c7c51a7638a989a66",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "四个要点（每股3.02元税前、登记日2026-09-23、发行规模200亿元、前5年利率1.86%）与参考答案完全一致，无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-086",
+  "raw_text": "{\"score\": 2, \"reason\": \"四个要点（每股3.02元税前、登记日2026-09-23、发行规模200亿元、前5年利率1.86%）与参考答案完全一致，无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

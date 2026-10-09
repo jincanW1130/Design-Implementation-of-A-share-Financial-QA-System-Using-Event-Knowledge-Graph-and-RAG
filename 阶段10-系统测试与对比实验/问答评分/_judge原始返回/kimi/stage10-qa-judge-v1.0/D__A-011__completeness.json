@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-011",
+  "attempts": [
+    {
+      "answer_key": "D__A-011",
+      "attempt": 1,
+      "completion_tokens": 229,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 9.742,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5934,
+      "qid": "PE-11",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:46:17+08:00",
+      "total_tokens": 6163
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T17:46:27+08:00",
+  "group": "D",
+  "input_sha256": "4564d3b3fc443b5c0c96175c6ee6ff3cb8620bed5287d7ac53766ef04a2af52e",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案共10家被担保人，答案覆盖7家并明确说明名单不全，遗漏鲁班工业品、中铁物贸西安、武汉3家，属基本覆盖但非完整。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-11",
+  "raw_text": "{\"score\": 1, \"reason\": \"参考答案共10家被担保人，答案覆盖7家并明确说明名单不全，遗漏鲁班工业品、中铁物贸西安、武汉3家，属基本覆盖但非完整。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

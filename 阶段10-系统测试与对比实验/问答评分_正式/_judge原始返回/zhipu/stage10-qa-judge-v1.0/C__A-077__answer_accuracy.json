@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-077",
+  "attempts": [
+    {
+      "answer_key": "C__A-077",
+      "attempt": 1,
+      "completion_tokens": 518,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 4.188,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4219,
+      "qid": "FQ-077",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:02:27+08:00",
+      "total_tokens": 4737
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T01:02:32+08:00",
+  "group": "C",
+  "input_sha256": "c7012b308af0d03904e73f5cff1c30f5d361253dfa8e9726344d0ec8af302d83",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "项目名称、招标人、中标金额均与参考答案一致，招标代理机构表述正确，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-077",
+  "raw_text": "{\"score\": 2, \"reason\": \"项目名称、招标人、中标金额均与参考答案一致，招标代理机构表述正确，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

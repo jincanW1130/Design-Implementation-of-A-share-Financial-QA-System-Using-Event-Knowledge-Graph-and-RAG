@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-113",
+  "attempts": [
+    {
+      "answer_key": "E__A-113",
+      "attempt": 1,
+      "completion_tokens": 672,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 11.272,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4323,
+      "qid": "FQ-113",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:15:26+08:00",
+      "total_tokens": 4995
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:15:37+08:00",
+  "group": "E",
+  "input_sha256": "d49ea868a82776ab06030d868426383d8e8b427e70688247e6abc04b59e21c7b",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案中周锦明身份、天津锦龙角色、关联交易审议等事实均被证据1、2直接支撑，并主动标注证据不足之处，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-113",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案中周锦明身份、天津锦龙角色、关联交易审议等事实均被证据1、2直接支撑，并主动标注证据不足之处，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

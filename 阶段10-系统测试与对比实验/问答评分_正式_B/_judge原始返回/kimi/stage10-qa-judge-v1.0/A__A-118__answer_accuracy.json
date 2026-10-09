@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-118",
+  "attempts": [
+    {
+      "answer_key": "A__A-118",
+      "attempt": 1,
+      "completion_tokens": 96,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 4.842,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3883,
+      "qid": "FQ-118",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:21:54+08:00",
+      "total_tokens": 3979
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:21:59+08:00",
+  "group": "A",
+  "input_sha256": "65c67dd19700efcf44ae352b59461980531fa31ff501a9e3343cdd77d4c6aa23",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案与金标准一致：明确不存在一致行动关系，并补充与其他员工持股计划为一致行动关系，内容完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-118",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案与金标准一致：明确不存在一致行动关系，并补充与其他员工持股计划为一致行动关系，内容完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

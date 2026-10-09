@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-082",
+  "attempts": [
+    {
+      "answer_key": "E__A-082",
+      "attempt": 1,
+      "completion_tokens": 322,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 11.993,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4003,
+      "qid": "FQ-082",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:27:36+08:00",
+      "total_tokens": 4325
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:27:48+08:00",
+  "group": "E",
+  "input_sha256": "d1b17f3ba71d82b448443d9225a3ded0f89a552863340d24e5498c92d0f0dc30",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "分拆、实物分派、保密递交等核心事实均有证据1原文支撑，图谱参与方说法与路径一致，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-082",
+  "raw_text": "{\"score\": 2, \"reason\": \"分拆、实物分派、保密递交等核心事实均有证据1原文支撑，图谱参与方说法与路径一致，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

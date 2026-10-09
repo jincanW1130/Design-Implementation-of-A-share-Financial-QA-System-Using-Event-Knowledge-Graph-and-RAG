@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-092",
+  "attempts": [
+    {
+      "answer_key": "E__A-092",
+      "attempt": 1,
+      "completion_tokens": 196,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 11.845,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4950,
+      "qid": "FQ-092",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:35:06+08:00",
+      "total_tokens": 5146
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:35:18+08:00",
+  "group": "E",
+  "input_sha256": "9d12e276dd70d2b74d367b65b7e1502dc7c8fcb374835bf58fd1aa6601cb0c3e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确给出回购上限153.59→151.01元/股、2026年7月16日生效及管控事件2026年8月13日，与参考答案完全一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-092",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案正确给出回购上限153.59→151.01元/股、2026年7月16日生效及管控事件2026年8月13日，与参考答案完全一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

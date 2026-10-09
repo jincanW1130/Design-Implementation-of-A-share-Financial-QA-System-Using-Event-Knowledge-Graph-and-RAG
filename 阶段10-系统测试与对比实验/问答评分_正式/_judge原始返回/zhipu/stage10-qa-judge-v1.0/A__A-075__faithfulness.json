@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-075",
+  "attempts": [
+    {
+      "answer_key": "A__A-075",
+      "attempt": 1,
+      "completion_tokens": 992,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 16.241,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3931,
+      "qid": "FQ-075",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:41:42+08:00",
+      "total_tokens": 4923
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T00:41:58+08:00",
+  "group": "A",
+  "input_sha256": "d382ceb684da8c233861e11c27623c206b4baaeda3c557f03a87b2276efbe443",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "公告主体、子公司、项目名、12,950万元与5.09%、包号及各分项金额、公示期均能被证据1/3/4/10直接支撑，名称差异仅作分析未当事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-075",
+  "raw_text": "{\"score\": 2, \"reason\": \"公告主体、子公司、项目名、12,950万元与5.09%、包号及各分项金额、公示期均能被证据1/3/4/10直接支撑，名称差异仅作分析未当事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-098",
+  "attempts": [
+    {
+      "answer_key": "C__A-098",
+      "attempt": 1,
+      "completion_tokens": 1453,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 20.966,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5477,
+      "qid": "FQ-098",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:04:29+08:00",
+      "total_tokens": 6930
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:04:50+08:00",
+  "group": "C",
+  "input_sha256": "95fb4829562fdbf202d92421453f220f6e15c70fe15e935814fcfa0110595877",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "中标、签约合同、对手方信息、联合体中标等事实性说法均能在证据1/3/6/8/9等中找到对应支撑，无编造内容，完全基于证据。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-098",
+  "raw_text": "{\"score\": 2, \"reason\": \"中标、签约合同、对手方信息、联合体中标等事实性说法均能在证据1/3/6/8/9等中找到对应支撑，无编造内容，完全基于证据。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

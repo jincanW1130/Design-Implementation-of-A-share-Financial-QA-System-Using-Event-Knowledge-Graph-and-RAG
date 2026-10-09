@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-119",
+  "attempts": [
+    {
+      "answer_key": "D__A-119",
+      "attempt": 1,
+      "completion_tokens": 1069,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 18.871,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4457,
+      "qid": "FQ-119",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:11:49+08:00",
+      "total_tokens": 5526
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-09T01:12:08+08:00",
+  "group": "D",
+  "input_sha256": "051943d36733803d0845dcca3f691a5913e96f8002cc6cc072763153e69a639a",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "所引持股数、比例、公告标题与日期及\"不导致实际控制人变化\"均与证据2及元数据一致，无编造",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-119",
+  "raw_text": "{\"score\": 2, \"reason\": \"所引持股数、比例、公告标题与日期及\\\"不导致实际控制人变化\\\"均与证据2及元数据一致，无编造\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

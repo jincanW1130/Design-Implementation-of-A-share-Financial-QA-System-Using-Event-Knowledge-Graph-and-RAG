@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-106",
+  "attempts": [
+    {
+      "answer_key": "B__A-106",
+      "attempt": 1,
+      "completion_tokens": 274,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 11.253,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4391,
+      "qid": "FQ-106",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:49:33+08:00",
+      "total_tokens": 4665
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:49:44+08:00",
+  "group": "B",
+  "input_sha256": "9d63336a51e3884895ba2676654a866ad30265507f7f171f31a4a7b5cc848aa7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核准机构（证监会）、文号证监许可[2021]3561号、7,000万张、总额700,000.00万元均与参考答案一致，要素齐全无误",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-106",
+  "raw_text": "{\"score\": 2, \"reason\": \"核准机构（证监会）、文号证监许可[2021]3561号、7,000万张、总额700,000.00万元均与参考答案一致，要素齐全无误\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

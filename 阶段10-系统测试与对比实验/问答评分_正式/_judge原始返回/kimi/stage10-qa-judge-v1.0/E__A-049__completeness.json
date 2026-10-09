@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-049",
+  "attempts": [
+    {
+      "answer_key": "E__A-049",
+      "attempt": 1,
+      "completion_tokens": 265,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.847,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4856,
+      "qid": "FQ-049",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:56:35+08:00",
+      "total_tokens": 5121
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:56:44+08:00",
+  "group": "E",
+  "input_sha256": "af44c86c08d48a4068a316a6d3f3be89f8d8625d3ca6169b09f07dfafbe0fc02",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "仅覆盖穆峰、李红栓、袁媛3名高管，董事长魏建军及全部董事（执行董事、职工董事、非执行董事、独立董事）约8人全部遗漏，关键信息大量缺失。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-049",
+  "raw_text": "{\"score\": 0, \"reason\": \"仅覆盖穆峰、李红栓、袁媛3名高管，董事长魏建军及全部董事（执行董事、职工董事、非执行董事、独立董事）约8人全部遗漏，关键信息大量缺失。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-025",
+  "attempts": [
+    {
+      "answer_key": "A__A-025",
+      "attempt": 1,
+      "completion_tokens": 171,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 9.196,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3713,
+      "qid": "PE-25",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:45:01+08:00",
+      "total_tokens": 3884
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:45:10+08:00",
+  "group": "A",
+  "input_sha256": "c4e1d1fed8e6eae64b3ea11f33a836fdf34912b3699c2dad848725b7d40890eb",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "招标人、中标人、编号、代理机构及补充说明中的风险提示均可在证据1/2/4中找到对应支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-25",
+  "raw_text": "{\"score\": 2, \"reason\": \"招标人、中标人、编号、代理机构及补充说明中的风险提示均可在证据1/2/4中找到对应支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-004",
+  "attempts": [
+    {
+      "answer_key": "E__A-004",
+      "attempt": 1,
+      "completion_tokens": 124,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.842,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4054,
+      "qid": "FQ-004",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:25:25+08:00",
+      "total_tokens": 4178
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:25:33+08:00",
+  "group": "E",
+  "input_sha256": "5550432229e73eef465d13b5cddecf9a5e6fde596eb9275d33e32e7e66a92358",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案四项关键信息（新签合同总额28,724亿元、-0.3%；合约销售额2,129亿元、-1.2%）全部覆盖，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-004",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案四项关键信息（新签合同总额28,724亿元、-0.3%；合约销售额2,129亿元、-1.2%）全部覆盖，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

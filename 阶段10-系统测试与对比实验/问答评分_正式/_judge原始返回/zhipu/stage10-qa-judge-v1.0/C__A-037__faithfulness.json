@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-037",
+  "attempts": [
+    {
+      "answer_key": "C__A-037",
+      "attempt": 1,
+      "completion_tokens": 958,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 17.531,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4646,
+      "qid": "FQ-037",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:43:45+08:00",
+      "total_tokens": 5604
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:44:02+08:00",
+  "group": "C",
+  "input_sha256": "3b7b43b9845e693dd567ea64ad23ad352b8d5431ee9915792f876a4f8a861f20",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "两次中标主体、金额、比例及风险提示均被证据1/2/3逐一支撑，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-037",
+  "raw_text": "{\"score\": 2, \"reason\": \"两次中标主体、金额、比例及风险提示均被证据1/2/3逐一支撑，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

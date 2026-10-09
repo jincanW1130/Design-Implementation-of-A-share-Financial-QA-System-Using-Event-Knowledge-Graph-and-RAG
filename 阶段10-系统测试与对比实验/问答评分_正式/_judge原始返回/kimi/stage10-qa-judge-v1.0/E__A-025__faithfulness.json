@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-025",
+  "attempts": [
+    {
+      "answer_key": "E__A-025",
+      "attempt": 1,
+      "completion_tokens": 456,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 18.268,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4735,
+      "qid": "FQ-025",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:37:17+08:00",
+      "total_tokens": 5191
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:37:35+08:00",
+  "group": "E",
+  "input_sha256": "a8caa214e08b00f5fa162626b7b1a97ccfc720d31f3a923cde341aaa04fd4257",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核准文号、股数、发行价、总额、净额、到账时间、验资报告、三方监管协议及2021年另一笔发行等说法均可在证据1/4/5中逐字找到支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-025",
+  "raw_text": "{\"score\": 2, \"reason\": \"核准文号、股数、发行价、总额、净额、到账时间、验资报告、三方监管协议及2021年另一笔发行等说法均可在证据1/4/5中逐字找到支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

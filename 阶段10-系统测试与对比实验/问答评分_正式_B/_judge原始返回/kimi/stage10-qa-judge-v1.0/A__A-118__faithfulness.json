@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-118",
+  "attempts": [
+    {
+      "answer_key": "A__A-118",
+      "attempt": 1,
+      "completion_tokens": 123,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 10.1,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3913,
+      "qid": "FQ-118",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:22:08+08:00",
+      "total_tokens": 4036
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:22:18+08:00",
+  "group": "A",
+  "input_sha256": "50d11a45fb479bc9b17a91c1726491ded1283f841bc0f3a5f81e42e0fcf5a78d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案全部事实（未与控股股东/实控人一致行动、与其他存续员工持股计划一致行动）均被证据5原文直接支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-118",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案全部事实（未与控股股东/实控人一致行动、与其他存续员工持股计划一致行动）均被证据5原文直接支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

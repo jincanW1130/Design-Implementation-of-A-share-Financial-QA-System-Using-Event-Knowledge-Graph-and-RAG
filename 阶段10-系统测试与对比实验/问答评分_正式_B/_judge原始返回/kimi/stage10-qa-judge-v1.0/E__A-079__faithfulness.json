@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-079",
+  "attempts": [
+    {
+      "answer_key": "E__A-079",
+      "attempt": 1,
+      "completion_tokens": 598,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 20.16,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5008,
+      "qid": "FQ-079",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:25:30+08:00",
+      "total_tokens": 5606
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:25:50+08:00",
+  "group": "E",
+  "input_sha256": "4155d445993a584f5f147b7c46a67bdc3d8b02ec4e91a8db5139f7d820a892cd",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "井别、井深、作业时间、服务商及注册资本、合同条款、费用、试油单位等事实均能在证据1-5中找到原文支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-079",
+  "raw_text": "{\"score\": 2, \"reason\": \"井别、井深、作业时间、服务商及注册资本、合同条款、费用、试油单位等事实均能在证据1-5中找到原文支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

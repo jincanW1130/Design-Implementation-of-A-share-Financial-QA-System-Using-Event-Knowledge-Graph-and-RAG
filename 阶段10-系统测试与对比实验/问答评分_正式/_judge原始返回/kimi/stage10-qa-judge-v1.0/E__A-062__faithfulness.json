@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-062",
+  "attempts": [
+    {
+      "answer_key": "E__A-062",
+      "attempt": 1,
+      "completion_tokens": 450,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 15.439,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5174,
+      "qid": "FQ-062",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T23:11:27+08:00",
+      "total_tokens": 5624
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:11:43+08:00",
+  "group": "E",
+  "input_sha256": "6fac20e278e2465011da7728f9327a662ef6a55bdfa1b330d123654e003c01c5",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核心事实（交易内容、已完成、2026年4月起并表、追溯调整、7/8月公告'已重述'）均可由证据4、5、8直接支撑，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-062",
+  "raw_text": "{\"score\": 2, \"reason\": \"核心事实（交易内容、已完成、2026年4月起并表、追溯调整、7/8月公告'已重述'）均可由证据4、5、8直接支撑，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-035",
+  "attempts": [
+    {
+      "answer_key": "D__A-035",
+      "attempt": 1,
+      "completion_tokens": 370,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 15.147,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4574,
+      "qid": "FQ-035",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:45:59+08:00",
+      "total_tokens": 4944
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:46:14+08:00",
+  "group": "D",
+  "input_sha256": "322c9194322bb732d67c084ad37e4082470c39b66a74945af10c33343dfcb4a9",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "启动日期、总包方、关联提供方及3000万元额度等事实均能在证据1/2/3中找到对应原文支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-035",
+  "raw_text": "{\"score\": 2, \"reason\": \"启动日期、总包方、关联提供方及3000万元额度等事实均能在证据1/2/3中找到对应原文支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

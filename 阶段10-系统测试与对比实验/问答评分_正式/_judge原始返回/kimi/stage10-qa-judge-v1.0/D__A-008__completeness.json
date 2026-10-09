@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-008",
+  "attempts": [
+    {
+      "answer_key": "D__A-008",
+      "attempt": 1,
+      "completion_tokens": 242,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 13.195,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4925,
+      "qid": "FQ-008",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:30:21+08:00",
+      "total_tokens": 5167
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:30:34+08:00",
+  "group": "D",
+  "input_sha256": "3d7f61a18d688b933bf576f021165a86a40600cd8149bebc2b9d33ed166b800d",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案全部关键信息：截止日、累计股数13,342,301股、占比0.2280%、金额459,160,081.19元（不含费用）及价格区间33.51~37.37元/股，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-008",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案全部关键信息：截止日、累计股数13,342,301股、占比0.2280%、金额459,160,081.19元（不含费用）及价格区间33.51~37.37元/股，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

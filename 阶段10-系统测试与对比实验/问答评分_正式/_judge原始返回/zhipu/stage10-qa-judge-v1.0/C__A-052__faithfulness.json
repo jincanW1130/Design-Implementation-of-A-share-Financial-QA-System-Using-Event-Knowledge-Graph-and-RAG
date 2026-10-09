@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-052",
+  "attempts": [
+    {
+      "answer_key": "C__A-052",
+      "attempt": 1,
+      "completion_tokens": 1866,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 31.789,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5201,
+      "qid": "FQ-052",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:45:52+08:00",
+      "total_tokens": 7067
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:46:24+08:00",
+  "group": "C",
+  "input_sha256": "ae587361bde741b075ffb2c0fb6b4da4b2836ba4be216fd7aa99cea5e752a6f2",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "郑宗强任董事长、陈刚任职工董事及离任时间等说法均可在可用证据中找到原文支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-052",
+  "raw_text": "{\"score\": 2, \"reason\": \"郑宗强任董事长、陈刚任职工董事及离任时间等说法均可在可用证据中找到原文支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

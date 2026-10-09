@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-026",
+  "attempts": [
+    {
+      "answer_key": "E__A-026",
+      "attempt": 1,
+      "completion_tokens": 117,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.121,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4812,
+      "qid": "FQ-026",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:37:37+08:00",
+      "total_tokens": 4929
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:37:45+08:00",
+  "group": "E",
+  "input_sha256": "b8474b931d5fbead82c35db643fd3bb237d8c47c41be0dd9ea89f331ece34572",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件主要内容、注册证编号鲁械注准20262060279、注册人名称山东新华医疗器械股份有限公司均与参考答案一致，无错误。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-026",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件主要内容、注册证编号鲁械注准20262060279、注册人名称山东新华医疗器械股份有限公司均与参考答案一致，无错误。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

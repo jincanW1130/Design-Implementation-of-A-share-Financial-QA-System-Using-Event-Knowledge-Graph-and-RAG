@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-052",
+  "attempts": [
+    {
+      "answer_key": "B__A-052",
+      "attempt": 1,
+      "completion_tokens": 1110,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 8.545,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5305,
+      "qid": "FQ-052",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:34:54+08:00",
+      "total_tokens": 6415
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:35:03+08:00",
+  "group": "B",
+  "input_sha256": "60896465ddd942eaff08421670afab56590465d17fd18ccd7c44969d9fd68b0e",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "仅答对董事长郑宗强（另提及离任职工董事陈刚），漏掉罗汉武、窦晓波、李芳、胡顺靖，属部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-052",
+  "raw_text": "{\"score\": 1, \"reason\": \"仅答对董事长郑宗强（另提及离任职工董事陈刚），漏掉罗汉武、窦晓波、李芳、胡顺靖，属部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-030",
+  "attempts": [
+    {
+      "answer_key": "E__A-030",
+      "attempt": 1,
+      "completion_tokens": 165,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 11.63,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5192,
+      "qid": "FQ-030",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:41:22+08:00",
+      "total_tokens": 5357
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:41:34+08:00",
+  "group": "E",
+  "input_sha256": "bed961adedc08d8a6f1d3629cbde2e5d481520a60b2b3d7c1c1cc4ccc5d337da",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案所有事实（2022年6月剥离、交易对方中天科技集团、出售100%股权、剔除贸易业务收入及信息出处说明）均与证据10原文一致，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-030",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案所有事实（2022年6月剥离、交易对方中天科技集团、出售100%股权、剔除贸易业务收入及信息出处说明）均与证据10原文一致，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

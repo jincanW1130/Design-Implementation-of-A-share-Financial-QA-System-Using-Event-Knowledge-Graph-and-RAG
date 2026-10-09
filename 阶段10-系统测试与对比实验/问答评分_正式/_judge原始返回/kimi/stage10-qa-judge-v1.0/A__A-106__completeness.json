@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-106",
+  "attempts": [
+    {
+      "answer_key": "A__A-106",
+      "attempt": 1,
+      "completion_tokens": 181,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 14.391,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4091,
+      "qid": "FQ-106",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:16:24+08:00",
+      "total_tokens": 4272
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:16:38+08:00",
+  "group": "A",
+  "input_sha256": "509c87f12d8c05f37750af2c1b7a90bd567d0527e910f7b34dc3a1c125ecf3c4",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核准机构、文号、发行张数、面值、发行总额、期限等关键信息全部覆盖，无遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-106",
+  "raw_text": "{\"score\": 2, \"reason\": \"核准机构、文号、发行张数、面值、发行总额、期限等关键信息全部覆盖，无遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-022",
+  "attempts": [
+    {
+      "answer_key": "A__A-022",
+      "attempt": 1,
+      "completion_tokens": 681,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 26.93,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4383,
+      "qid": "PE-22",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:42:27+08:00",
+      "total_tokens": 5064
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:42:54+08:00",
+  "group": "A",
+  "input_sha256": "7c8445337d8711a3fcb854d7682a64c0793a6e4ce2cb95ab05aa562485137714",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "谢永林、冀光恒、郭晓涛、付欣、蔡方方、项有志、高鹏、吴雷鸣等人名均覆盖，但漏掉冀光恒的行长身份，高管部分不完整，属基本覆盖。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-22",
+  "raw_text": "{\"score\": 1, \"reason\": \"谢永林、冀光恒、郭晓涛、付欣、蔡方方、项有志、高鹏、吴雷鸣等人名均覆盖，但漏掉冀光恒的行长身份，高管部分不完整，属基本覆盖。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

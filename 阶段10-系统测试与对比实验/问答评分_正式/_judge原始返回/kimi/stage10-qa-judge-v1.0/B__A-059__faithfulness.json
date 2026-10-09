@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-059",
+  "attempts": [
+    {
+      "answer_key": "B__A-059",
+      "attempt": 1,
+      "completion_tokens": 485,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 18.478,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4295,
+      "qid": "FQ-059",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:27:04+08:00",
+      "total_tokens": 4780
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:27:23+08:00",
+  "group": "B",
+  "input_sha256": "539a68dacdf1ac710e926b0cccfc7672cfabac02f0edb0989424cdc2ebaa3ab9",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "侯启军法定代表人见证据1，张征董事会秘书见证据2，陈燕斌王世洁回避表决及'其他董事'表述见证据5，'斌'姓名不完整亦如实说明，均有支撑无编造",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-059",
+  "raw_text": "{\"score\": 2, \"reason\": \"侯启军法定代表人见证据1，张征董事会秘书见证据2，陈燕斌王世洁回避表决及'其他董事'表述见证据5，'斌'姓名不完整亦如实说明，均有支撑无编造\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

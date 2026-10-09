@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-012",
+  "attempts": [
+    {
+      "answer_key": "A__A-012",
+      "attempt": 1,
+      "completion_tokens": 264,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 5.999,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4260,
+      "qid": "PE-12",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-07T18:32:25+08:00",
+      "total_tokens": 4524
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:32:31+08:00",
+  "group": "A",
+  "input_sha256": "c078f8c7b275b5bbdf9dbc90af8c54d5304853cf63d29904de95183fb71850be",
+  "judge": "zhipu",
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案准确给出第八补充协议、2026年9月7日签订、互供协议期限至2027年12月31日，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-12",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案准确给出第八补充协议、2026年9月7日签订、互供协议期限至2027年12月31日，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

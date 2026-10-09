@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-011",
+  "attempts": [
+    {
+      "answer_key": "E__A-011",
+      "attempt": 1,
+      "completion_tokens": 1600,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 48.775,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5995,
+      "qid": "PE-11",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:16:14+08:00",
+      "total_tokens": 7595
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:17:02+08:00",
+  "group": "E",
+  "input_sha256": "6049e92e1a12d3f4dedf7e9d4cfa42056683cdfba857943ffa551ede11c0222e",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "所列7家被担保人及其担保主体、牛田洋出现两次等说法均可在证据3、4中找到对应行，序号5-7缺失的说明也与证据文本相符，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-11",
+  "raw_text": "{\"score\": 2, \"reason\": \"所列7家被担保人及其担保主体、牛田洋出现两次等说法均可在证据3、4中找到对应行，序号5-7缺失的说明也与证据文本相符，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-054",
+  "attempts": [
+    {
+      "answer_key": "A__A-054",
+      "attempt": 1,
+      "completion_tokens": 413,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 13.943,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4919,
+      "qid": "FQ-054",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:13:47+08:00",
+      "total_tokens": 5332
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:14:01+08:00",
+  "group": "A",
+  "input_sha256": "48689890fd676d6f8b96d516a160c1dac3c0b8dd25df33d6ee475c87b66d7b31",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "所列姓名均出自证据：胡望明等为关联董事回避见证据8，杨兆为独董候选人见证据4标题，其余均为对证据内容的如实描述，无编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-054",
+  "raw_text": "{\"score\": 2, \"reason\": \"所列姓名均出自证据：胡望明等为关联董事回避见证据8，杨兆为独董候选人见证据4标题，其余均为对证据内容的如实描述，无编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

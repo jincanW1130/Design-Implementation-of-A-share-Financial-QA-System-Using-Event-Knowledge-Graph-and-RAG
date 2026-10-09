@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-043",
+  "attempts": [
+    {
+      "answer_key": "D__A-043",
+      "attempt": 1,
+      "completion_tokens": 460,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 16.895,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4272,
+      "qid": "FQ-043",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:52:34+08:00",
+      "total_tokens": 4732
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:52:51+08:00",
+  "group": "D",
+  "input_sha256": "602d5e6db439483fb065093c41ce9e86fb3a64ed62076502928929f68600c8be",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "赎回摘牌事件、103%赎回价、9月11日债权登记、9月14日完成及持股数据等事实均能在证据1-3中找到对应支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-043",
+  "raw_text": "{\"score\": 2, \"reason\": \"赎回摘牌事件、103%赎回价、9月11日债权登记、9月14日完成及持股数据等事实均能在证据1-3中找到对应支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

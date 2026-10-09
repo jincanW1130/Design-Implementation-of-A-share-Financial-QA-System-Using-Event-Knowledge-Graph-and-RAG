@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-081",
+  "attempts": [
+    {
+      "answer_key": "A__A-081",
+      "attempt": 1,
+      "completion_tokens": 509,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 15.759,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4305,
+      "qid": "FQ-081",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:58:11+08:00",
+      "total_tokens": 4814
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:58:27+08:00",
+  "group": "A",
+  "input_sha256": "75d16a0f5cbdf3ee52a644090e7d213596fd1f4c4cd165fed8cc13bfd4e71fc9",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "签署日期、32套、5+3年、2.9957亿元/299,568,000元、128套框架协议60个月、9月3份合同43套45,313.98万元等说法均有检索证据原文支撑，未见编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-081",
+  "raw_text": "{\"score\": 2, \"reason\": \"签署日期、32套、5+3年、2.9957亿元/299,568,000元、128套框架协议60个月、9月3份合同43套45,313.98万元等说法均有检索证据原文支撑，未见编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

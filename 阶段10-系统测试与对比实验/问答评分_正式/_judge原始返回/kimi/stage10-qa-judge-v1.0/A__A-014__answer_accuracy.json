@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-014",
+  "attempts": [
+    {
+      "answer_key": "A__A-014",
+      "attempt": 1,
+      "completion_tokens": 80,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 7.05,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3877,
+      "qid": "FQ-014",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:47:07+08:00",
+      "total_tokens": 3957
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T18:47:15+08:00",
+  "group": "A",
+  "input_sha256": "345c12203013c8c8c65f259c1187508761025167f8d4e718eb751317742f4acd",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核准机构（国家金融监督管理总局）与文号（金复〔2026〕496号）均与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-014",
+  "raw_text": "{\"score\": 2, \"reason\": \"核准机构（国家金融监督管理总局）与文号（金复〔2026〕496号）均与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

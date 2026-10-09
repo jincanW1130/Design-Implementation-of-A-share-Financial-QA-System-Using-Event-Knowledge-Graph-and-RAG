@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-079",
+  "attempts": [
+    {
+      "answer_key": "A__A-079",
+      "attempt": 1,
+      "completion_tokens": 326,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 11.309,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4328,
+      "qid": "FQ-079",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:56:51+08:00",
+      "total_tokens": 4654
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T19:57:02+08:00",
+  "group": "A",
+  "input_sha256": "759e7ef1f1df96ec4a64f68a97691643682f154151798594a9d7081f659fd690",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案所述WZ10-11W-1井总包事件、初探井、海拔-1700米、8月13日启动、作业2个月及总包商中海油服等均有证据3/4/6支撑，公告日期8月11日亦与证据元数据一致，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-079",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案所述WZ10-11W-1井总包事件、初探井、海拔-1700米、8月13日启动、作业2个月及总包商中海油服等均有证据3/4/6支撑，公告日期8月11日亦与证据元数据一致，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

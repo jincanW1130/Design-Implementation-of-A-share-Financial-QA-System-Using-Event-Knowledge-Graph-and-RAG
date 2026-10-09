@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-066",
+  "attempts": [
+    {
+      "answer_key": "D__A-066",
+      "attempt": 1,
+      "completion_tokens": 538,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 18.401,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4888,
+      "qid": "FQ-066",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:19:04+08:00",
+      "total_tokens": 5426
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:19:22+08:00",
+  "group": "D",
+  "input_sha256": "d064413b49b5b8ada44840deb420b7cee63187238f9e25be509b6f0412140416",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "异常波动日期、偏离值、函询对象、回函说明及备查文件、落款日期等说法均能在证据1与证据7中找到对应，截断处亦明示不推测，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-066",
+  "raw_text": "{\"score\": 2, \"reason\": \"异常波动日期、偏离值、函询对象、回函说明及备查文件、落款日期等说法均能在证据1与证据7中找到对应，截断处亦明示不推测，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

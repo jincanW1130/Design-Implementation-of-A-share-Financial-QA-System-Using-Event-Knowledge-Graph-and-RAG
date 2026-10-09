@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-062",
+  "attempts": [
+    {
+      "answer_key": "B__A-062",
+      "attempt": 1,
+      "completion_tokens": 123,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 7.036,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4796,
+      "qid": "FQ-062",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:27:55+08:00",
+      "total_tokens": 4919
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:28:02+08:00",
+  "group": "B",
+  "input_sha256": "d709d40760bd818c091fb9ce70b83b67f38a669a319660259138cbd16a32bed0",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案与金标准一致：发行股份及支付现金购买国家能源集团资产交易已完成，自2026年4月起运营数据并入新资产并追溯调整，两问均答对。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-062",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案与金标准一致：发行股份及支付现金购买国家能源集团资产交易已完成，自2026年4月起运营数据并入新资产并追溯调整，两问均答对。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

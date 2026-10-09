@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-024",
+  "attempts": [
+    {
+      "answer_key": "E__A-024",
+      "attempt": 1,
+      "completion_tokens": 126,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.227,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4491,
+      "qid": "FQ-024",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:36:25+08:00",
+      "total_tokens": 4617
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:36:33+08:00",
+  "group": "E",
+  "input_sha256": "b6f07f1361af74f6cc4e96a09633182f63df9b2948e8fd991957e97ee2d21ba3",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案正确给出接受注册机构为交易商协会、通知书编号中市协注〔2026〕PDFI6号、注册规模30亿元PDFI及6月10日收到，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-024",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案正确给出接受注册机构为交易商协会、通知书编号中市协注〔2026〕PDFI6号、注册规模30亿元PDFI及6月10日收到，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

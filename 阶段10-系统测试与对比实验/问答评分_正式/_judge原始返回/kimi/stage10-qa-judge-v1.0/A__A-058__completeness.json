@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-058",
+  "attempts": [
+    {
+      "answer_key": "A__A-058",
+      "attempt": 1,
+      "completion_tokens": 441,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 16.222,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3663,
+      "qid": "FQ-058",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:16:13+08:00",
+      "total_tokens": 4104
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:16:29+08:00",
+  "group": "A",
+  "input_sha256": "91f3c77ff1d74b18778085d214a22b77c3444c8983297e52b57a7682666f7070",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "未答出吴磊的法定代表人身份，且注册资本、成立日期、注册地址等关键信息全部遗漏，仅身份不符的关联董事表述，属大量遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-058",
+  "raw_text": "{\"score\": 0, \"reason\": \"未答出吴磊的法定代表人身份，且注册资本、成立日期、注册地址等关键信息全部遗漏，仅身份不符的关联董事表述，属大量遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

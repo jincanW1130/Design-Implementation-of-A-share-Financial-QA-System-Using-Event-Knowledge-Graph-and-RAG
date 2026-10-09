@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-057",
+  "attempts": [
+    {
+      "answer_key": "D__A-057",
+      "attempt": 1,
+      "completion_tokens": 303,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 17.741,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4023,
+      "qid": "FQ-057",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:11:00+08:00",
+      "total_tokens": 4326
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:11:17+08:00",
+  "group": "D",
+  "input_sha256": "47b956d30fa206bf9b4b668255de95ea980be8343b50bbc267e6941532ff71d4",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案称证据不足且对杨兆身份、各证据主题及均未提及目标公司的陈述均与可用证据一致，无编造事实",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-057",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案称证据不足且对杨兆身份、各证据主题及均未提及目标公司的陈述均与可用证据一致，无编造事实\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

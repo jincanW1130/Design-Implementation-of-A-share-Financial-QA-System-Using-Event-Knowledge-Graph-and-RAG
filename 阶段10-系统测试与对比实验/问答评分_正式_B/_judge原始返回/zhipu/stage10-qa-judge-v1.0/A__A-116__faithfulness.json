@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-116",
+  "attempts": [
+    {
+      "answer_key": "A__A-116",
+      "attempt": 1,
+      "completion_tokens": 366,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 6.8,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 3819,
+      "qid": "FQ-116",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:06:05+08:00",
+      "total_tokens": 4185
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:06:11+08:00",
+  "group": "A",
+  "input_sha256": "701c3a5966137e38f976695fbe61f3461ce6f9ae44d50442fd77c80d6f7759f0",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案所称全资子公司关系及担保事实均由证据2原文『同意全资子公司上海电气香港有限公司…本次债券由电气香港提供担保』直接支撑，无无依据事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-116",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案所称全资子公司关系及担保事实均由证据2原文『同意全资子公司上海电气香港有限公司…本次债券由电气香港提供担保』直接支撑，无无依据事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

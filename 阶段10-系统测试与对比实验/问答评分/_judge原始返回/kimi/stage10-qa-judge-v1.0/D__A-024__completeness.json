@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-024",
+  "attempts": [
+    {
+      "answer_key": "D__A-024",
+      "attempt": 1,
+      "completion_tokens": 172,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 10.011,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4832,
+      "qid": "PE-24",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:01:13+08:00",
+      "total_tokens": 5004
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T18:01:23+08:00",
+  "group": "D",
+  "input_sha256": "529fe423319005fb125d65454cf5b1a1658361f21680e478f26a335e47d4f7b3",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案关键信息：调整后571.60元/股、调整前573元/股及2026年8月10日生效日，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-24",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案关键信息：调整后571.60元/股、调整前573元/股及2026年8月10日生效日，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

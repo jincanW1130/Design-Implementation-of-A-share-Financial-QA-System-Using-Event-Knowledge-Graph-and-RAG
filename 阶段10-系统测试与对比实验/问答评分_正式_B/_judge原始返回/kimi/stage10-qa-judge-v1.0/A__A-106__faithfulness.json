@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-106",
+  "attempts": [
+    {
+      "answer_key": "A__A-106",
+      "attempt": 1,
+      "completion_tokens": 179,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 9.415,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4114,
+      "qid": "FQ-106",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:16:39+08:00",
+      "total_tokens": 4293
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:16:49+08:00",
+  "group": "A",
+  "input_sha256": "4a7382302b0a3d7a691d6df34af3a9adee78728370e6366aeda1e581f2f5ae1e",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "核准机构、文号、张数、总额、期限、利率及挂牌信息均可由证据1与证据5/6直接支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-106",
+  "raw_text": "{\"score\": 2, \"reason\": \"核准机构、文号、张数、总额、期限、利率及挂牌信息均可由证据1与证据5/6直接支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

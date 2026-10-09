@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-109",
+  "attempts": [
+    {
+      "answer_key": "D__A-109",
+      "attempt": 1,
+      "completion_tokens": 180,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 7.383,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4038,
+      "qid": "FQ-109",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:09:19+08:00",
+      "total_tokens": 4218
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T22:09:26+08:00",
+  "group": "D",
+  "input_sha256": "e9a169e99a875908f815ce8b58b00889a6e6001b806c13aacd331c0f6ebed6bd",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确指出公司、控股股东及实际控制人与招标人（含新疆水利电力物资公司）不存在关联关系，与参考答案一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-109",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案明确指出公司、控股股东及实际控制人与招标人（含新疆水利电力物资公司）不存在关联关系，与参考答案一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

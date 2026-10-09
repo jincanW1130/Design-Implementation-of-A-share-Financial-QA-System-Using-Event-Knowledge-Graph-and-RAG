@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-043",
+  "attempts": [
+    {
+      "answer_key": "A__A-043",
+      "attempt": 1,
+      "completion_tokens": 121,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 8.206,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4272,
+      "qid": "FQ-043",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:03:06+08:00",
+      "total_tokens": 4393
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T19:03:14+08:00",
+  "group": "A",
+  "input_sha256": "5df279ceab32326fbd53e876770f75d3adf4024077efb3884d7568c68f091660",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件（2020年可交换债赎回及摘牌）、赎回价103%含末期利息、摘牌日2026-09-14均与参考答案一致",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-043",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件（2020年可交换债赎回及摘牌）、赎回价103%含末期利息、摘牌日2026-09-14均与参考答案一致\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

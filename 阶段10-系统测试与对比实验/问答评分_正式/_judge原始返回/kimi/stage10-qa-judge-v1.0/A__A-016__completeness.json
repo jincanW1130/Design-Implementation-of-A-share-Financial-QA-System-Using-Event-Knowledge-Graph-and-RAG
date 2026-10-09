@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-016",
+  "attempts": [
+    {
+      "answer_key": "A__A-016",
+      "attempt": 1,
+      "completion_tokens": 77,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 4.939,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3837,
+      "qid": "FQ-016",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T18:47:57+08:00",
+      "total_tokens": 3914
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T18:48:02+08:00",
+  "group": "A",
+  "input_sha256": "6d367d3326c581987f8661af80150d562121f1519e3325282d1cf681582a4a86",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案关键信息：以国家金融监督管理总局复函为依据，含无异议及条件已满足，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-016",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案关键信息：以国家金融监督管理总局复函为依据，含无异议及条件已满足，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

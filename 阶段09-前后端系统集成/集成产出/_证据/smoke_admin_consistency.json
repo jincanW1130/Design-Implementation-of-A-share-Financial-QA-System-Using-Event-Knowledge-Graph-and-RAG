@@ -2,19 +2,19 @@
   "method": "GET",
   "path": "/api/admin/consistency-check",
   "http_status": 200,
-  "seconds": 1.147,
+  "seconds": 0.097,
   "body": {
     "data": {
       "chunk_count": 5018,
       "vector_count": 5018,
       "graph_node_counts": {
-        "Company": 116,
-        "Person": 403,
+        "Person": 396,
         "Industry": 73,
-        "Institution": 316,
-        "Event": 1100,
+        "Institution": 308,
+        "Event": 1098,
         "Policy": 102,
-        "Document": 692
+        "Document": 692,
+        "Company": 938
       },
       "is_consistent": true,
       "diff": {
@@ -29,20 +29,21 @@
           "文本块（MySQL document_chunk）5018 条 vs 向量（build_meta.vector_count）5018 条：+0",
           "文本块 5018 条 vs 向量映射实点 5018 行：+0",
           "向量映射 5018 行 vs build_meta 自报 5018 条：+0",
-          "图谱节点 2802 个、关系 2736 条（实查）",
-          "上游旁证（C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_2\\graph_stats.json）：节点 2802、关系 2736"
+          "图谱节点 3607 个、关系 3614 条（实查）",
+          "上游旁证（C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\graph_stats.json）：节点 3607、关系 3614"
         ],
         "document_count": 709,
         "vector_map_lines": 5018,
         "vector_count_from_build_meta": 5018,
-        "graph_nodes_total": 2802,
-        "graph_edges_total": 2736,
+        "graph_nodes_total": 3607,
+        "graph_edges_total": 3614,
         "graph_edges_by_relation": {
-          "BELONGS_TO": 14,
-          "CUSTOMER_OF": 4,
-          "COMPETES_WITH": 1,
-          "HAS_EXECUTIVE": 143,
-          "PARTICIPATES_IN": 1252,
+          "BELONGS_TO": 54,
+          "SUPPLIES": 29,
+          "CUSTOMER_OF": 9,
+          "COMPETES_WITH": 8,
+          "HAS_EXECUTIVE": 278,
+          "PARTICIPATES_IN": 1914,
           "ISSUED_BY": 124,
           "RELATED_TO": 87,
           "EVIDENCED_BY": 1111
@@ -54,7 +55,7 @@
           "answer": 30,
           "answer_evidence": 293
         },
-        "upstream_graph_stats": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_2\\graph_stats.json"
+        "upstream_graph_stats": "C:\\Users\\15129\\Desktop\\毕业设计\\阶段06-事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\graph_stats.json"
       },
       "sources": {
         "mysql": "ashare_qa",
@@ -68,5 +69,5 @@
       "data_cutoff_time": "2026-09-25T23:59:59+08:00"
     }
   },
-  "raw_head": "{\"data\":{\"chunk_count\":5018,\"vector_count\":5018,\"graph_node_counts\":{\"Company\":116,\"Person\":403,\"Industry\":73,\"Institution\":316,\"Event\":1100,\"Policy\":102,\"Document\":692},\"is_consistent\":true,\"diff\":{\"deltas\":{\"document_chunk_vs_vector_count\":0,\"document_chunk_vs_vector_map_lines\":0,\"vector_map_lines_vs_build_meta\":0,\"graph_nodes_total_vs_upstream\":0,\"graph_edges_total_vs_upstream\":0},\"items\":[\"文本块（MySQL document_chunk）5018 条 vs 向量（build_meta.vector_count）5018 条：+0\",\"文本块 5018 条 vs 向量映射实点 5018 行：+0\",\"向量映射 5018 行 vs build_meta 自报 5018 条：+0\",\"图谱节点 2802 个、关系 2736 条（实查）\",\"上游旁证（C:\\\\Users\\\\15129\\\\Desktop\\\\毕业设计\\\\阶段06-事件抽取与知识图谱\\\\图谱导出\\\\v2.1_v1_2\\\\graph_stats.json）：节点 2802、关系 2736\"],\"document_count\":709,\"vector_map_lines\":5018,\"vector_count_from_build_meta\":5018,\"graph_nodes_total\":2802,\"graph_edges_t"
+  "raw_head": "{\"data\":{\"chunk_count\":5018,\"vector_count\":5018,\"graph_node_counts\":{\"Person\":396,\"Industry\":73,\"Institution\":308,\"Event\":1098,\"Policy\":102,\"Document\":692,\"Company\":938},\"is_consistent\":true,\"diff\":{\"deltas\":{\"document_chunk_vs_vector_count\":0,\"document_chunk_vs_vector_map_lines\":0,\"vector_map_lines_vs_build_meta\":0,\"graph_nodes_total_vs_upstream\":0,\"graph_edges_total_vs_upstream\":0},\"items\":[\"文本块（MySQL document_chunk）5018 条 vs 向量（build_meta.vector_count）5018 条：+0\",\"文本块 5018 条 vs 向量映射实点 5018 行：+0\",\"向量映射 5018 行 vs build_meta 自报 5018 条：+0\",\"图谱节点 3607 个、关系 3614 条（实查）\",\"上游旁证（C:\\\\Users\\\\15129\\\\Desktop\\\\毕业设计\\\\阶段06-事件抽取与知识图谱\\\\图谱导出\\\\v2.1_v1_3\\\\graph_stats.json）：节点 3607、关系 3614\"],\"document_count\":709,\"vector_map_lines\":5018,\"vector_count_from_build_meta\":5018,\"graph_nodes_total\":3607,\"graph_edges_t"
 }

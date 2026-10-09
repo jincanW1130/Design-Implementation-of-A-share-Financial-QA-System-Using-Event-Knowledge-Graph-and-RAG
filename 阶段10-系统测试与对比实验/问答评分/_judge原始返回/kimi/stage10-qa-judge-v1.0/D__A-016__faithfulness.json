@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-016",
+  "attempts": [
+    {
+      "answer_key": "D__A-016",
+      "attempt": 1,
+      "completion_tokens": 579,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 18.306,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5423,
+      "qid": "PE-16",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:54:13+08:00",
+      "total_tokens": 6002
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T17:54:32+08:00",
+  "group": "D",
+  "input_sha256": "e5567e4d3b44a793b87a55538417d178a1b1df17024dc0514ee8795af2d0b829",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案列举的平安银行与伊利各项事件均有对应证据支撑，且『现有证据内无共同事件』的结论与实际检索证据一致，未编造事实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-16",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案列举的平安银行与伊利各项事件均有对应证据支撑，且『现有证据内无共同事件』的结论与实际检索证据一致，未编造事实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

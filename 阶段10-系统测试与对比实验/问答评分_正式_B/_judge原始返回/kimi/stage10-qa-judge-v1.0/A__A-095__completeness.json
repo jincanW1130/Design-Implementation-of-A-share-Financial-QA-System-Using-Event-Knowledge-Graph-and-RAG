@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-095",
+  "attempts": [
+    {
+      "answer_key": "A__A-095",
+      "attempt": 1,
+      "completion_tokens": 280,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 10.367,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4436,
+      "qid": "FQ-095",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:05:27+08:00",
+      "total_tokens": 4716
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:05:37+08:00",
+  "group": "A",
+  "input_sha256": "73f03c534afd82d6c248fc90afd9c1de8897e80b83fe30fb9a2b61a93d09be10",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "已覆盖股数、金额、价格区间及A股下限10亿元，但遗漏H股回购授权规模上限5亿港元这一关键信息，属基本覆盖",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-095",
+  "raw_text": "{\"score\": 1, \"reason\": \"已覆盖股数、金额、价格区间及A股下限10亿元，但遗漏H股回购授权规模上限5亿港元这一关键信息，属基本覆盖\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

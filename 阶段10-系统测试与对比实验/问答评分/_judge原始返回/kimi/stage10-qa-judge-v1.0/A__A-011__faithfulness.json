@@ -1,0 +1,44 @@
+{
+  "answer_key": "A__A-011",
+  "attempts": [
+    {
+      "answer_key": "A__A-011",
+      "attempt": 1,
+      "completion_tokens": 143,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 6.463,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5655,
+      "qid": "PE-11",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:30:55+08:00",
+      "total_tokens": 5798
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T16:31:01+08:00",
+  "group": "A",
+  "input_sha256": "a184d1a0185297a7c7f03d6afb42c320cd0358451877c75b21341d494cba7bab",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "10家被担保人名称及牛田洋公司在序号10、11出现、共11条担保协议等说法均能被证据1、3、10支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-11",
+  "raw_text": "{\"score\": 2, \"reason\": \"10家被担保人名称及牛田洋公司在序号10、11出现、共11条担保协议等说法均能被证据1、3、10支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-062",
+  "attempts": [
+    {
+      "answer_key": "C__A-062",
+      "attempt": 1,
+      "completion_tokens": 475,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 8.883,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5590,
+      "qid": "FQ-062",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:47:22+08:00",
+      "total_tokens": 6065
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:47:31+08:00",
+  "group": "C",
+  "input_sha256": "6513b8d38a4b12c1225af60ce00ff0b72079b833f3a4e1f2e9513758c505d77e",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案两点均与参考答案一致：发行股份及支付现金购买国家能源集团资产交易已完成，自2026年4月起影响运营数据并追溯调整，完全正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-062",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案两点均与参考答案一致：发行股份及支付现金购买国家能源集团资产交易已完成，自2026年4月起影响运营数据并追溯调整，完全正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-012",
+  "attempts": [
+    {
+      "answer_key": "D__A-012",
+      "attempt": 1,
+      "completion_tokens": 107,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 7.071,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4632,
+      "qid": "FQ-012",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:33:12+08:00",
+      "total_tokens": 4739
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:33:19+08:00",
+  "group": "D",
+  "input_sha256": "d32503581465880bd6bbcb538d8ffc05015e52bee2d3aabd93cf6e624a48ea93",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "三个日期与参考答案完全一致：股权登记日8月7日，除权除息日与现金红利发放日均为8月10日。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-012",
+  "raw_text": "{\"score\": 2, \"reason\": \"三个日期与参考答案完全一致：股权登记日8月7日，除权除息日与现金红利发放日均为8月10日。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

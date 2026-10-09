@@ -1,0 +1,43 @@
+{
+ "aggregate_ok_qids": 117,
+ "aggregate_rows": 117,
+ "model_calls_from_success_rows": 117,
+ "note": "模型调用下限＝成功题 trace 行里 attempts 的条数之和（每条的 attempts 就是该题实际发过的请求数）；失败题不落 trace 行，故其调用次数不在其中，按下限报出、不估算成好看的数字。",
+ "per_question": [
+  {
+   "now_answer_trace_sha256": "549f33d60216b3f1344513aaa0c8a4ec6fe27409315ab293ab28d03b4fc79519",
+   "qid": "FQ-023",
+   "stale_error_code": 3004,
+   "stale_failures": {
+    "FQ-023": [
+     "date_unverifiable"
+    ]
+   },
+   "stale_reason": "answer_gate_failed",
+   "stale_sha256": "02c29b361f4818e597a6bc3849403c8e59f203635d942567f433ad401fa859e0"
+  },
+  {
+   "now_answer_trace_sha256": "b8986d167fed3ff558012ce74695e68fa844ec3f352047dba168cda7a9cea0b4",
+   "qid": "FQ-036",
+   "stale_error_code": 3004,
+   "stale_failures": {
+    "FQ-036": [
+     "forbidden_terms"
+    ]
+   },
+   "stale_reason": "answer_gate_failed",
+   "stale_sha256": "6601489e8bbfffd1d3f5c43c9e85e3387ea598ca9134012e3b6ae43ea868ae85"
+  }
+ ],
+ "recovered_after_retry": [
+  "FQ-023",
+  "FQ-036"
+ ],
+ "schema": "stage10-c-cleanup-1.0",
+ "stale_removed": 2,
+ "still_failed_qids": [
+  "FQ-022",
+  "FQ-093",
+  "FQ-115"
+ ]
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-049",
+  "attempts": [
+    {
+      "answer_key": "C__A-049",
+      "attempt": 1,
+      "completion_tokens": 233,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "kimi",
+      "latency_seconds": 8.942,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5092,
+      "qid": "FQ-049",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:03:55+08:00",
+      "total_tokens": 5325
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:04:04+08:00",
+  "group": "C",
+  "input_sha256": "a58569c8619db4585b5886a2e08c6178af27434fb73bfa6d5938844e2dbc6911",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "仅覆盖穆峰、李红栓、袁媛三名高管，遗漏董事长魏建军及赵国庆、赵改、何平、范辉、邹兆麟、田雅娟等全部董事，关键信息大量遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-049",
+  "raw_text": "{\"score\": 0, \"reason\": \"仅覆盖穆峰、李红栓、袁媛三名高管，遗漏董事长魏建军及赵国庆、赵改、何平、范辉、邹兆麟、田雅娟等全部董事，关键信息大量遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

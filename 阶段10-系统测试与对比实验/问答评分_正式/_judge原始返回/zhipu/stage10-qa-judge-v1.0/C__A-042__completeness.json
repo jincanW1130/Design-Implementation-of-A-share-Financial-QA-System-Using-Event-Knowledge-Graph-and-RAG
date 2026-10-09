@@ -1,0 +1,45 @@
+{
+  "answer_key": "C__A-042",
+  "attempts": [
+    {
+      "answer_key": "C__A-042",
+      "attempt": 1,
+      "completion_tokens": 522,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "C",
+      "judge": "zhipu",
+      "latency_seconds": 10.824,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4787,
+      "qid": "FQ-042",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:44:21+08:00",
+      "total_tokens": 5309
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:44:31+08:00",
+  "group": "C",
+  "input_sha256": "c2987a6ba43e886f6fed1ad21c088b45040f524226d9f780212403ad49895bed",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案两条关键信息：纳入合并范围事实、372/292/80万审计费用及增加30万、业绩预告合并范围说明，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-042",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案两条关键信息：纳入合并范围事实、372/292/80万审计费用及增加30万、业绩预告合并范围说明，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

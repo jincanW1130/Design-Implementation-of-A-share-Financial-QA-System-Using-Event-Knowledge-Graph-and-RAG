@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-048",
+  "attempts": [
+    {
+      "answer_key": "E__A-048",
+      "attempt": 1,
+      "completion_tokens": 1330,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 37.786,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5291,
+      "qid": "FQ-048",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:55:41+08:00",
+      "total_tokens": 6621
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:56:18+08:00",
+  "group": "E",
+  "input_sha256": "a60120efb87e3149c5592e3b07109aee77167ad8363bc9ed08dcabe30d7f9220",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "决议公告批准事项、半年报及分配方案披露、说明会安排、权益分派金额基数与日期、自行/委托派发对象等说法均能在证据1-10中找到对应原文，无编造内容。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-048",
+  "raw_text": "{\"score\": 2, \"reason\": \"决议公告批准事项、半年报及分配方案披露、说明会安排、权益分派金额基数与日期、自行/委托派发对象等说法均能在证据1-10中找到对应原文，无编造内容。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

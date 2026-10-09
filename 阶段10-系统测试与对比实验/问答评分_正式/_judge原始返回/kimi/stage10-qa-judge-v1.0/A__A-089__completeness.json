@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-089",
+  "attempts": [
+    {
+      "answer_key": "A__A-089",
+      "attempt": 1,
+      "completion_tokens": 383,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 17.33,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4317,
+      "qid": "FQ-089",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:01:36+08:00",
+      "total_tokens": 4700
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:01:53+08:00",
+  "group": "A",
+  "input_sha256": "dd65c7d4ffdc1d1d0236701d22a63e0a450a30bb34b199630a391e3754972c94",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "三项关键信息仅覆盖股权登记日，除权除息日（7月16日）与7月回购10,780,847股均缺失且回购数答错口径，属大量遗漏。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-089",
+  "raw_text": "{\"score\": 0, \"reason\": \"三项关键信息仅覆盖股权登记日，除权除息日（7月16日）与7月回购10,780,847股均缺失且回购数答错口径，属大量遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

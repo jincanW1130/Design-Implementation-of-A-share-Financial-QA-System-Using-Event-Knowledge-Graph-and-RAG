@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-113",
+  "attempts": [
+    {
+      "answer_key": "D__A-113",
+      "attempt": 1,
+      "completion_tokens": 444,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "zhipu",
+      "latency_seconds": 7.276,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4275,
+      "qid": "FQ-113",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:11:17+08:00",
+      "total_tokens": 4719
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T01:11:24+08:00",
+  "group": "D",
+  "input_sha256": "bcd2cbb88087c2f5fb89faae28be414d7b154541803a112621513798f67738dd",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案关键信息：周锦明为控股股东实控人，其控股天津锦龙提供总包所需部分装备及配套服务，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-113",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案关键信息：周锦明为控股股东实控人，其控股天津锦龙提供总包所需部分装备及配套服务，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

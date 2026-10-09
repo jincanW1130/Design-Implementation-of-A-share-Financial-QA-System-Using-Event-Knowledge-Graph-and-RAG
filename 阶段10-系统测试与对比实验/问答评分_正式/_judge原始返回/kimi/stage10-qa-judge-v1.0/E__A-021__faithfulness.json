@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-021",
+  "attempts": [
+    {
+      "answer_key": "E__A-021",
+      "attempt": 1,
+      "completion_tokens": 165,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 8.039,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5052,
+      "qid": "FQ-021",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:35:44+08:00",
+      "total_tokens": 5217
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:35:52+08:00",
+  "group": "E",
+  "input_sha256": "89c86bfc98b4f0824249ea94c7a30096f75075c9ee0d83d27235c42d85ccd0b2",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "批准机构、日期、提交/受理时间及236.14万元投入等事实均可由证据4、5、6直接支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-021",
+  "raw_text": "{\"score\": 2, \"reason\": \"批准机构、日期、提交/受理时间及236.14万元投入等事实均可由证据4、5、6直接支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

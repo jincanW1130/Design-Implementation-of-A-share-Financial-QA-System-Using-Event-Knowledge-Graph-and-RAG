@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-116",
+  "attempts": [
+    {
+      "answer_key": "B__A-116",
+      "attempt": 1,
+      "completion_tokens": 710,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 24.357,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4636,
+      "qid": "FQ-116",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:54:51+08:00",
+      "total_tokens": 5346
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T20:55:16+08:00",
+  "group": "B",
+  "input_sha256": "fa269868b952d65663b9a09da9fdcc4ac706379e9a97184d2b2e2608074b5f55",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "已覆盖全资子公司关系及电气香港提供担保，但遗漏参考答案中“担保期限不超过5年”这一关键信息，属基本覆盖。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-116",
+  "raw_text": "{\"score\": 1, \"reason\": \"已覆盖全资子公司关系及电气香港提供担保，但遗漏参考答案中“担保期限不超过5年”这一关键信息，属基本覆盖。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

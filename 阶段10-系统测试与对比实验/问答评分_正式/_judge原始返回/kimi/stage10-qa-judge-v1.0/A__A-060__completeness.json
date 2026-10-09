@@ -1,0 +1,47 @@
+{
+  "answer_key": "A__A-060",
+  "attempts": [
+    {
+      "answer_key": "A__A-060",
+      "attempt": 1,
+      "completion_tokens": 130,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "json_recovered": true,
+      "judge": "kimi",
+      "latency_seconds": 6.036,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4157,
+      "qid": "FQ-060",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T19:18:15+08:00",
+      "total_tokens": 4287
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T19:18:21+08:00",
+  "group": "A",
+  "input_sha256": "11684b035dce3aa7703afcc75ab9470c4104b63867fb7b4aaecf40af3aa5f47f",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "_recovered_from_malformed_json": true,
+    "reason": "参考答案关键信息为程忠（副总经理、财务总监）及688001代码，被评答案称无法回答，关键信息全部遗漏",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-060",
+  "raw_text": "{\"score\": 0, \"reason\": 参考答案关键信息为程忠（副总经理、财务总监）及688001代码，被评答案称无法回答，关键信息全部遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

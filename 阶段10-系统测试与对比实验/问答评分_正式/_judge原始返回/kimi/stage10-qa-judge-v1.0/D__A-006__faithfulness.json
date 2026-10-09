@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-006",
+  "attempts": [
+    {
+      "answer_key": "D__A-006",
+      "attempt": 1,
+      "completion_tokens": 377,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 14.902,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 3684,
+      "qid": "FQ-006",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:29:22+08:00",
+      "total_tokens": 4061
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T21:29:37+08:00",
+  "group": "D",
+  "input_sha256": "814eb7eb2d0537e488f9de422827932fb78a6ed082d3fa12125f525603efe752",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "文号、400亿元上限、24个月有效期均有证据1支撑，但答案称公告发布于2026年9月16日，可用证据原文落款为9月15日，存在一处不严谨。",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-006",
+  "raw_text": "{\"score\": 1, \"reason\": \"文号、400亿元上限、24个月有效期均有证据1支撑，但答案称公告发布于2026年9月16日，可用证据原文落款为9月15日，存在一处不严谨。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

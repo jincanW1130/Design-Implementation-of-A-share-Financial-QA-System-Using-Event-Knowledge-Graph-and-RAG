@@ -1,0 +1,44 @@
+{
+  "answer_key": "A__A-027",
+  "attempts": [
+    {
+      "answer_key": "A__A-027",
+      "attempt": 1,
+      "completion_tokens": 185,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "from_cache": false,
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 13.024,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4589,
+      "qid": "PE-27",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:13:37+08:00",
+      "total_tokens": 4774
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T16:13:50+08:00",
+  "group": "A",
+  "input_sha256": "fa82b67c1901b6055275715b35ac8f8029b6700966ba7d3c33997ccc4c716703",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "卖方答对，但买方未给出具体企业全称、签署时间未答出2026年7月13日，三项仅答对一项，属部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-27",
+  "raw_text": "{\"score\": 1, \"reason\": \"卖方答对，但买方未给出具体企业全称、签署时间未答出2026年7月13日，三项仅答对一项，属部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-090",
+  "attempts": [
+    {
+      "answer_key": "D__A-090",
+      "attempt": 1,
+      "completion_tokens": 385,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 16.383,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5294,
+      "qid": "FQ-090",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:54:45+08:00",
+      "total_tokens": 5679
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:55:02+08:00",
+  "group": "D",
+  "input_sha256": "55ee730663fd0914c1a1e132846174cfb78054034da4c5166e6d081d5b4349c8",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "离任时间、退休原因、每股红利0.06374元、可供分配利润1068.7亿元四项关键信息全部覆盖，仅省略原定任期这一非所问细节。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-090",
+  "raw_text": "{\"score\": 2, \"reason\": \"离任时间、退休原因、每股红利0.06374元、可供分配利润1068.7亿元四项关键信息全部覆盖，仅省略原定任期这一非所问细节。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

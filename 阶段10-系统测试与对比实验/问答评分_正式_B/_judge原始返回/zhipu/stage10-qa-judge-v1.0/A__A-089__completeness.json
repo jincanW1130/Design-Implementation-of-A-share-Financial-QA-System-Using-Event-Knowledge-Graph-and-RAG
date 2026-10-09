@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-089",
+  "attempts": [
+    {
+      "answer_key": "A__A-089",
+      "attempt": 1,
+      "completion_tokens": 1045,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 19.476,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4519,
+      "qid": "FQ-089",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:01:20+08:00",
+      "total_tokens": 5564
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T23:01:39+08:00",
+  "group": "A",
+  "input_sha256": "dd65c7d4ffdc1d1d0236701d22a63e0a450a30bb34b199630a391e3754972c94",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "三项关键信息仅答对股权登记日，除权除息日缺失，回购累计数量误答为2,535,759股，遗漏过半判0。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-089",
+  "raw_text": "{\"score\": 0, \"reason\": \"三项关键信息仅答对股权登记日，除权除息日缺失，回购累计数量误答为2,535,759股，遗漏过半判0。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

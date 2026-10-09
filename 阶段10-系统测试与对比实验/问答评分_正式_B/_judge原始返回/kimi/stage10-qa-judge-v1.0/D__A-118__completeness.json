@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-118",
+  "attempts": [
+    {
+      "answer_key": "D__A-118",
+      "attempt": 1,
+      "completion_tokens": 647,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 20.22,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4912,
+      "qid": "FQ-118",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:14:43+08:00",
+      "total_tokens": 5559
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T22:15:03+08:00",
+  "group": "D",
+  "input_sha256": "cb99f035ec93e30e9d19bfb165dd1d58d893da7586d7fa5926100f0fb996f369",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "完整覆盖参考答案全部关键信息：否定结论、未与控股股东及实控人签署一致行动协议或安排、与其他已存续员工持股计划为一致行动关系。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-118",
+  "raw_text": "{\"score\": 2, \"reason\": \"完整覆盖参考答案全部关键信息：否定结论、未与控股股东及实控人签署一致行动协议或安排、与其他已存续员工持股计划为一致行动关系。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-083",
+  "attempts": [
+    {
+      "answer_key": "E__A-083",
+      "attempt": 1,
+      "completion_tokens": 195,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 13.163,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4585,
+      "qid": "FQ-083",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:28:03+08:00",
+      "total_tokens": 4780
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:28:17+08:00",
+  "group": "E",
+  "input_sha256": "0b2b3e0c1a367f932defe1eae390574ed904e9bce13f217fa5b652e2aec764c0",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、编号INTerpath-001、联合Keytruda、适应症及1100例等事实均可在证据1中找到，图谱信息与路径一致，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-083",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、编号INTerpath-001、联合Keytruda、适应症及1100例等事实均可在证据1中找到，图谱信息与路径一致，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-100",
+  "attempts": [
+    {
+      "answer_key": "A__A-100",
+      "attempt": 1,
+      "completion_tokens": 2539,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 45.058,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4292,
+      "qid": "FQ-100",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:03:46+08:00",
+      "total_tokens": 6831
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T23:04:31+08:00",
+  "group": "A",
+  "input_sha256": "bc780aad74f598cd19b37655f3c6d15c426e4a168539457f42a518f139d35793",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案所列签署合同、拟中标、出资比例、关联方认定等事实均可在可用证据中找到对应原文，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-100",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案所列签署合同、拟中标、出资比例、关联方认定等事实均可在可用证据中找到对应原文，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

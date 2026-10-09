@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-032",
+  "attempts": [
+    {
+      "answer_key": "E__A-032",
+      "attempt": 1,
+      "completion_tokens": 1078,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 25.059,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5360,
+      "qid": "FQ-032",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:06:44+08:00",
+      "total_tokens": 6438
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T00:07:09+08:00",
+  "group": "E",
+  "input_sha256": "3315f357102e843d432393fdaea40a30cefd51801788eb51f6755e727da9f306",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案明确表示无法给出数值，资产总额、所有者权益、营业收入、净利润四项指标均未作答，与参考答案全部不符。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-032",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案明确表示无法给出数值，资产总额、所有者权益、营业收入、净利润四项指标均未作答，与参考答案全部不符。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

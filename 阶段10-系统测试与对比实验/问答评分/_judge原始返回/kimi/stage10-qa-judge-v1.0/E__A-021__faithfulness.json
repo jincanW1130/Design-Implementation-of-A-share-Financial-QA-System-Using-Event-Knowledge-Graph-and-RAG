@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-021",
+  "attempts": [
+    {
+      "answer_key": "E__A-021",
+      "attempt": 1,
+      "completion_tokens": 197,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 9.662,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4824,
+      "qid": "PE-21",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:25:13+08:00",
+      "total_tokens": 5021
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-07T18:25:23+08:00",
+  "group": "E",
+  "input_sha256": "a75dd47bd65b2ca167f953deb3bf27bcb36c4e05a2268c0cf2a44f42e198973e",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "受托管理人角色、名义持有、专户名称、代行表决权及登记机构、公告日期均可在证据5、10及证据来源发布时间中找到支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-21",
+  "raw_text": "{\"score\": 2, \"reason\": \"受托管理人角色、名义持有、专户名称、代行表决权及登记机构、公告日期均可在证据5、10及证据来源发布时间中找到支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

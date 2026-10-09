@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-086",
+  "attempts": [
+    {
+      "answer_key": "A__A-086",
+      "attempt": 1,
+      "completion_tokens": 353,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "zhipu",
+      "latency_seconds": 5.942,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4556,
+      "qid": "FQ-086",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T00:42:42+08:00",
+      "total_tokens": 4909
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-09T00:42:48+08:00",
+  "group": "A",
+  "input_sha256": "32fe078dbf64752b69bf30319dc34bdcdd0de24ae08324859b504af313cbd760",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖四个关键点：每股股息3.02元、股权登记日2026年9月23日、发行规模200亿元、前5年票面利率1.86%，无遗漏",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-086",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖四个关键点：每股股息3.02元、股权登记日2026年9月23日、发行规模200亿元、前5年票面利率1.86%，无遗漏\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

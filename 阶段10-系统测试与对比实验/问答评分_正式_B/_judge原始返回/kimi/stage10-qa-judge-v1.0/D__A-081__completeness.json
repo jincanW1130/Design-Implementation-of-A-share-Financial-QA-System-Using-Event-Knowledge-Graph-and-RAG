@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-081",
+  "attempts": [
+    {
+      "answer_key": "D__A-081",
+      "attempt": 1,
+      "completion_tokens": 266,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 8.979,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5495,
+      "qid": "FQ-081",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:46:48+08:00",
+      "total_tokens": 5761
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-08T21:46:57+08:00",
+  "group": "D",
+  "input_sha256": "361b5ffaafc5ef46426482c080d554b493875631971f1b023a97b17d7417eae7",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "参考答案关键信息（7月20日签署两份协议、32套、8年含5+3、含税2.9957亿元）全部覆盖，额外内容不影响完整性",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-081",
+  "raw_text": "{\"score\": 2, \"reason\": \"参考答案关键信息（7月20日签署两份协议、32套、8年含5+3、含税2.9957亿元）全部覆盖，额外内容不影响完整性\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

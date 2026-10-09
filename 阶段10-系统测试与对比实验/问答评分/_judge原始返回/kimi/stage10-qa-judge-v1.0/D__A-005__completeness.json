@@ -1,0 +1,43 @@
+{
+  "answer_key": "D__A-005",
+  "attempts": [
+    {
+      "answer_key": "D__A-005",
+      "attempt": 1,
+      "completion_tokens": 108,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 8.67,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 5638,
+      "qid": "PE-05",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T17:43:22+08:00",
+      "total_tokens": 5746
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T17:43:31+08:00",
+  "group": "D",
+  "input_sha256": "6db93d7a3ac35b2826848d39cbdc0e182d2e40eb2fd9ad10fc3a695fa9d05834",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案完整覆盖参考答案的第六期（2026年8月26日）与第七期（2026年9月21日）两期及各自发行日期，无遗漏。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-05",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案完整覆盖参考答案的第六期（2026年8月26日）与第七期（2026年9月21日）两期及各自发行日期，无遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

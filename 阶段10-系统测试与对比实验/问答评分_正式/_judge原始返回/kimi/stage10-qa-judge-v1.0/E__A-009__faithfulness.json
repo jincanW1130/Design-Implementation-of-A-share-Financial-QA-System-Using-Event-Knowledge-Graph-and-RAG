@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-009",
+  "attempts": [
+    {
+      "answer_key": "E__A-009",
+      "attempt": 1,
+      "completion_tokens": 220,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 12.022,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4065,
+      "qid": "FQ-009",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T22:28:15+08:00",
+      "total_tokens": 4285
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T22:28:27+08:00",
+  "group": "E",
+  "input_sha256": "7d61456cf756c1ea4d92cbdf7519c57990effcbe785f8d07c176923e1b3b9592",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "债券四要素、发行主体、5亿欧元额度、董事会六届四次会议及发行目的均可由证据2、证据3直接支撑，无编造内容",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-009",
+  "raw_text": "{\"score\": 2, \"reason\": \"债券四要素、发行主体、5亿欧元额度、董事会六届四次会议及发行目的均可由证据2、证据3直接支撑，无编造内容\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

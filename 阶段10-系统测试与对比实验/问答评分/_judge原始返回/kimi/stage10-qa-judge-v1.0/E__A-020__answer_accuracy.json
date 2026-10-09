@@ -1,0 +1,43 @@
+{
+  "answer_key": "E__A-020",
+  "attempts": [
+    {
+      "answer_key": "E__A-020",
+      "attempt": 1,
+      "completion_tokens": 433,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "kimi",
+      "latency_seconds": 13.307,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4871,
+      "qid": "PE-20",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T18:24:02+08:00",
+      "total_tokens": 5304
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-07T18:24:15+08:00",
+  "group": "E",
+  "input_sha256": "ec52b784ad7a52db84546475b5729f7a98232ec00f57a23daeba81d2b706d5b4",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "主答为68.85%（及其后70.01%），与金标准69.95%（含间接持股）不一致，但提供了相关持股与控股股东信息，属部分正确",
+    "score": 1
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-20",
+  "raw_text": "{\"score\": 1, \"reason\": \"主答为68.85%（及其后70.01%），与金标准69.95%（含间接持股）不一致，但提供了相关持股与控股股东信息，属部分正确\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

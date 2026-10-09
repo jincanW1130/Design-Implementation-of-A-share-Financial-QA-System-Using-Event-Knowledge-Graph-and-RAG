@@ -1,0 +1,45 @@
+{
+  "answer_key": "E__A-092",
+  "attempts": [
+    {
+      "answer_key": "E__A-092",
+      "attempt": 1,
+      "completion_tokens": 319,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "E",
+      "judge": "zhipu",
+      "latency_seconds": 4.782,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 5190,
+      "qid": "FQ-092",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-09T01:13:37+08:00",
+      "total_tokens": 5509
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-09T01:13:42+08:00",
+  "group": "E",
+  "input_sha256": "9d12e276dd70d2b74d367b65b7e1502dc7c8fcb374835bf58fd1aa6601cb0c3e",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "三个要点与参考答案完全一致：151.01元/股、2026年7月16日生效、8月13日管控事件，均正确。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-092",
+  "raw_text": "{\"score\": 2, \"reason\": \"三个要点与参考答案完全一致：151.01元/股、2026年7月16日生效、8月13日管控事件，均正确。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

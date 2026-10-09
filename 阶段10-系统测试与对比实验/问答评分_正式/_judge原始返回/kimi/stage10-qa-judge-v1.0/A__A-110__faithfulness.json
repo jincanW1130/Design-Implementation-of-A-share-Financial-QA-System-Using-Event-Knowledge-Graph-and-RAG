@@ -1,0 +1,45 @@
+{
+  "answer_key": "A__A-110",
+  "attempts": [
+    {
+      "answer_key": "A__A-110",
+      "attempt": 1,
+      "completion_tokens": 431,
+      "dimension": "faithfulness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 17.267,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4047,
+      "qid": "FQ-110",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:18:13+08:00",
+      "total_tokens": 4478
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "faithfulness",
+  "finished_at": "2026-10-08T20:18:30+08:00",
+  "group": "A",
+  "input_sha256": "1c295d71b623365e10efb89b373f40ab8ab9f77a1e6af3ef142a1dd17cc710ce",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "控股股东表述见证据3原文，持股数据与证据4完全一致，质押及摘牌说法分别有证据7、4支撑，无编造。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-110",
+  "raw_text": "{\"score\": 2, \"reason\": \"控股股东表述见证据3原文，持股数据与证据4完全一致，质押及摘牌说法分别有证据7、4支撑，无编造。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

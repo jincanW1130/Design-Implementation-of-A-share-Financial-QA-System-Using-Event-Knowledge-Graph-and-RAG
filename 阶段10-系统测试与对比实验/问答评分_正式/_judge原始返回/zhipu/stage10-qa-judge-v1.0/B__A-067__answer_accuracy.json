@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-067",
+  "attempts": [
+    {
+      "answer_key": "B__A-067",
+      "attempt": 1,
+      "completion_tokens": 320,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "zhipu",
+      "latency_seconds": 5.856,
+      "max_tokens": 4000,
+      "model": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "ok": true,
+      "prompt_tokens": 4650,
+      "qid": "FQ-067",
+      "status": "http_ok",
+      "temperature": 0.0,
+      "timestamp": "2026-10-08T23:38:08+08:00",
+      "total_tokens": 4970
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T23:38:14+08:00",
+  "group": "B",
+  "input_sha256": "78ba919195b5088537883d72a33a0854c89307ad7bde495bb7691c5153474f58",
+  "judge": "zhipu",
+  "max_tokens": 4000,
+  "model_requested": "glm-5.3-flash",
+  "model_resolved": "glm-5.3-flash",
+  "ok": true,
+  "parsed": {
+    "reason": "事件（三主体设立苏州华旭新能合伙企业）、认缴总额100,000万元及阳光新能源19,900万元、占比19.90%均与参考答案一致，补充备案信息亦属实。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-067",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件（三主体设立苏州华旭新能合伙企业）、认缴总额100,000万元及阳光新能源19,900万元、占比19.90%均与参考答案一致，补充备案信息亦属实。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 0.0
+}

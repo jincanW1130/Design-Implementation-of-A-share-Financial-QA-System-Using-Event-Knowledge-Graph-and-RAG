@@ -1,0 +1,45 @@
+{
+  "answer_key": "D__A-079",
+  "attempts": [
+    {
+      "answer_key": "D__A-079",
+      "attempt": 1,
+      "completion_tokens": 169,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "D",
+      "judge": "kimi",
+      "latency_seconds": 10.123,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4960,
+      "qid": "FQ-079",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T21:45:05+08:00",
+      "total_tokens": 5129
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T21:45:15+08:00",
+  "group": "D",
+  "input_sha256": "a066ccf6f52b26d7439d886a0306a07e6dda95f27fd16591542a45210574b3c0",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "事件、井别初探井、井深-1700米、作业2个月、2026-08-13启动、总包商中海油服均与参考答案一致，且正确区分了E-1井",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-079",
+  "raw_text": "{\"score\": 2, \"reason\": \"事件、井别初探井、井深-1700米、作业2个月、2026-08-13启动、总包商中海油服均与参考答案一致，且正确区分了E-1井\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

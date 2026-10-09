@@ -1,0 +1,45 @@
+{
+  "answer_key": "B__A-046",
+  "attempts": [
+    {
+      "answer_key": "B__A-046",
+      "attempt": 1,
+      "completion_tokens": 125,
+      "dimension": "answer_accuracy",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "B",
+      "judge": "kimi",
+      "latency_seconds": 4.455,
+      "max_tokens": 4000,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4659,
+      "qid": "FQ-046",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-08T20:12:36+08:00",
+      "total_tokens": 4784
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "answer_accuracy",
+  "finished_at": "2026-10-08T20:12:41+08:00",
+  "group": "B",
+  "input_sha256": "8e2fe924d7f727984ca4c06c9aeb6e62d77449adbe8d6f4dcd2cd8cf1568d7b2",
+  "judge": "kimi",
+  "max_tokens": 4000,
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案准确指出持有人由安徽美来药业变更为国药致君坪山、批准文号不变，并补充生产场地等与药品一致，与参考答案完全一致。",
+    "score": 2
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "FQ-046",
+  "raw_text": "{\"score\": 2, \"reason\": \"答案准确指出持有人由安徽美来药业变更为国药致君坪山、批准文号不变，并补充生产场地等与药品一致，与参考答案完全一致。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}

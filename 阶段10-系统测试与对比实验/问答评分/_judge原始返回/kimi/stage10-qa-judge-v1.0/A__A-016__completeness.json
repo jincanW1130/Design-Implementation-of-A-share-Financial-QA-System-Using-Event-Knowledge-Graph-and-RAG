@@ -1,0 +1,43 @@
+{
+  "answer_key": "A__A-016",
+  "attempts": [
+    {
+      "answer_key": "A__A-016",
+      "attempt": 1,
+      "completion_tokens": 242,
+      "dimension": "completeness",
+      "error": null,
+      "finish_reason": "stop",
+      "group": "A",
+      "judge": "kimi",
+      "latency_seconds": 11.913,
+      "model": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "ok": true,
+      "prompt_tokens": 4000,
+      "qid": "PE-16",
+      "status": "http_ok",
+      "temperature": 1.0,
+      "timestamp": "2026-10-07T16:37:23+08:00",
+      "total_tokens": 4242
+    }
+  ],
+  "cache_schema": "stage10-qa-judge-cache-v1",
+  "dimension": "completeness",
+  "finished_at": "2026-10-07T16:37:35+08:00",
+  "group": "A",
+  "input_sha256": "d57f313c4de1e424d7fb3c47af00feba623ece7fdcd7c466f2489aa1b430271f",
+  "judge": "kimi",
+  "model_requested": "kimi-k3",
+  "model_resolved": "kimi-k3",
+  "ok": true,
+  "parsed": {
+    "reason": "答案称无法回答，完全未覆盖参考答案的关键信息（平安银行为伊利债务融资工具注册的联席主承销商），属关键信息大量遗漏。",
+    "score": 0
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "qid": "PE-16",
+  "raw_text": "{\"score\": 0, \"reason\": \"答案称无法回答，完全未覆盖参考答案的关键信息（平安银行为伊利债务融资工具注册的联席主承销商），属关键信息大量遗漏。\"}",
+  "temperature_requested": 0.0,
+  "temperature_used": 1.0
+}
