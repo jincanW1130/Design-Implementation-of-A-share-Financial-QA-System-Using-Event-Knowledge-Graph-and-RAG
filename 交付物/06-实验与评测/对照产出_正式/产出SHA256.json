@@ -1,0 +1,64 @@
+{
+  "files": {
+    "A/answer_trace.jsonl": {
+      "bytes": 1065499,
+      "sha256": "308ab35b02f74b56a241682be877e325fccd79f2354fd6dfbbb6f1c5158ee47c"
+    },
+    "A/qa_records.jsonl": {
+      "bytes": 552188,
+      "sha256": "2d5b6ca3e170d058b0029f873c1e7470aa28f8681b95db8f629f46406a60ff06"
+    },
+    "A_vs_C_对照.json": {
+      "bytes": 52427,
+      "sha256": "b3702f95b43fb3dbcce852dc9e63ef1366a310630d3efa3ac8bcd6b7ebf2f3a6"
+    },
+    "A_vs_C_对照报告.md": {
+      "bytes": 10131,
+      "sha256": "3864eafa5b60133345ba0b4f99ed2d674fd9a0e78aba198f9125c763383d4488"
+    },
+    "B/answer_trace.jsonl": {
+      "bytes": 1381462,
+      "sha256": "ccc21990ee4966bef4694c8856b19928ea198379a5dba114d374c1004cf27de0"
+    },
+    "B/qa_records.jsonl": {
+      "bytes": 857418,
+      "sha256": "7e014a55819e4ebe2140bfb03488d0542d12ab633169a6b318abd7bf268da1fa"
+    },
+    "B1/answer_trace.jsonl": {
+      "bytes": 596725,
+      "sha256": "2058e4292302d4a8fd5432931fcc8486c52b1aaec1c0bb9cb5508be5b162885a"
+    },
+    "B1/qa_records.jsonl": {
+      "bytes": 189358,
+      "sha256": "283b6b5733389a44b6186acd377a3f43724043c6bc98425cbae54ca575a27c7f"
+    },
+    "C/answer_trace.jsonl": {
+      "bytes": 1401080,
+      "sha256": "c8a54f04a2eb6ebfeb41b642628d04c6489a79a84defd07d13a1ceec365744dc"
+    },
+    "C/qa_records.jsonl": {
+      "bytes": 891347,
+      "sha256": "f606b9dccf84036ca215b97cb7176f478e38984577e2a8d93919c1fda64f67fe"
+    },
+    "D/answer_trace.jsonl": {
+      "bytes": 1330329,
+      "sha256": "824ac629ee0da75a17c4c1dcfc0eaaaa173ec1c924652bcc3c0ec6926d839862"
+    },
+    "D/qa_records.jsonl": {
+      "bytes": 798774,
+      "sha256": "a4cf16e44e5bb5ca185f332c296543194db15c3074b78cf52eeed8db1b2420db"
+    },
+    "E/answer_trace.jsonl": {
+      "bytes": 1312829,
+      "sha256": "84c7722e18fb0453eba72dab848354088a8be6d2b054f38ef88c5f39db9f3657"
+    },
+    "E/qa_records.jsonl": {
+      "bytes": 790184,
+      "sha256": "f54716885d588b22e4c9eaa1b6ef23505fc166beef8d15e4d2c24cfa3c2bc695"
+    }
+  },
+  "generated_at": "2026-10-09T01:45:43",
+  "generated_by": "交付物/06-实验与评测/工具/跑正式对照.py",
+  "note": "产出 SHA-256 记录；重跑后逐文件复核，任何一项与登记值不同即说明该文件变了。",
+  "question_set": "交付物/06-实验与评测/测试集/questions.jsonl"
+}

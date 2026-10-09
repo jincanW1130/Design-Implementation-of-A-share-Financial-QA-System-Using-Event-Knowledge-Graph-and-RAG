@@ -1,1 +1,0 @@
-[T9] verify 通过：30 题与冻结表逐题一致；磁盘文件 C:\Users\15129\Desktop\毕业设计\阶段07-RAG检索系统\预实验问题集\questions.jsonl

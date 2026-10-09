@@ -1,8 +1,0 @@
-Loading weights:   0%|          | 0/71 [00:00<?, ?it/s]Loading weights: 100%|██████████| 71/71 [00:00<00:00, 10479.86it/s]
-Loading weights:   0%|          | 0/71 [00:00<?, ?it/s]Loading weights: 100%|██████████| 71/71 [00:00<00:00, 10244.44it/s]
-RUN1 (0, 'df9c05ad56b021df3cbdced3610adc58edbcf7587b646b4ca9ec0a0f7f321731', 'a6c51393669852ad0b3c3b62dbbcbf5f38777494f138dc71d4aec85d5a585039')
-RUN2 (0, 'df9c05ad56b021df3cbdced3610adc58edbcf7587b646b4ca9ec0a0f7f321731', 'a6c51393669852ad0b3c3b62dbbcbf5f38777494f138dc71d4aec85d5a585039')
-MATRIX byte-identical across runs: True
-SELECTION byte-identical across runs: True
-MATRIX == repo artifact: True
-SELECTION == repo artifact: False

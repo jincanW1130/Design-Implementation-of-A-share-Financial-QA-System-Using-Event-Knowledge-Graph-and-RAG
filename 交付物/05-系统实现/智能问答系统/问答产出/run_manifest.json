@@ -1,0 +1,240 @@
+{
+  "artifacts_sha256": {
+    "answer_trace": {
+      "bytes": 376495,
+      "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/智能问答系统\\问答产出\\answer_trace.jsonl",
+      "sha256": "8b0d755ef43d214c7fae84856f8e06a73041e452cbe5c8b3fd786247c8ffdb1a"
+    },
+    "input_manifest": {
+      "bytes": 7061,
+      "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/智能问答系统\\问答产出\\input_manifest.json",
+      "sha256": "d1767f672b4072a4e8192f5cac2d1dd915b337d66c8d0ebc5194c43332e873a0"
+    },
+    "prompt_snapshot": {
+      "bytes": 3898,
+      "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/智能问答系统\\问答产出\\prompt_snapshot.json",
+      "sha256": "702a23c62247dafa68e00243759231966961f3d3360585808fab2582f8b0bd5d"
+    },
+    "qa_records": {
+      "bytes": 253335,
+      "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/智能问答系统\\问答产出\\qa_records.jsonl",
+      "sha256": "a64d0f0bcf60a0449bc4dbe4d9866bdbbd51a1f1968c275f514d2984f092768d"
+    },
+    "selection_decision": {
+      "bytes": 12233,
+      "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/智能问答系统\\问答产出\\selection_decision.json",
+      "sha256": "517a5ee0c56bf7a5dde5ad0645e9542831b41bc963630c8de6671076bdf2495d"
+    },
+    "selection_matrix": {
+      "bytes": 591286,
+      "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/智能问答系统\\问答产出\\selection_matrix.jsonl",
+      "sha256": "a0c875efe161af6f840261a9dfd2380aa346b0f1093b5754f8ec6bf7a897d39c"
+    }
+  },
+  "assembly_determinism": {
+    "all_identical": true,
+    "identical": 30,
+    "model_calls": 0,
+    "note": "装配层（证据 → Prompt 文本）在同一输入下逐字节一致（《21》第五节 硬约束 17；验收 G2）；本项 0 次调用。",
+    "prompt_sha256_by_qid": {
+      "PE-01": "af0b07b3623e5cbd7b6908663b0f82503d68588b18fe83c4997eed0ef0c0d3f7",
+      "PE-02": "cab7f7570fc9d9e88ac29358db08106010daf6d9e694a1fef0945afb8fb53367",
+      "PE-03": "5b85b4347e031e8bade4a312522311a0cd951f19ea96a63c18481b09caf28f28",
+      "PE-04": "1c20bf83fff7d1a2fd92dfec34409edef8b0fb8b8f9c6ec5c78da9c17ae0de70",
+      "PE-05": "4f212ed091fc615358c51d2d0a6715c4a6502db6e2568ca19b68fa8e0c2a4aac",
+      "PE-06": "2e8b1318059563e3a094a4510576f0b12cd993b74ef9d9eb4b8427fbf705a250",
+      "PE-07": "f0a6670d6e79c8c4044263bb9f8ccbc3b98824b1e99d6a68cb2337b17090cd04",
+      "PE-08": "72326b733d0fdeeac80e916b264f24d2af061895e3ebc04ffad2e59f7327f814",
+      "PE-09": "1a75708edb2e0e6dee0778bd25f4c8a201794075f57460677446884a7b984f61",
+      "PE-10": "b1368b52442380424ec9fab039c3bf557830b50a8403703cef4476216a664e3c",
+      "PE-11": "665b06f375d579ba1859446180aa9154d8cfc5b7b1b1e26fa22bb2f4aa4a6dd6",
+      "PE-12": "d4b6edf26f56a4ae7b34f4ac4aeb0295d30518b9a4de4813020f1bce8a210947",
+      "PE-13": "ebb46a240dc89c136cb09f5b3dceb6557f99c8c7ea87d3e5694a85abfef9282e",
+      "PE-14": "39f8cf2e2321996832e10a37964f3c3b73a03e47455e9cd7b6ca89591d9063ee",
+      "PE-15": "eee4d3db30313073dffbf2c53dee2c789cb4d29de58769a15ef590e6cedce7f0",
+      "PE-16": "1562f4a152d9ab22b88e9e5b0f4735ea7adc20388fb0a4942333721bc03ba8d3",
+      "PE-17": "8ddff3d21cd7a52d589c205b309fc200bbd20827ac5c1eafc4abb6f45de003da",
+      "PE-18": "7eee2204e265d09a56ac2bb77c390f7630380df6ec7a5fd56c37d3acb9740297",
+      "PE-19": "9d16dac2db49dd897398fdfdefa066c6f9e81f577526e311b72a548c68e92023",
+      "PE-20": "bbe884ede6112cd367fa720a476135509e476d5b3526f3819ab2b8039693bc3a",
+      "PE-21": "4d73a785a55450fc1e2102c675358189c2a3006d12ba5ac6dafd0e9fa8822d9e",
+      "PE-22": "a2cc0f3cf60437bec3af0ad60fef1c9e26e2429f7dec5c934f93e624bd7307f4",
+      "PE-23": "f77c4c4dbc21676ba9d3ea027d3c76b4a946b404d177e3a01832ee0eeaa566f9",
+      "PE-24": "082768647756fa7210e2f05f27637f6637fb9c2f747e22b873a6aee38aeec4bf",
+      "PE-25": "5fec3aca8c50c9bc998edcb12103332e2682cde5703c0a2ad3575ac61b4a69fc",
+      "PE-26": "205de01510a2726e9d6efc2c8d0eaa5e2c85203b72e6b133a3aee7444ca0b3f1",
+      "PE-27": "3ba5655199ccb547484f6421b9d08364c115055c7fcc14bbfba60fe25471cb9c",
+      "PE-28": "277d54596de5aa42ab8458c9132e3d9ad25c74af9c0572b312d78e7790dd1709",
+      "PE-29": "13a710e82508881431839f69bb3125e64ee3a65c9707072b70902ee2cbb7d8e9",
+      "PE-30": "cc7373b562acb948d119d1c9094bae2357a83f5ddd5981bde5193dbbb8311630"
+    },
+    "questions": 30,
+    "repeats": 2
+  },
+  "config_snapshot": {
+    "K": 10,
+    "N": 20,
+    "context_token_budget": 3600,
+    "data_cutoff_time": "2026-09-25T23:59:59+08:00",
+    "dataset_version": "v2.1",
+    "endpoint": "https://api.deepseek.com/v1",
+    "g": 2,
+    "max_tokens": 16384,
+    "model_name": "deepseek-flash",
+    "model_version": "deepseek-flash",
+    "parameter_source": "config.require_fixed（四项定值从 代码\\检索\\config.py 导入）",
+    "prompt_version": "v1.0",
+    "temperature": 0
+  },
+  "frozen_env_note": "镜像重跑哨兵：STAGE8_FORBID_MODEL_CALLS=1 时禁止任何模型调用（《21》第2.5节 第 3 条；验收 G1）",
+  "gate_summary_from_cycle_1": {
+    "citation_out_of_range_total": 0,
+    "date_unverifiable_total": 0,
+    "dates_beyond_cutoff_total": 15,
+    "forbidden_hit_total": 0,
+    "graph_section_bad": 0,
+    "open_ended_applicable": 0,
+    "passed_all": true
+  },
+  "input_fingerprints": {
+    "count": 10,
+    "files": [
+      {
+        "bytes": 260054,
+        "item": 1,
+        "key": "per_question_trace",
+        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/RAG检索系统\\检索产出\\per_question_trace.jsonl",
+        "sha256": "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b"
+      },
+      {
+        "bytes": 8212,
+        "item": 2,
+        "key": "stage7_input_manifest",
+        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/RAG检索系统\\检索产出\\input_manifest.json",
+        "sha256": "ec58953e1165a215500e2e3f840a8b47ee36162426607ba13b909e48aa8fc115"
+      },
+      {
+        "bytes": 12203,
+        "item": 3,
+        "key": "stage7_run_manifest",
+        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/RAG检索系统\\检索产出\\run_manifest.json",
+        "sha256": "71cc33b737b26d70022bb863b86f9b1c6d3464644449f5667997fd2e2c0722f1"
+      },
+      {
+        "bytes": 4496547,
+        "item": 4,
+        "key": "documents",
+        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/数据准备\\数据集\\v2.1\\clean\\documents.jsonl",
+        "sha256": "c838c608c20060adb1366d5c6f7566f9de25016110dc368f7f92fcb8a10f9eea"
+      },
+      {
+        "bytes": 5322875,
+        "item": 5,
+        "key": "chunks",
+        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/数据准备\\数据集\\v2.1\\chunks\\chunks.jsonl",
+        "sha256": "2202cbf8e3915598fc9fa57a9fe6d32577705f59ce7bfdfab822903d949e8e44"
+      },
+      {
+        "bytes": 3108,
+        "item": 6,
+        "key": "dataset_meta",
+        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/数据准备\\数据集\\v2.1\\meta\\dataset.json",
+        "sha256": "41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988"
+      },
+      {
+        "bytes": 788038,
+        "item": 7,
+        "key": "nodes_csv",
+        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\nodes.csv",
+        "sha256": "ecfaa43a650c42a5281eaf50defa79ada043985b2283847507b6ef3ad006341e"
+      },
+      {
+        "bytes": 184551,
+        "item": 7,
+        "key": "edges_csv",
+        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\edges.csv",
+        "sha256": "0ff0eecfc23bb860f7307b85ed510b49265d6ec79b7ad22fc6b038df1738fe91"
+      },
+      {
+        "bytes": 47363,
+        "item": 7,
+        "key": "graph_stats",
+        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\graph_stats.json",
+        "sha256": "576e06b72f9406b8a750cdea1470ca09e8fbdc93c258f2c23843d49734e8c0dc"
+      },
+      {
+        "bytes": 102389,
+        "item": 8,
+        "key": "questions",
+        "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/RAG检索系统\\预实验问题集\\questions.jsonl",
+        "sha256": "9817534cba8066dbfd4cbfd03b416e839f649d847176952134fe7dda556e8be1"
+      }
+    ],
+    "recomputed_mismatched": [],
+    "source": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/智能问答系统\\问答产出\\input_manifest.json"
+  },
+  "model_calls": {
+    "cycle_1": 30,
+    "cycle_2": 30,
+    "note": "每次调用计入本项（含 v1.3 空正文重试）；dry-run 时应为 0（验收 B4／G1）。",
+    "questions_per_cycle": 30,
+    "retries": 0,
+    "total": 60
+  },
+  "model_output_repeatability": {
+    "definition": "两次运行中「模型生成的『回答』正文（body_text）逐字符相同」的题占比；模型侧输出**不承诺**逐字节一致（《21》第五节 硬约束 17）",
+    "differing_qids": [
+      "PE-01",
+      "PE-02",
+      "PE-03",
+      "PE-04",
+      "PE-05",
+      "PE-06",
+      "PE-07",
+      "PE-08",
+      "PE-09",
+      "PE-10",
+      "PE-11",
+      "PE-12",
+      "PE-13",
+      "PE-14",
+      "PE-15",
+      "PE-16",
+      "PE-17",
+      "PE-18",
+      "PE-19",
+      "PE-20",
+      "PE-21",
+      "PE-22",
+      "PE-23",
+      "PE-24",
+      "PE-25",
+      "PE-26",
+      "PE-27",
+      "PE-28",
+      "PE-29",
+      "PE-30"
+    ],
+    "identical": 0,
+    "identical_qids": [],
+    "questions": 30,
+    "rate": 0.0
+  },
+  "notice": "本文件只登记 30 题预实验集上的**原始读数**，不含人工评分，不构成正式实验结论（《21》第1.2节、非目标 4／5）；模型输出重复一致率只登记数值，**不作通过／失败判据**（验收 G3）。",
+  "now_injected": "2026-10-04T11:41:31+08:00",
+  "purpose": "T9：复跑命令、输入指纹、产出 SHA-256、两次运行的装配逐字节一致性、两次运行的模型输出重复一致率、模型调用次数（含重试）",
+  "reproduce_commands": [
+    "python 代码\\问答\\model_selection.py --recheck",
+    "python 代码\\问答\\answer.py --selftest",
+    "python 代码\\问答\\history.py --selftest",
+    "python 代码\\问答\\run_answer.py --qid PE-01",
+    "python 代码\\问答\\run_answer.py --all",
+    "python 代码\\问答\\run_answer.py --selftest",
+    "set STAGE8_FORBID_MODEL_CALLS=1 && python 代码\\问答\\run_answer.py --dry-run",
+    "python 代码\\问答\\run_answer.py --run-manifest",
+    "python 工具\\跨文档核验.py"
+  ],
+  "schema": "stage8-run-manifest-1.0",
+  "session_id": "S-001",
+  "stage": "第 8 阶段：智能问答系统"
+}

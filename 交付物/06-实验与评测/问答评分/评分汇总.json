@@ -1,0 +1,1139 @@
+{
+  "by_group": {
+    "A": {
+      "dimensions": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            1,
+            6,
+            23
+          ],
+          "mean": 1.7333,
+          "n_scored": 30
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            6,
+            6,
+            18
+          ],
+          "mean": 1.4,
+          "n_scored": 30
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            1,
+            29
+          ],
+          "mean": 1.9667,
+          "n_scored": 30
+        }
+      },
+      "label": "A 组 · Vector RAG（基线）",
+      "n_answers": 30,
+      "n_scored_full": 30
+    },
+    "B": {
+      "dimensions": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            2,
+            6,
+            22
+          ],
+          "mean": 1.6667,
+          "n_scored": 30
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            6,
+            5,
+            19
+          ],
+          "mean": 1.4333,
+          "n_scored": 30
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            1,
+            29
+          ],
+          "mean": 1.9667,
+          "n_scored": 30
+        }
+      },
+      "label": "B 组 · Vector RAG + 1-hop 图谱",
+      "n_answers": 30,
+      "n_scored_full": 30
+    },
+    "C": {
+      "dimensions": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            1,
+            7,
+            22
+          ],
+          "mean": 1.7,
+          "n_scored": 30
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            4,
+            8,
+            18
+          ],
+          "mean": 1.4667,
+          "n_scored": 30
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            0,
+            30
+          ],
+          "mean": 2.0,
+          "n_scored": 30
+        }
+      },
+      "label": "C 组 · Vector RAG + 2-hop 图谱（Method）",
+      "n_answers": 30,
+      "n_scored_full": 30
+    },
+    "D": {
+      "dimensions": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            2,
+            5,
+            23
+          ],
+          "mean": 1.7,
+          "n_scored": 30
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            5,
+            6,
+            19
+          ],
+          "mean": 1.4667,
+          "n_scored": 30
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            0,
+            30
+          ],
+          "mean": 2.0,
+          "n_scored": 30
+        }
+      },
+      "label": "D 组 · C + 时间过滤",
+      "n_answers": 30,
+      "n_scored_full": 30
+    },
+    "E": {
+      "dimensions": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            2,
+            7,
+            21
+          ],
+          "mean": 1.6333,
+          "n_scored": 30
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            5,
+            7,
+            18
+          ],
+          "mean": 1.4333,
+          "n_scored": 30
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            1,
+            29
+          ],
+          "mean": 1.9667,
+          "n_scored": 30
+        }
+      },
+      "label": "E 组 · D + 证据排序",
+      "n_answers": 30,
+      "n_scored_full": 30
+    }
+  },
+  "caliber_statement": "本汇总的问答质量分由**跨厂商大模型**按《02》第12.7节 的 0／1／2 统一量表给出，**不是人工评分**，只反映模型判断；任何人读这些读数时不得把它们当作人工金标准。",
+  "call_account": {
+    "attempts_total": 581,
+    "cache_hits_reused_not_billed": 600,
+    "completion_tokens": 273548,
+    "failed": 38,
+    "failed_dimension_cells": 0,
+    "failed_records": 0,
+    "max_calls_including_retries": 900,
+    "ok": 543,
+    "prompt_tokens": 2860514,
+    "retries": 32,
+    "total_tokens": 3134062
+  },
+  "cross_model_adjudication": {
+    "by_dimension": {
+      "answer_accuracy": {
+        "adjudicated": 0,
+        "agree": 30,
+        "disagree": 0,
+        "n": 30
+      },
+      "completeness": {
+        "adjudicated": 0,
+        "agree": 30,
+        "disagree": 0,
+        "n": 30
+      },
+      "faithfulness": {
+        "adjudicated": 1,
+        "agree": 29,
+        "disagree": 1,
+        "n": 30
+      }
+    },
+    "disagreement_notes": [
+      {
+        "answer_key": "D__A-004",
+        "dimension": "faithfulness",
+        "final_score": 1,
+        "group": "D",
+        "kimi_score": 2,
+        "note": "答案处于量表边界：主judge未计较证据10被误归类的小瑕疵，副judge认为该误述构成少量不严谨。",
+        "qid": "PE-04",
+        "zhipu_score": 1
+      }
+    ],
+    "final_scores_by_group": {
+      "A": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            1,
+            6,
+            23
+          ],
+          "mean": 1.7333,
+          "n_scored": 30
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            6,
+            6,
+            18
+          ],
+          "mean": 1.4,
+          "n_scored": 30
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            1,
+            29
+          ],
+          "mean": 1.9667,
+          "n_scored": 30
+        }
+      },
+      "B": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            2,
+            6,
+            22
+          ],
+          "mean": 1.6667,
+          "n_scored": 30
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            6,
+            5,
+            19
+          ],
+          "mean": 1.4333,
+          "n_scored": 30
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            1,
+            29
+          ],
+          "mean": 1.9667,
+          "n_scored": 30
+        }
+      },
+      "C": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            1,
+            7,
+            22
+          ],
+          "mean": 1.7,
+          "n_scored": 30
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            4,
+            8,
+            18
+          ],
+          "mean": 1.4667,
+          "n_scored": 30
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            0,
+            30
+          ],
+          "mean": 2.0,
+          "n_scored": 30
+        }
+      },
+      "D": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            2,
+            5,
+            23
+          ],
+          "mean": 1.7,
+          "n_scored": 30
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            5,
+            6,
+            19
+          ],
+          "mean": 1.4667,
+          "n_scored": 30
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            1,
+            29
+          ],
+          "mean": 1.9667,
+          "n_scored": 30
+        }
+      },
+      "E": {
+        "answer_accuracy": {
+          "distribution_0_1_2": [
+            2,
+            7,
+            21
+          ],
+          "mean": 1.6333,
+          "n_scored": 30
+        },
+        "completeness": {
+          "distribution_0_1_2": [
+            5,
+            7,
+            18
+          ],
+          "mean": 1.4333,
+          "n_scored": 30
+        },
+        "faithfulness": {
+          "distribution_0_1_2": [
+            0,
+            1,
+            29
+          ],
+          "mean": 1.9667,
+          "n_scored": 30
+        }
+      }
+    },
+    "n_adjudicated": 1,
+    "n_adjudication_failed": 0,
+    "n_agree": 89,
+    "n_answers_cross_checked": 30,
+    "n_cells": 90,
+    "n_disagree": 1
+  },
+  "cross_model_agreement": {
+    "n_answers_compared": 30,
+    "per_dimension": {
+      "answer_accuracy": {
+        "both_full_marks": 25,
+        "both_full_marks_rate": 0.8333,
+        "linear_weighted_kappa": 1.0,
+        "mean_abs_diff": 0.0,
+        "n": 30,
+        "simple_agreement": 1.0
+      },
+      "completeness": {
+        "both_full_marks": 25,
+        "both_full_marks_rate": 0.8333,
+        "linear_weighted_kappa": 1.0,
+        "mean_abs_diff": 0.0,
+        "n": 30,
+        "simple_agreement": 1.0
+      },
+      "faithfulness": {
+        "both_full_marks": 29,
+        "both_full_marks_rate": 0.9667,
+        "linear_weighted_kappa": 0.0,
+        "mean_abs_diff": 0.0333,
+        "n": 30,
+        "simple_agreement": 0.9667
+      }
+    },
+    "per_group": {
+      "A": {
+        "answer_accuracy": {
+          "linear_weighted_kappa": 1.0,
+          "n": 6,
+          "simple_agreement": 1.0
+        },
+        "completeness": {
+          "linear_weighted_kappa": 1.0,
+          "n": 6,
+          "simple_agreement": 1.0
+        },
+        "faithfulness": {
+          "linear_weighted_kappa": null,
+          "n": 6,
+          "simple_agreement": 1.0
+        }
+      },
+      "B": {
+        "answer_accuracy": {
+          "linear_weighted_kappa": 1.0,
+          "n": 6,
+          "simple_agreement": 1.0
+        },
+        "completeness": {
+          "linear_weighted_kappa": 1.0,
+          "n": 6,
+          "simple_agreement": 1.0
+        },
+        "faithfulness": {
+          "linear_weighted_kappa": null,
+          "n": 6,
+          "simple_agreement": 1.0
+        }
+      },
+      "C": {
+        "answer_accuracy": {
+          "linear_weighted_kappa": 1.0,
+          "n": 6,
+          "simple_agreement": 1.0
+        },
+        "completeness": {
+          "linear_weighted_kappa": 1.0,
+          "n": 6,
+          "simple_agreement": 1.0
+        },
+        "faithfulness": {
+          "linear_weighted_kappa": null,
+          "n": 6,
+          "simple_agreement": 1.0
+        }
+      },
+      "D": {
+        "answer_accuracy": {
+          "linear_weighted_kappa": 1.0,
+          "n": 6,
+          "simple_agreement": 1.0
+        },
+        "completeness": {
+          "linear_weighted_kappa": 1.0,
+          "n": 6,
+          "simple_agreement": 1.0
+        },
+        "faithfulness": {
+          "linear_weighted_kappa": 0.0,
+          "n": 6,
+          "simple_agreement": 0.8333
+        }
+      },
+      "E": {
+        "answer_accuracy": {
+          "linear_weighted_kappa": 1.0,
+          "n": 6,
+          "simple_agreement": 1.0
+        },
+        "completeness": {
+          "linear_weighted_kappa": 1.0,
+          "n": 6,
+          "simple_agreement": 1.0
+        },
+        "faithfulness": {
+          "linear_weighted_kappa": null,
+          "n": 6,
+          "simple_agreement": 1.0
+        }
+      }
+    }
+  },
+  "doc02_version": "v3.12",
+  "generated_at": "2026-10-09T00:41:02+08:00",
+  "generated_by": "交付物/06-实验与评测/工具/评分脚本.py",
+  "judgement_12_8_answer_accuracy_half": [
+    {
+      "answer_accuracy_A": 1.75,
+      "answer_accuracy_C": 1.6667,
+      "answer_accuracy_gap_C_minus_A": -0.0833,
+      "answer_accuracy_half_holds": false,
+      "answer_accuracy_verdict": "不下降不成立（下降 -0.0833）",
+      "cer_A": 0.5,
+      "cer_C": 0.5,
+      "cer_half_holds": false,
+      "combined_holds": false,
+      "n_questions": 12,
+      "subset": "关系型"
+    },
+    {
+      "answer_accuracy_A": 1.6667,
+      "answer_accuracy_C": 1.6667,
+      "answer_accuracy_gap_C_minus_A": 0.0,
+      "answer_accuracy_half_holds": true,
+      "answer_accuracy_verdict": "不下降成立（持平）",
+      "cer_A": 0.52381,
+      "cer_C": 0.52381,
+      "cer_half_holds": false,
+      "combined_holds": false,
+      "n_questions": 21,
+      "subset": "多跳型"
+    },
+    {
+      "answer_accuracy_A": 1.9167,
+      "answer_accuracy_C": 1.9167,
+      "answer_accuracy_gap_C_minus_A": 0.0,
+      "answer_accuracy_half_holds": true,
+      "answer_accuracy_verdict": "不下降成立（持平）",
+      "cer_A": 0.75,
+      "cer_C": 0.75,
+      "cer_half_holds": false,
+      "combined_holds": false,
+      "n_questions": 12,
+      "subset": "时序型"
+    }
+  ],
+  "judges": {
+    "kimi": {
+      "base_source": "config.local:kimi_base_url",
+      "checked_at": "2026-10-07T16:12:53+08:00",
+      "has_key": true,
+      "key_source": "config.local:kimi_api_key",
+      "label": "Moonshot Kimi",
+      "model_requested": "kimi-k3",
+      "model_resolved": "kimi-k3",
+      "model_source": "config.local.json 的 kimi_model_hint（Moonshot 直连）",
+      "note": "此处只登记 key 的**来源标签**，不含凭据取值。",
+      "temperature_used": 1.0
+    },
+    "zhipu": {
+      "base_source": "config.local:zhipu_base_url",
+      "checked_at": "2026-10-07T16:12:58+08:00",
+      "has_key": true,
+      "key_source": "config.local:zhipu_api_key",
+      "label": "智谱 Zhipu",
+      "model_requested": "glm-5.3-flash",
+      "model_resolved": "glm-5.3-flash",
+      "model_source": "config.local.json 的 zhipu_base_url（智谱直连）",
+      "note": "此处只登记 key 的**来源标签**，不含凭据取值。",
+      "temperature_used": 0.0
+    }
+  },
+  "prompt_version": "stage10-qa-judge-v1.0",
+  "sample": {
+    "answer_chars_mean": 2261.6,
+    "answers_total": 150,
+    "cross_judge_answers": 30,
+    "cross_judge_calls_planned": 90,
+    "cross_judge_qids": [
+      "PE-03",
+      "PE-04",
+      "PE-12",
+      "PE-18",
+      "PE-24",
+      "PE-25"
+    ],
+    "empty_answer_bodies": 0,
+    "groups": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+    ],
+    "primary_judge_answers": 150,
+    "primary_judge_calls_planned": 450,
+    "qids_per_group": 30
+  },
+  "scale_source": "《02-项目执行总控文档》第12.7节「评价指标与定义」",
+  "scale_verbatim": "Answer Accuracy：0 = 错误，1 = 部分正确，2 = 完全正确。Completeness：0 = 关键信息大量遗漏，1 = 基本覆盖，2 = 信息完整。Faithfulness：0 = 存在明显无依据事实，1 = 少量不严谨，2 = 完全基于证据。",
+  "schema": "stage10-qa-judge-summary-v1",
+  "subsets": [
+    {
+      "name": "关系型",
+      "per_group": {
+        "A": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                0,
+                3,
+                9
+              ],
+              "mean": 1.75,
+              "n_scored": 12
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                2,
+                5,
+                5
+              ],
+              "mean": 1.25,
+              "n_scored": 12
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                1,
+                11
+              ],
+              "mean": 1.9167,
+              "n_scored": 12
+            }
+          },
+          "n_questions": 12
+        },
+        "B": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                1,
+                2,
+                9
+              ],
+              "mean": 1.6667,
+              "n_scored": 12
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                3,
+                2,
+                7
+              ],
+              "mean": 1.3333,
+              "n_scored": 12
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                1,
+                11
+              ],
+              "mean": 1.9167,
+              "n_scored": 12
+            }
+          },
+          "n_questions": 12
+        },
+        "C": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                1,
+                2,
+                9
+              ],
+              "mean": 1.6667,
+              "n_scored": 12
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                2,
+                4,
+                6
+              ],
+              "mean": 1.3333,
+              "n_scored": 12
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                0,
+                12
+              ],
+              "mean": 2.0,
+              "n_scored": 12
+            }
+          },
+          "n_questions": 12
+        },
+        "D": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                1,
+                1,
+                10
+              ],
+              "mean": 1.75,
+              "n_scored": 12
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                2,
+                3,
+                7
+              ],
+              "mean": 1.4167,
+              "n_scored": 12
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                0,
+                12
+              ],
+              "mean": 2.0,
+              "n_scored": 12
+            }
+          },
+          "n_questions": 12
+        },
+        "E": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                1,
+                3,
+                8
+              ],
+              "mean": 1.5833,
+              "n_scored": 12
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                2,
+                4,
+                6
+              ],
+              "mean": 1.3333,
+              "n_scored": 12
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                1,
+                11
+              ],
+              "mean": 1.9167,
+              "n_scored": 12
+            }
+          },
+          "n_questions": 12
+        }
+      },
+      "qids": [
+        "PE-19",
+        "PE-20",
+        "PE-21",
+        "PE-22",
+        "PE-23",
+        "PE-24",
+        "PE-25",
+        "PE-26",
+        "PE-27",
+        "PE-28",
+        "PE-29",
+        "PE-30"
+      ]
+    },
+    {
+      "name": "多跳型",
+      "per_group": {
+        "A": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                1,
+                5,
+                15
+              ],
+              "mean": 1.6667,
+              "n_scored": 21
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                5,
+                4,
+                12
+              ],
+              "mean": 1.3333,
+              "n_scored": 21
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                1,
+                20
+              ],
+              "mean": 1.9524,
+              "n_scored": 21
+            }
+          },
+          "n_questions": 21
+        },
+        "B": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                2,
+                4,
+                15
+              ],
+              "mean": 1.619,
+              "n_scored": 21
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                5,
+                3,
+                13
+              ],
+              "mean": 1.381,
+              "n_scored": 21
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                0,
+                21
+              ],
+              "mean": 2.0,
+              "n_scored": 21
+            }
+          },
+          "n_questions": 21
+        },
+        "C": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                1,
+                5,
+                15
+              ],
+              "mean": 1.6667,
+              "n_scored": 21
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                3,
+                6,
+                12
+              ],
+              "mean": 1.4286,
+              "n_scored": 21
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                0,
+                21
+              ],
+              "mean": 2.0,
+              "n_scored": 21
+            }
+          },
+          "n_questions": 21
+        },
+        "D": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                2,
+                3,
+                16
+              ],
+              "mean": 1.6667,
+              "n_scored": 21
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                4,
+                4,
+                13
+              ],
+              "mean": 1.4286,
+              "n_scored": 21
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                0,
+                21
+              ],
+              "mean": 2.0,
+              "n_scored": 21
+            }
+          },
+          "n_questions": 21
+        },
+        "E": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                2,
+                4,
+                15
+              ],
+              "mean": 1.619,
+              "n_scored": 21
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                4,
+                5,
+                12
+              ],
+              "mean": 1.381,
+              "n_scored": 21
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                1,
+                20
+              ],
+              "mean": 1.9524,
+              "n_scored": 21
+            }
+          },
+          "n_questions": 21
+        }
+      },
+      "qids": [
+        "PE-04",
+        "PE-05",
+        "PE-06",
+        "PE-07",
+        "PE-08",
+        "PE-09",
+        "PE-13",
+        "PE-14",
+        "PE-15",
+        "PE-16",
+        "PE-17",
+        "PE-18",
+        "PE-22",
+        "PE-23",
+        "PE-24",
+        "PE-25",
+        "PE-26",
+        "PE-27",
+        "PE-28",
+        "PE-29",
+        "PE-30"
+      ]
+    },
+    {
+      "name": "时序型",
+      "per_group": {
+        "A": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                0,
+                1,
+                11
+              ],
+              "mean": 1.9167,
+              "n_scored": 12
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                1,
+                2,
+                9
+              ],
+              "mean": 1.6667,
+              "n_scored": 12
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                0,
+                12
+              ],
+              "mean": 2.0,
+              "n_scored": 12
+            }
+          },
+          "n_questions": 12
+        },
+        "B": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                0,
+                1,
+                11
+              ],
+              "mean": 1.9167,
+              "n_scored": 12
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                1,
+                2,
+                9
+              ],
+              "mean": 1.6667,
+              "n_scored": 12
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                0,
+                12
+              ],
+              "mean": 2.0,
+              "n_scored": 12
+            }
+          },
+          "n_questions": 12
+        },
+        "C": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                0,
+                1,
+                11
+              ],
+              "mean": 1.9167,
+              "n_scored": 12
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                1,
+                3,
+                8
+              ],
+              "mean": 1.5833,
+              "n_scored": 12
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                0,
+                12
+              ],
+              "mean": 2.0,
+              "n_scored": 12
+            }
+          },
+          "n_questions": 12
+        },
+        "D": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                0,
+                1,
+                11
+              ],
+              "mean": 1.9167,
+              "n_scored": 12
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                1,
+                3,
+                8
+              ],
+              "mean": 1.5833,
+              "n_scored": 12
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                0,
+                12
+              ],
+              "mean": 2.0,
+              "n_scored": 12
+            }
+          },
+          "n_questions": 12
+        },
+        "E": {
+          "dimensions": {
+            "answer_accuracy": {
+              "distribution_0_1_2": [
+                0,
+                1,
+                11
+              ],
+              "mean": 1.9167,
+              "n_scored": 12
+            },
+            "completeness": {
+              "distribution_0_1_2": [
+                1,
+                3,
+                8
+              ],
+              "mean": 1.5833,
+              "n_scored": 12
+            },
+            "faithfulness": {
+              "distribution_0_1_2": [
+                0,
+                0,
+                12
+              ],
+              "mean": 2.0,
+              "n_scored": 12
+            }
+          },
+          "n_questions": 12
+        }
+      },
+      "qids": [
+        "PE-03",
+        "PE-06",
+        "PE-09",
+        "PE-12",
+        "PE-15",
+        "PE-18",
+        "PE-21",
+        "PE-24",
+        "PE-27",
+        "PE-28",
+        "PE-29",
+        "PE-30"
+      ]
+    }
+  ],
+  "temperature_requested": 0.0
+}

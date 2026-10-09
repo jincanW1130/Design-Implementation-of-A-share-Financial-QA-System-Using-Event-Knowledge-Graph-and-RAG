@@ -1,0 +1,164 @@
+#### B2-01 extracted.jsonl 基本量
+records = 709
+distinct doc_id = 709
+entities = 3293 {'Company': 1825, 'Institution': 744, 'Policy': 126, 'Person': 508, 'Industry': 90}
+events = 1114 {'股权': 233, '监管': 54, '重大经营': 218, '投资并购': 51, '业绩': 169, '重大合同': 145, '政策': 76, '产品': 168}
+relations(数组口径) = 2506 {'PARTICIPATES_IN': 1917, 'RELATED_TO': 87, 'HAS_EXECUTIVE': 278, 'ISSUED_BY': 124, 'SUPPLIES': 29, 'COMPETES_WITH': 8, 'CUSTOMER_OF': 9, 'BELONGS_TO': 54}
+evidenced_by = 1114
+roles = {'主体': 1107, '涉及方': 574, '合作方': 228, '受影响方': 7, '监管方': 1}
+counts.rejected 求和 = 82
+warnings 条数 = 456
+verify.ontology = {"entity_types": {"Company": 1825, "Industry": 90, "Institution": 744, "Person": 508, "Policy": 126}, "entity_types_expected": ["Company", "Person", "Industry", "Institution", "Event", "Policy"], "enumeration_violations": [], "event_types": {"业绩": 169, "产品": 168, "投资并购": 51, "政策": 76, "监管": 54, "股权": 233, "重大合同": 145, "重大经营": 218}, "event_types_expected": ["业绩", "监管", "股权", "投资并购", "重大合同", "产品", "政策", "重大经营"], "relation_types": {"BELONGS_TO": 54, "COMPETES_WITH": 8, "CUSTOMER_OF": 9, "EVIDENCED_BY": 1114, "HAS_EXECUTIVE": 278, "ISSUED_BY": 124, "PARTICIPATES_IN": 1917, "RELATED_TO": 87, "SUPPLIES": 29}, "relations_expected": ["BELONGS_TO", "SUPPLIES", "CUSTOMER_OF", "COMPETES_WITH", "HAS_EXECUTIVE", "PARTICIPATES_IN", "ISSUED_BY", "RELATED_TO", "EVIDENCED_BY"]}
+verify.rejected = {"by_reason": {"endpoint_type_mismatch": 4, "entity_name_not_in_document": 2, "entity_ref_unresolved": 8, "event_ref_unresolved": 16, "issued_by_event_type_illegal": 5, "quote_not_in_document": 18, "quote_spans_chunk_boundary": 2, "relation_confidence_missing_or_illegal": 6, "relation_domain_range_illegal": 21}, "total": 82}
+verify.evidence = {"bad_examples": [], "items_bad": 0, "items_checked": 6913, "items_ok": 6913, "note": "EVIDENCED_BY 不参与本项核对（它不携带三项证据属性，终点即文档）", "rule": "source_chunk_id 必须在 v2.1 的 chunks.jsonl 中存在、其 doc_id 等于同一条事实的 source_doc_id，且该条的 quote 折空白后必须出现在该文本块的 content 里"}
+verify.roles = {"主体": 1107, "受影响方": 7, "合作方": 228, "涉及方": 574, "监管方": 1}
+
+#### B2-02 证据可定位逐条重算（entities／events／relations 的 quote 落到 source_chunk_id）
+checked = 6913  ok = 6913  bad = 0 []
+三项证据属性缺失 = 3293 [('entity', 1001, 'confidence'), ('entity', 1001, 'confidence'), ('entity', 1001, 'confidence'), ('entity', 1004, 'confidence'), ('entity', 1004, 'confidence')]
+注：verify.evidence.items_checked = 6913  items_ok = 6913
+注：verify.evidence_attrs = {"relations_missing_attrs": [], "relations_with_three_attrs_ok": 2506}
+
+#### B2-03 event_time 两级口径
+抽取层 events = 1114  空 = 717  非空 = 397
+抽取层空值按类型 = {'监管': 42, '重大经营': 103, '投资并购': 32, '股权': 86, '重大合同': 109, '业绩': 136, '政策': 50, '产品': 159}
+backfill.counts = {"accepted": 173, "by_basis": {"null": 544, "stated": 110, "year_from_publish": 63}, "event_time_nonnull_after": 570, "event_time_null_after": 544, "events_by_basis_after": {"null": 544, "stated": 507, "year_from_publish": 63}, "events_null_in_scope": 717, "events_total": 1114, "quote_not_found_in_document": 0, "rejected": 544}
+backfill.keys = ['basis_definitions', 'basis_values', 'cache', 'counts', 'dataset_version', 'notes', 'profile', 'prompt_version', 'results', 'schema', 'source', 'window', 'year_from_publish_rule']
+时间覆盖_度量 extraction_layer_after_backfill = {"events": 1114, "events_with_time": 570, "events_without_time": 544, "metrics": {"doc_ids_ge2": [1001, 1010, 1014, 1018, 1021, 1026, 1030, 1042, 1049, 1050, 1058, 1059, 1072, 1082, 1106, 1114, 1127, 1130, 1149, 1163, 1175, 1178, 1193, 1195, 1197, 1201, 1205, 1207, 1210, 1214, 1237, 1249, 1257, 1258, 1259, 1275, 1292, 1293, 1294, 1298, 1318, 1325, 1342, 1356, 1362, 1364, 1370, 1379, 1381, 1396, 1433, 1445, 1450, 1492, 1511, 1529, 1533, 1535, 1543, 2016, 2045, 2066, 2083, 2085, 2089, 2100], "doc_ids_multi_month": [1001, 1010, 1014, 1021, 1026, 1030, 1042, 1049, 1050, 1058, 1059, 1072, 1082, 1106, 1114, 1127, 1130, 1149, 1163, 1175, 1178, 1193, 1195, 1201, 1205, 1207, 1214, 1237, 1249, 1257, 1292, 1293, 1298, 1318, 1325, 1362, 1364, 1370, 1396, 1445, 1450, 1492, 1511, 1529, 1535, 1543, 2016, 2066, 2083], "docs_times_span_ge_31_days": 40, "docs_times_span_more_than_one_month": 49, "docs_with_ge2_dated_events": 66}}
+时间覆盖_度量 graph_layer = null
+graph_stats.event_time_basis = {"by_basis": {"null": 544, "stated": 494, "year_from_publish": 62}, "events_total": 1100, "note": "basis 只作为审计读数落在 graph_stats.json；Event 节点列仍严格照《10》第4.5.1节 表 4-8 的六项核心属性，不新增字段。", "source": "交付物/03-代码/抽取与图谱/_全量/v2.1_v1_2/event_time_backfill.json", "source_sha256": "46c61022eb6df6f2b66098882608ea6f5fdac1161d423acfe68c81bdfec67a7a"}
+graph_stats.event_core_attributes = {"event_time_null_count": 544, "events": 1100, "note": "event_time 空值条数与《15》第八节「六项核心属性非空」的差异，见机检读数"}
+
+#### B2-04 BELONGS_TO 有效期
+抽取侧 BELONGS_TO = 54  带有效期 = 0
+抽取侧 BELONGS_TO 的键集合 = ['confidence', 'head_id', 'head_name', 'head_type', 'quote', 'quote_match_count', 'relation', 'relation_id', 'source_chunk_id', 'source_doc_id', 'tail_id', 'tail_name', 'tail_type', 'valid_from', 'valid_to']
+
+#### B2-05 无参与主体的事件
+事件总数 = 1114  有 PARTICIPATES_IN 的 = 1073  无参与主体 = 41
+
+#### B2-06 导出物：文件级
+nodes.csv              bytes=708043 sha256=04f2ac227e9595e2df7eefd1f14892edc3327d2b10e950b4f92e4d536c8cb524
+edges.csv              bytes=131275 sha256=e86f86d99bb1b227364bc09b05a46db00adfe114ed5f9b04820e82258252b3f0
+graph_stats.json       bytes=24802 sha256=63394794a90ad9186f3bc6cfd6ea56e02e5db739b75762b6cc2fa3e30efe31bd
+replay.cypher          bytes=727503 sha256=8cdb68d0782b04a852614dbbfee51efe81885f059d957b2a96c9655746b6c9ae
+人工确认清单.json            bytes=6428 sha256=a17268f8c0694e6b9b38c0c1db1ba89eb6a637b6f3674dd39f3d35ef380f6083
+graph_stats.files = {"edges.csv": {"bytes": 131275, "rows": 2736, "sha256": "e86f86d99bb1b227364bc09b05a46db00adfe114ed5f9b04820e82258252b3f0"}, "nodes.csv": {"bytes": 708043, "rows": 2802, "sha256": "04f2ac227e9595e2df7eefd1f14892edc3327d2b10e950b4f92e4d536c8cb524"}, "replay.cypher": {"bytes": 727503, "rows": null, "sha256": "8cdb68d0782b04a852614dbbfee51efe81885f059d957b2a96c9655746b6c9ae"}}
+
+#### B2-07 导出物：nodes.csv 重算
+rows = 2802  cols = 33
+by_label = {'Company': 116, 'Document': 692, 'Event': 1100, 'Industry': 73, 'Institution': 316, 'Person': 403, 'Policy': 102}
+sum = 2802
+distinct node_id = 2802
+HCONF 节点 = 12  无 stock_code 的 HCONF = 12
+HCONF node_ids = ['HCONF-0001', 'HCONF-0002', 'HCONF-0003', 'HCONF-0004', 'HCONF-0005', 'HCONF-0006', 'HCONF-0007', 'HCONF-0008', 'HCONF-0009', 'HCONF-0010', 'HCONF-0011', 'HCONF-0012']
+Event 节点 = 1100  event_type 分布 = {'股权': 226, '监管': 53, '重大经营': 216, '投资并购': 51, '重大合同': 145, '业绩': 167, '政策': 74, '产品': 168}
+Event 节点 event_time 空 = 544
+Document 节点 = 692  distinct doc_id = 692
+
+#### B2-08 导出物：edges.csv 重算
+rows = 2736  cols = 9
+edges_by_relation = {'BELONGS_TO': 14, 'COMPETES_WITH': 1, 'CUSTOMER_OF': 4, 'EVIDENCED_BY': 1111, 'HAS_EXECUTIVE': 143, 'ISSUED_BY': 124, 'PARTICIPATES_IN': 1252, 'RELATED_TO': 87}
+edges_total = 2736
+语义边（8 条关系） = 1625  三项证据属性缺失 = 0
+PARTICIPATES_IN role 分布 = {'主体': 752, '合作方': 62, '涉及方': 431, '受影响方': 6, '监管方': 1}
+EVIDENCED_BY = 1111  head 数 = 1100  恰 1 条 = 1089  恰 2 条 = 11  >2 条 = 0
+EVIDENCED_BY head 全是 Event 节点 = True ；tail 全是 Document 节点 = True
+（说明：Document 节点编号＝裸 doc_id，不带 DOC- 前缀，见《16》6.1 的 id_rule）
+BELONGS_TO = 14  带有效期 = 0
+ISSUED_BY = 124  非政策／监管事件的 ISSUED_BY = 0 []
+issuer 同时是 participant 的对数 = 0
+
+#### B2-09 悬空端点、孤立节点
+悬空边 = 0
+孤立节点 = 435  by_label = {'Company': 4, 'Person': 209, 'Industry': 63, 'Institution': 125, 'Policy': 34}
+graph_stats.isolated_nodes = {"count": ["002090", "300351", "HCONF-0010", "HCONF-0011", "PER-0001", "PER-0002", "PER-0004", "PER-0006", "PER-0007", "PER-0008", "PER-0009", "PER-0012", "PER-0013", "PER-0015", "PER-0016", "PER-0019", "PER-0021", "PER-0025", "PER-0028", "PER-0032", "PER-0033", "PER-0039", "PER-0040", "PER-0041", "PER-0042", "PER-0043", "PER-0046", "PER-0049", "PER-0050", "PER-0051", "PER-0052", "PER-0054", "PER-0055", "PER-0057", "PER-0058", "PER-0059", "PER-0060", "PER-0064", "PER-0067", "PER-0068", "PER-0069", "PER-0072", "PER-0074", "PER-0075", "PER-0077", "PER-0079", "PER-0080", "PER-0082", "PER-0085", "PER-0086", "PER-0089", "PER-0090", "PER-0092", "PER-0093", "PER-0094", "PER-0098", "PER-0099", "PER-0101", "PER-0103", "PER-0104", "PER-0105", "PER-0106", "PER-0108", "PER-0109", "PER-0110", "PER-0111", "PER-0112", "PER-0114", "PER-0115", "PER-0117", "PER-0118", "PER-0120", "PER-0121", "PER-0125", "PER-0126", "PER-0127", "PER-0129", "PER-0131", "PER-0132", "PER-0134", "PER-0136", "PER-0137", "PER-0139", "PER-0140", "PER-0141", "PER-0143", "PER-0145", "PER-0146", "PER-0147", "PER-0150", "PER-0157", "PER-0158", "PER-0160", "PER-0161", "PER-0162", "PER-0163", "PER-0164", "PER-0166", "PER-0167", "PER-0170", "PER-0171", "PER-0174", "PER-0175", "PER-0176", "PER-0177", "PER-0179", "PER-0181", "PER-0182", "PER-0183", "PER-0185", "PER-0190", "PER-0191", "PER-0193", "PER-0196", "PER-0198", "PER-0199", "PER-0200", "PER-0201", "PER-0203", "PER-0206", "PER-0208", "PER-0209", "PER-0213", "PER-0214", "PER-0215", "PER-0216", "PER-0218", "PER-0219", "PER-0221", "PER-0222", "PER-0223", "PER-0225", "PER-0228", "PER-0231", "PER-0234", "PER-0240", "PER-0242", "PER-0244", "PER-0247", "PER-0249", "PER-0251", "PER-0258", "PER-0261", "PER-0262", "PER-0267", "PER-0269", "PER-0270", "PER-0274", "PER-0279", "PER-0281", "PER-0282", "PER-0283", "PER-0284", "PER-0285", "PER-0286", "PER-0290", "PER-0292", "PER-0293", "PER-0295", "PER-0297", "PER-0298", "PER-0301", "PER-0302", "PER-0304", "PER-0305", "PER-0306", "PER-0309", "PER-0310", "PER-0318", "PER-0320", "PER-0322", "PER-0324", "PER-0328", "PER-0329", "PER-0332", "PER-0333", "PER-0334", "PER-0335", "PER-0336", "PER-0338", "PER-0340", "PER-0343", "PER-0349", "PER-0350", "PER-0351", "PER-0354", "PER-0355", "PER-0357", "PER-0358", "PER-0360", "PER-0361", "PER-0362", "PER-0363", "PER-0364", "PER-0365", "PER-0369", "PER-0372", "PER-0373", "PER-0375", "PER-0377", "PER-0381", "PER-0387", "PER-0388", "PER-0390", "PER-0391", "PER-0392", "PER-0394", "PER-0395", "PER-0396", "PER-0398", "PER-0401", "PER-0402", "PER-0403", "IND-0001", "IND-0002", "IND-0003", "IND-0004", "IND-0005", "IND-0006", "IND-0007", "IND-0008", "IND-0009", "IND-0010", "IND-0011", "IND-0013", "IND-0014", "IND-0017", "IND-0018", "IND-0019", "IND-0020", "IND-0021", "IND-0022", "IND-0023", "IND-0025", "IND-0026", "IND-0027", "IND-0028", "IND-0029", "IND-0030", "IND-0033", "IND-0034", "IND-0035", "IND-0036", "IND-0037", "IND-0038", "IND-0039", "IND-0040", "IND-0041", "IND-0042", "IND-0043", "IND-0044", "IND-0045", "IND-0046", "IND-0047", "IND-0048", "IND-0049", "IND-0050", "IND-0052", "IND-0053", "IND-0054", "IND-0055", "IND-0056", "IND-0057", "IND-0058", "IND-0059", "IND-0060", "IND-0061", "IND-0062", "IND-0064", "IND-0065", "IND-0067", "IND-0068", "IND-0069", "IND-0070", "IND-0072", "IND-0073", "INST-0003", "INST-0004", "INST-0006", "INST-0010", "INST-0011", "INST-0012", "INST-0013", "INST-0015", "INST-0017", "INST-0022", "INST-0026", "INST-0027", "INST-0029", "INST-0030", "INST-0031", "INST-0032", "INST-0033", "INST-0042", "INST-0045", "INST-0046", "INST-0049", "INST-0050", "INST-0052", "INST-0053", "INST-0054", "INST-0057", "INST-0065", "INST-0067", "INST-0068", "INST-0072", "INST-0073", "INST-0075", "INST-0077", "INST-0081", "INST-0084", "INST-0085", "INST-0087", "INST-0090", "INST-0091", "INST-0092", "INST-0093", "INST-0095", "INST-0096", "INST-0097", "INST-0101", "INST-0102", "INST-0103", "INST-0105", "INST-0110", "INST-0114", "INST-0115", "INST-0118", "INST-0119", "INST-0120", "INST-0123", "INST-0125", "INST-0127", "INST-0133", "INST-0135", "INST-0140", "INST-0144", "INST-0148", "INST-0154", "INST-0155", "INST-0156", "INST-0159", "INST-0163", "INST-0164", "INST-0165", "INST-0166", "INST-0167", "INST-0169", "INST-0172", "INST-0173", "INST-0174", "INST-0175", "INST-0177", "INST-0178", "INST-0179", "INST-0180", "INST-0183", "INST-0186", "INST-0196", "INST-0197", "INST-0198", "INST-0199", "INST-0201", "INST-0202", "INST-0204", "INST-0205", "INST-0212", "INST-0219", "INST-0221", "INST-0222", "INST-0238", "INST-0239", "INST-0248", "INST-0249", "INST-0251", "INST-0254", "INST-0255", "INST-0257", "INST-0259", "INST-0264", "INST-0266", "INST-0269", "INST-0270", "INST-0272", "INST-0273", "INST-0275", "INST-0278", "INST-0279", "INST-0287", "INST-0291", "INST-0294", "INST-0296", "INST-0297", "INST-0300", "INST-0302", "INST-0303", "INST-0306", "INST-0308", "INST-0309", "INST-0310", "INST-0312", "POL-0004", "POL-0005", "POL-0010", "POL-0012", "POL-0015", "POL-0016", "POL-0017", "POL-0019", "POL-0022", "POL-0027", "POL-0033", "POL-0034", "POL-0040", "POL-0050", "POL-0053", "POL-0059", "POL-0062", "POL-0064", "POL-0065", "POL-0067", "POL-0069", "POL-0072", "POL-0075", "POL-0077", "POL-0079", "POL-0081", "POL-0086", "POL-0087", "POL-0090", "POL-0091", "POL-0095", "POL-0096", "POL-0100", "POL-0101"], "note": "无边节点：实体抽到了但语料没给出关系；如实保留，不删（不是遗漏）"}
+
+#### B2-10 三条对账恒等式
+恒等式1 实体侧：3293 − 1070 待消歧 = 2223 → 998 节点 + 12 HCONF + 692 Document + 1100 Event = 2802
+  实测 nodes_total = 2802  by_label 实测 = {'Company': 116, 'Person': 403, 'Industry': 73, 'Institution': 316, 'Event': 1100, 'Policy': 102, 'Document': 692}
+恒等式2 事件侧：1114 − 14 = 1100；Event 节点实测 = 1100
+恒等式3 关系侧：2506 − 878 − 1 − 2 = 1625（+29 人工确认恢复）；1625 + EVIDENCED_BY = 2736
+  实测 edges_total = 2736  语义边 = 1625  EVIDENCED_BY = 1111
+graph_stats.counts = {"documents": 692, "edges_by_relation": {"BELONGS_TO": 14, "COMPETES_WITH": 1, "CUSTOMER_OF": 4, "EVIDENCED_BY": 1111, "HAS_EXECUTIVE": 143, "ISSUED_BY": 124, "PARTICIPATES_IN": 1252, "RELATED_TO": 87}, "edges_total": 2736, "events": 1100, "merged_events": 14, "nodes_by_label": {"Company": 116, "Document": 692, "Event": 1100, "Industry": 73, "Institution": 316, "Person": 403, "Policy": 102}, "nodes_total": 2802, "singleton_events": 1086}
+graph_stats.edge_dedup = {"duplicate_rows_removed": 2}
+graph_stats.unresolved = {"BELONGS_TO": 40, "COMPETES_WITH": 7, "CUSTOMER_OF": 5, "HAS_EXECUTIVE": 135, "PARTICIPATES_IN": 662, "SUPPLIES": 29}  total = 878
+graph_stats.issuer_participation_dropped = {"count": 1, "note": "写 PARTICIPATES_IN 之前算出每个事件上 ISSUED_BY 的终点机构集合，起点命中即确定性丢弃并计数（与「端点未消歧 → 跳过并计数」同一套风格）", "rule": "issuer_also_participant_only_issued_by", "sample": [{"event": "EVT-1036", "institution": "INST-0126", "reason": "issuer_also_participant_only_issued_by", "role": "主体", "source_chunk_id": 3007000, "source_doc_id": 3007}]}
+
+#### B2-11 HCONF 人工确认
+确认文件 sha256 = a17268f8c0694e6b9b38c0c1db1ba89eb6a637b6f3674dd39f3d35ef380f6083  bytes = 6428
+schema = stage6-human-confirmation-1.0  confirmed_by = 作者  confirmed_at = 2026-09-26
+条目数 = 13  confirmed=true = 12
+graph_stats.human_confirmation = {"edges_added": 29, "edges_added_by_relation": {"CUSTOMER_OF": 4, "HAS_EXECUTIVE": 7, "PARTICIPATES_IN": 18}, "entries_confirmed": 12, "entries_total": 13, "entries_unconfirmed": 1, "node_ids": ["HCONF-0001", "HCONF-0002", "HCONF-0003", "HCONF-0004", "HCONF-0005", "HCONF-0006", "HCONF-0007", "HCONF-0008", "HCONF-0009", "HCONF-0010", "HCONF-0011", "HCONF-0012"], "nodes_added": 12, "nodes_by_label": {"Company": 12}, "note": "《10》第4.5.4节：匹配失败进待消歧列表，**人工确认后再写入图谱**。确认是数据（确认文件的 confirmed 字段），不是代码；未确认条目继续排除，确认名称只建一个节点、不并进配置公司。", "policy": "pending_confirmation_exclude_from_graph", "rejected_not_merged_into_configured_company": [], "sha256": "a17268f8c0694e6b9b38c0c1db1ba89eb6a637b6f3674dd39f3d35ef380f6083", "source_file": "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_2/人工确认清单.json", "unconfirmed_names": ["豪威集成电路（集团）股份有限公司"], "work_root_copy": "交付物/04-数据与知识图谱/数据准备/数据集/_抽取缓存/v2.1_v1_2/图谱管线/人工确认清单.json"}
+以 HCONF 节点为端点的导出边 = 29  按关系 = {'CUSTOMER_OF': 4, 'PARTICIPATES_IN': 18, 'HAS_EXECUTIVE': 7}
+
+#### B2-12 三条可过滤性读数（重算）
+图谱层 含 >=2 个不同 event_time 日期的文档 = 66
+图谱层 含 >=2 个不同自然月的文档 = 49
+图谱层 同文档日期跨度 >=31 天 = 40
+抽取层 含 >=2 个不同日期 = 44
+抽取层 字面口径「>=2 条 event_time 非空」 = 81
+抽取层 含 >=2 个自然月 = 32
+抽取层 日期跨度 >=31 天 = 26
+时间覆盖_度量.json 摘要 = {}
+时间覆盖_度量.json 全键 = ['backfill', 'definition', 'extraction_layer_after_backfill', 'extraction_layer_before_backfill', 'generated_at', 'graph_layer_after_backfill', 'schema', 'sources']
+时间覆盖_度量.graph_layer_after_backfill = {"events": 1100, "events_with_time": 556, "events_without_time": 544, "metrics": {"doc_ids_ge2": [1001, 1010, 1014, 1018, 1021, 1026, 1030, 1042, 1049, 1050, 1058, 1059, 1072, 1082, 1106, 1114, 1127, 1130, 1149, 1163, 1175, 1178, 1193, 1195, 1197, 1201, 1205, 1207, 1210, 1214, 1237, 1249, 1257, 1258, 1259, 1275, 1292, 1293, 1294, 1298, 1318, 1325, 1342, 1356, 1362, 1364, 1370, 1379, 1381, 1396, 1433, 1445, 1450, 1492, 1511, 1529, 1533, 1535, 1543, 2016, 2045, 2066, 2083, 2085, 2089, 2100], "doc_ids_multi_month": [1001, 1010, 1014, 1021, 1026, 1030, 1042, 1049, 1050, 1058, 1059, 1072, 1082, 1106, 1114, 1127, 1130, 1149, 1163, 1175, 1178, 1193, 1195, 1201, 1205, 1207, 1214, 1237, 1249, 1257, 1292, 1293, 1298, 1318, 1325, 1362, 1364, 1370, 1396, 1445, 1450, 1492, 1511, 1529, 1535, 1543, 2016, 2066, 2083], "docs_times_span_ge_31_days": 40, "docs_times_span_more_than_one_month": 49, "docs_with_ge2_dated_events": 66}}
+
+#### B2-12b 去重层 events_without_participants（已消歧口径）
+events_merged.jsonl 行数 = 1100
+participants 为空的事件 = 254
+既有 participants 为空、也有 unresolved_peers 的事件 = 0
+participants 为空且 unresolved_peers 也为空 = 254
+
+#### B2-13 run_history.jsonl 成本台账
+条数 = 3
+键 = ['api_calls', 'api_calls_total', 'cache_hits', 'completion_tokens', 'documents', 'failures', 'fallback_calls', 'fetched', 'finished_at', 'force', 'manifest_files', 'manifest_sha256', 'model_latency_ms_sum', 'model_pinning_warnings', 'per_doc', 'profile', 'prompt_tokens', 'reject_total', 'retries', 'run_index', 'started_at', 'total_tokens', 'wall_clock_seconds']
+  [0] {"api_calls": 3, "api_calls_total": 3, "cache_hits": 0, "completion_tokens": 13477, "documents": 3, "failures": [], "fallback_calls": 0, "fetched": 3, "finished_at": "2026-09-27T13:29:57+08:00", "force": false, "manifest_files": 7, "manifest_sha256": "0bd5de5e9cbacacca6abf3bb400e6a43366cf763c87ae8d133d159fb10ec8c4e", "model_latency_ms_sum": 51700, "model_pinning_warnings": [], "per_doc": [{"cache_elapsed_ms": 12311, "counts": {"entities": 3, "events": 1, "evidenced_by": 1, "rejected": 0, "relations": 3, "warnings": 0}, "doc_id": 1488, "elapsed_ms": 13041, "finish_reason": "stop", "from_cache": false, "reject_reasons": [], "usage": {"completion_tokens": 2785, "prompt_tokens": 3590, "total_tok
+  [1] {"api_calls": 749, "api_calls_total": 749, "cache_hits": 3, "completion_tokens": 3033067, "documents": 709, "failures": [{"doc_id": 1018, "error": "RuntimeError: 缓存与当前输入不一致：doc_id=1018 的缓存 input_sha256=323ef3bf27622209559928a2f26bc772bcde063d329e2e4c384dff829c4b9f51，当前输入=b48507b94ba943c1f41477a19063c79cdb080c7cab72b3c993f6bb055642d692。这通常意味着文档、提示词、模型或调用参数变过；确认后加 --force 重跑并重写缓存。", "stage": "call_or_cache"}, {"doc_id": 1026, "error": "RuntimeError: 缓存与当前输入不一致：doc_id=1026 的缓存 input_sha256=ab788ac27aa04cc16e405a0c2d8b8cf0e69434649acf7fad7b709edd8bf783e9，当前输入=d38046da208e6729f60ecf1767bc23e9e69a389a7cc8ad1ea77d792e64859c4d。这通常意味着文档、提示词、模型或调用参数变过；确认后加 --force 重跑并重写缓存。", "stage": "call_or_cache"},
+  [2] {"api_calls": 31, "api_calls_total": 31, "cache_hits": 680, "completion_tokens": 3161429, "documents": 709, "failures": [], "fallback_calls": 2, "fetched": 29, "finished_at": "2026-09-27T17:05:11+08:00", "force": false, "manifest_files": 713, "manifest_sha256": "ed5b048b336a2a7b8eb6f82ccea0ab650ffe5b39fbda1d670b05c4a4ba28eaa6", "model_latency_ms_sum": 12757553, "model_pinning_warnings": [], "per_doc": [{"cache_elapsed_ms": 19627, "counts": {"entities": 3, "events": 3, "evidenced_by": 3, "rejected": 0, "relations": 5, "warnings": 0}, "doc_id": 1001, "elapsed_ms": 2, "finish_reason": "stop", "from_cache": true, "reject_reasons": [], "usage": {"completion_tokens": 4998, "prompt_tokens": 3290, "
+--- token 汇总 ---
+prompt_tokens 合计 = 6718138
+completion_tokens 合计 = 6207973
+total_tokens 合计 = 12926111
+逐条 total_tokens = [26321, 6323136, 6576654]
+逐条 api_calls = [3, 749, 31]
+逐条 documents = [3, 709, 709]
+v1.2 抽取链合计（第 2＋3 条；不含第 1 条冒烟） = 12899790
+含冒烟的合计 = 12926111
+
+#### B2-14 verify.json reproducibility
+{
+ "api_calls": [
+  3,
+  749
+ ],
+ "cache_hits": [
+  0,
+  3
+ ],
+ "compared_manifest_sha256": [
+  "e2d8efc67705ee4334a1e6a6021d13763c4b23baff78d57cf28d703da2bf52c1"
+ ],
+ "compared_runs": [
+  2
+ ],
+ "documents": [
+  3,
+  709
+ ],
+ "fetched": [
+  3,
+  679
+ ],
+ "identical_across_runs": false,
+ "manifest_sha256": [
+  "0bd5de5e9cbacacca6abf3bb400e6a43366cf763c87ae8d133d159fb10ec8c4e",
+  "e2d8efc67705ee4334a1e6a6021d13763c4b23baff78d57cf28d703da2bf52c1"
+ ],
+ "runs": 2,
+ "wall_clock_seconds": [
+  52.78,
+  12294.21
+ ]
+}
+verify.documents = 709  documents_missing = []
+scope_note = 本次核对覆盖 709／709 篇；缺失的 doc_id 见 documents_missing（部分运行或解析失败都会落在这里）

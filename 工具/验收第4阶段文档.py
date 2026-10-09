@@ -16,7 +16,7 @@ except Exception:
     pass
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-P10 = os.path.join(ROOT, '阶段04-系统总体设计', '10-系统总体设计（第四阶段）.md')
+P10 = os.path.join(ROOT, '交付物/07-设计与需求/总体设计', '10-系统总体设计（第四阶段）.md')
 P02 = os.path.join(ROOT, '02-项目执行总控文档.md')
 
 fails = []

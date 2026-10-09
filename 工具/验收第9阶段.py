@@ -32,7 +32,7 @@ A～I 共 **58 行**（A6＋B8＋C10＋D6＋E6＋F6＋G6＋H5＋I5）。
 * 两个新码必须在 C3 逐码列表里出现：`1004`（HTTP 429，限流）与 `3004`（HTTP 502，装配账目守卫未通过）。
   1004 由突发触发并留痕；**3004 只做静态逐码核对**（登记在 `errors.py`、HTTP 502），**不做实况探针**——
   原先写的"3004 的确定性样本是 PE-03"是把**缺陷当成了期望行为**：PE-03 稳定报 3004 源于
-  `代码\问答\run_answer.py` 桥接路径取错 token 账口径（`budget_trim.after`＝保留 K 之前，
+  `交付物/03-代码\问答\run_answer.py` 桥接路径取错 token 账口径（`budget_trim.after`＝保留 K 之前，
   而守卫要的是保留 K 之后）。该缺陷已于 2026-10-02 修复，故 PE-03 改判为
   **回归断言（必须 HTTP 200）**，见 C3 内的「PE-03 回归断言」块。
 * D1／D2 走**候选题列表**（`QA_CANDIDATES`）取前若干道成功（HTTP 200）的题：D1 取前 3 道判「四段答案」，
@@ -87,25 +87,25 @@ except Exception:                                           # pragma: no cover
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.abspath(os.path.join(HERE, os.pardir))
 
-STAGE = "阶段09-前后端系统集成"
+STAGE = "交付物/05-系统实现/前后端系统集成"
 P_TASK = os.path.join(STAGE, "24-第9阶段任务书（前后端系统集成）.md")
 P_DOC25 = os.path.join(STAGE, "25-第9阶段产出文档（前后端系统集成）.md")
-P_DESIGN = os.path.join("阶段04-系统总体设计", "10-系统总体设计（第四阶段）.md")
+P_DESIGN = os.path.join("交付物/07-设计与需求/总体设计", "10-系统总体设计（第四阶段）.md")
 P_OUT = os.path.join(STAGE, "集成产出")
 P_EVID = os.path.join(P_OUT, "_证据")
-P_BACKEND = os.path.join("代码", "后端")
-P_FRONTEND = os.path.join("代码", "前端")
+P_BACKEND = os.path.join("交付物/03-代码", "后端")
+P_FRONTEND = os.path.join("交付物/03-代码", "前端")
 P_DEPLOY = "部署"
-P_QSET = os.path.join("阶段07-RAG检索系统", "预实验问题集", "questions.jsonl")
-P_QAREC = os.path.join("阶段08-智能问答系统", "问答产出", "qa_records.jsonl")
-P_DOCS = os.path.join("阶段05-数据准备", "数据集", "v2.1", "clean", "documents.jsonl")
-P_CHUNKS = os.path.join("阶段05-数据准备", "数据集", "v2.1", "chunks", "chunks.jsonl")
+P_QSET = os.path.join("交付物/05-系统实现/RAG检索系统", "预实验问题集", "questions.jsonl")
+P_QAREC = os.path.join("交付物/05-系统实现/智能问答系统", "问答产出", "qa_records.jsonl")
+P_DOCS = os.path.join("交付物/04-数据与知识图谱/数据准备", "数据集", "v2.1", "clean", "documents.jsonl")
+P_CHUNKS = os.path.join("交付物/04-数据与知识图谱/数据准备", "数据集", "v2.1", "chunks", "chunks.jsonl")
 # 2026-10-03 口径切换：图谱交付口径由 v2.1_v1_2 切到 **v2.1_v1_3**（作者裁定，见《02》修订记录 v3.6）。
 # v1.2 的导出目录转为归档、逐字节未动，本脚本不再指向它；三处路径一律取自同一常量，避免漏改。
 GRAPH_EXPORT_VERSION = "v2.1_v1_3"
-P_GRAPH_STATS = os.path.join("阶段06-事件抽取与知识图谱", "图谱导出", GRAPH_EXPORT_VERSION, "graph_stats.json")
-P_NODES_CSV = os.path.join("阶段06-事件抽取与知识图谱", "图谱导出", GRAPH_EXPORT_VERSION, "nodes.csv")
-P_EDGES_CSV = os.path.join("阶段06-事件抽取与知识图谱", "图谱导出", GRAPH_EXPORT_VERSION, "edges.csv")
+P_GRAPH_STATS = os.path.join("交付物/04-数据与知识图谱/事件抽取与知识图谱", "图谱导出", GRAPH_EXPORT_VERSION, "graph_stats.json")
+P_NODES_CSV = os.path.join("交付物/04-数据与知识图谱/事件抽取与知识图谱", "图谱导出", GRAPH_EXPORT_VERSION, "nodes.csv")
+P_EDGES_CSV = os.path.join("交付物/04-数据与知识图谱/事件抽取与知识图谱", "图谱导出", GRAPH_EXPORT_VERSION, "edges.csv")
 P_XDOC = os.path.join("工具", "跨文档核验.py")
 P_WORK = os.path.join(STAGE, "_工作底稿")
 P_FINGERPRINT = os.path.join(P_WORK, "决策者核验", "输入指纹.py")
@@ -169,7 +169,7 @@ REGISTERED_ADDITIONS = {
 QA_CANDIDATES = ["PE-01", "PE-02", "PE-03", "PE-04"]
 # 2026-10-02 复原：`PE-03` 归位。此前 C、D、E 三组把 PE-03 从候选题里换成了 `PE-15`，
 # 原因是 PE-03 经 `/api/qa/ask` 稳定报 3004（装配账目守卫）——那**不是 PE-03 特殊**，
-# 而是 `代码\问答\run_answer.py` 桥接路径把 `budget_trim.after`（保留 K 之前的账）
+# 而是 `交付物/03-代码\问答\run_answer.py` 桥接路径把 `budget_trim.after`（保留 K 之前的账）
 # 当成了 trace 的 `token_account`（应为保留 K 之后的账），凡触发 K 裁块的题都会中招。
 # 该缺陷已于 2026-10-02 修复（见 C3 的 PE-03 回归断言），故把 PE-03 换回候选题。
 UPSTREAM_GUARD_CODES = frozenset({3004, 3001})
@@ -219,7 +219,7 @@ MIRROR_FILES = [
 ]
 MIRROR_DIRS = [
     P_BACKEND,
-    os.path.join("代码", "问答"),             # F2 要拿 prompt.py 的 SECTION_HEADERS 逐字对
+    os.path.join("交付物/03-代码", "问答"),             # F2 要拿 prompt.py 的 SECTION_HEADERS 逐字对
     os.path.join(P_FRONTEND, "src"),
     P_DEPLOY,
     P_EVID,
@@ -1002,7 +1002,7 @@ def c_b6(g):
         payload = None
         if meth == "PUT":
             # 该接口的请求体契约＝文档字段本身（必填 title／content／source／publish_time，
-            # 见 代码\后端\api\admin.py 的 `_check_document_payload` 与 `DOC_ALLOWED`）：
+            # 见 交付物/03-代码\后端\api\admin.py 的 `_check_document_payload` 与 `DOC_ALLOWED`）：
             # 缺必填判 1003、含未登记字段判 1002——两种都不是 B6 要判的 2003。
             payload = {"title": "守门测试文档", "content": "守门测试正文（应被 2003 拒绝，不落盘）",
                        "source": "公告", "publish_time": "2026-01-01T00:00:00"}
@@ -1183,7 +1183,7 @@ def c_c3(g):
     # 2026-10-02 门禁口径修订（评审 P0-新①）：**3004 不再走实况探针**。
     #
     # 原判据把 PE-03 当作「3004 的确定性样本」，期望它返回 HTTP 502／code=3004。那是把
-    # **缺陷当成了期望行为**：PE-03 之所以稳定报 3004，是因为 `代码\问答\run_answer.py`
+    # **缺陷当成了期望行为**：PE-03 之所以稳定报 3004，是因为 `交付物/03-代码\问答\run_answer.py`
     # 的桥接路径取了错误的 token 账口径（`budget_trim.after`＝保留 K 之前，而守卫要的是
     # 保留 K 之后）。该缺陷修复后 PE-03 正常返回 HTTP 200，原期望必然落空。
     #
@@ -1232,7 +1232,7 @@ def c_c3(g):
                    % (st_p3, body_p3.get("code")))
 
     # 4002（越权）：《24》第 219 行「普通用户访问 /api/admin/* 返回 4002（HTTP 403）
-    # （机检：逐个后台路径探测）」。普通用户通道的判定见 代码\后端\api\admin.py 的
+    # （机检：逐个后台路径探测）」。普通用户通道的判定见 交付物/03-代码\后端\api\admin.py 的
     # `_ordinary_user_reason`：X-Client-Role 是 user 一类取值、或 Origin 落在 CORS_ORIGINS、
     # 或 Referer 指向允许来源，任一命中即按普通用户拒（本机实测 Origin=http://localhost:5173
     # 与 X-Client-Role: user 两条都生效，见 集成产出\error_scenarios.jsonl 的「⑧ 越权」行）。
@@ -1709,18 +1709,18 @@ def c_d6(g):
                 hits.append("%s:%d %s" % (br(g.root, cfg), i, ln.strip()[:90]))
     changed = []
     if os.path.isdir(gitd):
-        rc, out = run_cmd(["git", "-C", g.root, "status", "--porcelain", "--", "代码/检索", "代码/问答"])
+        rc, out = run_cmd(["git", "-C", g.root, "status", "--porcelain", "--", "交付物/03-代码/检索", "交付物/03-代码/问答"])
         changed = [x for x in out.splitlines() if x.strip()]
     else:
         changed = ["<镜像无 .git，跳过>"]
     if not hits:
         bad.append("未在 %s／%s 里找到对 代码\\检索／代码\\问答 的 import 路径" % (br(g.root, reuse), br(g.root, cfg)))
     if [x for x in changed if not x.startswith("<镜像")]:
-        bad.append("代码/检索 或 代码/问答 有改动：%s" % changed[:5])
+        bad.append("交付物/03-代码/检索 或 交付物/03-代码/问答 有改动：%s" % changed[:5])
     if bad:
         g.fail("D6", "；".join(bad))
     else:
-        g.ok("D6", "后端以路径加载上游模块（%s）；git status 对 代码/检索、代码/问答 零改动%s"
+        g.ok("D6", "后端以路径加载上游模块（%s）；git status 对 交付物/03-代码/检索、交付物/03-代码/问答 零改动%s"
              % (hits[0], "（镜像无 .git，跳过 git 校验）" if changed and changed[0].startswith("<镜像") else ""))
 
 
@@ -2018,7 +2018,7 @@ def c_f2(g):
     m = JS_ARR_RE("HEADERS").search(txt)
     got = js_strings(m.group(1)) if m else []
     ln = (txt[:m.start()].count("\n") + 1) if m else None
-    be = os.path.join("代码", "问答", "prompt.py")
+    be = os.path.join("交付物/03-代码", "问答", "prompt.py")
     be_txt = read_text(g.p(be)) if os.path.exists(g.p(be)) else ""
     # 上游把段头写成 ANSWER_SECTIONS（裸名）＋ SECTION_HEADERS = ["【%s】" % t for t in ANSWER_SECTIONS]
     ma = re.search(r"ANSWER_SECTIONS\s*=\s*[\[\(](.*?)[\]\)]", be_txt, re.S)
@@ -2482,7 +2482,7 @@ def c_h3(g):
                  "    print('HEALTH_ERR', type(exc).__name__)\n")
     _drv, _, _rest = probe_py.partition(":")           # C:\… → /mnt/c/…
     probe_mount = "/mnt/%s/%s" % (_drv.lower(), _rest.replace("\\", "/").lstrip("/"))
-    run_mount = " -v '%s:/app/代码/后端/config.local.json:ro' -v '%s:/tmp/gate9_probe.py:ro'" \
+    run_mount = " -v '%s:/app/交付物/03-代码/后端/config.local.json:ro' -v '%s:/tmp/gate9_probe.py:ro'" \
                 % (cfg_mount, probe_mount)
 
     def wsl_probe(container):
@@ -2508,7 +2508,7 @@ def c_h3(g):
         logtail = [l for l in logs if ("run.py" in l or "Traceback" in l or "error" in l.lower())][-2:]
         # 补充探针：只把 CMD 换掉（其余照旧），看同一镜像能不能真起来 —— 用来定位缺陷落点
         wsl_bash("docker run -d --name %s --network host%s ashare-qa-backend:local "
-                 "python 代码/后端/run.py >/dev/null 2>&1; echo ok" % (probe, run_mount), timeout=180)
+                 "python 交付物/03-代码/后端/run.py >/dev/null 2>&1; echo ok" % (probe, run_mount), timeout=180)
         for i in range(1, 7):
             time.sleep(5)
             probe_health, _raw = wsl_probe(probe)
@@ -2528,7 +2528,7 @@ def c_h3(g):
     else:
         g.fail("H3", "按镜像自带 CMD 起容器后，容器内 GET /api/health **无响应**（12 次×5 s 轮询，末次读数=%s）；CMD=%s；"
                      "容器状态=%s；容器日志尾部=%s；《25》是否登记该失败原因：%s；"
-                     "补充探针（只把 CMD 换成 [python 代码/后端/run.py]，其余照旧）：%s —— 说明缺陷落在 CMD 的 --host 参数上，"
+                     "补充探针（只把 CMD 换成 [python 交付物/03-代码/后端/run.py]，其余照旧）：%s —— 说明缺陷落在 CMD 的 --host 参数上，"
                      "而不是镜像本身（%s:%s 的 argparse 只有 --reload／--port／--log-level，HOST 固定 127.0.0.1：%s）"
                % (health or "（无输出）", cmd_txt, status_line[0] if status_line else "（未取到）",
                   " / ".join(logtail) or "（无相关行）", reg_txt,
@@ -2629,7 +2629,7 @@ I2_EXT = {"", ".py", ".md", ".txt", ".json", ".js", ".vue", ".html", ".css", ".p
           ".bat", ".yml", ".yaml", ".sql", ".csv", ".example", ".example"}
 I2_NEG = re.compile(r"不是|不称|不写|不引|不得|不再|未|没有|无|禁止|非|不含|排除|改为|纠正|口径|统一|一律|写成|称「|称\"")
 # FAIL 只落在**第 9 阶段交付物**里；上游阶段（如文献调研对 LangChain 论文的引用、旧阶段的验收日志）只统计不判负。
-I2_SCOPE = (STAGE + "/", os.path.join("代码", "后端") + "/", os.path.join("代码", "前端") + "/", P_DEPLOY + "/")
+I2_SCOPE = (STAGE + "/", os.path.join("交付物/03-代码", "后端") + "/", os.path.join("交付物/03-代码", "前端") + "/", P_DEPLOY + "/")
 
 
 def _in_scope(rp):
@@ -2780,10 +2780,10 @@ def check_env(g):
 
 
 START_HINT = [
-    r'powershell -ExecutionPolicy Bypass -File "部署\启动.ps1"',
+    r'powershell -ExecutionPolicy Bypass -File "交付物/10-部署\启动.ps1"',
     r'wsl -d Ubuntu -u root -- bash -lc "systemctl start docker; docker start ashare-neo4j"',
-    r'python "代码\后端\run.py"',
-    r'cd "代码\前端" && npm run dev',
+    r'python "交付物/03-代码\后端\run.py"',
+    r'cd "交付物/03-代码\前端" && npm run dev',
 ]
 
 
@@ -3019,18 +3019,18 @@ def tamper_cases(root):
         return "\n".join(lines[:4]) + "\n"
 
     return [
-        ("① 删掉冒烟矩阵里 /api/graph/entities 的正常行 → 覆盖缺口", "阶段09-前后端系统集成/集成产出/smoke_matrix.jsonl", t_smoke, {"C1"}),
-        ("② errors.py 把 3004 改成 3999 → 逐码表对不上", "代码/后端/errors.py", t_codes, {"C3"}),
-        ("③ graph_counts.json 节点总数 3607 → 3606 → 计数对拍不符", "阶段09-前后端系统集成/集成产出/graph_counts.json", t_graphcount, {"E1"}),
-        ("④ 《25》改掉一个小节标题 → 九节不齐", "阶段09-前后端系统集成/25-第9阶段产出文档（前后端系统集成）.md", t_doc25_title, {"I4"}),
-        ("⑤ 部署\\README.md 把「未安装 Docker Desktop」改成反义", "部署/README.md", t_readme, {"H4"}),
-        ("⑥ AnswerSections.vue 删掉一个固定段头 → 四段不齐", "代码/前端/src/components/AnswerSections.vue", t_f2, {"F2"}),
-        ("⑦ GraphPathPanel.vue 改掉未使用图谱扩展的固定字样", "代码/前端/src/components/GraphPathPanel.vue", t_f4, {"F4"}),
-        ("⑧ nfr02_paced100.json 成功率 100 → 90 → 低于 95% 阈值", "阶段09-前后端系统集成/集成产出/_证据/nfr02_paced100.json", t_paced, {"G5"}),
-        ("⑨ package.json 加一个被排除依赖 langchain", "代码/前端/package.json", t_pkg, {"G6"}),
-        ("⑩ 在《25》里写一句不带否定的「向量数据库」", "阶段09-前后端系统集成/25-第9阶段产出文档（前后端系统集成）.md", t_i2, {"I2"}),
-        ("⑪ latency_profile.json 抹掉图谱段的来源", "阶段09-前后端系统集成/集成产出/latency_profile.json", t_g4, {"G4"}),
-        ("⑫ error_scenarios.jsonl 只留 4 行 → 不足 6 类", "阶段09-前后端系统集成/集成产出/error_scenarios.jsonl", t_g3, {"G3"}),
+        ("① 删掉冒烟矩阵里 /api/graph/entities 的正常行 → 覆盖缺口", "交付物/05-系统实现/前后端系统集成/集成产出/smoke_matrix.jsonl", t_smoke, {"C1"}),
+        ("② errors.py 把 3004 改成 3999 → 逐码表对不上", "交付物/03-代码/后端/errors.py", t_codes, {"C3"}),
+        ("③ graph_counts.json 节点总数 3607 → 3606 → 计数对拍不符", "交付物/05-系统实现/前后端系统集成/集成产出/graph_counts.json", t_graphcount, {"E1"}),
+        ("④ 《25》改掉一个小节标题 → 九节不齐", "交付物/05-系统实现/前后端系统集成/25-第9阶段产出文档（前后端系统集成）.md", t_doc25_title, {"I4"}),
+        ("⑤ 部署\\README.md 把「未安装 Docker Desktop」改成反义", "交付物/10-部署/README.md", t_readme, {"H4"}),
+        ("⑥ AnswerSections.vue 删掉一个固定段头 → 四段不齐", "交付物/03-代码/前端/src/components/AnswerSections.vue", t_f2, {"F2"}),
+        ("⑦ GraphPathPanel.vue 改掉未使用图谱扩展的固定字样", "交付物/03-代码/前端/src/components/GraphPathPanel.vue", t_f4, {"F4"}),
+        ("⑧ nfr02_paced100.json 成功率 100 → 90 → 低于 95% 阈值", "交付物/05-系统实现/前后端系统集成/集成产出/_证据/nfr02_paced100.json", t_paced, {"G5"}),
+        ("⑨ package.json 加一个被排除依赖 langchain", "交付物/03-代码/前端/package.json", t_pkg, {"G6"}),
+        ("⑩ 在《25》里写一句不带否定的「向量数据库」", "交付物/05-系统实现/前后端系统集成/25-第9阶段产出文档（前后端系统集成）.md", t_i2, {"I2"}),
+        ("⑪ latency_profile.json 抹掉图谱段的来源", "交付物/05-系统实现/前后端系统集成/集成产出/latency_profile.json", t_g4, {"G4"}),
+        ("⑫ error_scenarios.jsonl 只留 4 行 → 不足 6 类", "交付物/05-系统实现/前后端系统集成/集成产出/error_scenarios.jsonl", t_g3, {"G3"}),
     ]
 
 

@@ -1,3 +1,0 @@
-exit=4
-拒绝联网：单条探测（probe_title） 需要访问知网公开站点，但未显式打开 --allow-network（默认关闭）。
-       如确需联网核验，请显式加 `--allow-network`；离线解析与报告不受影响。

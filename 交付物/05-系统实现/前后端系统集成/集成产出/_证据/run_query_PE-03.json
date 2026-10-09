@@ -1,0 +1,316 @@
+{
+  "budget_trim": {
+    "after": {
+      "estimate_note": "文本块＝chunks.jsonl 的 token_count 实测；图谱路径与事件三元组＝估算 token",
+      "event_triple_tokens": 23,
+      "event_triples": 3,
+      "graph_tokens": 113,
+      "path_tokens": 90,
+      "paths": 3,
+      "text_chunks": 11,
+      "text_tokens": 3220,
+      "total_tokens": 3333
+    },
+    "before": {
+      "estimate_note": "文本块＝chunks.jsonl 的 token_count 实测；图谱路径与事件三元组＝估算 token",
+      "event_triple_tokens": 64,
+      "event_triples": 9,
+      "graph_tokens": 896,
+      "path_tokens": 832,
+      "paths": 28,
+      "text_chunks": 33,
+      "text_tokens": 10641,
+      "total_tokens": 11537
+    },
+    "budget": 3600,
+    "budget_exceeded": false,
+    "budget_floor_applied": false,
+    "dropped_chunks": 22,
+    "dropped_paths": 14,
+    "rule": "先裁与问题实体无关的远端图谱路径 → 再按分层保留顺序从尾部往前裁文本块（裁剪先于证据排序，不使用排序结果；g=2）"
+  },
+  "candidates": {
+    "dual_hit": 1,
+    "filtered_union": 33,
+    "graph_only": 13,
+    "graph_paths": 40,
+    "graph_returned": 14,
+    "unfiltered_union": 33,
+    "union": 33,
+    "vector_returned": 20
+  },
+  "checks": {
+    "candidates_unique": true,
+    "evidence_unique": true,
+    "kept_le_k": true,
+    "within_budget": true
+  },
+  "final_evidence": {
+    "dual_hit_in_final": [],
+    "final_set_sorted": [
+      1010000,
+      1010001,
+      1054001,
+      1096001,
+      1104011,
+      1149019,
+      1346000,
+      1459000,
+      1459008,
+      2004000
+    ],
+    "graph_evidence_in_final": [
+      1346000,
+      2004000
+    ],
+    "presentation_order": [
+      1010001,
+      1010000,
+      1054001,
+      1104011,
+      1459000,
+      1096001,
+      1459008,
+      1149019,
+      2004000,
+      1346000
+    ],
+    "size": 10
+  },
+  "generated_by": "交付物/03-代码/检索/run_query.py",
+  "graph_audit": {
+    "chunk_refs": 52,
+    "excluded_evidenced_by": 0,
+    "excluded_no_chunk_id": 0,
+    "invalid_detail": [],
+    "invalid_doc_mismatch": 0,
+    "invalid_not_in_chunks": 0
+  },
+  "graph_path_payload": {
+    "depth": 2,
+    "event_triples": [
+      [
+        "EVT-0455",
+        "重大经营",
+        "2026-04-24"
+      ],
+      [
+        "EVT-0782",
+        "股权",
+        "2026-08-28"
+      ],
+      [
+        "EVT-0783",
+        "股权",
+        "2026-08-28"
+      ]
+    ],
+    "graph_path": [
+      {
+        "depth": 1,
+        "end": "EVT-0455",
+        "nodes": [
+          "300274",
+          "EVT-0455"
+        ],
+        "relations": [
+          {
+            "direction": "out",
+            "evidence": {
+              "confidence": "0.85",
+              "source_chunk_id": "1346000",
+              "source_doc_id": "1346"
+            },
+            "neighbor": "EVT-0455",
+            "relation": "PARTICIPATES_IN",
+            "role": "主体"
+          }
+        ],
+        "start": "300274"
+      },
+      {
+        "depth": 1,
+        "end": "EVT-0782",
+        "nodes": [
+          "300274",
+          "EVT-0782"
+        ],
+        "relations": [
+          {
+            "direction": "out",
+            "evidence": {
+              "confidence": "0.9",
+              "source_chunk_id": "2004000",
+              "source_doc_id": "2004"
+            },
+            "neighbor": "EVT-0782",
+            "relation": "PARTICIPATES_IN",
+            "role": "主体"
+          }
+        ],
+        "start": "300274"
+      },
+      {
+        "depth": 1,
+        "end": "EVT-0783",
+        "nodes": [
+          "300274",
+          "EVT-0783"
+        ],
+        "relations": [
+          {
+            "direction": "out",
+            "evidence": {
+              "confidence": "0.9",
+              "source_chunk_id": "2004000",
+              "source_doc_id": "2004"
+            },
+            "neighbor": "EVT-0783",
+            "relation": "PARTICIPATES_IN",
+            "role": "主体"
+          }
+        ],
+        "start": "300274"
+      }
+    ],
+    "graph_used": true,
+    "note": "路径列表与事件三元组计入 Context Token Budget，不计入 K"
+  },
+  "graph_query_calls": {
+    "G1": 1,
+    "G2": 1,
+    "G3": 1,
+    "G4": 1,
+    "G5": 9
+  },
+  "graph_used": true,
+  "group": "C",
+  "keep_k": {
+    "dropped_by_k": [
+      1034006
+    ],
+    "input": 11,
+    "k": 10,
+    "note": "按分层保留顺序取前 K 个（第一层向量侧前 K−g 个 → 第二层图谱侧新增块至多 g 个 → 第三层向量侧剩余候选回填；截取先于分组排序；g=2）",
+    "output": 10,
+    "precision_fill": {
+      "candidates": 10,
+      "denominator": 10,
+      "evidence_size": 10,
+      "k": 10,
+      "note": "候选数不少于 K：分母恒为 K（检索指标在 metrics.py 计算）",
+      "vacant": 0
+    }
+  },
+  "metrics": {
+    "K": 10,
+    "complete_evidence_recall_at_k": 1.0,
+    "final_ids": [
+      "1010001",
+      "1010000",
+      "1054001",
+      "1104011",
+      "1459000",
+      "1096001",
+      "1459008",
+      "1149019",
+      "2004000",
+      "1346000"
+    ],
+    "gold_available": true,
+    "gold_ids": [
+      "1010001"
+    ],
+    "gold_source": "题集 qid=PE-03（含 time_window 与 gold）",
+    "level": "chunk",
+    "mrr": 1.0,
+    "n_final": 10,
+    "n_gold": 1,
+    "n_hit": 1,
+    "precision_at_k": 0.1,
+    "qid": "PE-03",
+    "recall_at_k": 1.0
+  },
+  "model_calls": {
+    "config_model_calls_allowed": 0,
+    "external_api_calls": 0,
+    "llm_calls": 0,
+    "note": "本链路 0 次大语言模型／外部接口调用；问题侧向量化是本地 Embedding 前向（与索引同模型同 revision、离线加载），按《18》第2.5节 不计入「模型调用」，但不得写成「全程未跑模型」"
+  },
+  "parameters": {
+    "K": 10,
+    "N": 20,
+    "context_token_budget": 3600,
+    "g": 2,
+    "sources": {
+      "K": "config.require_fixed('K')",
+      "N": "config.require_fixed('N')",
+      "context_token_budget": "config.require_fixed('context_token_budget')",
+      "g": "config.require_fixed('graph_retention_share')"
+    }
+  },
+  "question": {
+    "gold_evidence_chunk_ids": [
+      1010001
+    ],
+    "gold_evidence_count": 1,
+    "gold_hop_depth": 0,
+    "gold_source": "题集 qid=PE-03（含 time_window 与 gold）",
+    "qid": "PE-03",
+    "question_set": "交付物/05-系统实现/RAG检索系统/预实验问题集/questions.jsonl",
+    "task_type": "事实型",
+    "text": "最近30天（2026年8月26日至2026年9月25日）内，阳光电源控股子公司参与设立的苏州华旭新能股权投资合伙企业完成了哪项登记，备案编码是多少？",
+    "time_window": {
+      "basis": "event_time",
+      "empty_policy": "exclude",
+      "hi": "2026-09-25",
+      "label": "最近30天",
+      "lo": "2026-08-26",
+      "source": "题集 time_window"
+    }
+  },
+  "schema": "stage7-run-query-1.0",
+  "switches": {
+    "evidence_sort": false,
+    "graph_depth": 2,
+    "time_filter": false
+  },
+  "time_filter": {
+    "branch": "keep_all_graph",
+    "enabled": false,
+    "filter_diff": {
+      "added": [],
+      "counts": {
+        "added": 0,
+        "removed": 0
+      },
+      "measurable": false,
+      "note": "本题差集为空：在该题上不可测，不得据此得出时间过滤无贡献的结论",
+      "removed": []
+    },
+    "g6_called": false,
+    "kept_chunk_ids": [
+      1054004,
+      1054005,
+      1054006,
+      1234000,
+      1234001,
+      1263000,
+      1287000,
+      1346000,
+      1346002,
+      2001000,
+      2004000,
+      2086001,
+      2088002,
+      2102003
+    ],
+    "removed_by_reason": {
+      "no_event_time": [],
+      "null_time_event": [],
+      "out_of_range_event": []
+    },
+    "removed_chunk_ids": [],
+    "window": null
+  }
+}

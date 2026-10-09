@@ -1,0 +1,281 @@
+====================================================================================================
+文件：交付物/04-数据与知识图谱/事件抽取与知识图谱\图谱导出\v2.1_v1_2\nodes.csv
+表头（33 列）：node_id | label | name | stock_code | company_name | short_name | aliases | exchange | person_id | person_name | role_title | industry_code | industry_name | level | institution_id | institution_name | institution_type | event_id | event_type | event_name | event_time | description | confidence | policy_id | policy_name | issuer | publish_date | doc_id | title | source | url | publish_time | category
+
+---- 样例第 1 行 ----
+node_id = 000001
+label = Company
+name = 平安银行
+stock_code = 000001
+company_name = 平安银行股份有限公司
+short_name = 平安银行
+aliases = 平安银行
+exchange = 深交所
+person_id = 
+person_name = 
+role_title = 
+industry_code = 
+industry_name = 
+level = 
+institution_id = 
+institution_name = 
+institution_type = 
+event_id = 
+event_type = 
+event_name = 
+event_time = 
+description = 
+confidence = 
+policy_id = 
+policy_name = 
+issuer = 
+publish_date = 
+doc_id = 
+title = 
+source = 
+url = 
+publish_time = 
+category = 
+
+---- 样例第 2 行 ----
+node_id = 000002
+label = Company
+name = 万科A
+stock_code = 000002
+company_name = 万科企业股份有限公司
+short_name = 万科A
+aliases = 万科A
+exchange = 深交所
+person_id = 
+person_name = 
+role_title = 
+industry_code = 
+industry_name = 
+level = 
+institution_id = 
+institution_name = 
+institution_type = 
+event_id = 
+event_type = 
+event_name = 
+event_time = 
+description = 
+confidence = 
+policy_id = 
+policy_name = 
+issuer = 
+publish_date = 
+doc_id = 
+title = 
+source = 
+url = 
+publish_time = 
+category = 
+
+---- 样例第 3 行 ----
+node_id = 000034
+label = Company
+name = 神州数码
+stock_code = 000034
+company_name = 神州数码集团股份有限公司
+short_name = 神州数码
+aliases = 上海神州数码有限公司
+exchange = 深交所
+person_id = 
+person_name = 
+role_title = 
+industry_code = 
+industry_name = 
+level = 
+institution_id = 
+institution_name = 
+institution_type = 
+event_id = 
+event_type = 
+event_name = 
+event_time = 
+description = 
+confidence = 
+policy_id = 
+policy_name = 
+issuer = 
+publish_date = 
+doc_id = 
+title = 
+source = 
+url = 
+publish_time = 
+category = 
+
+---- 样例第 4 行 ----
+node_id = 000063
+label = Company
+name = 中兴通讯
+stock_code = 000063
+company_name = 中兴通讯（香港）有限公司
+short_name = 中兴通讯
+aliases = 中兴通讯|中兴通讯股份有限公司
+exchange = 深交所
+person_id = 
+person_name = 
+role_title = 
+industry_code = 
+industry_name = 
+level = 
+institution_id = 
+institution_name = 
+institution_type = 
+event_id = 
+event_type = 
+event_name = 
+event_time = 
+description = 
+confidence = 
+policy_id = 
+policy_name = 
+issuer = 
+publish_date = 
+doc_id = 
+title = 
+source = 
+url = 
+publish_time = 
+category = 
+
+---- 样例第 5 行 ----
+node_id = 000333
+label = Company
+name = 美的集团
+stock_code = 000333
+company_name = 美的集团股份有限公司
+short_name = 美的集团
+aliases = 美的集团
+exchange = 深交所
+person_id = 
+person_name = 
+role_title = 
+industry_code = 
+industry_name = 
+level = 
+institution_id = 
+institution_name = 
+institution_type = 
+event_id = 
+event_type = 
+event_name = 
+event_time = 
+description = 
+confidence = 
+policy_id = 
+policy_name = 
+issuer = 
+publish_date = 
+doc_id = 
+title = 
+source = 
+url = 
+publish_time = 
+category = 
+
+====================================================================================================
+文件：交付物/04-数据与知识图谱/事件抽取与知识图谱\图谱导出\v2.1_v1_2\edges.csv
+表头（9 列）：head_id | relation | tail_id | source_doc_id | source_chunk_id | confidence | role | valid_from | valid_to
+
+---- 样例第 1 行 ----
+head_id = 000001
+relation = HAS_EXECUTIVE
+tail_id = PER-0010
+source_doc_id = 1337
+source_chunk_id = 1337000
+confidence = 0.9
+role = 
+valid_from = 
+valid_to = 
+
+---- 样例第 2 行 ----
+head_id = 000001
+relation = HAS_EXECUTIVE
+tail_id = PER-0029
+source_doc_id = 1231
+source_chunk_id = 1231000
+confidence = 0.8
+role = 
+valid_from = 
+valid_to = 
+
+---- 样例第 3 行 ----
+head_id = 000001
+relation = HAS_EXECUTIVE
+tail_id = PER-0029
+source_doc_id = 1337
+source_chunk_id = 1337000
+confidence = 0.9
+role = 
+valid_from = 
+valid_to = 
+
+---- 样例第 4 行 ----
+head_id = 000001
+relation = HAS_EXECUTIVE
+tail_id = PER-0062
+source_doc_id = 1355
+source_chunk_id = 1355000
+confidence = 0.85
+role = 
+valid_from = 
+valid_to = 
+
+---- 样例第 5 行 ----
+head_id = 000001
+relation = HAS_EXECUTIVE
+tail_id = PER-0288
+source_doc_id = 1337
+source_chunk_id = 1337000
+confidence = 0.9
+role = 
+valid_from = 
+valid_to = 
+
+====================================================================================================
+文件：交付物/04-数据与知识图谱/事件抽取与知识图谱\图谱导出\v2.1_v1_2\replay.cypher　总行数 5561
+前 40 行：
+// 第 6 阶段知识图谱重放脚本（由 write_graph.py 生成，逐字节可复现）
+// 数据来源（只读）：交付物/03-代码/抽取与图谱/_全量/v2.1_v1_2/extracted.jsonl
+//   抽取结果 sha256：bae28dc7682b290192d9d06624ecbe8b7e186833bf294f82bc25c4903eb94fab
+//   文档数 709；prompt 版本 stage6-extract-v1.2
+// 口径：编号显式分配并固化（不使用自增主键）；八条由模型给出的关系带 source_doc_id／source_chunk_id／confidence，EVIDENCED_BY 不带这三项；
+//   图上不设数据截止时间属性（《10》第4.5.6节：时间只落在 Event.event_time、BELONGS_TO.valid_from／valid_to、Document.publish_time）；导出物不复制正文。
+// 节点 2802 个、边 2736 条（事件 1100 条（合并后））
+
+// ---- 约束与索引：《10》第4.5.3节 逐字照抄（7 条唯一性约束 ＋ 3 条索引）----
+CREATE CONSTRAINT uk_company_stock FOR (c:Company) REQUIRE c.stock_code IS UNIQUE;
+CREATE CONSTRAINT uk_person FOR (p:Person) REQUIRE p.person_id IS UNIQUE;
+CREATE CONSTRAINT uk_industry FOR (i:Industry) REQUIRE i.industry_code IS UNIQUE;
+CREATE CONSTRAINT uk_institution FOR (n:Institution) REQUIRE n.institution_id IS UNIQUE;
+CREATE CONSTRAINT uk_event FOR (e:Event) REQUIRE e.event_id IS UNIQUE;
+CREATE CONSTRAINT uk_policy FOR (p:Policy) REQUIRE p.policy_id IS UNIQUE;
+CREATE CONSTRAINT uk_document FOR (d:Document) REQUIRE d.doc_id IS UNIQUE;
+CREATE INDEX idx_event_time FOR (e:Event) ON (e.event_time);
+CREATE INDEX idx_event_type FOR (e:Event) ON (e.event_type);
+CREATE INDEX idx_doc_publish FOR (d:Document) ON (d.publish_time);
+
+// ---- 节点 ----
+MERGE (n:Company {node_id: '000001'}) SET n.name = '平安银行', n.stock_code = '000001', n.company_name = '平安银行股份有限公司', n.short_name = '平安银行', n.aliases = '[\'平安银行\']', n.exchange = '深交所';
+MERGE (n:Company {node_id: '000002'}) SET n.name = '万科A', n.stock_code = '000002', n.company_name = '万科企业股份有限公司', n.short_name = '万科A', n.aliases = '[\'万科A\']', n.exchange = '深交所';
+MERGE (n:Company {node_id: '000034'}) SET n.name = '神州数码', n.stock_code = '000034', n.company_name = '神州数码集团股份有限公司', n.short_name = '神州数码', n.aliases = '[\'上海神州数码有限公司\']', n.exchange = '深交所';
+MERGE (n:Company {node_id: '000063'}) SET n.name = '中兴通讯', n.stock_code = '000063', n.company_name = '中兴通讯（香港）有限公司', n.short_name = '中兴通讯', n.aliases = '[\'中兴通讯\', \'中兴通讯股份有限公司\']', n.exchange = '深交所';
+MERGE (n:Company {node_id: '000333'}) SET n.name = '美的集团', n.stock_code = '000333', n.company_name = '美的集团股份有限公司', n.short_name = '美的集团', n.aliases = '[\'美的集团\']', n.exchange = '深交所';
+MERGE (n:Company {node_id: '000338'}) SET n.name = '潍柴动力', n.stock_code = '000338', n.company_name = '潍柴动力股份有限公司', n.short_name = '潍柴动力', n.aliases = '[\'潍柴动力\']', n.exchange = '深交所';
+MERGE (n:Company {node_id: '000651'}) SET n.name = '格力电器', n.stock_code = '000651', n.company_name = '珠海格力电器股份有限公司', n.short_name = '格力电器', n.aliases = '[\'格力电器\']', n.exchange = '深交所';
+MERGE (n:Company {node_id: '000661'}) SET n.name = '长春高新', n.stock_code = '000661', n.company_name = '长春高新技术产业（集团）股份有限公司', n.short_name = '长春高新', n.aliases = '[]', n.exchange = '深交所';
+MERGE (n:Company {node_id: '000725'}) SET n.name = '京东方A', n.stock_code = '000725', n.company_name = '京东方科技集团股份有限公司', n.short_name = '京东方A', n.aliases = '[\'京东方A\']', n.exchange = '深交所';
+MERGE (n:Company {node_id: '000792'}) SET n.name = '盐湖股份', n.stock_code = '000792', n.company_name = '青海盐湖工业股份有限公司', n.short_name = '盐湖股份', n.aliases = '[]', n.exchange = '深交所';
+MERGE (n:Company {node_id: '000858'}) SET n.name = '五粮液', n.stock_code = '000858', n.company_name = '宜宾五粮液酒类销售有限责任公司', n.short_name = '五粮液', n.aliases = '[\'五粮液\', \'四川省宜宾五粮液酒厂有限公司\', \'四川省宜宾五粮液集团有限公司\', \'宜宾五粮液股份有限公司\']', n.exchange = '深交所';
+MERGE (n:Company {node_id: '000963'}) SET n.name = '华东医药', n.stock_code = '000963', n.company_name = '华东医药股份有限公司', n.short_name = '华东医药', n.aliases = '[\'华东医药\']', n.exchange = '深交所';
+MERGE (n:Company {node_id: '002022'}) SET n.name = '科华生物', n.stock_code = '002022', n.company_name = '上海科华生物工程股份有限公司', n.short_name = '科华生物', n.aliases = '[]', n.exchange = '深交所';
+MERGE (n:Company {node_id: '002051'}) SET n.name = '中工国际', n.stock_code = '002051', n.company_name = '中工国际工程股份有限公司', n.short_name = '中工国际', n.aliases = '[]', n.exchange = '深交所';
+MERGE (n:Company {node_id: '002090'}) SET n.name = '金智科技', n.stock_code = '002090', n.company_name = '江苏金智科技股份有限公司', n.short_name = '金智科技', n.aliases = '[]', n.exchange = '深交所';
+MERGE (n:Company {node_id: '002128'}) SET n.name = '电投能源', n.stock_code = '002128', n.company_name = '内蒙古电投能源股份有限公司', n.short_name = '电投能源', n.aliases = '[]', n.exchange = '深交所';
+MERGE (n:Company {node_id: '002200'}) SET n.name = '交投生态', n.stock_code = '002200', n.company_name = '云南交投生态科技股份有限公司', n.short_name = '交投生态', n.aliases = '[]', n.exchange = '深交所';
+MERGE (n:Company {node_id: '002241'}) SET n.name = '歌尔股份', n.stock_code = '002241', n.company_name = '歌尔股份有限公司', n.short_name = '歌尔股份', n.aliases = '[]', n.exchange = '深交所';
+MERGE (n:Company {node_id: '002307'}) SET n.name = '北新路桥', n.stock_code = '002307', n.company_name = '新疆北新路桥集团股份有限公司', n.short_name = '北新路桥', n.aliases = '[\'北新路桥\']', n.exchange = '深交所';

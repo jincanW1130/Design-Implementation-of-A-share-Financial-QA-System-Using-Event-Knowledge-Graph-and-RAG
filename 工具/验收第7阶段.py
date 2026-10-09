@@ -13,13 +13,13 @@ r"""《18-第7阶段任务书（RAG检索系统）》第 7 阶段交付物的阶
     它的 B／C／H／I／J／K／L／M／N 九项**自动覆盖**本表第 2、3、9、11、19、26、27、28 行的
     一部分；本脚本对这些行**只补足剩余部分，不放宽任何判定**，并在第 28 行**真的调用**它
     （`--strict-citations`），以它的退出码为准。
-  * `代码\检索\` 各脚本的 `--selftest` —— 被验收对象的内建自检。本脚本**不采信其结论**：
+  * `交付物/03-代码\检索\` 各脚本的 `--selftest` —— 被验收对象的内建自检。本脚本**不采信其结论**：
     一律从输入、代码源码、镜像重跑的产物与《19》正文重新推导后比对；唯一显式引用自检产物的
     地方是第 11／12／14／15／16／17 行的**构造用例结果**与第 24 行的双跑指纹，且都标出读的
     是哪一份产物、并在镜像里**现场重跑生成**（不是读工作区的旧报告）。
 
 **只读纪律（沿用 `工具\验收第6阶段.py` 的镜像根目录做法）**：本脚本对交付物只读。唯一的写动作
-发生在系统临时目录里——把 `代码\检索\*.py`、数据集 v2.1 的 11 个输入、预实验问题集三件、
+发生在系统临时目录里——把 `交付物/03-代码\检索\*.py`、数据集 v2.1 的 11 个输入、预实验问题集三件、
 `检索产出\` 的既有产物与 `_工作底稿\_T11\T11_summary.json`（`run_query --run-manifest` 的输入）
 **镜像**到一个临时根目录，在那里重跑：
 
@@ -41,7 +41,7 @@ r"""《18-第7阶段任务书（RAG检索系统）》第 7 阶段交付物的阶
 退出码：0 = full 档全部检查通过且无 SKIP；1 = 存在失败项、环境／链上失败或输入缺失；
         2 = `--profile static` 未执行需要镜像重跑的检查项（不得作为收口判定）。
 
-纪律：**参数一律取 `代码\检索\config.py`**（路径、K／N／预算、g、模型与 revision、组开关都在
+纪律：**参数一律取 `交付物/03-代码\检索\config.py`**（路径、K／N／预算、g、模型与 revision、组开关都在
 那里）；本脚本自带常量的部分只有两类，均已就地注释：① 数据集的表名白名单与禁用词形态
 （按《02》第8.4节 与《18》第五节 硬约束 22 构造，拼串以免自我命中）；② 扫描器的正对照样本。
 """
@@ -73,12 +73,12 @@ except AttributeError:
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TOOLS = os.path.join(ROOT, "工具")
-CODE = os.path.join(ROOT, "代码", "检索")
-STAGE7 = os.path.join(ROOT, "阶段07-RAG检索系统")
+CODE = os.path.join(ROOT, "交付物/03-代码", "检索")
+STAGE7 = os.path.join(ROOT, "交付物/05-系统实现/RAG检索系统")
 OUT = os.path.join(STAGE7, "检索产出")
 QS = os.path.join(STAGE7, "预实验问题集")
-STAGE5 = os.path.join(ROOT, "阶段05-数据准备")
-STAGE6 = os.path.join(ROOT, "阶段06-事件抽取与知识图谱")
+STAGE5 = os.path.join(ROOT, "交付物/04-数据与知识图谱/数据准备")
+STAGE6 = os.path.join(ROOT, "交付物/04-数据与知识图谱/事件抽取与知识图谱")
 P18 = os.path.join(STAGE6, "18-第7阶段任务书（RAG检索系统）.md")
 P19 = os.path.join(STAGE7, "19-第7阶段产出文档（RAG检索系统）.md")
 P00 = os.path.join(ROOT, "00-项目总览与索引.md")
@@ -116,32 +116,46 @@ CREDENTIAL_NAME_PAT = re.compile(
 # 《18》第三节的冻结输入与第 5／6 阶段已入库的指纹记录，不在运行时读取
 # `检索产出\input_manifest.json` 作为期望值。
 FROZEN_INPUT_FINGERPRINTS = [
-    ("documents", "阶段05-数据准备/数据集/v2.1/clean/documents.jsonl",
+    ("documents", "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/clean/documents.jsonl",
      4496547, "c838c608c20060adb1366d5c6f7566f9de25016110dc368f7f92fcb8a10f9eea"),
-    ("chunks", "阶段05-数据准备/数据集/v2.1/chunks/chunks.jsonl",
+    ("chunks", "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/chunks/chunks.jsonl",
      5322875, "2202cbf8e3915598fc9fa57a9fe6d32577705f59ce7bfdfab822903d949e8e44"),
-    ("faiss_index", "阶段05-数据准备/数据集/v2.1/index/faiss.index",
+    ("faiss_index", "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/index/faiss.index",
      10276909, "4052ed9a251eb0c8276a2bb5fd81e7ced5e4ccdc6cc03c126c0740d68368ef87"),
-    ("vector_map", "阶段05-数据准备/数据集/v2.1/index/vector_map.jsonl",
+    ("vector_map", "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/index/vector_map.jsonl",
      284916, "e11569c8ba67e63d9af81bd959f0da10d80db0844e7e29fcc04165f17726614b"),
-    ("build_meta", "阶段05-数据准备/数据集/v2.1/index/build_meta.json",
+    ("build_meta", "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/index/build_meta.json",
      964, "5d886d080d103088e99d9a76ebe0ec34bf9e4dbf81127d364a89389928dea9ee"),
-    ("dataset_meta", "阶段05-数据准备/数据集/v2.1/meta/dataset.json",
+    ("dataset_meta", "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/meta/dataset.json",
      3108, "41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988"),
-    ("nodes_csv", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/nodes.csv",
+    ("nodes_csv", "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/nodes.csv",
      788038, "ecfaa43a650c42a5281eaf50defa79ada043985b2283847507b6ef3ad006341e"),
 
-    ("edges_csv", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/edges.csv",
+    ("edges_csv", "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/edges.csv",
      184551, "0ff0eecfc23bb860f7307b85ed510b49265d6ec79b7ad22fc6b038df1738fe91"),
 
-    ("replay_cypher", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/replay.cypher",
-     1013800, "ee3dac6f203cd6c22346ee118a3162b4d8ffb2c215563d5f539a8ba22ebfadfc"),
+    # 2026-10-09 目录重组重基线（**仅因目录改名而更新；判据对象、强度、行结构均未变**）：
+    # 顶层 `阶段NN-XXX/` 整体改名到 `交付物/NN-XXX/` 后，这三个产物里内嵌的路径字符串
+    # 随之改写（replay.cypher 的 L2 数据来源注释；graph_stats.json 的 extract_records／
+    # source／source_file／work_root_copy 与 files.replay_cypher；人工确认清单.json 的
+    # seeded_from 与 usage），字节数与 SHA-256 因此变化。三者已由
+    # `write_graph.py`（T6，零模型调用）在改名后的目录结构上**重新生成**并通过
+    # `--verify-only` 全量机检（20 项、passed 18、failed_must 空），故不是内容错。
+    # 【旧期望值原样保留（时点留痕，不得删除）】
+    #   ("replay_cypher", …, 1013800,
+    #    "ee3dac6f203cd6c22346ee118a3162b4d8ffb2c215563d5f539a8ba22ebfadfc"),
+    #   ("graph_stats", …, 47285,
+    #    "f15a3409566a234061b733417e60c6dca26443da215ba46f74a17965c4df5e55"),
+    #   ("human_confirmation", …, 6428,
+    #    "a17268f8c0694e6b9b38c0c1db1ba89eb6a637b6f3674dd39f3d35ef380f6083"),
+    ("replay_cypher", "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/replay.cypher",
+     1013813, "38a14bf37ac474bdc5a44e6d1a2fa62fe07a932359075e1ad6c5ed40c8bf78fc"),
 
-    ("graph_stats", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json",
-     47285, "f15a3409566a234061b733417e60c6dca26443da215ba46f74a17965c4df5e55"),
+    ("graph_stats", "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json",
+     47363, "576e06b72f9406b8a750cdea1470ca09e8fbdc93c258f2c23843d49734e8c0dc"),
 
-    ("human_confirmation", "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/人工确认清单.json",
-     6428, "a17268f8c0694e6b9b38c0c1db1ba89eb6a637b6f3674dd39f3d35ef380f6083"),
+    ("human_confirmation", "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/人工确认清单.json",
+     6454, "457ecce357c887359f982653a7f51cf6c748733c053f29acfb205ef9105a6eae"),
 
 ]
 FROZEN_GRAPH_KEYS = ("nodes_csv", "edges_csv", "replay_cypher", "graph_stats",
@@ -362,7 +376,7 @@ MIRROR_SCRATCH = ["pipeline_assertions.json", "pipeline_trace_D.jsonl",
 # `run_query.py --run-manifest` 的**输入**（T11 的实测量留痕）：逐字节复跑 run_manifest.json
 # 必须有它（否则 run_query 会退回"现场计数"分支而得到不同的字节）。按输入复制、**不参与
 # 新鲜度判定**——新鲜度只看 run_manifest.json 本身是否由本次链上运行重新生成。
-MIRROR_INPUT_EVIDENCE = ["阶段07-RAG检索系统/_工作底稿/_T11/T11_summary.json"]
+MIRROR_INPUT_EVIDENCE = ["交付物/05-系统实现/RAG检索系统/_工作底稿/_T11/T11_summary.json"]
 
 
 class ChainFailure(RuntimeError):
@@ -373,7 +387,7 @@ def mirror_items():
     items = []
     for name in sorted(os.listdir(CODE)):
         if name.endswith(".py"):
-            items.append((os.path.join(CODE, name), os.path.join("代码", "检索", name)))
+            items.append((os.path.join(CODE, name), os.path.join("交付物/03-代码", "检索", name)))
     for _key, path in config.INPUT_FILES:
         items.append((path, os.path.relpath(path, ROOT)))
     for name in ("questions.jsonl", "说明.md", "题目模板.md"):
@@ -407,8 +421,8 @@ def build_mirror():
 
 def drop_mirror_outputs(tmp):
     """照第 6 阶段 `drop_exports()` 的做法，先删镜像里的旧产物并留下缺失态证据。"""
-    out_dir = os.path.join(tmp, "阶段07-RAG检索系统", "检索产出")
-    work_dir = os.path.join(tmp, "阶段07-RAG检索系统", "_工作底稿")
+    out_dir = os.path.join(tmp, "交付物/05-系统实现/RAG检索系统", "检索产出")
+    work_dir = os.path.join(tmp, "交付物/05-系统实现/RAG检索系统", "_工作底稿")
     os.makedirs(out_dir, exist_ok=True)
     os.makedirs(work_dir, exist_ok=True)
     state = {}
@@ -485,7 +499,7 @@ import json
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.getcwd(), "代码", "检索"))
+sys.path.insert(0, os.path.join(os.getcwd(), "交付物/03-代码", "检索"))
 import metrics
 import pipeline
 
@@ -553,7 +567,7 @@ def ensure_replay():
         REPLAY.update({"tmp": tmp, "copied": copied, "skipped": skipped})
         REPLAY["freshness"] = drop_mirror_outputs(tmp)
         m = lambda *parts: os.path.join(tmp, *parts)
-        code_dir = m("代码", "检索")
+        code_dir = m("交付物/03-代码", "检索")
         steps = [
             ("check_inputs", [os.path.join(code_dir, "check_inputs.py")]),
             ("vector_search_selftest", [os.path.join(code_dir, "vector_search.py"), "--selftest"]),
@@ -572,7 +586,7 @@ def ensure_replay():
         for cycle in ("run1", "run2"):
             r = {}
             r["pipeline"] = run_cmd([os.path.join(code_dir, "pipeline.py"), "--group", "C", "--out",
-                                     m("阶段07-RAG检索系统", "检索产出", "per_question_trace.jsonl")],
+                                     m("交付物/05-系统实现/RAG检索系统", "检索产出", "per_question_trace.jsonl")],
                                     tmp, "cycle_%s_pipeline" % cycle)
             require_zero(r["pipeline"], "链上 %s pipeline" % cycle)
             r["pre_experiment"] = run_cmd([os.path.join(code_dir, "pre_experiment.py"), "--quiet"],
@@ -581,7 +595,7 @@ def ensure_replay():
             r["metrics"] = run_cmd([os.path.join(code_dir, "metrics.py")],
                                    tmp, "cycle_%s_metrics" % cycle)
             require_zero(r["metrics"], "链上 %s metrics" % cycle)
-            r["sha"] = {n: sha256_file(m("阶段07-RAG检索系统", "检索产出", n))
+            r["sha"] = {n: sha256_file(m("交付物/05-系统实现/RAG检索系统", "检索产出", n))
                         for n in ("pre_experiment_matrix.jsonl", "k_selection.json",
                                   "per_question_trace.jsonl", "metrics_pre.jsonl")}
             cyc.append(r)
@@ -602,7 +616,7 @@ def ensure_replay():
         REPLAY["independent"] = json.loads(probe_line.split("=", 1)[1])
         fresh_bad = []
         for name in MIRROR_OUTPUTS:
-            path = m("阶段07-RAG检索系统", "检索产出", name)
+            path = m("交付物/05-系统实现/RAG检索系统", "检索产出", name)
             row = REPLAY["freshness"][name]
             row["exists_after_run"] = os.path.isfile(path)
             if row["exists_after_run"]:
@@ -611,7 +625,7 @@ def ensure_replay():
                 fresh_bad.append(name)
         for name in MIRROR_SCRATCH:
             key = "_工作底稿/" + name
-            path = m("阶段07-RAG检索系统", "_工作底稿", name)
+            path = m("交付物/05-系统实现/RAG检索系统", "_工作底稿", name)
             row = REPLAY["freshness"][key]
             row["exists_after_run"] = os.path.isfile(path)
             if row["exists_after_run"]:
@@ -621,18 +635,18 @@ def ensure_replay():
         if fresh_bad:
             raise ChainFailure("镜像产物新鲜度不成立（删除后不存在→运行后出现）：%s"
                                % "、".join(fresh_bad))
-        REPLAY["mirror_out_dir"] = m("阶段07-RAG检索系统", "检索产出")
+        REPLAY["mirror_out_dir"] = m("交付物/05-系统实现/RAG检索系统", "检索产出")
         REPLAY["assertions"] = read_json(
-            m("阶段07-RAG检索系统", "_工作底稿", "pipeline_assertions.json"), default={})
-        REPLAY["matrix"] = read_jsonl(m("阶段07-RAG检索系统", "检索产出",
+            m("交付物/05-系统实现/RAG检索系统", "_工作底稿", "pipeline_assertions.json"), default={})
+        REPLAY["matrix"] = read_jsonl(m("交付物/05-系统实现/RAG检索系统", "检索产出",
                                         "pre_experiment_matrix.jsonl"))
-        REPLAY["selection"] = read_json(m("阶段07-RAG检索系统", "检索产出", "k_selection.json"),
+        REPLAY["selection"] = read_json(m("交付物/05-系统实现/RAG检索系统", "检索产出", "k_selection.json"),
                                         default={})
-        REPLAY["trace"] = read_jsonl(m("阶段07-RAG检索系统", "检索产出",
+        REPLAY["trace"] = read_jsonl(m("交付物/05-系统实现/RAG检索系统", "检索产出",
                                        "per_question_trace.jsonl"))
-        REPLAY["metrics"] = read_jsonl(m("阶段07-RAG检索系统", "检索产出", "metrics_pre.jsonl"))
-        REPLAY["trace_D"] = read_jsonl(m("阶段07-RAG检索系统", "_工作底稿", "pipeline_trace_D.jsonl"))
-        REPLAY["trace_E"] = read_jsonl(m("阶段07-RAG检索系统", "_工作底稿", "pipeline_trace_E.jsonl"))
+        REPLAY["metrics"] = read_jsonl(m("交付物/05-系统实现/RAG检索系统", "检索产出", "metrics_pre.jsonl"))
+        REPLAY["trace_D"] = read_jsonl(m("交付物/05-系统实现/RAG检索系统", "_工作底稿", "pipeline_trace_D.jsonl"))
+        REPLAY["trace_E"] = read_jsonl(m("交付物/05-系统实现/RAG检索系统", "_工作底稿", "pipeline_trace_E.jsonl"))
         REPLAY["mirror_files"] = sum(len(files) for _r, _d, files in os.walk(tmp))
         _env, removed = stripped_env()
         removed_seen = set(removed)
@@ -934,7 +948,7 @@ def collect_delivery_texts():
     for n in sorted(os.listdir(CODE)):
         p = os.path.join(CODE, n)
         if os.path.isfile(p) and (n.endswith(".py") or n.endswith(".md")):
-            targets.append(("代码/检索/" + n, read_text(p, "")))
+            targets.append(("交付物/03-代码/检索/" + n, read_text(p, "")))
     for base in (OUT, QS):
         for n in sorted(os.listdir(base)):
             p = os.path.join(base, n)
@@ -1908,12 +1922,12 @@ chk(not ddl_hits and ddl_ctrl and not seventh and not table_hits and table_ctrl
        "、".join(sorted(SIX_TABLE_NAMES)), ddl_ctrl, table_ctrl,
        "六张表" in t19))
 MODEL_SCAN_EXEMPT = {
-    "代码/检索/build_questions.py": "题集构造与第三方复核登记",
-    "代码/检索/config.py": "唯一参数来源；仅含硬守卫凭据名正则，不含答案生成模型型号",
-    "代码/检索/third_party_review.py": "第三方复核执行脚本",
-    "阶段07-RAG检索系统/预实验问题集/第三方复核报告.md": "第三方复核报告",
-    "阶段07-RAG检索系统/预实验问题集/第三方复核台账.json": "第三方复核台账",
-    "阶段07-RAG检索系统/预实验问题集/收口报告（千帆剥离与T8重绑）.md": "第三方复核留痕",
+    "交付物/03-代码/检索/build_questions.py": "题集构造与第三方复核登记",
+    "交付物/03-代码/检索/config.py": "唯一参数来源；仅含硬守卫凭据名正则，不含答案生成模型型号",
+    "交付物/03-代码/检索/third_party_review.py": "第三方复核执行脚本",
+    "交付物/05-系统实现/RAG检索系统/预实验问题集/第三方复核报告.md": "第三方复核报告",
+    "交付物/05-系统实现/RAG检索系统/预实验问题集/第三方复核台账.json": "第三方复核台账",
+    "交付物/05-系统实现/RAG检索系统/预实验问题集/收口报告（千帆剥离与T8重绑）.md": "第三方复核留痕",
 }
 model_targets = [(n, t) for n, t in aa_targets if n not in MODEL_SCAN_EXEMPT]
 model_hits = []

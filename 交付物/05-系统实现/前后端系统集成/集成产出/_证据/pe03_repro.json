@@ -1,0 +1,65 @@
+{
+  "question": "最近30天（2026年8月26日至2026年9月25日）内，阳光电源控股子公司参与设立的苏州华旭新能股权投资合伙企业完成了哪项登记，备案编码是多少？",
+  "qid": "PE-03",
+  "runs": [
+    {
+      "tag": "1",
+      "http_status": 503,
+      "code": 3001,
+      "message": "图谱服务不可用",
+      "seconds": 7.366,
+      "new_run_dirs": [
+        {
+          "run_dir": "qa_runs/ask_C_eugact_m",
+          "empty": true,
+          "files": []
+        }
+      ],
+      "key_log_lines": [
+        "ashare_qa.backend WARNING ApiError POST /api/qa/ask → code=3001 http=503；detail=run_answer 退出码 1（耗时 7.4s，out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_eugact_m）"
+      ],
+      "all_log_lines": [
+        "ashare_qa.backend INFO 调用第 8 阶段问答链路：group=C session_id=S-T11-PE03REPRO out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_eugact_m 超时=300s",
+        "ashare_qa.backend WARNING 问答链路非零退出：exit=1 耗时=7.4s out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_eugact_m\n--- stdout 尾部 ---\n==============================================================================\nrun_answer：自定义问题\n==============================================================================\n四项定值（config.require_fixed（四项定值从 代码\\检索\\config.py 导入））：K=10 N=20 预算=3600 g=2\n答案侧冻结：model=deepseek-flash temperature=0 max_tokens=16384 prompt_version=v1.0\n会话 session_id=S-T11-PE03REPRO；记录层时间注入 --now=2026-09-30T01:28:52+08:00\n[桥接] 调第 7 阶段既有链路（只读）：C:\\Users\\15129\\AppData\\Local\\Programs\\Python\\Python312\\python.exe C:\\Users\\15129\\Desktop\\毕业设计\\代码\\检索\\run_query.py --group C --out C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/智能问答系统\\_工作底稿\\桥接\\run_query_C_custom.json --question 最近30天（2026年8月26日至2026年9月25日）内，阳光电源控股子公司参与设立的苏州华旭新能股权投资合伙企业完成了哪项登记，备案编码是多少？\n\n--- stderr 尾部 ---\nPE-03：token 账现场重算与上游 trace 不一致——现场 text+path+event_triple=3007、trace total_tokens=3333（《21》第五节 硬约束 6：预算守卫必须由重算分量组成，不得照抄上游；审查 B-02／C-06）\n",
+        "ashare_qa.backend WARNING ApiError POST /api/qa/ask → code=3001 http=503；detail=run_answer 退出码 1（耗时 7.4s，out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_eugact_m）",
+        "httpx INFO HTTP Request: POST http://testserver/api/qa/ask \"HTTP/1.1 503 Service Unavailable\""
+      ],
+      "console_log": "_证据/_pe03_console_1.log",
+      "console_tail": "2026-09-30 01:28:52,072 INFO ashare_qa.backend 调用第 8 阶段问答链路：group=C session_id=S-T11-PE03REPRO out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_eugact_m 超时=300s\n2026-09-30 01:28:59,422 WARNING ashare_qa.backend 问答链路非零退出：exit=1 耗时=7.4s out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_eugact_m\n--- stdout 尾部 ---\n==============================================================================\nrun_answer：自定义问题\n==============================================================================\n四项定值（config.require_fixed（四项定值从 代码\\检索\\config.py 导入））：K=10 N=20 预算=3600 g=2\n答案侧冻结：model=deepseek-flash temperature=0 max_tokens=16384 prompt_version=v1.0\n会话 session_id=S-T11-PE03REPRO；记录层时间注入 --now=2026-09-30T01:28:52+08:00\n[桥接] 调第 7 阶段既有链路（只读）：C:\\Users\\15129\\AppData\\Local\\Programs\\Python\\Python312\\python.exe C:\\Users\\15129\\Desktop\\毕业设计\\代码\\检索\\run_query.py --group C --out C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/智能问答系统\\_工作底稿\\桥接\\run_query_C_custom.json --question 最近30天（2026年8月26日至2026年9月25日）内，阳光电源控股子公司参与设立的苏州华旭新能股权投资合伙企业完成了哪项登记，备案编码是多少？\n\n--- stderr 尾部 ---\nPE-03：token 账现场重算与上游 trace 不一致——现场 text+path+event_triple=3007、trace total_tokens=3333（《21》第五节 硬约束 6：预算守卫必须由重算分量组成，不得照抄上游；审查 B-02／C-06）\n\n2026-09-30 01:28:59,422 WARNING ashare_qa.backend ApiError POST /api/qa/ask → code=3001 http=503；detail=run_answer 退出码 1（耗时 7.4s，out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_eugact_m）",
+      "failure_reason_lines": [
+        "PE-03：token 账现场重算与上游 trace 不一致——现场 text+path+event_triple=3007、trace total_tokens=3333（《21》第五节 硬约束 6：预算守卫必须由重算分量组成，不得照抄上游；审查 B-02／C-06）",
+        "2026-09-30 01:28:59,422 WARNING ashare_qa.backend ApiError POST /api/qa/ask → code=3001 http=503；detail=run_answer 退出码 1（耗时 7.4s，out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_eugact_m）"
+      ]
+    },
+    {
+      "tag": "2",
+      "http_status": 503,
+      "code": 3001,
+      "message": "图谱服务不可用",
+      "seconds": 7.402,
+      "new_run_dirs": [
+        {
+          "run_dir": "qa_runs/ask_C_ejvpn6dg",
+          "empty": true,
+          "files": []
+        }
+      ],
+      "key_log_lines": [
+        "ashare_qa.backend WARNING ApiError POST /api/qa/ask → code=3001 http=503；detail=run_answer 退出码 1（耗时 7.4s，out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_ejvpn6dg）"
+      ],
+      "all_log_lines": [
+        "ashare_qa.backend INFO 调用第 8 阶段问答链路：group=C session_id=S-T11-PE03REPRO out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_ejvpn6dg 超时=300s",
+        "ashare_qa.backend WARNING 问答链路非零退出：exit=1 耗时=7.4s out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_ejvpn6dg\n--- stdout 尾部 ---\n==============================================================================\nrun_answer：自定义问题\n==============================================================================\n四项定值（config.require_fixed（四项定值从 代码\\检索\\config.py 导入））：K=10 N=20 预算=3600 g=2\n答案侧冻结：model=deepseek-flash temperature=0 max_tokens=16384 prompt_version=v1.0\n会话 session_id=S-T11-PE03REPRO；记录层时间注入 --now=2026-09-30T01:28:59+08:00\n[桥接] 调第 7 阶段既有链路（只读）：C:\\Users\\15129\\AppData\\Local\\Programs\\Python\\Python312\\python.exe C:\\Users\\15129\\Desktop\\毕业设计\\代码\\检索\\run_query.py --group C --out C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/智能问答系统\\_工作底稿\\桥接\\run_query_C_custom.json --question 最近30天（2026年8月26日至2026年9月25日）内，阳光电源控股子公司参与设立的苏州华旭新能股权投资合伙企业完成了哪项登记，备案编码是多少？\n\n--- stderr 尾部 ---\nPE-03：token 账现场重算与上游 trace 不一致——现场 text+path+event_triple=3007、trace total_tokens=3333（《21》第五节 硬约束 6：预算守卫必须由重算分量组成，不得照抄上游；审查 B-02／C-06）\n",
+        "ashare_qa.backend WARNING ApiError POST /api/qa/ask → code=3001 http=503；detail=run_answer 退出码 1（耗时 7.4s，out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_ejvpn6dg）",
+        "httpx INFO HTTP Request: POST http://testserver/api/qa/ask \"HTTP/1.1 503 Service Unavailable\""
+      ],
+      "console_log": "_证据/_pe03_console_2.log",
+      "console_tail": "2026-09-30 01:28:59,431 INFO ashare_qa.backend 调用第 8 阶段问答链路：group=C session_id=S-T11-PE03REPRO out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_ejvpn6dg 超时=300s\n2026-09-30 01:29:06,826 WARNING ashare_qa.backend 问答链路非零退出：exit=1 耗时=7.4s out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_ejvpn6dg\n--- stdout 尾部 ---\n==============================================================================\nrun_answer：自定义问题\n==============================================================================\n四项定值（config.require_fixed（四项定值从 代码\\检索\\config.py 导入））：K=10 N=20 预算=3600 g=2\n答案侧冻结：model=deepseek-flash temperature=0 max_tokens=16384 prompt_version=v1.0\n会话 session_id=S-T11-PE03REPRO；记录层时间注入 --now=2026-09-30T01:28:59+08:00\n[桥接] 调第 7 阶段既有链路（只读）：C:\\Users\\15129\\AppData\\Local\\Programs\\Python\\Python312\\python.exe C:\\Users\\15129\\Desktop\\毕业设计\\代码\\检索\\run_query.py --group C --out C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/智能问答系统\\_工作底稿\\桥接\\run_query_C_custom.json --question 最近30天（2026年8月26日至2026年9月25日）内，阳光电源控股子公司参与设立的苏州华旭新能股权投资合伙企业完成了哪项登记，备案编码是多少？\n\n--- stderr 尾部 ---\nPE-03：token 账现场重算与上游 trace 不一致——现场 text+path+event_triple=3007、trace total_tokens=3333（《21》第五节 硬约束 6：预算守卫必须由重算分量组成，不得照抄上游；审查 B-02／C-06）\n\n2026-09-30 01:29:06,828 WARNING ashare_qa.backend ApiError POST /api/qa/ask → code=3001 http=503；detail=run_answer 退出码 1（耗时 7.4s，out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_ejvpn6dg）",
+      "failure_reason_lines": [
+        "PE-03：token 账现场重算与上游 trace 不一致——现场 text+path+event_triple=3007、trace total_tokens=3333（《21》第五节 硬约束 6：预算守卫必须由重算分量组成，不得照抄上游；审查 B-02／C-06）",
+        "2026-09-30 01:29:06,828 WARNING ashare_qa.backend ApiError POST /api/qa/ask → code=3001 http=503；detail=run_answer 退出码 1（耗时 7.4s，out_dir=C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\qa_runs\\ask_C_ejvpn6dg）"
+      ]
+    }
+  ],
+  "note": "进程内 TestClient 复跑同一题；不改冻结配置、不改上游文件。failure_reason_lines 为链路退出原因的原文（取自 console_log，不含口令）。"
+}

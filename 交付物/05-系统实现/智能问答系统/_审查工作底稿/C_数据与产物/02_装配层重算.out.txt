@@ -1,0 +1,43 @@
+K=10 N=20 预算=3600 g=2 （导入自 交付物/03-代码\检索\config.py）
+==============================================================================================================
+qid     证据   总token    text复核     顺序            两次SHA     traceSHA 图谱     预算     结论    
+PE-01   10   3502      OK         OK            OK        OK      是      OK     OK    
+PE-02   9    3236      OK         OK            OK        OK      是      OK     OK    
+PE-03   10   3007      OK         OK            OK        OK      是      OK     OK    
+PE-04   10   3577      OK         OK            OK        OK      是      OK     OK    
+PE-05   10   3140      OK         OK            OK        OK      是      OK     OK    
+PE-06   10   3140      OK         OK            OK        OK      是      OK     OK    
+PE-07   10   3584      OK         OK            OK        OK      是      OK     OK    
+PE-08   10   3231      OK         OK            OK        OK      是      OK     OK    
+PE-09   10   3119      OK         OK            OK        OK      是      OK     OK    
+PE-10   10   2978      OK         OK            OK        OK      是      OK     OK    
+PE-11   10   3282      OK         OK            OK        OK      是      OK     OK    
+PE-12   9    3430      OK         OK            OK        OK      是      OK     OK    
+PE-13   10   3448      OK         OK            OK        OK      是      OK     OK    
+PE-14   10   3538      OK         OK            OK        OK      是      OK     OK    
+PE-15   10   3568      OK         OK            OK        OK      是      OK     OK    
+PE-16   8    3210      OK         OK            OK        OK      是      OK     OK    
+PE-17   10   3297      OK         OK            OK        OK      是      OK     OK    
+PE-18   10   3092      OK         OK            OK        OK      是      OK     OK    
+PE-19   9    3570      OK         OK            OK        OK      是      OK     OK    
+PE-20   10   3504      OK         OK            OK        OK      是      OK     OK    
+PE-21   10   3217      OK         OK            OK        OK      是      OK     OK    
+PE-22   10   3599      OK         OK            OK        OK      是      OK     OK    
+PE-23   10   3563      OK         OK            OK        OK      是      OK     OK    
+PE-24   10   3249      OK         OK            OK        OK      是      OK     OK    
+PE-25   10   3527      OK         OK            OK        OK      是      OK     OK    
+PE-26   9    3307      OK         OK            OK        OK      是      OK     OK    
+PE-27   10   3301      OK         OK            OK        OK      是      OK     OK    
+PE-28   10   3030      OK         OK            OK        OK      是      OK     OK    
+PE-29   9    3363      OK         OK            OK        OK      是      OK     OK    
+PE-30   10   3573      OK         OK            OK        OK      是      OK     OK    
+--------------------------------------------------------------------------------------------------------------
+total_tokens 范围 = 2978 ～ 3599（预算 3600）
+text_tokens 复核不符题数 = 0；顺序不符 = 0；两次装配不符 = 0；trace 登记不符 = 0；超预算 = 0
+from_graph 块合计 = 53
+证据条数分布 = {"8": 1, "9": 5, "10": 24}
+
+--- 正对照（顺序比对器有效性）---
+  颠倒 PE-01 顺序后：order_matches_trace = False（必须 False）→ PASS
+
+结论：不一致项合计 = 0

@@ -4,7 +4,7 @@
 本工具对 260 条自动标注（**模型参照集**，在 `自动标注\\` 下、只读）做 **40 条逐条抽检**，
 把抽中条目铺成可复核的工作区，并在复核后算出「复核改动与模型参照集的一致率」。它**不产生任何标签、
 不改任何既有产物**：读 `自动标注\\`，写 `自动标注\\抽检\\`（该路径落在 `.gitignore` 覆盖的
-`阶段05-数据准备/数据集/` 之下，可用 `git check-ignore -v <路径>` 复核）。
+`交付物/04-数据与知识图谱/数据准备/数据集/` 之下，可用 `git check-ignore -v <路径>` 复核）。
 
 | 子命令 | 作用 |
 | --- | --- |
@@ -85,7 +85,7 @@ except AttributeError:
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(_THIS_DIR)
 
-CONFIG_PATH = os.path.join(ROOT, "代码", "抽取与图谱", "config.py")
+CONFIG_PATH = os.path.join(ROOT, "交付物/03-代码", "抽取与图谱", "config.py")
 KERNEL_PATH = os.path.join(ROOT, "工具", "标注结构校验.py")
 TOOL_RELPATH = "工具\\抽检助手.py"
 KERNEL_RELPATH = "工具\\标注结构校验.py"
@@ -536,7 +536,7 @@ def render_ledger(plan, rows_by_split, auto_dir, spot_dir, script_sha):
         ("算法简述", algorithm),
         ("抽取链无关声明",
          "本抽检的抽样**只读** `%s`（模型参照集）与 `%s`；**不读** `代码\\抽取与图谱\\_全量\\`、"
-         "**不读** `阶段06-事件抽取与知识图谱\\图谱导出\\`（selftest 用**文件访问审计**核这一条："
+         "**不读** `交付物/04-数据与知识图谱/事件抽取与知识图谱\\图谱导出\\`（selftest 用**文件访问审计**核这一条："
          "export／check／diff 全程没有打开过这两条目录下的任何文件）。因此抽样与抽取链的输出无关，"
          "一致率不是抽取链的自证。"
          % (rel(os.path.join(auto_dir, "{dev,test}.auto.jsonl")),

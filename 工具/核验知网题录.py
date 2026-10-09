@@ -53,7 +53,7 @@ except Exception:
 
 # ------------------------------------------------------------------ 路径与常量
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STAGE2 = os.path.join(REPO, "阶段02-文献调研与开题")
+STAGE2 = os.path.join(REPO, "交付物/08-文献与开题/文献调研与开题")
 LIB_MD = os.path.join(STAGE2, "03-精选文献库（22篇）.md")
 OUT_DIR = os.path.join(STAGE2, "_知网核验")
 EVID_DIR = os.path.join(OUT_DIR, "证据")
@@ -1301,9 +1301,9 @@ def build_report() -> str:
     report = []
     report.append("# 第 2 阶段精选文献库（22 篇）知网空间题录核验报告\n")
     report.append("> 核验日期：%s（北京时间）" % now_text())
-    report.append("> 核验对象：`阶段02-文献调研与开题/03-精选文献库（22篇）.md` 的 22 条题录")
+    report.append("> 核验对象：`交付物/08-文献与开题/文献调研与开题/03-精选文献库（22篇）.md` 的 22 条题录")
     report.append("> 采集工具：`工具/核验知网题录.py`")
-    report.append("> 结果文件：`阶段02-文献调研与开题/_知网核验/知网题录.jsonl`")
+    report.append("> 结果文件：`交付物/08-文献与开题/文献调研与开题/_知网核验/知网题录.jsonl`")
     report.append("")
     report.append("## 一、来源性质声明\n")
     report.append("本次核验使用的是**知网空间**（`cnki.com.cn`）文章页与**知网空间检索**（`search.cnki.com.cn`），不是知网主库登录检索；"
@@ -1454,10 +1454,10 @@ def build_report() -> str:
     report.append("```")
     report.append("")
     report.append("说明：上述 `git status` 中，`02-项目执行总控文档.md`、`04-开题报告.md`、"
-                  "`代码/检索/*`、`阶段04-*`、`阶段06-*/18-*`、`阶段07-*/19-*`、"
+                  "`交付物/03-代码/检索/*`、`阶段04-*`、`阶段06-*/18-*`、`阶段07-*/19-*`、"
                   "`工具/验收第7阶段.py`、`工具/拼装第四阶段文档.py` 等改动属于另一并发任务的既有改动；"
-                  "本次只新增 `工具/核验知网题录.py` 与 `阶段02-文献调研与开题/_知网核验/`，"
-                  "并只改 `阶段02-文献调研与开题/03-精选文献库（22篇）.md` 的 KG-21、KG-28 两条核验行。")
+                  "本次只新增 `工具/核验知网题录.py` 与 `交付物/08-文献与开题/文献调研与开题/_知网核验/`，"
+                  "并只改 `交付物/08-文献与开题/文献调研与开题/03-精选文献库（22篇）.md` 的 KG-21、KG-28 两条核验行。")
     report.append("")
     report.append("Git 默认对非 ASCII 路径做八进制转义；同一命令的可读版本另存为 `验证输出/git_status_readable.txt`。")
     report.append("")

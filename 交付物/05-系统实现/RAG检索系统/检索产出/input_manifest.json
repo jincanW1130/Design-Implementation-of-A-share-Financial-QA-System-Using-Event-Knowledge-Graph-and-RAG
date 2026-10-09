@@ -1,0 +1,282 @@
+{
+  "all_ok": true,
+  "boundaries": {
+    "belongs_to": 54,
+    "belongs_to_with_valid_from": 0,
+    "company_nodes": 938,
+    "company_nodes_without_stock_code": 833,
+    "competes_with": 8,
+    "customer_of": 9,
+    "isolated_nodes": 587,
+    "relations_skipped": 0,
+    "supplies": 29
+  },
+  "checks": [
+    {
+      "detail": "缺 0 个",
+      "name": "输入文件齐备（11 个）",
+      "ok": true
+    },
+    {
+      "detail": "实测 709",
+      "name": "文档数 = 709",
+      "ok": true
+    },
+    {
+      "detail": "实测 5018",
+      "name": "文本块数 = 5018",
+      "ok": true
+    },
+    {
+      "detail": "实测 5018",
+      "name": "三级映射行数 = 5018",
+      "ok": true
+    },
+    {
+      "detail": "min=0 max=5017 唯一=True",
+      "name": "vector_id 域恰为 0..5017",
+      "ok": true
+    },
+    {
+      "detail": "正向错 0、反向漏 0",
+      "name": "三级映射双向可查（正向错 0 ／反向漏 0）",
+      "ok": true
+    },
+    {
+      "detail": "实测 64～500",
+      "name": "token_count 区间 64～500",
+      "ok": true
+    },
+    {
+      "detail": "实测 1593125",
+      "name": "token_count 合计 = 1593125",
+      "ok": true
+    },
+    {
+      "detail": "BAAI/bge-small-zh-v1.5 @ 7999e1d33597",
+      "name": "Embedding 模型名与 revision 与《02》第12.4节 一致",
+      "ok": true
+    },
+    {
+      "detail": "v2.1",
+      "name": "dataset_version = v2.1",
+      "ok": true
+    },
+    {
+      "detail": "2026-09-25T23:59:59+08:00",
+      "name": "data_cutoff_time = 2026-09-25T23:59:59+08:00",
+      "ok": true
+    },
+    {
+      "detail": "实测 5018",
+      "name": "ntotal = 5018",
+      "ok": true
+    },
+    {
+      "detail": "实测 512",
+      "name": "d = 512",
+      "ok": true
+    },
+    {
+      "detail": "实测 0",
+      "name": "metric_type 为内积（METRIC_INNER_PRODUCT = 0）",
+      "ok": true
+    },
+    {
+      "detail": "实测 3607",
+      "name": "节点数 = 3607",
+      "ok": true
+    },
+    {
+      "detail": "实测 3614",
+      "name": "边数 = 3614",
+      "ok": true
+    },
+    {
+      "detail": "实测 head_id,relation,tail_id,source_doc_id,source_chunk_id,confidence,role,valid_from,valid_to",
+      "name": "边表恰好 9 列且与 config.EDGE_COLUMNS 一致",
+      "ok": true
+    },
+    {
+      "detail": "['Company', 'Document', 'Event', 'Industry', 'Institution', 'Person', 'Policy']",
+      "name": "节点标签都在本体 7 类内",
+      "ok": true
+    },
+    {
+      "detail": "['BELONGS_TO', 'COMPETES_WITH', 'CUSTOMER_OF', 'EVIDENCED_BY', 'HAS_EXECUTIVE', 'ISSUED_BY', 'PARTICIPATES_IN', 'RELATED_TO', 'SUPPLIES']",
+      "name": "关系名都在 9 条内",
+      "ok": true
+    },
+    {
+      "detail": "实测 1098",
+      "name": "Event 节点数 = 1098",
+      "ok": true
+    },
+    {
+      "detail": "实测 544（49.5%）——D／E 组时间过滤要剔除的规模",
+      "name": "event_time 为空 = 544",
+      "ok": true
+    },
+    {
+      "detail": "语义边 2503、带 source_chunk_id 2503",
+      "name": "语义边数 = 2503 且全部带 source_chunk_id",
+      "ok": true
+    },
+    {
+      "detail": "未命中 0、不一致 0",
+      "name": "证据可回溯（未命中 0 ／ doc_id 不一致 0）",
+      "ok": true
+    },
+    {
+      "detail": "实测 7244",
+      "name": "replay.cypher 行数 = 7244",
+      "ok": true
+    },
+    {
+      "detail": "{'checks': 20, 'failed': ['belongs_to_carries_validity_columns', 'event_time_nonempty'], 'failed_must': [], 'known_gaps': ['belongs_to_carries_validity_columns', 'event_time_nonempty'], 'passed': 18}",
+      "name": "图谱机检 checks=20、passed=18、failed_must 为空",
+      "ok": true
+    }
+  ],
+  "corpus": {
+    "chunks": 5018,
+    "documents": 709,
+    "token_count_max": 500,
+    "token_count_min": 64,
+    "token_count_total": 1593125,
+    "vectors": 5018
+  },
+  "data_cutoff_time": "2026-09-25T23:59:59+08:00",
+  "dataset_version": "v2.1",
+  "files": [
+    {
+      "bytes": 4496547,
+      "key": "documents",
+      "path": "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/clean/documents.jsonl",
+      "sha256": "c838c608c20060adb1366d5c6f7566f9de25016110dc368f7f92fcb8a10f9eea"
+    },
+    {
+      "bytes": 5322875,
+      "key": "chunks",
+      "path": "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/chunks/chunks.jsonl",
+      "sha256": "2202cbf8e3915598fc9fa57a9fe6d32577705f59ce7bfdfab822903d949e8e44"
+    },
+    {
+      "bytes": 10276909,
+      "key": "faiss_index",
+      "path": "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/index/faiss.index",
+      "sha256": "4052ed9a251eb0c8276a2bb5fd81e7ced5e4ccdc6cc03c126c0740d68368ef87"
+    },
+    {
+      "bytes": 284916,
+      "key": "vector_map",
+      "path": "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/index/vector_map.jsonl",
+      "sha256": "e11569c8ba67e63d9af81bd959f0da10d80db0844e7e29fcc04165f17726614b"
+    },
+    {
+      "bytes": 964,
+      "key": "build_meta",
+      "path": "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/index/build_meta.json",
+      "sha256": "5d886d080d103088e99d9a76ebe0ec34bf9e4dbf81127d364a89389928dea9ee"
+    },
+    {
+      "bytes": 3108,
+      "key": "dataset_meta",
+      "path": "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/meta/dataset.json",
+      "sha256": "41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988"
+    },
+    {
+      "bytes": 788038,
+      "key": "nodes_csv",
+      "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/nodes.csv",
+      "sha256": "ecfaa43a650c42a5281eaf50defa79ada043985b2283847507b6ef3ad006341e"
+    },
+    {
+      "bytes": 184551,
+      "key": "edges_csv",
+      "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/edges.csv",
+      "sha256": "0ff0eecfc23bb860f7307b85ed510b49265d6ec79b7ad22fc6b038df1738fe91"
+    },
+    {
+      "bytes": 1013813,
+      "key": "replay_cypher",
+      "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/replay.cypher",
+      "sha256": "38a14bf37ac474bdc5a44e6d1a2fa62fe07a932359075e1ad6c5ed40c8bf78fc"
+    },
+    {
+      "bytes": 47363,
+      "key": "graph_stats",
+      "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json",
+      "sha256": "576e06b72f9406b8a750cdea1470ca09e8fbdc93c258f2c23843d49734e8c0dc"
+    },
+    {
+      "bytes": 6454,
+      "key": "human_confirmation",
+      "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/人工确认清单.json",
+      "sha256": "457ecce357c887359f982653a7f51cf6c748733c053f29acfb205ef9105a6eae"
+    }
+  ],
+  "generated_by": "交付物/03-代码/检索/check_inputs.py",
+  "graph": {
+    "edge_columns": [
+      "head_id",
+      "relation",
+      "tail_id",
+      "source_doc_id",
+      "source_chunk_id",
+      "confidence",
+      "role",
+      "valid_from",
+      "valid_to"
+    ],
+    "edges": 3614,
+    "events": 1098,
+    "events_without_time": 544,
+    "graph_check": {
+      "checks": 20,
+      "failed": [
+        "belongs_to_carries_validity_columns",
+        "event_time_nonempty"
+      ],
+      "failed_must": [],
+      "known_gaps": [
+        "belongs_to_carries_validity_columns",
+        "event_time_nonempty"
+      ],
+      "passed": 18
+    },
+    "labels": {
+      "Company": 938,
+      "Document": 692,
+      "Event": 1098,
+      "Industry": 73,
+      "Institution": 308,
+      "Person": 396,
+      "Policy": 102
+    },
+    "nodes": 3607,
+    "relations": {
+      "BELONGS_TO": 54,
+      "COMPETES_WITH": 8,
+      "CUSTOMER_OF": 9,
+      "EVIDENCED_BY": 1111,
+      "HAS_EXECUTIVE": 278,
+      "ISSUED_BY": 124,
+      "PARTICIPATES_IN": 1914,
+      "RELATED_TO": 87,
+      "SUPPLIES": 29
+    },
+    "replay_cypher_lines": 7244,
+    "semantic_edges": 2503,
+    "semantic_edges_with_source_chunk_id": 2503
+  },
+  "graph_version": "v2.1_v1_3",
+  "index": {
+    "d": 512,
+    "metric_name": "inner_product",
+    "metric_type": 0,
+    "ntotal": 5018
+  },
+  "schema": "stage7-input-manifest-1.0",
+  "stage": "07-RAG检索系统"
+}

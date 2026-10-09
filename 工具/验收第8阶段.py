@@ -7,7 +7,7 @@ F 4 ＋ G 6 ＋ H 4；v1.5 计数更正）。本脚本逐行落地这 39 行：*
 每组标题里**（例如「A、《21》第八节 A 组（第 1～4 行：A1 …）」），逐行 1:1、行序与表格一致。
 full 档必须能读出 39／39。
 
-**不采信被验收对象的自检**：`代码\问答\*.py --selftest` 的结论一律不作为验收依据。本脚本
+**不采信被验收对象的自检**：`交付物/03-代码\问答\*.py --selftest` 的结论一律不作为验收依据。本脚本
 从**输入文件、代码源码、装配层现场重算、产出文件原文**四条线独立推导后再比对；唯一引用
 被验对象产物的地方是「读它的产出文件」本身（`answer_trace.jsonl`／`qa_records.jsonl`／
 `run_manifest.json`／`prompt_snapshot.json`），且一律**现场重算关键量**（引用编号／日期来源／
@@ -36,7 +36,7 @@ full 档必须能读出 39／39。
 **脚本自带常量的说明**：验收判据、冻结值、字段清单、区块标题、映射表等一律**现场从被判文档
 读出来**（《21》第五节、《02》第12.4节、《10》表 4-6 与表 4-12、《19》第 8 节）。脚本内只保留
 三类常量，均就地注明出处：① 期望行数与分组（《21》第八节 表头）；② 检索侧四项定值的期望值
-（《21》第五节 硬约束 1，用于反过来核对 `代码\检索\config.py` 是否被改动）；③ 表格行标签
+（《21》第五节 硬约束 1，用于反过来核对 `交付物/03-代码\检索\config.py` 是否被改动）；③ 表格行标签
 （用于在原文里定位表格行）。
 """
 
@@ -75,7 +75,7 @@ EXPECTED_TOTAL_ROWS = 39
 STATIC_UNRUN_ROWS = ("A3", "C2", "C3", "C4", "C6", "G1", "G2", "G5", "G6")
 
 # 检索侧四项定值的期望值（《21》第五节 硬约束 1 与《02》第12.4节）：用于**反向核对**
-# `代码\检索\config.py` 未被改动，不作为答案侧参数的兜底。
+# `交付物/03-代码\检索\config.py` 未被改动，不作为答案侧参数的兜底。
 EXPECT_FIXED = {"K": 10, "N": 20, "context_token_budget": 3600,
                 "graph_retention_share": 2}
 
@@ -95,7 +95,7 @@ FROZEN_ANSWER_FALLBACK = {
 BLOCK_TABLE_LABELS = ("1", "2", "3", "4", "5", "6", "7")
 
 # 记录层字段名（《21》第五节 硬约束 13 逐字列出；与《10》第4.4.1节 表 4-6 同源）。
-# 运行时与 `代码\问答\history.py` 的三个字段元组逐项比对，两处都必须与下面一致。
+# 运行时与 `交付物/03-代码\问答\history.py` 的三个字段元组逐项比对，两处都必须与下面一致。
 # `question.user_id` 是表 4-6 的**可空外键**（`fk_question_user`，「登录未启用时为空」）——
 # 《21》硬约束 13 的逐字列表漏了它，而表 4-6 为准绳，故 F1 的**必备字段集**含 `user_id`
 # （全面审查 C-01；第一版不启用登录，值恒为 `null`）。
@@ -359,7 +359,7 @@ class Gate(object):
 
     @property
     def stage8(self):
-        return self.p("阶段08-智能问答系统")
+        return self.p("交付物/05-系统实现/智能问答系统")
 
     @property
     def out_dir(self):
@@ -367,11 +367,11 @@ class Gate(object):
 
     @property
     def code8(self):
-        return self.p("代码", "问答")
+        return self.p("交付物/03-代码", "问答")
 
     @property
     def stage7out(self):
-        return self.p("阶段07-RAG检索系统", "检索产出")
+        return self.p("交付物/05-系统实现/RAG检索系统", "检索产出")
 
     # --- 模块加载（被验收对象，从 --root 下加载；只读） ----------------------
     def load_modules(self):
@@ -423,7 +423,7 @@ class Gate(object):
 
     def questions(self):
         return self.cached("questions", lambda: read_jsonl(
-            os.path.join(self.root, "阶段07-RAG检索系统", "预实验问题集",
+            os.path.join(self.root, "交付物/05-系统实现/RAG检索系统", "预实验问题集",
                          "questions.jsonl")) or [])
 
     def assembled(self, repeat=0):
@@ -530,17 +530,17 @@ def group_a(g):
     # A2：开工值 vs 收工值逐项一致 ＋ 清单自报读数现场复算（数据集版本、行数、图谱规模）。
     live = {}
     if manifest:
-        ds = read_json(os.path.join(g.root, "阶段05-数据准备", "数据集", "v2.1", "meta",
+        ds = read_json(os.path.join(g.root, "交付物/04-数据与知识图谱/数据准备", "数据集", "v2.1", "meta",
                                     "dataset.json")) or {}
         ds2 = ds.get("dataset") if isinstance(ds.get("dataset"), dict) else ds
-        chunks = read_jsonl(os.path.join(g.root, "阶段05-数据准备", "数据集", "v2.1",
+        chunks = read_jsonl(os.path.join(g.root, "交付物/04-数据与知识图谱/数据准备", "数据集", "v2.1",
                                          "chunks", "chunks.jsonl"))
-        docs = read_jsonl(os.path.join(g.root, "阶段05-数据准备", "数据集", "v2.1", "clean",
+        docs = read_jsonl(os.path.join(g.root, "交付物/04-数据与知识图谱/数据准备", "数据集", "v2.1", "clean",
                                        "documents.jsonl"))
         # 2026-10-03 口径切换：图谱交付口径由 v2.1_v1_2 切到 **v2.1_v1_3**（见《02》修订记录 v3.6）。
-        nodes = read_text(os.path.join(g.root, "阶段06-事件抽取与知识图谱", "图谱导出",
+        nodes = read_text(os.path.join(g.root, "交付物/04-数据与知识图谱/事件抽取与知识图谱", "图谱导出",
                                        "v2.1_v1_3", "nodes.csv"), "")
-        edges = read_text(os.path.join(g.root, "阶段06-事件抽取与知识图谱", "图谱导出",
+        edges = read_text(os.path.join(g.root, "交付物/04-数据与知识图谱/事件抽取与知识图谱", "图谱导出",
                                        "v2.1_v1_3", "edges.csv"), "")
         live = {
             "dataset_version": ds2.get("dataset_version"),
@@ -575,15 +575,37 @@ def group_a(g):
         pass
     else:
         ok_git, lines, gdetail = g.git_status()
-        scoped = [l for l in lines
-                  if ("代码/检索/" in l.replace("\\", "/")
-                      or "阶段07-RAG检索系统/检索产出/" in l.replace("\\", "/"))]
+        raw_scoped = [l for l in lines
+                      if ("交付物/03-代码/检索/" in l.replace("\\", "/")
+                          or "交付物/05-系统实现/RAG检索系统/检索产出/" in l.replace("\\", "/"))]
+        # **2026-10-09 目录重组后的判读修正（判据对象与强度不变）**：
+        # 顶层目录重组把 `代码/检索/` 与 `阶段07-RAG检索系统/检索产出/` 整体改名到新位置，
+        # git 的 `--porcelain` 对这类改动给出重命名条目 `R  <旧路径> -> <新路径>`（工作区
+        # 又与索引不同时第二列再加一个 `M`，即 `RM`）。**这个 `M` 是重命名条目自带的**：
+        # 索引记的是旧 blob、工作区是新 blob，两者本就不同，它并不表示"内容被改动"。
+        # 若不剔除，会把"目录移动"整批误报成"检索侧被改动"（实测 17 条全部如此）。
+        # 故本行只把**不构成重命名对**的条目计入（重命名对＝同一行同时含旧、新路径且带 `->`）；
+        # 任何真正的内容改动都不带 `->`，仍会被逐条抓出。判据对象（检索侧是否被改动）
+        # 与强度（一条都不许有）均未改变。
+        scoped = []
+        renamed = []
+        for l in raw_scoped:
+            if "->" in l:
+                renamed.append(l)
+            else:
+                scoped.append(l)
         if not ok_git:
             g.envfail("A3 git status 不可用", gdetail)
-        g.row("A3", ok_git and not scoped, "检索侧未被改动（git status --porcelain）",
-              "git %s；题目范围为 代码/检索/ 与 阶段07-RAG检索系统/检索产出/，命中 %d 条%s"
-              % (gdetail, len(scoped),
-                 "" if not scoped else "：" + br([l.strip() for l in scoped], 3)))
+        detail = ("git %s；题目范围为 交付物/03-代码/检索/ 与 "
+                  "交付物/05-系统实现/RAG检索系统/检索产出/，命中 %d 条%s；"
+                  "其中重命名对 %d 条（目录重组的移动，非内容改动，已按上面的判读修正剔除）"
+                  % (gdetail, len(scoped),
+                     "" if not scoped else "：" + br([l.strip() for l in scoped], 3),
+                     len(renamed)))
+        if renamed:
+            g.note("A3 重命名对明细（移动，不计入失败；≥17 条时只列前 3 条）",
+                   br([l.strip() for l in renamed], 3))
+        g.row("A3", ok_git and not scoped, "检索侧未被改动（git status --porcelain）", detail)
 
     # A4：仓库内无建表语句／无连接串／*.sql 缺失；六表口径仍可读。
     ddl_hits = []
@@ -603,17 +625,17 @@ def group_a(g):
                 sql_files.append(rel(os.path.join(dirpath, fn), g.root))
     # **时点限定（2026-09-30，第 9 阶段 T2 落地时按《24-第9阶段任务书（前后端系统集成）》
     # 第4.7节 的登记调整）**：「仓库内无 *.sql／*.ddl」是**第 8 阶段收口时点**的判据——第 8 阶段
-    # 刻意不写 DDL、不建库（六张表只在文档里）。第 9 阶段的 T2 起，`代码\后端\schema\六张表.sql`
+    # 刻意不写 DDL、不建库（六张表只在文档里）。第 9 阶段的 T2 起，`交付物/03-代码\后端\schema\六张表.sql`
     # 是**合法且必需**的产出（六张表的建表脚本），再把它判失败等于用一条会随时点失效的判据否掉
-    # 后续阶段。故改为：**只在第 9 阶段开工后豁免第 9 阶段的 DDL 所在目录**（`代码\后端\`），
+    # 后续阶段。故改为：**只在第 9 阶段开工后豁免第 9 阶段的 DDL 所在目录**（`交付物/03-代码\后端\`），
     # 其余任何位置出现 *.sql／*.ddl 仍然判失败；豁免项**在输出里逐条列出**（不是静默放过）。
-    # 判据不放宽：A4 的主体（`代码\问答\` 交付范围内无建表语句、无连接串；《02》六表口径可读）
+    # 判据不放宽：A4 的主体（`交付物/03-代码\问答\` 交付范围内无建表语句、无连接串；《02》六表口径可读）
     # **一字未动**。
-    p9_marker = g.p(os.path.join("阶段09-前后端系统集成",
+    p9_marker = g.p(os.path.join("交付物/05-系统实现/前后端系统集成",
                                  "24-第9阶段任务书（前后端系统集成）.md"))
     stage9_started = os.path.isfile(p9_marker)
     # 注意：`rel()` 返回的路径用**正斜杠**（POSIX 风格），故豁免前缀也用正斜杠比较。
-    exempt_prefix = "代码/后端"
+    exempt_prefix = "交付物/03-代码/后端"
     sql_unexpected = [f for f in sql_files
                       if not (stage9_started and f.lower().startswith(exempt_prefix))]
     sql_exempt = [f for f in sql_files if f not in sql_unexpected]
@@ -646,7 +668,7 @@ def group_b(g):
     g.group("B、《21》第八节 B 组（第 5～8 行：B1 模型三值一致 ／ B2 参数无第二份字面量 ／ "
             "B3 Prompt 版本一致 ／ B4 调用次数如实）")
     mods = g.load_modules()
-    p21 = g.p("阶段08-智能问答系统", "21-第8阶段任务书（智能问答系统）.md")
+    p21 = g.p("交付物/05-系统实现/智能问答系统", "21-第8阶段任务书（智能问答系统）.md")
     t21 = read_text(p21, "")
     p02 = read_text(os.path.join(g.root, "02-项目执行总控文档.md"), "")
     if not mods:
@@ -727,7 +749,7 @@ def group_b(g):
              "仍为 TBD（v3.3 登记属 T12，本行按《21》的裁定值比对，不以《02》尚未登记的"
              "行判失败）" if llm_tbd else strip_emphasis(t_llm)[:40]))
 
-    # B2：四项定值由 代码\检索\config.py 导入；其余模块不得出现第二份字面量。
+    # B2：四项定值由 交付物/03-代码\检索\config.py 导入；其余模块不得出现第二份字面量。
     ret = getattr(cfg, "RETRIEVAL", {}) or {}
     fixed_bad = {k: (v, ret.get(k)) for k, v in EXPECT_FIXED.items() if ret.get(k) != v}
     cfg_k = getattr(cfg, "K", None)
@@ -825,7 +847,7 @@ def group_b(g):
                 src_bad.append("config.py:%d %s 的右侧含整数字面量 %s"
                                % (node.lineno, name, br(ints, 3)))
 
-    # 四项定值各自的取用证据（键名与 代码\检索\config.py 的字段名一致）。
+    # 四项定值各自的取用证据（键名与 交付物/03-代码\检索\config.py 的字段名一致）。
     need_keys = {"K": ("K",), "N": ("N",),
                  "context_token_budget": ("CONTEXT_TOKEN_BUDGET", "context_token_budget"),
                  "graph_retention_share": ("G", "graph_retention_share")}
@@ -903,7 +925,7 @@ def group_c(g):
     mods = g.load_modules()
     cases = g.cases_by_qid()
     cases2 = g.cases_by_qid(1)
-    p10 = read_text(os.path.join(g.root, "阶段04-系统总体设计",
+    p10 = read_text(os.path.join(g.root, "交付物/07-设计与需求/总体设计",
                                  "10-系统总体设计（第四阶段）.md"), "")
     blocks = list(getattr(mods["prompt"], "BLOCK_TITLES", []) or []) if mods else []
 
@@ -1390,7 +1412,7 @@ def group_f(g):
     g.group("F、《21》第八节 F 组（第 26～29 行：F1 三表字段覆盖 ／ F2 联合唯一 ／ F3 会话隔离 ／ "
             "F4 回看不重渲染路径）")
     mods = g.load_modules()
-    p21 = read_text(g.p("阶段08-智能问答系统", "21-第8阶段任务书（智能问答系统）.md"), "")
+    p21 = read_text(g.p("交付物/05-系统实现/智能问答系统", "21-第8阶段任务书（智能问答系统）.md"), "")
     records = g.records()
 
     # F1：逐条含硬约束 13 的全部字段名，无缺、无多余业务字段；且 history.py 的字段元组同源。
@@ -1681,9 +1703,9 @@ def group_g(g):
     if g.static_unrun("G5", "跨文档核验（--strict-citations 退出码 0）",
                       "static 档不跑子进程"):
         pass
-    elif not os.path.isdir(g.p("阶段02-文献调研与开题")):
+    elif not os.path.isdir(g.p("交付物/08-文献与开题/文献调研与开题")):
         g.row_unrun("G5", "跨文档核验（--strict-citations 退出码 0）",
-                    "根目录 %s 下无 阶段02-文献调研与开题（镜像根不含全工作区），"
+                    "根目录 %s 下无 交付物/08-文献与开题/文献调研与开题（镜像根不含全工作区），"
                     "本项在镜像里不成立" % g.root)
     else:
         tool = g.p("工具", "跨文档核验.py")
@@ -1705,9 +1727,9 @@ def group_g(g):
 def group_h(g):
     g.group("H、《21》第八节 H 组（第 36～39 行：H1 《22》九节齐全 ／ H2 读数有来源 ／ "
             "H3 限制继承 ／ H4 非目标未被越界）")
-    p22 = g.p("阶段08-智能问答系统", "22-第8阶段产出文档（智能问答系统）.md")
+    p22 = g.p("交付物/05-系统实现/智能问答系统", "22-第8阶段产出文档（智能问答系统）.md")
     t22 = read_text(p22)
-    p19 = read_text(os.path.join(g.root, "阶段07-RAG检索系统",
+    p19 = read_text(os.path.join(g.root, "交付物/05-系统实现/RAG检索系统",
                                  "19-第7阶段产出文档（RAG检索系统）.md"), "")
     missing_note = "《22》尚未落盘：%s" % rel(p22, g.root)
 
@@ -1801,10 +1823,10 @@ def group_h(g):
     # 第4.7节 的登记调整）**：`阶段09-*` 目录与 git status 里的 `阶段09-` 条目是**第 8 阶段
     # 收口时点**的判据——它要守的是「第 8 阶段没越界做第 9 阶段的事」。第 9 阶段一经开工，
     # 该目录的存在就是**预期状态**，再把它判失败等于用一条会随时点失效的判据否掉后续阶段。
-    # 故改为：仅当 `阶段09-前后端系统集成\24-第9阶段任务书（前后端系统集成）.md`（第 9 阶段
+    # 故改为：仅当 `交付物/05-系统实现/前后端系统集成\24-第9阶段任务书（前后端系统集成）.md`（第 9 阶段
     # 开工的标志文件）**不存在**时，`阶段09-*` 才计入失败；存在则记 note 并说明。判据不放宽：
     # 「第 8 阶段交付范围内无前端／接口／DDL 产物」这一条**一字未动**，仍逐文件扫描并硬判。
-    p9_marker = g.p(os.path.join("阶段09-前后端系统集成",
+    p9_marker = g.p(os.path.join("交付物/05-系统实现/前后端系统集成",
                                  "24-第9阶段任务书（前后端系统集成）.md"))
     stage9_started = os.path.isfile(p9_marker)
     ok_h4 = (not fe) and (not ddl) and (not api) and (stage9_started or not stage09) \
@@ -1812,7 +1834,7 @@ def group_h(g):
     g.row("H4", ok_h4,
           "非目标未被越界（第 8 阶段交付范围内无前端／接口／DDL 产物；"
           "阶段09- 的出现按开工标志作时点限定）",
-          "扫描范围＝阶段08-智能问答系统\\ 与 代码\\问答\\（本阶段交付范围）：前端类 %d 个%s、"
+          "扫描范围＝交付物/05-系统实现/智能问答系统\\ 与 代码\\问答\\（本阶段交付范围）：前端类 %d 个%s、"
           "DDL 类 %d 个%s、接口框架 import %d 处%s；根目录 阶段09-* 目录 %d 个；"
           "git status 中 阶段09- 条目 %d 条（git %s）；第 9 阶段开工标志＝%s"
           % (len(fe), "" if not fe else "：" + br(fe, 3), len(ddl),
@@ -1842,7 +1864,7 @@ def term_discipline(g):
             audit.append(("代码\\问答\\" + name, os.path.join(g.code8, name)))
     for extra in ("21-第8阶段任务书（智能问答系统）.md",
                   "22-第8阶段产出文档（智能问答系统）.md"):
-        audit.append(("阶段08-智能问答系统\\" + extra, os.path.join(g.stage8, extra)))
+        audit.append(("交付物/05-系统实现/智能问答系统\\" + extra, os.path.join(g.stage8, extra)))
 
     banned_hits, faiss_raw, faiss_bare, neoj_claims = [], [], [], []
     scanned = 0
@@ -1974,42 +1996,42 @@ def finish(g, quiet=False):
 MIRROR_FILES = (
     # `.gitignore` 要一起带进镜像：A3／H4 依赖 `git status --porcelain`，而仓库根
     # `.gitignore` 里的 `__pycache__/`／`*.py[cod]` 正是让「导入镜像模块产生的字节码缓存」
-    # 不进入 status 的原因；少了它，镜像里 A3 会被 `代码/检索/__pycache__/` 误判。
+    # 不进入 status 的原因；少了它，镜像里 A3 会被 `交付物/03-代码/检索/__pycache__/` 误判。
     ".gitignore",
-    "代码/检索/config.py",
-    "代码/问答/config.py", "代码/问答/rules.py", "代码/问答/prompt.py",
-    "代码/问答/assemble.py", "代码/问答/answer.py", "代码/问答/history.py",
-    "代码/问答/run_answer.py", "代码/问答/model_selection.py", "代码/问答/check_inputs.py",
-    "代码/问答/README.md",
-    "阶段07-RAG检索系统/检索产出/per_question_trace.jsonl",
-    "阶段07-RAG检索系统/检索产出/input_manifest.json",
-    "阶段07-RAG检索系统/检索产出/run_manifest.json",
-    "阶段07-RAG检索系统/预实验问题集/questions.jsonl",
-    "阶段05-数据准备/数据集/v2.1/clean/documents.jsonl",
-    "阶段05-数据准备/数据集/v2.1/chunks/chunks.jsonl",
-    "阶段05-数据准备/数据集/v2.1/meta/dataset.json",
-    "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/nodes.csv",
-    "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/edges.csv",
-    "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json",
-    "阶段08-智能问答系统/21-第8阶段任务书（智能问答系统）.md",
+    "交付物/03-代码/检索/config.py",
+    "交付物/03-代码/问答/config.py", "交付物/03-代码/问答/rules.py", "交付物/03-代码/问答/prompt.py",
+    "交付物/03-代码/问答/assemble.py", "交付物/03-代码/问答/answer.py", "交付物/03-代码/问答/history.py",
+    "交付物/03-代码/问答/run_answer.py", "交付物/03-代码/问答/model_selection.py", "交付物/03-代码/问答/check_inputs.py",
+    "交付物/03-代码/问答/README.md",
+    "交付物/05-系统实现/RAG检索系统/检索产出/per_question_trace.jsonl",
+    "交付物/05-系统实现/RAG检索系统/检索产出/input_manifest.json",
+    "交付物/05-系统实现/RAG检索系统/检索产出/run_manifest.json",
+    "交付物/05-系统实现/RAG检索系统/预实验问题集/questions.jsonl",
+    "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/clean/documents.jsonl",
+    "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/chunks/chunks.jsonl",
+    "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/meta/dataset.json",
+    "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/nodes.csv",
+    "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/edges.csv",
+    "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json",
+    "交付物/05-系统实现/智能问答系统/21-第8阶段任务书（智能问答系统）.md",
     # 《22》必须一起带进镜像：H1／H2／H3 判的就是它。少了它，H1／H2／H3 在**原样副本**上就
     # 会 FAIL，「正向对照」失去意义（原本「3 个反例」里没有一条能覆盖 H 组；H 组的正控也是
     # 空的）——加上它，正向对照才真的能证明 H 组判据在「文档齐全」时判 [OK]。
-    "阶段08-智能问答系统/22-第8阶段产出文档（智能问答系统）.md",
-    "阶段08-智能问答系统/问答产出/input_manifest.json",
-    "阶段08-智能问答系统/问答产出/prompt_snapshot.json",
-    "阶段08-智能问答系统/问答产出/answer_trace.jsonl",
-    "阶段08-智能问答系统/问答产出/qa_records.jsonl",
-    "阶段08-智能问答系统/问答产出/run_manifest.json",
-    "阶段08-智能问答系统/问答产出/selection_matrix.jsonl",
-    "阶段08-智能问答系统/问答产出/selection_decision.json",
-    "阶段04-系统总体设计/10-系统总体设计（第四阶段）.md",
-    "阶段07-RAG检索系统/19-第7阶段产出文档（RAG检索系统）.md",
+    "交付物/05-系统实现/智能问答系统/22-第8阶段产出文档（智能问答系统）.md",
+    "交付物/05-系统实现/智能问答系统/问答产出/input_manifest.json",
+    "交付物/05-系统实现/智能问答系统/问答产出/prompt_snapshot.json",
+    "交付物/05-系统实现/智能问答系统/问答产出/answer_trace.jsonl",
+    "交付物/05-系统实现/智能问答系统/问答产出/qa_records.jsonl",
+    "交付物/05-系统实现/智能问答系统/问答产出/run_manifest.json",
+    "交付物/05-系统实现/智能问答系统/问答产出/selection_matrix.jsonl",
+    "交付物/05-系统实现/智能问答系统/问答产出/selection_decision.json",
+    "交付物/07-设计与需求/总体设计/10-系统总体设计（第四阶段）.md",
+    "交付物/05-系统实现/RAG检索系统/19-第7阶段产出文档（RAG检索系统）.md",
     "00-项目总览与索引.md",
     "02-项目执行总控文档.md",
 )
-ANSWER_TRACE_REL = "阶段08-智能问答系统/问答产出/answer_trace.jsonl"
-QA_RECORDS_REL = "阶段08-智能问答系统/问答产出/qa_records.jsonl"
+ANSWER_TRACE_REL = "交付物/05-系统实现/智能问答系统/问答产出/answer_trace.jsonl"
+QA_RECORDS_REL = "交付物/05-系统实现/智能问答系统/问答产出/qa_records.jsonl"
 
 
 def build_mirror(tag):
@@ -2076,7 +2098,7 @@ def tamper_citation(root):
 
 def tamper_graph_section(root):
     """反例③：把 PE-03 的图谱段换成固定标注，而 graph_used 仍为真（应触发 D4／E2）。"""
-    sys.path.insert(0, os.path.join(root, "代码", "问答"))
+    sys.path.insert(0, os.path.join(root, "交付物/03-代码", "问答"))
     for name in ("config", "rules", "prompt", "assemble", "answer", "history"):
         sys.modules.pop(name, None)
     import prompt as pm  # noqa: E402

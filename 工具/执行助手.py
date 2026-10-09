@@ -58,7 +58,7 @@ class ControlFailed(RuntimeError):
 def setup():
     """把本进程的 stdout/stderr 改成 UTF-8，返回模块自身以便链式调用。
 
-    起因：控制台默认 GBK，中文输出全是乱码（实测 ``阶段05-数据准备`` 打成
+    起因：控制台默认 GBK，中文输出全是乱码（实测 ``交付物/04-数据与知识图谱/数据准备`` 打成
     ``�׶�05-����׼��``），误判过好几次。
     """
     for s in (sys.stdout, sys.stderr):

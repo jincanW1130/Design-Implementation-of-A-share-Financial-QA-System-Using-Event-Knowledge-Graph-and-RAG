@@ -1,0 +1,73 @@
+{
+  "method": "GET",
+  "path": "/api/admin/consistency-check",
+  "http_status": 200,
+  "seconds": 0.097,
+  "body": {
+    "data": {
+      "chunk_count": 5018,
+      "vector_count": 5018,
+      "graph_node_counts": {
+        "Person": 396,
+        "Industry": 73,
+        "Institution": 308,
+        "Event": 1098,
+        "Policy": 102,
+        "Document": 692,
+        "Company": 938
+      },
+      "is_consistent": true,
+      "diff": {
+        "deltas": {
+          "document_chunk_vs_vector_count": 0,
+          "document_chunk_vs_vector_map_lines": 0,
+          "vector_map_lines_vs_build_meta": 0,
+          "graph_nodes_total_vs_upstream": 0,
+          "graph_edges_total_vs_upstream": 0
+        },
+        "items": [
+          "文本块（MySQL document_chunk）5018 条 vs 向量（build_meta.vector_count）5018 条：+0",
+          "文本块 5018 条 vs 向量映射实点 5018 行：+0",
+          "向量映射 5018 行 vs build_meta 自报 5018 条：+0",
+          "图谱节点 3607 个、关系 3614 条（实查）",
+          "上游旁证（C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\graph_stats.json）：节点 3607、关系 3614"
+        ],
+        "document_count": 709,
+        "vector_map_lines": 5018,
+        "vector_count_from_build_meta": 5018,
+        "graph_nodes_total": 3607,
+        "graph_edges_total": 3614,
+        "graph_edges_by_relation": {
+          "BELONGS_TO": 54,
+          "SUPPLIES": 29,
+          "CUSTOMER_OF": 9,
+          "COMPETES_WITH": 8,
+          "HAS_EXECUTIVE": 278,
+          "PARTICIPATES_IN": 1914,
+          "ISSUED_BY": 124,
+          "RELATED_TO": 87,
+          "EVIDENCED_BY": 1111
+        },
+        "expected_counts": {
+          "document": 709,
+          "document_chunk": 5018,
+          "question": 30,
+          "answer": 30,
+          "answer_evidence": 293
+        },
+        "upstream_graph_stats": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\graph_stats.json"
+      },
+      "sources": {
+        "mysql": "ashare_qa",
+        "build_meta": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/数据准备\\数据集\\v2.1\\index\\build_meta.json",
+        "vector_map": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/数据准备\\数据集\\v2.1\\index\\vector_map.jsonl",
+        "graph_backend": "neo4j"
+      }
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"chunk_count\":5018,\"vector_count\":5018,\"graph_node_counts\":{\"Person\":396,\"Industry\":73,\"Institution\":308,\"Event\":1098,\"Policy\":102,\"Document\":692,\"Company\":938},\"is_consistent\":true,\"diff\":{\"deltas\":{\"document_chunk_vs_vector_count\":0,\"document_chunk_vs_vector_map_lines\":0,\"vector_map_lines_vs_build_meta\":0,\"graph_nodes_total_vs_upstream\":0,\"graph_edges_total_vs_upstream\":0},\"items\":[\"文本块（MySQL document_chunk）5018 条 vs 向量（build_meta.vector_count）5018 条：+0\",\"文本块 5018 条 vs 向量映射实点 5018 行：+0\",\"向量映射 5018 行 vs build_meta 自报 5018 条：+0\",\"图谱节点 3607 个、关系 3614 条（实查）\",\"上游旁证（C:\\\\Users\\\\15129\\\\Desktop\\\\毕业设计\\\\交付物/04-数据与知识图谱/事件抽取与知识图谱\\\\图谱导出\\\\v2.1_v1_3\\\\graph_stats.json）：节点 3607、关系 3614\"],\"document_count\":709,\"vector_map_lines\":5018,\"vector_count_from_build_meta\":5018,\"graph_nodes_total\":3607,\"graph_edges_t"
+}

@@ -5,7 +5,7 @@ r"""《16-事件抽取与知识图谱（第六阶段）》与第 6 阶段交付�
 与另外两个脚本的分工（不重复实现）：
   * `工具\跨文档核验.py` —— 全工作区 Markdown 的通用一致性（检查 A～N，含禁用词 J、索引登记 L、
     《02》版本 N1／N2）。本脚本**不调用它**，只核验它存在与否；操作者应另行运行它。
-  * `代码\抽取与图谱\write_graph.py --verify-only` 与 `graph_check.json` —— 管线自身的机检
+  * `交付物/03-代码\抽取与图谱\write_graph.py --verify-only` 与 `graph_check.json` —— 管线自身的机检
     （T6 的 17 项）。它是**被验收对象的内建自检**，本脚本不采信其结论，一律从导出物、缓存与
     数据集重算；唯一显式引用 `graph_check.json` 的地方是 J 组的「本次重跑机检快照」一行，
     输出里标出读的是报告，且不作为任何检查的唯一依据。
@@ -31,17 +31,17 @@ r"""《16-事件抽取与知识图谱（第六阶段）》与第 6 阶段交付�
 
 **profile 口径（本脚本的路径开关）**：
   * `v21_v1_3`（**默认，2026-10-03 起**）—— 核验**现行交付 v1.3**：
-    `阶段05-数据准备\数据集\_抽取缓存\v2.1_v1_2\图谱管线_v1_3\` 与
-    `阶段06-事件抽取与知识图谱\图谱导出\v2.1_v1_3\`；默认 profile 与
+    `交付物/04-数据与知识图谱/数据准备\数据集\_抽取缓存\v2.1_v1_2\图谱管线_v1_3\` 与
+    `交付物/04-数据与知识图谱/事件抽取与知识图谱\图谱导出\v2.1_v1_3\`；默认 profile 与
     `config.GRAPH_PIPELINE["default_profile"]` 对齐（不写死在本脚本里）。
   * `v21_v1_2`（2026-09-27 至 2026-10-03 期间为默认）—— 核验 **v1.2 历史口径**：
-    `阶段05-数据准备\数据集\_抽取缓存\v2.1_v1_2\图谱管线\` 与
-    `阶段06-事件抽取与知识图谱\图谱导出\v2.1_v1_2\`（归档、逐字节未动）。
-  * `v21` —— 归档：核验 **v1.1 全量产物** `阶段05-数据准备\数据集\_抽取缓存\v2.1\图谱管线\` 与
-    `阶段06-事件抽取与知识图谱\图谱导出\v2.1\`。
-  * `pilot` —— 归档：核验 v1.1 的 `阶段06-事件抽取与知识图谱\_试跑_图谱管线\` 与
-    `代码\抽取与图谱\_试跑\extracted.jsonl`（12 篇试点缓存）。
-  三个 profile 的目录一律经 `代码\抽取与图谱\config.pipeline_paths()` 解析，不在本脚本里写死。
+    `交付物/04-数据与知识图谱/数据准备\数据集\_抽取缓存\v2.1_v1_2\图谱管线\` 与
+    `交付物/04-数据与知识图谱/事件抽取与知识图谱\图谱导出\v2.1_v1_2\`（归档、逐字节未动）。
+  * `v21` —— 归档：核验 **v1.1 全量产物** `交付物/04-数据与知识图谱/数据准备\数据集\_抽取缓存\v2.1\图谱管线\` 与
+    `交付物/04-数据与知识图谱/事件抽取与知识图谱\图谱导出\v2.1\`。
+  * `pilot` —— 归档：核验 v1.1 的 `交付物/04-数据与知识图谱/事件抽取与知识图谱\_试跑_图谱管线\` 与
+    `交付物/03-代码\抽取与图谱\_试跑\extracted.jsonl`（12 篇试点缓存）。
+  三个 profile 的目录一律经 `交付物/03-代码\抽取与图谱\config.pipeline_paths()` 解析，不在本脚本里写死。
 
 **版本口径（2026-09-27 第二步「验收重锚」）**：默认核验对象从 v1.1 切到 **v1.2**——镜像重跑的
 输入缓存、逐字节比对基准、路径判据、T5 的 `choices=[...]` 逐字子串与 L1 的缓存目录判据全部跟着
@@ -70,11 +70,11 @@ profile 下仍是硬检查。（本文件里其余写「默认口径＝v1.2」�
 退出码：0 = 全部检查通过（SKIP 不影响退出码）；1 = 存在失败项或输入缺失。
 
 纪律：
-  * 本脚本对交付物**只读**：唯一的写动作发生在系统临时目录里——把 `代码\抽取与图谱\*.py`、
+  * 本脚本对交付物**只读**：唯一的写动作发生在系统临时目录里——把 `交付物/03-代码\抽取与图谱\*.py`、
     数据集 v2.1 的正文与文本块、抽取缓存、抽取结果与管线产物**镜像**到一个临时根目录，在那里
     复跑 `run_all.py`（以及四个环节脚本、`--from` 续跑），再与工作区里的原产物逐字节比对。
     **绝不写入工作区的任何交付目录**（《15》第五节 硬约束 6、10、11）。
-  * 参数一律取 `代码\抽取与图谱\config.py` 与《10》（本体、事件类型、关系、role 取值、编号规则、
+  * 参数一律取 `交付物/03-代码\抽取与图谱\config.py` 与《10》（本体、事件类型、关系、role 取值、编号规则、
     导出字段、正文抽样参数都在那里）。本脚本自带的常量只有两处例外，均已就地注释：
     ① R 组的**数据集指纹基线候选落点**（任务书未规定基线文件名，属本工具的发现规则）；
     ② D 组对 chunk 的查法（用 chunk_id → doc_id 的映射重算，不读任何报告）。
@@ -110,9 +110,9 @@ except AttributeError:
     pass
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STAGE6 = os.path.join(ROOT, "阶段06-事件抽取与知识图谱")
-CODE_GRAPH = os.path.join(ROOT, "代码", "抽取与图谱")
-CODE_PREP = os.path.join(ROOT, "代码", "数据准备")
+STAGE6 = os.path.join(ROOT, "交付物/04-数据与知识图谱/事件抽取与知识图谱")
+CODE_GRAPH = os.path.join(ROOT, "交付物/03-代码", "抽取与图谱")
+CODE_PREP = os.path.join(ROOT, "交付物/03-代码", "数据准备")
 TOOLS = os.path.join(ROOT, "工具")
 sys.path.insert(0, CODE_GRAPH)
 
@@ -120,13 +120,13 @@ import config  # noqa: E402  第 6 阶段唯一参数来源（路径、阈值、
 
 P15 = os.path.join(STAGE6, "15-第6阶段任务书（事件抽取与知识图谱）.md")
 P16 = os.path.join(STAGE6, "16-事件抽取与知识图谱（第六阶段）.md")
-P10 = os.path.join(ROOT, "阶段04-系统总体设计", "10-系统总体设计（第四阶段）.md")
+P10 = os.path.join(ROOT, "交付物/07-设计与需求/总体设计", "10-系统总体设计（第四阶段）.md")
 P02 = os.path.join(ROOT, "02-项目执行总控文档.md")
 P00 = os.path.join(ROOT, "00-项目总览与索引.md")
 GITIGNORE = os.path.join(ROOT, ".gitignore")
 CROSS_DOC = os.path.join(TOOLS, "跨文档核验.py")
 
-EVAL_DIR = os.path.join(ROOT, "阶段05-数据准备", "数据集", "抽取评测集", config.DATASET_VERSION)
+EVAL_DIR = os.path.join(ROOT, "交付物/04-数据与知识图谱/数据准备", "数据集", "抽取评测集", config.DATASET_VERSION)
 EVAL_DEV = os.path.join(EVAL_DIR, "dev.jsonl")
 EVAL_TEST = os.path.join(EVAL_DIR, "test.jsonl")
 # 2026-10-09：原先此处登记 `标注说明.md`。该文件整份是「人工标注怎么标」的说明，
@@ -137,7 +137,7 @@ EVAL_STATS = os.path.join(EVAL_DIR, "分层统计.json")
 # 数据集「只读」的指纹基线候选落点（任务书未规定基线文件名，故由本工具按下列顺序发现；
 # 这是本文件里「参数一律取自 config」的一处例外登记，理由见 R 组注释）：
 #   1) <管线工作目录>\dataset_fingerprint.json —— 本阶段自行固定的开工指纹（首选，JSON）；
-#   2) 第 5 阶段封版后的目录清单（代码\数据准备\勘察\manifest_宽口径_*.json：含 root 与逐文件 sha256）；
+#   2) 第 5 阶段封版后的目录清单（交付物/03-代码\数据准备\勘察\manifest_宽口径_*.json：含 root 与逐文件 sha256）；
 #   3) 《16》正文里与 documents.jsonl／chunks.jsonl 同行的 64 位 sha256（仅作补充）。
 BASELINE_LOCAL = "dataset_fingerprint.json"
 BASELINE_STAGE5 = [
@@ -1336,8 +1336,8 @@ def mirror_items():
     items = []
     for name in sorted(os.listdir(CODE_GRAPH)):
         if name.endswith(".py"):
-            items.append((os.path.join(CODE_GRAPH, name), os.path.join("代码", "抽取与图谱", name)))
-    items.append((os.path.join(CODE_PREP, "config.py"), os.path.join("代码", "数据准备", "config.py")))
+            items.append((os.path.join(CODE_GRAPH, name), os.path.join("交付物/03-代码", "抽取与图谱", name)))
+    items.append((os.path.join(CODE_PREP, "config.py"), os.path.join("交付物/03-代码", "数据准备", "config.py")))
     for p in (config.DOCS_PATH, config.CHUNKS_PATH):
         items.append((p, os.path.relpath(p, config.ROOT)))
     # 缓存按 profile 取：默认口径 v1.2 取 config.CACHE_DIR，归档 pilot／v21 取 v1.1 主缓存；
@@ -1420,7 +1420,7 @@ def ensure_replay():
         tmp, copied, skipped = build_mirror()
         REPLAY.update({"tmp": tmp, "copied": copied, "skipped": skipped})
         py = sys.executable
-        code_run = os.path.join(tmp, "代码", "抽取与图谱")
+        code_run = os.path.join(tmp, "交付物/03-代码", "抽取与图谱")
         run_all = os.path.join(code_run, "run_all.py")
         export_mirror = os.path.join(tmp, os.path.relpath(PATHS["export_dir"], config.ROOT))
         REPLAY["orig_hash"] = {k: sha256_file(PATHS[k]) for k in REPLAY_KEYS}
@@ -1532,7 +1532,7 @@ if ok_replay:
     srun = R["stage_runs"]["disambiguate"]
     chk(srun["code"] == 0, "H1 disambiguate.py 单独重跑退出码为 0",
         "实测 命令：python %s --profile %s --force；退出码=%s、耗时 %.2fs%s%s"
-        % (os.path.join("代码", "抽取与图谱", "disambiguate.py"), PROFILE, srun["code"],
+        % (os.path.join("交付物/03-代码", "抽取与图谱", "disambiguate.py"), PROFILE, srun["code"],
            srun["seconds"],
            "；stderr 尾部：" + norm_ws(srun["stderr"])[-160:] if srun["stderr"] else "",
            "；stdout 尾部：" + norm_ws(srun["stdout"])[-200:] if srun["code"] else ""))
@@ -2551,10 +2551,10 @@ control_ok = bool(KEY_RE.search("sk-" + "A" * 24)) and bool(
 scan_exts = (".md", ".py", ".json", ".csv", ".txt", ".jsonl", ".html", ".yml", ".yaml")
 size_cap = 8 * 1024 * 1024
 skip_dirs = {".git", ".idea", "__pycache__", ".venv", "venv"}
-skip_prefixes = (os.path.join(ROOT, "阶段05-数据准备", "数据集"),
-                 os.path.join(ROOT, "阶段06-事件抽取与知识图谱", "_试跑"),
-                 os.path.join(ROOT, "代码", "抽取与图谱", "_试跑"),
-                 os.path.join(ROOT, "代码", "抽取与图谱", "_全量"))
+skip_prefixes = (os.path.join(ROOT, "交付物/04-数据与知识图谱/数据准备", "数据集"),
+                 os.path.join(ROOT, "交付物/04-数据与知识图谱/事件抽取与知识图谱", "_试跑"),
+                 os.path.join(ROOT, "交付物/03-代码", "抽取与图谱", "_试跑"),
+                 os.path.join(ROOT, "交付物/03-代码", "抽取与图谱", "_全量"))
 
 
 def git_readonly(*args):
@@ -2602,7 +2602,7 @@ for base, dirs, files in os.walk(ROOT):
 # 可提交文件集取 **git 自己的真话**：已跟踪 ＋ 未跟踪但未被 .gitignore 排除
 # （`git ls-files -co --exclude-standard`，只读查询）。HARD 要求是「**git 会提交的**文件里没有
 # 密钥取值」，所以判定集不能是手写目录清单——清单对文件级忽略规则失明，上一版 U1 正是这样把
-# `代码\抽取与图谱\config.local.json`（git 永不提交，`config.api_key()` 的合法回退落点）判成了失败。
+# `交付物/03-代码\抽取与图谱\config.local.json`（git 永不提交，`config.api_key()` 的合法回退落点）判成了失败。
 _git_list = git_readonly("ls-files", "-co", "--exclude-standard")
 committable = None if _git_list is None else [l.strip() for l in _git_list.split("\n") if l.strip()]
 committable_set = None if committable is None else set(committable)
@@ -2683,11 +2683,11 @@ print("=" * 78)
 # 口径与 跨文档核验.py 的 J 项同源（同一行出现否定词即视为排除语境），但范围限定在第 6 阶段的
 # 交付物（《16》、抽取与图谱代码与 README、图谱导出物、消歧／去重产物），全工作区的 J 项由
 # `python 工具\跨文档核验.py` 单独给出。
-vdb_targets = [("《16》", t16 or ""), ("代码/抽取与图谱/README.md",
+vdb_targets = [("《16》", t16 or ""), ("交付物/03-代码/抽取与图谱/README.md",
                                       read_text(os.path.join(CODE_GRAPH, "README.md"), default="") or "")]
 for name in sorted(os.listdir(CODE_GRAPH)):
     if name.endswith(".py"):
-        vdb_targets.append(("代码/抽取与图谱/" + name,
+        vdb_targets.append(("交付物/03-代码/抽取与图谱/" + name,
                             read_text(os.path.join(CODE_GRAPH, name), default="") or ""))
 for name, p in (("nodes.csv", PATHS["nodes"]), ("edges.csv", PATHS["edges"]),
                 ("graph_stats.json", PATHS["graph_stats"]),

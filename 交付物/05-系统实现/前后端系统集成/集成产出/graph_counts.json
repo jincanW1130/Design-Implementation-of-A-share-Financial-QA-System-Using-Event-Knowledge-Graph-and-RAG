@@ -1,0 +1,379 @@
+{
+  "all_match": true,
+  "comparison": [
+    {
+      "csv": 3607,
+      "graph_stats": 3607,
+      "item": "nodes_total",
+      "match": true,
+      "neo4j": 3607
+    },
+    {
+      "csv": 3614,
+      "graph_stats": 3614,
+      "item": "edges_total",
+      "match": true,
+      "neo4j": 3614
+    },
+    {
+      "csv": 938,
+      "graph_stats": 938,
+      "item": "node:Company",
+      "match": true,
+      "neo4j": 938
+    },
+    {
+      "csv": 396,
+      "graph_stats": 396,
+      "item": "node:Person",
+      "match": true,
+      "neo4j": 396
+    },
+    {
+      "csv": 73,
+      "graph_stats": 73,
+      "item": "node:Industry",
+      "match": true,
+      "neo4j": 73
+    },
+    {
+      "csv": 308,
+      "graph_stats": 308,
+      "item": "node:Institution",
+      "match": true,
+      "neo4j": 308
+    },
+    {
+      "csv": 1098,
+      "graph_stats": 1098,
+      "item": "node:Event",
+      "match": true,
+      "neo4j": 1098
+    },
+    {
+      "csv": 102,
+      "graph_stats": 102,
+      "item": "node:Policy",
+      "match": true,
+      "neo4j": 102
+    },
+    {
+      "csv": 692,
+      "graph_stats": 692,
+      "item": "node:Document",
+      "match": true,
+      "neo4j": 692
+    },
+    {
+      "csv": 54,
+      "graph_stats": 54,
+      "item": "edge:BELONGS_TO",
+      "match": true,
+      "neo4j": 54
+    },
+    {
+      "csv": 29,
+      "graph_stats": 29,
+      "item": "edge:SUPPLIES",
+      "match": true,
+      "neo4j": 29
+    },
+    {
+      "csv": 9,
+      "graph_stats": 9,
+      "item": "edge:CUSTOMER_OF",
+      "match": true,
+      "neo4j": 9
+    },
+    {
+      "csv": 8,
+      "graph_stats": 8,
+      "item": "edge:COMPETES_WITH",
+      "match": true,
+      "neo4j": 8
+    },
+    {
+      "csv": 278,
+      "graph_stats": 278,
+      "item": "edge:HAS_EXECUTIVE",
+      "match": true,
+      "neo4j": 278
+    },
+    {
+      "csv": 1914,
+      "graph_stats": 1914,
+      "item": "edge:PARTICIPATES_IN",
+      "match": true,
+      "neo4j": 1914
+    },
+    {
+      "csv": 124,
+      "graph_stats": 124,
+      "item": "edge:ISSUED_BY",
+      "match": true,
+      "neo4j": 124
+    },
+    {
+      "csv": 87,
+      "graph_stats": 87,
+      "item": "edge:RELATED_TO",
+      "match": true,
+      "neo4j": 87
+    },
+    {
+      "csv": 1111,
+      "graph_stats": 1111,
+      "item": "edge:EVIDENCED_BY",
+      "match": true,
+      "neo4j": 1111
+    }
+  ],
+  "comparison_basis": "对拍基准 ＝ nodes.csv／edges.csv 的去表头行数本身：节点 3607／关系 3614（两版口径都不写死，一律现场计数）",
+  "counts": {
+    "edges_by_relation": {
+      "BELONGS_TO": 54,
+      "COMPETES_WITH": 8,
+      "CUSTOMER_OF": 9,
+      "EVIDENCED_BY": 1111,
+      "HAS_EXECUTIVE": 278,
+      "ISSUED_BY": 124,
+      "PARTICIPATES_IN": 1914,
+      "RELATED_TO": 87,
+      "SUPPLIES": 29
+    },
+    "edges_total": 3614,
+    "nodes_by_label": {
+      "Company": 938,
+      "Document": 692,
+      "Event": 1098,
+      "Industry": 73,
+      "Institution": 308,
+      "Person": 396,
+      "Policy": 102
+    },
+    "nodes_total": 3607
+  },
+  "csv_counts": {
+    "edges_by_relation": {
+      "BELONGS_TO": 54,
+      "COMPETES_WITH": 8,
+      "CUSTOMER_OF": 9,
+      "EVIDENCED_BY": 1111,
+      "HAS_EXECUTIVE": 278,
+      "ISSUED_BY": 124,
+      "PARTICIPATES_IN": 1914,
+      "RELATED_TO": 87,
+      "SUPPLIES": 29
+    },
+    "edges_total": 3614,
+    "nodes_by_label": {
+      "Company": 938,
+      "Document": 692,
+      "Event": 1098,
+      "Industry": 73,
+      "Institution": 308,
+      "Person": 396,
+      "Policy": 102
+    },
+    "nodes_total": 3607
+  },
+  "dup_key_audit": {
+    "evidenced_by_dup_groups": 0,
+    "evidenced_by_key_fields": [
+      "head_id",
+      "relation",
+      "tail_id"
+    ],
+    "semantic_dup_groups": 0,
+    "semantic_key_fields": [
+      "head_id",
+      "source_doc_id",
+      "source_chunk_id",
+      "confidence",
+      "role",
+      "relation",
+      "tail_id"
+    ],
+    "three_field_only_dup_groups": 5,
+    "three_field_only_dups": [
+      {
+        "key": [
+          "000063",
+          "PARTICIPATES_IN",
+          "EVT-0356",
+          "1272",
+          "1272001",
+          "0.9"
+        ],
+        "roles": [
+          "主体",
+          "涉及方"
+        ],
+        "row_indexes": [
+          47,
+          48
+        ]
+      },
+      {
+        "key": [
+          "000858",
+          "PARTICIPATES_IN",
+          "EVT-0170",
+          "1138",
+          "1138001",
+          "0.9"
+        ],
+        "roles": [
+          "主体",
+          "涉及方"
+        ],
+        "row_indexes": [
+          136,
+          137
+        ]
+      },
+      {
+        "key": [
+          "300191",
+          "PARTICIPATES_IN",
+          "EVT-0720",
+          "1543",
+          "1543003",
+          "0.9"
+        ],
+        "roles": [
+          "主体",
+          "合作方"
+        ],
+        "row_indexes": [
+          309,
+          310
+        ]
+      },
+      {
+        "key": [
+          "600028",
+          "PARTICIPATES_IN",
+          "EVT-0104",
+          "1082",
+          "1082002",
+          "0.95"
+        ],
+        "roles": [
+          "主体",
+          "合作方"
+        ],
+        "row_indexes": [
+          451,
+          452
+        ]
+      },
+      {
+        "key": [
+          "600875",
+          "PARTICIPATES_IN",
+          "EVT-0303",
+          "1225",
+          "1225002",
+          "0.9"
+        ],
+        "roles": [
+          "合作方",
+          "涉及方"
+        ],
+        "row_indexes": [
+          706,
+          707
+        ]
+      }
+    ]
+  },
+  "evidenced_by_note": "EVIDENCED_BY 不写 source_doc_id／source_chunk_id／confidence 三项证据属性（《02》第9.2.3节、《24》硬约束）；它另带 edge_id，只用于展示来源文档、不产生文本块级候选。",
+  "generated_at": "2026-10-04T11:39:53+08:00",
+  "graph_stats_counts": {
+    "edges_by_relation": {
+      "BELONGS_TO": 54,
+      "COMPETES_WITH": 8,
+      "CUSTOMER_OF": 9,
+      "EVIDENCED_BY": 1111,
+      "HAS_EXECUTIVE": 278,
+      "ISSUED_BY": 124,
+      "PARTICIPATES_IN": 1914,
+      "RELATED_TO": 87,
+      "SUPPLIES": 29
+    },
+    "edges_by_relation_raw_keys": [
+      "BELONGS_TO",
+      "COMPETES_WITH",
+      "CUSTOMER_OF",
+      "EVIDENCED_BY",
+      "HAS_EXECUTIVE",
+      "ISSUED_BY",
+      "PARTICIPATES_IN",
+      "RELATED_TO",
+      "SUPPLIES"
+    ],
+    "edges_total": 3614,
+    "nodes_by_label": {
+      "Company": 938,
+      "Document": 692,
+      "Event": 1098,
+      "Industry": 73,
+      "Institution": 308,
+      "Person": 396,
+      "Policy": 102
+    },
+    "nodes_by_label_raw_keys": [
+      "Company",
+      "Document",
+      "Event",
+      "Industry",
+      "Institution",
+      "Person",
+      "Policy"
+    ],
+    "nodes_total": 3607
+  },
+  "inputs": {
+    "edges_csv": {
+      "bytes": 184551,
+      "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\edges.csv",
+      "sha256": "0ff0eecfc23bb860f7307b85ed510b49265d6ec79b7ad22fc6b038df1738fe91"
+    },
+    "graph_stats": {
+      "bytes": 47285,
+      "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\graph_stats.json",
+      "sha256": "f15a3409566a234061b733417e60c6dca26443da215ba46f74a17965c4df5e55"
+    },
+    "nodes_csv": {
+      "bytes": 788038,
+      "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\nodes.csv",
+      "sha256": "ecfaa43a650c42a5281eaf50defa79ada043985b2283847507b6ef3ad006341e"
+    }
+  },
+  "merge_key_note": "节点 MERGE 键 ＝ node_id；语义边 MERGE 键 ＝ 端点＋类型＋证据三项＋role；EVIDENCED_BY 键 ＝ 端点＋类型（不带证据三项）。role 并入键的原因见本文件模块头与 dup_key_audit 字段：仅用『端点＋类型＋证据三项』会把 5 组 role 不同的平行边各并成 1 条，关系数将变成 3609 ≠ 3614。",
+  "mode": "reset-import",
+  "neo4j": {
+    "deployment": "Neo4j 以容器形态运行在 WSL2 内（镜像 neo4j:5-community，容器名 ashare-neo4j，端口映射 7474／7687 → Windows 侧 bolt://127.0.0.1:7687）；未安装 Docker Desktop、未注册 Windows 服务。这是本地单实例，不是集群、不是高可用、不是生产部署。",
+    "edition": "community",
+    "kernel": "Neo4j Kernel",
+    "uri": "bolt://127.0.0.1:7687",
+    "user": "neo4j",
+    "version": "5.26.31"
+  },
+  "relation_types_present": [
+    "BELONGS_TO",
+    "SUPPLIES",
+    "CUSTOMER_OF",
+    "COMPETES_WITH",
+    "HAS_EXECUTIVE",
+    "PARTICIPATES_IN",
+    "ISSUED_BY",
+    "RELATED_TO",
+    "EVIDENCED_BY"
+  ],
+  "relation_types_zero": [],
+  "schema": "stage9-graph-counts-1.0",
+  "stage": "第 9 阶段（前后端系统集成）",
+  "task": "T3 图谱服务化：Neo4j 导入与计数对拍"
+}

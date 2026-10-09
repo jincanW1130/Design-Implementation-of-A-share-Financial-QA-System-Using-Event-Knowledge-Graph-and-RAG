@@ -1,0 +1,30 @@
+{
+  "method": "GET",
+  "path": "/api/admin/extraction/tasks/RP-20260930-0020",
+  "http_status": 200,
+  "seconds": 0.014,
+  "body": {
+    "data": {
+      "task_id": "RP-20260930-0020",
+      "status": "accepted",
+      "kind": "reprocess",
+      "processed_chunks": 0,
+      "entity_count": 0,
+      "event_count": 0,
+      "relation_count": 0,
+      "merge_log_count": 0,
+      "scope": "all",
+      "doc_ids": [],
+      "doc_id": null,
+      "prompt_version": null,
+      "created_at": "2026-09-30T01:22:06",
+      "executed": false,
+      "note": "第一版：本接口只登记任务记录，不实际重新运行抽取与向量化（重跑需要模型调用与向量索引重建，属第 5／6 阶段能力，本阶段对上游只读）。台账落盘于 交付物/05-系统实现/前后端系统集成\\_工作底稿\\后台任务台账.jsonl。scope=all doc_ids=全量。"
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"task_id\":\"RP-20260930-0020\",\"status\":\"accepted\",\"kind\":\"reprocess\",\"processed_chunks\":0,\"entity_count\":0,\"event_count\":0,\"relation_count\":0,\"merge_log_count\":0,\"scope\":\"all\",\"doc_ids\":[],\"doc_id\":null,\"prompt_version\":null,\"created_at\":\"2026-09-30T01:22:06\",\"executed\":false,\"note\":\"第一版：本接口只登记任务记录，不实际重新运行抽取与向量化（重跑需要模型调用与向量索引重建，属第 5／6 阶段能力，本阶段对上游只读）。台账落盘于 交付物/05-系统实现/前后端系统集成\\\\_工作底稿\\\\后台任务台账.jsonl。scope=all doc_ids=全量。\"},\"meta\":{\"dataset_version\":\"v2.1\",\"data_cutoff_time\":\"2026-09-25T23:59:59+08:00\"}}"
+}

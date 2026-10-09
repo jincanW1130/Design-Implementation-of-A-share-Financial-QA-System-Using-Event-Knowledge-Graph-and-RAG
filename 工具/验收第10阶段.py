@@ -80,7 +80,7 @@ A～G 共 **46 行**（A8＋B7＋C6＋D6＋E5＋F8＋G6）。
   G3 判据＝失败项集合必须 ⊆ {开工基线 ∪ 这一项已登记由 Lead 执行的登记项}，**超出即 FAIL**；
   「文档提到的文件均存在」（悬空引用）**零容忍**；允许项逐条打印、不静默放过。当前实测：退出码 0、全部通过。
 * **上游只读**（G4／G5）：以《26》第三节登记的 15 个 SHA-256 指纹为准，逐项比对；
-  `代码\问答\config.py` 的 `qid` 前缀白名单修复**由另一路任务并行实施**（《27》已登记），
+  `交付物/03-代码\问答\config.py` 的 `qid` 前缀白名单修复**由另一路任务并行实施**（《27》已登记），
   故它**不在**指纹清单内——这一豁免逐条打印、不静默。
 * 只读：不改业务代码、不改产物数值、不放宽判据；发现真缺陷如实 FAIL；不打印、不落盘任何口令。
 """
@@ -113,7 +113,7 @@ except Exception:                                           # pragma: no cover
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.abspath(os.path.join(HERE, os.pardir))
 
-S10 = "阶段10-系统测试与对比实验"
+S10 = "交付物/06-实验与评测"
 P_TASK = os.path.join(S10, "26-第10阶段任务书（系统测试与对比实验）.md")
 P_DOC27 = os.path.join(S10, "27-第10阶段产出文档（系统测试与对比实验）.md")
 P_FAILCASE = os.path.join(S10, "失败案例分析.md")
@@ -138,21 +138,21 @@ P_SUBMIT = os.path.join(S10, "送审材料", "数据来源与合规说明.md")
 P_OUT_FORMAL = os.path.join(S10, "对照产出_正式")
 P_FEASIBILITY = os.path.join(S10, "测试集可行性分析.md")
 
-P_PE = os.path.join("阶段07-RAG检索系统", "预实验问题集", "questions.jsonl")
-P_PE_TRACE = os.path.join("阶段07-RAG检索系统", "检索产出", "per_question_trace.jsonl")
-P_CHUNKS = os.path.join("阶段05-数据准备", "数据集", "v2.1", "chunks", "chunks.jsonl")
-P_DOCS = os.path.join("阶段05-数据准备", "数据集", "v2.1", "clean", "documents.jsonl")
-P_DATASET_META = os.path.join("阶段05-数据准备", "数据集", "v2.1", "meta", "dataset.json")
+P_PE = os.path.join("交付物/05-系统实现/RAG检索系统", "预实验问题集", "questions.jsonl")
+P_PE_TRACE = os.path.join("交付物/05-系统实现/RAG检索系统", "检索产出", "per_question_trace.jsonl")
+P_CHUNKS = os.path.join("交付物/04-数据与知识图谱/数据准备", "数据集", "v2.1", "chunks", "chunks.jsonl")
+P_DOCS = os.path.join("交付物/04-数据与知识图谱/数据准备", "数据集", "v2.1", "clean", "documents.jsonl")
+P_DATASET_META = os.path.join("交付物/04-数据与知识图谱/数据准备", "数据集", "v2.1", "meta", "dataset.json")
 GRAPH_VER = "v2.1_v1_3"
-P_GRAPH_STATS = os.path.join("阶段06-事件抽取与知识图谱", "图谱导出", GRAPH_VER, "graph_stats.json")
-P_NODES = os.path.join("阶段06-事件抽取与知识图谱", "图谱导出", GRAPH_VER, "nodes.csv")
-P_EDGES = os.path.join("阶段06-事件抽取与知识图谱", "图谱导出", GRAPH_VER, "edges.csv")
-P_QAREC8 = os.path.join("阶段08-智能问答系统", "问答产出", "qa_records.jsonl")
-P_IM9 = os.path.join("阶段09-前后端系统集成", "集成产出", "input_manifest.json")
+P_GRAPH_STATS = os.path.join("交付物/04-数据与知识图谱/事件抽取与知识图谱", "图谱导出", GRAPH_VER, "graph_stats.json")
+P_NODES = os.path.join("交付物/04-数据与知识图谱/事件抽取与知识图谱", "图谱导出", GRAPH_VER, "nodes.csv")
+P_EDGES = os.path.join("交付物/04-数据与知识图谱/事件抽取与知识图谱", "图谱导出", GRAPH_VER, "edges.csv")
+P_QAREC8 = os.path.join("交付物/05-系统实现/智能问答系统", "问答产出", "qa_records.jsonl")
+P_IM9 = os.path.join("交付物/05-系统实现/前后端系统集成", "集成产出", "input_manifest.json")
 P_XDOC = os.path.join("工具", "跨文档核验.py")
-P_RETRIEVAL_CFG = os.path.join("代码", "检索", "config.py")
-P_ANSWER_CFG = os.path.join("代码", "问答", "config.py")
-P_ANSWER = os.path.join("代码", "问答", "answer.py")
+P_RETRIEVAL_CFG = os.path.join("交付物/03-代码", "检索", "config.py")
+P_ANSWER_CFG = os.path.join("交付物/03-代码", "问答", "config.py")
+P_ANSWER = os.path.join("交付物/03-代码", "问答", "answer.py")
 
 GROUPS5 = ["A", "B", "C", "D", "E"]
 # 正式全量（`对照产出_正式\`）的组集合＝A～E ＋ Baseline 1（闭卷 LLM 辅助基线）。
@@ -185,38 +185,66 @@ XDOC_BASELINE = [
 ]
 
 # G4／G5：上游只读指纹（登记在《26》第三节，开工时实测；逐项 SHA-256）
+#
+# **2026-10-09 目录重组重基线（仅因目录改名而更新；判据对象、行结构、A～G 分组、
+#   断言强度与反例集均未变）**：顶层 `阶段NN-XXX/` 整体改名到 `交付物/NN-XXX/`、
+#   `代码/` → `交付物/03-代码/`。这些上游文件里内嵌着指向仓库内其他文件的路径字符串
+#   （模块头注释、`ROOT`／`STAGE_DIR`／`DATASET_ROOT`／`GRAPH_DIR` 常量、
+#   `generated_by` 字段、`source` 字段等），路径重写后其内容随之变化，SHA-256 必然改变。
+#   逐文件已用 `git show HEAD:<旧路径>` 与现盘做**归一化比对**核实：差异只是路径前缀，
+#   没有路径之外的误伤。`graph_stats.json` 另经 `write_graph.py --profile v21_v1_3`
+#   （零模型调用）重新生成，`问句／图谱导出` 的语义读数逐项不变（节点 3607／边 3614／
+#   机检 20 项 passed 18、failed_must 空）。
+# 【旧期望值原样保留（时点留痕，不得删除）】
+#   UPSTREAM_FP（旧）：
+#     "交付物/03-代码/检索/config.py"      a55b91db651c13900f35ab74007fb6fa9ea366e2097ba218cc45d17d7dbc1306
+#     "交付物/03-代码/检索/pipeline.py"    1ec94bd957c39d13a4ffce13146ff32004b03fe5bba833498dfc017058449835
+#     "交付物/03-代码/检索/graph_query.py" 897ba8c79c786fce5b46be726c430c4ab922036b839dfe65c735ece10a4d0eed
+#     "交付物/03-代码/问答/run_answer.py"  fb3d54f3cd4e1764c411d12d78d958bcb9eaeb4e9df35a4c7e4e8cc773c5c14b
+#     "交付物/03-代码/问答/assemble.py"    f7760c2b7b9599136fbe16d6d1ea2425cc99911e31ff84d8b291f5eec4dfd339
+#     "交付物/03-代码/问答/prompt.py"      60b0e8b41ce147b5bbcf86f6dc11c1faed7ba5fd70a9e55d80d8aef1bcaf001b
+#     "交付物/05-系统实现/RAG检索系统/预实验问题集/questions.jsonl"
+#                                          12e579c09d7377ffe792930bbac29b6d374ad97562a8f65a49882bbb82b477e6
+#     "交付物/05-系统实现/RAG检索系统/检索产出/per_question_trace.jsonl"
+#                                          17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b
+#   UPSTREAM_FP_5_9（旧）：
+#     "…/图谱导出/v2.1_v1_3/graph_stats.json"
+#                                          f15a3409566a234061b733417e60c6dca26443da215ba46f74a17965c4df5e55
+#     "…/前后端系统集成/集成产出/input_manifest.json"
+#                                          9f02d39967cdf96fc8013e0620485f64efd3eab1f46ba54f0d4375147d45c803
+#   （其余 6／6 项未变，仍为上列同一批值。）
 UPSTREAM_FP = {
-    "代码/检索/config.py": "a55b91db651c13900f35ab74007fb6fa9ea366e2097ba218cc45d17d7dbc1306",
-    "代码/检索/pipeline.py": "1ec94bd957c39d13a4ffce13146ff32004b03fe5bba833498dfc017058449835",
-    "代码/检索/graph_query.py": "897ba8c79c786fce5b46be726c430c4ab922036b839dfe65c735ece10a4d0eed",
-    "代码/问答/run_answer.py": "fb3d54f3cd4e1764c411d12d78d958bcb9eaeb4e9df35a4c7e4e8cc773c5c14b",
-    "代码/问答/assemble.py": "f7760c2b7b9599136fbe16d6d1ea2425cc99911e31ff84d8b291f5eec4dfd339",
-    "代码/问答/prompt.py": "60b0e8b41ce147b5bbcf86f6dc11c1faed7ba5fd70a9e55d80d8aef1bcaf001b",
-    "阶段07-RAG检索系统/预实验问题集/questions.jsonl":
-        "12e579c09d7377ffe792930bbac29b6d374ad97562a8f65a49882bbb82b477e6",
-    "阶段07-RAG检索系统/检索产出/per_question_trace.jsonl":
+    "交付物/03-代码/检索/config.py": "419c12c1eeaf99a4785ac3f5e85cd010adc5ffb4fea24ab287024925ca778ce4",
+    "交付物/03-代码/检索/pipeline.py": "99fd5d4723ab8263905a879fda275ed737dfee823b8436de59599fa101e7c4ba",
+    "交付物/03-代码/检索/graph_query.py": "e50c78fb7ae6e3caf9e24598c4e47f38ba7b3ed1ff2549600b999217ddf4a6e0",
+    "交付物/03-代码/问答/run_answer.py": "7a9f10a1c285e3ced516ea6245017990ea502f36c1949266ea5f73f5331d6dab",
+    "交付物/03-代码/问答/assemble.py": "508f6d8629b02d06dd4eb5f625ee93744d44e7e6a22f1ebeb98ffb9fc9b70bba",
+    "交付物/03-代码/问答/prompt.py": "60b0e8b41ce147b5bbcf86f6dc11c1faed7ba5fd70a9e55d80d8aef1bcaf001b",
+    "交付物/05-系统实现/RAG检索系统/预实验问题集/questions.jsonl":
+        "9817534cba8066dbfd4cbfd03b416e839f649d847176952134fe7dda556e8be1",
+    "交付物/05-系统实现/RAG检索系统/检索产出/per_question_trace.jsonl":
         "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b",
 }
 UPSTREAM_FP_5_9 = {
-    "阶段05-数据准备/数据集/v2.1/meta/dataset.json":
+    "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/meta/dataset.json":
         "41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988",
-    "阶段05-数据准备/数据集/v2.1/chunks/chunks.jsonl":
+    "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/chunks/chunks.jsonl":
         "2202cbf8e3915598fc9fa57a9fe6d32577705f59ce7bfdfab822903d949e8e44",
-    "阶段05-数据准备/数据集/v2.1/clean/documents.jsonl":
+    "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/clean/documents.jsonl":
         "c838c608c20060adb1366d5c6f7566f9de25016110dc368f7f92fcb8a10f9eea",
-    "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json":
-        "f15a3409566a234061b733417e60c6dca26443da215ba46f74a17965c4df5e55",
-    "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/nodes.csv":
+    "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json":
+        "576e06b72f9406b8a750cdea1470ca09e8fbdc93c258f2c23843d49734e8c0dc",
+    "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/nodes.csv":
         "ecfaa43a650c42a5281eaf50defa79ada043985b2283847507b6ef3ad006341e",
-    "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/edges.csv":
+    "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/edges.csv":
         "0ff0eecfc23bb860f7307b85ed510b49265d6ec79b7ad22fc6b038df1738fe91",
-    "阶段08-智能问答系统/问答产出/qa_records.jsonl":
+    "交付物/05-系统实现/智能问答系统/问答产出/qa_records.jsonl":
         "a64d0f0bcf60a0449bc4dbe4d9866bdbbd51a1f1968c275f514d2984f092768d",
-    "阶段09-前后端系统集成/集成产出/input_manifest.json":
-        "9f02d39967cdf96fc8013e0620485f64efd3eab1f46ba54f0d4375147d45c803",
+    "交付物/05-系统实现/前后端系统集成/集成产出/input_manifest.json":
+        "6def927129908339b1fc5b3b0ee094308a359401d84c7edca2d15468d664763d",
 }
 # 已登记的并行修复豁免（不静默放过：G4 里逐条打印）
-G4_EXEMPT = ["代码/问答/config.py（qid 前缀白名单的修复由另一路任务并行实施，《27》已登记）"]
+G4_EXEMPT = ["交付物/03-代码/问答/config.py（qid 前缀白名单的修复由另一路任务并行实施，《27》已登记）"]
 
 # F3：`测试集\说明.md` 第 5 节的 9 条已知限制 ←→ 《27》里承接处必须出现的关键词
 LIMIT_KEYS = [
@@ -266,7 +294,7 @@ MIRROR_FILES = [
     os.path.join(P_OUT_FORMAL, "产出SHA256.json"),
 ] + [os.path.join(P_OUT_FORMAL, g, n) for g in GROUPS_FORMAL
      for n in ("answer_trace.jsonl", "qa_records.jsonl")]
-MIRROR_DIRS = [P_V13, P_V12, os.path.join("代码", "检索"), os.path.join("代码", "问答")]
+MIRROR_DIRS = [P_V13, P_V12, os.path.join("交付物/03-代码", "检索"), os.path.join("交付物/03-代码", "问答")]
 MIRROR_SKIP_DIRS = {".git", "node_modules", "dist", "__pycache__", ".venv"}
 MIRROR_SKIP_EXT = {".pyc", ".log", ".zip", ".exe", ".dll"}
 
@@ -2492,7 +2520,7 @@ def tamper_cases(root):
         ("② 某题 anchor 的 quote 改一个字符 → 不再逐字命中；题集指纹同时失效（预期级联）",
          os.path.join(S10, "测试集/questions.jsonl"), t_anchor, {"A5", "E2"}),
         ("③ graph_stats.json 的 profile 值改成 v21_v1_2 → 口径不符；上游只读指纹同时报警（预期级联）",
-         "阶段06-事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json", t_profile, {"A6", "G5"}),
+         "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json", t_profile, {"A6", "G5"}),
         ("④ A 组 trace 删掉 PE-01 已命中的 gold 块 → CER 重算下降",
          os.path.join(S10, "对照产出_v13/A/answer_trace.jsonl"), t_trace, {"B2", "B3"}),
         ("⑤ 报告主表 CER 五组改成不同值 → 与独立重算不符",

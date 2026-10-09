@@ -1,8 +1,0 @@
-$ C:\Users\15129\AppData\Local\Programs\Python\Python312\python.exe -X utf8 C:\Users\15129\AppData\Local\Temp\re7_C\mirror\代码\检索\metrics.py
-[metrics] K=10（来源：k_selection.json）  source_status=per_question_trace
-[metrics] 逐题行 30 行 ＋ 元数据 1 行 ＋ 平均值 1 行
-[metrics] 落盘：C:\Users\15129\AppData\Local\Temp\re7_C\mirror\阶段07-RAG检索系统\检索产出\metrics_pre.jsonl
-[metrics] sha256：b33491f723cd33aa42b6cbe9cdd136e74c868b088e41103352aaff6fdedd9dd2
-[metrics] 文档级诊断函数（recall_at_k_doc_level_diagnostic）存在但**未**参与本文件；两级不混算。
-
---- stderr ---

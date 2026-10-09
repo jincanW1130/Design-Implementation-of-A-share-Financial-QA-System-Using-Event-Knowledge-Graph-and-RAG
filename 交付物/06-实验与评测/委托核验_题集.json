@@ -1,0 +1,32 @@
+{
+  "$schema": "stage10-formal-question-set-attestation-1.0",
+  "artifact": "交付物/06-实验与评测/测试集/questions.jsonl",
+  "attested_at_rule_version": "2026-10-04 合并修复（缺陷 1～5）",
+  "builder_script": "交付物/06-实验与评测/工具/合并正式测试集.py",
+  "decision_maker_verifier": "交付物/06-实验与评测/工具/_决策者核验_题集.py",
+  "baseline_cutoff_date": "2026-09-25",
+  "filterable_doc_set_size": 66,
+  "事件型+2跳": {
+    "time_constrained": 6,
+    "declared_shortfall": 0,
+    "reason": "路径一（公司A--PARTICIPATES_IN-->共同参与事件<--PARTICIPATES_IN--公司B）在 66 篇可过滤文档上确实枚举不出时间约束题：现场重算 413 个公司对里只有 1 对（中工国际×乌干达输电公司）的两个共同参与事件的证据块都落在 66 篇内，且这两块同属 doc 1030、不构成跨文档。按《题目模板》第二节给出的另一条 2 跳路径（公司→事件→机构／政策）新写确定性枚举器 enum_event_two_hop_org，现场枚举出 34 条路径，扣除 30 题预实验集与批 A／批 B 其他题已占用的 gold 块后仍有 10 条可用候选，据此构造出 6 道（FQ-103～FQ-108，builder=hand），因此缺口为 0、无需按「无 12 ＋ 有 0」登记。6 道题逐条满足：(a) gold 文档全部落在 66 篇可过滤集合内；(b) 过滤前后候选差集非空（脚本 verify() 逐题打印 pre/post/drop 读数）；(c) answer 需要 2 跳（公司→事件、事件→机构／政策 两条关系边）；(d) gold 条数 ≤ 10（实际 1～2 条）；(e) 每条 anchor 在 chunks.jsonl 中逐字命中（去空白比对）。**必须一并写明的折扣**：该格核心 12 道内部混用两条不同的 2 跳路径（无时间约束 6 道走路径一，有时间约束 6 道走路径二）；路径二的「2 跳必要性」沿用 30 题预实验集 PE-18 的同格先例（该题 gold 亦为单块），即「2 跳」体现在先经公司→事件定位窗口内的事件、再经事件→机构确定机构端点，而不是「答案本身必须跨两个文本块」。若评审要求更严口径，这 6 道需整体重做，该格将退回「无 12 ＋ 有 0」并重新登记缺口。",
+    "hand_built_qids": ["FQ-103", "FQ-104", "FQ-105", "FQ-106", "FQ-107", "FQ-108"],
+    "path_used_by_these_qids": "公司 --PARTICIPATES_IN--> 事件 --ISSUED_BY／PARTICIPATES_IN--> 机构（或 --RELATED_TO--> 政策）",
+    "enumerator": "建正式测试集_B.py::enum_event_two_hop_org",
+    "candidate_pool": {
+      "paths_total": 34,
+      "paths_after_excluding_occupied_chunks": 10,
+      "paths_used": 6
+    }
+  },
+  "other_attestations": {
+    "total_questions": 120,
+    "core_questions": 108,
+    "stress_subset_questions": 12,
+    "time_constrained_questions": 66,
+    "pe_gold_chunk_overlap": 0,
+    "pe_question_text_overlap": 0,
+    "v1_v8_verifier_result": "全部核验项通过（V1～V8）",
+    "preflight_remaining_fail": "题集 schema · qid 前缀（FQ- 不在 跑正式对照.py 的白名单 PE-／F- 内；该白名单源自 代码\\问答\\config.identifiers_for() 只解析 PE-<数字>）——超出本任务写范围，需决策者裁定"
+  }
+}

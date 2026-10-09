@@ -1,0 +1,422 @@
+== 引用《NN》第x.y节，其中 NN 不在 bynum 中（C 直接 continue 跳过）==
+bynum keys=['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19']
+
+== 反引号内带扩展名的 token，按扩展名 ==
+  .py : 232
+  .json : 214
+  .md : 180
+  .jsonl : 136
+  .csv : 56
+  .0 : 39
+  .1 : 34
+  .cypher : 28
+  .pdf : 26
+  .txt : 20
+  .5 : 16
+  .2 : 14
+  .docx : 12
+  .index : 11
+  .6 : 10
+  .html : 6
+  .cn : 6
+  .count : 6
+  .5017 : 5
+  .COMPANIES : 5
+  .706 : 4
+  .sha256 : 4
+  .CHUNK : 3
+  .content : 3
+  .source : 2
+  .url : 2
+  .rejected : 2
+  .E : 2
+  .446 : 1
+  .search : 1
+  .DEDUP : 1
+  .EMBEDDING : 1
+  .763 : 1
+  .title : 1
+  .SOURCES : 1
+  .category : 1
+  .CATEGORIES : 1
+  .AutoTokenizer : 1
+  .subs : 1
+  .PACING : 1
+  .LLM : 1
+  .total : 1
+  .GRAPH : 1
+  .ids : 1
+  .tolerance : 1
+  检查器覆盖: md,py,html,csv,docx,pdf,png,svg
+
+== 反引号内 .json/.jsonl/.txt/.yaml 实例（K 不检查）==
+  00-项目总览与索引.md:32  人工确认清单.json
+  00-项目总览与索引.md:36  时间覆盖_度量.json
+  00-项目总览与索引.md:172  graph_stats.json
+  00-项目总览与索引.md:172  人工确认清单.json
+  00-项目总览与索引.md:175  dev.auto.jsonl
+  00-项目总览与索引.md:175  test.auto.jsonl
+  00-项目总览与索引.md:175  自动标注台账.json
+  00-项目总览与索引.md:175  {dev,test}.auto.repaired.jsonl
+  00-项目总览与索引.md:243  meta\dataset.json
+  00-项目总览与索引.md:245  交付物/05-系统实现/RAG检索系统\检索产出\pre_experiment_matrix.jsonl
+  00-项目总览与索引.md:245  k_selection.json
+  00-项目总览与索引.md:276  时间覆盖_度量.json
+  00-项目总览与索引.md:280  交付物/05-系统实现/RAG检索系统\检索产出\run_manifest.json
+  00-项目总览与索引.md:293  per_question_trace.jsonl
+  00-项目总览与索引.md:295  clean\documents.jsonl
+  00-项目总览与索引.md:295  chunks\chunks.jsonl
+  00-项目总览与索引.md:295  vector_map.jsonl
+  00-项目总览与索引.md:295  build_meta.json
+  00-项目总览与索引.md:295  meta\dataset.json
+  00-项目总览与索引.md:295  graph_stats.json
+  00-项目总览与索引.md:295  人工确认清单.json
+  02-项目执行总控文档.md:46  meta\dataset.json
+  02-项目执行总控文档.md:48  交付物/05-系统实现/RAG检索系统\检索产出\k_selection.json
+  02-项目执行总控文档.md:48  交付物/05-系统实现/RAG检索系统\检索产出\pre_experiment_matrix.jsonl
+  02-项目执行总控文档.md:48  k_selection.json
+  02-项目执行总控文档.md:48  per_question_trace.jsonl
+  02-项目执行总控文档.md:48  metrics_pre.jsonl
+  02-项目执行总控文档.md:48  检索产出\k_selection.json
+  02-项目执行总控文档.md:48  pre_experiment_matrix.jsonl
+  02-项目执行总控文档.md:49  k_selection.json
+  02-项目执行总控文档.md:49  pre_experiment_matrix.jsonl
+  02-项目执行总控文档.md:49  k_selection.json
+  02-项目执行总控文档.md:49  检索产出\k_selection.json
+  02-项目执行总控文档.md:49  pre_experiment_matrix.jsonl
+  02-项目执行总控文档.md:556  meta\dataset.json
+  02-项目执行总控文档.md:787  meta\dataset.json
+  02-项目执行总控文档.md:787  index\build_meta.json
+  02-项目执行总控文档.md:790  交付物/05-系统实现/RAG检索系统\检索产出\pre_experiment_matrix.jsonl
+  02-项目执行总控文档.md:790  k_selection.json
+  02-项目执行总控文档.md:791  k_selection.json
+  02-项目执行总控文档.md:836  交付物/05-系统实现/RAG检索系统\检索产出\pre_experiment_matrix.jsonl
+  02-项目执行总控文档.md:836  k_selection.json
+  10-系统总体设计（第四阶段）.md:545  meta\dataset.json
+  12-第5阶段任务书（数据准备）.md:58  meta\dataset.json
+  12-第5阶段任务书（数据准备）.md:139  meta\dataset.json
+  12-第5阶段任务书（数据准备）.md:179  meta\dataset.json
+  12-第5阶段任务书（数据准备）.md:202  meta\dataset.json
+  12-第5阶段任务书（数据准备）.md:261  meta\dataset.json
+  12-第5阶段任务书（数据准备）.md:261  reports\time_coverage.json
+  13-数据准备（第五阶段）.md:91  raw\_fetch_log.jsonl
+  13-数据准备（第五阶段）.md:92  raw\_fetch_log.jsonl
+  13-数据准备（第五阶段）.md:106  raw\{doc_id}.json
+  13-数据准备（第五阶段）.md:106  raw\_fetch_log.jsonl
+  13-数据准备（第五阶段）.md:108  raw\_fetch_log.jsonl
+  13-数据准备（第五阶段）.md:110  _fetch_log.jsonl
+  13-数据准备（第五阶段）.md:146  reports\dedup_log.jsonl
+  13-数据准备（第五阶段）.md:146  reports\clean_stats.json
+  13-数据准备（第五阶段）.md:154  clean_stats.json
+  13-数据准备（第五阶段）.md:179  chunk_stats.json
+  13-数据准备（第五阶段）.md:196  index\vector_map.jsonl
+  13-数据准备（第五阶段）.md:196  chunks.jsonl
+  13-数据准备（第五阶段）.md:200  reports\chunk_stats.json
+  13-数据准备（第五阶段）.md:244  chunks.jsonl
+  13-数据准备（第五阶段）.md:244  documents.jsonl
+  13-数据准备（第五阶段）.md:264  index\build_meta.json
+  13-数据准备（第五阶段）.md:266  build_meta.json
+  13-数据准备（第五阶段）.md:267  build_meta.json
+  13-数据准备（第五阶段）.md:279  index\vector_map.jsonl
+  13-数据准备（第五阶段）.md:280  index\build_meta.json
+  13-数据准备（第五阶段）.md:294  clean\documents.jsonl
+  13-数据准备（第五阶段）.md:314  chunks\chunks.jsonl
+  13-数据准备（第五阶段）.md:319  documents.jsonl
+  13-数据准备（第五阶段）.md:329  index\vector_map.jsonl
+  13-数据准备（第五阶段）.md:329  chunks.jsonl
+  13-数据准备（第五阶段）.md:330  index\build_meta.json
+  13-数据准备（第五阶段）.md:330  meta\dataset.json
+  13-数据准备（第五阶段）.md:331  raw\{doc_id}.json
+  13-数据准备（第五阶段）.md:332  raw\_fetch_log.jsonl
+  13-数据准备（第五阶段）.md:356  meta\dataset.json
+  13-数据准备（第五阶段）.md:356  meta\dataset.json
+  13-数据准备（第五阶段）.md:369  meta\dataset.json
+  13-数据准备（第五阶段）.md:377  meta\dataset.json
+  13-数据准备（第五阶段）.md:377  company_coverage.json
+  13-数据准备（第五阶段）.md:378  clean\documents.jsonl
+  13-数据准备（第五阶段）.md:379  chunks\chunks.jsonl
+  13-数据准备（第五阶段）.md:413  documents.jsonl
+  13-数据准备（第五阶段）.md:427  company_coverage.json
+  13-数据准备（第五阶段）.md:482  meta\dataset.json
+  13-数据准备（第五阶段）.md:482  clean\documents.jsonl
+  13-数据准备（第五阶段）.md:482  chunks\chunks.jsonl
+  13-数据准备（第五阶段）.md:499  reports\skipped.jsonl
+  13-数据准备（第五阶段）.md:499  reports\dedup_log.jsonl
+  13-数据准备（第五阶段）.md:541  meta\dataset.json
+  13-数据准备（第五阶段）.md:541  clean\documents.jsonl
+  13-数据准备（第五阶段）.md:541  chunks\chunks.jsonl
+  13-数据准备（第五阶段）.md:619  v21_宽口径_报告.txt
+  13-数据准备（第五阶段）.md:619  event_first_probe.json
+  13-数据准备（第五阶段）.md:628  raw\_fetch_log.jsonl
+  13-数据准备（第五阶段）.md:628  meta\dataset.json
+  13-数据准备（第五阶段）.md:638  reports\consistency_report.json
+  13-数据准备（第五阶段）.md:638  reports\time_coverage.json
+  13-数据准备（第五阶段）.md:638  reports\company_coverage.json
+  13-数据准备（第五阶段）.md:638  reports\chunk_stats.json
+  13-数据准备（第五阶段）.md:638  reports\clean_stats.json
+  13-数据准备（第五阶段）.md:663  数据集\v2.0\reports\skipped.jsonl
+  13-数据准备（第五阶段）.md:663  reports\dedup_log.jsonl
+  13-数据准备（第五阶段）.md:663  数据集\v2.1\raw\_fetch_log.jsonl
+  13-数据准备（第五阶段）.md:663  数据集\v2.1\reports\skipped.jsonl
+  13-数据准备（第五阶段）.md:668  raw\_fetch_log.jsonl
+  13-数据准备（第五阶段）.md:670  raw\_fetch_log.jsonl
+  13-数据准备（第五阶段）.md:697  reports\dedup_log.jsonl
+  13-数据准备（第五阶段）.md:706  reports\skipped.jsonl
+  13-数据准备（第五阶段）.md:730  clean\documents.jsonl
+  13-数据准备（第五阶段）.md:730  chunks\chunks.jsonl
+  13-数据准备（第五阶段）.md:848  index\vector_map.jsonl
+  13-数据准备（第五阶段）.md:848  index\build_meta.json
+  13-数据准备（第五阶段）.md:859  meta\dataset.json
+  13-数据准备（第五阶段）.md:872  meta\dataset.json
+  13-数据准备（第五阶段）.md:876  meta\dataset.json
+  13-数据准备（第五阶段）.md:876  _fetch_log.jsonl
+  13-数据准备（第五阶段）.md:876  clean\documents.jsonl
+  13-数据准备（第五阶段）.md:876  chunks\chunks.jsonl
+  13-数据准备（第五阶段）.md:876  index\vector_map.jsonl
+  13-数据准备（第五阶段）.md:876  index\build_meta.json
+  13-数据准备（第五阶段）.md:876  reports\consistency_report.json
+  13-数据准备（第五阶段）.md:876  reports\time_coverage.json
+  13-数据准备（第五阶段）.md:876  reports\company_coverage.json
+  13-数据准备（第五阶段）.md:876  reports\chunk_stats.json
+  13-数据准备（第五阶段）.md:876  reports\clean_stats.json
+  13-数据准备（第五阶段）.md:876  reports\dedup_log.jsonl
+  13-数据准备（第五阶段）.md:876  reports\skipped.jsonl
+  15-第6阶段任务书（事件抽取与知识图谱）.md:14  clean\documents.jsonl
+  15-第6阶段任务书（事件抽取与知识图谱）.md:14  chunks\chunks.jsonl
+  15-第6阶段任务书（事件抽取与知识图谱）.md:107  clean\documents.jsonl
+  15-第6阶段任务书（事件抽取与知识图谱）.md:168  *.local.json
+  15-第6阶段任务书（事件抽取与知识图谱）.md:200  v2.1\clean\documents.jsonl
+  15-第6阶段任务书（事件抽取与知识图谱）.md:201  v2.1\chunks\chunks.jsonl
+  15-第6阶段任务书（事件抽取与知识图谱）.md:234  v2.1\clean\documents.jsonl
+  15-第6阶段任务书（事件抽取与知识图谱）.md:234  v2.1\chunks\chunks.jsonl
+  15-第6阶段任务书（事件抽取与知识图谱）.md:252  交付物/04-数据与知识图谱/事件抽取与知识图谱\图谱导出\v2.1_v1_2\graph_stats.json
+  15-第6阶段任务书（事件抽取与知识图谱）.md:263  交付物/04-数据与知识图谱/数据准备\数据集\抽取评测集\v2.1\dev.jsonl
+  15-第6阶段任务书（事件抽取与知识图谱）.md:264  交付物/04-数据与知识图谱/数据准备\数据集\抽取评测集\v2.1\test.jsonl
+  15-第6阶段任务书（事件抽取与知识图谱）.md:266  交付物/04-数据与知识图谱/数据准备\数据集\抽取评测集\v2.1\分层统计.json
+  15-第6阶段任务书（事件抽取与知识图谱）.md:279  chunks\chunks.jsonl
+  15-第6阶段任务书（事件抽取与知识图谱）.md:283  graph_stats.json
+  15-第6阶段任务书（事件抽取与知识图谱）.md:303  graph_stats.json
+  15-第6阶段任务书（事件抽取与知识图谱）.md:328  chunks\chunks.jsonl
+  15-第6阶段任务书（事件抽取与知识图谱）.md:329  graph_stats.json
+  15-第6阶段任务书（事件抽取与知识图谱）.md:414  graph_stats.json
+  16-事件抽取与知识图谱（第六阶段）.md:4  交付物/03-代码\抽取与图谱\_全量\v2.1_v1_2\extracted.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:4  event_time_backfill.json
+  16-事件抽取与知识图谱（第六阶段）.md:4  时间覆盖_度量.json
+  16-事件抽取与知识图谱（第六阶段）.md:62  运行日志_首跑.txt
+  16-事件抽取与知识图谱（第六阶段）.md:62  运行日志_复跑.txt
+  16-事件抽取与知识图谱（第六阶段）.md:68  交付物/04-数据与知识图谱/数据准备\数据集\_抽取缓存\v2.1\图谱管线\运行日志_复跑.txt
+  16-事件抽取与知识图谱（第六阶段）.md:69  run_history.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:69  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:69  extracted.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:69  extracted.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:69  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:70  graph_stats.json
+  16-事件抽取与知识图谱（第六阶段）.md:83  交付物/04-数据与知识图谱/数据准备\数据集\抽取评测集\v2.1\分层统计.json
+  16-事件抽取与知识图谱（第六阶段）.md:90  _全量\v2.1_v1_2\run_history.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:91  对照指标.json
+  16-事件抽取与知识图谱（第六阶段）.md:94  对照指标.json
+  16-事件抽取与知识图谱（第六阶段）.md:95  run_history.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:96  对照指标.json
+  16-事件抽取与知识图谱（第六阶段）.md:96  extracted.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:96  对照指标.json
+  16-事件抽取与知识图谱（第六阶段）.md:97  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:103  _抽取缓存\v2.1_v1_2\{doc_id}.json
+  16-事件抽取与知识图谱（第六阶段）.md:114  交付物/04-数据与知识图谱/数据准备\数据集\_抽取缓存\v2.1_v1_2\时间补抽\{event_id}.json
+  16-事件抽取与知识图谱（第六阶段）.md:116  交付物/03-代码\抽取与图谱\_全量\v2.1_v1_2\event_time_backfill.json
+  16-事件抽取与知识图谱（第六阶段）.md:117  event_time_backfill_report.json
+  16-事件抽取与知识图谱（第六阶段）.md:117  时间覆盖_度量.json
+  16-事件抽取与知识图谱（第六阶段）.md:119  event_time_backfill_report.json
+  16-事件抽取与知识图谱（第六阶段）.md:119  时间覆盖_度量.json
+  16-事件抽取与知识图谱（第六阶段）.md:119  event_time_backfill.json
+  16-事件抽取与知识图谱（第六阶段）.md:130  event_time_backfill_report.json
+  16-事件抽取与知识图谱（第六阶段）.md:132  时间覆盖_度量.json
+  16-事件抽取与知识图谱（第六阶段）.md:140  时间覆盖_度量.json
+  16-事件抽取与知识图谱（第六阶段）.md:140  _全量\v2.1\时间覆盖_度量.json
+  16-事件抽取与知识图谱（第六阶段）.md:140  交付物/04-数据与知识图谱/事件抽取与知识图谱\_整改_第一步\02_重算\F4_v1_1_时间覆盖_度量_新口径_只算不落归档.json
+  16-事件抽取与知识图谱（第六阶段）.md:171  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:186  extracted.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:207  extracted.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:207  run_history.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:208  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:208  extracted.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:209  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:210  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:212  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:213  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:213  extracted.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:214  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:215  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:260  graph_stats.json
+  16-事件抽取与知识图谱（第六阶段）.md:279  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:279  extracted.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:280  时间覆盖_度量.json
+  16-事件抽取与知识图谱（第六阶段）.md:280  event_time_backfill.json
+  16-事件抽取与知识图谱（第六阶段）.md:283  extracted.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:325  交付物/04-数据与知识图谱/数据准备\数据集\_抽取缓存\v2.1_v1_2\图谱管线\消歧\disambiguation.json
+  16-事件抽取与知识图谱（第六阶段）.md:325  alias_table.json
+  16-事件抽取与知识图谱（第六阶段）.md:334  消歧\unresolved.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:344  图谱导出\v2.1_v1_2\人工确认清单.json
+  16-事件抽取与知识图谱（第六阶段）.md:358  dedup_self_test.json
+  16-事件抽取与知识图谱（第六阶段）.md:364  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:392  merge_summary.json
+  16-事件抽取与知识图谱（第六阶段）.md:392  merge_log.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:420  graph_stats.json
+  16-事件抽取与知识图谱（第六阶段）.md:421  交付物/04-数据与知识图谱/数据准备\数据集\_抽取缓存\v2.1_v1_2\图谱管线\graph_check.json
+  16-事件抽取与知识图谱（第六阶段）.md:430  graph_stats.json
+  16-事件抽取与知识图谱（第六阶段）.md:436  人工确认清单.json
+  16-事件抽取与知识图谱（第六阶段）.md:437  graph_stats.json
+  16-事件抽取与知识图谱（第六阶段）.md:444  graph_stats.json
+  16-事件抽取与知识图谱（第六阶段）.md:461  交付物/04-数据与知识图谱/事件抽取与知识图谱\图谱导出\v2.1_v1_2\人工确认清单.json
+  16-事件抽取与知识图谱（第六阶段）.md:461  图谱导出\v2.1\人工确认清单.json
+  16-事件抽取与知识图谱（第六阶段）.md:463  graph_stats.json
+  16-事件抽取与知识图谱（第六阶段）.md:464  graph_stats.json
+  16-事件抽取与知识图谱（第六阶段）.md:464  graph_check.json
+  16-事件抽取与知识图谱（第六阶段）.md:471  分层统计.json
+  16-事件抽取与知识图谱（第六阶段）.md:474  dev.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:474  test.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:474  分层统计.json
+  16-事件抽取与知识图谱（第六阶段）.md:492  分层统计.json
+  16-事件抽取与知识图谱（第六阶段）.md:556  dev.auto.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:556  test.auto.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:556  自动标注台账.json
+  16-事件抽取与知识图谱（第六阶段）.md:573  graph_stats.json
+  16-事件抽取与知识图谱（第六阶段）.md:573  时间覆盖_度量.json
+  16-事件抽取与知识图谱（第六阶段）.md:574  时间覆盖_度量.json
+  16-事件抽取与知识图谱（第六阶段）.md:575  event_time_backfill_report.json
+  16-事件抽取与知识图谱（第六阶段）.md:575  extracted.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:587  交付物/04-数据与知识图谱/事件抽取与知识图谱\图谱导出\v2.1_v1_2\人工确认清单.json
+  16-事件抽取与知识图谱（第六阶段）.md:594  extracted.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:610  extracted.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:610  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:627  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:627  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:627  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:627  _全量\v2.1\verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:665  dev.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:665  test.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:665  分层统计.json
+  16-事件抽取与知识图谱（第六阶段）.md:673  自动标注\提准\{dev,test}.auto.repaired.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:680  dev.auto.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:680  test.auto.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:682  提准台账.json
+  16-事件抽取与知识图谱（第六阶段）.md:686  自动标注\抽检\_抽检台账.json
+  16-事件抽取与知识图谱（第六阶段）.md:686  自动标注\提准\{dev,test}.auto.repaired.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:691  自动标注\提准\{dev,test}.auto.repaired.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:692  交付物/04-数据与知识图谱/数据准备\数据集\抽取评测集\v2.1\自动标注\抽检\_抽检台账.json
+  16-事件抽取与知识图谱（第六阶段）.md:704  kimi_k3_标注.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:704  kimi_k2.6_标注.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:704  glm-5.3-flash_标注.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:720  dev.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:720  test.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:720  分层统计.json
+  16-事件抽取与知识图谱（第六阶段）.md:741  时间覆盖_度量.json
+  16-事件抽取与知识图谱（第六阶段）.md:753  交付物/03-代码\抽取与图谱\_全量\v2.1\report_stats.json
+  16-事件抽取与知识图谱（第六阶段）.md:753  交付物/04-数据与知识图谱/事件抽取与知识图谱\图谱导出\v2.1\graph_stats.json
+  16-事件抽取与知识图谱（第六阶段）.md:753  交付物/04-数据与知识图谱/数据准备\数据集\抽取评测集\v2.1\分层统计.json
+  16-事件抽取与知识图谱（第六阶段）.md:756  dev.auto.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:756  test.auto.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:756  自动标注台账.json
+  16-事件抽取与知识图谱（第六阶段）.md:756  dev.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:756  test.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:758  自动标注\提准\{dev,test}.auto.repaired.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:759  自动标注\抽检\_抽检台账.json
+  16-事件抽取与知识图谱（第六阶段）.md:759  自动标注\提准\{dev,test}.auto.repaired.jsonl
+  16-事件抽取与知识图谱（第六阶段）.md:760  graph_check.json
+  16-事件抽取与知识图谱（第六阶段）.md:760  graph_stats.json
+  16-事件抽取与知识图谱（第六阶段）.md:760  verify.json
+  16-事件抽取与知识图谱（第六阶段）.md:761  graph_stats.json
+  16-事件抽取与知识图谱（第六阶段）.md:761  时间覆盖_度量.json
+  17-前六阶段审查报告（2026-09-27）.md:50  verify.json
+  17-前六阶段审查报告（2026-09-27）.md:63  verify.json
+  17-前六阶段审查报告（2026-09-27）.md:71  _审查工作底稿\B_产物与代码\raw\gate_跨文档核验.txt
+  17-前六阶段审查报告（2026-09-27）.md:72  gate_跨文档核验_strict.txt
+  17-前六阶段审查报告（2026-09-27）.md:73  ...\raw\gate_验收第4阶段文档.txt
+  17-前六阶段审查报告（2026-09-27）.md:74  ...\raw\gate_验收第5阶段数据.txt
+  17-前六阶段审查报告（2026-09-27）.md:75  ...\raw\gate_验收第5阶段数据_with_idempotence.txt
+  17-前六阶段审查报告（2026-09-27）.md:76  ...\raw\gate_验收第6阶段_默认v1_2.txt
+  17-前六阶段审查报告（2026-09-27）.md:77  ...\raw\gate_验收第6阶段_v21.txt
+  17-前六阶段审查报告（2026-09-27）.md:78  ...\raw\gate_执行助手_selftest.txt
+  17-前六阶段审查报告（2026-09-27）.md:79  ...\raw\gate_标注助手_selftest.txt
+  17-前六阶段审查报告（2026-09-27）.md:80  ...\raw\gate_抽检助手_selftest.txt
+  17-前六阶段审查报告（2026-09-27）.md:81  ...\raw\gate_auto_annotate_lint_selftest.txt
+  17-前六阶段审查报告（2026-09-27）.md:82  ...\raw\gate_sample_eval_set_verify_only.txt
+  17-前六阶段审查报告（2026-09-27）.md:84  _审查工作底稿\B_产物与代码\raw\gate_退出码汇总.txt
+  17-前六阶段审查报告（2026-09-27）.md:132  _抽取缓存\v2.1_v1_2\1001.json
+  17-前六阶段审查报告（2026-09-27）.md:148  graph_stats.json
+  17-前六阶段审查报告（2026-09-27）.md:169  交付物/04-数据与知识图谱/数据准备\数据集\v2.1\clean\documents.jsonl
+  17-前六阶段审查报告（2026-09-27）.md:169  chunks\chunks.jsonl
+  17-前六阶段审查报告（2026-09-27）.md:169  meta\dataset.json
+  17-前六阶段审查报告（2026-09-27）.md:169  _审查工作底稿\B_产物与代码\raw\B1_重算.txt
+  17-前六阶段审查报告（2026-09-27）.md:173  documents.jsonl
+  17-前六阶段审查报告（2026-09-27）.md:173  chunks.jsonl
+  17-前六阶段审查报告（2026-09-27）.md:186  _审查工作底稿\B_产物与代码\raw\B2_重算.txt
+  17-前六阶段审查报告（2026-09-27）.md:193  graph_stats.json
+  17-前六阶段审查报告（2026-09-27）.md:195  graph_stats.json
+  17-前六阶段审查报告（2026-09-27）.md:197  run_history.jsonl
+  17-前六阶段审查报告（2026-09-27）.md:205  verify.json
+  17-前六阶段审查报告（2026-09-27）.md:205  verify.json
+  17-前六阶段审查报告（2026-09-27）.md:205  run_history.jsonl
+  17-前六阶段审查报告（2026-09-27）.md:211  交付物/04-数据与知识图谱/事件抽取与知识图谱\图谱导出\v2.1\人工确认清单.json
+  17-前六阶段审查报告（2026-09-27）.md:226  时间覆盖_度量.json
+  17-前六阶段审查报告（2026-09-27）.md:239  verify.json
+  17-前六阶段审查报告（2026-09-27）.md:240  graph_stats.json
+  17-前六阶段审查报告（2026-09-27）.md:241  对照指标.json
+  17-前六阶段审查报告（2026-09-27）.md:242  时间覆盖_度量.json
+  17-前六阶段审查报告（2026-09-27）.md:244  graph_stats.json
+  17-前六阶段审查报告（2026-09-27）.md:250  verify.json
+  17-前六阶段审查报告（2026-09-27）.md:250  run_history.jsonl
+  17-前六阶段审查报告（2026-09-27）.md:255  verify.json
+  17-前六阶段审查报告（2026-09-27）.md:265  extracted.jsonl
+  17-前六阶段审查报告（2026-09-27）.md:265  extracted.jsonl
+  17-前六阶段审查报告（2026-09-27）.md:267  verify.json
+  17-前六阶段审查报告（2026-09-27）.md:267  _全量\v2.1\verify.json
+  17-前六阶段审查报告（2026-09-27）.md:278  meta\dataset.json
+  17-前六阶段审查报告（2026-09-27）.md:293  交付物/03-代码\数据准备\勘察\manifest_宽口径_最终.json
+  17-前六阶段审查报告（2026-09-27）.md:299  verify.json
+  17-前六阶段审查报告（2026-09-27）.md:300  时间覆盖_度量.json
+  17-前六阶段审查报告（2026-09-27）.md:317  交付物/04-数据与知识图谱/数据准备\数据集\v2.1\clean\documents.jsonl
+  17-前六阶段审查报告（2026-09-27）.md:318  交付物/04-数据与知识图谱/数据准备\数据集\v2.1\chunks\chunks.jsonl
+  17-前六阶段审查报告（2026-09-27）.md:320  graph_stats.json
+  17-前六阶段审查报告（2026-09-27）.md:322  chunks.jsonl
+  17-前六阶段审查报告（2026-09-27）.md:337  meta\dataset.json
+  17-前六阶段审查报告（2026-09-27）.md:360  交付物/04-数据与知识图谱/事件抽取与知识图谱\图谱导出\v2.1_v1_2\graph_stats.json
+  17-前六阶段审查报告（2026-09-27）.md:370  verify.json
+  17-前六阶段审查报告（2026-09-27）.md:390  verify.json
+  18-第7阶段任务书（RAG检索系统）.md:69  交付物/04-数据与知识图谱/数据准备\数据集\v2.1\index\vector_map.jsonl
+  18-第7阶段任务书（RAG检索系统）.md:73  交付物/04-数据与知识图谱/数据准备\数据集\v2.1\meta\dataset.json
+  18-第7阶段任务书（RAG检索系统）.md:105  verify.json
+  18-第7阶段任务书（RAG检索系统）.md:171  交付物/04-数据与知识图谱/数据准备\数据集\v2.1\clean\documents.jsonl
+  18-第7阶段任务书（RAG检索系统）.md:172  交付物/04-数据与知识图谱/数据准备\数据集\v2.1\chunks\chunks.jsonl
+  18-第7阶段任务书（RAG检索系统）.md:174  交付物/04-数据与知识图谱/数据准备\数据集\v2.1\index\vector_map.jsonl
+  18-第7阶段任务书（RAG检索系统）.md:175  交付物/04-数据与知识图谱/数据准备\数据集\v2.1\index\build_meta.json
+  18-第7阶段任务书（RAG检索系统）.md:176  交付物/04-数据与知识图谱/数据准备\数据集\v2.1\meta\dataset.json
+  18-第7阶段任务书（RAG检索系统）.md:180  交付物/04-数据与知识图谱/事件抽取与知识图谱\图谱导出\v2.1_v1_2\graph_stats.json
+  18-第7阶段任务书（RAG检索系统）.md:181  交付物/04-数据与知识图谱/事件抽取与知识图谱\图谱导出\v2.1_v1_2\人工确认清单.json
+  18-第7阶段任务书（RAG检索系统）.md:182  documents.jsonl
+  18-第7阶段任务书（RAG检索系统）.md:182  chunks.jsonl
+  18-第7阶段任务书（RAG检索系统）.md:285  build_meta.json
+  18-第7阶段任务书（RAG检索系统）.md:287  chunks.jsonl
+  18-第7阶段任务书（RAG检索系统）.md:341  交付物/04-数据与知识图谱/数据准备\数据集\v2.1\index\vector_map.jsonl
+  18-第7阶段任务书（RAG检索系统）.md:342  交付物/04-数据与知识图谱/数据准备\数据集\v2.1\index\build_meta.json
+  18-第7阶段任务书（RAG检索系统）.md:432  k_selection.json
+  18-第7阶段任务书（RAG检索系统）.md:432  检索产出\k_selection.json
+  18-第7阶段任务书（RAG检索系统）.md:432  pre_experiment_matrix.jsonl
+  19-第7阶段产出文档（RAG检索系统）.md:35  交付物/05-系统实现/RAG检索系统\检索产出\run_manifest.json
+  19-第7阶段产出文档（RAG检索系统）.md:43  交付物/04-数据与知识图谱/数据准备\数据集\v2.1\index\build_meta.json
+  19-第7阶段产出文档（RAG检索系统）.md:44  交付物/04-数据与知识图谱/数据准备\数据集\v2.1\meta\dataset.json
+  19-第7阶段产出文档（RAG检索系统）.md:45  交付物/05-系统实现/RAG检索系统\检索产出\input_manifest.json
+  19-第7阶段产出文档（RAG检索系统）.md:46  交付物/05-系统实现/RAG检索系统\检索产出\k_selection.json
+  19-第7阶段产出文档（RAG检索系统）.md:75  交付物/05-系统实现/RAG检索系统\检索产出\input_manifest.json
+  19-第7阶段产出文档（RAG检索系统）.md:121  交付物/05-系统实现/RAG检索系统\检索产出\run_manifest.json
+  19-第7阶段产出文档（RAG检索系统）.md:139  交付物/05-系统实现/RAG检索系统\_工作底稿\pipeline_assertions.json
+  19-第7阶段产出文档（RAG检索系统）.md:152  交付物/05-系统实现/RAG检索系统\_工作底稿\pipeline_assertions.json
+  19-第7阶段产出文档（RAG检索系统）.md:200  交付物/05-系统实现/RAG检索系统\检索产出\pre_experiment_matrix.jsonl
+  19-第7阶段产出文档（RAG检索系统）.md:319  交付物/05-系统实现/RAG检索系统\_工作底稿\graph_query_selftest.json
+  19-第7阶段产出文档（RAG检索系统）.md:342  交付物/05-系统实现/RAG检索系统\检索产出\metrics_pre.jsonl
+  19-第7阶段产出文档（RAG检索系统）.md:368  交付物/05-系统实现/RAG检索系统\检索产出\input_manifest.json
+  19-第7阶段产出文档（RAG检索系统）.md:431  交付物/05-系统实现/RAG检索系统\_工作底稿\_T11\T11_stdout.txt
+  19-第7阶段产出文档（RAG检索系统）.md:432  交付物/05-系统实现/RAG检索系统\_工作底稿\_T11\T11_summary.json
+  19-第7阶段产出文档（RAG检索系统）.md:473  交付物/04-数据与知识图谱/事件抽取与知识图谱\图谱导出\v2.1_v1_2\graph_stats.json
+  19-第7阶段产出文档（RAG检索系统）.md:508  交付物/05-系统实现/RAG检索系统\检索产出\run_manifest.json
+  19-第7阶段产出文档（RAG检索系统）.md:538  交付物/05-系统实现/RAG检索系统\检索产出\per_question_trace.jsonl
+  README.md:23  人工确认清单.json

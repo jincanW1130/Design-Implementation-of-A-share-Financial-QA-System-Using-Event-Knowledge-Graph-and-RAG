@@ -1,0 +1,47 @@
+#### B3-01 HEAD 与工作区状态
+$ git rev-parse --short HEAD  (rc=0)
+d3b722f
+$ git log -1 --format=%H %ci %s  (rc=0)
+d3b722fc17a2037dbd5feb2070c245a522e7c9cb 2026-09-27 19:56:16 +0800 登记三个第三方模型的独立复核结论（40 条抽检样本）
+$ git status --short  (rc=0)
+?? 交付物/04-数据与知识图谱/事件抽取与知识图谱/_审查工作底稿/
+HEAD 跟踪文件数 = 113
+
+#### B3-02 v1.1 三处落点在 git 里的状态
+交付物/03-代码/抽取与图谱/_全量/v2.1/                             入库文件数=0
+交付物/04-数据与知识图谱/数据准备/数据集/_抽取缓存/v2.1/                      入库文件数=0
+交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1/                      入库文件数=6
+     交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1/edges.csv   check-ignore rc=1 (无输出=未忽略)
+     交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1/graph_stats.json   check-ignore rc=1 (无输出=未忽略)
+     交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1/nodes.csv   check-ignore rc=1 (无输出=未忽略)
+     交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1/replay.cypher   check-ignore rc=1 (无输出=未忽略)
+     交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1/人工确认清单.json   check-ignore rc=1 (无输出=未忽略)
+     交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1/待人工确认清单.md   check-ignore rc=1 (无输出=未忽略)
+交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_2/                 入库文件数=5
+交付物/03-代码/抽取与图谱/_全量/v2.1_v1_2/                        入库文件数=0
+
+#### B3-03 逐字节比对：工作区 vs git show HEAD:<path>
+OK       交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1/edges.csv                                       工作区 590ba206a8007e6b (176506 B) vs HEAD 590ba206a8007e6b (176506 B)
+OK       交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1/graph_stats.json                                工作区 9e87886e1fa62d3c (26156 B) vs HEAD 9e87886e1fa62d3c (26156 B)
+OK       交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1/nodes.csv                                       工作区 71da0bb3f7f0cee9 (892740 B) vs HEAD 71da0bb3f7f0cee9 (892740 B)
+OK       交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1/replay.cypher                                   工作区 7bd0fd9a2247a4fa (904225 B) vs HEAD 7bd0fd9a2247a4fa (904225 B)
+OK       交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1/人工确认清单.json                                     工作区 a17268f8c0694e6b (6428 B) vs HEAD a17268f8c0694e6b (6428 B)
+OK       交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1/待人工确认清单.md                                      工作区 94deb44939471ae6 (10133 B) vs HEAD 94deb44939471ae6 (10133 B)
+OK       交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_2/edges.csv                                  工作区 e86f86d99bb1b227 (131275 B) vs HEAD e86f86d99bb1b227 (131275 B)
+OK       交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_2/graph_stats.json                           工作区 63394794a90ad918 (24802 B) vs HEAD 63394794a90ad918 (24802 B)
+OK       交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_2/nodes.csv                                  工作区 04f2ac227e9595e2 (708043 B) vs HEAD 04f2ac227e9595e2 (708043 B)
+OK       交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_2/replay.cypher                              工作区 8cdb68d0782b04a8 (727503 B) vs HEAD 8cdb68d0782b04a8 (727503 B)
+OK       交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_2/人工确认清单.json                                工作区 a17268f8c0694e6b (6428 B) vs HEAD a17268f8c0694e6b (6428 B)
+结论：图谱导出两代目录 全部与 HEAD 逐字节一致
+
+#### B3-04 v1.1 未入库落点的键文件 sha256（无提交版可比，仅留档）
+交付物/03-代码/抽取与图谱/_全量/v2.1/extracted.jsonl                                      exists=True ignore=.gitignore:32:交付物/03-代码/抽取与图谱/_全量/	交付物/03-代码/抽取与图谱/_全量/v2.1/extracted.jsonl
+      sha256=4cd9bcceb40e3c75e41524a7cfe7a0de5430f9170f0a0b81150d4e8305e19374  bytes=4582610
+交付物/03-代码/抽取与图谱/_全量/v2.1/verify.json                                          exists=True ignore=.gitignore:32:交付物/03-代码/抽取与图谱/_全量/	交付物/03-代码/抽取与图谱/_全量/v2.1/verify.json
+      sha256=933a293b2da78772db335edb97ee9b5eef0173c4153d727ee2c80de98a99cef4  bytes=14605
+交付物/03-代码/抽取与图谱/_全量/v2.1/run_history.jsonl                                    exists=True ignore=.gitignore:32:交付物/03-代码/抽取与图谱/_全量/	交付物/03-代码/抽取与图谱/_全量/v2.1/run_history.jsonl
+      sha256=62295e71870a373ecf9d78064a153e985d2de7a1ee2e7c62379f46e2e9e7cfb8  bytes=2249901
+交付物/03-代码/抽取与图谱/_全量/v2.1/event_time_backfill.json                             exists=True ignore=.gitignore:32:交付物/03-代码/抽取与图谱/_全量/	交付物/03-代码/抽取与图谱/_全量/v2.1/event_time_backfill.json
+      sha256=52c308a06da0c7075688c4366a64580bb5cdd61bb9dcae4625e074113f3e7460  bytes=1611973
+交付物/03-代码/抽取与图谱/_全量/v2.1/对照报告.md                                              exists=False ignore=.gitignore:32:交付物/03-代码/抽取与图谱/_全量/	交付物/03-代码/抽取与图谱/_全量/v2.1/对照报告.md
+交付物/03-代码/抽取与图谱/_全量/v2.1/对照指标.json                                            exists=False ignore=.gitignore:32:交付物/03-代码/抽取与图谱/_全量/	交付物/03-代码/抽取与图谱/_全量/v2.1/对照指标.json

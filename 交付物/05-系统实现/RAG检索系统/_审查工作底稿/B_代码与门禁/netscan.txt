@@ -1,0 +1,36 @@
+=== 扫描导入闭包（6 个文件）===
+交付物/03-代码/检索/pre_experiment.py            hits=0
+交付物/03-代码/检索/pipeline.py                  hits=0
+交付物/03-代码/检索/metrics.py                   hits=0
+交付物/03-代码/检索/config.py                    hits=0
+交付物/03-代码/检索/vector_search.py             hits=1
+     line 147   from-import      huggingface_hub.constants
+交付物/03-代码/检索/graph_query.py               hits=0
+
+=== 正对照 1：同目录 third_party_review.py（真实外部 API 线，**不在** pre_experiment 闭包内）===
+     line 416   from-import      openai
+     line 417   client-ctor      OpenAI
+     line 98    cred-literal?    kimi_api_key
+     line 99    cred-literal?    KIMI_API_KEY
+     line 109   cred-literal?    zhipu_api_key
+     line 110   cred-literal?    ZHIPU_API_KEY
+
+=== 正对照 2：人造合成样本（确认扫描器对 requests/urllib/os.environ 键有效）===
+     line 1     import           requests
+     line 1     import           urllib.request
+     line 1     import           socket
+     line 3     env-credential   OPENAI_API_KEY
+     line 3     cred-literal?    OPENAI_API_KEY
+     line 5     call             requests.post
+     line 7     call             urllib.request.urlopen
+     line 5     url-literal      https://api.openai.com/v1/chat/completions
+     line 7     url-literal      http://example.com
+
+=== 正对照 3：闭包内文件里的 HF 离线开关（说明扫描器能看到 os.environ 赋值）===
+     交付物/03-代码/检索/vector_search.py:65: os.environ["HF_HUB_OFFLINE"] = "1"
+     交付物/03-代码/检索/vector_search.py:66: os.environ["TRANSFORMERS_OFFLINE"] = "1"
+     交付物/03-代码/检索/vector_search.py:264:             print("[vector_search]   离线加载：local_files_only=True，HF_HUB_OFFLINE=%s，"
+     交付物/03-代码/检索/vector_search.py:265:                   "TRANSFORMERS_OFFLINE=%s"
+     交付物/03-代码/检索/vector_search.py:266:                   % (os.environ.get("HF_HUB_OFFLINE"), os.environ.get("TRANSFORMERS_OFFLINE")))
+     交付物/03-代码/检索/vector_search.py:549:           "HF_HUB_OFFLINE=%s，TRANSFORMERS_OFFLINE=%s"
+     交付物/03-代码/检索/vector_search.py:550:           % (os.environ.get("HF_HUB_OFFLINE"), os.environ.get("TRANSFORMERS_OFFLINE")))

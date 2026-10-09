@@ -1,0 +1,222 @@
+{
+  "data_cutoff_time": "2026-09-25T23:59:59+08:00",
+  "dataset_version": "v2.1",
+  "determinism": {
+    "byte_comparison_note": "本字段的 SHA-256 与计数为确定性内容；耗时字段见 local_embedding，按字段单独放置并标注不参与逐字节比对",
+    "commands": [
+      "python 代码\\检索\\pipeline.py --group C --out 交付物/05-系统实现/RAG检索系统\\检索产出\\per_question_trace.jsonl",
+      "python 代码\\检索\\pre_experiment.py --quiet",
+      "python 代码\\检索\\metrics.py"
+    ],
+    "files": {
+      "k_selection.json": {
+        "identical": true,
+        "matches_t11": false,
+        "run1_sha256": "2a2c3edc11ef8b866aa3019243ab0f253104b00a21bcbd3af37878e71e2d7b3f",
+        "run2_sha256": "2a2c3edc11ef8b866aa3019243ab0f253104b00a21bcbd3af37878e71e2d7b3f",
+        "t11_recorded_run1_sha256": "b6fd1e7c9d1b171a4d1e1ade7f1eb5abf90a96c93e699a55369ca63b7483d367",
+        "t11_recorded_run2_sha256": "b6fd1e7c9d1b171a4d1e1ade7f1eb5abf90a96c93e699a55369ca63b7483d367",
+        "workspace_sha256": "2a2c3edc11ef8b866aa3019243ab0f253104b00a21bcbd3af37878e71e2d7b3f"
+      },
+      "metrics_pre.jsonl": {
+        "identical": true,
+        "matches_t11": false,
+        "run1_sha256": "8c7e543e8151a1bb6233cee6f5e5c831a4d3431855d219c1908cd1cbd83e5dad",
+        "run2_sha256": "8c7e543e8151a1bb6233cee6f5e5c831a4d3431855d219c1908cd1cbd83e5dad",
+        "t11_recorded_run1_sha256": "869602c2a2d8cc66ada72b736ab072231ab59fe86afa405123c1f7518ef1d9e0",
+        "t11_recorded_run2_sha256": "869602c2a2d8cc66ada72b736ab072231ab59fe86afa405123c1f7518ef1d9e0",
+        "workspace_sha256": "8c7e543e8151a1bb6233cee6f5e5c831a4d3431855d219c1908cd1cbd83e5dad"
+      },
+      "per_question_trace.jsonl": {
+        "identical": true,
+        "matches_t11": true,
+        "run1_sha256": "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b",
+        "run2_sha256": "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b",
+        "t11_recorded_run1_sha256": "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b",
+        "t11_recorded_run2_sha256": "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b",
+        "workspace_sha256": "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b"
+      },
+      "pre_experiment_matrix.jsonl": {
+        "identical": true,
+        "matches_t11": true,
+        "run1_sha256": "300b9a823bc5280c05365db0189531ed1da97e801ea6e770bc6e8603f8d81dfb",
+        "run2_sha256": "300b9a823bc5280c05365db0189531ed1da97e801ea6e770bc6e8603f8d81dfb",
+        "t11_recorded_run1_sha256": "300b9a823bc5280c05365db0189531ed1da97e801ea6e770bc6e8603f8d81dfb",
+        "t11_recorded_run2_sha256": "300b9a823bc5280c05365db0189531ed1da97e801ea6e770bc6e8603f8d81dfb",
+        "workspace_sha256": "300b9a823bc5280c05365db0189531ed1da97e801ea6e770bc6e8603f8d81dfb"
+      }
+    },
+    "identical": true,
+    "method": "同一输入的两次运行：在系统临时目录的镜像里各跑一轮 pipeline --group C → pre_experiment --quiet → metrics，四个产出逐一比对 SHA-256，并与工作区交付产物逐字节比对；临时目录用后删除，工作区交付目录零写入"
+  },
+  "generated_by": "交付物/03-代码/检索/run_query.py --run-manifest",
+  "graph_version": "v2.1_v1_3",
+  "input_manifest": {
+    "all_match": true,
+    "files": [
+      {
+        "bytes_recomputed": 4496547,
+        "bytes_recorded": 4496547,
+        "key": "documents",
+        "matches_input_manifest": true,
+        "path": "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/clean/documents.jsonl",
+        "sha256_recomputed": "c838c608c20060adb1366d5c6f7566f9de25016110dc368f7f92fcb8a10f9eea",
+        "sha256_recorded": "c838c608c20060adb1366d5c6f7566f9de25016110dc368f7f92fcb8a10f9eea"
+      },
+      {
+        "bytes_recomputed": 5322875,
+        "bytes_recorded": 5322875,
+        "key": "chunks",
+        "matches_input_manifest": true,
+        "path": "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/chunks/chunks.jsonl",
+        "sha256_recomputed": "2202cbf8e3915598fc9fa57a9fe6d32577705f59ce7bfdfab822903d949e8e44",
+        "sha256_recorded": "2202cbf8e3915598fc9fa57a9fe6d32577705f59ce7bfdfab822903d949e8e44"
+      },
+      {
+        "bytes_recomputed": 10276909,
+        "bytes_recorded": 10276909,
+        "key": "faiss_index",
+        "matches_input_manifest": true,
+        "path": "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/index/faiss.index",
+        "sha256_recomputed": "4052ed9a251eb0c8276a2bb5fd81e7ced5e4ccdc6cc03c126c0740d68368ef87",
+        "sha256_recorded": "4052ed9a251eb0c8276a2bb5fd81e7ced5e4ccdc6cc03c126c0740d68368ef87"
+      },
+      {
+        "bytes_recomputed": 284916,
+        "bytes_recorded": 284916,
+        "key": "vector_map",
+        "matches_input_manifest": true,
+        "path": "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/index/vector_map.jsonl",
+        "sha256_recomputed": "e11569c8ba67e63d9af81bd959f0da10d80db0844e7e29fcc04165f17726614b",
+        "sha256_recorded": "e11569c8ba67e63d9af81bd959f0da10d80db0844e7e29fcc04165f17726614b"
+      },
+      {
+        "bytes_recomputed": 964,
+        "bytes_recorded": 964,
+        "key": "build_meta",
+        "matches_input_manifest": true,
+        "path": "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/index/build_meta.json",
+        "sha256_recomputed": "5d886d080d103088e99d9a76ebe0ec34bf9e4dbf81127d364a89389928dea9ee",
+        "sha256_recorded": "5d886d080d103088e99d9a76ebe0ec34bf9e4dbf81127d364a89389928dea9ee"
+      },
+      {
+        "bytes_recomputed": 3108,
+        "bytes_recorded": 3108,
+        "key": "dataset_meta",
+        "matches_input_manifest": true,
+        "path": "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/meta/dataset.json",
+        "sha256_recomputed": "41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988",
+        "sha256_recorded": "41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988"
+      },
+      {
+        "bytes_recomputed": 788038,
+        "bytes_recorded": 788038,
+        "key": "nodes_csv",
+        "matches_input_manifest": true,
+        "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/nodes.csv",
+        "sha256_recomputed": "ecfaa43a650c42a5281eaf50defa79ada043985b2283847507b6ef3ad006341e",
+        "sha256_recorded": "ecfaa43a650c42a5281eaf50defa79ada043985b2283847507b6ef3ad006341e"
+      },
+      {
+        "bytes_recomputed": 184551,
+        "bytes_recorded": 184551,
+        "key": "edges_csv",
+        "matches_input_manifest": true,
+        "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/edges.csv",
+        "sha256_recomputed": "0ff0eecfc23bb860f7307b85ed510b49265d6ec79b7ad22fc6b038df1738fe91",
+        "sha256_recorded": "0ff0eecfc23bb860f7307b85ed510b49265d6ec79b7ad22fc6b038df1738fe91"
+      },
+      {
+        "bytes_recomputed": 1013813,
+        "bytes_recorded": 1013813,
+        "key": "replay_cypher",
+        "matches_input_manifest": true,
+        "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/replay.cypher",
+        "sha256_recomputed": "38a14bf37ac474bdc5a44e6d1a2fa62fe07a932359075e1ad6c5ed40c8bf78fc",
+        "sha256_recorded": "38a14bf37ac474bdc5a44e6d1a2fa62fe07a932359075e1ad6c5ed40c8bf78fc"
+      },
+      {
+        "bytes_recomputed": 47363,
+        "bytes_recorded": 47363,
+        "key": "graph_stats",
+        "matches_input_manifest": true,
+        "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json",
+        "sha256_recomputed": "576e06b72f9406b8a750cdea1470ca09e8fbdc93c258f2c23843d49734e8c0dc",
+        "sha256_recorded": "576e06b72f9406b8a750cdea1470ca09e8fbdc93c258f2c23843d49734e8c0dc"
+      },
+      {
+        "bytes_recomputed": 6454,
+        "bytes_recorded": 6454,
+        "key": "human_confirmation",
+        "matches_input_manifest": true,
+        "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/人工确认清单.json",
+        "sha256_recomputed": "457ecce357c887359f982653a7f51cf6c748733c053f29acfb205ef9105a6eae",
+        "sha256_recorded": "457ecce357c887359f982653a7f51cf6c748733c053f29acfb205ef9105a6eae"
+      }
+    ],
+    "files_count": 11,
+    "path": "交付物/05-系统实现/RAG检索系统/检索产出/input_manifest.json",
+    "schema": "stage7-input-manifest-1.0",
+    "sha256": "ec58953e1165a215500e2e3f840a8b47ee36162426607ba13b909e48aa8fc115"
+  },
+  "local_embedding": {
+    "device": "本地 CPU 前向（torch.set_num_threads(1)，离线加载）",
+    "dim": 512,
+    "encodes_query_total_note": "合计为 T11 明确记数的部分（pre_experiment.py 全程：向量检索缓存 90 次 ＋ 全池相似度缓存 30 次 ＝ 120 次 query 编码）；其余步骤 T11 未逐次记录编码条数，按「不臆造数字」记 null 并在 count_note 里说明",
+    "encodes_query_total_recorded": 120,
+    "model_name": "BAAI/bge-small-zh-v1.5",
+    "normalize": true,
+    "note": "本地 Embedding 前向不计入「模型调用」（《18》第2.5节）；不得写成「全程未跑模型」。一次单题检索调用 encode_query 1 次；g>0 且该题存在图谱侧新增候选时，第二层排序再取一次全池相似度（至多再 1 次），不新增模型、不联网。",
+    "query_instruction": "",
+    "revision": "7999e1d3359715c523056ef9478215996d62a620",
+    "source": "交付物/05-系统实现/RAG检索系统/_工作底稿/_T11/T11_summary.json 与 交付物/05-系统实现/RAG检索系统/_工作底稿/_T11（T11 实测量；本次不重新计时）",
+    "supplementary_count_only": null,
+    "t11_measured_components": [
+      {
+        "component": "vector_search.py --selftest",
+        "count_note": "T11 未逐次记录编码条数（该步骤含本地 Embedding 前向）",
+        "encodes_query": null,
+        "seconds": 8.173,
+        "seconds_note": "T11 记录的该步骤墙钟耗时（含本地 Embedding 前向；未单独计时）"
+      },
+      {
+        "component": "pre_experiment.py（第一轮 9 格网格 ＋ 第二轮选定格）",
+        "count_detail": {
+          "full_pool_similarity_cache": 30,
+          "source_line": "T11 日志原文：向量检索缓存 90 条 ＋ 全池相似度缓存 30 条",
+          "vector_search_cache": 90
+        },
+        "encodes_query": 120,
+        "seconds": 28.802,
+        "seconds_note": "T11 记录的该步骤墙钟耗时（含本地 Embedding 前向；未单独计时）"
+      },
+      {
+        "component": "pipeline.py --selftest（五组 × 30 题）",
+        "count_note": "T11 未逐次记录编码条数（该步骤含本地 Embedding 前向）",
+        "encodes_query": null,
+        "seconds": 12.074,
+        "seconds_note": "T11 记录的该步骤墙钟耗时（含本地 Embedding 前向；未单独计时）"
+      },
+      {
+        "component": "metrics.py（纯计算，不编码）",
+        "encodes_query": 0,
+        "seconds": 0.056,
+        "seconds_note": "T11 记录的该步骤墙钟耗时（含本地 Embedding 前向；未单独计时）"
+      }
+    ],
+    "timing_fields_note": "本节的 seconds 字段为 T11 的静态实测记录，按字段单独放置；耗时字段不参与逐字节比对（本次生成不写运行时间戳、不新计时）。"
+  },
+  "model_calls": {
+    "config_model_calls_allowed": 0,
+    "external_api_calls": 0,
+    "llm_calls": 0,
+    "note": "第 7 阶段链路没有答案生成模型、不需要密钥（config 刻意不提供读取方式）；问题侧向量化是本地 Embedding 前向，按《18》第2.5节 不计入「模型调用」，但不得写成「全程未跑模型」"
+  },
+  "reproduce": {
+    "run_manifest": "python 代码\\检索\\run_query.py --run-manifest",
+    "selftest": "python 代码\\检索\\run_query.py --selftest",
+    "single_question": "python 代码\\检索\\run_query.py --question \"…\" --group C"
+  },
+  "schema": "stage7-run-manifest-1.0",
+  "stage": "07-RAG检索系统"
+}

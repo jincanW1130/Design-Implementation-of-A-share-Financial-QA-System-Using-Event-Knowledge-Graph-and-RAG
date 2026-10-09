@@ -11,7 +11,7 @@
 2. **解析／摘要小工具与 schema 常量**：`parse_item_file`（解析条目文件的三个锚点块）、
    `render_item`（渲染条目文件的非标注部分）、`norm_ws`／`text_digest`／`sha256_hex`、
    `ITEM_SCHEMA`／`CASE_TYPES`／`ENTITY_PER_TYPE_FIELDS` 等。
-   `代码\抽取与图谱\auto_annotate*.py` 与 `工具\抽检助手.py` 共用这一份，不另立第二套。
+   `交付物/03-代码\抽取与图谱\auto_annotate*.py` 与 `工具\抽检助手.py` 共用这一份，不另立第二套。
 
 **评测口径（本文件所在的唯一口径）**
 ------------------------------------
@@ -45,7 +45,7 @@ from collections import Counter, OrderedDict
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(_THIS_DIR)
 
-CONFIG_PATH = os.path.join(ROOT, "代码", "抽取与图谱", "config.py")
+CONFIG_PATH = os.path.join(ROOT, "交付物/03-代码", "抽取与图谱", "config.py")
 KERNEL_RELPATH = "工具\标注结构校验.py"
 
 # `status` 的**唯一**合法取值：模型参照集。

@@ -1,0 +1,375 @@
+{
+  "failures": [],
+  "frozen": {
+    "K": 10,
+    "N": 20,
+    "budget": 3600,
+    "g": 2,
+    "model": "deepseek-flash",
+    "prompt_version": "v1.0",
+    "temperature": 0
+  },
+  "generated_at": "2026-10-02T13:45:27",
+  "generated_by": "交付物/06-实验与评测/工具/跑AC对照.py",
+  "groups": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E"
+  ],
+  "machine": {
+    "A": {
+      "body_chars_max": 1256,
+      "body_chars_mean": 437.2,
+      "body_chars_min": 80,
+      "empty_body": 0,
+      "evidence_count_max": 10,
+      "evidence_count_mean": 9.9667,
+      "evidence_count_min": 9,
+      "gate_pass": 30,
+      "gate_pass_rate": 1.0,
+      "human_scoring": "NOT_DONE",
+      "human_scoring_note": "人工 0／1／2 评分（Answer Accuracy／Completeness／Faithfulness）与 ≥20% 样本的间隔 ≥3 天二次复评**尚未做**（《02》第12.7节）。本表任何数字都是**机检量**，不得当成答案质量分；在人工评分完成前，第 12.8 节的判定条件「Answer Accuracy 不下降」无法判定。",
+      "is_graph_extended": 0,
+      "llm_seconds_max": 23.696,
+      "llm_seconds_mean": 6.821,
+      "n_questions": 30,
+      "total_tokens_max": 3520,
+      "total_tokens_mean": 3147.0,
+      "zero_hop_graph_path_leak": 0
+    },
+    "B": {
+      "body_chars_max": 1204,
+      "body_chars_mean": 480.2,
+      "body_chars_min": 115,
+      "empty_body": 0,
+      "evidence_count_max": 10,
+      "evidence_count_mean": 9.8,
+      "evidence_count_min": 9,
+      "gate_pass": 30,
+      "gate_pass_rate": 1.0,
+      "human_scoring": "NOT_DONE",
+      "human_scoring_note": "人工 0／1／2 评分（Answer Accuracy／Completeness／Faithfulness）与 ≥20% 样本的间隔 ≥3 天二次复评**尚未做**（《02》第12.7节）。本表任何数字都是**机检量**，不得当成答案质量分；在人工评分完成前，第 12.8 节的判定条件「Answer Accuracy 不下降」无法判定。",
+      "is_graph_extended": 30,
+      "llm_seconds_max": 26.268,
+      "llm_seconds_mean": 6.565,
+      "n_questions": 30,
+      "total_tokens_max": 3584,
+      "total_tokens_mean": 3323.5,
+      "zero_hop_graph_path_leak": 0
+    },
+    "C": {
+      "body_chars_max": 1303,
+      "body_chars_mean": 441.7,
+      "body_chars_min": 131,
+      "empty_body": 0,
+      "evidence_count_max": 10,
+      "evidence_count_mean": 9.7667,
+      "evidence_count_min": 8,
+      "gate_pass": 30,
+      "gate_pass_rate": 1.0,
+      "human_scoring": "NOT_DONE",
+      "human_scoring_note": "人工 0／1／2 评分（Answer Accuracy／Completeness／Faithfulness）与 ≥20% 样本的间隔 ≥3 天二次复评**尚未做**（《02》第12.7节）。本表任何数字都是**机检量**，不得当成答案质量分；在人工评分完成前，第 12.8 节的判定条件「Answer Accuracy 不下降」无法判定。",
+      "is_graph_extended": 30,
+      "llm_seconds_max": 32.656,
+      "llm_seconds_mean": 6.764,
+      "n_questions": 30,
+      "total_tokens_max": 3599,
+      "total_tokens_mean": 3339.4,
+      "zero_hop_graph_path_leak": 0
+    },
+    "D": {
+      "body_chars_max": 1145,
+      "body_chars_mean": 467.8,
+      "body_chars_min": 89,
+      "empty_body": 0,
+      "evidence_count_max": 10,
+      "evidence_count_mean": 9.8667,
+      "evidence_count_min": 9,
+      "gate_pass": 30,
+      "gate_pass_rate": 1.0,
+      "human_scoring": "NOT_DONE",
+      "human_scoring_note": "人工 0／1／2 评分（Answer Accuracy／Completeness／Faithfulness）与 ≥20% 样本的间隔 ≥3 天二次复评**尚未做**（《02》第12.7节）。本表任何数字都是**机检量**，不得当成答案质量分；在人工评分完成前，第 12.8 节的判定条件「Answer Accuracy 不下降」无法判定。",
+      "is_graph_extended": 30,
+      "llm_seconds_max": 24.965,
+      "llm_seconds_mean": 6.29,
+      "n_questions": 30,
+      "total_tokens_max": 3590,
+      "total_tokens_mean": 3314.5,
+      "zero_hop_graph_path_leak": 0
+    },
+    "E": {
+      "body_chars_max": 1132,
+      "body_chars_mean": 466.4,
+      "body_chars_min": 129,
+      "empty_body": 0,
+      "evidence_count_max": 10,
+      "evidence_count_mean": 9.8667,
+      "evidence_count_min": 9,
+      "gate_pass": 30,
+      "gate_pass_rate": 1.0,
+      "human_scoring": "NOT_DONE",
+      "human_scoring_note": "人工 0／1／2 评分（Answer Accuracy／Completeness／Faithfulness）与 ≥20% 样本的间隔 ≥3 天二次复评**尚未做**（《02》第12.7节）。本表任何数字都是**机检量**，不得当成答案质量分；在人工评分完成前，第 12.8 节的判定条件「Answer Accuracy 不下降」无法判定。",
+      "is_graph_extended": 30,
+      "llm_seconds_max": 44.67,
+      "llm_seconds_mean": 6.53,
+      "n_questions": 30,
+      "total_tokens_max": 3590,
+      "total_tokens_mean": 3314.5,
+      "zero_hop_graph_path_leak": 0
+    }
+  },
+  "metrics": {
+    "A": {
+      "K": 10,
+      "complete_evidence_recall_at_k": 0.566667,
+      "graph_evidence_in_final_total": 0,
+      "graph_evidence_per_question": 0.0,
+      "mrr": 0.658889,
+      "n_questions": 30,
+      "precision_at_k": 0.14,
+      "recall_at_k": 0.678095
+    },
+    "B": {
+      "K": 10,
+      "complete_evidence_recall_at_k": 0.566667,
+      "graph_evidence_in_final_total": 53,
+      "graph_evidence_per_question": 1.7667,
+      "mrr": 0.659259,
+      "n_questions": 30,
+      "precision_at_k": 0.146667,
+      "recall_at_k": 0.68119
+    },
+    "C": {
+      "K": 10,
+      "complete_evidence_recall_at_k": 0.566667,
+      "graph_evidence_in_final_total": 53,
+      "graph_evidence_per_question": 1.7667,
+      "mrr": 0.659259,
+      "n_questions": 30,
+      "precision_at_k": 0.15,
+      "recall_at_k": 0.692302
+    },
+    "D": {
+      "K": 10,
+      "complete_evidence_recall_at_k": 0.566667,
+      "graph_evidence_in_final_total": 47,
+      "graph_evidence_per_question": 1.5667,
+      "mrr": 0.655556,
+      "n_questions": 30,
+      "precision_at_k": 0.143333,
+      "recall_at_k": 0.679206
+    },
+    "E": {
+      "K": 10,
+      "complete_evidence_recall_at_k": 0.566667,
+      "graph_evidence_in_final_total": 47,
+      "graph_evidence_per_question": 1.5667,
+      "mrr": 0.408889,
+      "n_questions": 30,
+      "precision_at_k": 0.143333,
+      "recall_at_k": 0.679206
+    }
+  },
+  "qids": [
+    "PE-01",
+    "PE-02",
+    "PE-03",
+    "PE-04",
+    "PE-05",
+    "PE-06",
+    "PE-07",
+    "PE-08",
+    "PE-09",
+    "PE-10",
+    "PE-11",
+    "PE-12",
+    "PE-13",
+    "PE-14",
+    "PE-15",
+    "PE-16",
+    "PE-17",
+    "PE-18",
+    "PE-19",
+    "PE-20",
+    "PE-21",
+    "PE-22",
+    "PE-23",
+    "PE-24",
+    "PE-25",
+    "PE-26",
+    "PE-27",
+    "PE-28",
+    "PE-29",
+    "PE-30"
+  ],
+  "question_set": "交付物/05-系统实现/RAG检索系统\\预实验问题集\\questions.jsonl",
+  "subsets": [
+    {
+      "name": "关系型",
+      "per_group": {
+        "A": {
+          "K": 10,
+          "complete_evidence_recall_at_k": 0.5,
+          "graph_evidence_in_final_total": 0,
+          "graph_evidence_per_question": 0.0,
+          "mrr": 0.55,
+          "n_questions": 12,
+          "precision_at_k": 0.116667,
+          "recall_at_k": 0.591667
+        },
+        "B": {
+          "K": 10,
+          "complete_evidence_recall_at_k": 0.5,
+          "graph_evidence_in_final_total": 21,
+          "graph_evidence_per_question": 1.75,
+          "mrr": 0.550926,
+          "n_questions": 12,
+          "precision_at_k": 0.125,
+          "recall_at_k": 0.5875
+        },
+        "C": {
+          "K": 10,
+          "complete_evidence_recall_at_k": 0.5,
+          "graph_evidence_in_final_total": 21,
+          "graph_evidence_per_question": 1.75,
+          "mrr": 0.550926,
+          "n_questions": 12,
+          "precision_at_k": 0.125,
+          "recall_at_k": 0.5875
+        },
+        "D": {
+          "K": 10,
+          "complete_evidence_recall_at_k": 0.5,
+          "graph_evidence_in_final_total": 18,
+          "graph_evidence_per_question": 1.5,
+          "mrr": 0.541667,
+          "n_questions": 12,
+          "precision_at_k": 0.116667,
+          "recall_at_k": 0.566667
+        },
+        "E": {
+          "K": 10,
+          "complete_evidence_recall_at_k": 0.5,
+          "graph_evidence_in_final_total": 18,
+          "graph_evidence_per_question": 1.5,
+          "mrr": 0.2875,
+          "n_questions": 12,
+          "precision_at_k": 0.116667,
+          "recall_at_k": 0.566667
+        }
+      }
+    },
+    {
+      "name": "多跳型",
+      "per_group": {
+        "A": {
+          "K": 10,
+          "complete_evidence_recall_at_k": 0.52381,
+          "graph_evidence_in_final_total": 0,
+          "graph_evidence_per_question": 0.0,
+          "mrr": 0.631746,
+          "n_questions": 21,
+          "precision_at_k": 0.161905,
+          "recall_at_k": 0.66712
+        },
+        "B": {
+          "K": 10,
+          "complete_evidence_recall_at_k": 0.52381,
+          "graph_evidence_in_final_total": 37,
+          "graph_evidence_per_question": 1.7619,
+          "mrr": 0.632275,
+          "n_questions": 21,
+          "precision_at_k": 0.171429,
+          "recall_at_k": 0.671542
+        },
+        "C": {
+          "K": 10,
+          "complete_evidence_recall_at_k": 0.52381,
+          "graph_evidence_in_final_total": 38,
+          "graph_evidence_per_question": 1.8095,
+          "mrr": 0.632275,
+          "n_questions": 21,
+          "precision_at_k": 0.17619,
+          "recall_at_k": 0.687415
+        },
+        "D": {
+          "K": 10,
+          "complete_evidence_recall_at_k": 0.52381,
+          "graph_evidence_in_final_total": 32,
+          "graph_evidence_per_question": 1.5238,
+          "mrr": 0.626984,
+          "n_questions": 21,
+          "precision_at_k": 0.166667,
+          "recall_at_k": 0.668707
+        },
+        "E": {
+          "K": 10,
+          "complete_evidence_recall_at_k": 0.52381,
+          "graph_evidence_in_final_total": 32,
+          "graph_evidence_per_question": 1.5238,
+          "mrr": 0.473016,
+          "n_questions": 21,
+          "precision_at_k": 0.166667,
+          "recall_at_k": 0.668707
+        }
+      }
+    },
+    {
+      "name": "时序型",
+      "per_group": {
+        "A": {
+          "K": 10,
+          "complete_evidence_recall_at_k": 0.75,
+          "graph_evidence_in_final_total": 0,
+          "graph_evidence_per_question": 0.0,
+          "mrr": 0.791667,
+          "n_questions": 12,
+          "precision_at_k": 0.15,
+          "recall_at_k": 0.777778
+        },
+        "B": {
+          "K": 10,
+          "complete_evidence_recall_at_k": 0.75,
+          "graph_evidence_in_final_total": 20,
+          "graph_evidence_per_question": 1.6667,
+          "mrr": 0.791667,
+          "n_questions": 12,
+          "precision_at_k": 0.15,
+          "recall_at_k": 0.777778
+        },
+        "C": {
+          "K": 10,
+          "complete_evidence_recall_at_k": 0.75,
+          "graph_evidence_in_final_total": 22,
+          "graph_evidence_per_question": 1.8333,
+          "mrr": 0.791667,
+          "n_questions": 12,
+          "precision_at_k": 0.158333,
+          "recall_at_k": 0.805556
+        },
+        "D": {
+          "K": 10,
+          "complete_evidence_recall_at_k": 0.75,
+          "graph_evidence_in_final_total": 15,
+          "graph_evidence_per_question": 1.25,
+          "mrr": 0.791667,
+          "n_questions": 12,
+          "precision_at_k": 0.158333,
+          "recall_at_k": 0.805556
+        },
+        "E": {
+          "K": 10,
+          "complete_evidence_recall_at_k": 0.75,
+          "graph_evidence_in_final_total": 15,
+          "graph_evidence_per_question": 1.25,
+          "mrr": 0.472222,
+          "n_questions": 12,
+          "precision_at_k": 0.158333,
+          "recall_at_k": 0.805556
+        }
+      }
+    }
+  ]
+}

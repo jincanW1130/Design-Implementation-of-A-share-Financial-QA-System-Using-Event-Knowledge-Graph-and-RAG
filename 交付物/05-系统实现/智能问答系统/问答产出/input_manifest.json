@@ -1,0 +1,203 @@
+{
+  "all_ok": true,
+  "checks": [
+    {
+      "detail": "缺 0 个",
+      "name": "输入文件齐备（10 个，对应《21》第三节 八项）",
+      "ok": true
+    },
+    {
+      "detail": "trace=30 题集=30",
+      "name": "trace 行数 = 题集行数（实测 30）",
+      "ok": true
+    },
+    {
+      "detail": "group 取值 = ['C']",
+      "name": "trace 的 group 全为 C",
+      "ok": true
+    },
+    {
+      "detail": "实测 709",
+      "name": "documents.jsonl = 709 行",
+      "ok": true
+    },
+    {
+      "detail": "实测 5018",
+      "name": "chunks.jsonl = 5018 行",
+      "ok": true
+    },
+    {
+      "detail": "总行 3608 − 表头 1 = 3607（数据行）",
+      "name": "nodes.csv = 3607 行（不含表头）",
+      "ok": true
+    },
+    {
+      "detail": "总行 3615 − 表头 1 = 3614（数据行）",
+      "name": "edges.csv = 3614 行（不含表头）",
+      "ok": true
+    },
+    {
+      "detail": "实测 'v2.1'",
+      "name": "dataset_version = v2.1",
+      "ok": true
+    },
+    {
+      "detail": "实测 '2026-09-25T23:59:59+08:00'",
+      "name": "data_cutoff_time = 2026-09-25T23:59:59+08:00",
+      "ok": true
+    },
+    {
+      "detail": "比对 6 条，不一致 0 条",
+      "name": "同路径 sha256 在两处一致（对上了 6 条）",
+      "ok": true
+    }
+  ],
+  "cross_check_stage7": {
+    "manifest_path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/RAG检索系统\\检索产出\\input_manifest.json",
+    "matched_by_path": [
+      "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/edges.csv",
+      "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/graph_stats.json",
+      "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/nodes.csv",
+      "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/chunks/chunks.jsonl",
+      "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/clean/documents.jsonl",
+      "交付物/04-数据与知识图谱/数据准备/数据集/v2.1/meta/dataset.json"
+    ],
+    "matched_count": 6,
+    "mismatched": [],
+    "stage7_fingerprints": 11
+  },
+  "data_cutoff_time": "2026-09-25T23:59:59+08:00",
+  "dataset_version": "v2.1",
+  "graph_csv_scale_basis": "不含表头的数据行数（检索侧 config.GRAPH_SIZE 的登记口径）",
+  "items": [
+    {
+      "files": [
+        {
+          "bytes": 260054,
+          "key": "per_question_trace",
+          "mtime": 1791042700.823795,
+          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/RAG检索系统\\检索产出\\per_question_trace.jsonl",
+          "sha256": "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b"
+        }
+      ],
+      "item": 1
+    },
+    {
+      "files": [
+        {
+          "bytes": 8212,
+          "key": "stage7_input_manifest",
+          "mtime": 1791554237.4096754,
+          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/RAG检索系统\\检索产出\\input_manifest.json",
+          "sha256": "ec58953e1165a215500e2e3f840a8b47ee36162426607ba13b909e48aa8fc115"
+        }
+      ],
+      "item": 2
+    },
+    {
+      "files": [
+        {
+          "bytes": 12203,
+          "key": "stage7_run_manifest",
+          "mtime": 1791554305.8709643,
+          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/RAG检索系统\\检索产出\\run_manifest.json",
+          "sha256": "71cc33b737b26d70022bb863b86f9b1c6d3464644449f5667997fd2e2c0722f1"
+        }
+      ],
+      "item": 3
+    },
+    {
+      "files": [
+        {
+          "bytes": 4496547,
+          "key": "documents",
+          "mtime": 1790342354.401367,
+          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/数据准备\\数据集\\v2.1\\clean\\documents.jsonl",
+          "sha256": "c838c608c20060adb1366d5c6f7566f9de25016110dc368f7f92fcb8a10f9eea"
+        }
+      ],
+      "item": 4
+    },
+    {
+      "files": [
+        {
+          "bytes": 5322875,
+          "key": "chunks",
+          "mtime": 1790342460.1787167,
+          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/数据准备\\数据集\\v2.1\\chunks\\chunks.jsonl",
+          "sha256": "2202cbf8e3915598fc9fa57a9fe6d32577705f59ce7bfdfab822903d949e8e44"
+        }
+      ],
+      "item": 5
+    },
+    {
+      "files": [
+        {
+          "bytes": 3108,
+          "key": "dataset_meta",
+          "mtime": 1790342673.7180889,
+          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/数据准备\\数据集\\v2.1\\meta\\dataset.json",
+          "sha256": "41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988"
+        }
+      ],
+      "item": 6
+    },
+    {
+      "files": [
+        {
+          "bytes": 788038,
+          "key": "nodes_csv",
+          "mtime": 1791554196.7189865,
+          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\nodes.csv",
+          "sha256": "ecfaa43a650c42a5281eaf50defa79ada043985b2283847507b6ef3ad006341e"
+        },
+        {
+          "bytes": 184551,
+          "key": "edges_csv",
+          "mtime": 1791554196.7189865,
+          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\edges.csv",
+          "sha256": "0ff0eecfc23bb860f7307b85ed510b49265d6ec79b7ad22fc6b038df1738fe91"
+        },
+        {
+          "bytes": 47363,
+          "key": "graph_stats",
+          "mtime": 1791554197.2861097,
+          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/04-数据与知识图谱/事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\graph_stats.json",
+          "sha256": "576e06b72f9406b8a750cdea1470ca09e8fbdc93c258f2c23843d49734e8c0dc"
+        }
+      ],
+      "item": 7
+    },
+    {
+      "files": [
+        {
+          "bytes": 102389,
+          "key": "questions",
+          "mtime": 1791551541.0969155,
+          "path": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/RAG检索系统\\预实验问题集\\questions.jsonl",
+          "sha256": "9817534cba8066dbfd4cbfd03b416e839f649d847176952134fe7dda556e8be1"
+        }
+      ],
+      "item": 8
+    }
+  ],
+  "mtime_note": "mtime 只作参考，不参与比对（《21》第三节）",
+  "purpose": "T1 输入指纹清单与只读基线（开工记一次，收工逐项重算比对）",
+  "scale_measured": {
+    "chunks_rows": 5018,
+    "data_cutoff_time": "2026-09-25T23:59:59+08:00",
+    "dataset_version": "v2.1",
+    "documents_rows": 709,
+    "edges_csv_data_rows": 3614,
+    "edges_csv_total_lines": 3615,
+    "nodes_csv_data_rows": 3607,
+    "nodes_csv_total_lines": 3608,
+    "questions_rows": 30,
+    "trace_groups": [
+      "C"
+    ],
+    "trace_rows": 30
+  },
+  "schema": "stage8-input-manifest-1.0",
+  "stage": "第 8 阶段：智能问答系统"
+}

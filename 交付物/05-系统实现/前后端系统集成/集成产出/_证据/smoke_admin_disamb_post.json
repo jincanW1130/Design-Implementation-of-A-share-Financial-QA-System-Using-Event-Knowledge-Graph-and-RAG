@@ -1,0 +1,22 @@
+{
+  "method": "POST",
+  "path": "/api/admin/extraction/disambiguation/ENT-1010-002",
+  "http_status": 200,
+  "seconds": 0.023,
+  "body": {
+    "data": {
+      "item_id": "ENT-1010-002",
+      "stock_code": null,
+      "status": "rejected",
+      "raw_name": "阳光新能源",
+      "recorded_at": "2026-09-30T01:22:08",
+      "ledger": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物/05-系统实现/前后端系统集成\\_工作底稿\\消歧人工确认台账.jsonl",
+      "note": "只记入本项目人工确认台账；未回写上游消歧清单与图谱文件。回写图谱请在第 6 阶段跑 write_graph.py。"
+    },
+    "meta": {
+      "dataset_version": "v2.1",
+      "data_cutoff_time": "2026-09-25T23:59:59+08:00"
+    }
+  },
+  "raw_head": "{\"data\":{\"item_id\":\"ENT-1010-002\",\"stock_code\":null,\"status\":\"rejected\",\"raw_name\":\"阳光新能源\",\"recorded_at\":\"2026-09-30T01:22:08\",\"ledger\":\"C:\\\\Users\\\\15129\\\\Desktop\\\\毕业设计\\\\交付物/05-系统实现/前后端系统集成\\\\_工作底稿\\\\消歧人工确认台账.jsonl\",\"note\":\"只记入本项目人工确认台账；未回写上游消歧清单与图谱文件。回写图谱请在第 6 阶段跑 write_graph.py。\"},\"meta\":{\"dataset_version\":\"v2.1\",\"data_cutoff_time\":\"2026-09-25T23:59:59+08:00\"}}"
+}

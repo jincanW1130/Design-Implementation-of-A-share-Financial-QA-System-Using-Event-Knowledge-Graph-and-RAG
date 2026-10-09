@@ -1,0 +1,555 @@
+{
+  "budget_trim": {
+    "after": {
+      "estimate_note": "文本块＝chunks.jsonl 的 token_count 实测；图谱路径与事件三元组＝估算 token",
+      "event_triple_tokens": 55,
+      "event_triples": 7,
+      "graph_tokens": 432,
+      "path_tokens": 377,
+      "paths": 9,
+      "text_chunks": 9,
+      "text_tokens": 2804,
+      "total_tokens": 3236
+    },
+    "before": {
+      "estimate_note": "文本块＝chunks.jsonl 的 token_count 实测；图谱路径与事件三元组＝估算 token",
+      "event_triple_tokens": 66,
+      "event_triples": 9,
+      "graph_tokens": 863,
+      "path_tokens": 797,
+      "paths": 27,
+      "text_chunks": 45,
+      "text_tokens": 14649,
+      "total_tokens": 15512
+    },
+    "budget": 3600,
+    "budget_exceeded": false,
+    "budget_floor_applied": false,
+    "dropped_chunks": 36,
+    "dropped_paths": 14,
+    "rule": "先裁与问题实体无关的远端图谱路径 → 再按分层保留顺序从尾部往前裁文本块（裁剪先于证据排序，不使用排序结果；g=2）"
+  },
+  "candidates": {
+    "dual_hit": 10,
+    "filtered_union": 45,
+    "graph_only": 25,
+    "graph_paths": 63,
+    "graph_returned": 35,
+    "unfiltered_union": 45,
+    "union": 45,
+    "vector_returned": 20
+  },
+  "checks": {
+    "candidates_unique": true,
+    "evidence_unique": true,
+    "kept_le_k": true,
+    "within_budget": true
+  },
+  "final_evidence": {
+    "dual_hit_in_final": [
+      1021000,
+      1163000,
+      1163001,
+      1342000,
+      1342001,
+      1396000
+    ],
+    "final_set_sorted": [
+      1021000,
+      1021001,
+      1021002,
+      1163000,
+      1163001,
+      1233000,
+      1342000,
+      1342001,
+      1396000
+    ],
+    "graph_evidence_in_final": [
+      1233000
+    ],
+    "presentation_order": [
+      1342001,
+      1342000,
+      1021001,
+      1163001,
+      1021000,
+      1163000,
+      1396000,
+      1021002,
+      1233000
+    ],
+    "size": 9
+  },
+  "generated_by": "交付物/03-代码/检索/run_query.py",
+  "graph_audit": {
+    "chunk_refs": 99,
+    "excluded_evidenced_by": 0,
+    "excluded_no_chunk_id": 0,
+    "invalid_detail": [],
+    "invalid_doc_mismatch": 0,
+    "invalid_not_in_chunks": 0
+  },
+  "graph_path_payload": {
+    "depth": 2,
+    "event_triples": [
+      [
+        "EVT-0027",
+        "重大经营",
+        "2026-09-21"
+      ],
+      [
+        "EVT-0205",
+        "监管",
+        "2026-04-23"
+      ],
+      [
+        "EVT-0206",
+        "重大经营",
+        "2026-08-26"
+      ],
+      [
+        "EVT-0312",
+        "股权",
+        "2026-08-06"
+      ],
+      [
+        "EVT-0450",
+        "监管",
+        "2026-06-10"
+      ],
+      [
+        "EVT-0451",
+        "重大经营",
+        "2026-06-29"
+      ],
+      [
+        "EVT-0525",
+        "股权",
+        "2026-02-05"
+      ]
+    ],
+    "graph_path": [
+      {
+        "depth": 1,
+        "end": "EVT-0312",
+        "nodes": [
+          "600089",
+          "EVT-0312"
+        ],
+        "relations": [
+          {
+            "direction": "out",
+            "evidence": {
+              "confidence": "0.95",
+              "source_chunk_id": "1233000",
+              "source_doc_id": "1233"
+            },
+            "neighbor": "EVT-0312",
+            "relation": "PARTICIPATES_IN",
+            "role": "主体"
+          }
+        ],
+        "start": "600089"
+      },
+      {
+        "depth": 1,
+        "end": "EVT-0450",
+        "nodes": [
+          "600089",
+          "EVT-0450"
+        ],
+        "relations": [
+          {
+            "direction": "out",
+            "evidence": {
+              "confidence": "0.9",
+              "source_chunk_id": "1342000",
+              "source_doc_id": "1342"
+            },
+            "neighbor": "EVT-0450",
+            "relation": "PARTICIPATES_IN",
+            "role": "主体"
+          }
+        ],
+        "start": "600089"
+      },
+      {
+        "depth": 1,
+        "end": "EVT-0451",
+        "nodes": [
+          "600089",
+          "EVT-0451"
+        ],
+        "relations": [
+          {
+            "direction": "out",
+            "evidence": {
+              "confidence": "0.9",
+              "source_chunk_id": "1342001",
+              "source_doc_id": "1342"
+            },
+            "neighbor": "EVT-0451",
+            "relation": "PARTICIPATES_IN",
+            "role": "主体"
+          }
+        ],
+        "start": "600089"
+      },
+      {
+        "depth": 2,
+        "end": "600089",
+        "nodes": [
+          "600089",
+          "EVT-0312",
+          "600089"
+        ],
+        "relations": [
+          {
+            "direction": "out",
+            "evidence": {
+              "confidence": "0.85",
+              "source_chunk_id": "1232001",
+              "source_doc_id": "1232"
+            },
+            "neighbor": "EVT-0312",
+            "relation": "PARTICIPATES_IN",
+            "role": "主体"
+          },
+          {
+            "direction": "in",
+            "evidence": {
+              "confidence": "0.95",
+              "source_chunk_id": "1233000",
+              "source_doc_id": "1233"
+            },
+            "neighbor": "600089",
+            "relation": "PARTICIPATES_IN",
+            "role": "主体"
+          }
+        ],
+        "start": "600089"
+      },
+      {
+        "depth": 2,
+        "end": "EVT-0027",
+        "nodes": [
+          "IND-0032",
+          "300750",
+          "EVT-0027"
+        ],
+        "relations": [
+          {
+            "direction": "in",
+            "evidence": {
+              "confidence": "0.7",
+              "source_chunk_id": "2102003",
+              "source_doc_id": "2102"
+            },
+            "neighbor": "300750",
+            "relation": "BELONGS_TO",
+            "role": ""
+          },
+          {
+            "direction": "out",
+            "evidence": {
+              "confidence": "0.95",
+              "source_chunk_id": "1021000",
+              "source_doc_id": "1021"
+            },
+            "neighbor": "EVT-0027",
+            "relation": "PARTICIPATES_IN",
+            "role": "主体"
+          }
+        ],
+        "start": "IND-0032"
+      },
+      {
+        "depth": 2,
+        "end": "EVT-0205",
+        "nodes": [
+          "IND-0032",
+          "300750",
+          "EVT-0205"
+        ],
+        "relations": [
+          {
+            "direction": "in",
+            "evidence": {
+              "confidence": "0.7",
+              "source_chunk_id": "2102003",
+              "source_doc_id": "2102"
+            },
+            "neighbor": "300750",
+            "relation": "BELONGS_TO",
+            "role": ""
+          },
+          {
+            "direction": "out",
+            "evidence": {
+              "confidence": "0.95",
+              "source_chunk_id": "1021000",
+              "source_doc_id": "1021"
+            },
+            "neighbor": "EVT-0205",
+            "relation": "PARTICIPATES_IN",
+            "role": "主体"
+          }
+        ],
+        "start": "IND-0032"
+      },
+      {
+        "depth": 2,
+        "end": "EVT-0205",
+        "nodes": [
+          "IND-0032",
+          "300750",
+          "EVT-0205"
+        ],
+        "relations": [
+          {
+            "direction": "in",
+            "evidence": {
+              "confidence": "0.7",
+              "source_chunk_id": "2102003",
+              "source_doc_id": "2102"
+            },
+            "neighbor": "300750",
+            "relation": "BELONGS_TO",
+            "role": ""
+          },
+          {
+            "direction": "out",
+            "evidence": {
+              "confidence": "0.92",
+              "source_chunk_id": "1163000",
+              "source_doc_id": "1163"
+            },
+            "neighbor": "EVT-0205",
+            "relation": "PARTICIPATES_IN",
+            "role": "主体"
+          }
+        ],
+        "start": "IND-0032"
+      },
+      {
+        "depth": 2,
+        "end": "EVT-0206",
+        "nodes": [
+          "IND-0032",
+          "300750",
+          "EVT-0206"
+        ],
+        "relations": [
+          {
+            "direction": "in",
+            "evidence": {
+              "confidence": "0.7",
+              "source_chunk_id": "2102003",
+              "source_doc_id": "2102"
+            },
+            "neighbor": "300750",
+            "relation": "BELONGS_TO",
+            "role": ""
+          },
+          {
+            "direction": "out",
+            "evidence": {
+              "confidence": "0.93",
+              "source_chunk_id": "1163001",
+              "source_doc_id": "1163"
+            },
+            "neighbor": "EVT-0206",
+            "relation": "PARTICIPATES_IN",
+            "role": "主体"
+          }
+        ],
+        "start": "IND-0032"
+      },
+      {
+        "depth": 2,
+        "end": "EVT-0525",
+        "nodes": [
+          "IND-0032",
+          "300750",
+          "EVT-0525"
+        ],
+        "relations": [
+          {
+            "direction": "in",
+            "evidence": {
+              "confidence": "0.7",
+              "source_chunk_id": "2102003",
+              "source_doc_id": "2102"
+            },
+            "neighbor": "300750",
+            "relation": "BELONGS_TO",
+            "role": ""
+          },
+          {
+            "direction": "out",
+            "evidence": {
+              "confidence": "0.9",
+              "source_chunk_id": "1396000",
+              "source_doc_id": "1396"
+            },
+            "neighbor": "EVT-0525",
+            "relation": "PARTICIPATES_IN",
+            "role": "主体"
+          }
+        ],
+        "start": "IND-0032"
+      }
+    ],
+    "graph_used": true,
+    "note": "路径列表与事件三元组计入 Context Token Budget，不计入 K"
+  },
+  "graph_query_calls": {
+    "G1": 2,
+    "G2": 2,
+    "G3": 0,
+    "G4": 1,
+    "G5": 9
+  },
+  "graph_used": true,
+  "group": "C",
+  "keep_k": {
+    "dropped_by_k": [],
+    "input": 9,
+    "k": 10,
+    "note": "候选数不超过 K：全部保留（不因候选少而删题）",
+    "output": 9,
+    "precision_fill": {
+      "candidates": 9,
+      "denominator": 10,
+      "evidence_size": 9,
+      "k": 10,
+      "note": "候选不足 K：空缺位置记未命中，题目保留",
+      "vacant": 1
+    }
+  },
+  "metrics": {
+    "K": 10,
+    "complete_evidence_recall_at_k": 1.0,
+    "final_ids": [
+      "1342001",
+      "1342000",
+      "1021001",
+      "1163001",
+      "1021000",
+      "1163000",
+      "1396000",
+      "1021002",
+      "1233000"
+    ],
+    "gold_available": true,
+    "gold_ids": [
+      "1342001"
+    ],
+    "gold_source": "题集 qid=PE-02（含 time_window 与 gold）",
+    "level": "chunk",
+    "mrr": 1.0,
+    "n_final": 9,
+    "n_gold": 1,
+    "n_hit": 1,
+    "precision_at_k": 0.1,
+    "qid": "PE-02",
+    "recall_at_k": 1.0
+  },
+  "model_calls": {
+    "config_model_calls_allowed": 0,
+    "external_api_calls": 0,
+    "llm_calls": 0,
+    "note": "本链路 0 次大语言模型／外部接口调用；问题侧向量化是本地 Embedding 前向（与索引同模型同 revision、离线加载），按《18》第2.5节 不计入「模型调用」，但不得写成「全程未跑模型」"
+  },
+  "parameters": {
+    "K": 10,
+    "N": 20,
+    "context_token_budget": 3600,
+    "g": 2,
+    "sources": {
+      "K": "config.require_fixed('K')",
+      "N": "config.require_fixed('N')",
+      "context_token_budget": "config.require_fixed('context_token_budget')",
+      "g": "config.require_fixed('graph_retention_share')"
+    }
+  },
+  "question": {
+    "gold_evidence_chunk_ids": [
+      1342001
+    ],
+    "gold_evidence_count": 1,
+    "gold_hop_depth": 0,
+    "gold_source": "题集 qid=PE-02（含 time_window 与 gold）",
+    "qid": "PE-02",
+    "question_set": "交付物/05-系统实现/RAG检索系统/预实验问题集/questions.jsonl",
+    "task_type": "事实型",
+    "text": "特变电工控股公司特变电工新疆新能源股份有限公司2026年度第一期绿色科技创新债券的发行额度、期限与发行利率分别是多少？",
+    "time_window": null
+  },
+  "schema": "stage7-run-query-1.0",
+  "switches": {
+    "evidence_sort": false,
+    "graph_depth": 2,
+    "time_filter": false
+  },
+  "time_filter": {
+    "branch": "keep_all_graph",
+    "enabled": false,
+    "filter_diff": {
+      "added": [],
+      "counts": {
+        "added": 0,
+        "removed": 0
+      },
+      "measurable": false,
+      "note": "本题差集为空：在该题上不可测，不得据此得出时间过滤无贡献的结论",
+      "removed": []
+    },
+    "g6_called": false,
+    "kept_chunk_ids": [
+      1021000,
+      1054006,
+      1083000,
+      1163000,
+      1163001,
+      1209002,
+      1209010,
+      1232000,
+      1232001,
+      1233000,
+      1234001,
+      1257001,
+      1257009,
+      1263000,
+      1287000,
+      1340000,
+      1340001,
+      1342000,
+      1342001,
+      1346000,
+      1346002,
+      1385000,
+      1396000,
+      1396001,
+      1467000,
+      1484000,
+      2001000,
+      2004000,
+      2007005,
+      2014000,
+      2044002,
+      2086001,
+      2088002,
+      2096000,
+      2102003
+    ],
+    "removed_by_reason": {
+      "no_event_time": [],
+      "null_time_event": [],
+      "out_of_range_event": []
+    },
+    "removed_chunk_ids": [],
+    "window": null
+  }
+}
