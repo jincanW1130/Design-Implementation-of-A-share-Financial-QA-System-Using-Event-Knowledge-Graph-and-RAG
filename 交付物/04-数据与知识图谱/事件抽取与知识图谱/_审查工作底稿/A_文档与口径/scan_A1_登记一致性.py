@@ -6,7 +6,7 @@ import sys
 
 sys.stdout.reconfigure(encoding='utf-8')
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..', '..', '..'))
 t00 = open(os.path.join(ROOT, '00-项目总览与索引.md'), encoding='utf-8').read()
 
 print('ROOT =', ROOT)
