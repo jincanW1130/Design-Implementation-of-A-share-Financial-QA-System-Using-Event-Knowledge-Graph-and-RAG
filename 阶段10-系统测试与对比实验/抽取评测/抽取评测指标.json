@@ -6,7 +6,7 @@
     "reference_primary": "阶段05-数据准备/数据集/抽取评测集/v2.1/自动标注/提准/{dev,test}.auto.repaired.jsonl",
     "reference_secondary": "阶段05-数据准备/数据集/抽取评测集/v2.1/自动标注/{dev,test}.auto.jsonl",
     "is_reference_human_annotated": false,
-    "statement": "参照集为模型自动标注（deepseek-flash，与抽取器同模型）经 lint 定向修复后的产物，另有一次由本项目决策者执行的 40 条独立复核修正；它不是人工标注，也未逐条人工复核。",
+    "statement": "参照集为模型自动标注（deepseek-flash，与抽取器同模型）经 lint 定向修复后的产物，另有一次由本项目决策者以模型口径执行的 40 条独立复核修正；它是参照物、不是金标准。",
     "rebuild_command": "python 阶段10-系统测试与对比实验\\工具\\评测抽取.py",
     "model_calls": 0
   },
@@ -62,7 +62,7 @@
     }
   },
   "diagnostics": {
-    "norm_ws_source": "norm_ws 与 工具/标注助手.py 逐例一致（5 例）；名字规范化＝config.normalize_entity_name(norm_ws(x))，取自 代码/抽取与图谱/auto_annotate_compare.py",
+    "norm_ws_source": "norm_ws 与 工具/标注结构校验.py 逐例一致（5 例）；名字规范化＝config.normalize_entity_name(norm_ws(x))，取自 代码/抽取与图谱/auto_annotate_compare.py",
     "extract_products": {
       "raw_cache_dir": "阶段05-数据准备/数据集/_抽取缓存/v2.1_v1_2/",
       "raw_cache_note": "709 篇，一篇文档一条原始返回；不按文本块",

@@ -17,7 +17,7 @@ r"""auto_annotate_compare.py —— 两版自动标注（pro 版 vs flash 版）
 ## 一致率口径（先声明，避免事后挑口径）
 * 「严格一致条目」＝该字段的键集合两版**完全相同**；一致率＝严格一致条目 ÷ 共同条目数。
 * 「平均 Jaccard」＝逐条目 `|交集|／|并集|` 的平均（两版都为空集的条目按 1 计）。
-* 名字规范化＝`工具\标注助手.py` 的 `norm_ws`（只去空白）＋ `config.normalize_entity_name`
+* 名字规范化＝`工具\标注结构校验.py` 的 `norm_ws`（只去空白）＋ `config.normalize_entity_name`
   （去空白＋剥最外层包裹字符），**不做**简繁折叠、不做模糊匹配。
 
 用法：
@@ -44,7 +44,7 @@ if _HERE not in sys.path:
 import config  # noqa: E402
 
 ROOT = config.ROOT
-HANDANN_PATH = os.path.join(ROOT, "工具", "标注助手.py")
+HANDANN_PATH = os.path.join(ROOT, "工具", "标注结构校验.py")
 EVAL_SUBDIR = "抽取评测集"
 OUT_DIR_DEFAULT = os.path.join("自动标注", "提准")
 REPORT_NAME = "两版对照报告.md"

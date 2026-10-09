@@ -19,9 +19,9 @@ r"""auto_annotate.py —— 第 6 阶段抽取评测集 v2.1 的「**模型自�
   自己的固化参数**（见下方常量区），与《16》第1.1节 的**抽取链冻结四要素**是两组参数，不要混谈。
   环境变量 `STAGE6_FORBID_MODEL_CALLS=1` 时 `config.api_key()` 会直接抛错——本脚本另在
   `call_model()` 入口先拦一道，保证**缓存未命中即失败**，不许偷偷打接口。
-* 校验：`工具\标注助手.py` 的公开入口 `validate_annotation(record, cfg, path)`
+* 校验：`工具\标注结构校验.py` 的公开入口 `validate_annotation(record, cfg, path)`
   ——与 `check` **共用同一个校验源**，因此不存在「自动标注另一套校验」。
-* 字段清单与枚举：`工具\标注助手.py` 的 `ENTITY_PER_TYPE_FIELDS`／`CASE_TYPES` 与
+* 字段清单与枚举：`工具\标注结构校验.py` 的 `ENTITY_PER_TYPE_FIELDS`／`CASE_TYPES` 与
   `代码\抽取与图谱\config.py` 的本体常量；本体定义文本直接调
   `config.ontology_definitions_text()`，脚本内不重抄一处枚举。
 
@@ -55,7 +55,7 @@ $env:STAGE6_FORBID_MODEL_CALLS=1; python 代码\抽取与图谱\auto_annotate.py
     自动标注台账.json                    ← 模型／Prompt 版本／逐条 attempts／usage／校验问题／输入摘要／汇总
     自动标注报告.md                      ← 统计分布、quote 定位率、重试率、成本、**被迫猜测的字段清单**
     _缓存\<ITEM_ID>.json                 ← 每条每次尝试的原始返回（可重放）
-    工作区\dev\*.md / 工作区\test\*.md    ← 与人工工作区同格式，可直接用 `标注助手.py check` 复核
+    工作区\dev\*.md / 工作区\test\*.md    ← 条目文件格式与模型参照集产物一致，可直接用 `工具\抽检助手.py check` 复核
 ```
 """
 
@@ -80,8 +80,8 @@ if _HERE not in sys.path:
 import config  # noqa: E402
 
 ROOT = config.ROOT
-TOOL_RELPATH = "工具\\标注助手.py"
-HANDANN_PATH = os.path.join(ROOT, "工具", "标注助手.py")
+TOOL_RELPATH = "工具\\标注结构校验.py"
+HANDANN_PATH = os.path.join(ROOT, "工具", "标注结构校验.py")
 
 # --------------------------------------------------------------------------
 # 固化参数（模型与 Prompt；换任何一个都要同步升 PROMPT_VERSION 并写进文档）
@@ -297,7 +297,7 @@ REPAIR_TEMPLATE = """
 
 
 def render_schema() -> str:
-    """schema 说明：枚举来自 config，字段清单来自 `标注助手.py`（与校验器同源），不重抄字面量。"""
+    """schema 说明：枚举来自 config，字段清单来自 `标注结构校验.py`（与校验器同源），不重抄字面量。"""
     per_type = []
     for et in config.ENTITY_TYPES_FROM_MODEL:
         per_type.append("     - `%s`：%s" % (et, "、".join(handann.ENTITY_PER_TYPE_FIELDS.get(et) or [])))
@@ -488,7 +488,7 @@ def _problems_of(ann, rec, cfg) -> list:
 
 
 def attach_provenance(ann, attempts) -> OrderedDict:
-    """补 `provenance` 块——**自动标注必须能自证是自动标注**（`标注助手.py` 的 `auto_provenance_missing` 守卫）。
+    """补 `provenance` 块——**模型参照集必须能自证产者与提示词版本**（`标注结构校验.py` 的 `auto_provenance_missing` 守卫）。
 
     取值全部来自本轮的真实调用记录（模型解析值／时间戳／usage 都取自缓存里的 attempts），
     因此**重放时补出来的 provenance 与首跑逐字一致**。
@@ -548,7 +548,7 @@ def normalize_annotation(obj, rec, cfg) -> dict:
         if not ent.get("entity_ref"):
             ent["entity_ref"] = "E%d" % (len(keep) + 1)
             _drop("entities", "缺 entity_ref，按出现顺序补 E%d" % (len(keep) + 1))
-        # 校验器对 per-type 属性只判**键在不在**（`标注助手.py` 的 `_check_entities`）；
+        # 校验器对 per-type 属性只判**键在不在**（`标注结构校验.py` 的 `_check_entities`）；
         # 缺键就补「无法给出取值」的空值（原文没有的就是没有，**不许编**），并如实登记补了哪些。
         for name in handann.ENTITY_PER_TYPE_FIELDS.get(et) or []:
             if name not in ent:
@@ -915,7 +915,7 @@ def _push_ledger(record, rec, stats, lock, ledger_rows):
 
 
 def write_workspace_item(rec, annotation, eval_relpath: str, cfg) -> str:
-    """把一条自动标注物化成**与人工工作区同格式**的 md（可直接用 `标注助手.py check` 复核）。"""
+    """把一条模型标注物化成**与模型参照集条目文件同格式**的 md（可直接用 `工具\抽检助手.py check` 复核）。"""
     content = handann.render_item(rec, cfg, eval_relpath)
     i = content.find(handann.MARK_ANN_BEGIN) + len(handann.MARK_ANN_BEGIN)
     j = content.find(handann.MARK_ANN_END)
@@ -1169,14 +1169,13 @@ def write_workspace_guide(cfg, ed, od) -> None:
     write_text_atomic(os.path.join(od, WORKSPACE_DIRNAME, "说明.md"), "\n".join([
         "# 自动标注工作区（由 `代码\\抽取与图谱\\auto_annotate.py` 生成）",
         "",
-        "**这是模型自动标注（`status = auto_annotated`），不是人工标注，也不是金标准。**",
-        "它落在独立产物里；第 6 阶段交付文件 `dev.jsonl`／`test.jsonl` 的槽位仍为空（冻结契约）。",
+        "**这是模型参照集（`status = auto_annotated`，带 `provenance` 自证产者与提示词版本）：它是参照物，不是金标准。**",
+        "它落在独立产物里；第 6 阶段交付文件 `dev.jsonl`／`test.jsonl` **不带任何标注字段**（交付文件不夹带标签）。",
         "",
-        "格式与 `工具\\标注助手.py export` 生成的人工工作区**完全一致**，因此可直接复核：",
+        "格式与 `工具\\标注结构校验.py` 渲染的条目文件**完全一致**，因此可直接复核：",
         "",
         "```powershell",
-        "python 工具\\标注助手.py check --workspace \"%s\" --eval-dir \"%s\""
-        % (os.path.relpath(os.path.join(od, WORKSPACE_DIRNAME), ROOT), os.path.relpath(ed, ROOT)),
+        "python 工具\\抽检助手.py check",
         "```",
         "",
         ("模型：`%s`（与抽取器 `%s` **是同一个模型**——衡量的是同模型下抽取链提示词／格式与标注口径的差距，"
@@ -1366,7 +1365,7 @@ def write_report(args, cfg, records, results, stats, wall, od) -> None:
     add("## 三、被迫猜测的字段清单")
     add("")
     add("**这一节是判断「要不要放宽自动标注 schema」的依据。**")
-    add("口径：逐字段看**校验器要求必填**（`工具\\标注助手.py` 的 `ENTITY_PER_TYPE_FIELDS`，"
+    add("口径：逐字段看**校验器要求必填**（`工具\\标注结构校验.py` 的 `ENTITY_PER_TYPE_FIELDS`，"
         "与 `标注说明.md` 第3.1节 同源）的实体属性，模型实际给出的取值在正文里的支撑程度：")
     add("")
     add("* `本块有`：取值（去空白后）在本条 `text` 里出现——**有本块证据**；")

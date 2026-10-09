@@ -129,7 +129,9 @@ CROSS_DOC = os.path.join(TOOLS, "跨文档核验.py")
 EVAL_DIR = os.path.join(ROOT, "阶段05-数据准备", "数据集", "抽取评测集", config.DATASET_VERSION)
 EVAL_DEV = os.path.join(EVAL_DIR, "dev.jsonl")
 EVAL_TEST = os.path.join(EVAL_DIR, "test.jsonl")
-EVAL_NOTE = os.path.join(EVAL_DIR, "标注说明.md")
+# 2026-10-09：原先此处登记 `标注说明.md`。该文件整份是「人工标注怎么标」的说明，
+# 已随「人工标注」这一参照概念的删除一并删除；标注结构与字段枚举的落点改为
+# `分层统计.json` 的 `annotation_schema`（现场可读），故不再作为交付件核验。
 EVAL_STATS = os.path.join(EVAL_DIR, "分层统计.json")
 
 # 数据集「只读」的指纹基线候选落点（任务书未规定基线文件名，故由本工具按下列顺序发现；
@@ -181,7 +183,9 @@ if ARGS.eval_dir:
     EVAL_DIR = os.path.abspath(ARGS.eval_dir)
     EVAL_DEV = os.path.join(EVAL_DIR, "dev.jsonl")
     EVAL_TEST = os.path.join(EVAL_DIR, "test.jsonl")
-    EVAL_NOTE = os.path.join(EVAL_DIR, "标注说明.md")
+    # 2026-10-09：原先此处登记 `标注说明.md`。该文件整份是「人工标注怎么标」的说明，
+# 已随「人工标注」这一参照概念的删除一并删除；标注结构与字段枚举的落点改为
+# `分层统计.json` 的 `annotation_schema`（现场可读），故不再作为交付件核验。
     EVAL_STATS = os.path.join(EVAL_DIR, "分层统计.json")
 
 
@@ -1745,7 +1749,7 @@ export_rel = rel_to_root(PATHS["export_dir"]) + "/nodes.csv"
 export_ignored = [(ln, pat) for ln, pat in rules if gitignore_match(pat, export_rel)]
 note("L4 证据（导出物是否被 .gitignore 排除）",
      "实测 %s → %s" % (rel_to_root(PATHS["export_dir"]),
-                       "被排除（需人工确认：真导出物应随仓库提交）" if export_ignored
+                       "被排除（需逐条判读：真导出物应随仓库提交）" if export_ignored
                        else "未被排除（与《15》第4.3节 一致）"))
 
 
@@ -1797,15 +1801,18 @@ print("N、《15》第八节 第 15～18 行：抽取评测集（Dev 60 ＋ Test
 print("=" * 78)
 
 eval_files = [("dev.jsonl", EVAL_DEV), ("test.jsonl", EVAL_TEST),
-              ("标注说明.md", EVAL_NOTE), ("分层统计.json", EVAL_STATS)]
+              ("分层统计.json", EVAL_STATS)]
 miss_eval = [n for n, p in eval_files if not os.path.isfile(p)]
-chk(not miss_eval, "N1 评测集四件齐全（与数据集版本目录同级，落 %s）" % rel_to_root(EVAL_DIR),
+chk(not miss_eval, "N1 评测集三件齐全（dev.jsonl／test.jsonl／分层统计.json；标注结构与枚举的落点"
+    "已由 `标注说明.md` 改为 `分层统计.json` 的 `annotation_schema`；与数据集版本目录同级，落 %s）"
+    % rel_to_root(EVAL_DIR),
     "实测 %d/%d 存在；缺失 %s"
     % (len(eval_files) - len(miss_eval), len(eval_files), "、".join(miss_eval) or "无"))
 dev_rows = read_jsonl(EVAL_DEV) if os.path.isfile(EVAL_DEV) else []
 test_rows = read_jsonl(EVAL_TEST) if os.path.isfile(EVAL_TEST) else []
 eval_stats = read_json(EVAL_STATS, default=None) or {}
-eval_note = read_text(EVAL_NOTE, default="") or ""
+eval_stats_text = read_text(EVAL_STATS, default="") or ""
+eval_items_text = (read_text(EVAL_DEV, default="") or "") + (read_text(EVAL_TEST, default="") or "")
 n_dev, n_test = len(dev_rows), len(test_rows)
 bad_split = [ln for ln, r in dev_rows if r.get("split") != "dev"] + \
             [ln for ln, r in test_rows if r.get("split") != "test"]
@@ -1816,55 +1823,58 @@ chk(n_dev == 60 and n_test == 200 and n_dev + n_test == 260 and not bad_split,
                      "通过" if eval_stats.get("counts", {}).get("total") == 260 else
                      "分层统计.json 未登记 260（读报告，仅作参考）"))
 
-need_fields = ["chunk_id", "doc_id", "annotation"]
-ann_keys = ["entities", "events", "relations", "times", "notes"]
+# 2026-10-09 重基线（删「交付槽位」概念，**判据反转为更硬的守卫**）：交付文件
+# `{dev,test}.jsonl` 由「带空 annotation 骨架的交付槽位」收成**纯抽样产物**——每条只有
+# 抽样字段、**不带任何标注字段**。原判据只验「骨架字段齐备」；新判据改验「**不得夹带任何
+# 标签字段**」，并保留 chunk_id／doc_id 的齐备性。红线：模型参照集是参照物、不是金标准，
+# 交付文件里不得出现参照集内容。
+need_fields = ["chunk_id", "doc_id"]
+LABEL_FIELDS = ["annotation", "status", "entities", "events", "relations", "times",
+                "ontology_boundary_log", "notes"]
 field_bad, statuses = [], Counter()
 for name, rows in (("dev.jsonl", dev_rows), ("test.jsonl", test_rows)):
     for ln, r in rows:
         for f in need_fields:
             if f not in r:
                 field_bad.append("%s 第%d行 缺 %s" % (name, ln, f))
-        ann = r.get("annotation") or {}
-        for k in ann_keys:
-            if k not in ann:
-                field_bad.append("%s 第%d行 annotation 缺 %s" % (name, ln, k))
-        statuses[ann.get("status")] += 1
+        for f in LABEL_FIELDS:
+            if f in r:
+                field_bad.append("%s 第%d行 夹带标签字段 %s" % (name, ln, f))
+        _ann = r.get("annotation")
+        statuses[_ann.get("status") if isinstance(_ann, dict) else None] += 1
 chk(not field_bad,
-    "N3 每条都带 chunk_id／doc_id 与 annotations 骨架（entities／events／relations／times／notes）",
-    "实测 检查 %d 条；缺字段 %d 处%s；标注状态分布 %s"
+    "N3 每条都带 chunk_id／doc_id 且**不带任何标注字段**（交付文件是纯抽样产物，不夹带标签）",
+    "实测 检查 %d 条；缺抽样字段或夹带标签字段 %d 处%s；标注字段状态分布 %s"
     % (n_dev + n_test, len(field_bad), "：" + br(field_bad) if field_bad else "",
        dict(statuses)))
 
-# N3b（C 线头号假阴性补齐）：《16》第五节 冻结契约——260 条**交付槽位恒为
-# `pending_human_annotation` 且内容为空**。N3 过去只验「字段齐备」，不验「槽位是否为空」，
-# 于是「把 entities 填成非空、status 仍留 pending」这种违规能照样 98/101 通过。
-# 本项与 `工具\标注助手.py` 的 `status_pending_but_filled` 码同源（该码由 check 把守），
-# 槽位名与 `_annotation_status()` 的 `slots` 一致：entities／events／relations／times／
-# ontology_boundary_log ＋ notes。判据只增不减：既判「非空」，也判 status 不再是 pending。
+# N3b（C 线头号假阴性补齐的原地重基线，2026-10-09）：原判据断言「260 条交付槽位恒为未标注状态且内容为空」。
+# 该概念已按作者决定整体撤销——**本课题不存在「人工」这个参照概念**：交付的抽取评测集
+# 不再携带任何标注字段，抽取参照物一律是**模型参照集**（`v2.1\\自动标注\\`、
+# `v2.1\\自动标注_flash\\`）。判据按红线「**不得把模型产物写成交付标签、不得把参照集
+# 写成金标准**」反转为更硬的守卫：逐条断言交付条目的键集合与**参照集字段集合不相交**。
+# **强度对比**：旧判据允许「带空 annotation 骨架」通过、只拦「骨架被填」；新判据连空骨架都拦。
 ANN_SLOTS = ["entities", "events", "relations", "times", "ontology_boundary_log"]
+REF_KEYS = set(LABEL_FIELDS) - {"status"}
 pending_bad = []
 for name, rows in (("dev.jsonl", dev_rows), ("test.jsonl", test_rows)):
     for ln, r in rows:
-        ann = r.get("annotation") or {}
-        non_empty = [s for s in ANN_SLOTS if isinstance(ann.get(s), list) and ann.get(s)]
-        _notes = ann.get("notes")
-        has_note = bool(_notes.strip()) if isinstance(_notes, str) else bool(_notes)
-        if ann.get("status") != "pending_human_annotation" or non_empty or has_note:
-            pending_bad.append("%s 第%d行 status=%s、非空槽位=%s、notes=%s"
-                               % (name, ln, ann.get("status"),
-                                  "／".join(non_empty) or "无", "非空" if has_note else "空"))
+        inter = sorted(set(r.keys()) & REF_KEYS)
+        if inter:
+            pending_bad.append("%s 第%d行 与参照集字段相交：%s" % (name, ln, "／".join(inter)))
 chk(not pending_bad,
-    "N3b 260 条交付槽位恒为 pending_human_annotation 且内容为空（《16》第五节冻结契约；"
-    "填了内容就必须同步改 status）",
-    "实测 检查 %d 条；违背 %d 处%s"
+    "N3b 260 条交付条目**一律不带任何标注字段**、与参照集字段集合不相交"
+    "（无槽位、无 status、无 notes；「模型参照集是参照物，不是金标准」）",
+    "实测 检查 %d 条；与参照集字段相交 %d 处%s"
     % (n_dev + n_test, len(pending_bad),
        "：" + br(pending_bad, limit=6) if pending_bad else ""))
 
-if set(statuses) == {"pending_human_annotation"} and not pending_bad:
-    note("N3 证据（人工标注状态）",
-         "实测 %d 条全部为 pending_human_annotation 且槽位为空：T8 的选点与配额已落盘，"
-         "人工标注尚未填写（N3b 已逐条核实槽位确实为空）；"
-         "这正是 N9 与 O4 需要《16》登记证据不足清单的原因" % sum(statuses.values()))
+if not any(k is not None for k in statuses) and not pending_bad:
+    note("N3 证据（交付文件的标签字段状态）",
+         "实测 %d 条**全部不带标注字段**（标注状态分布只有 None）：T8 的选点与配额已落盘，"
+         "交付文件是**纯抽样产物**；抽取参照物一律取**模型参照集**"
+         "（模型参照集是参照物，不是金标准）——这正是 N9 与 O4 需要《16》登记证据不足清单的原因"
+         % sum(statuses.values()))
 
 dev_ids = [r.get("chunk_id") for _, r in dev_rows]
 test_ids = [r.get("chunk_id") for _, r in test_rows]
@@ -1887,14 +1897,14 @@ if not doc_overlap:
     # 二者不一致即为「登记与实测打架」，应当 FAIL。
     _recorded_overlap = (eval_stats.get("keys") or {}).get("document_overlap_size")
     chk(not doc_overlap and _recorded_overlap == 0,
-        "N5 文档集合重叠部分已在《标注说明.md》登记（实测交集为 0）",
+        "N5 文档集合重叠部分已在《分层统计.json》登记（实测交集为 0）",
         "实测 dev 文档 %d 个、test 文档 %d 个、交集 %d 个；交集为空故无需登记；"
         "分层统计.json 登记 document_overlap_size=%s（实测与登记须同为 0）"
         % (len(dev_docs), len(test_docs), len(doc_overlap), _recorded_overlap))
 else:
-    unreg = [str(d) for d in doc_overlap if str(d) not in eval_note]
-    chk(not unreg, "N5 文档集合重叠部分已在《标注说明.md》登记（%d 篇重叠）" % len(doc_overlap),
-        "实测 交集 %d 篇；未在《标注说明.md》出现的 %s"
+    unreg = [str(d) for d in doc_overlap if str(d) not in eval_stats_text]
+    chk(not unreg, "N5 文档集合重叠部分已在《分层统计.json》登记（%d 篇重叠）" % len(doc_overlap),
+        "实测 交集 %d 篇；未在《分层统计.json》出现的 %s"
         % (len(doc_overlap), br(unreg) or "无"))
 
 # 表 15-E 的三维度重算：数据集侧按文本块占比，评测集侧按条目占比
@@ -2023,8 +2033,9 @@ chk(not unregistered,
 
 balanced_terms = ["8 类均衡", "8类均衡", "八类均衡", "按 8 类", "9 条关系均等", "9条关系均等",
                   "八种事件均衡", "均衡分层"]
-balanced_targets = [("《15》", t15), ("《16》", t16 or ""), ("标注说明.md", eval_note),
-                    ("分层统计.json", read_text(EVAL_STATS, default="") or "")]
+balanced_targets = [("《15》", t15), ("《16》", t16 or ""),
+                    ("dev.jsonl＋test.jsonl", eval_items_text),
+                    ("分层统计.json", eval_stats_text)]
 bal_hits = scan_terms(balanced_terms, balanced_targets)
 bal_all = scan_terms(balanced_terms, balanced_targets, ignore_negation=True)
 chk(not bal_hits,
@@ -2270,7 +2281,7 @@ for p in iter_files(PATHS["dedup_dir"]):
     deliverables.append((os.path.basename(p), read_text(p, default="") or ""))
 ddl_re = re.compile(r"\b(?:CREATE|ALTER|DROP)\s+(?:TABLE|DATABASE|SCHEMA)\b", re.I)
 # 「检测模式的引用」：脚本自己写 DDL 关键字**去检查别人**（如 write_graph.py 的
-# `if "CREATE TABLE" in ln.upper()`）不算本阶段产出 DDL。这类行照样打印出来供人工确认，
+# `if "CREATE TABLE" in ln.upper()`）不算本阶段产出 DDL。这类行照样打印出来供逐条判读，
 # 只是不计入失败（沿用 跨文档核验.py J／K 两项「启发式检查不许静默跳过」的口径）。
 DDL_SEARCH_CTX = re.compile(r"[\"'](?:CREATE|ALTER|DROP)\s+(?:TABLE|DATABASE|SCHEMA)[\"']"
                             r"\s*(?:in\b|not\s+in\b|\)|\])", re.I)
@@ -2692,7 +2703,7 @@ chk(not vdb_hits,
     % (len(vdb_targets), len(vdb_hits), len(vdb_all) - len(vdb_hits),
        "：" + br(["%s 第%d行「%s」" % (a, b, term[:40]) for a, b, term, _l, _n in vdb_hits], 3)
        if vdb_hits else ""))
-note("V2 证据（含否定语境的全部命中，供人工确认）",
+note("V2 证据（含否定语境的全部命中，供逐条判读）",
      br(["%s 第%d行「%s」" % (a, b, c[:60]) for a, b, c, _d, _e in vdb_all], 5) or "无命中")
 
 

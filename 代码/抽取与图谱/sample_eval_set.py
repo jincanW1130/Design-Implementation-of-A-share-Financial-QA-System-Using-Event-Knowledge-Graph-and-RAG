@@ -12,11 +12,15 @@
 4. 写出 `阶段05-数据准备\\数据集\\抽取评测集\\v2.1\\` 下的三个机器可读文件：
    `dev.jsonl`、`test.jsonl`、`分层统计.json`。
 
-**本脚本不产生任何标签**：`dev.jsonl`／`test.jsonl` 的 `annotation` 块里
-`entities`／`events`／`relations`／`times`／`ontology_boundary_log` 一律是空容器，
-`notes` 为空串，`status` 恒为 `pending_human_annotation`。写盘前有一道断言把关
-（`assert_annotation_empty`），`--verify-only` 会再从盘上复算一遍。
-人工标注是 T8 尚未完成的部分，口径见同目录的《标注说明.md》。
+**本脚本不产生任何标签，交付文件里也没有任何标签字段**：`dev.jsonl`／`test.jsonl`
+每一条只带抽样字段（`item_id`／`split`／`chunk_id`／`doc_id`／`chunk_index`／
+`chunk_count_in_doc`／`token_count`／`category`／`publish_time`／`month`／`source`／
+`title`／`url`／`company_list`／`subject_companies`／`text`／`doc_text`／`sampling`），
+**不带 `annotation`、`status`、`entities`、`events`、`relations`、`times`、
+`ontology_boundary_log`、`notes` 任何一个标签字段**。写盘前有一道断言把关
+（`assert_no_label_fields`），`--verify-only` 会再从盘上复算一遍。
+标注结构（字段名与枚举）的落点是同目录 `分层统计.json` 的 `annotation_schema`；
+抽取参照物一律是**模型参照集**（模型参照集是参照物，不是金标准）。
 
 参数来源：《15-第6阶段任务书（事件抽取与知识图谱）》第4.4节／第五节 硬约束 14～16／
 第八节 验收标准／第九节 T8；本体与代理关键词集一律取自 `代码\\抽取与图谱\\config.py`
@@ -541,17 +545,13 @@ def annotation_schema() -> dict:
     }
 
 
-def empty_annotation() -> dict:
-    """标注槽位：**一律为空容器**，由人工标注填写。"""
-    return {
-        "status": "pending_human_annotation",
-        "entities": [],
-        "events": [],
-        "relations": [],
-        "times": [],
-        "ontology_boundary_log": [],
-        "notes": "",
-    }
+# `empty_annotation()` 已随「交付槽位」概念的删除一并删除（2026-10-09）：
+# 交付文件不再携带任何标签字段，因此不存在「空槽位骨架」这种东西。
+
+
+# 交付文件**不得出现**的标签字段（与 `工具\标注结构校验.py` 的只读模型参照集字段集合一致）。
+LABEL_FIELDS = ("annotation", "status", "entities", "events", "relations", "times",
+                "ontology_boundary_log", "notes")
 
 
 def choose_chunk(unit: dict) -> tuple:
@@ -613,23 +613,23 @@ def make_item(split: str, seq: int, unit: dict, schema: dict) -> dict:
             "note": ("evidence_unit = chunk：事实以本条给定文本块的 chunk_id 为准；"
                      "选块优先取本条覆盖标签的块级关键词真正命中的块（选块启发式，不是标注）；"
                      "doc_text 只用于文档级判定（事件是否被块边界切断、参与主体与 role），"
-                     "跨块证据写进 annotation.notes。company_list／subject_companies 只是候选池，"
+                     "跨块证据按 `分层统计.json` 的 `annotation_schema.notes` 口径另行记录"
+                     "（本条不含任何标签字段）。company_list／subject_companies 只是候选池，"
                      "不是「公司参与该事件」的依据（《15》第五节 硬约束 16）。"),
-            "annotation_schema_ref": "分层统计.json#annotation_schema 与 标注说明.md 第三节",
+            "annotation_schema_ref": "分层统计.json#annotation_schema",
         },
-        "annotation": empty_annotation(),
     }
 
 
-def assert_annotation_empty(item: dict) -> None:
-    ann = item["annotation"]
-    if ann.get("status") != "pending_human_annotation":
-        raise SystemExit("条目 %s 的标注状态不是待标注" % item.get("item_id"))
-    for k in ("entities", "events", "relations", "times", "ontology_boundary_log"):
-        if ann.get(k) != []:
-            raise SystemExit("条目 %s 的 %s 槽位非空——本脚本不得写入任何标签" % (item.get("item_id"), k))
-    if ann.get("notes") != "":
-        raise SystemExit("条目 %s 的 notes 非空——本脚本不得写入任何标签" % item.get("item_id"))
+def assert_no_label_fields(item: dict) -> None:
+    """**交付条目不得夹带任何标签字段**（2026-10-09 起：原「空槽位骨架」概念已整体撤销）。
+
+    强度对比：旧断言只拦「骨架被填」，新断言**连空骨架都拦**——交付文件是纯抽样产物。
+    """
+    present = [k for k in LABEL_FIELDS if k in item]
+    if present:
+        raise SystemExit("条目 %s 夹带了标签字段 %s——本脚本不得写入任何标签"
+                         % (item.get("item_id"), "／".join(present)))
 
 
 def build_items(selection: dict) -> dict:
@@ -639,7 +639,7 @@ def build_items(selection: dict) -> dict:
         units = sorted(selection["picked"][split], key=lambda u: int(u["chunk"]["chunk_id"]))
         rows = [make_item(split, i + 1, u, schema) for i, u in enumerate(units)]
         for r in rows:
-            assert_annotation_empty(r)
+            assert_no_label_fields(r)
         items[split] = rows
     return {"items": items, "schema": schema}
 
@@ -837,7 +837,7 @@ def coverage_report(rows: dict, universe_index: dict, docs: dict, chunks: list, 
         elif total < THIN_CLASS_THRESHOLD:
             status = "薄证据（登记）：计划条目仅 %d 条，标注判定无实例时按证据不足登记" % total
         else:
-            status = "有候选条目（待人工标注判定）"
+            status = "有候选条目（待逐条判定）"
         events.append({
             "event_type": name,
             "planned_items_dev": per["dev"], "planned_items_test": per["test"],
@@ -871,12 +871,12 @@ def coverage_report(rows: dict, universe_index: dict, docs: dict, chunks: list, 
             status = ("登记为证据不足／候选已纳入：三条公司间关系只在 company_list 长度 ≥ 2 的文档里"
                       "可能出现证据，本次已强制纳入 %d 条多公司条目（Dev %d ＋ Test %d；其中 "
                       "subject_companies 长度 ≥ 2 的 %d 条：Dev %d ＋ Test %d）；"
-                      "是否真有关系由人工标注判定，判定无证据时按证据不足登记"
+                      "是否真有关系由逐条判定给出，判定无证据时按证据不足登记"
                       % (multi_company_items, multi_split["dev"], multi_split["test"],
                          strict_multi_items, strict_split["dev"], strict_split["test"]))
             planned_note = "候选条目数 = 本条内 company_list ≥ 2 的条目数"
         elif per["dev"] + per["test"] >= THIN_CLASS_THRESHOLD:
-            status = "有候选条目（正文级代理关键词命中，待人工标注判定）"
+            status = "有候选条目（正文级代理关键词命中，待逐条判定）"
             planned_note = "正文级代理关键词命中本条的文本块"
         elif per["dev"] + per["test"]:
             status = ("薄证据（登记）：计划条目仅 %d 条，远小于其他关系；"
@@ -1071,20 +1071,21 @@ def build_stats(docs: dict, chunks: list, selection: dict, built: dict) -> dict:
         ),
         "worst_deviations": comp_list_rows[:5],
     }
-    annotation_emptiness = {
+    # 2026-10-09：原 `annotation_emptiness`（「槽位一律为空」）随「交付槽位」概念整体撤销，
+    # 改为登记**标签字段的缺席**——判据只收紧不放宽（旧判据允许空骨架，新判据连空骨架都拦）。
+    label_field_absence = {
         "checked_items": len(all_rows),
-        "nonempty_slots": [],
-        "status_value": sorted({r["annotation"]["status"] for r in all_rows}),
-        "rule": "entities／events／relations／times／ontology_boundary_log 一律为空列表，notes 为空串；"
-                "本脚本不产生任何标签，标注为人工未完成项。",
+        "label_fields": list(LABEL_FIELDS),
+        "present_label_fields": [],
+        "rule": "交付文件是纯抽样产物：每一条只带抽样字段，"
+                "**不带 annotation／status／entities／events／relations／times／"
+                "ontology_boundary_log／notes 任何一个标签字段**；本脚本不产生任何标签。",
     }
     for r in all_rows:
-        for path, v in flatten_annotation(r["annotation"]):
-            if path.endswith("status"):
-                if v != "pending_human_annotation":
-                    annotation_emptiness["nonempty_slots"].append({"item_id": r["item_id"], "path": path, "value": v})
-            elif v not in ([], "", None):
-                annotation_emptiness["nonempty_slots"].append({"item_id": r["item_id"], "path": path, "value": v})
+        present = sorted(k for k in LABEL_FIELDS if k in r)
+        if present:
+            label_field_absence["present_label_fields"].append(
+                {"item_id": r["item_id"], "present": present})
     tag_counts = {t: {"dev": 0, "test": 0, "total": 0} for t in COVERAGE_TAGS}
     for split in SPLIT_ORDER:
         for r in rows[split]:
@@ -1150,7 +1151,7 @@ def build_stats(docs: dict, chunks: list, selection: dict, built: dict) -> dict:
         "coverage_tag_counts": tag_counts,
         "coverage": coverage_report(rows, selection["universe_index"], docs, chunks, table_cd),
         "annotation_schema": built["schema"],
-        "annotation_emptiness": annotation_emptiness,
+        "label_field_absence": label_field_absence,
         "selection": {
             "dev_chunk_ids": ids["dev"], "test_chunk_ids": ids["test"],
             "dev_doc_ids": docids["dev"], "test_doc_ids": docids["test"],
@@ -1190,7 +1191,7 @@ def read_jsonl(path: str) -> list:
 
 
 def flatten_annotation(ann: dict, prefix: str = "") -> list:
-    """把 annotation 块摊平成 (路径, 取值) 列表，用于「槽位一律为空」的检查。"""
+    """把一个映射摊平成 (路径, 取值) 列表（旧「槽位一律为空」检查的遗留小工具，保留备用）。"""
     out = []
     for k, v in ann.items():
         path = "%s.%s" % (prefix, k) if prefix else k
@@ -1218,12 +1219,9 @@ def verify(verbose: bool = True) -> dict:
     inter = sorted(set(dev_ids) & set(test_ids))
     bad_ann, bad_chunk, bad_link, bad_idx = [], [], [], []
     for r in dev + test:
-        for path, v in flatten_annotation(r.get("annotation") or {}):
-            if path.endswith("status"):
-                if v != "pending_human_annotation":
-                    bad_ann.append((r["item_id"], path, v))
-            elif v not in ([], "", None):
-                bad_ann.append((r["item_id"], path, v))
+        present = sorted(k for k in LABEL_FIELDS if k in r)
+        if present:
+            bad_ann.append((r["item_id"], "／".join(present), "夹带标签字段"))
         cid, did = int(r["chunk_id"]), int(r["doc_id"])
         if cid not in chunk_index:
             bad_chunk.append(cid)
@@ -1245,7 +1243,7 @@ def verify(verbose: bool = True) -> dict:
         "test_chunk_id_set_size": len(set(test_ids)),
         "chunk_id_intersection_size": len(inter), "chunk_id_intersection_examples": inter[:5],
         "document_overlap_size": len(dev_docs & test_docs),
-        "annotation_slots_empty": not bad_ann, "annotation_violations": bad_ann[:10],
+        "label_fields_absent": not bad_ann, "label_field_violations": bad_ann[:10],
         "chunk_ids_resolvable_in_v21": not bad_chunk, "unresolved_chunk_ids": bad_chunk[:10],
         "chunk_doc_link_ok": not bad_link, "chunk_doc_link_violations": bad_link[:10],
         # M-6：chunk_index 与 chunk_id 的自洽性（对 chunks.jsonl 重算）
@@ -1306,7 +1304,7 @@ def main(argv=None) -> int:
             "test_fingerprint": stats["selection"]["test_fingerprint"],
             "coverage_tag_counts": stats["coverage_tag_counts"],
             "deviations_registry_size": len(stats["deviations_registry"]),
-            "annotation_slots_empty": report["annotation_slots_empty"],
+            "label_fields_absent": report["label_fields_absent"],
             "verify_ok": report["ok"],
         }
         print(json.dumps(summary, ensure_ascii=False, indent=2))

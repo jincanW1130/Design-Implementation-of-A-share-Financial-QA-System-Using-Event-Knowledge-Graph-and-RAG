@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-"""工具\\抽检助手.py —— 第 6 阶段抽取评测集（v2.1）的**人工抽检工作台**（离线；不调模型）。
+"""工具\\抽检助手.py —— 第 6 阶段抽取评测集（v2.1）的**逐条抽检工作台**（离线；不调模型）。
 
-本工具对 260 条自动标注（**模型参照集**，在 `自动标注\\` 下、只读）做 **40 条人工抽检**，
-把抽中条目铺成可复核的工作区，并在复核后算出「人工与模型的一致率」。它**不产生任何标签、
+本工具对 260 条自动标注（**模型参照集**，在 `自动标注\\` 下、只读）做 **40 条逐条抽检**，
+把抽中条目铺成可复核的工作区，并在复核后算出「复核改动与模型参照集的一致率」。它**不产生任何标签、
 不改任何既有产物**：读 `自动标注\\`，写 `自动标注\\抽检\\`（该路径落在 `.gitignore` 覆盖的
 `阶段05-数据准备/数据集/` 之下，可用 `git check-ignore -v <路径>` 复核）。
 
 | 子命令 | 作用 |
 | --- | --- |
 | `export` | 确定性抽 40 条（10 dev ＋ 30 test），铺工作台：`_抽检台账.json`、`工作区\\{dev,test}\\<ITEM>.md`、`抽检说明.md` |
-| `check`  | 用 `工具\\标注助手.py` 的公开入口 `validate_annotation` 校验这 40 条的结构合法性；并报「已复核／未复核」进度 |
+| `check`  | 用 `工具\\标注结构校验.py` 的公开入口 `validate_annotation` 校验这 40 条的结构合法性；并报「已复核／未复核」进度 |
 | `diff`   | 把工作区与 `自动标注\\{dev,test}.auto.jsonl` 逐项比对，写 `抽检\\一致率报告.md`（条目级一致率、改动明细、枚举字段精确一致率、`notes` 码分布、Wilson 95% 外推） |
 | `selftest` | 在系统临时目录里自检：抽样确定性、8 类事件覆盖、`diff` 定位能力、未复核检出、源文件未被改 |
 
@@ -39,13 +39,13 @@ python 工具\\抽检助手.py selftest
 
 ## `check`／`diff` 的口径
 
-* 结构校验**不另立一套**：直接 import `工具\\标注助手.py` 的 `validate_annotation`，错误码与
-  `python 工具\\标注助手.py check` 一致；工作区文件级的问题（文件名／split／抽样字段／文本块摘要）
+* 结构校验**不另立一套**：直接 import `工具\\标注结构校验.py` 的 `validate_annotation`——
+  **同一个函数、同一套错误码**；工作区文件级的问题（文件名／split／抽样字段／文本块摘要）
   沿用同一套码（`parse_error`／`filename_mismatch`／`split_mismatch`／`sampled_field_changed`／
   `text_changed`／`text_digest_mismatch`）。
-* **复核完成的判据是「人工写下的 `notes`」**（不是 `status`）：`notes` 非空 **且**（与模型参照集里的
+* **复核完成的判据是「复核时新写下的 `notes`」**（不是 `status`）：`notes` 非空 **且**（与模型参照集里的
   `notes` 不同 **或** 能解析出已知错误码）才算复核完成。模型自己写的 `notes`（如
-  `empty_but_checked: true`、一句口径说明）**不算人工复核**——否则未动的文件会被误判成已复核
+  `empty_but_checked: true`、一句口径说明）**不算复核完成**——否则未动的文件会被误判成已复核
   （模型参照集里有 93 条带自述 `notes`）。条目级三者互斥且合计 40：未复核（unreviewed）；
   `notes` 写好了且五个内容槽位（`entities`／`events`／`relations`／`times`／
   `ontology_boundary_log`）无改动 ⇒ 一致（agree）；否则 ⇒ 有改动（corrected）。
@@ -86,9 +86,9 @@ _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(_THIS_DIR)
 
 CONFIG_PATH = os.path.join(ROOT, "代码", "抽取与图谱", "config.py")
-HANDANN_PATH = os.path.join(ROOT, "工具", "标注助手.py")
+KERNEL_PATH = os.path.join(ROOT, "工具", "标注结构校验.py")
 TOOL_RELPATH = "工具\\抽检助手.py"
-HANDANN_RELPATH = "工具\\标注助手.py"
+KERNEL_RELPATH = "工具\\标注结构校验.py"
 
 EVAL_SUBDIR = "抽取评测集"
 AUTO_DIRNAME = "自动标注"
@@ -114,7 +114,7 @@ ENTITY_NAME_KEYS = OrderedDict([
     ("Policy", "policy_name"),
 ])
 
-# 人工只写在 `notes` 里的错误码（码在前，可逗号组合，中文冒号后跟一句说明）。
+# 复核只写在 `notes` 里的错误码（码在前，可逗号组合，中文冒号后跟一句说明）。
 ERROR_CODES = [
     ("OK", "完全同意，不用改"),
     ("E_TYPE", "实体类型归错"),
@@ -156,20 +156,20 @@ def load_config():
     return _load_py_module("stage6_extract_config", CONFIG_PATH)
 
 
-def load_handann():
-    """复用 `工具\\标注助手.py`：公开校验入口 `validate_annotation` 与解析／摘要小工具。"""
-    return _load_py_module("stage6_handann_tool", HANDANN_PATH)
+def load_kernel():
+    """复用 `工具\\标注结构校验.py`：公开校验入口 `validate_annotation` 与解析／摘要小工具。"""
+    return _load_py_module("stage6_annot_struct_kernel", KERNEL_PATH)
 
 
-_HANDANN_CACHE = None
+_KERNEL_CACHE = None
 
 
-def handann_mod():
-    """缓存的 `标注助手` 模块（内部函数用；命令行入口各自显式 load 一次）。"""
-    global _HANDANN_CACHE
-    if _HANDANN_CACHE is None:
-        _HANDANN_CACHE = load_handann()
-    return _HANDANN_CACHE
+def kernel_mod():
+    """缓存的 `标注结构校验` 模块（内部函数用；命令行入口各自显式 load 一次）。"""
+    global _KERNEL_CACHE
+    if _KERNEL_CACHE is None:
+        _KERNEL_CACHE = load_kernel()
+    return _KERNEL_CACHE
 
 
 def default_eval_dir(cfg) -> str:
@@ -525,7 +525,7 @@ def render_ledger(plan, rows_by_split, auto_dir, spot_dir, script_sha):
         ("schema", LEDGER_SCHEMA),
         ("tool", TOOL_RELPATH),
         ("tool_sha256", script_sha),
-        ("定位", "40 条人工抽检（%d dev ＋ %d test），用于估计人工与模型参照集的一致率；"
+        ("定位", "40 条逐条抽检（%d dev ＋ %d test），用于估计复核改动与模型参照集的一致率；"
                  "**不是全量复核**，外推到 260 条只是粗略区间。" % (QUOTA["dev"], QUOTA["test"])),
         ("种子", SEED),
         ("并列打破键", "sha256(种子:item_id)（十六进制升序）"),
@@ -621,7 +621,7 @@ def cmd_export(args) -> int:
 def render_guide(plan, ledger, spot_dir, auto_dir) -> str:
     code_rows = "\n".join("| `%s` | %s |" % (c, m) for c, m in ERROR_CODES)
     lines = [
-        "# 抽检说明 —— 人工抽检工作台（40 条）",
+        "# 抽检说明 —— 逐条抽检工作台（40 条）",
         "",
         "> 一页纸。**只改每个 `.md` 里「三、标注槽位」的那个 json 块**，并把结论写进该块的 `notes`。",
         "> 抽中集合：%d 条（dev %d ＋ test %d）；种子 `%s`；抽样只读模型参照集 `%s`，"
@@ -646,7 +646,7 @@ def render_guide(plan, ledger, spot_dir, auto_dir) -> str:
         "",
         "- **只改 json 块**：上面 17 项字段与两段文本（`text`／`doc_text`）是抽样写的，改了 `check` 会报；"
         "`status` **保持 `auto_annotated` 不要动**，`provenance` 也不要动。",
-        "- **每条都要写 `notes`**（人工写下的 `notes` 才算复核完成，空着会被算成「未复核」）："
+        "- **每条都要写 `notes`**（复核时新写下的 `notes` 才算复核完成，空着会被算成「未复核」）："
         "**码在前，中文冒号后跟一句说明**；多个码用逗号组合。"
         "例：`V_TYPE,R_ROLE：事件该判「产品」；role 该是「涉及方」`。",
         "- **模型自己写的 `notes` 不算你的复核**（如 `empty_but_checked: true` 或一句口径说明，"
@@ -707,7 +707,7 @@ def load_ledger(spot_dir: str):
 
 
 class Problems(list):
-    """问题清单（与 `标注助手.py` 的打印口径一致）。"""
+    """问题清单（与 `工具\\标注结构校验.py` 的打印口径一致）。"""
 
     def add(self, kind, path, item_id, field, value, message):
         self.append(OrderedDict([("kind", kind), ("file", path), ("item_id", item_id),
@@ -741,8 +741,8 @@ def iter_spot_entries(ledger, spot_dir):
                os.path.join(spot_dir, WS_DIRNAME, v["split"], "%s.md" % v["item_id"]))
 
 
-def check_spot(ledger, spot_dir, auto_dir, cfg, handann, verbose=True):
-    """返回 (problems, 统计)。结构校验复用 `handann.validate_annotation`。"""
+def check_spot(ledger, spot_dir, auto_dir, cfg, kernel, verbose=True):
+    """返回 (problems, 统计)。结构校验复用 `kernel.validate_annotation`。"""
     problems = Problems()
     _, auto_rows = load_auto_annotations(auto_dir)
     handled = set()
@@ -752,7 +752,7 @@ def check_spot(ledger, spot_dir, auto_dir, cfg, handann, verbose=True):
         if not os.path.isfile(path):
             problems.add("file_missing", path, iid, "文件", path, "抽中的条目在工作区里没有文件")
             continue
-        meta, text, annotation, errs = handann.parse_item_file(path)
+        meta, text, annotation, errs = kernel.parse_item_file(path)
         for e in errs:
             problems.add("parse_error", path, (meta or {}).get("item_id", iid), "文件结构",
                          os.path.basename(path), e)
@@ -773,11 +773,11 @@ def check_spot(ledger, spot_dir, auto_dir, cfg, handann, verbose=True):
                     if meta.get(k) != rec.get(k):
                         problems.add("sampled_field_changed", path, iid, "meta.%s" % k,
                                      meta.get(k), "抽样字段不许改：模型参照集里 %s=%s" % (k, rec.get(k)))
-                if text is None or handann.text_digest(text) != handann.text_digest(rec.get("text")):
+                if text is None or kernel.text_digest(text) != kernel.text_digest(rec.get("text")):
                     problems.add("text_changed", path, iid, "text",
-                                 handann.text_digest(text or ""),
+                                 kernel.text_digest(text or ""),
                                  "工作区里的文本块与模型参照集里的不是同一段（抽样字段不许改）")
-            if text is not None and meta.get("text_digest") != handann.text_digest(text):
+            if text is not None and meta.get("text_digest") != kernel.text_digest(text):
                 problems.add("text_digest_mismatch", path, iid, "meta.text_digest",
                              meta.get("text_digest"),
                              "META 里的 text_digest 与本条文本块重算的摘要不符")
@@ -791,7 +791,7 @@ def check_spot(ledger, spot_dir, auto_dir, cfg, handann, verbose=True):
         else:
             unreviewed.append(iid)
         rec = auto_rows.get(iid) or meta or {}
-        for p in handann.validate_annotation(
+        for p in kernel.validate_annotation(
                 {"item_id": iid, "chunk_id": rec.get("chunk_id"), "doc_id": rec.get("doc_id"),
                  "text": text, "annotation": annotation}, cfg, path):
             problems.append(p)
@@ -811,13 +811,13 @@ def check_spot(ledger, spot_dir, auto_dir, cfg, handann, verbose=True):
     ])
     if verbose:
         print("check：抽检工作区 %s" % spot_dir)
-        print("  台账 %d 条｜已复核 %d 条｜未复核 %d 条（判据：人工写下的 notes，见抽检说明）"
+        print("  台账 %d 条｜已复核 %d 条｜未复核 %d 条（判据：复核时新写下的 notes，见抽检说明）"
               % (summary["total"], summary["reviewed"], summary["unreviewed"]))
         if unreviewed:
             show = "、".join(unreviewed[:12]) + ("…" if len(unreviewed) > 12 else "")
             print("  未复核：%s" % show)
         if not problems:
-            print("  **0 个结构问题**：40 条的结构校验全部通过（与 `标注助手.py check` 同一份校验内核）。")
+            print("  **0 个结构问题**：40 条的结构校验全部通过（与 `工具\\标注结构校验.py` 同一份校验内核）。")
         else:
             print("  %d 个结构问题：" % len(problems))
             for p in problems:
@@ -829,12 +829,12 @@ def check_spot(ledger, spot_dir, auto_dir, cfg, handann, verbose=True):
 
 def cmd_check(args) -> int:
     cfg = load_config()
-    handann = load_handann()
+    kernel = load_kernel()
     eval_dir = os.path.abspath(args.eval_dir or default_eval_dir(cfg))
     auto_dir = os.path.abspath(args.auto_dir or os.path.join(eval_dir, AUTO_DIRNAME))
     spot_dir = os.path.abspath(args.spot_dir or os.path.join(auto_dir, SPOT_DIRNAME))
     ledger = load_ledger(spot_dir)
-    problems, summary = check_spot(ledger, spot_dir, auto_dir, cfg, handann, verbose=True)
+    problems, summary = check_spot(ledger, spot_dir, auto_dir, cfg, kernel, verbose=True)
     if problems:
         print("check 失败：%d 个结构问题（退出码 1）；未复核 %d 条不算失败"
               % (len(problems), summary["unreviewed"]))
@@ -1146,10 +1146,10 @@ def parse_codes(notes: str):
 
 
 def is_reviewed(new_notes, old_notes) -> bool:
-    """复核完成的判据：人工写下的 `notes`（见文件头口径）。
+    """复核完成的判据：复核时新写下的 `notes`（见文件头口径）。
 
     `notes` 非空，且（与模型参照集里的 `notes` 不同，或能解析出已知错误码）。模型自己写的
-    `notes` 原样留着 ⇒ 未复核（模型参照集里有 93 条带自述 `notes`，不能当成人工复核）。
+    `notes` 原样留着 ⇒ 未复核（模型参照集里有 93 条带自述 `notes`，不能当成复核完成）。
     """
     n = str(new_notes if new_notes is not None else "").strip()
     if not n:
@@ -1172,7 +1172,7 @@ def wilson_interval(x: int, n: int, z: float = 1.96):
 
 
 def build_diff(spot_dir: str, ledger, auto_dir: str):
-    """比对工作区与模型参照集，返回可渲染的结果字典（确定性；与人工当前进度有关）。"""
+    """比对工作区与模型参照集，返回可渲染的结果字典（确定性；与复核当前进度有关）。"""
     auto_ann, auto_rows = load_auto_annotations(auto_dir)
     items, problems = [], Problems()
     counts = OrderedDict([("agree", 0), ("corrected", 0), ("unreviewed", 0)])
@@ -1187,7 +1187,7 @@ def build_diff(spot_dir: str, ledger, auto_dir: str):
         if not os.path.isfile(path):
             problems.add("file_missing", path, iid, "文件", path, "工作区里没有该条目的文件")
             continue
-        meta, text, new_ann, errs = handann_mod().parse_item_file(path)
+        meta, text, new_ann, errs = kernel_mod().parse_item_file(path)
         if new_ann is None:
             problems.add("parse_error", path, iid, "annotation", os.path.basename(path),
                          "标注块解析不了：%s" % "；".join(errs))
@@ -1254,7 +1254,7 @@ def render_diff_md(result, ledger, spot_dir, auto_dir) -> str:
     lines = [
         "# 抽检一致率报告（第 6 阶段抽取评测集 v2.1）",
         "",
-        "> **这只是 40 条的抽检估计，不是全量复核**：本报告比对的是 40 条人工抽检的改动与"
+        "> **这只是 40 条的抽检估计，不是全量复核**：本报告比对的是 40 条逐条抽检的改动与"
         "`自动标注\\{dev,test}.auto.jsonl`（模型参照集），不是对 260 条的结论。",
         "> 抽样只读模型参照集 `%s`，**不读** `代码\\抽取与图谱\\_全量\\`、**不读** `图谱导出\\`，"
         "因此抽样与抽取链的输出无关（一致率不是抽取链的自证）。"
@@ -1268,7 +1268,7 @@ def render_diff_md(result, ledger, spot_dir, auto_dir) -> str:
         "| 完全未改（agree） | %d | `notes` 非空，且五个内容槽位（entities／events／relations／times／"
         "ontology_boundary_log）与模型参照集无改动 |" % counts["agree"],
         "| 有改动（corrected） | %d | `notes` 非空，且至少一处内容改动 |" % counts["corrected"],
-        "| 未复核（unreviewed） | %d | 还没有人工写下的 `notes`（判据见下；与 `status` 无关） |"
+        "| 未复核（unreviewed） | %d | 还没有复核时新写下的 `notes`（判据见下；与 `status` 无关） |"
         % counts["unreviewed"],
         "| 合计 | %d | dev %d 条 ＋ test %d 条（抽检台账 `%s` 可复算） |"
         % (TOTAL, QUOTA["dev"], QUOTA["test"], LEDGER_NAME),
@@ -1276,7 +1276,7 @@ def render_diff_md(result, ledger, spot_dir, auto_dir) -> str:
         "### 1.1 条目清单（逐条定位）",
         "",
         "> 复核完成的判据：`notes` 非空，**且**与模型参照集里的 `notes` 不同（或能解析出已知错误码）。"
-        "模型自己写的 `notes`（如 `empty_but_checked: true`、一句口径说明）原样留着不算人工复核。",
+        "模型自己写的 `notes`（如 `empty_but_checked: true`、一句口径说明）原样留着不算复核完成。",
         "",
         "| item_id | split | category | 复核 | 条目级 | 改动处数 | notes 码 | notes |",
         "| --- | --- | --- | --- | --- | --- | --- | --- |",
@@ -1337,7 +1337,7 @@ def render_diff_md(result, ledger, spot_dir, auto_dir) -> str:
         "本体边界 = `case_id` → `case_type`＋`summary` 前 20 字。"
         "配不上的条目按「整条新增／删除」写进改动明细表，**不计入**本节的分母。",
         "",
-        "## 四、错误类型分布（人工写在 `notes` 里的码）",
+        "## 四、错误类型分布（复核写在 `notes` 里的码）",
         "",
         "| 码 | 含义 | 条数 |",
         "| --- | --- | --- |",
@@ -1383,7 +1383,7 @@ def render_diff_md(result, ledger, spot_dir, auto_dir) -> str:
         "## 六、口径与限制",
         "",
         "- **复核完成的判据**：`notes` 非空，且与模型参照集里的 `notes` 不同（或能解析出已知错误码）——"
-        "判据与 `status` 无关；模型自己写的 `notes` 不算人工复核。`status`／`provenance` 不是可复核内容，"
+        "判据与 `status` 无关；模型自己写的 `notes` 不算复核完成。`status`／`provenance` 不是可复核内容，"
         "`diff` 忽略这两键，`notes` 只用于判状态与统计码。",
         "- 比对一律先去空白（含全角空格）；实体的名字键按类型取（`company_name`／`person_name`／"
         "`industry_name`／`institution_name`／`policy_name`）。",
@@ -1504,13 +1504,13 @@ def strip_timestamps(obj):
 
 def write_annotation_block(path: str, annotation) -> None:
     """把标注块替换成 `annotation`（保留文件其余部分与围栏），供 selftest 造改动。"""
-    handann = handann_mod()
+    kernel = kernel_mod()
     raw = read_text(path)
-    i = raw.find(handann.MARK_ANN_BEGIN)
-    j = raw.find(handann.MARK_ANN_END)
+    i = raw.find(kernel.MARK_ANN_BEGIN)
+    j = raw.find(kernel.MARK_ANN_END)
     if i < 0 or j < 0:
         raise RuntimeError("缺少 ANNOTATION 锚点：%s" % path)
-    head = raw[:i + len(handann.MARK_ANN_BEGIN)]
+    head = raw[:i + len(kernel.MARK_ANN_BEGIN)]
     tail = raw[j:]
     body = "\n```json\n%s\n```\n" % dump_json(annotation)
     write_text_atomic(path, head + body + tail)
@@ -1518,7 +1518,7 @@ def write_annotation_block(path: str, annotation) -> None:
 
 def cmd_selftest(args) -> int:
     cfg = load_config()
-    handann = load_handann()
+    kernel = load_kernel()
     real_eval = os.path.abspath(args.eval_dir or default_eval_dir(cfg))
     real_auto = os.path.abspath(args.auto_dir or os.path.join(real_eval, AUTO_DIRNAME))
     src_auto_jsonl = [os.path.join(real_auto, "%s.auto.jsonl" % s) for s in SPLITS]
@@ -1582,7 +1582,7 @@ def cmd_selftest(args) -> int:
         # ④ check：未改动的 40 条 → 40 未复核、0 结构问题
         spot_c = os.path.join(tmp, "抽检_c")
         shutil.copytree(spot_a, spot_c)
-        problems, summary = check_spot(ledger, spot_c, t_auto, cfg, handann, verbose=False)
+        problems, summary = check_spot(ledger, spot_c, t_auto, cfg, kernel, verbose=False)
         ok &= _assert(not problems and summary["unreviewed"] == TOTAL,
                       "未复核检出：未改动的工作区报 40 条未复核、0 个结构问题",
                       "未复核 %d／%d；结构问题 %d 个%s"
@@ -1605,21 +1605,21 @@ def cmd_selftest(args) -> int:
                       if v["item_id"] not in (a_item["item_id"], b_item["item_id"]))
         a_id, b_id, c_id = a_item["item_id"], b_item["item_id"], c_item["item_id"]
         a_path = os.path.join(spot_c, WS_DIRNAME, a_item["split"], "%s.md" % a_id)
-        _, _, ann_a, _ = handann.parse_item_file(a_path)
+        _, _, ann_a, _ = kernel.parse_item_file(a_path)
         old_type = ann_a["entities"][0]["entity_type"]
         new_type = "Institution" if old_type != "Institution" else "Company"
         ann_a["entities"][0]["entity_type"] = new_type
         ann_a["notes"] = "E_TYPE：实体类型应为 %s（抽检造改动）" % old_type
         write_annotation_block(a_path, ann_a)
         b_path = os.path.join(spot_c, WS_DIRNAME, b_item["split"], "%s.md" % b_id)
-        _, _, ann_b, _ = handann.parse_item_file(b_path)
+        _, _, ann_b, _ = kernel.parse_item_file(b_path)
         old_rel = ann_b["relations"][0]["relation"]
         new_rel = "RELATED_TO" if old_rel != "RELATED_TO" else "PARTICIPATES_IN"
         ann_b["relations"][0]["relation"] = new_rel
         ann_b["notes"] = "R_REL：关系类型应为 %s（抽检造改动）" % old_rel
         write_annotation_block(b_path, ann_b)
         c_path = os.path.join(spot_c, WS_DIRNAME, c_item["split"], "%s.md" % c_id)
-        _, _, ann_c, _ = handann.parse_item_file(c_path)
+        _, _, ann_c, _ = kernel.parse_item_file(c_path)
         ann_c["notes"] = "OK：完全同意，不用改"
         write_annotation_block(c_path, ann_c)
 
@@ -1655,7 +1655,7 @@ def cmd_selftest(args) -> int:
                      if it["state"] == "unreviewed"
                      and is_reviewed(it["notes"], it["模型原 notes"])]
         ok &= _assert(n_un == TOTAL - 3 and not misjudged,
-                      "未复核检出：没有人工 notes 的条目被算作未复核（含模型自述 notes 的条目）",
+                      "未复核检出：没有复核 notes 的条目被算作未复核（含模型自述 notes 的条目）",
                       "未复核 %d 条＝notes 为空 %d 条 ＋ 仍是模型原样 %d 条；误判 %d 条"
                       % (n_un, empty_un, left_over, len(misjudged)))
 
@@ -1704,7 +1704,7 @@ def write_spot_tree(spot_dir: str, plan, ledger, auto_dir: str) -> None:
 def build_parser():
     ap = argparse.ArgumentParser(
         prog="抽检助手",
-        description="第 6 阶段抽取评测集（v2.1）的人工抽检工作台："
+        description="第 6 阶段抽取评测集（v2.1）的逐条抽检工作台："
                     "确定性抽 40 条（10 dev ＋ 30 test）、结构校验、一致率报告、自检（离线）")
     sub = ap.add_subparsers(dest="cmd", required=True)
     for name, helptext in (("export", "确定性抽 40 条并铺工作台（台账＋工作区＋说明）"),
@@ -1718,7 +1718,7 @@ def build_parser():
         p.add_argument("--spot-dir", default=None, help="抽检目录（默认 <auto-dir>\\抽检）")
         if name == "export":
             p.add_argument("--force", action="store_true",
-                           help="覆盖工作区里已被人工改动的文件（默认保留，不覆盖）")
+                           help="覆盖工作区里已被复核改动的文件（默认保留，不覆盖）")
     return ap
 
 

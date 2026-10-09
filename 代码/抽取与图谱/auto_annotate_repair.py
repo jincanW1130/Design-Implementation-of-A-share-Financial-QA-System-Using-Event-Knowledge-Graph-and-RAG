@@ -16,7 +16,7 @@ r"""auto_annotate_repair.py —— 对 **flash 版**自动标注（模型参照�
   自己的 16384；Prompt 版本 `stage6-auto-annotate-flash-repair-v1.0`（与标注器、与 pro 版都不同）。
 * 提示词里的**输出 schema 与 quote 规则复用 `auto_annotate.py` 的**（`SYSTEM_PROMPT`／
   `render_schema()`／`REPAIR_TEMPLATE`），本脚本**不另抄一份**口径文本；
-  `config.ontology_definitions_text()`、校验内核 `工具\标注助手.validate_annotation` 同样复用。
+  `config.ontology_definitions_text()`、校验内核 `工具\标注结构校验.validate_annotation` 同样复用。
 * 允许模型判**误报**：返回 `disputed: [{"rule": …, "reason": …}]` 时该规则不再改，台账逐条记。
 * 校验最多回喂 3 轮；仍不过则**保留原标注**并标 `repair_failed`（不许放宽校验）。
 * **模型自我修正不构成独立验证**：修复后重跑 lint 只说明「按同一套规则，命中少了多少」，
@@ -35,7 +35,7 @@ python 代码\抽取与图谱\auto_annotate_repair.py run --round 2 --input-dir 
 
 产物（默认落 `…\v2.1\自动标注\提准\`）：`dev.auto.repaired.jsonl`／`test.auto.repaired.jsonl`、
 `提准台账.json`、`提准报告.md`、`工作区\{dev,test}\*.md`（可直接用
-`python 工具\标注助手.py check --workspace "…\自动标注\提准\工作区" --eval-dir "…\v2.1"` 复核）、
+`python 工具\抽检助手.py check` 复核）、
 `_缓存\<ITEM_ID>.json`（每次尝试的原始返回，可重放）。
 """
 
@@ -59,7 +59,7 @@ if _HERE not in sys.path:
 import config  # noqa: E402
 
 ROOT = config.ROOT
-HANDANN_PATH = os.path.join(ROOT, "工具", "标注助手.py")
+HANDANN_PATH = os.path.join(ROOT, "工具", "标注结构校验.py")
 EVAL_SUBDIR = "抽取评测集"
 FLASH_DIRNAME = "自动标注_flash"
 OUT_DIRNAME = os.path.join("自动标注", "提准")

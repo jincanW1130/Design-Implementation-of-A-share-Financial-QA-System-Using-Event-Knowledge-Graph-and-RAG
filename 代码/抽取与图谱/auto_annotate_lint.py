@@ -91,7 +91,7 @@ if _HERE not in sys.path:
 import config  # noqa: E402  （代码\抽取与图谱\config.py）
 
 ROOT = config.ROOT
-HANDANN_PATH = os.path.join(ROOT, "工具", "标注助手.py")
+HANDANN_PATH = os.path.join(ROOT, "工具", "标注结构校验.py")
 EVAL_SUBDIR = "抽取评测集"
 OUT_DIR_DEFAULT = os.path.join("自动标注", "提准")
 LINT_SCHEMA = "stage6-auto-annotate-lint-1.0"
@@ -186,7 +186,7 @@ def _fold(text) -> str:
 
 # --------------------------------------------------------------------------
 # 简繁／异体折叠：**表已迁到同目录的 `fold_variants.py`**（2026-10-02，理由见该模块 docstring）。
-# 本文件原先把表内联在这里，但本文件跨目录 `import 工具\标注助手.py`，导致
+# 本文件原先把表内联在这里，但本文件跨目录 `import 工具\标注结构校验.py`，导致
 # `config.normalize_entity_name()` 惰性导入本模块时会连带依赖 `工具\`，
 # 而第 6 阶段门禁的镜像不复制 `工具\` ⇒ 镜像内导入失败。
 # 迁移后本文件改为**从同目录模块导入并把原名再导出**，本文件内既有引用（fold_simp／S2T_MAP）

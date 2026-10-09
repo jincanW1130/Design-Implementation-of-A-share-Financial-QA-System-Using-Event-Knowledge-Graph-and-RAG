@@ -21,13 +21,13 @@
 
 口径（作者裁定，2026-10-04《02》v3.9）
 --------------------------------------
-RQ1 抽取评测的对照物由「人工标注」改为**模型参照集**：
+RQ1 抽取评测的对照物是**模型参照集**：
 
     主参照集 = 阶段05-数据准备\\数据集\\抽取评测集\\v2.1\\自动标注\\提准\\{dev,test}.auto.repaired.jsonl
 
 它是 `deepseek-flash`（**与抽取器同模型**）自动标注＋离线 lint 规则 v1.2 ＋两轮定向修复
-后的产物，另有一次 40 条独立复核（由本项目决策者执行、**不是人工复核**）的 4 处修正。
-**它不是人工标注，也未逐条人工复核。** 另设一份异模型对照参照集
+后的产物，另有一次 40 条独立复核（由本项目决策者以模型口径执行、**不构成独立验证**）的 4 处修正。
+**它是参照物、不是金标准。** 另设一份异模型对照参照集
 （`自动标注\\{dev,test}.auto.jsonl`，`deepseek-v4-pro`、未做 lint 定向修复），
 本文只把它作为**对照读数**列出，不作为主口径。
 
@@ -122,7 +122,7 @@ def load_module(path, name):
 
 
 def norm_ws(text):
-    """与 `工具\\标注助手.py` 的 `norm_ws` 同一口径：去掉全部空白（含全角空格）。"""
+    """与 `工具\\标注结构校验.py` 的 `norm_ws` 同一口径：去掉全部空白（含全角空格）。"""
     return WS_RE.sub("", str(text or ""))
 
 
@@ -186,12 +186,12 @@ RELATIONS_ANNOTATED = [r for r in RELATIONS if r != "EVIDENCED_BY"]
 
 
 def self_check_normalization():
-    """自检：本脚本的 `norm_ws` 与 `工具\\标注助手.py` 的口径逐例一致。"""
+    """自检：本脚本的 `norm_ws` 与 `工具\\标注结构校验.py` 的口径逐例一致。"""
     src = compare.handann.norm_ws
     for probe in NORM_WS_PROBES:
         if src(probe) != norm_ws(probe):
-            raise AssertionError("norm_ws 与 标注助手.py 不一致：%r" % (probe,))
-    return "norm_ws 与 工具/标注助手.py 逐例一致（%d 例）；名字规范化＝" \
+            raise AssertionError("norm_ws 与 标注结构校验.py 不一致：%r" % (probe,))
+    return "norm_ws 与 工具/标注结构校验.py 逐例一致（%d 例）；名字规范化＝" \
            "config.normalize_entity_name(norm_ws(x))，取自 代码/抽取与图谱/auto_annotate_compare.py" \
            % len(NORM_WS_PROBES)
 
@@ -248,18 +248,19 @@ def load_doc_chunks():
 def load_eval_items(doc_chunks):
     """260 条评测条目：item_id → {split, chunk_id, doc_id, doc_chunk_ids}（只读抽样字段）。
 
-    交付文件 `{dev,test}.jsonl` 的 `annotation` 槽位是《16》第 7.6 节 的冻结契约：**必须为空**。
-    本函数逐条断言这一状态，任何非空即报错退出——本脚本绝不会往交付槽位里写东西。
+    交付文件 `{dev,test}.jsonl` 是**纯抽样产物**：每条只带抽样字段，**不带任何标注字段**
+    （原「260 条交付槽位」连同 `annotation` 字段已按作者决定整体撤销）。《16》第 7.6 节 的
+    冻结契约因此由「交付槽位不得由脚本／规则／模型代填」**升级为「交付文件不得夹带任何标签字段」**。
+    本函数逐条断言这一状态，任何标签字段的存在即报错退出——本脚本绝不会往交付文件里写东西。
     """
     items = OrderedDict()
     for split in SPLITS:
         for rec in read_jsonl(os.path.join(EVAL_DIR, "%s.jsonl" % split)):
-            ann = rec.get("annotation") or {}
-            if ann.get("status") != "pending_human_annotation":
-                raise AssertionError("交付文件的 annotation.status 变了：%s" % rec.get("item_id"))
-            for slot in CLASSES + ["ontology_boundary_log"]:
-                if ann.get(slot):
-                    raise AssertionError("交付文件的 annotation.%s 非空：%s" % (slot, rec.get("item_id")))
+            for banned in ("annotation", "status", "entities", "events", "relations",
+                           "times", "ontology_boundary_log"):
+                if banned in rec:
+                    raise AssertionError("交付文件夹带了标签字段 %s：%s"
+                                         % (banned, rec.get("item_id")))
             doc_id = int(rec["doc_id"])
             items[rec["item_id"]] = OrderedDict([
                 ("split", split), ("chunk_id", int(rec["chunk_id"])), ("doc_id", doc_id),
@@ -784,10 +785,10 @@ def build_report(res, meta):
     add("> **口径声明（每份产出都带）**：本报告的全部读数都是「**模型参照集口径下的抽取表现**」。")
     add("> 对照物（参照集）＝ `阶段05-数据准备\\数据集\\抽取评测集\\v2.1\\自动标注\\提准\\{dev,test}.auto.repaired.jsonl`，")
     add("> 由 `deepseek-flash`（**与抽取器同模型**）自动标注 ＋ 离线 lint 规则 v1.2 ＋ 两轮定向修复生成，")
-    add("> 另有一次 40 条独立复核（由本项目决策者执行、**不是人工复核**）的 4 处修正。")
-    add("> **它不是人工标注产物，也未逐条人工复核**；参照集与抽取器同端点、同模型家族，")
+    add("> 另有一次 40 条独立复核（由本项目决策者以模型口径执行、**不构成独立验证**）的 4 处修正。")
+    add("> **它是参照物、不是金标准**；参照集与抽取器同端点、同模型家族，")
     add("> 两者之间的一致**不构成独立验证**，同源自证风险被降低但没有消除。")
-    add("> 因此本报告的 P／R／F1 **不得**读作「准确率」，也不得写成任何以人工标注为对照物的表述。")
+    add("> 因此本报告的 P／R／F1 **不得**读作「准确率」，也不得写成任何以金标准／标准答案为对照物的表述。")
     add("")
     add("| 项 | 值 |")
     add("| --- | --- |")
@@ -860,7 +861,7 @@ def build_report(res, meta):
     add("## 二、匹配判据（TP／FP／FN 逐类定义）")
     add("")
     add("**同一把尺子**：名字规范化与既有脚本逐字一致——`norm_name(x) = config.normalize_entity_name(norm_ws(x))`，")
-    add("其中 `norm_ws` 取自 `工具\\标注助手.py`（去全部空白，含全角空格），")
+    add("其中 `norm_ws` 取自 `工具\\标注结构校验.py`（去全部空白，含全角空格），")
     add("`normalize_entity_name` 取自 `代码\\抽取与图谱\\config.py`（去空白后再剥最外层包裹字符 `《》〈〉<>【】〔〕“”‘’\"\"（）()`，")
     add("**不做大小写折叠、不做宽度折叠、不做简繁折叠、不做模糊匹配**）。本脚本直接 import 这两个模块取值，不复刻、不另立一套。")
     add("")
@@ -968,7 +969,7 @@ def build_report(res, meta):
     # ---- 6 ----
     add("## 六、已知限制（必须与读数一起引用）")
     add("")
-    add("1. **参照集是模型产物，不是人工标注，也未逐条人工复核。** 主参照集由 `deepseek-flash` 自动标注")
+    add("1. **参照集是模型产物，是参照物、不是金标准。** 主参照集由 `deepseek-flash` 自动标注")
     add("   ＋ lint 定向修复生成；`deepseek-flash` **与抽取器同模型**，两者对「什么算一条事实」「字段怎么填」")
     add("   的偏好可能同向，因此本报告的高读数**有同源自证成分**，一致**不构成独立验证**。")
     add("2. **偏倚方向（承第 7 阶段已登记口径）：参照集比多模型共识更紧、以漏标为主，")
@@ -1140,16 +1141,17 @@ def build_caliber(res, meta):
     add("扫出硬命中条目，只对这些条目做**定向修复**（`auto_annotate_repair.py`，Prompt `stage6-auto-annotate-flash-repair-v1.0`），")
     add("修复后硬命中 0 处／0 条；最后有一次 40 条独立复核（由本项目决策者执行）的 4 处修正。")
     add("")
-    add("**它不是人工标注，也不是人工金标准，未逐条人工复核。**")
+    add("**它是参照物、不是金标准；参照集与抽取器同端点同模型家族 ⇒ 同源自证风险被降低但没有消除、两者一致不构成独立验证。**")
     add("")
-    add("## 二、为什么不是人工的")
+    add("## 二、为什么这一口径不构成独立验证")
     add("")
-    add("因为人工标注**没有做**。抽取评测集的交付文件")
-    add("`阶段05-数据准备\\数据集\\抽取评测集\\v2.1\\{dev,test}.jsonl` 的 `annotation` 槽位")
-    add("（`entities`／`events`／`relations`／`times`／`ontology_boundary_log`）**全部为空**、")
-    add("`status = pending_human_annotation`——这是《16》第 7.6 节 的冻结契约：")
-    add("「交付槽位不得由脚本、规则或模型代填」。本次评测**没有**、也不会把那 260 条参照集内容写进交付槽位，")
-    add("而是另立一份公开、可复算的参照集，并把系统抽取结果与它对照。")
+    add("因为本课题的评测**一律为模型口径**：抽取以**模型参照集**为参照物、问答以跨厂商模型评审为口径。")
+    add("抽取评测集的交付文件")
+    add("`阶段05-数据准备\\数据集\\抽取评测集\\v2.1\\{dev,test}.jsonl` 是**纯抽样产物**：")
+    add("每条只带抽样字段，**不带任何标注字段**（原「260 条交付槽位」连同 `annotation` 字段已按作者决定整体撤销）。")
+    add("因此本次评测**没有**、也不会把参照集内容写进交付文件，")
+    add("而是另立一份公开、可复算的**模型参照集**，并把系统抽取结果与它对照。")
+    add("**它是参照物，不是金标准。**")
     add("")
     add("## 三、本次读数（主判据，micro；口径见《抽取评测报告》第二节）")
     add("")
@@ -1178,8 +1180,8 @@ def build_caliber(res, meta):
     add("")
     add("## 五、不得怎么读")
     add("")
-    add("* **不得**把这些数字写成「准确率」或「人工金标准下的抽取准确率」。")
-    add("* **不得**出现以人工标注为对照物的表述（如把参照集称作人工标注结果）。")
+    add("* **不得**把这些数字写成「准确率」或「金标准下的抽取准确率」。")
+    add("* **不得**出现以金标准／标准答案为对照物的表述（如把模型参照集称作金标准或标准答案）。")
     add("* **不得**把参照集与抽取结果之间的一致当作「独立验证」。")
     add("* **不得**把某一类的总读数单独拿出来支撑「抽取质量达标」——必须连**分类型读数**与")
     add("  《抽取评测报告》第六节的已知限制一起引用。")
@@ -1282,7 +1284,7 @@ def build_all():
             ("reference_secondary", "阶段05-数据准备/数据集/抽取评测集/v2.1/自动标注/{dev,test}.auto.jsonl"),
             ("is_reference_human_annotated", False),
             ("statement", "参照集为模型自动标注（deepseek-flash，与抽取器同模型）经 lint 定向修复后的产物，"
-                          "另有一次由本项目决策者执行的 40 条独立复核修正；它不是人工标注，也未逐条人工复核。"),
+                          "另有一次由本项目决策者以模型口径执行的 40 条独立复核修正；它是参照物、不是金标准。"),
             ("rebuild_command", REBUILD_CMD),
             ("model_calls", 0),
         ])),

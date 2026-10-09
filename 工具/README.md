@@ -12,8 +12,8 @@
 | `验收第8阶段.py` | 第 8 阶段的专项验收：逐条对应《21》第八节 的 **39 行**验收标准（A 组 4／B 组 4／C 组 6／D 组 6／E 组 5／F 组 4／G 组 6／H 组 4），**零大模型调用**——用 `代码\问答\` 的装配层与判据现场重算 30 题、读产出、跑 0 调用的 CLI 完成全部检查；支持 `--root PATH`（对镜像树或篡改副本运行）与 `--selftest`（原样副本必须全过 ＋ 3 个反例必须被分别抓到的**负向校准**）。**`--profile full`（默认）是收口判定**（39/39、退出码 0）；`--profile static` 有 9 行记 `[UNRUN]`、退出码 2、不得作收口判定 |
 | `验收第9阶段.py` | 第 9 阶段的专项验收：逐条对应《24》第八节 的 **58 行**验收标准（A 组 6／B 组 8／C 组 10／D 组 6／E 组 6／F 组 6／G 组 6／H 组 5／I 组 5），覆盖环境与服务、六表与导入、25 个业务接口与错误码、问答与证据链路、图谱服务化、前端四页、安全与非功能（含 NFR-01／02）、部署形态与一致性／只读。**服务未启动时判「环境未就绪」（退出码 2），不与内容失败混淆**；支持 `--root PATH` 与 `--selftest`（原样副本无内容失败 ＋ **12 个定向反例**逐一「期望 FAIL 集 ＝ 实测 FAIL 集」）。**`--profile full`（默认）是收口判定**：实测 **58／58、退出码 0**、环境／链上失败 0 行；`--profile static` 执行 25／58、未执行 33、退出码 2，不得作收口判定。**首轮运行时抓出两个真缺陷**（`部署\启动.ps1` 缺 UTF-8 BOM 导致 PS 5.1 下 13 条语法错误；镜像 CMD 的 `--host` 与 `run.py` 的 argparse 不匹配导致容器 `Exited (2)`），两处修复留痕见《25》修订记录 v1.1 |
 | `拼装第四阶段文档.py` | 把 `阶段04-系统总体设计\_分节源文件\` 的 7 个分节源文件拼装为交付文档 `阶段04-系统总体设计\10-系统总体设计（第四阶段）.md` |
-| `标注助手.py` | 第 6 阶段抽取评测集（v2.1，Dev 60 ＋ Test 200）的**人工标注工作台**：`export` 展开成一条一个 `.md`、`check` 校验并打印证据、`merge` 写回 jsonl、`stats` 统计覆盖、`selftest` 自检。离线、不调模型、不产生任何标签 |
-| `抽检助手.py` | 第 6 阶段抽取评测集（v2.1）的**人工抽检工作台**：`export` 确定性抽 40 条（10 dev ＋ 30 test；8 类事件每类 ≥2）并铺工作区、`check` 结构校验＋复核进度、`diff` 写一致率报告（条目级一致率、改动明细、枚举字段精确一致率、Wilson 95% 区间）、`selftest` 自检。只读 `自动标注\`（模型参照集）、离线、不调模型 |
+| `标注结构校验.py` | 第 6 阶段抽取评测集的**标注结构校验内核**：公开入口 `validate_annotation`、解析／摘要小工具与 schema 常量；被 `工具\抽检助手.py` 与 `代码\抽取与图谱\auto_annotate*.py` 复用 |
+| `抽检助手.py` | 第 6 阶段抽取评测集（v2.1）的**逐条抽检工作台**：`export` 确定性抽 40 条（10 dev ＋ 30 test；8 类事件每类 ≥2）并铺工作区、`check` 结构校验＋复核进度、`diff` 写一致率报告（条目级一致率、改动明细、枚举字段精确一致率、Wilson 95% 区间）、`selftest` 自检。只读 `自动标注\`（模型参照集）、离线、不调模型 |
 | `执行助手.py` | 执行原语：UTF-8 读写、JSONL、**带正对照的扫描**、git 包装（提交走 `-F 文件`、推送先探测连通）、命令输出收口。自检 `python 工具\执行助手.py selftest` |
 
 ---
@@ -131,35 +131,19 @@ python 工具\拼装第四阶段文档.py
 
 读 `阶段04-系统总体设计\_分节源文件\` 的 7 个分节源文件，加文档头（元信息表、导言 第0.1节～第0.3节）与交付说明附录，写出 `阶段04-系统总体设计\10-系统总体设计（第四阶段）.md`。**《10》要改内容时改分节源文件再重跑本脚本，不要直接改交付文档**，否则下一次拼装会覆盖。
 
-## `标注助手.py`
+## `标注结构校验.py`
 
-第 6 阶段抽取评测集（v2.1，Dev 60 ＋ Test 200 ＝ 260 条文本块）的**人工标注工作台**。它的职责只是把人写下的标签搬进搬出，并在搬之前挡住不合口径的写法——**离线、不调模型、不预填／不建议／不猜测任何取值**。标注口径的唯一来源是 `阶段05-数据准备\数据集\抽取评测集\v2.1\` 下的 `标注说明.md`，本体枚举一律读 `代码\抽取与图谱\config.py`，本脚本不重抄一处枚举。
+第 6 阶段抽取评测集的**标注结构校验内核**（模块、无命令行入口）。公开入口 `validate_annotation(record, cfg=None, path=None)`：对内存里的一条标注记录跑与 `工具\抽检助手.py check` 完全相同的槽位校验，返回问题列表（每项含 `kind`／`file`／`item_id`／`field`／`value`／`message`，空列表即通过）。另有解析／摘要小工具与 schema 常量：`parse_item_file`（解析条目文件的三个锚点块）、`render_item`（渲染条目文件的非标注部分）、`norm_ws`／`text_digest`／`sha256_hex`，以及 `ITEM_SCHEMA`／`CASE_TYPES`／`ENTITY_PER_TYPE_FIELDS` 等。**`工具\抽检助手.py` 与 `代码\抽取与图谱\auto_annotate*.py` 共用这一份，不另立第二套。**
 
-```powershell
-python 工具\标注助手.py export      # 展开/刷新工作区（默认不覆盖已填写的条目）
-python 工具\标注助手.py check       # 校验已填写的标注，逐条打印证据行；有问题退出码 1
-python 工具\标注助手.py stats       # 按 split 统计覆盖率与各类实体/事件/关系条数
-python 工具\标注助手.py merge       # 写回 dev.jsonl／test.jsonl（先备份；check 不过则拒绝）
-python 工具\标注助手.py selftest    # 自检：临时目录里走一遍导出→校验→往返→负向用例
-```
+标注结构与字段枚举的落点是 `阶段05-数据准备\数据集\抽取评测集\v2.1\分层统计.json` 的 `annotation_schema`（entities／events／relations／times／ontology_boundary_log／notes，与 `代码\抽取与图谱\config.py` 同源），本体枚举一律读 `代码\抽取与图谱\config.py`，本模块不重抄一处枚举。**离线、不调模型、不预填／不建议／不猜测任何取值。**
 
-`--eval-dir`／`--workspace` 覆盖落点，`--split dev|test|all` 只处理一个 split。工作区默认写在（评测集目录由 `config.DATASET_ROOT` ＋ `config.DATASET_VERSION` 推出，**不写死版本号**；该目录整体落在 `.gitignore` 已排除的 `阶段05-数据准备/数据集/` 之下）：
+**现行口径（唯一）**：本课题的评测一律为模型口径——抽取以**模型参照集**为参照物、问答以跨厂商模型评审为口径；**模型参照集是参照物，不是金标准**。因此 `status` 只有**唯一一个合法取值** `auto_annotated`（模型参照集），且必须带 `provenance`（`model`／`prompt_version`／`temperature`）自证产者与提示词版本；交付的 `dev.jsonl`／`test.jsonl` **不带任何标注字段**。解析／渲染/铺工作区的命令在 `工具\抽检助手.py`（`export`／`check`／`diff`／`selftest`），本内核只提供解析／渲染与校验、不写任何工作区。
 
-```text
-阶段05-数据准备\数据集\抽取评测集\v2.1\标注工作区\
-    dev\DEV-001.md … dev\DEV-060.md      test\TEST-001.md … test\TEST-200.md
-    _备份\     说明.md     _导出台账.json     _合并记录.json
-```
+**文件格式（`.md` 条目的锚点；工作台工作区按此解析）**：一个条目一个 `.md`——人读的上下文（item_id／category／publish_time／title／url／chunk_id 等 17 项抽样字段 ＋ **待标注的文本块** ＋ 文档全文）用 Markdown；待填槽位是文件里**唯一的 `json` 代码块**，由 `<!-- HANDANN-META: … -->`／`<!-- HANDANN:TEXT:BEGIN -->…<!-- HANDANN:TEXT:END -->`／`<!-- HANDANN:ANNOTATION:BEGIN -->…<!-- HANDANN:ANNOTATION:END -->` 三个锚点定位（`parse_item_file` 读、`render_item` 渲染），解析不靠正则猜。锚点是**机器读契约、不得改动**：磁盘上的模型参照集工作区按这套锚点解析，改了就读不出来。选 `.md` 的理由：槽位是嵌套结构（`events[].participants[]`），Markdown 表格表达不了，硬塞只会造出更难解析的格式；单文件即单一事实来源，也免掉「`.json` 与渲染 `.md` 谁为准」的同步问题。每个条目文件里**逐字段**列出允许值（枚举读自 config），并写明「只改这一段」。
 
-**文件格式（为什么是 `.md` 而不是 `.json`）**：一个条目一个 `.md`——人读的上下文（item_id／category／publish_time／title／url／chunk_id 等 17 项抽样字段 ＋ **待标注的文本块** ＋ 文档全文）用 Markdown；待填槽位是文件里**唯一的 `json` 代码块**，由 `<!-- HANDANN:… -->` 锚点定位，解析不靠正则猜。选 `.md` 的理由：标注是「读上下文 → 填结构化槽位」，而槽位本身是嵌套结构（`events[].participants[]`），Markdown 表格表达不了，硬塞只会造出更难解析的格式；单文件即单一事实来源，也免掉「`.json` 与渲染 `.md` 谁为准」的同步问题。每个条目文件里**逐字段**列出允许值（枚举读自 config），并写明「只改这一段」。
+**`validate_annotation`（槽位）与工作区文件级的检查项**：空／重复 `item_id`、文件名与 `item_id` 不一致；`status` 与槽位不一致（含「说完成却四个槽位全空」——协议允许的例外是 `notes` 里写 `empty_but_checked: true`）；`status` 只有**唯一合法取值** `auto_annotated`（模型参照集），**其它任何 status 一律报 `status_unknown`**；**`status = auto_annotated` 时必须带 `provenance`**：缺 `model`／`prompt_version`／`temperature` 任一项即报 `auto_provenance_missing`（`temperature = 0` 是合法取值，判的是「键缺失／`None`／空串」，不是真值）——目的是**防止模型参照集被当成其它来源的参照物**；`entity_type`／`event_type`／`relation`／`role` 越界；非 `EVIDENCED_BY` 关系缺三项证据属性（键缺失／值为空报 `relation_evidence_missing`，只报这一条）、`source_chunk_id` ≠ 本条 `chunk_id`、`source_doc_id` ≠ 本条 `doc_id`（`relation_doc_mismatch`）；`confidence` 的**取值**在 `events[]` 与 `relations[]` 复用同一个校验器（单一口径）：`float()` 能解析且在 0.0～1.0 内即通过（`"0.9"` 这类数字字符串照样通过），非数值或越界报 `confidence_range`，`events[].confidence` 键缺失／空值报 `confidence_empty`；`quote` 去空白后不是本条 `text` 的精确子串（或长度不在 12～200）；`ontology_boundary_log` 里**把新本体当成已生效**的写法（自造关系名／自造实体类型／断言「已新增……关系」／复活 `INVOLVES`）——**只在断言已生效时拒绝**，出现「建议／疑似／待／拟／希望／考虑／提请／是否」这类建议或未定语境的同形句一律放行（协议第八节 允许在 `suggested_handling` 里提建议）；「记录／备注」不算建议语境，不能把「已新增……并写入图谱」这类已生效断言说成建议。另按协议补 8 项：必填字段缺失、`confidence` 越界、`event_time` 与 `times[].value` 的 `YYYY-MM-DD` 格式、`entity_ref`／`event_ref` 重复与悬空引用、关系端点类型不符合 `RELATION_SCHEMA` 的 domain／range、关系端点声明的 `from_label`／`to_label` 必须等于该端点实际类型（`relation_label_mismatch`）、`ISSUED_BY` 出现在非政策／监管事件上、标注里出现 `data_cutoff_time`。另有两条与工作区文件本身绑定（归 `工具\抽检助手.py`）：META 里的 `text_digest` 必须等于按本条文本块重算的摘要（`text_digest_mismatch`，专管「META 摘要被改」，与管抽样字段的 `text_changed`／`sampled_field_changed` 分开）；`BELONGS_TO` 的 `valid_from`／`valid_to` 允许写 `null` 或省略（正文没有日期时视为未知，**不许编日期**），给了值就必须是 `YYYY-MM-DD`（格式非法报 `relation_validity_format`）。**每条问题都打印文件、item_id、字段与值**，便于回溯。
 
-**`check` 的检查项**：空／重复 `item_id`、文件名与 `item_id` 不一致；`status` 与槽位不一致（含「说完成却四个槽位全空」——协议允许的例外是 `notes` 里写 `empty_but_checked: true`）；`status` 只认三个值 `pending_human_annotation`／`human_annotated`／`auto_annotated`（第三个是**模型自动标注**，第 10 阶段的模型参照集），**`status = auto_annotated` 时必须带 `provenance`**：缺 `model`／`prompt_version`／`temperature` 任一项即报 `auto_provenance_missing`（`temperature = 0` 是合法取值，判的是「键缺失／`None`／空串」，不是真值；这条守卫只盯 `auto_annotated`，不误伤 `human_annotated`）——目的是**防止自动标注被当成人工标注**；`entity_type`／`event_type`／`relation`／`role` 越界；非 `EVIDENCED_BY` 关系缺三项证据属性（键缺失／值为空报 `relation_evidence_missing`，只报这一条）、`source_chunk_id` ≠ 本条 `chunk_id`、`source_doc_id` ≠ 本条 `doc_id`（`relation_doc_mismatch`）；`confidence` 的**取值**在 `events[]` 与 `relations[]` 复用同一个校验器（单一口径）：`float()` 能解析且在 0.0～1.0 内即通过（`"0.9"` 这类数字字符串照样通过），非数值或越界报 `confidence_range`，`events[].confidence` 键缺失／空值报 `confidence_empty`；`quote` 去空白后不是本条 `text` 的精确子串（或长度不在 12～200）；`ontology_boundary_log` 里**把新本体当成已生效**的写法（自造关系名／自造实体类型／断言「已新增……关系」／复活 `INVOLVES`）——**只在断言已生效时拒绝**，出现「建议／疑似／待／拟／希望／考虑／提请／是否」这类建议或未定语境的同形句一律放行（协议第八节 允许在 `suggested_handling` 里提建议）；「记录／备注」不算建议语境，不能把「已新增……并写入图谱」这类已生效断言说成建议。另按协议补 8 项：必填字段缺失、`confidence` 越界、`event_time` 与 `times[].value` 的 `YYYY-MM-DD` 格式、`entity_ref`／`event_ref` 重复与悬空引用、关系端点类型不符合 `RELATION_SCHEMA` 的 domain／range、关系端点声明的 `from_label`／`to_label` 必须等于该端点实际类型（`relation_label_mismatch`）、`ISSUED_BY` 出现在非政策／监管事件上、标注里出现 `data_cutoff_time`。另有两条与工作区文件本身绑定：META 里的 `text_digest` 必须等于按本条文本块重算的摘要（`text_digest_mismatch`，专管「META 摘要被改」，与管抽样字段的 `text_changed`／`sampled_field_changed` 分开）；`BELONGS_TO` 的 `valid_from`／`valid_to` 允许写 `null` 或省略（正文没有日期时视为未知，**不许编日期**），给了值就必须是 `YYYY-MM-DD`（格式非法报 `relation_validity_format`）。**每条问题都打印文件、item_id、字段与值**，便于回溯。
-
-**写回口径**：`merge` **只改 `annotation`**（`status` → `human_annotated`），其余字段与**字段顺序**逐字保留；写盘前把原件复制到 `_备份\`（同内容不重复备份，故只留一份干净原件）；重跑同一命令逐字节不动，**幂等**。`export` 默认**跳过**已存在的文件（不覆盖任何已填写的工作），`--refresh` 只重写仍是空模板的条目，`--overwrite` 才会动已填写的条目（先备份）。`selftest` 全程在系统临时目录，不碰真实文件。
-
-**`merge` 拒绝 `auto_annotated`（`merge_refuses_auto`）**：工作区里只要有一条 `status = auto_annotated`，`merge` 就**不写盘、退出码 1**，并说明「第 6 阶段交付文件的槽位必须保持为空（《15》第八节 的冻结契约），自动标注落在独立产物里」。这是**硬守卫**：它先于 `check` 判定，且 **`--force` 不放行**（它不是「可越过的 check 问题」，是交付文件的冻结契约）。守卫也**只拦 `auto_annotated`**——同一批工作区里的 `human_annotated` 条目照常写回，`merge` 的其它行为一律不变。自动标注的产物在 `阶段05-数据准备\数据集\抽取评测集\v2.1\自动标注\`（`代码\抽取与图谱\auto_annotate.py` 产出），与人工工作区互不干扰。
-
-**三处需要知道的口径**：① 完成标记取 `human_annotated`、自动标注标记取 `auto_annotated`——协议只规定了未标注状态，两个取值在脚本顶部常量处登记；② `merge` 之后 `python 代码\抽取与图谱\sample_eval_set.py --verify-only` 的第 4 项「标注槽位全空」会失败，那是**标注已开始的正常后果**（`标注说明.md` 第十二节 第 4 项只适用于「标注尚未开始」的状态）；③ `check` 与 `代码\抽取与图谱\auto_annotate.py` **共用同一个校验入口** `validate_annotation(record, cfg=None, path=None) -> list`（对内存里的一条标注记录跑与 `check` 完全相同的槽位校验，文件级比对仍归 `run_check`），因此「自动标注的校验」与「人工标注的校验」不存在两套口径。
+**交付口径**：第 6 阶段交付的 `dev.jsonl`／`test.jsonl` 槽位保持为空、**不带任何标注字段**（《15》第八节 的冻结契约）；模型参照集落在独立产物 `阶段05-数据准备\数据集\抽取评测集\v2.1\自动标注\`（`代码\抽取与图谱\auto_annotate*.py` 产出），不与交付文件混放。`工具\抽检助手.py` 与 `代码\抽取与图谱\auto_annotate*.py` 共用本内核的同一个校验入口 `validate_annotation(record, cfg=None, path=None) -> list`，因此不存在「两套校验」。
 
 ## 编写约定（改脚本时请遵守）
 
@@ -167,7 +151,7 @@ python 工具\标注助手.py selftest    # 自检：临时目录里走一遍导
 2. **按文档分别归属节号**：`《02》第8.4节` 与 `《04》第8.4节` 是两个不同的节，不能放进同一个集合比较。第 3 阶段曾因混用集合而漏报一处未覆盖引用。
 3. **修订留痕要排除**：`《02》` 的版本记录行与 `《05》`《06》 的"原为…"表述中会出现已作废的旧写法，那是留痕，不是缺陷。脚本据此把 **`05-`／`06-`／`08-` 三个记录类文件整体排除**在 `H`、`I` 两项之外——它们会逐字引用旧写法，不能当缺陷报。
 4. `J` 与 `K` 是启发式检查，允许出现需要用人工判断的行，但**不允许静默跳过**——不确定就打印出来。
-5. **计划产出要登记，且登记是「路径感知」的**：任务书一类文档会提到"将要创建"的文件（例如 `16-事件抽取与知识图谱（第六阶段）.md`），它在检查时必然还不存在。这类文件名写在脚本顶部的 `PLANNED` 集合里；**文件一旦创建就把它从 `PLANNED` 删掉**，否则会掩盖真正的悬空路径。`PLANNED` 分两类：**裸文件名**（`nodes.csv`、`验收第6阶段.py` 这种）在任意位置都算已登记；**带路径的**（`代码\抽取与图谱\README.md`）只匹配该路径。后者是 2026-09-25 加的——若把 `README.md` 按裸名登记，会连带跳过全项目所有 `README.md` 的悬空判定，副作用大于收益。**当前 `PLANNED` 为空**：2026-09-27 按本条约定清空了第 6 阶段的 9 条登记（`16-…（第六阶段）.md`、`extract.py`、`disambiguate.py`、`dedup_events.py`、`write_graph.py`、`标注说明.md`、`代码\抽取与图谱\README.md`、`代码\抽取与图谱\config.py`、`代码\抽取与图谱\run_all.py`——全部已在磁盘上；审查 A 的 A1.4）。
+5. **计划产出要登记，且登记是「路径感知」的**：任务书一类文档会提到"将要创建"的文件（例如 `16-事件抽取与知识图谱（第六阶段）.md`），它在检查时必然还不存在。这类文件名写在脚本顶部的 `PLANNED` 集合里；**文件一旦创建就把它从 `PLANNED` 删掉**，否则会掩盖真正的悬空路径。`PLANNED` 分两类：**裸文件名**（`nodes.csv`、`验收第6阶段.py` 这种）在任意位置都算已登记；**带路径的**（`代码\抽取与图谱\README.md`）只匹配该路径。后者是 2026-09-25 加的——若把 `README.md` 按裸名登记，会连带跳过全项目所有 `README.md` 的悬空判定，副作用大于收益。**当前 `PLANNED` 为空**：2026-09-27 按本条约定清空了第 6 阶段的 9 条登记（`16-…（第六阶段）.md`、`extract.py`、`disambiguate.py`、`dedup_events.py`、`write_graph.py`、`分层统计.json`、`代码\抽取与图谱\README.md`、`代码\抽取与图谱\config.py`、`代码\抽取与图谱\run_all.py`——全部已在磁盘上；审查 A 的 A1.4）。
 
    注意两个计数不是一回事：`PLANNED` 是**计划产出**的登记数（当前 0，脚本自查时会打出来），核验项是 **A～N 共 14 项**（N 又分 N1／N2 两条）。2026-09-27 之前这里误写过「12 项」，那既不是登记数（实际 9 条）也不是核验项数（14 项），已按实际登记改写。
 6. **查路径要知道数据集的存在**：第 5 阶段起文档会按**数据集内的相对路径**写文件（`meta\sources.csv`、`reports\consistency_report.md` 等）。`K` 项的 `SEARCH` 因此追加了 `阶段05-数据准备\数据集\<版本>\` 与 `_试跑\`；带省略号的 token（如正则片段 `cs.com.cn/….html`）由 `WHITE` 排除，因为它描述的是模式而不是具体文件。
