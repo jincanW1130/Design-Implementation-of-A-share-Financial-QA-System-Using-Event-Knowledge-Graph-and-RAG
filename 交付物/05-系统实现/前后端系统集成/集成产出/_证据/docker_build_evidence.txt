@@ -1,4 +1,4 @@
-﻿wsl : wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。
+wsl : wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。
 At line:11 char:18
 + ... WSL_UTF8=1; wsl -d Ubuntu -u root -- bash -lc "docker images ashare-q ...
 +                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -6,4 +6,19 @@ At line:11 char:18
     + FullyQualifiedErrorId : NativeCommandError
  
 ashare-qa-backend:local id=4a6d6963fee6 size=285MB created=6 minutes ago
+client=29.1.3 server=29.1.3
+
+# ---------------------------------------------------------------------------
+# 2026-10-10 重建留痕（A3 答辩环境演练；目录重组漏网修复后的重建）
+# ---------------------------------------------------------------------------
+# 起因：旧镜像（id=4a6d6963fee6／f868b331eae7）是**重组前布局**——CMD 为 `代码/后端/run.py`，
+#      且镜像内数据集路径与图谱口径均为旧布局，故 H3「镜像可运行」无响应。
+# 变更：Dockerfile 图谱 COPY 由归档口径 `v2.1_v1_2` 改到现行 `v2.1_v1_3`；
+#      torch 先按 CPU 源单独安装（requirements.txt 文件头已登记的选项）＋ pip 加 --timeout/--retries。
+# 过程：首轮（默认 PyPI）读超时失败；次轮方块中止（退出码 137）；第三轮命令未执行；
+#      第四轮用 CPU 源成功。
+# 结果（实测）：Successfully built ab0cfc8e63a7 / Successfully tagged ashare-qa-backend:local
+# 镜像读数：ashare-qa-backend:local id=ab0cfc8e63a7 size=2.32GB
+# 构建步骤：15/15 全过（含 Step 11／12 两次 COPY 数据集与图谱导出物、Step 15 CMD）
+ashare-qa-backend:local id=ab0cfc8e63a7 size=2.32GB created=2026-10-10（A3 演练重建）
 client=29.1.3 server=29.1.3

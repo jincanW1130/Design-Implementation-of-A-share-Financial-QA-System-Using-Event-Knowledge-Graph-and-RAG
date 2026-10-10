@@ -49,11 +49,14 @@ _HERE = os.path.dirname(os.path.abspath(__file__))          # 交付物/03-代�
 CODE_DIR = os.path.dirname(_HERE)                           # 交付物/03-代码
 ROOT = os.path.dirname(os.path.dirname(CODE_DIR))           # 仓库根（…\毕业设计）
 
-# 三个被测组件（本任务只覆盖这三个；数据准备／抽取与图谱的同名 config 不参与本套测试）
+# 被测组件目录。"数据准备"／"抽取与图谱" 是 P1-12 补测（E／F 组）新增：
+# 它们与被覆盖的四组一样，各自有一份**同名** `config.py`，同样靠 `_Isolated` 隔离。
 COMPONENT_DIRS = {
     "检索": os.path.join(CODE_DIR, "检索"),
     "问答": os.path.join(CODE_DIR, "问答"),
     "后端": os.path.join(CODE_DIR, "后端"),
+    "数据准备": os.path.join(CODE_DIR, "数据准备"),
+    "抽取与图谱": os.path.join(CODE_DIR, "抽取与图谱"),
 }
 
 # 恢复时要还原的 `sys.modules` 键（产品代码内部的裸名导入）
@@ -68,6 +71,11 @@ _TOUCHED_KEYS = {
     "检索": ("config",),
     "问答": ("config",),
     "后端": ("config",),
+    # 数据准备／抽取与图谱的产品代码内部一律 `import config`（裸名）；加载期顶替、退出还原。
+    # 这两个目录下的产品模块之间是**同目录导入**（如 chunk.py 的 `import config`、
+    # dedup.py 的 `from clean import …`），所以 `_Isolated` 同时把本组件目录插到 sys.path[0]。
+    "数据准备": ("config",),
+    "抽取与图谱": ("config",),
 }
 
 _MISSING = object()

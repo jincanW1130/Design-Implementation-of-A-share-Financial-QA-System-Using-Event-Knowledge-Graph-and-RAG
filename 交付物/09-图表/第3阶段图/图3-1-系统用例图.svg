@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1170" viewBox="0 0 1240 1170" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <!-- 白底 -->
+  <rect x="0" y="0" width="1240" height="1170" fill="#FFFFFF"/>
+
+  <!-- 系统边界 -->
+  <rect x="230" y="90" width="820" height="980" rx="14" fill="#FFFFFF" stroke="#78909C" stroke-width="2"/>
+  <text x="640" y="130" text-anchor="middle" font-size="20" font-weight="bold" fill="#37474F">A 股财经信息智能问答系统</text>
+
+  <!-- 参与者：普通用户（左） -->
+  <g stroke="#37474F" stroke-width="2" fill="none" stroke-linecap="round">
+    <circle cx="100" cy="444" r="13" fill="#FFFFFF"/>
+    <line x1="100" y1="457" x2="100" y2="492"/>
+    <line x1="80" y1="470" x2="120" y2="470"/>
+    <line x1="100" y1="492" x2="84" y2="518"/>
+    <line x1="100" y1="492" x2="116" y2="518"/>
+  </g>
+  <text x="100" y="548" text-anchor="middle" font-size="15" fill="#37474F">普通用户</text>
+
+  <!-- 参与者：后台（作者本人，右） -->
+  <g stroke="#37474F" stroke-width="2" fill="none" stroke-linecap="round">
+    <circle cx="1150" cy="844" r="13" fill="#FFFFFF"/>
+    <line x1="1150" y1="857" x2="1150" y2="892"/>
+    <line x1="1130" y1="870" x2="1170" y2="870"/>
+    <line x1="1150" y1="892" x2="1134" y2="918"/>
+    <line x1="1150" y1="892" x2="1166" y2="918"/>
+  </g>
+  <text x="1150" y="948" text-anchor="middle" font-size="15" fill="#37474F">后台（作者本人）</text>
+
+  <!-- 参与者与用例的关联（实线；椭圆随后绘制，覆盖线端） -->
+  <g stroke="#546E7A" stroke-width="1.4">
+    <line x1="120" y1="470" x2="285" y2="250"/>
+    <line x1="120" y1="470" x2="285" y2="390"/>
+    <line x1="120" y1="470" x2="285" y2="530"/>
+    <line x1="120" y1="470" x2="285" y2="670"/>
+    <line x1="120" y1="470" x2="285" y2="810"/>
+    <line x1="1132" y1="880" x2="1013" y2="850"/>
+    <line x1="1132" y1="880" x2="1013" y2="990"/>
+  </g>
+
+  <!-- 用例：普通用户四条（UC-01～UC-04） -->
+  <g fill="#FAFBFC" stroke="#607D8B" stroke-width="1.6">
+    <ellipse cx="455" cy="250" rx="175" ry="42"/>
+    <ellipse cx="455" cy="390" rx="175" ry="42"/>
+    <ellipse cx="455" cy="530" rx="175" ry="42"/>
+    <ellipse cx="455" cy="670" rx="175" ry="42"/>
+  </g>
+  <g text-anchor="middle" font-size="14" fill="#263238">
+    <text x="455" y="256">UC-01　提交问题并获取答案</text>
+    <text x="455" y="396">UC-02　查看答案与证据来源</text>
+    <text x="455" y="536">UC-03　查看图谱（含多跳路径查询）</text>
+    <text x="455" y="676">UC-04　查看历史记录</text>
+  </g>
+
+  <!-- 用例：后台两条（UC-05～UC-06） -->
+  <g fill="#FAFBFC" stroke="#607D8B" stroke-width="1.6">
+    <ellipse cx="860" cy="850" rx="155" ry="42"/>
+    <ellipse cx="860" cy="990" rx="155" ry="42"/>
+  </g>
+  <g text-anchor="middle" font-size="14" fill="#263238">
+    <text x="860" y="856">UC-05　后台导入财经文本</text>
+    <text x="860" y="996">UC-06　后台变更财经文本并触发重新处理</text>
+  </g>
+
+  <!-- 条件性用例：UC-07（虚线椭圆） -->
+  <ellipse cx="455" cy="810" rx="175" ry="42" fill="#FFFDF5" stroke="#8D6E63" stroke-width="1.8" stroke-dasharray="7,5"/>
+  <text x="455" y="816" text-anchor="middle" font-size="14" fill="#4E342E">UC-07　条件下的登录</text>
+
+  <!-- «extend»：UC-07 → UC-04（短竖直虚线箭头） -->
+  <g stroke="#8D6E63" stroke-width="1.6" stroke-dasharray="6,5" fill="none" stroke-linecap="round">
+    <line x1="455" y1="768" x2="455" y2="714"/>
+    <line x1="448" y1="724" x2="455" y2="714"/>
+    <line x1="462" y1="724" x2="455" y2="714"/>
+  </g>
+  <rect x="405" y="726" width="100" height="27" fill="#FFFFFF"/>
+  <text x="455" y="745" text-anchor="middle" font-size="12.5" fill="#6D4C41">«extend»</text>
+
+  <!-- «extend»：UC-07 → UC-01（右侧通道折线虚线箭头） -->
+  <g stroke="#8D6E63" stroke-width="1.6" stroke-dasharray="6,5" fill="none" stroke-linecap="round">
+    <path d="M 630 810 L 667 810 L 667 250 L 632 250"/>
+    <line x1="642" y1="243" x2="632" y2="250"/>
+    <line x1="642" y1="257" x2="632" y2="250"/>
+  </g>
+  <rect x="632" y="507" width="96" height="27" fill="#FFFFFF"/>
+  <text x="680" y="526" text-anchor="middle" font-size="12.5" fill="#6D4C41">«extend»</text>
+
+  <!-- 说明（UML 注释框，含折角；虚线连至 UC-07） -->
+  <line x1="490" y1="890" x2="462" y2="855" stroke="#8D6E63" stroke-width="1.2" stroke-dasharray="4,4"/>
+  <rect x="300" y="890" width="380" height="112" fill="#FFFDE7" stroke="#BCAAA4" stroke-width="1.4"/>
+  <path d="M 656 890 L 680 890 L 680 914 Z" fill="#EFEBE0" stroke="#BCAAA4" stroke-width="1.4"/>
+  <g font-size="13.5" fill="#4E342E">
+    <text x="316" y="920">条件：学校论文模板或毕业设计要求明确体现</text>
+    <text x="316" y="944">用户管理时开启（最小化的"仅登录"）；开启后</text>
+    <text x="316" y="968">作为 UC-01 与 UC-04 的前置步骤，其余用例不变。</text>
+  </g>
+
+  <!-- 图内图例 -->
+  <text x="640" y="1046" text-anchor="middle" font-size="12" fill="#607D8B">实线＝参与者关联；虚线＝条件性扩展（«extend»，仅条件满足时开启）</text>
+
+  <!-- 图题（PNG 自带图题，逐字与正文图注一致） -->
+  <text x="640" y="1125" text-anchor="middle" font-size="20" font-weight="bold" fill="#263238">图 3-1　系统用例图</text>
+</svg>

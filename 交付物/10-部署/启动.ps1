@@ -61,7 +61,13 @@ try {
 # 解码成乱码，正则匹配不到发行版行。故提前到此处，与上面的控制台编码一起定死。
 $env:WSL_UTF8 = 1
 
-$Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
+# **上溯层数（2026-10-10 修复）**：脚本现位于 `<仓库>\交付物\10-部署\`，$Root 必须一路回到
+# **仓库根**。目录重组（《02》v3.16，`部署/`→`交付物/10-部署/`）后目录下移一层，原 2 层上溯
+# 会把 $Root 算成 `<仓库>\交付物`，于是 ① 的库自检与 ③④ 的进程启动全部指向
+# `交付物\交付物\…` —— 实测症状：① 恒报「六张表可读=False」（库自检文件找不到）、
+# ③ 后端静默不起（8000 无监听）。与本项目既有的同类缺陷（`跑正式对照.py` 的上溯层数少一层，
+# v3.16 ⑤ 已修）同型。故上溯 **3 层**。
+$Root = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path))
 $Distro = "Ubuntu"
 $Container = "ashare-neo4j"
 $BackendPort = 8000

@@ -46,12 +46,21 @@ WORKDIR /app
 # 照抄会让 `pip install "pymysql==2.2.8"` 直接失败（PyPI 上不存在这个版本）——本镜像第一版
 # 就是这么构筑失败的，属实测踩坑留痕。
 COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
+# **torch 先按 CPU 源单独安装（2026-10-10 登记）**：requirements.txt 文件头本就写明这一选项
+# （「如需安装 CPU-only 轮子以显著减小体积，可改用 PyTorch 官方 CPU 源：版本号不变，只换来源」）。
+# 首次重建实测：默认 PyPI 拉的是 **CUDA 版 torch ＋ nvidia-* 依赖（合计数 GB）**，在本机到
+# files.pythonhosted.org 约 400 KB/s 的带宽下不可行（首轮还因读超时失败）；而 CPU 源实测
+# **约 1.9 MB/s、wheel 小一个量级**。容器无 GPU、只用 CPU 推理，故按 CPU 源两步安装：
+# torch 先装（版本号不变 ==2.12.1），随后整表安装时 pip 视其已满足而跳过。
+# 超时／重试参数一并放宽（--timeout 120 --retries 15），提高弱网下的构建成功率。
+RUN pip install --no-cache-dir --timeout 120 --retries 15 "torch==2.12.1" \
+        --index-url https://download.pytorch.org/whl/cpu
+RUN pip install --no-cache-dir --timeout 120 --retries 15 -r /app/requirements.txt
 
 # uvicorn[standard] 的 extras 语义保留在此处（requirements.txt 只写不带 extras 的
 # `uvicorn==0.54.0` 作为版本单一来源）：版本号与 requirements 一致，仅在容器内就地补
 # websockets／httptools 等 extras，避免 requirements 与 Dockerfile 两处写法打架。
-RUN pip install --no-cache-dir "uvicorn[standard]==0.54.0"
+RUN pip install --no-cache-dir --timeout 120 --retries 15 "uvicorn[standard]==0.54.0"
 
 # 后端代码 ＋ 上游只读代码（后端 import 复用检索与问答组件，故必须一起进镜像）
 COPY 交付物/03-代码/后端/ /app/交付物/03-代码/后端/
@@ -61,8 +70,11 @@ COPY 交付物/03-代码/问答/ /app/交付物/03-代码/问答/
 # 上游数据：数据集（向量索引与文本块）与图谱导出物是后端运行期读取的只读输入。
 # 仓库不含它们（.gitignore），故构建时必须由本地工作区提供；缺数据时镜像仍可构建，
 # 只是向量检索与内存图后端不可用（会以 3003／3001 明确报错，不会静默降级）。
+# **2026-10-10 修复**：图谱导出物原写死 `v2.1_v1_2`（2026-10-03 图谱口径切到 `v2.1_v1_3` 时
+# 本行未随动，镜像里带的仍是归档口径）；现改到现行 `v2.1_v1_3`，与《02》v3.6、六表与图谱计数
+# （3607／3614）一致。**归档目录 v2.1_v1_2 不进镜像**（已归档、不再作为任何现行输入）。
 COPY 交付物/04-数据与知识图谱/数据准备/数据集/v2.1/ /app/交付物/04-数据与知识图谱/数据准备/数据集/v2.1/
-COPY 交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_2/ /app/交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_2/
+COPY 交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/ /app/交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/
 
 # 端口：后端 8000（《24》第六节 格式决策 5 固定）
 EXPOSE 8000

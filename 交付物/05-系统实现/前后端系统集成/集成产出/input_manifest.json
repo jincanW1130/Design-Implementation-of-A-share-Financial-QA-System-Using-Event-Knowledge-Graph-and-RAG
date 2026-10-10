@@ -62,8 +62,8 @@
       "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱\\图谱导出\\v2.1_v1_3\\graph_stats.json",
       "note": "图谱计数对拍基准",
       "exists": true,
-      "bytes": 47285,
-      "sha256": "f15a3409566a234061b733417e60c6dca26443da215ba46f74a17965c4df5e55"
+      "bytes": 47363,
+      "sha256": "576e06b72f9406b8a750cdea1470ca09e8fbdc93c258f2c23843d49734e8c0dc"
     },
     {
       "path": "交付物/05-系统实现/RAG检索系统\\检索产出\\per_question_trace.jsonl",
@@ -81,129 +81,129 @@
     }
   ],
   "upstream_code": {
-    "代码\\检索\\build_questions.py": {
-      "bytes": 77798,
-      "sha256": "103c4a56a5a903f1fc0cbba3650702d68a5e6e94ba5c51f51fa563d989beb57a"
+    "交付物\\03-代码\\检索\\build_questions.py": {
+      "bytes": 77888,
+      "sha256": "1c8d827f527a8a3401aa0433ccc43c4d3a88f8fd56e707a35514631f1913fbc6"
     },
-    "代码\\检索\\check_inputs.py": {
-      "bytes": 13261,
-      "sha256": "a3a55f9f691a53cf9a34197857fda3380b989dbdd89bcb86153b7f7556c3e5e4"
+    "交付物\\03-代码\\检索\\check_inputs.py": {
+      "bytes": 13343,
+      "sha256": "eb2aa86f9666cc40a83c9e580582250329e98dfa634978a54b06193ad7e8f67b"
     },
-    "代码\\检索\\config.py": {
-      "bytes": 25595,
-      "sha256": "a55b91db651c13900f35ab74007fb6fa9ea366e2097ba218cc45d17d7dbc1306"
+    "交付物\\03-代码\\检索\\config.py": {
+      "bytes": 25726,
+      "sha256": "419c12c1eeaf99a4785ac3f5e85cd010adc5ffb4fea24ab287024925ca778ce4"
     },
-    "代码\\检索\\graph_query.py": {
-      "bytes": 51680,
-      "sha256": "897ba8c79c786fce5b46be726c430c4ab922036b839dfe65c735ece10a4d0eed"
+    "交付物\\03-代码\\检索\\graph_query.py": {
+      "bytes": 51775,
+      "sha256": "e50c78fb7ae6e3caf9e24598c4e47f38ba7b3ed1ff2549600b999217ddf4a6e0"
     },
-    "代码\\检索\\metrics.py": {
-      "bytes": 41144,
-      "sha256": "9751b6dc7cb98186b982e949bb66d53b271180bcd696e86d9470c8968a41ebb3"
+    "交付物\\03-代码\\检索\\metrics.py": {
+      "bytes": 41161,
+      "sha256": "55f06abebd85093347259bc6a21438f7bed218f683b9441996edf8331f32ff05"
     },
-    "代码\\检索\\pipeline.py": {
-      "bytes": 125168,
-      "sha256": "1ec94bd957c39d13a4ffce13146ff32004b03fe5bba833498dfc017058449835"
+    "交付物\\03-代码\\检索\\pipeline.py": {
+      "bytes": 125207,
+      "sha256": "99fd5d4723ab8263905a879fda275ed737dfee823b8436de59599fa101e7c4ba"
     },
-    "代码\\检索\\pre_experiment.py": {
-      "bytes": 54783,
-      "sha256": "aec7bf2d77ed5decbf9300a121e6a7e419a67e1b987fdc79fbbb13e2311d29c9"
+    "交付物\\03-代码\\检索\\pre_experiment.py": {
+      "bytes": 54822,
+      "sha256": "75bb2269004351a4c8232d4f7eb27b8f052ff4ec4cc77373a7391089901150be"
     },
-    "代码\\检索\\run_query.py": {
-      "bytes": 42530,
-      "sha256": "fb7382154d2e21188151a41aedd2eebe91a08e84ea6949b3b62c4de983eb5182"
+    "交付物\\03-代码\\检索\\run_query.py": {
+      "bytes": 42680,
+      "sha256": "e4bbaf5788642f0c5b240de3a4bc9e2eb6a5544321055e8a00b4d3a333bff735"
     },
-    "代码\\检索\\third_party_review.py": {
-      "bytes": 42135,
-      "sha256": "eb499763e33b554d91791764201e759074e0967ff1343671ceaeb567f92db379"
+    "交付物\\03-代码\\检索\\third_party_review.py": {
+      "bytes": 42470,
+      "sha256": "b7d2e37f7eaa3d0f4d4500e5b8d875b672c7d23ad1b0983156a4e07b65f70a09"
     },
-    "代码\\检索\\vector_search.py": {
-      "bytes": 29997,
-      "sha256": "f76d1fd78f793a15695f5274b41e9995ade638d58d8ba78705141fe1b9d10572"
+    "交付物\\03-代码\\检索\\vector_search.py": {
+      "bytes": 30040,
+      "sha256": "08c0c14b287b2d5aea09e547aed67d464e17f8acd7e465c7e3355fe67eac8d65"
     },
-    "代码\\问答\\answer.py": {
+    "交付物\\03-代码\\问答\\answer.py": {
       "bytes": 22821,
       "sha256": "8a235d180c49a5e021ff8b9d59c782b05cd81ad068e28867f0f8e27d35ef79b9"
     },
-    "代码\\问答\\assemble.py": {
-      "bytes": 16592,
-      "sha256": "f7760c2b7b9599136fbe16d6d1ea2425cc99911e31ff84d8b291f5eec4dfd339"
+    "交付物\\03-代码\\问答\\assemble.py": {
+      "bytes": 16609,
+      "sha256": "508f6d8629b02d06dd4eb5f625ee93744d44e7e6a22f1ebeb98ffb9fc9b70bba"
     },
-    "代码\\问答\\check_inputs.py": {
-      "bytes": 9278,
-      "sha256": "c42edde121039f0d69f842744bdf33f16e8c481b594e944d6ac7f653a2d3035e"
+    "交付物\\03-代码\\问答\\check_inputs.py": {
+      "bytes": 9295,
+      "sha256": "9c4bdbee90a3e9e33807ef14b234af9a84b1f1f107a819abbe2f40e2b7a52334"
     },
-    "代码\\问答\\config.py": {
-      "bytes": 27512,
-      "sha256": "c4efbf64bb48b8bf76b2c18eb2ec407d2fced7515476825e6e742b43d171c186"
+    "交付物\\03-代码\\问答\\config.py": {
+      "bytes": 27707,
+      "sha256": "11a2e1e35a0440e4f72864889a512e440c0f297f2fcbf7413abadd0066b8ae02"
     },
-    "代码\\问答\\history.py": {
+    "交付物\\03-代码\\问答\\history.py": {
       "bytes": 17316,
       "sha256": "8a2d722625d8998c94c80f117dcd63b76fe423b155ef8cc22fc7e65d854780f3"
     },
-    "代码\\问答\\model_selection.py": {
+    "交付物\\03-代码\\问答\\model_selection.py": {
       "bytes": 42385,
       "sha256": "fceb6d575862ec8d56bc7d9a798f2cd5d66f75347dc27b008ed85bf5aa12feda"
     },
-    "代码\\问答\\prompt.py": {
+    "交付物\\03-代码\\问答\\prompt.py": {
       "bytes": 22806,
       "sha256": "60b0e8b41ce147b5bbcf86f6dc11c1faed7ba5fd70a9e55d80d8aef1bcaf001b"
     },
-    "代码\\问答\\rules.py": {
+    "交付物\\03-代码\\问答\\rules.py": {
       "bytes": 15110,
       "sha256": "3f6770494ac8638ebb6a6b5fd9276592f65a6b0434055fce2d61640fab7f1ab3"
     },
-    "代码\\问答\\run_answer.py": {
-      "bytes": 49737,
-      "sha256": "fb3d54f3cd4e1764c411d12d78d958bcb9eaeb4e9df35a4c7e4e8cc773c5c14b"
+    "交付物\\03-代码\\问答\\run_answer.py": {
+      "bytes": 49824,
+      "sha256": "7a9f10a1c285e3ced516ea6245017990ea502f36c1949266ea5f73f5331d6dab"
     },
-    "代码\\数据准备\\check.py": {
+    "交付物\\03-代码\\数据准备\\check.py": {
       "bytes": 57740,
       "sha256": "bec8d8c4f931c5a288a2c8e30d4eeb0f9f7d9e4b9408f0c147cfb06f92044d93"
     },
-    "代码\\数据准备\\chunk.py": {
-      "bytes": 22391,
-      "sha256": "e01ac2c2a8d59b020c51dd04b4a5d039ddf5d537ba000c801780055d6351b718"
+    "交付物\\03-代码\\数据准备\\chunk.py": {
+      "bytes": 22404,
+      "sha256": "a0240df02c3835ac3e1d96b829ba55dee29d910b4fc5daed4c8c6908beeaac39"
     },
-    "代码\\数据准备\\clean.py": {
-      "bytes": 29051,
-      "sha256": "a759c22e47cf30722dfd8581933e800e66e0f809f06962dee3d1df3bd3510475"
+    "交付物\\03-代码\\数据准备\\clean.py": {
+      "bytes": 29064,
+      "sha256": "157269098e97c50c494697951268c4ec86fb84d2106c10f1ef72ceafd5647739"
     },
-    "代码\\数据准备\\config.py": {
-      "bytes": 51120,
-      "sha256": "67ef980d4f5c691e4acd251aacf5a3b30c0de15b1f77de199dd796a7e30d7c63"
+    "交付物\\03-代码\\数据准备\\config.py": {
+      "bytes": 51191,
+      "sha256": "ada0775e55e399ef576f9b899b48ccd1c720e904d8a69223c7af2a6fb87c2637"
     },
-    "代码\\数据准备\\dedup.py": {
-      "bytes": 11977,
-      "sha256": "d093ada3a2a72ef8e3ed60a8a466d161f88999914bd3b9a2dedb4f0c4f4e4943"
+    "交付物\\03-代码\\数据准备\\dedup.py": {
+      "bytes": 11990,
+      "sha256": "206faf070f2299bfb817d4d68064fb7e31ec8718520af896eaedbb90f18cb94e"
     },
-    "代码\\数据准备\\embed.py": {
+    "交付物\\03-代码\\数据准备\\embed.py": {
       "bytes": 19703,
       "sha256": "a894a75dc0a6d29893cc66a54dfedf42a27f6a49ee11fd464b369a261ead6164"
     },
-    "代码\\数据准备\\event_first.py": {
-      "bytes": 20561,
-      "sha256": "d72e56233d6993fbcca11a1499d3d16b8ca6fdc21452ebb2447ad69bca43ec05"
+    "交付物\\03-代码\\数据准备\\event_first.py": {
+      "bytes": 20587,
+      "sha256": "a8ade98388d7146cd1e45f05962dbb5b71e3e37b9007b9a48539516bed4490ca"
     },
-    "代码\\数据准备\\fetch.py": {
+    "交付物\\03-代码\\数据准备\\fetch.py": {
       "bytes": 142101,
       "sha256": "d60e44a6a47ae3288a9edc16490e409c6139e5549867633a31c1c65bb94b6e3f"
     },
-    "代码\\数据准备\\run_all.py": {
+    "交付物\\03-代码\\数据准备\\run_all.py": {
       "bytes": 6031,
       "sha256": "2159c4e90c59b5f1e3e4b06931868c31fa3ff0b13c9d22f1b153139e7326014b"
     },
-    "代码\\数据准备\\v21_report.py": {
-      "bytes": 11948,
-      "sha256": "347a9855e1e53134fe00423c54cc9dc2438e1a029d44842146246999120c7851"
+    "交付物\\03-代码\\数据准备\\v21_report.py": {
+      "bytes": 11974,
+      "sha256": "378c50824b00bd5b25a55fa3be684d30913a7fa92c6713bd6bf8f93f64d09db3"
     },
-    "代码\\数据准备\\勘察\\宽口径_验收工具.py": {
-      "bytes": 8530,
-      "sha256": "ab624161b63b01e57d73162c87afabbff7bfcc4bc7234bcd7205ac9c26d9af6c"
+    "交付物\\03-代码\\数据准备\\勘察\\宽口径_验收工具.py": {
+      "bytes": 8582,
+      "sha256": "d1caeff80e6ca6ff47522389e1bb3c3c8cca7cd3232cecd9973f386973324954"
     },
-    "代码\\数据准备\\勘察\\撤销中间轮次产出.py": {
-      "bytes": 3445,
-      "sha256": "2fba9c208b5a7fe1d44b837074ab4ce28d58beed3bf199c98da980dbd6e785de"
+    "交付物\\03-代码\\数据准备\\勘察\\撤销中间轮次产出.py": {
+      "bytes": 3471,
+      "sha256": "aaffdd43fada32b60bbd2bb82d04be515a120e809a30376aa25b39614919744a"
     }
   }
 }

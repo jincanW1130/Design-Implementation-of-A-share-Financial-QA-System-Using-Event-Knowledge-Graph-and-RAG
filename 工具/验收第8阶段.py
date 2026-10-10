@@ -651,8 +651,8 @@ def group_a(g):
     g.row("A4", not ddl_hits and not sql_unexpected and six_ok,
           "无数据库动作（第 8 阶段交付范围内无建表语句／无连接串；"
           "仓库内 *.sql 的时点限定见下）",
-          "代码\\问答 下 DDL／连接串命中 %d 处%s；仓库内 *.sql／*.ddl %d 个%s；"
-          "其中第 9 阶段开工后豁免 %d 个（豁免目录＝代码\\后端\\，标志文件%s）；"
+          "交付物/03-代码\\问答 下 DDL／连接串命中 %d 处%s；仓库内 *.sql／*.ddl %d 个%s；"
+          "其中第 9 阶段开工后豁免 %d 个（豁免目录＝交付物/03-代码\\后端\\，标志文件%s）；"
           "待判 *.sql／*.ddl %d 个%s；《02》第9.1节 六表口径可读=%s"
           % (len(ddl_hits), "" if not ddl_hits else "：" + br(ddl_hits, 3),
              len(sql_files), "" if not sql_files else "：" + br(sql_files, 3),
@@ -1858,10 +1858,10 @@ def term_discipline(g):
     neg_pat = re.compile(r"(不得|不部署|未部署|没有部署|不声称|不写|不连|禁止|无需|不要)")
     # 本脚本要**指名**这些术语才能自检（「FAISS 一律写『向量索引』」），故本脚本只参与
     # 「被禁连写术语」一项；FAISS／图数据库服务两项只在**被验收的文档与代码**上判定。
-    audit = [("代码\\问答\\README.md", os.path.join(g.code8, "README.md"))]
+    audit = [("交付物/03-代码\\问答\\README.md", os.path.join(g.code8, "README.md"))]
     for name in sorted(os.listdir(g.code8)) if os.path.isdir(g.code8) else []:
         if name.endswith(".py"):
-            audit.append(("代码\\问答\\" + name, os.path.join(g.code8, name)))
+            audit.append(("交付物/03-代码\\问答\\" + name, os.path.join(g.code8, name)))
     for extra in ("21-第8阶段任务书（智能问答系统）.md",
                   "22-第8阶段产出文档（智能问答系统）.md"):
         audit.append(("交付物/05-系统实现/智能问答系统\\" + extra, os.path.join(g.stage8, extra)))

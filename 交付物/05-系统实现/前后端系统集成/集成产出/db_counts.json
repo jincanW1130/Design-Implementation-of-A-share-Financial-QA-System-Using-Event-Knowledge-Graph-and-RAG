@@ -38,7 +38,7 @@
     "user": 0
   },
   "database": "ashare_qa",
-  "generated_at": "2026-10-09T19:02:54+08:00",
+  "generated_at": "2026-10-10T15:57:30+08:00",
   "input_fields": {
     "chunks": [
       "chunk_id",
@@ -97,25 +97,25 @@
   "inputs": {
     "chunks": {
       "bytes": 5322875,
-      "path": "交付物/04-数据与知识图谱/数据准备\\数据集\\v2.1\\chunks\\chunks.jsonl",
+      "path": "交付物\\04-数据与知识图谱\\数据准备\\数据集\\v2.1\\chunks\\chunks.jsonl",
       "rows": 5018,
       "sha256": "2202cbf8e3915598fc9fa57a9fe6d32577705f59ce7bfdfab822903d949e8e44"
     },
     "dataset_meta": {
       "bytes": 3108,
-      "path": "交付物/04-数据与知识图谱/数据准备\\数据集\\v2.1\\meta\\dataset.json",
+      "path": "交付物\\04-数据与知识图谱\\数据准备\\数据集\\v2.1\\meta\\dataset.json",
       "rows": null,
       "sha256": "41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988"
     },
     "documents": {
       "bytes": 4496547,
-      "path": "交付物/04-数据与知识图谱/数据准备\\数据集\\v2.1\\clean\\documents.jsonl",
+      "path": "交付物\\04-数据与知识图谱\\数据准备\\数据集\\v2.1\\clean\\documents.jsonl",
       "rows": 709,
       "sha256": "c838c608c20060adb1366d5c6f7566f9de25016110dc368f7f92fcb8a10f9eea"
     },
     "qa_records": {
       "bytes": 253335,
-      "path": "交付物/05-系统实现/智能问答系统\\问答产出\\qa_records.jsonl",
+      "path": "交付物\\05-系统实现\\智能问答系统\\问答产出\\qa_records.jsonl",
       "rows": 30,
       "sha256": "a64d0f0bcf60a0449bc4dbe4d9866bdbbd51a1f1968c275f514d2984f092768d"
     }

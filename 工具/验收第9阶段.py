@@ -95,7 +95,11 @@ P_OUT = os.path.join(STAGE, "集成产出")
 P_EVID = os.path.join(P_OUT, "_证据")
 P_BACKEND = os.path.join("交付物/03-代码", "后端")
 P_FRONTEND = os.path.join("交付物/03-代码", "前端")
-P_DEPLOY = "部署"
+# **目录重组修复（2026-10-10）**：原值 "部署"（重组前部署目录在仓库根：`部署\`）。《02》v3.16
+# 顶层重组后改为 `交付物/10-部署\`，本常量未随动 —— G2／H1／H4／H5 四行把 `<仓库>\部署\…`
+# 当成部署目录读文件，报 FileNotFoundError（判据内部异常，不是内容失败）。
+# 现改为现行路径；**判据文字与强度一律未改**（与 v3.16 ⑤ 的 `跑正式对照.py` 同类处置同型）。
+P_DEPLOY = os.path.join("交付物", "10-部署")
 P_QSET = os.path.join("交付物/05-系统实现/RAG检索系统", "预实验问题集", "questions.jsonl")
 P_QAREC = os.path.join("交付物/05-系统实现/智能问答系统", "问答产出", "qa_records.jsonl")
 P_DOCS = os.path.join("交付物/04-数据与知识图谱/数据准备", "数据集", "v2.1", "clean", "documents.jsonl")
@@ -2184,7 +2188,7 @@ def c_g2(g):
     readme = read_text(g.p(P_DEPLOY, "README.md"))
     reg = ("60" in doc25 and "限流" in doc25) and ("60 次" in readme or "60" in readme)
     if not reg:
-        bad.append("《25》或 部署\\README.md 未登记限制参数")
+        bad.append("《25》或 交付物/10-部署\\README.md 未登记限制参数")
     live_note = ""
     if g.live:
         st1, b1, _ = http("POST", "/api/qa/ask", {"question": "边" * 501, "session_id": "S-GATE-G2"})
@@ -2197,7 +2201,7 @@ def c_g2(g):
     if bad:
         g.fail("G2", "；".join(bad))
     else:
-        g.ok("G2", "%s:%s RATE_LIMIT 60 次／60 秒、question_max_chars=500；限制参数已登记于《25》与 部署\\README.md%s"
+        g.ok("G2", "%s:%s RATE_LIMIT 60 次／60 秒、question_max_chars=500；限制参数已登记于《25》与 交付物/10-部署\\README.md%s"
              % (br(g.root, cfgp), ln, live_note))
 
 
@@ -2403,7 +2407,7 @@ def c_h1(g):
     health = re.search(r"\[\s*OK\s*\]\s*status=(\w+)\s+mysql=(\w+)\s+neo4j=(\w+)\s+vector_index=(\w+)\s+model_config=(\w+)", out)
     bang = [l.strip() for l in out.split("\n") if "[ !! ]" in l]
     if len(marks) == 4 and health and health.group(1) == "ok" and not bang:
-        g.ok("H1", "powershell -File 部署\\启动.ps1 -NoFrontend：四步检查全部打印（%s），"
+        g.ok("H1", "powershell -File 交付物/10-部署\\启动.ps1 -NoFrontend：四步检查全部打印（%s），"
                    "健康检查 [OK] status=ok mysql=True neo4j=True vector_index=True model_config=True"
                    "（8000 已监听，脚本复用现有进程）" % "／".join(marks))
     else:
@@ -2581,7 +2585,7 @@ def c_h5(g):
         bad.append("graph_counts.json 的 neo4j.uri=%s（应 bolt://127.0.0.1:7687）" % uri)
     fixed = {3306, 7474, 7687, 8000, 5173}
     if not fixed <= readme_ports:
-        bad.append("部署\\README.md 端口一览缺 %s" % sorted(fixed - readme_ports))
+        bad.append("交付物/10-部署\\README.md 端口一览缺 %s" % sorted(fixed - readme_ports))
     if man_ports != fixed:
         bad.append("run_manifest.json 登记端口=%s（应 %s）" % (sorted(man_ports), sorted(fixed)))
     live_note = ""
@@ -2595,7 +2599,7 @@ def c_h5(g):
     if bad:
         g.fail("H5", "；".join(bad))
     else:
-        g.ok("H5", "端口口径一致：%s 后端 %s／前端 %s；部署\\README.md **包含**全部固定端口 %s"
+        g.ok("H5", "端口口径一致：%s 后端 %s／前端 %s；交付物/10-部署\\README.md **包含**全部固定端口 %s"
                    "（该正则抓到的是该文件里**所有**四位数字 %s —— 多出的年份／秒数等属误捕，"
                    "本行判据是「包含」不是「相等」，故不影响判定）；"
                    "run_manifest.json 登记 %s；Neo4j uri=%s%s"
@@ -2676,7 +2680,7 @@ def c_i2(g):
                   if outside else ""))
     else:
         g.ok("I2", "扫描 %d 个文本文件（排除 .git／node_modules／dist／_工作底稿／__pycache__）："
-                   "**第 9 阶段交付物**（阶段09 正文／代码\\后端／代码\\前端／部署）里被禁四字连写术语在非语境位置 0 命中"
+                   "**第 9 阶段交付物**（交付物/05-系统实现/前后端系统集成 正文／交付物/03-代码\\后端／交付物/03-代码\\前端／交付物/10-部署）里被禁四字连写术语在非语境位置 0 命中"
                    "（另有 %d 处出现在「不称…／统一表述为」的术语纠正句里，按语境排除；上游旧文件另有 %d 处，按范围只统计不判负）；"
                    "FAISS 一律写「%s」——《25》中该写法出现 %d 次"
              % (nfiles, ctx, len(outside), VDB_GOOD, good))
