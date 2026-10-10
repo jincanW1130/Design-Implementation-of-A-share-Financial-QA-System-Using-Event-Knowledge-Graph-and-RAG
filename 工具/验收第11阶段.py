@@ -201,14 +201,14 @@ ROWS = [
     ("D3", "正文引用编号 ⊆ [1]～[22]，且 22 条编号全部被引用"),
     ("E1", "图 4-1～图 4-8 全部被引用"),
     ("E2", "表 4-1～表 4-13 全部被引用"),
-    ("E3", "9 条图注 PNG 相对路径全部真实存在"),
+    ("E3", "9 条图注 PNG 相对路径与 9 条正文图片链接均真实存在"),
     ("F1", "抽取 F1 读数可在《抽取评测指标.json》中逐项找到"),
     ("F2", "NFR 读数可在《NFR_readings.json》中逐项找到"),
     ("F3", "规模读数可在声明的源文件中逐个找到"),
     ("F4", "6.7～6.10 四节已按正式全量读数回填，且每个读数可复算／可溯源"),
     ("G1", "6.7～6.10 四节齐备、无未回填占位、逐子集 CER 已按现行留痕重算、D/E 集合比对成立"),
     ("G2", "拼装确定性：连跑两次产出逐字节一致，且与磁盘《29》一致"),
-    ("G3", "写范围自检：阶段十一目录只含《28》《29》与分章源文件目录"),
+    ("G3", "写范围自检：阶段十一目录只含《28》《29》、分章源文件目录与提交件目录"),
     ("G4", "跨文档核验 --strict-citations 的失败项 ⊆ 两项登记"),
 ]
 
@@ -294,7 +294,12 @@ def parse_master_toc(ctx):
     m2 = re.search(r"^##\s*十六、", seg, re.M)
     if m2:
         seg = seg[:m2.start()]
-    ch = re.findall(r"^###\s*(第[一二三四五六七]章\s*\S.*?)\s*$", seg, re.M)
+    # 章标题的章号体例：2026-10-10 起论文按学校模板改为**阿拉伯数字**（`第1章 绪论`），
+    # 故此处同时接受两种体例（`第[一二三四五六七]章` 与 `第\d章`）。
+    # **判据强度未变**：仍是"抽出来的这串文本必须与《29》逐条、按顺序完全一致"，
+    # 只是把"章号的写法"这一**成文时的形态假设**放开；配合 _toc_compare 里新增的
+    # "解析结果不得为空"守卫，空转通过的口子也被堵上（见那里的注释）。
+    ch = re.findall(r"^###\s*(第(?:[一二三四五六七]|\d)章\s*\S.*?)\s*$", seg, re.M)
     sec = re.findall(r"^-\s*(\d\.\d\s+\S.*?)\s*$", seg, re.M)
     return ch, sec, ""
 
@@ -382,11 +387,18 @@ def _toc_compare(ctx, which):
     if err:
         return "FAIL", err
     if which == "ch":
-        got = re.findall(r"^#\s*(第[一二三四五六七]章\s*\S.*?)\s*$", t, re.M)
+        got = re.findall(r"^#\s*(第(?:[一二三四五六七]|\d)章\s*\S.*?)\s*$", t, re.M)
         want = ch02
     else:
         got = re.findall(r"^##\s*(\d\.\d\s+\S.*?)\s*$", t, re.M)
         want = sec02
+    # 守卫（2026-10-10 加严）：两侧**同时解析为空**时 `gn == wn` 会成立，判据就"空转通过"了
+    # ——本次改章号体例（中文数字 → 阿拉伯数字）时实测到：旧正则两侧都解析不出，
+    # 于是走进 OK 分支、在 `wn[0]` 上撞 IndexError 才暴露出来。**若无那次崩溃，这里会静默判 OK。**
+    # 故先断言两侧都非空：判据必须真的作用在"七章"与"43 节"上，而不是作用在空列表上。
+    if not want or not got:
+        return "FAIL", "解析结果为空：《02》第十五节 %d 条 /《29》%d 条——判据失去作用对象" % (
+            len(want), len(got))
     gn = [norm(x) for x in got]
     wn = [norm(x) for x in want]
     if gn == wn:
@@ -541,6 +553,34 @@ def d3(ctx):
 # --------------------------------------------------------------------------
 # E 组：图表
 # --------------------------------------------------------------------------
+# 正文图片链接 ![alt](target)；第 1 组＝目标本身。目标不含空格与括号。
+IMG_LINK_RE = re.compile(r"!\[[^\]\n]*\]\(([^()\n]*)\)")
+# 非「仓库内相对目标」的前缀：外链、页内锚点、绝对路径。
+LINK_EXTERNAL_PREFIXES = ("http://", "https://", "mailto:", "data:", "#", "/", "\\")
+# 带 scheme 的目标（含 Windows 盘符 `C:\…`）一律按外链处理。
+LINK_SCHEME_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9+.\-]*:")
+
+
+def _is_repo_rel_link(target):
+    """该链接目标是否为「仓库内相对目标」（无 scheme、非绝对路径、非页内锚点）。"""
+    t = target.strip()
+    if not t:
+        return False
+    low = t.lower()
+    for pre in LINK_EXTERNAL_PREFIXES:
+        if low.startswith(pre.lower()):
+            return False
+    return not LINK_SCHEME_RE.match(t)
+
+
+def _resolve_rel_link(base_dir, target):
+    """把仓库内相对目标按 base_dir 解析为绝对路径（带 `#锚点` 时去锚点）。"""
+    core = target.split("#", 1)[0].strip()
+    if not core:
+        return None
+    return os.path.normpath(os.path.join(base_dir, core.replace("/", os.sep)))
+
+
 def e1(ctx):
     t = paper(ctx)
     if not t:
@@ -566,13 +606,39 @@ def e3(ctx):
     t = paper(ctx)
     if not t:
         return "FAIL", "《29》不存在"
+    # ① 图注：反引号包裹的 `交付物/09-图表/…png`（仓库根相对）去重后恰 9 条，逐条存在
     paths = sorted(set(re.findall(r"`(交付物/09-图表/[^`\n]+\.png)`", t)))
     if len(paths) != 9:
         return "FAIL", "图注中声明的 PNG 路径为 %d 条（期望 9）" % len(paths)
     missing = [p for p in paths if not os.path.isfile(ctx.p(p))]
     if missing:
         return "FAIL", "下列 PNG 路径在磁盘上不存在：%s" % "、".join(missing)
-    return "OK", "9 条图注 PNG 路径全部真实存在"
+    # ② 正文图片链接：![](...) 的仓库内相对目标按**《29》所在目录**逐条解析。
+    #    2026-10-10 加严：旧判据只看图注里的反引号路径，正文 ![]() 全裂也照样给 OK
+    #    （重组把 `../` 层数拼错后，9 条图注路径全都写得对、9 个正文链接全悬空）。
+    #    现在要求：条数同为 9 条、逐条存在、且解析出的 PNG 与图注声明的 9 条是同一组。
+    base = os.path.dirname(ctx.p(PAPER_REL))
+    refs = [m.group(1).strip() for m in IMG_LINK_RE.finditer(t)]
+    refs = [r for r in refs if _is_repo_rel_link(r)]
+    if len(refs) != 9:
+        return "FAIL", ("正文图片链接（![](...)）的仓库内相对目标为 %d 条（期望 9 条）"
+                        % len(refs))
+    bad, resolved = [], set()
+    for r in refs:
+        dest = _resolve_rel_link(base, r)
+        if dest is None or not os.path.exists(dest):
+            bad.append(r)
+        else:
+            resolved.add(os.path.relpath(dest, ctx.root).replace(os.sep, "/"))
+    if bad:
+        return "FAIL", ("下列正文图片链接按《29》所在目录解析不到真实文件：%s"
+                        % "、".join(bad))
+    if resolved != set(paths):
+        return "FAIL", ("正文图片链接解析出的 PNG 与图注声明的 9 条不是同一组；"
+                        "只在链接侧：%s；只在图注侧：%s"
+                        % (sorted(resolved - set(paths))[:4],
+                           sorted(set(paths) - resolved)[:4]))
+    return "OK", "9 条图注 PNG 路径与 9 条正文图片链接全部真实存在（两侧为同一组 9 张图）"
 
 
 # --------------------------------------------------------------------------
@@ -1199,9 +1265,16 @@ def g3(ctx):
     d = ctx.p("交付物/01-论文")
     if not os.path.isdir(d):
         return "FAIL", "阶段十一目录不存在"
+    # G3 重基线（2026-10-10）：本阶段新增了 **Word 成稿** 这一正当产物，落点
+    # `交付物/01-论文/提交件/`（学校要求的文件名体例 `姓名_学号_题目.docx`）。
+    # 旧判据「条目集合恰为 {《28》,《29},_分章源文件}」是**成文时的事实断言**，
+    # 新增产物后必然对**正确产物**报红，故允许集合补入 `提交件`。
+    # **方向是收紧不是放宽**：仍然断言「集合恰好相等」（不是「包含」），并**新增两条**
+    # 对提交件目录的断言（恰 1 份 `.docx`、且非空）；旧判据的合理内核一条未删。
     allowed = {"28-第11阶段任务书（论文撰写与材料整理）.md",
                "29-第11阶段产出文档（毕业论文）.md",
-               "_分章源文件"}
+               "_分章源文件",
+               "提交件"}
     have = set(os.listdir(d))
     extra = sorted(have - allowed)
     miss = sorted(allowed - have)
@@ -1215,7 +1288,18 @@ def g3(ctx):
     for rel in (ASSEMBLER_REL, "工具/验收第11阶段.py"):
         if not os.path.isfile(ctx.p(rel)):
             return "FAIL", "本阶段新增脚本缺失：%s" % rel
-    return "OK", "阶段十一目录仅含《28》《29》与 _分章源文件（10 份）；本阶段两个新脚本就位"
+    # 提交件目录：**新增的两条断言**（重基线时一并加严，见上文注释）
+    sub = ctx.p("交付物/01-论文/提交件")
+    if not os.path.isdir(sub):
+        return "FAIL", "提交件目录不存在：%s" % sub
+    docxs = sorted(f for f in os.listdir(sub) if f.lower().endswith(".docx"))
+    if len(docxs) != 1:
+        return "FAIL", "提交件目录的 .docx 为 %d 份（期望恰 1 份）：%s" % (len(docxs), docxs)
+    sub_size = os.path.getsize(os.path.join(sub, docxs[0]))
+    if sub_size <= 0:
+        return "FAIL", "提交件为空文件：%s" % docxs[0]
+    return "OK", ("阶段十一目录仅含《28》《29》、_分章源文件（10 份）与提交件（1 份非空 .docx，"
+                  "%d 字节）；本阶段两个新脚本就位" % sub_size)
 
 
 def g4(ctx):
@@ -1347,6 +1431,10 @@ MIRROR_FILES = [
     # F4 第二段重基线（2026-10-09，正式集问答质量评分已完成）新增：6.8.1 的
     # 五组三维度均值与 12.8 判定表的溯源来源与机读汇总，缺它 F4 的新断言无法判定。
     QA_SCORE_FORMAL_REL, QA_SCORE_SUMMARY_REL,
+    # G3 重基线（2026-10-10，允许并断言"提交件"目录）新增：G3 现在断言
+    # `交付物/01-论文/提交件/` 恰有 1 份非空 `.docx`，**自检镜像必须一并复制它**，
+    # 否则镜像里 G3 会因"提交件缺失"报红、原样对照就不是 0 内容失败（与上文 F4／G1 同一种坑）。
+    "交付物/01-论文/提交件/王锦灿_20234225193_基于事件知识图谱与RAG的A股财经信息智能问答系统设计与实现.docx",
 ] + [TRACE_REL_TMPL % g for g in ("A", "B", "C", "D", "E")]
 MIRROR_PNGS = [
     "交付物/09-图表/第4阶段图/图4-1-六层架构与部署形态.png",
@@ -1646,9 +1734,9 @@ CASES = [
     ("⑫ 篡改《NFR_readings.json》的端到端均值（14.994 → 99.999）",
      _tamper_json(NFR_JSON_REL, ["nfr01", "end_to_end", "mean"], 99.999),
      {"F2"}),
-    ("⑬ 把 07 的一级标题「# 第七章 总结与展望」改成「# 第七章 总结」",
+    ("⑬ 把 07 的一级标题「# 第7章 总结与展望」改成「# 第7章 总结」",
      _tamper_replace(SRC + "/07-第七章-总结与展望.md",
-                     "# 第七章 总结与展望", "# 第七章 总结"),
+                     "# 第7章 总结与展望", "# 第7章 总结"),
      {"B1"}),
     # 删源文件同时打红三行：A2（10 份齐备性）、A3（11 个目标文件的存在性／编码）、
     # G3（分章源文件份数）。A4／G2 在本档为 UNRUN（非 FAIL），按定义不可计入期望。
@@ -1687,6 +1775,20 @@ CASES = [
     #    "9 条图注 PNG 路径全部真实存在"必然失败。与 ⑧（删图 4-5）同一条判据的两个命中面。
     ("⑲ 删掉图 3-1 的 PNG 文件",
      _tamper_delete("交付物/09-图表/第3阶段图/图3-1-系统用例图.png", src=False),
+     {"E3"}),
+    # ⑳ 锁 E3 加严（2026-10-10，「只看图注路径」→「图注路径 ＋ 正文图片链接」）新增的
+    #    那条腿：只把《29》里图 4-5 的**正文图片链接目标**改成不存在的文件名，**图注一字不动**。
+    #    此时第 ① 条腿（9 条图注路径）照旧全绿，只有第 ② 条腿能报红——这正是旧判据放过
+    #    「图注写得对、正文 9 个链接全裂」那类产物的缺口。
+    #    **改法如实登记**：必须直接改产出《29》而不能改源文件再重拼——第 2 步给两个拼装脚本
+    #    加了产出前链接自检，源文件里塞坏链会让拼装脚本自己以非零退出码中止（`_regen` 会抛
+    #    SystemExit），反例就够不到 E3；这也正是"两道防线"的分工：脚本挡住源文件侧，
+    #    E3 挡住产出侧（手改《29》）。
+    ("⑳ 把《29》里图 4-5 的正文图片链接目标改成不存在的文件名（图注不动）",
+     _tamper_replace(PAPER_REL,
+                     "](../09-图表/第4阶段图/图4-5-向量原文三级映射链路.png)",
+                     "](../09-图表/第4阶段图/图4-5-已破坏的链接.png)",
+                     src=False),
      {"E3"}),
 ]
 

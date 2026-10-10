@@ -15,6 +15,12 @@
 4. **文末**：修订记录位（固定表格，含本版行）。
 5. 产出文档**由脚本生成**，不得手改；`--check` 档用于核对磁盘上的《29》
    是否与一次现场拼装逐字节一致（供门禁 static 档使用）。
+6. **链接重定位**：分章源文件里的仓库内相对链接，按**源文件所在目录**解出目标后
+   重新表达为**《29》所在目录**的相对路径（`_relink`）。源文件在
+   `交付物/01-论文/_分章源文件/`、产出在 `交付物/01-论文/`，层级不同，逐字拼接
+   必然把 `../` 的层数拼错。
+7. **产出前自检**：拼装完成、写盘之前，扫描产出文本里所有仓库内相对链接并逐条按
+   《29》所在目录解析；任一条解析不到即以非零退出码报错并打印清单，绝不写出坏产物。
 
 用法
 ----
@@ -25,10 +31,13 @@
 import argparse
 import hashlib
 import os
+import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+SRC_REL_DIR = "交付物/01-论文/_分章源文件"
+OUT_REL_DIR = "交付物/01-论文"
 SRC_DIR = os.path.join(ROOT, "交付物/01-论文", "_分章源文件")
 OUT_REL = os.path.join("交付物/01-论文", "29-第11阶段产出文档（毕业论文）.md")
 OUT = os.path.join(ROOT, OUT_REL)
@@ -97,8 +106,99 @@ def _read_text(path):
     return text.rstrip("\n")
 
 
+# --------------------------------------------------------------------------
+# 链接重定位与产出前自检
+# --------------------------------------------------------------------------
+# Markdown 的两种链接：![alt](target)（图片）与 [text](target)（文字链接）。
+# 本仓库的图表链接目标不含空格与括号，故用最小正则即可覆盖。
+# 第 1 组＝`![alt](` 头部，第 2 组＝目标本身，第 3 组＝`)`。
+_LINK_RE = re.compile(r"(!?\[[^\]\n]*\]\()([^()\n]*)(\))")
+# 非「仓库内相对链接」的目标前缀：外链、页内锚点、绝对路径。
+_EXTERNAL_PREFIXES = ("http://", "https://", "mailto:", "data:", "#", "/", "\\")
+# 带 scheme 的目标（含 Windows 盘符 `C:\…`）一律按外链处理，不做重定位。
+_SCHEME_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9+.\-]*:")
+
+
+def _is_repo_rel_link(target):
+    """该链接目标是否为「仓库内相对链接」（无 scheme、非绝对路径、非页内锚点）。"""
+    t = target.strip()
+    if not t:
+        return False
+    low = t.lower()
+    for pre in _EXTERNAL_PREFIXES:
+        if low.startswith(pre.lower()):
+            return False
+    return not _SCHEME_RE.match(t)
+
+
+def _split_anchor(target):
+    """拆出 `#锚点`：返回 (路径部分, 含 # 的锚点后缀或空串)。"""
+    core, sep, anchor = target.partition("#")
+    return core, ("#" + anchor) if sep else ""
+
+
+def _relink(text, src_rel_dir, out_rel_dir):
+    """把正文里的仓库内相对链接由「相对源文件目录」改写为「相对产出文件目录」。
+
+    分章源文件在 `交付物/01-论文/_分章源文件/`，而《29》在 `交付物/01-论文/`：
+    两级目录深度不同，逐字拼接必然把 `../` 的层数拼错（重组后一度全仓 34 处图链
+    因此悬空）。这里对每个源文件的正文按**源文件所在目录**解出目标的绝对路径，
+    再用 `os.path.relpath` 重新表达为**产出文件所在目录**的相对路径（正斜杠）；
+    带 `#锚点` 的目标保留锚点。外链／锚点／绝对路径原样返回。
+    """
+    src_abs = os.path.join(ROOT, src_rel_dir.replace("/", os.sep))
+    out_abs = os.path.join(ROOT, out_rel_dir.replace("/", os.sep))
+
+    def repl(m):
+        target = m.group(2).strip()
+        if not _is_repo_rel_link(target):
+            return m.group(0)
+        core, anchor = _split_anchor(target)
+        if not core:
+            return m.group(0)
+        dest = os.path.normpath(os.path.join(src_abs, core.replace("/", os.sep)))
+        new = os.path.relpath(dest, out_abs).replace(os.sep, "/")
+        return m.group(1) + new + anchor + m.group(3)
+
+    return _LINK_RE.sub(repl, text)
+
+
+def _check_links(text, out_rel_dir):
+    """产出前自检：产出文本里的仓库内相对链接必须逐条解析得到。
+
+    解析基准是**产出文件的落点目录**（《29》固定在 `交付物/01-论文/`）。`--out`
+    只改写写盘位置、不改变产出文本的语义落点——门禁 A4／G2 两行把《29》拼到临时
+    目录再逐字节比对，链接仍须按固定落点解释，故这里一律以落点目录为基准。
+
+    返回链接条数；任一条解析不到即打印清单并以非零退出码中止（不写盘）。
+    """
+    base = os.path.join(ROOT, out_rel_dir.replace("/", os.sep))
+    total, bad = 0, []
+    for m in _LINK_RE.finditer(text):
+        target = m.group(2).strip()
+        if not _is_repo_rel_link(target):
+            continue
+        core, _ = _split_anchor(target)
+        if not core:
+            continue
+        total += 1
+        dest = os.path.normpath(os.path.join(base, core.replace("/", os.sep)))
+        if not os.path.exists(dest):
+            bad.append(target)
+    if bad:
+        print("链接自检失败：产出文本里有 %d 条仓库内相对链接解析不到真实文件" % len(bad))
+        for t in bad:
+            print("  [坏链] %s" % t)
+        raise SystemExit(3)
+    return total
+
+
 def build():
-    """返回 (文本, [(文件名, 字节数, sha256前12位)])；纯函数，无副作用。"""
+    """返回 (文本, [(文件名, 字节数, sha256前12位)], 仓库内相对链接条数)。
+
+    链接自检在本函数内完成：任一条仓库内相对链接解析不到即抛 SystemExit，
+    调用方不会写出坏产物。
+    """
     parts = [HEADER.format(title=TITLE).rstrip("\n")]
     stats = []
     for name in ORDER:
@@ -110,10 +210,12 @@ def build():
             raise SystemExit("分章源文件为空：%s" % name)
         digest = hashlib.sha256(text.encode("utf-8")).hexdigest()[:12]
         stats.append((name, len(text.encode("utf-8")), digest))
-        parts.append(text)
+        # 正文套用链接重定位（HEADER／FOOTER 是脚本文本，不套用）。
+        parts.append(_relink(text, SRC_REL_DIR, OUT_REL_DIR))
     parts.append(FOOTER.strip("\n"))
     doc = "\n\n".join(parts) + "\n"
-    return doc, stats
+    n_links = _check_links(doc, OUT_REL_DIR)
+    return doc, stats, n_links
 
 
 def main(argv=None):
@@ -125,7 +227,7 @@ def main(argv=None):
     args = ap.parse_args(argv)
 
     out_path = OUT if args.out is None else os.path.abspath(args.out)
-    doc, stats = build()
+    doc, stats, n_links = build()
     data = doc.encode("utf-8")
     digest = hashlib.sha256(data).hexdigest()
 
@@ -135,6 +237,7 @@ def main(argv=None):
         print("  %-34s %7d 字节  sha256:%s…" % (name, size, dg))
     print("产出文件：%s" % OUT_REL.replace(os.sep, "/"))
     print("产出规模：%d 字节（%d 行）" % (len(data), doc.count("\n")))
+    print("仓库内相对链接：%d 条（已逐条按《29》所在目录校验存在性）" % n_links)
     print("产出 sha256：%s" % digest)
     print("编码：UTF-8 无 BOM；换行：LF；含时间戳/随机量：否（确定性拼装）")
 

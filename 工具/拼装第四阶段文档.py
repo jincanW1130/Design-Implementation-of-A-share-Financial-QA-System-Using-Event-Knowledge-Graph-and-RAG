@@ -5,8 +5,15 @@ r"""把 10-系统总体设计（第四阶段）的分节源文件拼装为完整
 用法：python 工具\拼装第四阶段文档.py
 输入：<工作区>\交付物/07-设计与需求/总体设计\_分节源文件\4.1-…～4.7-….md
 输出：<工作区>\交付物/07-设计与需求/总体设计\10-系统总体设计（第四阶段）.md
+
+链接处理：分节源文件里的仓库内相对链接，按**源文件所在目录**解出目标后重新表达为
+**产出文件所在目录**的相对路径（`_relink`）——源文件在 `…\总体设计\_分节源文件\`、
+产出在 `…\总体设计\`，层级不同，逐字拼接会把 `../` 的层数拼错。拼装完成、写盘之前
+再扫描产出文本里所有仓库内相对链接逐条校验（`_check_links`）：任一条解析不到即以
+非零退出码报错并打印清单，不写出坏产物。
 """
 import os
+import re
 import sys
 import io
 
@@ -16,6 +23,8 @@ except Exception:
     pass
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SRC_REL_DIR = '交付物/07-设计与需求/总体设计/_分节源文件'
+OUT_REL_DIR = '交付物/07-设计与需求/总体设计'
 SRC = os.path.join(ROOT, '交付物/07-设计与需求/总体设计', '_分节源文件')
 OUT = os.path.join(ROOT, '交付物/07-设计与需求/总体设计', '10-系统总体设计（第四阶段）.md')
 
@@ -108,17 +117,104 @@ FOOTER = """
 """
 
 
+# --------------------------------------------------------------------------
+# 链接重定位与产出前自检
+# --------------------------------------------------------------------------
+# Markdown 的两种链接：![alt](target)（图片）与 [text](target)（文字链接）。
+# 本仓库的图表链接目标不含空格与括号，故用最小正则即可覆盖。
+# 第 1 组＝`![alt](` 头部，第 2 组＝目标本身，第 3 组＝`)`。
+_LINK_RE = re.compile(r'(!?\[[^\]\n]*\]\()([^()\n]*)(\))')
+# 非「仓库内相对链接」的目标前缀：外链、页内锚点、绝对路径。
+_EXTERNAL_PREFIXES = ('http://', 'https://', 'mailto:', 'data:', '#', '/', '\\')
+# 带 scheme 的目标（含 Windows 盘符 `C:\…`）一律按外链处理，不做重定位。
+_SCHEME_RE = re.compile(r'^[a-zA-Z][a-zA-Z0-9+.\-]*:')
+
+
+def _is_repo_rel_link(target):
+    """该链接目标是否为「仓库内相对链接」（无 scheme、非绝对路径、非页内锚点）。"""
+    t = target.strip()
+    if not t:
+        return False
+    low = t.lower()
+    for pre in _EXTERNAL_PREFIXES:
+        if low.startswith(pre.lower()):
+            return False
+    return not _SCHEME_RE.match(t)
+
+
+def _split_anchor(target):
+    """拆出 `#锚点`：返回 (路径部分, 含 # 的锚点后缀或空串)。"""
+    core, sep, anchor = target.partition('#')
+    return core, ('#' + anchor) if sep else ''
+
+
+def _relink(text, src_rel_dir, out_rel_dir):
+    """把正文里的仓库内相对链接由「相对源文件目录」改写为「相对产出文件目录」。
+
+    分节源文件在 `交付物/07-设计与需求/总体设计/_分节源文件/`，而《10》在
+    `交付物/07-设计与需求/总体设计/`：两级目录深度不同，逐字拼接必然把 `../` 的
+    层数拼错。这里对每个分节源文件的正文按**源文件所在目录**解出目标的绝对路径，
+    再用 `os.path.relpath` 重新表达为**产出文件所在目录**的相对路径（正斜杠）；
+    带 `#锚点` 的目标保留锚点。外链／锚点／绝对路径原样返回。
+    """
+    src_abs = os.path.join(ROOT, src_rel_dir.replace('/', os.sep))
+    out_abs = os.path.join(ROOT, out_rel_dir.replace('/', os.sep))
+
+    def repl(m):
+        target = m.group(2).strip()
+        if not _is_repo_rel_link(target):
+            return m.group(0)
+        core, anchor = _split_anchor(target)
+        if not core:
+            return m.group(0)
+        dest = os.path.normpath(os.path.join(src_abs, core.replace('/', os.sep)))
+        new = os.path.relpath(dest, out_abs).replace(os.sep, '/')
+        return m.group(1) + new + anchor + m.group(3)
+
+    return _LINK_RE.sub(repl, text)
+
+
+def _check_links(text, out_rel_dir):
+    """产出前自检：产出文本里的仓库内相对链接必须逐条解析得到。
+
+    解析基准是**产出文件的落点目录**。返回链接条数；任一条解析不到即打印清单
+    并以非零退出码中止（不写盘）。
+    """
+    base = os.path.join(ROOT, out_rel_dir.replace('/', os.sep))
+    total, bad = 0, []
+    for m in _LINK_RE.finditer(text):
+        target = m.group(2).strip()
+        if not _is_repo_rel_link(target):
+            continue
+        core, _ = _split_anchor(target)
+        if not core:
+            continue
+        total += 1
+        dest = os.path.normpath(os.path.join(base, core.replace('/', os.sep)))
+        if not os.path.exists(dest):
+            bad.append(target)
+    if bad:
+        print('链接自检失败：产出文本里有 %d 条仓库内相对链接解析不到真实文件' % len(bad))
+        for t in bad:
+            print('  [坏链] %s' % t)
+        raise SystemExit(3)
+    return total
+
+
 def main():
     pieces = [HEADER]
     for i, name in enumerate(PARTS):
         p = os.path.join(SRC, name)
         with open(p, 'r', encoding='utf-8') as f:
             body = f.read().rstrip('\n')
+        # 正文套用链接重定位（HEADER／FOOTER 是脚本文本，不套用）。
+        body = _relink(body, SRC_REL_DIR, OUT_REL_DIR)
         if i:
             pieces.append('\n---\n\n')
         pieces.append(body + '\n')
     pieces.append(FOOTER)
     text = ''.join(pieces)
+    n_links = _check_links(text, OUT_REL_DIR)
     with open(OUT, 'w', encoding='utf-8', newline='\n') as f:
         f.write(text)
     n = len(text.split('\n'))
@@ -127,6 +223,7 @@ def main():
     print('已写出 %s' % OUT)
     print('行数 %d，字节 %d，KB %.1f' % (n, len(text.encode('utf-8')), len(text.encode('utf-8')) / 1024))
     print('小节数 %d，分节源文件 %d 个' % (text.count('\n### '), len(PARTS)))
+    print('仓库内相对链接 %d 条（已逐条按《10》所在目录校验存在性）' % n_links)
 
 
 if __name__ == '__main__':

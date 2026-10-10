@@ -11,11 +11,50 @@
 *.txt    text eol=lf
 *.tsv    text eol=lf
 
+# 2026-10-10 补齐：下面这些文本类型原先只落在 `* text=auto` 上——**入库时**会被归一成 LF，
+# 但**检出时**按 core.eol=native 变成 CRLF。这不影响已提交的历史，却会让「换机／重新克隆」
+# 得到一份与工作区字节不同的副本，与本项目「文本一律 LF」的确定性纪律冲突；其中
+# `.sha256` 是抽取与图谱产物的**完整性清单**、`.ps1`／`.sh` 是启动与验收脚本，
+# 行尾变化会直接破坏 `sha256sum` 类校验与脚本跨平台行为。故显式写死 LF。
+*.log    text eol=lf
+*.sha256 text eol=lf
+*.xml    text eol=lf
+*.js     text eol=lf
+*.mjs    text eol=lf
+*.cjs    text eol=lf
+*.vue    text eol=lf
+*.ts     text eol=lf
+*.tsx    text eol=lf
+*.ps1    text eol=lf
+*.bat    text eol=lf
+*.sh     text eol=lf
+*.css    text eol=lf
+*.svg    text eol=lf
+*.ini    text eol=lf
+*.cfg    text eol=lf
+*.yml    text eol=lf
+*.yaml   text eol=lf
+*.toml   text eol=lf
+*.sql    text eol=lf
+
 # 仓库根控制文件（无扩展名，否则落到 * text=auto 上按 core.eol=native 检出为 CRLF）
 /.gitattributes text eol=lf
 /.gitignore    text eol=lf
+/.dockerignore text eol=lf
+# 不限深度：本仓库的 Dockerfile 位于 `交付物/10-部署/`，用 `/Dockerfile` 只会锚定仓库根、
+# 匹配不到（实测 check-attr 仍返回 text=auto／eol=unspecified）。
+Dockerfile text eol=lf
+.dockerignore text eol=lf
 
 # 二进制文件不做行尾与编码转换
-*.pdf  -text
-*.docx -text
-*.png  -text
+# `.index` 是 FAISS 二进制索引（实测文件头含 NUL），`.pptx`／`.xlsx` 是 Office 压缩包；
+# 三者原先都只靠 `* text=auto` 的二进制嗅探兜底，现显式声明，避免依赖启发式判断。
+*.pdf   -text
+*.docx  -text
+*.pptx  -text
+*.xlsx  -text
+*.index -text
+*.png   -text
+*.jpg   -text
+*.jpeg  -text
+*.gif   -text
