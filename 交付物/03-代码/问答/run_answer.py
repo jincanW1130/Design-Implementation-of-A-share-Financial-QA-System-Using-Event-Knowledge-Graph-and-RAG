@@ -349,8 +349,19 @@ def load_case_via_retrieval(args, params: dict) -> dict:
         if value is not None:
             cmd += [key, str(value)]
     print("[桥接] 调第 7 阶段既有链路（只读）：%s" % " ".join(cmd))
-    proc = subprocess.run(cmd, cwd=config.ROOT, capture_output=True, text=True,
-                          encoding="utf-8", errors="replace")
+    # N3（2026-10-11 复评更正）：内层 timeout 是**防御性冗余**——外层（qa_service）
+    # 的整体超时与本内层同值，但外层起点更早，**先到期的是外层**（T_外层 < T_内层 ⇒
+    # 外层先触发整树终止，本内层的 timeout 只是「外层万一未接管时」的第二道防线，
+    # 防止本子进程在任何场景下无限挂起。原注释「内层先于外层触发」的方向写反了，无害但已更正。
+    inner_timeout = float(config.ANSWER["timeout_seconds"])
+    try:
+        proc = subprocess.run(cmd, cwd=config.ROOT, capture_output=True, text=True,
+                              encoding="utf-8", errors="replace", timeout=inner_timeout)
+    except subprocess.TimeoutExpired:
+        _record_failure(3003, "retrieval_chain_timeout",
+                        {"timeout_seconds": inner_timeout, "out": out})
+        raise SystemExit("第 7 阶段链路 %gs 未返回（内层超时）——本脚本拒绝用别的语义替代，"
+                         "如实报错退出（3003）。" % inner_timeout)
     if proc.returncode != 0 or not os.path.isfile(out):
         print(proc.stdout[-2000:])
         print(proc.stderr[-2000:], file=sys.stderr)

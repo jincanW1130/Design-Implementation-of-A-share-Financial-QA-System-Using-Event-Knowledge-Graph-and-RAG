@@ -23,7 +23,7 @@ $root = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $testDir))   
 $files = @('test_0_module_isolation.py', 'test_a_five_step_contract.py',
            'test_b_retrieval_metrics.py', 'test_c_answer_assembly.py',
            'test_d_backend_errors.py', 'test_e_data_prep.py',
-           'test_f_extract_graph.py')
+           'test_f_extract_graph.py', 'test_g_backend_api.py')
 
 Push-Location $root
 $failed = 0

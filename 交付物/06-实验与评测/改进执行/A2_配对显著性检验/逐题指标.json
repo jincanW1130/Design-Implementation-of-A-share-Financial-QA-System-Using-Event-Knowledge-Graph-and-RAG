@@ -1,0 +1,7701 @@
+{
+ "formal": {
+  "A": {
+   "FQ-001": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-002": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-003": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-004": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-005": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-006": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-007": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-008": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-009": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-010": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-011": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.6666666666666666
+   },
+   "FQ-012": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-013": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-014": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-015": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-016": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-017": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-018": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-019": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-021": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-024": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-025": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-026": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-028": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-029": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-030": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-031": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-032": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-033": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-034": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-035": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-036": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-037": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-038": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-039": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-040": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-041": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-042": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-043": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-044": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-045": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-046": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-047": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-048": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-049": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.3333333333333333
+   },
+   "FQ-050": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-051": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.6666666666666666
+   },
+   "FQ-052": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-053": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-054": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 4,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-055": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-056": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-057": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-058": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-059": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-060": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-061": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-062": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-063": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-064": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.14285714285714285,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-065": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-066": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-067": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-068": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-069": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-070": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-071": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-072": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-073": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-074": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-075": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-076": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-077": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-078": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-079": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-080": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-081": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-082": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-084": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.14285714285714285,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-085": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-086": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-087": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-088": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-089": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-090": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-091": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-092": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-094": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-095": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-096": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-097": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.3,
+    "recall_at_k": 1.0
+   },
+   "FQ-098": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-099": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-100": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-101": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-102": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-103": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-104": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-105": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-106": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-107": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-109": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-110": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-111": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-112": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-113": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-114": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-115": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-116": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-117": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-118": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-119": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-120": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   }
+  },
+  "B": {
+   "FQ-001": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-002": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-003": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-004": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-005": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-006": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-007": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-008": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-009": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-010": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-011": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.6666666666666666
+   },
+   "FQ-012": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-013": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-014": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-015": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-016": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-017": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-018": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-019": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-020": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-021": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-023": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-024": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-025": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-026": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-027": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-028": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-029": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-030": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-031": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-032": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-033": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-034": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-035": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-036": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-037": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-038": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-039": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-040": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-041": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-042": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-043": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-044": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-045": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-046": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-047": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-048": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-049": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.3333333333333333
+   },
+   "FQ-050": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-051": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.3,
+    "recall_at_k": 1.0
+   },
+   "FQ-052": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-053": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-054": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 4,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-055": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-056": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-057": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-058": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-059": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-060": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-061": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-062": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-063": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-064": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.14285714285714285,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-065": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-066": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-067": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-068": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-069": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-070": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-071": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-072": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-073": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-074": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-075": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-076": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-077": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-078": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-079": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-080": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-081": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-082": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-083": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-084": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.14285714285714285,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-085": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-086": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-087": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-088": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-089": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-090": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-091": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-092": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-093": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-094": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-095": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-096": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-097": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.3,
+    "recall_at_k": 1.0
+   },
+   "FQ-098": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-099": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-100": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 8,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-101": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-102": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-103": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-104": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-105": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-106": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-107": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-108": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-109": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-110": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-111": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-112": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-113": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-114": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-116": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-117": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-118": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-119": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-120": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   }
+  },
+  "B1": {
+   "FQ-001": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-002": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-003": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-004": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-005": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-006": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-007": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-008": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-009": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-010": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-011": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 3,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-012": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-013": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-014": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-015": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-016": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-017": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-018": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-019": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-020": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-021": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-022": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-023": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-024": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-025": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-026": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-027": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-028": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-029": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-030": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-031": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-032": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-033": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-034": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-035": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-036": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-037": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-038": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-039": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-040": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-041": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-042": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-043": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-044": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-045": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-046": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-047": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-048": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-049": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 3,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-050": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 3,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-051": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 3,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-052": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-053": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-054": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 4,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-055": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-056": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-057": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-058": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-059": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-060": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-061": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-062": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-063": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-064": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-065": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-066": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-067": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-068": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-069": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-070": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-071": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-072": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-073": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-074": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-075": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-076": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-077": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-078": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-079": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-080": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-081": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-082": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-083": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-084": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-085": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-086": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-087": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-088": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-089": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-090": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-091": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-092": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-093": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-094": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-095": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-096": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-097": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 3,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-098": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-099": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-100": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-101": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-102": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-103": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-104": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-105": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-106": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-107": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-108": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-109": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-110": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-111": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-112": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-113": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-114": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-115": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-116": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-117": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-118": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-119": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-120": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 0,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   }
+  },
+  "C": {
+   "FQ-001": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-002": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-003": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-004": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-005": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-006": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-007": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-008": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-009": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-010": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-011": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 9,
+    "n_gold": 3,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.6666666666666666
+   },
+   "FQ-012": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-013": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-014": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 8,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-015": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-016": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-017": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-018": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-019": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-020": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-021": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-023": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-024": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-025": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-026": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-027": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-028": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-029": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-030": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-031": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-032": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-033": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-034": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-035": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-036": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-037": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-038": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-039": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-040": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-041": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-042": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-043": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-044": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-045": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-046": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-047": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-048": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-049": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.3333333333333333
+   },
+   "FQ-050": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-051": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 3,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.6666666666666666
+   },
+   "FQ-052": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-053": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-054": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 4,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-055": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-056": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-057": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-058": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-059": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-060": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-061": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-062": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-063": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-064": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.14285714285714285,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-065": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-066": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-067": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-068": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-069": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-070": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-071": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-072": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-073": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-074": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-075": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-076": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-077": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-078": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-079": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-080": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-081": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-082": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-083": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-084": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.14285714285714285,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-085": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-086": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-087": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-088": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-089": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-090": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-091": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-092": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-094": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-095": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-096": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-097": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 3,
+    "precision_at_k": 0.3,
+    "recall_at_k": 1.0
+   },
+   "FQ-098": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-099": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 8,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-100": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-101": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 8,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-102": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-103": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-104": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-105": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-106": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-107": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-108": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-109": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-110": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-111": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-112": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-113": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-114": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-116": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-117": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-118": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-119": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-120": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   }
+  },
+  "D": {
+   "FQ-001": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-002": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-003": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-004": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-005": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-006": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-007": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-008": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-009": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-010": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-011": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 9,
+    "n_gold": 3,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.6666666666666666
+   },
+   "FQ-012": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-013": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-014": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 8,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-015": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-016": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-017": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-018": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-019": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-020": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-021": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-023": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-024": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-025": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-026": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-027": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-028": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-029": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-030": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-031": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-032": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-033": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-034": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-035": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-036": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-037": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-038": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-039": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-040": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-041": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-042": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-043": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-044": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-045": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-046": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-047": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-048": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-049": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.3333333333333333
+   },
+   "FQ-050": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-051": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.3,
+    "recall_at_k": 1.0
+   },
+   "FQ-052": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-053": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-054": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 4,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-055": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-056": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-057": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-058": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-059": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-060": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-061": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-062": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-063": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-064": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.14285714285714285,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-065": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-066": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-067": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-068": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-069": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-070": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-071": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-072": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-073": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-074": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-075": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-076": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-077": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-078": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-079": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-080": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-081": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-082": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-083": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-084": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.14285714285714285,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-085": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-086": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-087": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-088": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-089": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-090": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-091": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-092": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-094": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-095": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-096": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-097": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.3,
+    "recall_at_k": 1.0
+   },
+   "FQ-098": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-099": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-100": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-101": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-102": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-103": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-104": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-105": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-106": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-107": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-108": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-109": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-110": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-111": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-112": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-113": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-114": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-116": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-117": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-118": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-119": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-120": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   }
+  },
+  "E": {
+   "FQ-001": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-002": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-003": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-004": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-005": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-006": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-007": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-008": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-009": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-010": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-011": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 3,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.6666666666666666
+   },
+   "FQ-012": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-013": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-014": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 8,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-015": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-016": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-017": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-018": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-019": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-020": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-021": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-023": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-024": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-025": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-026": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-027": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-028": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-029": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-030": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-031": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-032": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-033": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-034": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-035": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-036": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-037": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-038": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-039": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-040": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-041": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-042": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-043": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-044": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-045": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-046": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-047": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-048": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-049": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.3333333333333333
+   },
+   "FQ-050": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-051": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.3,
+    "recall_at_k": 1.0
+   },
+   "FQ-052": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-053": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-054": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 4,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-055": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-056": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-057": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-058": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-059": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-060": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-061": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-062": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "FQ-063": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-064": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-065": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-066": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-067": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-068": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-069": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-070": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-071": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-072": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-073": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-074": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-075": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-076": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-077": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-078": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-079": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-080": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-081": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-082": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-083": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-084": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-085": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-086": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-087": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-088": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-089": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-090": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-091": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-092": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-094": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-095": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-096": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.14285714285714285,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "FQ-097": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.3,
+    "recall_at_k": 1.0
+   },
+   "FQ-098": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-099": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-100": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-101": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-102": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-103": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "FQ-104": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-105": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-106": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-107": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-108": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-109": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-110": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-111": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.14285714285714285,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-112": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-113": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-114": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.125,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-116": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-117": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-118": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.14285714285714285,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-119": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.1,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "FQ-120": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   }
+  }
+ },
+ "meta": {
+  "formal_question_set": "交付物/06-实验与评测/测试集/questions.jsonl（120 题）",
+  "pre_question_set": "交付物/05-系统实现/RAG检索系统/预实验问题集/questions.jsonl（30 题）",
+  "说明": "逐题四项检索指标，公式复刻冻结脚本《跑AC对照.py retrieval_metrics()》"
+ },
+ "pre": {
+  "A": {
+   "PE-01": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-02": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-03": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-04": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 7,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.14285714285714285
+   },
+   "PE-05": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-06": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 4,
+    "precision_at_k": 0.4,
+    "recall_at_k": 1.0
+   },
+   "PE-07": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-08": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-09": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-10": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.3333333333333333
+   },
+   "PE-11": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 7,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-12": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-13": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 5,
+    "precision_at_k": 0.3,
+    "recall_at_k": 0.6
+   },
+   "PE-14": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 6,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.3333333333333333
+   },
+   "PE-15": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.3333333333333333
+   },
+   "PE-16": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "PE-17": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-18": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-19": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-20": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-21": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-22": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 5,
+    "precision_at_k": 0.3,
+    "recall_at_k": 0.6
+   },
+   "PE-23": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.1,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "PE-24": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-25": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-26": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 4,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-27": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-28": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-29": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-30": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.3,
+    "recall_at_k": 1.0
+   }
+  },
+  "B": {
+   "PE-01": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-02": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-03": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-04": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 7,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.2857142857142857
+   },
+   "PE-05": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-06": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 4,
+    "precision_at_k": 0.4,
+    "recall_at_k": 1.0
+   },
+   "PE-07": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-08": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-09": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-10": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.3333333333333333
+   },
+   "PE-11": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 7,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-12": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-13": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 5,
+    "precision_at_k": 0.3,
+    "recall_at_k": 0.6
+   },
+   "PE-14": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 9,
+    "n_gold": 6,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.3333333333333333
+   },
+   "PE-15": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 3,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.3333333333333333
+   },
+   "PE-16": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "PE-17": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-18": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-19": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-20": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-21": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-22": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 5,
+    "precision_at_k": 0.4,
+    "recall_at_k": 0.8
+   },
+   "PE-23": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-24": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-25": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-26": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 10,
+    "n_gold": 4,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.25
+   },
+   "PE-27": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-28": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-29": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-30": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.3,
+    "recall_at_k": 1.0
+   }
+  },
+  "C": {
+   "PE-01": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-02": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-03": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-04": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 7,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.2857142857142857
+   },
+   "PE-05": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-06": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 4,
+    "precision_at_k": 0.4,
+    "recall_at_k": 1.0
+   },
+   "PE-07": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-08": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-09": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-10": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.3333333333333333
+   },
+   "PE-11": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 7,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-12": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-13": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 5,
+    "precision_at_k": 0.3,
+    "recall_at_k": 0.6
+   },
+   "PE-14": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 6,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.3333333333333333
+   },
+   "PE-15": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.6666666666666666
+   },
+   "PE-16": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 8,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "PE-17": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-18": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-19": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-20": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-21": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-22": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 5,
+    "precision_at_k": 0.4,
+    "recall_at_k": 0.8
+   },
+   "PE-23": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-24": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-25": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-26": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.1111111111111111,
+    "n_ev": 9,
+    "n_gold": 4,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.25
+   },
+   "PE-27": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-28": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-29": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-30": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.3,
+    "recall_at_k": 1.0
+   }
+  },
+  "D": {
+   "PE-01": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-02": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-03": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-04": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 7,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.14285714285714285
+   },
+   "PE-05": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-06": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 4,
+    "precision_at_k": 0.4,
+    "recall_at_k": 1.0
+   },
+   "PE-07": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-08": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-09": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-10": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.3333333333333333
+   },
+   "PE-11": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 7,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-12": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-13": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 5,
+    "precision_at_k": 0.3,
+    "recall_at_k": 0.6
+   },
+   "PE-14": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 6,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.3333333333333333
+   },
+   "PE-15": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.6666666666666666
+   },
+   "PE-16": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "PE-17": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-18": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-19": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-20": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-21": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-22": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 5,
+    "precision_at_k": 0.4,
+    "recall_at_k": 0.8
+   },
+   "PE-23": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-24": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-25": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-26": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 4,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-27": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-28": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-29": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-30": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.3,
+    "recall_at_k": 1.0
+   }
+  },
+  "E": {
+   "PE-01": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-02": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-03": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.25,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-04": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 7,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.14285714285714285
+   },
+   "PE-05": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-06": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 4,
+    "precision_at_k": 0.4,
+    "recall_at_k": 1.0
+   },
+   "PE-07": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-08": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-09": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-10": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.3333333333333333
+   },
+   "PE-11": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 7,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-12": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-13": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 5,
+    "precision_at_k": 0.3,
+    "recall_at_k": 0.6
+   },
+   "PE-14": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 6,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.3333333333333333
+   },
+   "PE-15": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.5,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.2,
+    "recall_at_k": 0.6666666666666666
+   },
+   "PE-16": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.16666666666666666,
+    "n_ev": 9,
+    "n_gold": 2,
+    "precision_at_k": 0.1,
+    "recall_at_k": 0.5
+   },
+   "PE-17": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-18": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-19": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 9,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-20": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-21": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-22": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 5,
+    "precision_at_k": 0.4,
+    "recall_at_k": 0.8
+   },
+   "PE-23": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-24": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-25": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.2,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.1,
+    "recall_at_k": 1.0
+   },
+   "PE-26": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 4,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-27": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-28": {
+    "cer": 0.0,
+    "k": 10,
+    "mrr": 0.0,
+    "n_ev": 10,
+    "n_gold": 1,
+    "precision_at_k": 0.0,
+    "recall_at_k": 0.0
+   },
+   "PE-29": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 1.0,
+    "n_ev": 10,
+    "n_gold": 2,
+    "precision_at_k": 0.2,
+    "recall_at_k": 1.0
+   },
+   "PE-30": {
+    "cer": 1.0,
+    "k": 10,
+    "mrr": 0.3333333333333333,
+    "n_ev": 10,
+    "n_gold": 3,
+    "precision_at_k": 0.3,
+    "recall_at_k": 1.0
+   }
+  }
+ }
+}

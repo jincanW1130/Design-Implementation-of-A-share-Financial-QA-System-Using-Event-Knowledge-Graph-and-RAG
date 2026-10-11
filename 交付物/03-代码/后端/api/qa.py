@@ -94,12 +94,21 @@ def _validate_question(raw) -> str:
 
 @router.post("/ask")
 async def ask(payload: dict | None = Body(default=None)):
-    """提问：跑一次问答链路并落库，返回表 4-13 规定的九项载荷。"""
+    """提问：跑一次问答链路并落库，返回表 4-13 规定的九项载荷。
+
+    2026-10-11 按 S6 修正契约分叉：**缺 `question` 字段 → 1003**（必填字段缺失），
+    与《24》及 main.py「缺必填按 1003」的既定口径对齐——此前会落到
+    `validate_question(None)` 返回 1001（输入为空／超长），同一接口内两种缺字段
+    行为不一致。`question` 键存在但值为空／超长仍按 1001（输入非法 ≠ 字段缺失）。
+    """
     if not isinstance(payload, dict):
         raise errors.ApiError(1003, detail="请求体必须是 JSON 对象，收到 %s"
                               % type(payload).__name__)
     _reject_switches(payload)
 
+    if "question" not in payload:
+        raise errors.ApiError(1003, detail="必填字段 question 缺失"
+                              "（缺必填按 1003；输入为空／超长才是 1001）")
     question = _validate_question(payload.get("question"))
     session_id = payload.get("session_id")
     if not isinstance(session_id, str) or not session_id.strip():

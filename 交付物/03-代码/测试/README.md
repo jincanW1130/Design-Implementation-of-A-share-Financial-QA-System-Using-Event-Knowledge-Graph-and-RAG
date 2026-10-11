@@ -29,8 +29,10 @@ python -m pytest 交付物/03-代码\测试\test_c_answer_assembly.py -q
 python -m pytest 交付物/03-代码\测试\test_d_backend_errors.py -q
 python -m pytest 交付物/03-代码\测试\test_e_data_prep.py -q
 python -m pytest 交付物/03-代码\测试\test_f_extract_graph.py -q
+python -m pytest 交付物/03-代码\测试\test_g_backend_api.py -q
 
-# 一键跑上面 7 条并汇总退出码
+# 一键跑上面 8 条并汇总退出码（2026-10-11 复评 N5：当前基线 283 例 = 原 213 + test_g 70；
+# 本文件早前的 213 例读数已过时，以 运行测试.ps1 与 pytest 实际输出为准）
 powershell -File 交付物/03-代码\测试\运行测试.ps1
 
 # 前端（Vue）单测（vitest，另起一套）

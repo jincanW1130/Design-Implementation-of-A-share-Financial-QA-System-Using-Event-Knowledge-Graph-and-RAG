@@ -478,14 +478,19 @@ WILDCARD = re.compile(r'[*?\[]')                          # 通配写法（按�
 #   每个数字都指到 `集成产出/` 的源文件或复算命令。
 #   **仍未移出**：`交付物/10-部署/*`、`工具/验收第9阶段.py` 与 `集成产出/input_manifest.json`
 #   ——它们尚未落盘，继续留在登记里。
-PLANNED = {
-    '交付物/10-部署/Dockerfile',
-    '交付物/10-部署/README.md',
-    '交付物/10-部署/启动.ps1',
-    '交付物/05-系统实现/前后端系统集成/集成产出/input_manifest.json',
-}
+# 2026-10-11（M14）：上述 4 条产物（Dockerfile／README.md／启动.ps1／input_manifest.json）
+# 经核实**均已落盘**，按编写约定 5「文件一旦落盘就立即移出」全部移出，登记清空。
+# 下方紧跟一条运行时 WARN 自检：今后 PLANNED 里再出现「登记了但文件已在盘上」的残留，
+# 核验脚本会当场点名（不再允许悬空判定被永久豁免）。
+PLANNED = set()
 PLANNED_BARE = {p for p in PLANNED if '\\' not in p and '/' not in p}
 PLANNED_PATH = {p.replace('/', '\\').lower() for p in PLANNED if ('\\' in p or '/' in p)}
+# M14 自检：PLANNED 中「已落盘未移出」的条目 → WARN（不进 fails，只点名）
+_PLANNED_ON_DISK = [p for p in PLANNED
+                    if os.path.exists(os.path.join(ROOT, p.replace('/', os.sep)))]
+if _PLANNED_ON_DISK:
+    print('  !! WARN：PLANNED 登记里有 %d 条文件已落盘但未按编写约定 5 移出：%s'
+          % (len(_PLANNED_ON_DISK), '、'.join(_PLANNED_ON_DISK)))
 def is_planned(tok):
     """裸文件名按文件名匹配；带路径的 token 按路径后缀匹配（见 PLANNED 的说明）。"""
     if os.path.basename(tok) in PLANNED_BARE:
@@ -952,46 +957,54 @@ if _fp is not None and _o3 and _o4:
     report(not _missing, 'O3 指纹的 22 个全文文件均在 文献PDF/ 下存在', '缺 %s' % _missing)
 
     # ---- O4 《04》参考文献表 22 行 ----
+    # M15（2026-10-11 审查）：前置守卫——《04》的参考文献节标题一旦改动，
+    # `str.index` 会抛 ValueError 让整个核验崩溃；现在找不到标题即按判据失败报告
+    # 并跳过 O4／O5（与 E 组「前置断言不过则整组跳过」同一形态）。
     _t4 = D[_o4]
-    _i11 = _t4.index('## 十一、参考文献')
-    _body, _refs = _t4[:_i11], _t4[_i11:]
-    _ref = {int(a): b for a, b in re.findall(r'^\[(\d+)\] (.+)$', _refs, re.M)}
-    _rbad = []
-    if sorted(_ref) != list(range(1, 23)):
-        _rbad.append('参考文献表编号不是 1..22：%s' % sorted(_ref))
-    for r in ROWS:
-        _n = int(r['引用编号'])
-        _ln = _ref.get(_n, '')
-        _firstauthor = r['作者'].split(',')[0].strip()
-        if r['题名'] not in _ln:
-            _rbad.append('[%d] 题名未出现：%r' % (_n, r['题名']))
-        if _firstauthor and not _author_in_line(_firstauthor, _ln):
-            _rbad.append('[%d] 首作者 %r 未出现（已按 GB/T 7714 与原名两种写法归一化比较）'
-                         % (_n, _firstauthor))
-    for _x in _rbad:
-        print('    !! %s' % _x)
-    report(not _rbad, 'O4 《04》参考文献表 22 行与指纹逐条一致（题名＋首作者）', '%d 处不一致' % len(_rbad))
+    _REF_HEADING = '## 十一、参考文献'
+    if _REF_HEADING not in _t4:
+        report(False, 'O4 《04》含参考文献节标题（%r）' % _REF_HEADING,
+               '未找到——O4／O5 的逐条比对跳过')
+    else:
+        _i11 = _t4.index(_REF_HEADING)
+        _body, _refs = _t4[:_i11], _t4[_i11:]
+        _ref = {int(a): b for a, b in re.findall(r'^\[(\d+)\] (.+)$', _refs, re.M)}
+        _rbad = []
+        if sorted(_ref) != list(range(1, 23)):
+            _rbad.append('参考文献表编号不是 1..22：%s' % sorted(_ref))
+        for r in ROWS:
+            _n = int(r['引用编号'])
+            _ln = _ref.get(_n, '')
+            _firstauthor = r['作者'].split(',')[0].strip()
+            if r['题名'] not in _ln:
+                _rbad.append('[%d] 题名未出现：%r' % (_n, r['题名']))
+            if _firstauthor and not _author_in_line(_firstauthor, _ln):
+                _rbad.append('[%d] 首作者 %r 未出现（已按 GB/T 7714 与原名两种写法归一化比较）'
+                             % (_n, _firstauthor))
+        for _x in _rbad:
+            print('    !! %s' % _x)
+        report(not _rbad, 'O4 《04》参考文献表 22 行与指纹逐条一致（题名＋首作者）', '%d 处不一致' % len(_rbad))
 
-    # ---- O5 《04》正文引用编号 ----
-    _seq = []
-    for _no, _L in enumerate(_body.split('\n'), 1):
-        for _mm in re.finditer(r'\[(\d+)\]', _L):
-            _seq.append((_no, int(_mm.group(1))))
-    _nums = [n for _, n in _seq]
-    _occ = {n: _nums.count(n) for n in sorted(set(_nums))}
-    _first = {}
-    for _no, _n in _seq:
-        _first.setdefault(_n, _no)
-    _order = [x[0] for x in sorted(_first.items(), key=lambda kv: (kv[1], kv[0]))]
-    report(sorted(set(_nums)) == list(range(1, 23)), 'O5 正文引用编号集合 ＝ [1]～[22]',
-           '实测 %s' % sorted(set(_nums)))
-    report(_order == list(range(1, 23)), 'O5 正文引用编号按首次出现顺序严格递增',
-           '首现顺序 %s' % _order)
-    _cbad = [(r['槽位'], r['引用编号'], _occ.get(int(r['引用编号']), 0), r.get('正文引用次数'))
-             for r in ROWS if _occ.get(int(r['引用编号']), 0) != r.get('正文引用次数')]
-    for _x in _cbad:
-        print('    !! %s [%s] 正文出现 %d 次 ≠ 指纹 %s 次' % _x)
-    report(not _cbad, 'O5 正文每条引用出现次数与指纹一致', '%d 条不一致' % len(_cbad))
+        # ---- O5 《04》正文引用编号 ----
+        _seq = []
+        for _no, _L in enumerate(_body.split('\n'), 1):
+            for _mm in re.finditer(r'\[(\d+)\]', _L):
+                _seq.append((_no, int(_mm.group(1))))
+        _nums = [n for _, n in _seq]
+        _occ = {n: _nums.count(n) for n in sorted(set(_nums))}
+        _first = {}
+        for _no, _n in _seq:
+            _first.setdefault(_n, _no)
+        _order = [x[0] for x in sorted(_first.items(), key=lambda kv: (kv[1], kv[0]))]
+        report(sorted(set(_nums)) == list(range(1, 23)), 'O5 正文引用编号集合 ＝ [1]～[22]',
+               '实测 %s' % sorted(set(_nums)))
+        report(_order == list(range(1, 23)), 'O5 正文引用编号按首次出现顺序严格递增',
+               '首现顺序 %s' % _order)
+        _cbad = [(r['槽位'], r['引用编号'], _occ.get(int(r['引用编号']), 0), r.get('正文引用次数'))
+                 for r in ROWS if _occ.get(int(r['引用编号']), 0) != r.get('正文引用次数')]
+        for _x in _cbad:
+            print('    !! %s [%s] 正文出现 %d 次 ≠ 指纹 %s 次' % _x)
+        report(not _cbad, 'O5 正文每条引用出现次数与指纹一致', '%d 条不一致' % len(_cbad))
 
 print(); print('=' * 78)
 print('结论：%s' % ('全部通过' if not fails else '存在 %d 项失败：%s' % (len(fails), '；'.join(fails))))

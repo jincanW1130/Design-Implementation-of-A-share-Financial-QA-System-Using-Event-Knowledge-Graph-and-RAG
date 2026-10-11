@@ -33,6 +33,7 @@ from __future__ import annotations
 import contextlib
 import os
 import sys
+import threading
 
 import pymysql
 import pymysql.cursors
@@ -52,6 +53,9 @@ CONFIG_HINT = "请检查 代码\\后端\\config.local.json"
 CONNECT_TIMEOUT = 5
 READ_TIMEOUT = 30
 WRITE_TIMEOUT = 30
+PROBE_TIMEOUT = 3
+"""健康探针的专用连接／读超时（秒）：探针**每次新建短超时连接**、不碰共享单例，
+即使共享连接半开也能在数秒内如实返回（M1，2026-10-11 审查）。"""
 
 
 class DbConnectError(RuntimeError):
@@ -66,6 +70,12 @@ class DbConnectError(RuntimeError):
 # 1. 连接
 # --------------------------------------------------------------------------
 _conn = None
+_CONN_LOCK = threading.RLock()
+"""连接单例的创建／重连锁（M2，2026-10-11 审查）：`/api/health` 探针与业务请求并发时，
+`get_conn` 的「ping → 失败 → 重连」是 check-then-act，无锁会互踩（两个线程同时判定连接
+已死并各建一条，其中一条被静默丢弃甚至写坏共享状态）。RLock 可重入：`ping()` 内部再调
+`get_conn()` 不会自锁。锁内含网络操作（ping），最坏情况下其他线程排队等待——比竞态互踩
+安全，且这是单连接串行化方案的既定语义（见模块头「事务与连接」）。"""
 
 
 def _params(with_database: bool = True) -> dict:
@@ -108,26 +118,28 @@ def connect(with_database: bool = True):
 
 
 def get_conn():
-    """进程内单例连接；掉线时 ping 一次并重连。"""
+    """进程内单例连接；掉线时 ping 一次并重连（M2：持锁做 check-then-act，防并发互踩）。"""
     global _conn
-    if _conn is None:
-        _conn = connect(with_database=True)
+    with _CONN_LOCK:
+        if _conn is None:
+            _conn = connect(with_database=True)
+            return _conn
+        try:
+            _conn.ping(reconnect=True)
+        except Exception:
+            with contextlib.suppress(Exception):
+                _conn.close()
+            _conn = connect(with_database=True)
         return _conn
-    try:
-        _conn.ping(reconnect=True)
-    except Exception:
-        with contextlib.suppress(Exception):
-            _conn.close()
-        _conn = connect(with_database=True)
-    return _conn
 
 
 def close() -> None:
     global _conn
-    if _conn is not None:
-        with contextlib.suppress(Exception):
-            _conn.close()
-        _conn = None
+    with _CONN_LOCK:
+        if _conn is not None:
+            with contextlib.suppress(Exception):
+                _conn.close()
+            _conn = None
 
 
 def ping() -> bool:
@@ -147,23 +159,45 @@ def server_version() -> str:
     return str(row["v"]) if row else ""
 
 
-def probe() -> dict:
+def probe(timeout_seconds: int = PROBE_TIMEOUT) -> dict:
     """健康探针：返回 `{"ok": bool, "detail": str}`；**detail 不含口令**（`/api/health` 用）。
 
     三类结果分开报：凭据未配置（配置问题）／连不上（服务问题）／连通（带版本号）。
+
+    M1（2026-10-11 审查）：**每次新建探针专用短超时连接**（connect/read 超时取
+    `timeout_seconds`，默认 3s），不再 ping 共享单例——共享连接半开时 `ping()` 依赖
+    TCP 重传最长可阻塞约 35s，会把 `/api/health`（进而整次探活）拖住；专用连接由
+    连接超时兜底，探针数秒内必然返回。代价是每次探活新建一条连接（`/api/health`
+    探活频率低，可接受）。
     """
     try:
         config.db_params()
     except SystemExit:
         return {"ok": False, "detail": "凭据未配置（config.local.json 的 mysql_password 待填）"}
+    params = _params()
+    params["connect_timeout"] = int(timeout_seconds)
+    params["read_timeout"] = int(timeout_seconds)
     try:
-        conn = get_conn()
-        conn.ping(reconnect=True)
-        return {"ok": True, "detail": server_version()}
-    except DbConnectError as exc:
-        return {"ok": False, "detail": str(exc).splitlines()[0]}
+        conn = pymysql.connect(**params)
+    except pymysql.err.OperationalError as exc:
+        errno = exc.args[0] if exc.args else None
+        reason = exc.args[1] if len(exc.args) > 1 else str(exc)
+        head = str(reason).splitlines()[0] if reason else ""
+        return {"ok": False, "detail": "连接失败（ERROR %s: %s）" % (errno, head)}
+    except pymysql.err.MySQLError as exc:
+        return {"ok": False, "detail": "%s: %s" % (type(exc).__name__, exc)}
     except Exception as exc:
         return {"ok": False, "detail": "%s: %s" % (type(exc).__name__, exc)}
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT VERSION() AS v")
+            row = cur.fetchone()
+        return {"ok": True, "detail": str(row["v"]) if row else ""}
+    except Exception as exc:
+        return {"ok": False, "detail": "%s: %s" % (type(exc).__name__, exc)}
+    finally:
+        with contextlib.suppress(Exception):
+            conn.close()
 
 
 # --------------------------------------------------------------------------

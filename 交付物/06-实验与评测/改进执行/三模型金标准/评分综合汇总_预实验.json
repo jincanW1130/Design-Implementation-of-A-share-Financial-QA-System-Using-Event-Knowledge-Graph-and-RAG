@@ -1,0 +1,67 @@
+{
+ "aa_gap_C_minus_A": -0.0111,
+ "agreement": {
+  "all_equal": 410,
+  "two_one": 39
+ },
+ "by_group": {
+  "A": {
+   "answer_accuracy": 1.6778,
+   "completeness": 1.4222,
+   "faithfulness": 1.9222
+  },
+  "B": {
+   "answer_accuracy": 1.6556,
+   "completeness": 1.4556,
+   "faithfulness": 1.9778
+  },
+  "C": {
+   "answer_accuracy": 1.6667,
+   "completeness": 1.4111,
+   "faithfulness": 1.9667
+  },
+  "D": {
+   "answer_accuracy": 1.6444,
+   "completeness": 1.4667,
+   "faithfulness": 1.9667
+  },
+  "E": {
+   "answer_accuracy": 1.5778,
+   "completeness": 1.4222,
+   "faithfulness": 1.9556
+  }
+ },
+ "dataset": "pr",
+ "judgement_12_8_answer_accuracy_half_three_model": [
+  {
+   "answer_accuracy_A": 1.6296,
+   "answer_accuracy_C": 1.5758,
+   "gap_C_minus_A": -0.0538,
+   "holds": false,
+   "subset": "多跳型"
+  },
+  {
+   "answer_accuracy_A": 1.8889,
+   "answer_accuracy_C": 1.5758,
+   "gap_C_minus_A": -0.3131,
+   "holds": false,
+   "subset": "时序型"
+  }
+ ],
+ "n_answers": 150,
+ "note": "AA＝三模型综合均值口径；gap＝C−A。对照组口径见 交付物/06-实验与评测/问答评分_正式/评分汇总.json",
+ "overall": {
+  "answer_accuracy": {
+   "mean_of_means": 1.6444,
+   "n": 150
+  },
+  "completeness": {
+   "mean_of_means": 1.4356,
+   "n": 150
+  },
+  "faithfulness": {
+   "mean_of_means": 1.9578,
+   "n": 150
+  }
+ }
+}

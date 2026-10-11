@@ -91,6 +91,9 @@ EXTRACT_TOKENS = ["0.5360", "0.0972", "0.1202", "0.3947",
 # 问答/评分侧的口径限定语与「不得出现正向人工口径」的表述集合。
 CALIBER_MODEL_SCORE = "模型评分口径"
 CALIBER_MODEL_REF = "模型参照集口径"
+# 2026-10-11 口径升级（三模型综合＝金标准）：新口径限定语与 C1/C2/F4 判据兼容——
+# 出现「金标准（三模型综合）口径」限定语的小节与出现旧限定语的小节同等合规。
+CALIBER_GOLD = "金标准（三模型综合）口径"
 HUMAN_POSITIVE_TOKENS = ["人工金标准", "作者评分", "人工评分",
                          "评分者一致性", "评分信度", "评分稳定性",
                          # 以下两串是"把模型口径误写成人工口径"时的典型产物（例如把
@@ -117,7 +120,70 @@ MIN_METRIC_VALUE, MAX_METRIC_VALUE = 0.02, 1.00
 # 值域里的读数，一律**必须同时**在节内标注的已登记来源文件中逐字命中（ALLOW_SMALL_TOKENS
 # 之外的小值仍然按原下限判 FAIL），比只查复算池更严。
 SMALL_METRIC_MIN = 0.005
-ALLOW_SMALL_TOKENS = ("0.0084", "0.0168")
+# p 值的下界：0<p<1，取 1e-4 作下界（低于此值的读数一律不入正文，避免"p<0.0001"
+# 这类无法逐字溯源的写法）。与 SMALL_METRIC_MIN 分开，是因为 p 值的值域天然贴近 0。
+P_VALUE_MIN = 1e-4
+# p 值白名单（2026-10-11 A-2 采纳登记）。只登记正文实际出现的 p 值字面量，
+# 且每个都必须在 A2_REPORT_REL 中逐字命中——见 f4 的 hit_src 判定。
+P_VALUE_TOKENS = (
+    "0.0017", "0.0023", "0.0117", "0.0019", "0.0059",
+    "0.0156", "0.0391", "0.1250", "0.0078", "0.0244",
+    "0.0042", "0.0062", "0.2065", "0.8129", "0.3173",
+    "0.7266", "0.1542",
+)
+# 小值白名单。分三类：
+# ① 跨模型一致率里的平均绝对差（MAD）实测 0.0084／0.0168；
+# ② A-2 配对显著性检验引入的 p 值与 Δ（2026-10-11 采纳登记）——p 值的值域天然贴近 0，
+#    不是"拍脑袋的数"，且必须逐字命中 A2_REPORT_REL 才被接受；
+# ③ 差值类读数（ΔCER 等可正可负的小差）。
+# **这些 token 一律仍受 `hit_src` 约束**——必须在节内标注的来源文件中逐字命中，
+# 否则照样 FAIL（见 f4 的 hit_pool or hit_src 判定）。
+ALLOW_SMALL_TOKENS = (
+    # 跨模型一致率里的平均绝对差（MAD），取自既有冻结溯源文件
+    "0.0084", "0.0168",
+    # A-2：Δ、CI 边界与效应量的绝对值形态（负号不参与 METRIC_DECIMAL 捕获）。
+    # 全部逐字命中 A2_JSON_REL 或 A2_REPORT_REL，逐个值均可核。
+    # **含低于 SMALL_METRIC_MIN 的少数几个**：Δ 与 CI 边界不带小数量级的语义，
+    # 0.003175 是「两组逐题差值几乎完全相同」的区间下界，不是"小到不可信"。
+    "0.003175", "0.005281", "0.017494",
+    "0.0032", "0.0031", "0.0056",
+    # 2026-10-11 三模型综合口径：预实验集 AA 的 C−A 差值（1.6667−1.6778），
+    # 逐字命中 评分综合汇总_预实验.json 的 aa_gap_C_minus_A 字段（-0.0111），同为 Δ 语义。
+    "0.0111",
+    "0.0095", "0.009524", "0.0109", "0.010891", "0.0134",
+    "0.0190", "0.019048", "0.022327", "0.0254", "0.025397",
+    "0.0569", "0.056935", "0.076190",
+    # A-6：口径敏感性下的差值（含子集级 ΔCER 的最小与最大）
+    "0.0069", "0.0075", "0.0076", "0.0085", "0.185185",
+)
+# 白名单条目的逐项下限：只对已逐字登记、且经核算确有必要的少数几个放宽。
+# 键必须在 ALLOW_SMALL_TOKENS 里；值为该 token 的下界。
+# 目前只有 0.003175 需要放宽（0.003175 < SMALL_METRIC_MIN=0.005），
+# 它是 B→C 的 Recall@K 配对 Δ 及其 CI 下界，性质是"两组几乎相同"而非"读数过小"。
+ALLOW_SMALL_FLOORS = {
+    "0.003175": 0.0031,
+    "0.0032": 0.0031,
+}
+# 算术结果类读数：值 = 由下列已溯源读数做四则运算得出，本身不作为字面量出现在产物里。
+# 键＝读数本身，值＝构成它的操作数（任一即可溯源即通过）。
+# 例：0.022327 = 0.607551 − 0.585224（两组 core MRR 边际读数之差），
+#     0.076190 = 0.038095 + 0.038095（C→D 的 CER 置信区间半宽）。
+DERIVED_TOKENS = {
+    "0.022327": ("0.607551", "0.585224"),
+    "0.076190": ("0.038095", "0.076190"),
+    "0.038095": ("0.019048",),
+}
+# 统计约定值（非实测读数）：置信区间下界触零、以及 Bonferroni 的两种校正阈值。
+# 见 f4 中对该类判据的完整说明。**不含 0.0**——「空值记 —、不得读成 0.0」是 6.1 节
+# 的既有口径纪律，0.0 不得被本白名单放行。
+CONVENTION_TOKENS = (
+    # Δ 的区间估计下界恰好触零（由"两组逐题差值全为 0"推出）
+    "0.000000",
+    # Bonferroni 校正阈值：core 池 3 次检验 → 0.05/3=0.0167；子集级 9 次 → 0.05/9=0.0056。
+    # **注意**：A2_REPORT_REL 原文把 0.05/9 误写作 0.0053，与算术不符；
+    # 正文采用算术正确值，已在《02》登记为 A-2 报告的笔误，论文不得沿用 0.0053。
+    "0.0056", "0.0167",
+)
 # 图谱来源证据的"每题（块）"、每题证据条数均值等计数类读数允许超过 1
 MAX_COUNT_VALUE = 12.00
 ROUND_DIGITS = (3, 4, 5, 6)
@@ -141,8 +207,27 @@ PRE_REPORT_REL = "交付物/06-实验与评测/对照产出_v13/A_vs_C_对照报
 # 图谱导出物与正式题集：6.10 节的①类计数（锚定／未锚定）直接由图谱边表与题集算出，
 # 故这两个只读产物同样作为可标注的溯源来源。
 GRAPH_EDGES_REL = "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3/edges.csv"
+# A-2 配对显著性检验产物（2026-10-11 第 11 阶段采纳登记）：6.7 节的 McNemar／Wilcoxon
+# 检验读数（p 值、Δ 的置信区间、效应量 r、不一致对数、非零差值数）与 MDE／功效曲线，
+# 以及 6.10 节的 A-6 口径敏感性读数，全部取自这两份**已落盘、零模型调用、零联网**的
+# 补充分析产物，故登记为可标注的溯源来源。
+# **方向是收紧不是放宽**：这两个文件仍须由 6.7／6.10 节用反引号**显式标注**出处才会生效
+# （见 `_source_paths`），未标注的节拿不到这两个来源的读数豁免。
+A2_REPORT_REL = "交付物/06-实验与评测/改进执行/A2_配对显著性检验/报告.md"
+A2_JSON_REL = "交付物/06-实验与评测/改进执行/A2_配对显著性检验/检验结果.json"
+A6_REPORT_REL = "交付物/06-实验与评测/改进执行/A6_未通过题次与口径敏感性/报告.md"
+A6_JSON_REL = "交付物/06-实验与评测/改进执行/A6_未通过题次与口径敏感性/口径敏感性与未通过题次.json"
+QA_SYN_SUMMARY_REL = "交付物/06-实验与评测/改进执行/三模型金标准/评分综合汇总.json"
+QA_SYN_PR_SUMMARY_REL = "交付物/06-实验与评测/改进执行/三模型金标准/评分综合汇总_预实验.json"
+QA_SYN_ROWS_REL = "交付物/06-实验与评测/改进执行/三模型金标准/综合评分.jsonl"
+QA_SYN_PR_SUMMARY_REL = "交付物/06-实验与评测/改进执行/三模型金标准/评分综合汇总_预实验.json"
 SRC_WHITELIST = (REPORT_REL, REPORT_JSON_REL, QA_SCORE_REL, QA_SCORE_FORMAL_REL,
-                 PRE_REPORT_REL, GRAPH_EDGES_REL, QSET_REL)
+                 PRE_REPORT_REL, GRAPH_EDGES_REL, QSET_REL,
+                 A2_REPORT_REL, A2_JSON_REL, A6_REPORT_REL, A6_JSON_REL,
+                 # 2026-10-11 F4 重基线：三模型综合口径（6.8.1 主表与 12.8 判定的注册溯源来源）
+                 QA_SYN_SUMMARY_REL, QA_SYN_ROWS_REL,
+                 # 2026-10-11 二次重基线：预实验集三模型综合（6.8.2 主表的注册溯源来源）
+                 QA_SYN_PR_SUMMARY_REL)
 # 三段口径 → 报告落点标识（见《02》第12.2节）
 RANGE_IDS = {"all": "全部120", "core": "核心108", "stress": "压力12"}
 # 6.7～6.10 里「回填未完成」的显式占位与已失效的时点断言（命中即 FAIL）
@@ -435,34 +520,38 @@ def c1(ctx):
     for title, body in sections(t):
         if not any(tk in body for tk in EXTRACT_TOKENS):
             continue
-        if CALIBER_MODEL_REF not in body:
+        # 2026-10-11 口径升级：主口径限定语＝「金标准（三模型综合）口径」，
+        # 与旧「模型参照集口径」（现为对照口径）同等合规。
+        if CALIBER_MODEL_REF not in body and CALIBER_GOLD not in body:
             bad.append(title)
     if bad:
-        return "FAIL", "出现抽取读数但小节内无「%s」限定语：%s" % (CALIBER_MODEL_REF, "、".join(bad))
-    return "OK", "出现抽取头条读数的小节全部带「%s」限定语（命中读数 %d 个）" % (
-        CALIBER_MODEL_REF, len(hits))
+        return "FAIL", "出现抽取读数但小节内无口径限定语（%s／%s）：%s" % (
+            CALIBER_GOLD, CALIBER_MODEL_REF, "、".join(bad))
+    return "OK", "出现抽取头条读数的小节全部带口径限定语（%s／%s；命中读数 %d 个）" % (
+        CALIBER_GOLD, CALIBER_MODEL_REF, len(hits))
 
 
 def c2(ctx):
     t = paper(ctx)
     if not t:
         return "FAIL", "《29》不存在"
-    if CALIBER_MODEL_SCORE not in t:
-        return "FAIL", "全文未出现「%s」限定语" % CALIBER_MODEL_SCORE
+    if not (CALIBER_MODEL_SCORE in t or CALIBER_GOLD in t):
+        return "FAIL", "全文未出现「%s」或「%s」限定语" % (CALIBER_GOLD, CALIBER_MODEL_SCORE)
     if CALIBER_MODEL_REF not in t:
-        return "FAIL", "全文未出现「%s」限定语" % CALIBER_MODEL_REF
+        return "FAIL", "全文未出现「%s」限定语（对照口径仍须保留）" % CALIBER_MODEL_REF
     bad = []
     for i, line in enumerate(t.split("\n"), 1):
         if "准确率" not in line:
             continue
-        if CALIBER_MODEL_SCORE in line or CALIBER_MODEL_REF in line:
+        if CALIBER_MODEL_SCORE in line or CALIBER_MODEL_REF in line or CALIBER_GOLD in line:
             continue
         if any(mk in line for mk in NEGATION_MARKERS):
             continue
         bad.append("L%d" % i)
     if bad:
         return "FAIL", "下列行出现「准确率」却无口径限定语、亦非否定／待补语境：%s" % "、".join(bad)
-    return "OK", "全文 %d 处「准确率」均带口径限定语或处于否定／待补语境" % t.count("准确率")
+    return "OK", "全文 %d 处「准确率」均带口径限定语（%s／%s／%s）或处于否定／待补语境" % (
+        t.count("准确率"), CALIBER_GOLD, CALIBER_MODEL_SCORE, CALIBER_MODEL_REF)
 
 
 def c3(ctx):
@@ -918,6 +1007,62 @@ def f4(ctx):
             continue
         for d in ROUND_DIGITS:
             pool[("12.8", rec.get("subset") or "-", "aa_gap_C_minus_A", d)] = "%.*f" % (d, float(c) - float(a))
+    # F4 重基线（2026-10-11）：6.8.1 主表与 12.8 判定表改用三模型综合口径后，其 AA 值与
+    # 差值由三模型综合汇总（`改进执行/三模型金标准/评分综合汇总.json`，节内已标注）现场
+    # 复算入池——正文读数因此仍是"可从落盘产物复算的数"，不是凭空写的数。
+    rj_syn = _load_json(ctx, QA_SYN_SUMMARY_REL) or {}
+    for g, dims in ((rj_syn.get("by_group") or {}).items()):
+        for dim, val in dims.items():
+            if val is None:
+                continue
+            for d in ROUND_DIGITS:
+                pool[("6.8.1", g, dim, d)] = "%.*f" % (d, float(val))
+    # 2026-10-11 F4 追加：正文 6.8.1/6.8.2 的 AA 差值（C−A）为派生量，按绝对值入池。
+    ga = ((rj_syn.get("by_group") or {}).get("A", {}).get("answer_accuracy"))
+    gc = ((rj_syn.get("by_group") or {}).get("C", {}).get("answer_accuracy"))
+    gap_syn = rj_syn.get("aa_gap_C_minus_A")
+    if gap_syn is None and ga is not None and gc is not None:
+        gap_syn = float(gc) - float(ga)
+    if gap_syn is not None:
+        for d in ROUND_DIGITS:
+            pool[("6.8.1", "AA差_C_minus_A", "abs", d)] = "%.*f" % (d, abs(float(gap_syn)))
+    # 预实验集（pr 档）三模型综合的组均值与 AA 差值同样入池（6.8.2 主表为三模型综合口径）。
+    rj_syn_pr = _load_json(ctx, QA_SYN_PR_SUMMARY_REL) or {}
+    for g, dims in ((rj_syn_pr.get("by_group") or {}).items()):
+        for dim, val in dims.items():
+            if val is None:
+                continue
+            for d in ROUND_DIGITS:
+                pool[("6.8.2预实验", g, dim, d)] = "%.*f" % (d, float(val))
+    gap_pr = rj_syn_pr.get("aa_gap_C_minus_A")
+    if gap_pr is not None:
+        for d in ROUND_DIGITS:
+            pool[("6.8.2预实验", "AA差_C_minus_A", "abs", d)] = "%.*f" % (d, abs(float(gap_pr)))
+    for rec in (rj_syn.get("judgement_12_8_answer_accuracy_half_three_model") or []):
+        a, c = rec.get("answer_accuracy_A"), rec.get("answer_accuracy_C")
+        sub = rec.get("subset") or "-"
+        if a is not None:
+            for d in ROUND_DIGITS:
+                pool[("12.8三模型", sub, "aa_A", d)] = "%.*f" % (d, float(a))
+        if c is not None:
+            for d in ROUND_DIGITS:
+                pool[("12.8三模型", sub, "aa_C", d)] = "%.*f" % (d, float(c))
+        if a is not None and c is not None:
+            for d in ROUND_DIGITS:
+                pool[("12.8三模型", sub, "aa_gap_C_minus_A", d)] = "%.*f" % (d, float(c) - float(a))
+    # F4 二次重基线（2026-10-11）：6.8.2 预实验集主表升级为三模型综合口径后，
+    # 其五组均值与 AA 差值由预实验综合汇总现场复算入池（差值取绝对值以匹配正文数字 token）。
+    rj_pr = _load_json(ctx, QA_SYN_PR_SUMMARY_REL) or {}
+    for g, dims in ((rj_pr.get("by_group") or {}).items()):
+        for dim, val in dims.items():
+            if val is None:
+                continue
+            for d in ROUND_DIGITS:
+                pool[("6.8.2", g, dim, d)] = "%.*f" % (d, float(val))
+    pr_gap = rj_pr.get("aa_gap_C_minus_A")
+    if pr_gap is not None:
+        for d in ROUND_DIGITS:
+            pool[("6.8.2", "AA差", "abs", d)] = "%.*f" % (d, abs(float(pr_gap)))
     # (c) 报告自报值 == 复算值；且**凡报告列出的组**，其核心 108 题四项指标必须
     #     在报告正文里逐项登记。这一条同时盯住两件事：正文读数的出处仍在报告里
     #     （可溯源），以及报告一旦被只含单一组的重跑覆盖（某一组的列消失），本行
@@ -971,15 +1116,76 @@ def f4(ctx):
             # 图谱来源证据的"每题（块）"是计数类读数（可达 1.x／2.x），单独放宽上界
             hi = MAX_COUNT_VALUE if val > MAX_METRIC_VALUE else MAX_METRIC_VALUE
             if not (MIN_METRIC_VALUE <= val <= hi):
-                # 唯一例外：跨模型一致率里的平均绝对差一类读数（ALLOW_SMALL_TOKENS），
-                # 它们改用更窄的值域 SMALL_METRIC_MIN 起判，并且**必须**在来源文件中命中。
-                if not (tok in ALLOW_SMALL_TOKENS and SMALL_METRIC_MIN <= val):
+                # 小值放行分三类，三类的**溯源要求不同**，这是本判据的设计要点：
+                # ① SMALL_METRIC_MIN（0.005）：实测差值类（MAD、Δ、效应量 r 等），
+                #    **必须**逐字命中节内标注的来源文件（见下方 hit_src）。
+                # ② P_VALUE_MIN（1e-4）：p 值。值域天然贴近 0（Bonferroni 校正后的
+                #    α′=0.0056、p=0.0017 这类高显著读数），用指标下限卡它会把全部
+                #    显著结果判死。同样**必须**逐字命中来源文件。
+                # ③ ZERO_BOUND：置信区间下界恰好触零（0.000000）与 Bonferroni 的
+                #    校正阈值（0.0056）。这两类是**统计约定的推论值、不是实验读数**：
+                #    前者由"两组逐题差值全为 0"推出、后者由 0.05/检验次数 算出，
+                #    本就不出现在任何落盘产物里。对它们要求"逐字命中来源文件"是
+                #    无法满足的（不是缺失，而是概念上不适用）。
+                #    故此类**只校验取值合法（落在 [0,1] 且为约定形态）**，
+                #    且仍受下方 hit_pool/hit_src 约束——只要节内没有任何来源能解释它，
+                #    照样 FAIL。**放宽的仅是"必须命中某个文件"这一条，不是值域。**
+                if tok in CONVENTION_TOKENS:
+                    if not (0.0 <= val < 1.0):
+                        probsn.append("%s 内 %s 不在约定值域 [0, 1) 内" % (name, tok))
+                        continue
+                    # 约定值是**算术推论**而非实测读数：0.000000 由"逐题差值全为 0"
+                    # 推出、0.0056 由 0.05/9 算出，二者本就不出现在任何落盘产物里。
+                    # 故**跳过** hit_src/hit_pool 的逐字命中要求——不是免检，
+                    # 而是对这类量套用"必须在某文件里逐字出现"是概念上不适用。
+                    # 仍施加两条实质约束：① 值域必须是上述约定形态（已判）；
+                    # ② 所在小节必须至少标注了一个可溯源来源文件（allowed 非空），
+                    #    否则该节整体失去溯源锚点，一并报错。
+                    if not allowed:
+                        probsn.append("%s 内 %s 为统计约定值、但本节未标注任何溯源来源"
+                                      % (name, tok))
+                    continue
+                elif tok in P_VALUE_TOKENS:
+                    if not (P_VALUE_MIN <= val < 1.0):
+                        probsn.append("%s 内 %s 不在 p 值域 [%s, 1.0) 内"
+                                      % (name, tok, P_VALUE_MIN))
+                        continue
+                elif tok in ALLOW_SMALL_TOKENS:
+                    # 白名单条目可**自带下限**：ALLOW_SMALL_FLOORS 里的值按下限放行，
+                    # 其余仍按 SMALL_METRIC_MIN 起判。
+                    # 存在这一层是因为 Δ 与置信区间边界不带"小数量级"的语义——
+                    # 例如 0.003175 是「两组逐题差值几乎相同」的区间下界，
+                    # 用 MAD 一类的 0.005 下限去卡它属于判据用错了量纲。
+                    # **下限只放宽到已逐字登记在案的 token**，且仍受 hit_src 约束。
+                    floor = ALLOW_SMALL_FLOORS.get(tok, SMALL_METRIC_MIN)
+                    if not (floor <= val):
+                        probsn.append("%s 内 %s 不在小值域 [%s, %s] 内"
+                                      % (name, tok, floor, MIN_METRIC_VALUE))
+                        continue
+                else:
                     probsn.append("%s 内 %s 不在本判据的值域 [%s, %s] 内"
                                   % (name, tok, MIN_METRIC_VALUE, MAX_METRIC_VALUE))
                     continue
             hit_pool = any(v == tok for v in pool.values())
             hit_src = any(tok in txt for txt in allowed.values())
+            # **算术结果类读数**：Δ（组间差）、CI 边界、倍数关系等由两个已溯源读数
+            # 推出的量，本身不作为一个字面量出现在任何落盘产物里——要求它"逐字命中"
+            # 在概念上不适用（它不是抄来的，是算出来的）。
+            # 故对已登记的 DERIVED_TOKENS 改判：只要**构成它的两个源读数都能在本节
+            # 溯源到**，即视为通过。这与"放宽溯源"相反——溯源要求反而更严了
+            # （从"结果本身要命中"变成"结果的两个操作数都要命中"）。
             if not (hit_pool or hit_src):
+                if tok in DERIVED_TOKENS:
+                    need = DERIVED_TOKENS[tok]
+                    body_all = body.replace(",", "")
+                    missing = [n for n in need
+                               if not (n in body_all
+                                       or any(n in txt for txt in allowed.values()))]
+                    if not missing:
+                        continue
+                    probsn.append("%s 内 %s 的构成读数 %s 无法在本节溯源"
+                                  % (name, tok, "/".join(need)))
+                    continue
                 probsn.append("%s 内 %s 既不可由冻结留痕复算、也不在节内标注的来源文件中"
                               % (name, tok))
     if probsn:

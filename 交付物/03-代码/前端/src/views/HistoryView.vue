@@ -28,6 +28,11 @@ const loading = ref(false)
 const error = ref('')
 
 const drawerOn = ref(false)
+const drawerPanel = ref(null)
+let drawerReturnFocus = null
+/* M13（2026-10-11）：回看抽屉的焦点管理。openRow 记录触发元素并把焦点移入抽屉面板；
+   closeDrawer 把焦点还原到触发元素；trapDrawerTab 在抽屉内做 Tab 循环，
+   键盘焦点不会落到被 aria-modal 遮住的背景内容上（WCAG 2.4.3／2.1.2）。 */
 const current = ref(null)
 const detail = ref(null)
 const gp = ref(null)
@@ -85,6 +90,7 @@ const pathCount = computed(() => {
 
 async function openRow(row) {
   current.value = row
+  drawerReturnFocus = document.activeElement        // M13：记录触发元素，关闭时还原
   drawerOn.value = true
   document.body.setAttribute('data-drawer', 'on')
   detail.value = null
@@ -104,6 +110,7 @@ async function openRow(row) {
   }
   await nextTick()
   mountReplay()
+  if (drawerPanel.value) drawerPanel.value.focus()   // M13：焦点移入抽屉
 }
 
 function closeDrawer() {
@@ -111,6 +118,29 @@ function closeDrawer() {
   replayG = null
   drawerOn.value = false
   document.body.removeAttribute('data-drawer')
+  // M13：焦点还原到打开抽屉的那一行（元素可能已被翻页卸载，故判空）
+  if (drawerReturnFocus && typeof drawerReturnFocus.focus === 'function') {
+    drawerReturnFocus.focus()
+  }
+  drawerReturnFocus = null
+}
+
+function trapDrawerTab(e) {
+  // M13：Tab／Shift+Tab 在抽屉的可聚焦元素间循环（不逃逸到被遮住的页面背景）
+  if (e.key !== 'Tab' || !drawerOn.value) return
+  const panel = drawerPanel.value
+  if (!panel) return
+  const list = Array.from(
+    panel.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+  ).filter((el) => !el.disabled && el.offsetParent !== null)
+  if (!list.length) return
+  const first = list[0]
+  const last = list[list.length - 1]
+  if (e.shiftKey && document.activeElement === first) {
+    last.focus(); e.preventDefault()
+  } else if (!e.shiftKey && document.activeElement === last) {
+    first.focus(); e.preventDefault()
+  }
 }
 
 // 节点编号 → 画布类型（载荷里只存编号，故按编号前缀判别；判不出的一律按「文档」处理，不猜）
@@ -246,9 +276,11 @@ onBeforeUnmount(() => {
       </div>
 
       <!-- ===== 回看抽屉：四段（问题 / 答案 / 证据表 / 图谱路径可视化）===== -->
-      <div class="drawer" :class="{ on: drawerOn }" :hidden="!drawerOn" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+      <!-- 2026-10-11（M13）：补焦点管理——打开时焦点移入抽屉面板、Tab 循环困在抽屉内、
+           关闭后焦点还原到触发行（WCAG 2.4.3 顺序 ／ 2.1.2 无键盘陷阱的对话框配套）。 -->
+      <div class="drawer" :class="{ on: drawerOn }" :hidden="!drawerOn" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" @keydown="trapDrawerTab">
         <div class="drawer__scrim" @click="closeDrawer"></div>
-        <div class="drawer__panel">
+        <div ref="drawerPanel" class="drawer__panel" tabindex="-1">
           <div class="drawer__head">
             <div style="min-width:0">
               <span class="label">回看 · 会话 <span class="mono">{{ current ? current.question_id : '—' }}</span></span>

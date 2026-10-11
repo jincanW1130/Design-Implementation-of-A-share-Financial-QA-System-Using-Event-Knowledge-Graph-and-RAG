@@ -56,10 +56,12 @@ from __future__ import annotations
 import contextlib
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
 import threading
+import time
 from datetime import datetime
 
 import config
@@ -378,13 +380,94 @@ def _classify_failure(text: str, contract_path: str | None = None,
     return 9999
 
 
+def _kill_process_tree(pid: int) -> None:
+    """整树终止一个进程（S3，2026-10-11 审查）。
+
+    * Windows：`taskkill /F /T /PID`——/T 沿父子关系杀整棵树（链路内层 fork 的
+      `run_query.py` 一并终止）；
+    * POSIX：子进程由 `start_new_session=True` 成为新会话／进程组长，
+      `killpg(SIGKILL)` 整组终止。
+
+    任何失败只记日志、不抛（终止路径本身已在报 3002，别让清理动作改变错误语义）。
+    """
+    try:
+        if os.name == "nt":
+            subprocess.run(["taskkill", "/F", "/T", "/PID", str(pid)],
+                           capture_output=True)
+        else:
+            import signal                            # noqa: PLC0415（仅 POSIX 分支需要）
+            with contextlib.suppress(ProcessLookupError):
+                os.killpg(os.getpgid(pid), signal.SIGKILL)
+    except Exception as exc:                         # noqa: BLE001
+        logger.warning("进程树终止异常（pid=%s）：%s: %s", pid, type(exc).__name__, exc)
+
+
+# --------------------------------------------------------------------------
+# 2.5 qa_runs 运行留痕清理（M5，2026-10-11 审查：临时目录此前只增不删）
+# --------------------------------------------------------------------------
+QA_RUNS_RETENTION_DAYS = int(getattr(config, "QA_RUNS_RETENTION_DAYS", 7) or 7)
+"""`qa_runs` 运行目录的保留天数（取自 `config.local.json` 可选键
+`qa_runs_retention_days`，缺省 7 天——运维留痕参数，不是业务口径）。"""
+
+_RUNS_CLEANUP_INTERVAL = 24 * 3600.0
+_runs_last_cleanup = 0.0
+
+
+def cleanup_qa_runs(keep_days: int | None = None) -> int:
+    """删除 `qa_runs` 下保留期之外的 `ask_*` 运行目录，返回删除数。
+
+    只删本模块自己创建的 `ask_*` 前缀目录（前缀即本模块 `tempfile.mkdtemp` 的指纹）；
+    任何失败只记日志、**不抛**——清理是运维动作，绝不能影响问答链路。
+    """
+    days = int(keep_days) if keep_days is not None else QA_RUNS_RETENTION_DAYS
+    removed = 0
+    try:
+        if not os.path.isdir(RUN_DIR):
+            return 0
+        cutoff = time.time() - days * 86400.0
+        with os.scandir(RUN_DIR) as entries:
+            for entry in entries:
+                try:
+                    if not (entry.is_dir() and entry.name.startswith("ask_")):
+                        continue
+                    if entry.stat().st_mtime < cutoff:
+                        shutil.rmtree(entry.path, ignore_errors=True)
+                        removed += 1
+                except OSError:
+                    continue
+        if removed:
+            logger.info("qa_runs 清理：删除 %d 个 %d 天前的运行目录（%s）",
+                        removed, days, RUN_DIR)
+    except Exception as exc:                         # noqa: BLE001
+        logger.warning("qa_runs 清理失败（不影响问答）：%s: %s", type(exc).__name__, exc)
+    return removed
+
+
+def _cleanup_qa_runs_throttled() -> None:
+    """每日一次的节流清理：启动时由 main.create_app 调一次，此后由链路调用触发。"""
+    global _runs_last_cleanup                        # noqa: PLW0603
+    now = time.monotonic()
+    if now - _runs_last_cleanup < _RUNS_CLEANUP_INTERVAL:
+        return
+    _runs_last_cleanup = now
+    cleanup_qa_runs()
+
+
 def _run_chain(question: str, group: str, session_id: str, now_iso: str) -> dict:
     """调第 8 阶段入口跑一次完整问答链路，返回 `(记录, 轨迹, 运行目录)` 三者组成的字典。
 
     这是**同步阻塞**调用（10～30 秒），由接口层用 `asyncio.to_thread` 放到工作线程执行，
     不阻塞事件循环。
+
+    2026-10-11 按 S3 改用 `Popen` ＋ **进程树整杀**：链路内层还会再 fork 检索子进程
+    （`run_query.py`，持 torch＋FAISS，数百 MB），原先 `subprocess.run(timeout=…)` 超时
+    只杀直接子进程 `run_answer.py`，孙进程成孤儿（Windows 无进程组管控、POSIX 下也不随
+    父进程退出）——反复超时即孤儿累积。现改为：Windows 下子进程以
+    `CREATE_NEW_PROCESS_GROUP` 起树、超时 `taskkill /F /T` 整树终止；POSIX 下
+    `start_new_session=True` 使子进程成为新会话／进程组长、超时 `killpg` 整组终止。
     """
     os.makedirs(RUN_DIR, exist_ok=True)
+    _cleanup_qa_runs_throttled()                    # M5：每日节流清理过期运行目录
     out_dir = tempfile.mkdtemp(prefix="ask_%s_" % str(group), dir=RUN_DIR)
     cmd = [sys.executable, RUN_ANSWER_SCRIPT,
            "--question", question,
@@ -395,29 +478,39 @@ def _run_chain(question: str, group: str, session_id: str, now_iso: str) -> dict
     logger.info("调用第 8 阶段问答链路：group=%s session_id=%s out_dir=%s 超时=%ds",
                 group, session_id, out_dir, CHAIN_TIMEOUT_SECONDS)
     started = datetime.now()
+    # S3：把子进程放进独立进程组／作业树，超时才能整树终止（见函数 docstring）
+    popen_kwargs = ({"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP}
+                    if os.name == "nt" else {"start_new_session": True})
     try:
-        proc = subprocess.run(cmd, cwd=config.ROOT, capture_output=True, text=True,
-                              encoding="utf-8", errors="replace",
-                              timeout=CHAIN_TIMEOUT_SECONDS)
-    except subprocess.TimeoutExpired as exc:
-        logger.warning("问答链路超时（%ds）：out_dir=%s stdout=%s stderr=%s",
-                       CHAIN_TIMEOUT_SECONDS, out_dir,
-                       _tail(getattr(exc, "stdout", "")), _tail(getattr(exc, "stderr", "")))
-        raise ApiError(3002, detail="run_answer 超时 %ds（out_dir=%s）"
-                       % (CHAIN_TIMEOUT_SECONDS, out_dir))
+        proc = subprocess.Popen(cmd, cwd=config.ROOT, stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE, text=True, encoding="utf-8",
+                                errors="replace", **popen_kwargs)
     except OSError as exc:
         logger.exception("问答链路无法启动：%s", exc)
         raise ApiError(3001, detail="无法启动 %s：%s" % (RUN_ANSWER_SCRIPT, exc))
+    try:
+        stdout, stderr = proc.communicate(timeout=CHAIN_TIMEOUT_SECONDS)
+    except subprocess.TimeoutExpired as exc:
+        # communicate 超时**不杀**进程（官方语义）；此时整棵进程树仍然存活，
+        # 先整树终止再回收管道，杜绝持 torch＋FAISS 的孙进程孤儿（S3）。
+        logger.warning("问答链路超时（%ds）：out_dir=%s（整树终止 pid=%s）stdout=%s stderr=%s",
+                       CHAIN_TIMEOUT_SECONDS, out_dir, proc.pid,
+                       _tail(getattr(exc, "stdout", "")), _tail(getattr(exc, "stderr", "")))
+        _kill_process_tree(proc.pid)
+        with contextlib.suppress(Exception):
+            proc.communicate(timeout=30)            # 回收管道与退出码（树已死，立即返回）
+        raise ApiError(3002, detail="run_answer 超时 %ds（out_dir=%s）"
+                       % (CHAIN_TIMEOUT_SECONDS, out_dir))
 
     elapsed = (datetime.now() - started).total_seconds()
     if proc.returncode != 0:
         # 评审 P1-9：**先读上游的结构化失败契约**（判据不含任何措辞）；
         # 契约缺失／不可解析时 _classify_failure 才回落措辞匹配，并打 WARNING（不静默）。
-        code = _classify_failure((proc.stdout or "") + "\n" + (proc.stderr or ""),
+        code = _classify_failure((stdout or "") + "\n" + (stderr or ""),
                                  exit_code=proc.returncode, out_dir=out_dir)
         logger.warning("问答链路非零退出：exit=%s 耗时=%.1fs out_dir=%s\n--- stdout 尾部 ---\n%s"
                        "\n--- stderr 尾部 ---\n%s", proc.returncode, elapsed, out_dir,
-                       _tail(proc.stdout), _tail(proc.stderr))
+                       _tail(stdout), _tail(stderr))
         raise ApiError(code, detail="run_answer 退出码 %s（耗时 %.1fs，out_dir=%s）"
                        % (proc.returncode, elapsed, out_dir))
     logger.info("问答链路完成：耗时 %.1fs out_dir=%s", elapsed, out_dir)
@@ -425,7 +518,7 @@ def _run_chain(question: str, group: str, session_id: str, now_iso: str) -> dict
     record = _first_jsonl(os.path.join(out_dir, "qa_records.jsonl"))
     if not isinstance(record, dict):
         logger.warning("问答链路未产出 qa_records.jsonl 记录：out_dir=%s stdout=%s",
-                       out_dir, _tail(proc.stdout))
+                       out_dir, _tail(stdout))
         raise ApiError(3003, detail="qa_records.jsonl 无记录（out_dir=%s）" % out_dir)
     trace = _first_jsonl(os.path.join(out_dir, "answer_trace.jsonl"))
     return {"record": record, "trace": trace, "out_dir": out_dir,
@@ -626,10 +719,13 @@ def ask(question: str, session_id: str, group: str | None = None) -> dict:
     # 会话号以**请求值**为准（链路记录里的 session_id 理论上相同，但仍以调用方为准）
     question_block["session_id"] = session_id
 
+    # N2（2026-10-11 复评）：ID 分配与落库**合并进同一锁段**——原先分配后即释放锁，
+    # 并发时另一线程的 _next_ids 会读到前者未提交前的 MAX，可分配出同一 (qid, aid)
+    # 静默互覆。_DB_LOCK 是 RLock（可重入），_persist 内部的 with _DB_LOCK 不会自锁。
     with _DB_LOCK:
         conn = _fresh_conn()
         question_id, answer_id = _next_ids(conn, session_id, question)
-    items = _persist(record, question_id, answer_id)
+        items = _persist(record, question_id, answer_id)
 
     answer_text = str(answer_block.get("answer_text") or "")
     extended, graph_path = _graph_path_of_answer(answer_id)

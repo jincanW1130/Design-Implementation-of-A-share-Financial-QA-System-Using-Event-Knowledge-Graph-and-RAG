@@ -322,7 +322,10 @@ onBeforeUnmount(() => {
       </a>
 
       <nav class="nav" role="tablist" aria-label="主导航">
-        <button v-for="n in nav" :key="n.key" class="nav__btn" role="tab"
+        <!-- 2026-10-11（M13）：补 :id="nav-&lt;key&gt;" —— 四个视图 tabpanel 的
+             aria-labelledby="nav-ask／nav-answer／nav-graph／nav-history" 此前引用了
+             不存在的 id（ARIA 断裂引用），本 id 与之一一对应。 -->
+        <button v-for="n in nav" :key="n.key" :id="'nav-' + n.key" class="nav__btn" role="tab"
                 :aria-selected="cur === n.key ? 'true' : 'false'" @click="go(n.key)">{{ n.label }}</button>
       </nav>
 

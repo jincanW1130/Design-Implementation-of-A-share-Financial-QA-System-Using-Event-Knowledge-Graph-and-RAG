@@ -30,10 +30,12 @@
    连兜底路由与 `experiment/ask` 一并覆盖）。
    判「普通用户」的依据是**浏览器来源标记**：请求带 `Origin` 且落在 `config.CORS_ORIGINS`
    内（即来自前端 5173 页面），或 `Referer` 指向该来源，或显式带 `X-Client-Role: user`。
-   裸 `curl`（无这些头）视为运维／实验通道，照常放行——**校验清单里的 curl 因此可用**，
-   而前端页面发起的调用一律 403。**已知局限（如实登记）**：无登录 ⇒ 这些头可伪造，
-   4002 只能挡住「前端普通用户通道」，挡不住有意伪造头的人；真正的鉴权要等启用登录
-   （`user` 表与 4001 一并启用）之后才成立。
+   **2026-10-11 加固（S1）**：通过普通用户判定之后，运维／实验通道**还必须**携带共享密钥
+   请求头 `X-Admin-Token`（取值 = `config.local.json` 的 `admin_token`，未配置则全部后台
+   调用一律 **4001 fail closed**）——修复了「这些头可伪造，裸 curl 即可写库／删库／触发
+   计费调用」的严重缺陷；**已知局限（如实登记）**：共享密钥是单因素静态凭据，真正的
+   多用户鉴权仍要等启用登录（`user` 表与 4001 一并启用）之后才成立；容器形态对外部署
+   仍应只在内网／反代之后暴露。
 2. **2003 的响应体是本项目唯一的例外**：《10》第 4.7.3 节逐字要求「响应同时返回
    `retained_for_history = true`」，而表 4-13 又把 `retained_for_history（布尔）` 列为
    PUT／DELETE 的响应字段。故 2003 的响应体是 `{code, message, retained_for_history}`
@@ -83,6 +85,7 @@ from __future__ import annotations
 
 import asyncio
 import csv
+import hmac
 import importlib.util
 import json
 import os
@@ -412,6 +415,11 @@ def _graph_stats() -> tuple:
 CLIENT_ROLE_HEADER = "x-client-role"
 """显式声明身份的请求头（前端普通用户通道会带上；运维／实验脚本不带）。"""
 
+ADMIN_TOKEN_HEADER = "x-admin-token"
+"""【S1，2026-10-11 审查】管理面共享密钥请求头：运维／实验通道必须携带
+`X-Admin-Token: <config.local.json 的 admin_token>`；缺失或取值不符一律 **4001**（HTTP 401）。
+取值只比对（`hmac.compare_digest` 防时序侧信道），**不打印、不进日志、不进响应体**。"""
+
 USER_ROLES = frozenset({"user", "anonymous", "guest", "visitor", "public", "normal",
                         "普通用户", "用户"})
 """`X-Client-Role` 里表示「普通用户」的取值（大小写不敏感）。"""
@@ -441,16 +449,36 @@ def _ordinary_user_reason(request: Request) -> str | None:
 
 
 async def require_admin(request: Request) -> None:
-    """路由级依赖：普通用户访问 `/api/admin/*` 一律 **4002**（HTTP 403）。
+    """路由级依赖：后台前缀的双重守卫（2026-10-11 按 S1 加固）。
+
+    1. **普通用户通道 → 4002**（HTTP 403）：带 `X-Client-Role: user` 一类取值、或
+       `Origin`／`Referer` 落在前端允许来源——前端页面发起的调用在这里被拦（不变）。
+    2. **运维／实验通道 → 必须携带共享密钥**（S1）：请求头 `X-Admin-Token` 必须等于
+       `config.local.json` 的 `admin_token`（`hmac.compare_digest` 逐字节比对）；
+       缺失或取值不符一律 **4001**（HTTP 401）。**未配置 `admin_token` 时 fail closed**：
+       全部后台调用一律 4001——不再存在「无凭据也可写库/删库/触发计费调用」的裸放行。
 
     `detail` 只进日志（硬约束 7）；响应体由 `errors.install_exception_handlers`
-    统一成 `{code: 4002, message: "无操作权限"}`。
+    统一成 `{code, message}`。
     """
     reason = _ordinary_user_reason(request)
     if reason:
-        logger.warning("后台接口拒绝普通用户：path=%s %s（第一版无登录，按来源标记判定）",
+        logger.warning("后台接口拒绝普通用户：path=%s %s（按来源标记判定）",
                        request.url.path, reason)
         raise errors.ApiError(4002, detail="普通用户通道访问后台接口：%s" % reason)
+
+    expected = config.ADMIN_TOKEN
+    if expected is None:
+        logger.error("后台接口拒绝（未配置 admin_token，fail closed）：path=%s",
+                     request.url.path)
+        raise errors.ApiError(
+            4001, detail="管理面未配置共享密钥（config.local.json 的 admin_token）——"
+                         "全部后台调用被拒绝；配置后用请求头 %s 携带同值" % ADMIN_TOKEN_HEADER)
+    supplied = str(request.headers.get(ADMIN_TOKEN_HEADER) or "").strip()
+    if not supplied or not hmac.compare_digest(
+            supplied.encode("utf-8"), expected.encode("utf-8")):
+        logger.warning("后台接口凭据无效（缺头或取值不符）：path=%s", request.url.path)
+        raise errors.ApiError(4001, detail="缺少或错误的 %s 请求头" % ADMIN_TOKEN_HEADER)
 
 
 router = APIRouter(tags=["admin"], dependencies=[Depends(require_admin)])

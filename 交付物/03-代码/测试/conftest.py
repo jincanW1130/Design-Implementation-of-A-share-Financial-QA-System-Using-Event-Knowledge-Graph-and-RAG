@@ -161,7 +161,18 @@ def forbid_network():
     events = ("socket.connect", "socket.getaddrinfo", "socket.gethostbyname",
               "urllib.Request", "http.client.connect", "ftplib.connect", "smtplib.connect")
 
+    _LOOPBACK = ("127.0.0.1", "::1", "localhost")
+
     def _hook(event, args):
+        if event in events:
+            # 2026-10-11（G 组新增时修正）：TestClient 的同步／异步桥接在本机实现上走
+            # **127.0.0.1 环回 socket**（进程内通信，不出网卡），`socket.connect` 审计事件
+            # 会被误拦。故对**目标为环回地址**的 connect 放行——「离线」的本意是
+            # 「不连外部网络／不调大模型」，外部地址仍然零容忍、当场变红。
+            if event == "socket.connect":
+                target = args[1] if len(args) > 1 else None
+                if isinstance(target, tuple) and target and target[0] in _LOOPBACK:
+                    return
         if event in events:
             raise RuntimeError(
                 "单元测试必须离线：拦截到网络事件 %r（参数 %r）——本套测试不得联网、"

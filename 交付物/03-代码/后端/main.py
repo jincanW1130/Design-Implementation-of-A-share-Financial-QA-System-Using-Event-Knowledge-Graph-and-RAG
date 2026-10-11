@@ -41,7 +41,7 @@ import os
 import sys
 import threading
 import time
-from collections import defaultdict, deque
+from collections import deque
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -106,34 +106,77 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
     `Retry-After` 头。只在 `/api/*` 上生效，`/api/health` 豁免（探活不受限）。
 
     这是**单进程内**限流（第一版为单机演示，不做多进程／多实例共享计数，登记为已知限制）。
+
+    2026-10-11 按 S2 加固三点：
+    * **来源默认只信直连地址**：`X-Forwarded-For` 仅当 `trust_proxy_headers=True`
+      （`config.local.json` 可选键，默认 False）时才读——直连形态信任 XFF 等于让
+      伪造头绕过限流并污染日志；
+    * **键数量有界**：跟踪的 IP 键超过 `MAX_TRACKED_IPS` 即清扫，仍超则按最近活动
+      时间淘汰最旧的键——消除「伪造 IP 轮换打爆 `_hits` 内存」的攻击面；
+    * **低频全量清扫**：每 `SWEEP_INTERVAL_SECONDS` 秒清一次全空窗口的键，
+      空队列即删键，不残留空 deque。
     """
 
+    MAX_TRACKED_IPS = 100_000
+    """跟踪的来源 IP 键上限（S2 自保护）。单键是一小段 deque（窗口内 ≤ max_requests 个
+    时间戳），10 万键约为数十 MB 量级；触顶先全量清扫，仍超则淘汰最旧键并告警。"""
+
+    SWEEP_INTERVAL_SECONDS = 60.0
+    """全量清扫的最小间隔（秒）：正常流量下每分钟扫一次；触顶时立即触发，不等间隔。"""
+
     def __init__(self, app, window_seconds: int, max_requests: int, exempt_paths=(),
-                 scope_prefix="/api/"):
+                 scope_prefix="/api/", trust_proxy_headers: bool = False):
         super().__init__(app)
         self.window = float(window_seconds)
         self.max_requests = int(max_requests)
         self.exempt_paths = set(exempt_paths)
         self.scope_prefix = scope_prefix
-        self._hits = defaultdict(deque)
+        self.trust_proxy_headers = bool(trust_proxy_headers)
+        self._hits = {}
         self._lock = threading.Lock()
+        self._last_sweep = time.monotonic()
 
     def _client_ip(self, request: Request) -> str:
-        """来源 IP：优先 `X-Forwarded-For` 首段，取不到则用直连地址。"""
-        forwarded = request.headers.get("x-forwarded-for")
-        if forwarded:
-            return forwarded.split(",")[0].strip()
+        """来源 IP：默认取直连地址；仅当部署在可信反代之后才读 `X-Forwarded-For` 首段。"""
+        if self.trust_proxy_headers:
+            forwarded = request.headers.get("x-forwarded-for")
+            if forwarded:
+                return forwarded.split(",")[0].strip()
         return request.client.host if request.client else "unknown"
+
+    def _sweep_locked(self, now: float) -> None:
+        """清理过期键（持锁调用）：删全空窗口的键；仍超上限则淘汰最旧键（S2 自保护）。"""
+        expired = [ip for ip, q in self._hits.items()
+                   if not q or now - q[-1] > self.window]
+        for ip in expired:
+            del self._hits[ip]
+        if len(self._hits) > self.MAX_TRACKED_IPS:
+            overflow = len(self._hits) - self.MAX_TRACKED_IPS
+            oldest = sorted(self._hits, key=lambda ip: self._hits[ip][-1])[:overflow]
+            for ip in oldest:
+                del self._hits[ip]
+            logger.warning("限流器跟踪键数超上限（%d），已淘汰 %d 个最久未活动的来源"
+                           "（S2 自保护：淘汰意味着这些来源的窗口计数清零）",
+                           self.MAX_TRACKED_IPS, overflow)
 
     def _over_limit(self, ip: str) -> bool:
         now = time.monotonic()
         with self._lock:
-            queue = self._hits[ip]
-            while queue and now - queue[0] > self.window:
-                queue.popleft()
-            if len(queue) >= self.max_requests:
+            if now - self._last_sweep >= self.SWEEP_INTERVAL_SECONDS:
+                self._last_sweep = now
+                self._sweep_locked(now)                     # 低频清扫（S2）
+            queue = self._hits.get(ip)
+            if queue is not None:
+                while queue and now - queue[0] > self.window:
+                    queue.popleft()
+                if not queue:
+                    del self._hits[ip]                      # 空队列即删键（S2）
+                    queue = None
+            if queue is not None and len(queue) >= self.max_requests:
                 return True
-            queue.append(now)
+            self._hits.setdefault(ip, deque()).append(now)
+            if len(self._hits) > self.MAX_TRACKED_IPS:
+                self._sweep_locked(now)                     # 触顶立即清扫（S2）
             return False
 
     async def dispatch(self, request: Request, call_next):
@@ -357,7 +400,8 @@ def create_app() -> FastAPI:
     app.add_middleware(RateLimitMiddleware,
                        window_seconds=config.RATE_LIMIT["window_seconds"],
                        max_requests=config.RATE_LIMIT["max_requests"],
-                       exempt_paths={"/api/health"})
+                       exempt_paths={"/api/health"},
+                       trust_proxy_headers=bool(getattr(config, "TRUST_PROXY_HEADERS", False)))
     app.add_middleware(GuardMiddleware, max_body_bytes=config.LIMITS["max_body_bytes"])
     app.add_middleware(CORSMiddleware,
                        allow_origins=list(config.CORS_ORIGINS),
@@ -367,17 +411,29 @@ def create_app() -> FastAPI:
 
     # 本批唯一注册的业务路由
     @app.get("/api/health", tags=["health"])
-    async def health():
+    def health():
         """就绪探针（门禁 A5）：四项依赖的可用状态 ＋ 总体 status。
 
         本接口**不加统一响应信封**：表 4-13 未收录它，其响应体在《24》第 3.5 节被
         逐字规定为 `{status, mysql, neo4j, vector_index, model_config}`，故按字面返回，
         不套 `{data, meta}`。HTTP 状态恒为 200。
+
+        2026-10-11 按 M1 改为**同步 `def`**：FastAPI 把同步路由放进线程池执行，
+        探针的慢依赖（如 MySQL 半开连接最长可阻塞约 35s）不再阻塞事件循环拖垮全服务。
         """
         return JSONResponse(content=health_payload())
 
     # 可选注册（本批不存在这些模块，启动时打印说明）
     status = register_optional_routers(app)
+
+    # M5（2026-10-11 审查）：启动时清理一次过期的 qa_runs 运行目录（此后每 24h 由问答
+    # 链路节流触发；清理失败只记日志，不阻断启动）。
+    try:
+        from services import qa_service as _qa_service
+        _qa_service.cleanup_qa_runs()
+    except Exception as _cleanup_exc:                          # noqa: BLE001
+        logger.warning("qa_runs 启动清理跳过：%s: %s",
+                       type(_cleanup_exc).__name__, _cleanup_exc)
 
     logger.info("后端骨架已装配：允许来源=%s；限流=%s；请求体上限=%d 字节；问题长度=%d～%d 字",
                 "、".join(config.CORS_ORIGINS), config.RATE_LIMIT,

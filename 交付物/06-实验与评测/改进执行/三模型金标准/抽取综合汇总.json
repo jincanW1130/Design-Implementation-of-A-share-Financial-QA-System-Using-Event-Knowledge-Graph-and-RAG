@@ -1,0 +1,47 @@
+{
+ "consensus": {
+  "entities": 682,
+  "events": 50,
+  "events_loose": 57,
+  "relations": 574,
+  "times": 110
+ },
+ "members": {
+  "deepseek": {
+   "entities": 633,
+   "events": 267,
+   "events_loose": 267,
+   "relations": 531,
+   "times": 103
+  },
+  "glm": {
+   "entities": 827,
+   "events": 302,
+   "events_loose": 302,
+   "relations": 743,
+   "times": 148
+  },
+  "kimi": {
+   "entities": 635,
+   "events": 239,
+   "events_loose": 239,
+   "relations": 516,
+   "times": 84
+  }
+ },
+ "n_items": 260,
+ "pairwise": {
+  "deepseek-glm": {
+   "mean_jaccard": 0.5489,
+   "strict_item_rate": 0.0962
+  },
+  "deepseek-kimi": {
+   "mean_jaccard": 0.5156,
+   "strict_item_rate": 0.0769
+  },
+  "glm-kimi": {
+   "mean_jaccard": 0.5152,
+   "strict_item_rate": 0.0731
+  }
+ }
+}

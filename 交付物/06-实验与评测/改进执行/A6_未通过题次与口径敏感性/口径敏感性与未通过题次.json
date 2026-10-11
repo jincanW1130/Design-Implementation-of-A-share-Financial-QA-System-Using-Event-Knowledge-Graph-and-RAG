@@ -1,0 +1,629 @@
+{
+ "direction_consistency": {
+  "evidence": [
+   {
+    "delta_cer": 0.093838,
+    "pool": "core",
+    "positive": true,
+    "subset": "全部",
+    "treatment": "valid_only"
+   },
+   {
+    "delta_cer": 0.103968,
+    "pool": "core",
+    "positive": true,
+    "subset": "关系型",
+    "treatment": "valid_only"
+   },
+   {
+    "delta_cer": 0.115352,
+    "pool": "core",
+    "positive": true,
+    "subset": "多跳型",
+    "treatment": "valid_only"
+   },
+   {
+    "delta_cer": 0.170468,
+    "pool": "core",
+    "positive": true,
+    "subset": "时序型",
+    "treatment": "valid_only"
+   },
+   {
+    "delta_cer": 0.111111,
+    "pool": "core",
+    "positive": true,
+    "subset": "全部",
+    "treatment": "fail_as_zero"
+   },
+   {
+    "delta_cer": 0.083333,
+    "pool": "core",
+    "positive": true,
+    "subset": "关系型",
+    "treatment": "fail_as_zero"
+   },
+   {
+    "delta_cer": 0.138889,
+    "pool": "core",
+    "positive": true,
+    "subset": "多跳型",
+    "treatment": "fail_as_zero"
+   },
+   {
+    "delta_cer": 0.185185,
+    "pool": "core",
+    "positive": true,
+    "subset": "时序型",
+    "treatment": "fail_as_zero"
+   },
+   {
+    "delta_cer": 0.085697,
+    "pool": "all",
+    "positive": true,
+    "subset": "全部",
+    "treatment": "valid_only"
+   },
+   {
+    "delta_cer": 0.085107,
+    "pool": "all",
+    "positive": true,
+    "subset": "关系型",
+    "treatment": "valid_only"
+   },
+   {
+    "delta_cer": 0.100375,
+    "pool": "all",
+    "positive": true,
+    "subset": "多跳型",
+    "treatment": "valid_only"
+   },
+   {
+    "delta_cer": 0.140476,
+    "pool": "all",
+    "positive": true,
+    "subset": "时序型",
+    "treatment": "valid_only"
+   },
+   {
+    "delta_cer": 0.108333,
+    "pool": "all",
+    "positive": true,
+    "subset": "全部",
+    "treatment": "fail_as_zero"
+   },
+   {
+    "delta_cer": 0.083334,
+    "pool": "all",
+    "positive": true,
+    "subset": "关系型",
+    "treatment": "fail_as_zero"
+   },
+   {
+    "delta_cer": 0.130953,
+    "pool": "all",
+    "positive": true,
+    "subset": "多跳型",
+    "treatment": "fail_as_zero"
+   },
+   {
+    "delta_cer": 0.166667,
+    "pool": "all",
+    "positive": true,
+    "subset": "时序型",
+    "treatment": "fail_as_zero"
+   }
+  ],
+  "三子集在全部 8 个口径组合下 Δcer 均为正": true
+ },
+ "distributions": {
+  "by_group": {
+   "A": 7,
+   "B": 2,
+   "C": 3,
+   "D": 3,
+   "E": 3
+  },
+  "by_qid": {
+   "FQ-020": 1,
+   "FQ-022": 5,
+   "FQ-023": 1,
+   "FQ-027": 1,
+   "FQ-083": 1,
+   "FQ-093": 4,
+   "FQ-108": 1,
+   "FQ-115": 4
+  },
+  "by_reason": {
+   "citation_missing": 1,
+   "date_unverifiable": 18
+  },
+  "by_subset": {
+   "压力": 1,
+   "核心": 17
+  },
+  "by_type": {
+   "事件型": 2,
+   "事实型": 11,
+   "关系型": 5
+  },
+  "n_distinct_qids": 8,
+  "n_episodes": 18
+ },
+ "failures_detail": [
+  {
+   "gold_hop_depth": 2,
+   "group": "A",
+   "qid": "FQ-020",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "事实型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 2,
+   "group": "A",
+   "qid": "FQ-022",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "事实型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 2,
+   "group": "A",
+   "qid": "FQ-023",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "事实型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 0,
+   "group": "A",
+   "qid": "FQ-027",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "事件型",
+   "time_constraint": "无"
+  },
+  {
+   "gold_hop_depth": 2,
+   "group": "A",
+   "qid": "FQ-083",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "压力",
+   "task_type": "关系型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 1,
+   "group": "A",
+   "qid": "FQ-093",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "事实型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 2,
+   "group": "A",
+   "qid": "FQ-108",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "事件型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 2,
+   "group": "B",
+   "qid": "FQ-022",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "事实型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 0,
+   "group": "B",
+   "qid": "FQ-115",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "关系型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 2,
+   "group": "C",
+   "qid": "FQ-022",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "事实型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 1,
+   "group": "C",
+   "qid": "FQ-093",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "事实型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 0,
+   "group": "C",
+   "qid": "FQ-115",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "关系型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 2,
+   "group": "D",
+   "qid": "FQ-022",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "事实型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 1,
+   "group": "D",
+   "qid": "FQ-093",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "事实型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 0,
+   "group": "D",
+   "qid": "FQ-115",
+   "reason": [
+    "citation_missing",
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "关系型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 2,
+   "group": "E",
+   "qid": "FQ-022",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "事实型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 1,
+   "group": "E",
+   "qid": "FQ-093",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "事实型",
+   "time_constraint": "有"
+  },
+  {
+   "gold_hop_depth": 0,
+   "group": "E",
+   "qid": "FQ-115",
+   "reason": [
+    "date_unverifiable"
+   ],
+   "subset": "核心",
+   "task_type": "关系型",
+   "time_constraint": "有"
+  }
+ ],
+ "meta": {
+  "口径矩阵": "池 ∈ {core, all} × 分母处理 ∈ {valid_only(现行), fail_as_zero(未通过计0)}",
+  "失败原因来源": "各组题目录下 error_contract.json（只读）",
+  "未通过题次重建口径": "逐题/{组} 存在但聚合 answer_trace.jsonl 缺失；与冻结报告\"18 题次/8 题号\"对账"
+ },
+ "sensitivity": {
+  "all": {
+   "fail_as_zero": {
+    "全部": {
+     "A": {
+      "cer": 0.7,
+      "n": 120,
+      "recall": 0.751389
+     },
+     "C": {
+      "cer": 0.808333,
+      "n": 120,
+      "recall": 0.863889
+     },
+     "delta_C_minus_A": {
+      "cer": 0.108333,
+      "recall": 0.1125
+     }
+    },
+    "关系型": {
+     "A": {
+      "cer": 0.708333,
+      "n": 48,
+      "recall": 0.75
+     },
+     "C": {
+      "cer": 0.791667,
+      "n": 48,
+      "recall": 0.84375
+     },
+     "delta_C_minus_A": {
+      "cer": 0.083334,
+      "recall": 0.09375
+     }
+    },
+    "多跳型": {
+     "A": {
+      "cer": 0.642857,
+      "n": 84,
+      "recall": 0.702381
+     },
+     "C": {
+      "cer": 0.77381,
+      "n": 84,
+      "recall": 0.845238
+     },
+     "delta_C_minus_A": {
+      "cer": 0.130953,
+      "recall": 0.142857
+     }
+    },
+    "时序型": {
+     "A": {
+      "cer": 0.651515,
+      "n": 66,
+      "recall": 0.714646
+     },
+     "C": {
+      "cer": 0.818182,
+      "n": 66,
+      "recall": 0.866162
+     },
+     "delta_C_minus_A": {
+      "cer": 0.166667,
+      "recall": 0.151516
+     }
+    }
+   },
+   "valid_only": {
+    "全部": {
+     "A": {
+      "cer": 0.743363,
+      "n": 113,
+      "recall": 0.797935
+     },
+     "C": {
+      "cer": 0.82906,
+      "n": 117,
+      "recall": 0.88604
+     },
+     "delta_C_minus_A": {
+      "cer": 0.085697,
+      "recall": 0.088105
+     }
+    },
+    "关系型": {
+     "A": {
+      "cer": 0.723404,
+      "n": 47,
+      "recall": 0.765957
+     },
+     "C": {
+      "cer": 0.808511,
+      "n": 47,
+      "recall": 0.861702
+     },
+     "delta_C_minus_A": {
+      "cer": 0.085107,
+      "recall": 0.095745
+     }
+    },
+    "多跳型": {
+     "A": {
+      "cer": 0.692308,
+      "n": 78,
+      "recall": 0.75641
+     },
+     "C": {
+      "cer": 0.792683,
+      "n": 82,
+      "recall": 0.865854
+     },
+     "delta_C_minus_A": {
+      "cer": 0.100375,
+      "recall": 0.109444
+     }
+    },
+    "时序型": {
+     "A": {
+      "cer": 0.716667,
+      "n": 60,
+      "recall": 0.786111
+     },
+     "C": {
+      "cer": 0.857143,
+      "n": 63,
+      "recall": 0.907407
+     },
+     "delta_C_minus_A": {
+      "cer": 0.140476,
+      "recall": 0.121296
+     }
+    }
+   }
+  },
+  "core": {
+   "fail_as_zero": {
+    "全部": {
+     "A": {
+      "cer": 0.675926,
+      "n": 108,
+      "recall": 0.733025
+     },
+     "C": {
+      "cer": 0.787037,
+      "n": 108,
+      "recall": 0.848765
+     },
+     "delta_C_minus_A": {
+      "cer": 0.111111,
+      "recall": 0.11574
+     }
+    },
+    "关系型": {
+     "A": {
+      "cer": 0.638889,
+      "n": 36,
+      "recall": 0.694444
+     },
+     "C": {
+      "cer": 0.722222,
+      "n": 36,
+      "recall": 0.791667
+     },
+     "delta_C_minus_A": {
+      "cer": 0.083333,
+      "recall": 0.097223
+     }
+    },
+    "多跳型": {
+     "A": {
+      "cer": 0.597222,
+      "n": 72,
+      "recall": 0.666667
+     },
+     "C": {
+      "cer": 0.736111,
+      "n": 72,
+      "recall": 0.819444
+     },
+     "delta_C_minus_A": {
+      "cer": 0.138889,
+      "recall": 0.152777
+     }
+    },
+    "时序型": {
+     "A": {
+      "cer": 0.592593,
+      "n": 54,
+      "recall": 0.669753
+     },
+     "C": {
+      "cer": 0.777778,
+      "n": 54,
+      "recall": 0.83642
+     },
+     "delta_C_minus_A": {
+      "cer": 0.185185,
+      "recall": 0.166667
+     }
+    }
+   },
+   "valid_only": {
+    "全部": {
+     "A": {
+      "cer": 0.715686,
+      "n": 102,
+      "recall": 0.776144
+     },
+     "C": {
+      "cer": 0.809524,
+      "n": 105,
+      "recall": 0.873016
+     },
+     "delta_C_minus_A": {
+      "cer": 0.093838,
+      "recall": 0.096872
+     }
+    },
+    "关系型": {
+     "A": {
+      "cer": 0.638889,
+      "n": 36,
+      "recall": 0.694444
+     },
+     "C": {
+      "cer": 0.742857,
+      "n": 35,
+      "recall": 0.814286
+     },
+     "delta_C_minus_A": {
+      "cer": 0.103968,
+      "recall": 0.119842
+     }
+    },
+    "多跳型": {
+     "A": {
+      "cer": 0.641791,
+      "n": 67,
+      "recall": 0.716418
+     },
+     "C": {
+      "cer": 0.757143,
+      "n": 70,
+      "recall": 0.842857
+     },
+     "delta_C_minus_A": {
+      "cer": 0.115352,
+      "recall": 0.126439
+     }
+    },
+    "时序型": {
+     "A": {
+      "cer": 0.653061,
+      "n": 49,
+      "recall": 0.738095
+     },
+     "C": {
+      "cer": 0.823529,
+      "n": 51,
+      "recall": 0.885621
+     },
+     "delta_C_minus_A": {
+      "cer": 0.170468,
+      "recall": 0.147526
+     }
+    }
+   }
+  }
+ }
+}

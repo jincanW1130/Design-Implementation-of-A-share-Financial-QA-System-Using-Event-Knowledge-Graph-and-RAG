@@ -708,15 +708,27 @@ export function mountGraph(host, opt) {
     keys.forEach((k) => { if (!seen[k]) out.push([k, (e.properties || {})[k]]) })
     return out
   }
+  // M2（2026-10-11 复评）：innerHTML 注入面转义。图谱节点属性与文本块正文都可能含
+  // 第三方公告原文（存储型 XSS 载体），凡经 innerHTML 拼接的用户/上游数据一律过 esc；
+  // 链接地址走 safeUrl 白名单（仅 http/https），堵住 `url` 键曾绕过协议检查的口子。
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, (ch) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]))
+  }
+  function safeUrl(u) {
+    const t = String(u).trim()
+    return /^https?:\/\//i.test(t) ? t : null
+  }
   function propVal(k, v) {
     if (v === null || v === undefined || v === '' || v === EMPTY)
       return '<span class="gvp gvp--empty">' + EMPTY + '</span>' +
         '<span class="gsrc" style="display:block;margin-top:3px">本节点该属性在本次记录中为空</span>'
     const c = EAPI_LONG[k] ? (k === 'url' ? 'gvp gvp--url' : 'gvp gvp--long') : 'gvp'
     const txt = String(v)
-    const html = (k === 'url' || /^https?:\/\//.test(txt))
-      ? '<a class="gvp gvp--url" href="' + txt + '" target="_blank" rel="noopener">' + txt + '</a>'
-      : '<span class="' + c + '">' + txt + '</span>'
+    const href = safeUrl(txt)
+    const html = href
+      ? '<a class="gvp gvp--url" href="' + esc(href) + '" target="_blank" rel="noopener">' + esc(txt) + '</a>'
+      : '<span class="' + c + '">' + esc(txt) + '</span>'
     return html
   }
 
@@ -1116,10 +1128,10 @@ export function mountGraph(host, opt) {
       const nb = (d && d.neighbor_chunks) || []
       wrap.querySelector('div.gev__ctx').innerHTML =
         '<span class="label">查看上下文</span>' +
-        '<div class="gev__ctxrow"><span>接口</span><i>GET /api/documents/' + docId + '/chunks/' + chunkId + '</i></div>' +
-        '<div class="gev__ctxrow"><span>chunk_id</span><i>' + chunkId + '</i></div>' +
-        '<div class="gev__ctxrow"><span>chunk_content</span><i>' + content + '</i></div>' +
-        '<div class="gev__ctxrow"><span>neighbor_chunks</span><i>' + (nb.length ? nb.map((x) => 'chunk_id ' + x.chunk_id).join('、') : '本次返回里没有相邻块') + '</i></div>'
+        '<div class="gev__ctxrow"><span>接口</span><i>GET /api/documents/' + esc(docId) + '/chunks/' + esc(chunkId) + '</i></div>' +
+        '<div class="gev__ctxrow"><span>chunk_id</span><i>' + esc(chunkId) + '</i></div>' +
+        '<div class="gev__ctxrow"><span>chunk_content</span><i>' + esc(content) + '</i></div>' +
+        '<div class="gev__ctxrow"><span>neighbor_chunks</span><i>' + esc(nb.length ? nb.map((x) => 'chunk_id ' + x.chunk_id).join('、') : '本次返回里没有相邻块') + '</i></div>'
     }).catch((e) => {
       wrap.querySelector('div.gev__ctx').innerHTML =
         '<span class="label">查看上下文</span><p class="gev__gap">正文接口请求失败：' + (e && e.message || e) + '</p>'

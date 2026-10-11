@@ -146,12 +146,19 @@ def test_content_fingerprint_is_stable_and_hex_of_config_length(clean_mod, prep_
     assert all(ch in "0123456789abcdef" for ch in a)
 
 
-def test_content_fingerprint_has_no_dead_code_fallback(clean_mod):
-    """指纹长度必须是 config 值，不是函数里另写的第二份常量（P1-12 的"参数单一来源"）。"""
-    src_default_len = 16
+def test_content_fingerprint_length_follows_config(clean_mod, prep_cfg, monkeypatch):
+    """指纹长度唯一取自 config.DEDUP（P1-12 的"参数单一来源"）——2026-10-11 重写（S5）。
+
+    原用例 `len(a) == len(b) or 16 == len(a)` 的左支恒真（同一函数对非空输入返回等长
+    指纹），整个断言永真、任何实现都过，属伪测试。现改为 **monkeypatch 篡改长度常量**：
+    篡改后函数输出长度必须跟随——函数里若写死第二份常量（不看 config 值），本用例即杀。
+    """
+    hex_len = int(str(prep_cfg.DEDUP["content_fingerprint"]).partition("_")[2])
+    tampered = hex_len + 1
+    monkeypatch.setattr(clean_mod, "_FP_HEX_LEN", tampered)
     got = clean_mod.content_fingerprint("x")
-    # 无论 config 怎么改，函数返回长度都应与同一 config 的另一路读数一致
-    assert len(got) == len(clean_mod.content_fingerprint("y")) or src_default_len == len(got)
+    assert len(got) == tampered, "指纹长度未跟随篡改后的 config 值（函数内另写死了长度？）"
+    assert len(got) != hex_len          # 负向标定：证明篡改确实生效，断言不是恒真
 
 
 # ==========================================================================
@@ -345,7 +352,13 @@ def test_decide_url_rule_drops_duplicates_and_keeps_losers_out_of_later_rules(de
     assert len(url_decision) == 1
     assert url_decision[0]["winner"] == 1          # 早发布者胜
     assert url_decision[0]["dropped"] == [2]
-    assert url_decision[0]["decided_by"] if "decided_by" in url_decision[0] else True
+    # 2026-10-11 重写（S5）：原断言 `assert d["decided_by"] if "decided_by" in d else True`
+    # 在键不存在时恒真。decided_by 实际记录在 dropped_detail 每一条上（dedup.decide 落盘
+    # 结构），现无条件断言其存在，且取值 ∈ decide_reason 的三种合法 reason。
+    assert len(url_decision[0]["dropped_detail"]) == 1
+    assert "decided_by" in url_decision[0]["dropped_detail"][0]
+    assert url_decision[0]["dropped_detail"][0]["decided_by"] in (
+        "earlier_publish_time", "shorter_url", "smaller_doc_id")
     assert set(survivors) == {1, 3}
     # 2 被 url 规则淘汰后，不再出现在标题规则的候选里
     title_decision = [d for d in decisions if d["rule"] == dedup_mod.RULE_TITLE]

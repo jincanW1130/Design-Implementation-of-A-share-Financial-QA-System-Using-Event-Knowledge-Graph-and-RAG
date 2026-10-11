@@ -1,0 +1,50 @@
+{
+ "generated_at": "2026-10-10T23:34:50+0800",
+ "results": [
+  {
+   "vendor": "deepseek",
+   "model_requested": "deepseek-flash",
+   "base_host": "api.deepseek.com",
+   "has_key": true,
+   "ok": true,
+   "model_resolved": "deepseek-flash",
+   "temperature_tried": 0.0,
+   "error": null,
+   "latency_s": 1.65,
+   "raw_excerpt": "",
+   "usage": {
+    "p": 34
+   }
+  },
+  {
+   "vendor": "kimi",
+   "model_requested": "kimi-k2.7-code",
+   "base_host": "api.moonshot.cn",
+   "has_key": true,
+   "ok": true,
+   "model_resolved": "kimi-k2.7-code",
+   "temperature_tried": 1.0,
+   "error": "temp=0.0: Error code: 400 - {'error': {'message': 'invalid temperature: only 1 is allowed for this model', 'type': 'invalid_request_error'}}",
+   "latency_s": 0.7,
+   "raw_excerpt": "",
+   "usage": {
+    "p": 11
+   }
+  },
+  {
+   "vendor": "zhipu",
+   "model_requested": "glm-5.3-flash",
+   "base_host": "open.bigmodel.cn",
+   "has_key": true,
+   "ok": true,
+   "model_resolved": "glm-5.3-flash",
+   "temperature_tried": 0.0,
+   "error": null,
+   "latency_s": 1.07,
+   "raw_excerpt": "",
+   "usage": {
+    "p": 16
+   }
+  }
+ ]
+}

@@ -121,7 +121,12 @@ P_ERRSCEN = os.path.join(P_OUT, "error_scenarios.jsonl")
 P_SMOKE = os.path.join(P_OUT, "smoke_matrix.jsonl")
 
 BASE = "http://127.0.0.1:8000"
-ADMIN = {"X-Client-Role": "admin"}
+# 2026-10-11（S1 加固配套）：后台接口要求共享密钥请求头 X-Admin-Token（取值 =
+# 后端 config.local.json 的 admin_token）。门禁从环境变量 ASHARE_ADMIN_TOKEN 读取
+# 同值后随 ADMIN 角色一起发送；未设置环境变量时带空值，后台将按 4001 拒绝——
+# 此时 admin 相关判据会 FAIL，属「门禁环境未配置密钥」，不是被测对象的内容失败。
+ADMIN = {"X-Client-Role": "admin",
+         "X-Admin-Token": os.environ.get("ASHARE_ADMIN_TOKEN", "")}
 
 # 门禁自身的**主动节流**：服务端限流是 60 次／60 秒（滑动窗口，按来源 IP）。门禁在 A～C8
 # 这一串里会连发数十个请求，若不加节制，会把「服务端限流」误当成被测对象的「内容失败」
@@ -1200,6 +1205,10 @@ def c_c3(g):
         (1001, "POST", "/api/qa/ask", {"question": "", "session_id": "S-GATE"}, None),
         (1002, "GET", "/api/graph/events" + qs(start_time="2026-13-99"), None, None),
         (1003, "POST", "/api/qa/ask", {"question": "x"}, None),
+        # 2026-10-11（复评收尾 3）：补「缺 question」探针——第一轮审查发现 C3 只构造了
+        # 「缺 session_id」样例、对「缺 question」存在盲区（S6 分叉正是从这个盲区漏过的）。
+        # S6 修复后契约：缺 question 键 → 1003（与缺 session_id 同码）。
+        (1003, "POST", "/api/qa/ask", {"session_id": "S-GATE"}, None),
         (2001, "GET", "/api/qa/answers/999999", None, None),
         (2002, "GET", "/api/graph/entities" + qs(keyword="zzz不存在的实体zzz"), None, None),
         (2003, "DELETE", "/api/admin/documents/%s" % (_referenced_doc(g) or 1307), None, ADMIN),

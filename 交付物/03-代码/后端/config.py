@@ -404,6 +404,31 @@ def log_file_configured() -> bool:
 
 
 # --------------------------------------------------------------------------
+# 6.2 后台鉴权／反代信任／运行留痕（可选键：缺失或空＝默认行为，与 log_path 同一套口径）
+# --------------------------------------------------------------------------
+# 【S1，2026-10-11 审查】管理面共享密钥：配置后，`/api/admin/*` 的运维／实验通道必须带
+# `X-Admin-Token: <admin_token>` 请求头（与前端普通用户通道的 4002 判定叠加——前端来源
+# 依旧 4002，非前端来源缺头/错头则 4001）。**未配置时后台接口一律 401（fail closed）**：
+# 不提供「无密钥也放行」的回退——S1 的问题正是裸放行。取值只比对、不打印、不进日志。
+_admin_token_raw = _LOCAL.get("admin_token")
+ADMIN_TOKEN = (str(_admin_token_raw).strip()
+               if isinstance(_admin_token_raw, str) and str(_admin_token_raw).strip()
+               and not _is_placeholder(_admin_token_raw) else None)
+del _admin_token_raw
+
+# 【S2，2026-10-11 审查】是否信任反向代理头（X-Forwarded-For）。**默认 False**：直连形态下
+# 伪造 XFF 首段即可获得独立限流额度并污染日志；只有确认部署在可信反代之后才改 True。
+TRUST_PROXY_HEADERS = bool(_LOCAL.get("trust_proxy_headers", False))
+
+# 【M5，2026-10-11 审查】`qa_runs` 运行留痕目录的保留天数：启动与每日清理 N 天前的
+# `ask_*` 运行目录（只删本后端创建的前缀目录；清理失败只记日志、不影响问答）。
+_qa_runs_days_raw = _LOCAL.get("qa_runs_retention_days")
+QA_RUNS_RETENTION_DAYS = (_qa_runs_days_raw if isinstance(_qa_runs_days_raw, int)
+                          and _qa_runs_days_raw > 0 else 7)
+del _qa_runs_days_raw
+
+
+# --------------------------------------------------------------------------
 # 7. 接口层门槛参数（输入校验与频率限制；《24》第八节 G2「在文档中登记限制参数」）
 # --------------------------------------------------------------------------
 RATE_LIMIT = {

@@ -80,7 +80,11 @@ COPY 交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出
 EXPOSE 8000
 
 # 健康检查沿用应用自己的 /api/health（外部依赖不可用时它会如实报 degraded）
+# 2026-10-11 修复（M6）：判活口径放宽为 status ∈ {ok, degraded}——degraded 是
+# 「服务进程活着、某项依赖不可用」，不是服务死亡；原判 status=='ok' 会让 MySQL/Neo4j
+# 挂起时容器被连坐重启（依赖故障被放大成服务重启）。依赖健康由 /api/health 的
+# status 与四项探针观测，HEALTHCHECK 只负责「服务进程能否响应」。
 HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
-    CMD python -c "import urllib.request,json,sys; d=json.load(urllib.request.urlopen('http://127.0.0.1:8000/api/health',timeout=8)); sys.exit(0 if d.get('status')=='ok' else 1)"
+    CMD python -c "import urllib.request,json,sys; d=json.load(urllib.request.urlopen('http://127.0.0.1:8000/api/health',timeout=8)); sys.exit(0 if d.get('status') in ('ok','degraded') else 1)"
 
 CMD ["python", "交付物/03-代码/后端/run.py", "--host", "0.0.0.0"]
