@@ -1,0 +1,312 @@
+{
+ "registered": "2026-10-11",
+ "cc_limit": 20,
+ "cc_over_limit": [
+  {
+   "where": "交付物/03-代码/数据准备/check.py",
+   "fn": "main",
+   "cc": 144,
+   "line": 326
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/extract.py",
+   "fn": "parse_and_validate",
+   "cc": 72,
+   "line": 890
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/write_graph.py",
+   "fn": "assign_nodes",
+   "cc": 61,
+   "line": 335
+  },
+  {
+   "where": "交付物/03-代码/数据准备/fetch.py",
+   "fn": "plan_event_first_news",
+   "cc": 58,
+   "line": 2396
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/auto_annotate_verify.py",
+   "fn": "main",
+   "cc": 58,
+   "line": 63
+  },
+  {
+   "where": "交付物/03-代码/检索/build_questions.py",
+   "fn": "build_rows",
+   "cc": 52,
+   "line": 872
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/auto_annotate_lint.py",
+   "fn": "cmd_report",
+   "cc": 44,
+   "line": 1234
+  },
+  {
+   "where": "交付物/03-代码/检索/pipeline.py",
+   "fn": "collect_graph_candidates",
+   "cc": 41,
+   "line": 438
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/auto_annotate_repair.py",
+   "fn": "write_ledger_and_report",
+   "cc": 40,
+   "line": 659
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/auto_annotate_repair.py",
+   "fn": "cmd_run",
+   "cc": 40,
+   "line": 498
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/auto_annotate.py",
+   "fn": "normalize_annotation",
+   "cc": 40,
+   "line": 515
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/write_graph.py",
+   "fn": "check_export",
+   "cc": 39,
+   "line": 798
+  },
+  {
+   "where": "交付物/03-代码/数据准备/clean.py",
+   "fn": "main",
+   "cc": 38,
+   "line": 367
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/auto_annotate_lint.py",
+   "fn": "cmd_selftest",
+   "cc": 35,
+   "line": 1769
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/auto_annotate.py",
+   "fn": "cmd_run",
+   "cc": 35,
+   "line": 952
+  },
+  {
+   "where": "交付物/03-代码/检索/graph_query.py",
+   "fn": "selftest",
+   "cc": 34,
+   "line": 627
+  },
+  {
+   "where": "交付物/03-代码/数据准备/fetch.py",
+   "fn": "plan_event_first_announcements",
+   "cc": 34,
+   "line": 2249
+  },
+  {
+   "where": "交付物/03-代码/问答/answer.py",
+   "fn": "gate",
+   "cc": 33,
+   "line": 211
+  },
+  {
+   "where": "交付物/03-代码/检索/pipeline.py",
+   "fn": "cmd_selftest",
+   "cc": 33,
+   "line": 1882
+  },
+  {
+   "where": "交付物/03-代码/检索/check_inputs.py",
+   "fn": "main",
+   "cc": 33,
+   "line": 31
+  },
+  {
+   "where": "交付物/03-代码/数据准备/embed.py",
+   "fn": "main",
+   "cc": 33,
+   "line": 219
+  },
+  {
+   "where": "交付物/03-代码/数据准备/fetch.py",
+   "fn": "run_news_category",
+   "cc": 32,
+   "line": 1959
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/write_graph.py",
+   "fn": "build_edges",
+   "cc": 31,
+   "line": 623
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/dedup_events.py",
+   "fn": "self_test",
+   "cc": 30,
+   "line": 422
+  },
+  {
+   "where": "交付物/03-代码/检索/build_questions.py",
+   "fn": "derive_candidate_chunks",
+   "cc": 28,
+   "line": 813
+  },
+  {
+   "where": "交付物/03-代码/数据准备/fetch.py",
+   "fn": "news_search_candidates",
+   "cc": 28,
+   "line": 1572
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/run_all.py",
+   "fn": "run",
+   "cc": 28,
+   "line": 192
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/dedup_events.py",
+   "fn": "build_events",
+   "cc": 28,
+   "line": 177
+  },
+  {
+   "where": "交付物/03-代码/检索/build_questions.py",
+   "fn": "__init__",
+   "cc": 27,
+   "line": 221
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/dedup_events.py",
+   "fn": "run",
+   "cc": 27,
+   "line": 530
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/auto_annotate.py",
+   "fn": "collect_stats",
+   "cc": 27,
+   "line": 1214
+  },
+  {
+   "where": "交付物/03-代码/数据准备/chunk.py",
+   "fn": "main",
+   "cc": 26,
+   "line": 247
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/sample_eval_set.py",
+   "fn": "select_for_split",
+   "cc": 26,
+   "line": 326
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/extract_event_time.py",
+   "fn": "verify_result",
+   "cc": 26,
+   "line": 631
+  },
+  {
+   "where": "交付物/03-代码/检索/pre_experiment.py",
+   "fn": "run_once",
+   "cc": 25,
+   "line": 595
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/extract.py",
+   "fn": "build_verify_payload",
+   "cc": 25,
+   "line": 1395
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/sample_eval_set.py",
+   "fn": "table_15cd_recompute",
+   "cc": 24,
+   "line": 682
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/sample_eval_set.py",
+   "fn": "distribution_report",
+   "cc": 24,
+   "line": 738
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/extract.py",
+   "fn": "compute_coverage",
+   "cc": 24,
+   "line": 449
+  },
+  {
+   "where": "交付物/03-代码/后端/services/market_service.py",
+   "fn": "announcements",
+   "cc": 24,
+   "line": 312
+  },
+  {
+   "where": "交付物/03-代码/数据准备/fetch.py",
+   "fn": "cninfo_announcements",
+   "cc": 23,
+   "line": 923
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/sample_eval_set.py",
+   "fn": "build_deviations",
+   "cc": 23,
+   "line": 907
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/extract_event_time.py",
+   "fn": "build_window",
+   "cc": 23,
+   "line": 255
+  },
+  {
+   "where": "交付物/03-代码/后端/tools/import_graph.py",
+   "fn": "main",
+   "cc": 23,
+   "line": 578
+  },
+  {
+   "where": "交付物/03-代码/后端/api/graph.py",
+   "fn": "paths",
+   "cc": 23,
+   "line": 1082
+  },
+  {
+   "where": "交付物/03-代码/检索/pipeline.py",
+   "fn": "evidence_sort_factors",
+   "cc": 21,
+   "line": 1131
+  },
+  {
+   "where": "交付物/03-代码/数据准备/v21_report.py",
+   "fn": "main",
+   "cc": 21,
+   "line": 135
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/sample_eval_set.py",
+   "fn": "coverage_report",
+   "cc": 21,
+   "line": 807
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/extract.py",
+   "fn": "select_pilot_docs",
+   "cc": 21,
+   "line": 362
+  },
+  {
+   "where": "交付物/03-代码/抽取与图谱/auto_annotate_compare.py",
+   "fn": "build_report",
+   "cc": 21,
+   "line": 295
+  },
+  {
+   "where": "交付物/03-代码/后端/services/qa_service.py",
+   "fn": "_persist",
+   "cc": 21,
+   "line": 646
+  }
+ ]
+}

@@ -34,5 +34,11 @@ export default defineConfig({
     outDir: 'dist',
     // 构建产物不进仓库（.gitignore 已覆盖 交付物/03-代码/前端/dist/，硬约束 23）
     sourcemap: false,
+    // 2026-10-11（复评「兼容性」整改）：显式声明构建目标，取代 Vite 默认的
+    // 'modules'（其基线随 Vite 版本漂移、无文档口径）。es2020 ＝ Chrome 80+／
+    // Edge 80+／Firefox 75+／Safari 13.1+（2020 年起的 evergreen 浏览器基线），
+    // 与本项目的语法面（可选链／空值合并等 ES2020 特性）匹配；**不支持 IE**。
+    // 口径与浏览器矩阵的完整登记见同目录 `兼容性口径与矩阵.md`。
+    target: 'es2020',
   },
 })
