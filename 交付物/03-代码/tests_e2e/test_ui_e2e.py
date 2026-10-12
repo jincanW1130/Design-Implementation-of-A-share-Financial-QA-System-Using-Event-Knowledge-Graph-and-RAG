@@ -150,11 +150,13 @@ def test_e2e_09_history_list(page, page_url):
 # ---------------------------------------------------------------------------
 def test_e2e_10_history_detail_consistency(page, page_url):
     """回看抽屉打开后：抽屉标题与所点行的问题文本一致（M13 焦点管理顺带被真实触发）。"""
+    # 预置既有会话 S-001（库内有导入的 30 条记录）；不预置则新浏览器上下文生成空会话
+    page.add_init_script("window.localStorage.setItem('qa-console-session-id', 'S-001')")
     page.goto(page_url + "/history")
     page.wait_for_selector("text=历史记录", timeout=30_000)
     rows = page.locator("article.hrow")
     if rows.count() == 0:
-        pytest.skip("UNRUN：当前会话无历史记录（先在提问台完成一次提问）")
+        pytest.skip("UNRUN：S-001 会话无历史记录（数据集导入记录缺失）")
     first = rows.first
     title_in_row = first.inner_text()[:40]
     first.click()

@@ -38,7 +38,7 @@
     "user": 0
   },
   "database": "ashare_qa",
-  "generated_at": "2026-10-10T15:57:30+08:00",
+  "generated_at": "2026-10-12T09:03:33+08:00",
   "input_fields": {
     "chunks": [
       "chunk_id",
