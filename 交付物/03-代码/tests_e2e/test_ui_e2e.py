@@ -118,14 +118,18 @@ def test_e2e_07_evidence_source_opens_new_tab(page, page_url):
 # 8. 图谱检索（GraphView.vue 实体搜索）
 # ---------------------------------------------------------------------------
 def test_e2e_08_graph_search(page, page_url):
-    """/graph 搜索 600519 → 命中实体（走真实图谱后端）。"""
+    """/graph 搜索 000001 → 命中平安银行实体（走真实图谱后端）。
+
+    2026-10-11（UAT 验收单 v1.2 同步收紧）：原用例搜 600519 并断言「平安银行／000001／
+    600519 任一出现」——搜索回显会让 600519 恒真，属弱断言；且验收单 A4 的预期是
+    「000001 → 平安银行」。现改为搜 000001、断言实体名出现。
+    """
     page.goto(page_url + "/graph")
-    page.fill('input[aria-label="搜索实体作为图谱锚点"]', "600519")
+    page.fill('input[aria-label="搜索实体作为图谱锚点"]', "000001")
     page.keyboard.press("Enter")
     page.wait_for_selector("text=搜索中…", state="detached", timeout=30_000)
     body = page.inner_text("body")
-    assert ("平安银行" in body) or ("000001" in body) or ("600519" in body), \
-        "图谱检索 600519 未命中任何实体"
+    assert "平安银行" in body, "图谱检索 000001 未命中平安银行实体"
 
 
 # ---------------------------------------------------------------------------
