@@ -123,7 +123,7 @@ function onBodyClick(e) {
                 :aria-pressed="graphOn ? 'true' : 'false'" @click="emits('toggle-graph')">
           图谱扩展：{{ graphOn ? '开' : '关' }}
         </button>
-        <span v-else class="label">本次回答未启用图谱扩展</span>
+        <span v-else class="label">本次回答未启用图谱扩展——<b>不是功能关闭</b>：提问台的图谱扩展开关已开启，是本次检索未产生<b>可用的图谱证据路径</b>（问题实体在图谱中暂无关系边、或语料覆盖不足）。系统在此如实降级、不编造路径；要看图谱的当前状态，可到「知识图谱」页检索该实体。</span>
       </div>
 
       <div v-if="extended && !graphOn" class="graphOff">

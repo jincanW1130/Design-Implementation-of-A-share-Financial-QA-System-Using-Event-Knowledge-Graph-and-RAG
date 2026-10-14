@@ -153,7 +153,7 @@ onMounted(() => { if (appMeta && !appMeta.health) { /* health 由 App.vue 拉取
             <div class="askbox__foot">
               <div class="askbox__hints">
                 <span class="tag">数据集 {{ (appMeta && appMeta.datasetVersion) || '—' }}</span>
-                <span class="tag">图谱扩展 开</span>
+                <span class="tag" title="图谱扩展能力已开启；每次提问是否真正扩展，由链路按检索与图谱证据如实判定——无可用图谱证据时不扩展、不编造路径">图谱扩展 开 · 按题判定</span>
                 <span class="tag">路径深度 1～2 跳</span>
               </div>
               <button class="btn btn--quiet" :disabled="loading" @click="submit">
