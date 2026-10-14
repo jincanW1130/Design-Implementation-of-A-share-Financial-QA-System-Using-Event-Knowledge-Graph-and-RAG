@@ -15,7 +15,7 @@
 // 空列表是正常业务状态（2002 语义），给「未检索到匹配记录」提示，不是错误。
 
 import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
-import { listHistory, getHistoryDetail, getGraphPath } from '../api.js'
+import { listHistory, getHistoryDetail, getGraphPath, getEntity } from '../api.js'
 import { buildDataset, mountGraph, EXT, DOMAIN } from '../lib/graph.js'
 
 const appMeta = inject('appMeta', null)
@@ -109,7 +109,7 @@ async function openRow(row) {
     drawerLoading.value = false
   }
   await nextTick()
-  mountReplay()
+  await mountReplay()
   if (drawerPanel.value) drawerPanel.value.focus()   // M13：焦点移入抽屉
 }
 
@@ -187,13 +187,25 @@ function replayDs(payload) {
   const nodes = [...nodeSet].map((id) => ({ id, eid: id, type: typeOfId(id), name: id, code: '', sub: '', time: null }))
   return buildDataset('replay', nodes, edges)
 }
-function mountReplay() {
+async function mountReplay() {
   if (!graphHost.value) return
   if (replayG && replayG.destroy) replayG.destroy()
   replayG = null
   graphHost.value.innerHTML = ''
   const ds = replayDs(gp.value)
   if (!ds) return
+  // 2026-10-14（用户反馈「为什么是编号」）：回看载荷 answer.graph_path 里只存**节点编号**
+  //（拓扑与边原样），replayDs 此前把画布节点名兜底成编号，邻居全是 PER-xxxx／EVT-xxxx。
+  // 挂载前用**单实体详情接口**把编号批量翻译为实体名（person_name／event_name 等静态属性），
+  // 不改变「回看不重新查询图谱路径」的口径——路径拓扑仍 100% 来自当时载荷；
+  // 单个补名失败时该节点保持编号，不阻断画布。
+  await Promise.all(ds.nodes.map(async (n) => {
+    try {
+      const d = await getEntity(n.id)
+      const name = d && d.node && d.node.name
+      if (name) n.name = String(name)
+    } catch (e) { /* 补名失败保持编号 */ }
+  }))
   const el = document.createElement('div')
   graphHost.value.appendChild(el)
   const first = ds.nodes.slice().sort((a, b) => (b.deg - a.deg) || (a.id < b.id ? -1 : 1))[0]
