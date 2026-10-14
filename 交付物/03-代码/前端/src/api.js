@@ -129,7 +129,13 @@ export async function request(path, opts = {}) {
   // 错误响应：HTTP 非 2xx，或响应体带 `code` 字段（后端错误一律 {code, message}）
   if (!resp.ok || (payload && typeof payload.code === 'number')) {
     const code = payload && typeof payload.code === 'number' ? payload.code : resp.status
-    const message = (payload && payload.message) || `请求失败（HTTP ${resp.status}）`
+    let message = (payload && payload.message) || `请求失败（HTTP ${resp.status}）`
+    // 2026-10-14：1004 限流时把 Retry-After 秒数带给用户（后端限流响应带该头），
+    // 避免「只说超限、不说要等多久」的体验空洞。
+    const retryAfter = Number(resp.headers && resp.headers.get('Retry-After'))
+    if (code === 1004 && Number.isFinite(retryAfter) && retryAfter > 0) {
+      message += `，请约 ${Math.ceil(retryAfter)} 秒后重试`
+    }
     throw new ApiError(code, message, resp.status)
   }
 
