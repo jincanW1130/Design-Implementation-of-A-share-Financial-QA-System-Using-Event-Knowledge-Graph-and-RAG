@@ -17,15 +17,19 @@
 // 时间轴：只在**记录里真实出现过**的月份上取值——文档节点取边的 evidence.publish_time、
 // 事件节点取 GET /api/graph/events/{id} 的 event_time（为空则不落到轴上，与原型一致）。
 
-import { inject, onBeforeUnmount, onMounted, ref } from 'vue'
+import { inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import {
   getChunk, getEntity, getEntityEvidence, getEventDetail, getNeighbors, getPaths, listEntities,
 } from '../api.js'
 import { buildDataset, mountGraph, typeOfLabel, TKEYS, TYPE } from '../lib/graph.js'
 
 const appMeta = inject('appMeta', null)
+const route = useRoute()
 
-const anchor = ref('600519')
+// 2026-10-14：锚点支持由答案页带入（?entity=600887）；无参数时保持默认 600519。
+const DEFAULT_ANCHOR = '600519'
+const anchor = ref(String(route.query.entity || DEFAULT_ANCHOR))
 const loading = ref(false)
 const error = ref('')
 const note = ref('')
@@ -311,6 +315,11 @@ onMounted(() => {
     tlSvg.value.addEventListener('pointercancel', tlUp)
   }
   load(anchor.value)
+})
+// 2026-10-14：屏③已挂载时从答案页带 entity 跳入（同组件复用，onMounted 不再触发）
+watch(() => route.query.entity, (v) => {
+  const id = String(v || '').trim()
+  if (id && id !== anchor.value) useAnchor(id)
 })
 onBeforeUnmount(() => {
   if (G && G.destroy) G.destroy()

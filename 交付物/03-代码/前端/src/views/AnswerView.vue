@@ -10,12 +10,16 @@
 // 版式按原型屏②：qhead（问题＋口径标签行）→ 四段 `.aSec`（回答／证据来源／知识图谱路径／数据截至与判定区间）。
 // 正文 [证据N] 可点，跳到证据卡并高亮。外部链接 target=_blank rel=noopener「查看原文 ↗」。
 
-import { computed, inject, ref, watch } from 'vue'
+import { computed, inject, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { getAnswer, getEvidence, getGraphPath } from '../api.js'
+import { mountGraph } from '../lib/graph.js'
+import { buildReplayDataset, collectPathNodes, enrichNames, firstCompanyOf } from '../lib/replay.js'
 import AnswerSections from '../components/AnswerSections.vue'
 import EvidenceList from '../components/EvidenceList.vue'
 import GraphPathPanel from '../components/GraphPathPanel.vue'
 
+const router = useRouter()
 const props = defineProps({ answerId: { type: [String, Number], required: true } })
 const appMeta = inject('appMeta', null)
 
@@ -27,6 +31,12 @@ const graphPath = ref({ is_graph_extended: 0, paths: null, display_mode: 'not_us
 const graphOn = ref(true)
 const flashId = ref('')
 let flashTimer = null
+
+// 2026-10-14：落库路径补名（编号 → 实体名）＋ 本回答路径可视化
+const nameMap = ref({})                 // 节点编号 → 实体名（文本链路与画布共用）
+const graphHost = ref(null)
+const graphAnchor = ref('')             // 路径起点公司实体（跳屏③的锚点）
+let replayG = null
 
 const cutoff = computed(() => {
   const iso = appMeta && appMeta.dataCutoffTime ? appMeta.dataCutoffTime : ''
@@ -97,9 +107,56 @@ async function load() {
   } finally {
     loading.value = false
   }
+  // 画布容器只在 loading 结束后才渲染，故补名＋挂载放到 loading 翻 false 之后（nextTick 等容器出现）
+  if (!error.value && Number(graphPath.value.is_graph_extended) === 1
+      && Array.isArray(graphPath.value.paths) && graphPath.value.paths.length) {
+    await nextTick()
+    await mountAnswerGraph(graphPath.value)
+  } else {
+    teardownAnswerGraph()
+  }
+}
+
+/** 按落库载荷在答案页挂载本回答的图谱路径（补名后渲染；与历史回看同一套渲染器）。 */
+async function mountAnswerGraph(payload) {
+  teardownAnswerGraph()
+  nameMap.value = {}
+  graphAnchor.value = firstCompanyOf(payload) || ''
+  try {
+    // 先补名供文本链路用；buildReplayDataset 内部也会补一次（3 并发、详情接口有 HTTP 缓存，
+    // 重复请求浏览器层即返回，不额外打限流窗口）
+    nameMap.value = Object.fromEntries(await enrichNames(collectPathNodes(payload)))
+    const ds = await buildReplayDataset(payload)
+    if (!ds) return
+    await nextTick()                       // 等 v-if 的 graphHost 渲染出来
+    if (!graphHost.value) return
+    const el = document.createElement('div')
+    graphHost.value.appendChild(el)
+    const first = ds.nodes.slice().sort((a, b) => (b.deg - a.deg) || (a.id < b.id ? -1 : 1))[0]
+    // modes:false／不传 provider —— 与回看一致，按载荷渲染、不重新查询图谱拓扑
+    replayG = mountGraph(el, {
+      ds, modes: false, select: first ? first.id : null, depth: 2,
+      tag: '本回答的 answer.graph_path 载荷 · 路径还原',
+    })
+  } catch (e) {
+    // 可视化失败不影响文本四段（证据与文字链路仍完整可读）
+    teardownAnswerGraph()
+  }
+}
+function teardownAnswerGraph() {
+  if (replayG && replayG.destroy) replayG.destroy()
+  replayG = null
+  if (graphHost.value) graphHost.value.innerHTML = ''
+}
+
+/** 跳到屏③并以本回答路径的起点实体为锚点（屏③读 query.entity，不再固定 600519）。 */
+function goGraphPage() {
+  if (graphAnchor.value) router.push({ name: 'graph', query: { entity: graphAnchor.value } })
+  else router.push({ name: 'graph' })
 }
 
 watch(() => props.answerId, load, { immediate: true })
+onBeforeUnmount(teardownAnswerGraph)
 
 function onJump(id) {
   flashId.value = id
@@ -162,7 +219,21 @@ function onJump(id) {
             <EvidenceList :items="evidence.items" :groups="evidence.groups" :flash-id="flashId" />
           </template>
           <template #path>
-            <GraphPathPanel :is-graph-extended="graphPath.is_graph_extended" :graph-path="graphPath.paths" />
+            <GraphPathPanel :is-graph-extended="graphPath.is_graph_extended"
+                           :graph-path="graphPath.paths" :name-map="nameMap" />
+            <!-- 2026-10-14：本回答图谱路径可视化（按落库载荷还原，节点补实体名，不重新查拓扑） -->
+            <div v-if="extended && graphOn && Array.isArray(graphPath.paths) && graphPath.paths.length"
+                 class="agraph">
+              <div class="agraph__bar">
+                <span class="label">本回答的图谱路径 · 按落库载荷还原（节点已补实体名；拓扑不重查）</span>
+                <button v-if="graphAnchor" class="chip" type="button"
+                        @click="goGraphPage"
+                        title="到「事件知识图谱」页以该实体为锚点查看实时邻居与两跳路径">
+                  在知识图谱页查看 {{ graphAnchor }} →
+                </button>
+              </div>
+              <div ref="graphHost" class="agraph__host"></div>
+            </div>
           </template>
         </AnswerSections>
 
@@ -174,3 +245,11 @@ function onJump(id) {
     </div>
   </section>
 </template>
+
+<style scoped>
+/* 本回答图谱路径可视化（2026-10-14）：与历史回看表四同一高度口径 */
+.agraph { margin-top: 14px; padding-top: 13px; border-top: 1px solid var(--border); }
+.agraph__bar { display: flex; align-items: center; justify-content: space-between; gap: 10px;
+              flex-wrap: wrap; margin-bottom: 10px; }
+.agraph__host { min-height: 420px; }
+</style>

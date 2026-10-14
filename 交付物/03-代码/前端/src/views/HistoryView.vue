@@ -9,14 +9,17 @@
 //   * GET /api/history/{question_id}?session_id=…     → 回看（问题／答案正文／证据／graph_path_available）
 //   * GET /api/evidence/{answer_id}/graph-path        → **当时记录的路径载荷**（回看还原的来源）
 //
-// **回看不重新查询图谱**：表四只用 `answer.graph_path` 记录载荷重新渲染一遍，不调用任何 /api/graph/* 查询接口。
-// 载荷里只存了节点编号（未存实体名），故节点按编号显示，不另行查图补名——就地标注。
+// **回看不重新查询图谱拓扑**：表四只用 `answer.graph_path` 记录载荷重新渲染一遍，
+// 不调用任何 /api/graph/paths、neighbors 等拓扑查询接口。
+// 载荷里只存节点编号；画布挂载前用**单实体详情接口**把编号批量补成实体名
+//（2026-10-14 修正：先补名、再 buildDataset，见 lib/replay.js），补名不改路径拓扑。
 //
 // 空列表是正常业务状态（2002 语义），给「未检索到匹配记录」提示，不是错误。
 
 import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
-import { listHistory, getHistoryDetail, getGraphPath, getEntity } from '../api.js'
-import { buildDataset, mountGraph, EXT, DOMAIN } from '../lib/graph.js'
+import { listHistory, getHistoryDetail, getGraphPath } from '../api.js'
+import { mountGraph, EXT, DOMAIN } from '../lib/graph.js'
+import { buildReplayDataset } from '../lib/replay.js'
 
 const appMeta = inject('appMeta', null)
 
@@ -143,73 +146,19 @@ function trapDrawerTab(e) {
   }
 }
 
-// 节点编号 → 画布类型（载荷里只存编号，故按编号前缀判别；判不出的一律按「文档」处理，不猜）
-function typeOfId(id) {
-  const s = String(id)
-  if (/^PER-/.test(s)) return 'person'
-  if (/^EVT-/.test(s)) return 'event'
-  if (/^INST-|^ORG-/.test(s)) return 'org'
-  if (/^POL-/.test(s)) return 'policy'
-  if (/^IND-/.test(s)) return 'industry'
-  if (/^\d{6}$/.test(s)) return 'company'
-  return 'doc'
-}
-function replayDs(payload) {
-  const paths = (payload && payload.paths) || []
-  if (!Array.isArray(paths) || !paths.length) return null
-  const nodeSet = new Set()
-  const edges = []
-  for (const p of paths) {
-    const nodes = p.nodes || []
-    ;(p.relations || []).forEach((rel, i) => {
-      const a = nodes[i]
-      const b = rel.neighbor
-      if (a === undefined || b === undefined) return
-      nodeSet.add(String(a)); nodeSet.add(String(b))
-      const inEdge = rel.direction === 'in'
-      const ev = rel.evidence || {}
-      const num = (v) => (v === null || v === undefined || v === '' ? null : Number(v))
-      edges.push({
-        f: String(inEdge ? b : a),
-        t: String(inEdge ? a : b),
-        rel: rel.relation,
-        role: rel.role || '',
-        conf: num(ev.confidence),
-        sdoc: ev.source_doc_id !== undefined ? ev.source_doc_id : null,
-        schunk: ev.source_chunk_id !== undefined ? ev.source_chunk_id : null,
-        noev: rel.relation === 'EVIDENCED_BY' ? 1 : 0,
-        src: 'answer.graph_path',
-      })
-    })
-    if (!nodes.length) { if (p.start) nodeSet.add(String(p.start)); if (p.end) nodeSet.add(String(p.end)) }
-  }
-  if (!nodeSet.size) return null
-  const nodes = [...nodeSet].map((id) => ({ id, eid: id, type: typeOfId(id), name: id, code: '', sub: '', time: null }))
-  return buildDataset('replay', nodes, edges)
-}
+// 节点编号 → 类型／边构造／补名均在 lib/replay.js（2026-10-14 与答案页共用，避免两处漂移）。
 async function mountReplay() {
   if (!graphHost.value) return
   if (replayG && replayG.destroy) replayG.destroy()
   replayG = null
   graphHost.value.innerHTML = ''
-  const ds = replayDs(gp.value)
+  // 先补名（实体详情接口，3 并发）、再 buildDataset——画布标签天然是实体名
+  const ds = await buildReplayDataset(gp.value)
   if (!ds) return
-  // 2026-10-14（用户反馈「为什么是编号」）：回看载荷 answer.graph_path 里只存**节点编号**
-  //（拓扑与边原样），replayDs 此前把画布节点名兜底成编号，邻居全是 PER-xxxx／EVT-xxxx。
-  // 挂载前用**单实体详情接口**把编号批量翻译为实体名（person_name／event_name 等静态属性），
-  // 不改变「回看不重新查询图谱路径」的口径——路径拓扑仍 100% 来自当时载荷；
-  // 单个补名失败时该节点保持编号，不阻断画布。
-  await Promise.all(ds.nodes.map(async (n) => {
-    try {
-      const d = await getEntity(n.id)
-      const name = d && d.node && d.node.name
-      if (name) n.name = String(name)
-    } catch (e) { /* 补名失败保持编号 */ }
-  }))
   const el = document.createElement('div')
   graphHost.value.appendChild(el)
   const first = ds.nodes.slice().sort((a, b) => (b.deg - a.deg) || (a.id < b.id ? -1 : 1))[0]
-  // modes:false —— 回看固定用「会话载荷子图」；不传 provider —— 回看不重新查询图谱
+  // modes:false —— 回看固定用「会话载荷子图」；不传 provider —— 回看不重新查询图谱拓扑
   replayG = mountGraph(el, { ds, modes: false, select: first ? first.id : null, depth: 2, tag: '载荷 answer.graph_path · 回看还原' })
 }
 
@@ -372,7 +321,7 @@ onBeforeUnmount(() => {
                 </div>
                 <div ref="graphHost" class="dgraph"></div>
                 <p class="small" style="margin-top:10px">
-                  载荷里只存了节点编号（未存实体名），故节点按编号显示，<b>不另行查询图谱补名</b>；节点形状按编号前缀判类（PER-＝人物、EVT-＝事件、INST-＝机构、六位数字＝公司、其余数字＝文档），判不出的一律按文档处理、不猜。
+                  路径载荷里只存节点编号（拓扑与边原样）；画布挂载前按编号前缀判类（PER-＝人物、EVT-＝事件、INST-／ORG-＝机构、六位数字＝公司，判不出的按文档处理、不猜），并经<b>单实体详情接口</b>把编号补成实体名（3 并发防限流，单个失败保持编号）；<b>不重新查询图谱路径</b>，拓扑仍 100% 来自当时载荷。
                 </p>
               </div>
               <div v-if="!detail.graph_path_available" class="notice">

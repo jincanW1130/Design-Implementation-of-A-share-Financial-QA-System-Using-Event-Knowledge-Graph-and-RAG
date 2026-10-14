@@ -19,6 +19,11 @@ const props = defineProps({
   isGraphExtended: { type: [Number, String], default: 0 },
   /** 解析后的路径数组；也容忍后端偶发传回的 JSON 字符串（会就地解析）。 */
   graphPath: { type: [Array, String, Object], default: null },
+  /**
+   * 节点编号 → 实体名（2026-10-14）：落库载荷 nodes 只存编号，
+   * 父视图经单实体详情接口补名后传入；查不到的节点保持编号（如实降级）。
+   */
+  nameMap: { type: Object, default: () => ({}) },
 })
 
 const extended = computed(() => Number(props.isGraphExtended) === 1)
@@ -31,10 +36,15 @@ const paths = computed(() => {
   return Array.isArray(raw) ? raw : []
 })
 
-/** 单个节点的展示名：兼容「字符串 id」与「对象 {node_id, name, label}」两种形态。 */
+/** 单个节点的展示名：兼容「字符串 id」与「对象 {node_id, name, label}」两种形态；
+ *  字符串 id 优先查父视图补好的 nameMap（查不到保持编号）。 */
 function nodeLabel(node) {
   if (node === null || node === undefined) return '—'
-  if (typeof node === 'string' || typeof node === 'number') return String(node)
+  if (typeof node === 'string' || typeof node === 'number') {
+    const id = String(node)
+    const named = props.nameMap && props.nameMap[id]
+    return named ? `${named}（${id}）` : id
+  }
   const id = node.node_id ?? node.id ?? ''
   const name = node.name ?? ''
   return name ? `${name}（${id}）` : String(id || '—')
@@ -75,10 +85,10 @@ function chainOf(path) {
     }
     return segs
   }
-  // 落库形态：{start, end, relations[]}
-  segs.push({ kind: 'node', text: path.start ?? '—' })
+  // 落库形态：{start, end, relations[]}（同样走 nodeLabel，start/end 为编号时可补名）
+  segs.push({ kind: 'node', text: nodeLabel(path.start ?? '—') })
   for (const rel of rels) segs.push({ kind: 'rel', relation: rel.relation || '—', direction: 'out', attrs: relAttrs(rel) })
-  segs.push({ kind: 'node', text: path.end ?? '—' })
+  segs.push({ kind: 'node', text: nodeLabel(path.end ?? '—') })
   return segs
 }
 
