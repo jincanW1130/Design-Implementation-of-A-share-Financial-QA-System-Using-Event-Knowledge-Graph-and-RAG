@@ -1,0 +1,9 @@
+{
+  "name": "ashare-qa-uat-harness",
+  "private": true,
+  "type": "module",
+  "description": "用户验收测试装置（Playwright 驱动真实 Chromium）。与前端运行期依赖无关，单独安装：npm i --prefix 交付物/03-代码/前端/测试/uat",
+  "dependencies": {
+    "playwright": "^1.64.1"
+  }
+}

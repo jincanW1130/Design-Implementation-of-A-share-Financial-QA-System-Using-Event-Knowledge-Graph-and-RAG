@@ -1,0 +1,77 @@
+
+=== UAT 开始 ===  证据目录：C:\Users\15129\Desktop\毕业设计\交付物\03-代码\前端\测试\uat\证据\优化后终版
+目标：http://127.0.0.1:5173    任务：T1、T4、T5、T6、T2、T3、T7
+
+
+--- T1 新访客首屏自解释性（P4 首次来访者）---
+[1.4s] 通过 | T1 | 打开 / → HTTP 200
+[4.0s] 通过 | T1 | 首屏可见文本 2401 字
+[4.0s] 轻微 | T1 | 小字号（<12px）文本块占比 43%
+[4.0s] 记录 | T1 | 可聚焦元素 34 个；可点元素 33 个
+[4.0s] 轻微 | T1 | href="#" 占位链接 15 个：牛势问答A 股事件知识图谱 · RAG、了解更多、提问台、答案与证据、事件知识图谱、历史记录、上海证券交易所、深圳证券交易所
+[4.0s] 通过 | T1 | 首屏存在可点击的示例问题
+[4.0s] 记录 | T1 | 任务完成（耗时 4s 累计）
+[4.0s] 严重 | T1 | 浏览器侧错误 8 条（详见 T1-浏览器错误.json）：http 429 GET http://127.0.0.1:5173/api/config/meta ｜ console Failed to load resource: the server responded with a status of 429 (Too Many Requests) ｜ http 429 GET http://127.0.0.1:5173/api/market/quote
+
+--- T4 知识图谱浏览可用性（P3 合规/风控与 P2）---
+[4.8s] 通过 | T4 | 打开 /graph → HTTP 200
+[8.9s] 通过 | T4 | 实体检索命中
+[11.6s] 严重 | T4 | 空结果呈现：像报错
+[11.6s] 通过 | T4 | 搜不到实体时画布没有留下上一个锚点的数据
+[11.6s] 轻微 | T4 | 图谱页未渲染可点节点（.gnode 不存在）
+[11.6s] 记录 | T4 | 任务完成（耗时 12s 累计）
+[11.6s] 严重 | T4 | 浏览器侧错误 30 条（详见 T4-浏览器错误.json）：http 429 GET http://127.0.0.1:5173/api/config/meta ｜ console Failed to load resource: the server responded with a status of 429 (Too Many Requests) ｜ http 429 GET http://127.0.0.1:5173/api/graph/entities/600519/neighbors?with_evidence=1
+
+--- T5 键盘可达性与无障碍（P5 键盘/无障碍用户）---
+[12.6s] 通过 | T5 | 打开 /ask → HTTP 200
+[13.2s] 通过 | T5 | Tab 序列前 12 步：button:实时接入 → a:牛势问答A 股事件知识图谱 · RAG → button:提问台 → button:答案与证据 → button:知识图谱 → button:历史记录 → button:新建会话 → button:立即重试 → button:开始提问 → button:查看一条示例答案
+[13.2s] 通过 | T5 | 所有焦点元素都有可见焦点样式
+[13.2s] 通过 | T5 | 无 ARIA 断裂引用
+[13.2s] 通过 | T5 | lang=zh-CN，title=A股信息披露问答系统，h1=A 股财经信息智能问答
+现在，开箱即用
+[13.2s] 记录 | T5 | 任务完成（耗时 13s 累计）
+[13.2s] 严重 | T5 | 浏览器侧错误 8 条（详见 T5-浏览器错误.json）：http 429 GET http://127.0.0.1:5173/api/config/meta ｜ console Failed to load resource: the server responded with a status of 429 (Too Many Requests) ｜ http 429 GET http://127.0.0.1:5173/api/market/quote
+
+--- T6 小屏与窄窗适配（P4 手机端访客）---
+[14.1s] 通过 | T6 | 打开 /ask → HTTP 200
+[16.0s] 通过 | T6 | /ask @390px：横向溢出 0px
+[16.0s] 轻微 | T6 | /ask @390px：高<32px 的触控目标 15 个（如 实时接入(110×26)、了解更多(69×21)、了解更多(69×21)、提问台(39×15)）
+[16.7s] 通过 | T6 | 打开 /graph → HTTP 200
+[18.6s] 通过 | T6 | /graph @390px：横向溢出 0px
+[18.6s] 轻微 | T6 | /graph @390px：高<32px 的触控目标 13 个（如 实时接入(110×26)、提问台(39×15)、答案与证据(65×15)、事件知识图谱(78×15)）
+[19.3s] 通过 | T6 | 打开 /history → HTTP 200
+[21.2s] 通过 | T6 | /history @390px：横向溢出 0px
+[21.2s] 轻微 | T6 | /history @390px：高<32px 的触控目标 13 个（如 实时接入(110×26)、提问台(39×15)、答案与证据(65×15)、事件知识图谱(78×15)）
+[21.2s] 记录 | T6 | 任务完成（耗时 21s 累计）
+[21.2s] 严重 | T6 | 浏览器侧错误 30 条（详见 T6-浏览器错误.json）：http 429 GET http://127.0.0.1:5173/api/config/meta ｜ console Failed to load resource: the server responded with a status of 429 (Too Many Requests) ｜ http 429 GET http://127.0.0.1:5173/api/market/quote
+
+--- T2 提问主链路（真实大模型）（P1 投研分析师）---
+[21.3s] 记录 | T2 | 本节任务共用同一个浏览器会话（localStorage 会话标识一致，历史记录可互见）
+    （复用共享会话上下文）
+[22.1s] 通过 | T2 | 打开 /ask → HTTP 200
+[23.0s] 通过 | T2 | 找到提交按钮（#q ＋ button.btn--quiet）
+[504.8s] 通过 | T2 | POST /api/qa/ask 已发出（提交后 0.7s）
+[504.8s] 通过 | T2 | 等待期间用户可见的进度反馈：正在自动重试；此期间的空白不代表数据不存在，不是数据缺失。
+[504.8s] 严重 | T2 | 端到端总耗时 481.8s（过慢，用户会离开）
+[505.1s] 通过 | T2 | 答案页可见文本 2373 字
+[505.1s] 严重 | T2 | 未从 URL 取到 answer_id
+[505.1s] 记录 | T2 | 任务完成（耗时 505s 累计）
+[505.1s] 严重 | T2 | 浏览器侧错误 16 条（详见 T2-浏览器错误.json）：http 429 GET http://127.0.0.1:5173/api/config/meta ｜ console Failed to load resource: the server responded with a status of 429 (Too Many Requests) ｜ http 429 GET http://127.0.0.1:5173/api/market/quote
+
+--- T3 答案可追溯性与证据回原文（P2 研究生（写作防幻觉））---
+    （复用共享会话上下文）
+[506.6s] 通过 | T3 | 打开 /history → HTTP 200
+[507.4s] 严重 | T3 | 历史页可回看条目 0 个
+[507.4s] 记录 | T3 | 任务完成（耗时 507s 累计）
+[507.4s] 通过 | T3 | 浏览器控制台/网络无错误
+
+--- T7 答案页信息密度与阅读体验（P1 投研分析师（速读））---
+    （复用共享会话上下文）
+[508.9s] 通过 | T7 | 打开 /history → HTTP 200
+[509.5s] 严重 | T7 | 无可回看答案，跳过
+[509.5s] 记录 | T7 | 任务完成（耗时 510s 累计）
+[509.5s] 通过 | T7 | 浏览器控制台/网络无错误
+
+=== UAT 结束 ===  pass=26  minor=6  info=9  major=10
+证据：C:\Users\15129\Desktop\毕业设计\交付物\03-代码\前端\测试\uat\证据\优化后终版
+汇总：C:\Users\15129\Desktop\毕业设计\交付物\03-代码\前端\测试\uat\证据\优化后终版\UAT-结果.json

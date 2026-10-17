@@ -1,0 +1,13 @@
+# 用户验收测试装置（UAT）——目录级忽略规则
+#
+# 为什么在这里单独放一份：仓库根 .gitignore 覆盖的是 `node_modules/` 与 `dist/` 等常见目录，
+# 而本目录是**测试装置**而非前端运行期依赖：它自己 `npm install playwright` 只是为了驱动真实
+# 浏览器，`node_modules` 不可入库；证据目录里是**本次走查的原始截图与 JSON 快照**（数十 MB），
+# 属于过程证据、不入库（可随时用脚本重跑复现）。
+#
+# 可入库的只有装置本身：`package.json`、`package-lock.json`、`跑UAT.mjs`、`测请求预算.mjs`、
+# 以及各轮的结构化结论（`UAT-结果.json` 与 `请求预算.json` 这两类小文件，按需保留）。
+
+node_modules/
+证据/**/*.png
+证据/**/*.json
