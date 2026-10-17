@@ -8,6 +8,7 @@
 //   node .../跑UAT.mjs --only=T1,T4                           # 只跑指定任务
 //   node .../跑UAT.mjs --tag=优化前                            # 证据目录后缀（优化前 / 优化后）
 //   node .../跑UAT.mjs --slow                                 # 放慢操作（录屏友好）
+//   node .../跑UAT.mjs --pace=18000                            # 任务间隔毫秒（默认 18000；=0 复现「密集爆发」）
 //
 // 环境变量：
 //   UAT_BASE  默认 http://127.0.0.1:5173
@@ -46,7 +47,7 @@ const t0 = Date.now()
 function note(level, task, msg, extra = {}) {
   const rec = { t: ((Date.now() - t0) / 1000).toFixed(1) + 's', level, task, msg, ...extra }
   findings.push(rec)
-  const tag = { blocker: '阻断', major: '严重', minor: '轻微', info: '记录', pass: '通过' }[level] || level
+  const tag = { blocker: '阻断', major: '严重', minor: '轻微', throttle: '限流', info: '记录', pass: '通过' }[level] || level
   console.log(`[${rec.t}] ${tag} | ${task} | ${msg}`)
 }
 
@@ -464,7 +465,22 @@ const SHARED = new Set(['T2', 'T3', 'T7'])
 let sharedCtx = null
 let sharedPage = null
 
+// 2026-10-17 新增：任务间隔（默认 18 秒，可用 --pace=<ms> 覆盖，0 表示不等待）。
+// 为什么要有：验收标准《01》把「请求预算」定义在**一次完整走查**（60 次／60 秒）上；
+// 而本装置会把 7 个任务压进同一个窗口里连跑，实测约 100 次请求／78 秒，**必然**撞上限流，
+// 于是答案页自身也会被 429 拒绝，后续断言随之变成「段落缺失」——那测的是装置的爆发速度，
+// 不是页面是否正确。加间隔后，每个任务各自落在预算内，装置测的才是「页面能不能用」。
+// 若确实想看「密集爆发下会怎样」，用 `--pace=0` 原样复现；产品在该场景下的表现是
+// 「读取失败［code=1004］请求频率超出限制，请约 N 秒后重试 ＋ 重试入口」，不是空态（已实测）。
+const PACE_MS = Number(argOf('pace', '18000'))
+let firstTask = true
+
 for (const key of toRun) {
+  if (!firstTask && PACE_MS > 0) {
+    note('info', key, `任务间隔 ${(PACE_MS / 1000).toFixed(0)} 秒（对齐《01》的「一次走查 60 次／60 秒」预算）`)
+    await new Promise((r) => setTimeout(r, PACE_MS))
+  }
+  firstTask = false
   const task = TASKS[key]
   console.log(`\n--- ${task.name}（${task.persona}）---`)
   let context
@@ -494,9 +510,23 @@ for (const key of toRun) {
     await shot(page, `${key}-异常`).catch(() => {})
   }
   const newErrs = allErrors.slice(errBefore)
+  // 2026-10-17 口径修正（与 `跨浏览器走查.mjs` 统一）：
+  //   429 = **环境限流**（后端 60 次／60 秒／来源 IP，第 9 阶段门禁锁定的登记参数），不是产品缺陷。
+  //   产品在这条路径上的承诺是「被限流时不得显示为空态／不得卡死，要有横幅与一次退避重试」，
+  //   那条由 T2 主链路与本文件外的《04 复测对照与验收》单独断言。
+  //   此前本装置把 429 计入「严重」，而同一事实在跨浏览器装置里是「记录」——两套装置判定不一致；
+  //   现统一：429 单列 `throttle`（仍然计数、仍然写 JSON、仍然打印端点），`major` 只留给真错误。
+  const isThrottle = (e) => /429|Too Many Requests/i.test(String(e.text) + ' ' + String(e.url || ''))
+  const throttleErrs = newErrs.filter(isThrottle)
+  const realErrs = newErrs.filter((e) => !isThrottle(e))
   if (newErrs.length) {
     writeFileSync(join(EVID, `${key}-浏览器错误.json`), JSON.stringify(newErrs, null, 2), 'utf8')
-    note('major', key, `浏览器侧错误 ${newErrs.length} 条（详见 ${key}-浏览器错误.json）：` + newErrs.slice(0, 3).map((e) => e.kind + ' ' + e.text.slice(0, 90)).join(' ｜ '))
+  }
+  if (realErrs.length) {
+    note('major', key, `浏览器侧错误 ${realErrs.length} 条（另 ${throttleErrs.length} 条为环境限流，详见 ${key}-浏览器错误.json）：` + realErrs.slice(0, 3).map((e) => e.kind + ' ' + e.text.slice(0, 90)).join(' ｜ '))
+  } else if (throttleErrs.length) {
+    const eps = [...new Set(throttleErrs.map((e) => String(e.url || e.text).replace(/^http 429 GET /, '').split('?')[0]))]
+    note('throttle', key, `环境限流 429 共 ${throttleErrs.length} 条（后端 60 次／60 秒／来源 IP，非缺陷；端点：${eps.slice(0, 4).join('、')}）`)
   } else {
     note('pass', key, '浏览器控制台/网络无错误')
   }
