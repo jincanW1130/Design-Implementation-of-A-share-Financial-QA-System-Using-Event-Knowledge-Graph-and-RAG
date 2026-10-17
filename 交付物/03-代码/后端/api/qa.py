@@ -104,8 +104,10 @@ async def ask(payload: dict | None = Body(default=None)):
     if not isinstance(payload, dict):
         raise errors.ApiError(1003, detail="请求体必须是 JSON 对象，收到 %s"
                               % type(payload).__name__)
-    _reject_switches(payload)
 
+    # P3-2：必填字段缺失**优先**报 1003（与 docstring「缺 question／session_id → 1003」对齐），
+    # 再做输入合法性与未登记字段校验。此前 `_reject_switches` 排在最前，会让
+    # `{"foo":"bar"}`（既缺 question 又带未知字段）先被未知字段拦下返 1002，与 1003 口径不符。
     if "question" not in payload:
         raise errors.ApiError(1003, detail="必填字段 question 缺失"
                               "（缺必填按 1003；输入为空／超长才是 1001）")
@@ -114,6 +116,10 @@ async def ask(payload: dict | None = Body(default=None)):
     if not isinstance(session_id, str) or not session_id.strip():
         raise errors.ApiError(1003, detail="session_id 缺失或不是非空字符串（第一版由前端生成 UUID）")
     session_id = session_id.strip()
+
+    # 必填齐全后，再拒未登记／分组开关字段（硬约束 9 → 1002）。
+    _reject_switches(payload)
+
     if len(session_id) > SESSION_ID_MAX_CHARS:
         raise errors.ApiError(1002, detail="session_id 长度 %d 超过 %d（应为 UUID）"
                               % (len(session_id), SESSION_ID_MAX_CHARS))

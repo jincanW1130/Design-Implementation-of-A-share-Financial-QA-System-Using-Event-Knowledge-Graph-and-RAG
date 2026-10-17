@@ -17,6 +17,7 @@ import { useRoute, useRouter } from 'vue-router'
 import {
   getConfigMeta, getHealth,
   getMarketQuote, getMarketNews, getMarketReports,
+  onThrottleChange, throttleState,
 } from './api.js'
 import { mountField } from './lib/field.js'
 import { initReveal, kickReveal } from './lib/reveal.js'
@@ -50,6 +51,35 @@ const market = reactive({
 })
 provide('market', market)
 provide('reloadMarket', () => loadMarket())
+
+// --------------------------------------------------------------------------
+// 限流横幅（2026-10-17 新增）
+// --------------------------------------------------------------------------
+// 为什么必须把「限流」显式讲出来：本次实测一次真实浏览器走查共发出 84 次 `/api/*` 请求
+// （其中图谱页单独约占 38 次），而后端 `RateLimitMiddleware` 是「窗口 60 秒／上限 60 次」的
+// **按来源 IP 全局滑动窗口**，于是正常使用约 40 秒后整站开始 429。此时搜索结果会被调用点吞成
+// 「（无结果）」、历史页图谱写「未检索到」、实时区显示「未接入」——用户读到的是
+// 「没有这家公司／没有这段数据」，属于方向性误读。横幅只补一件事：把「这是后端限流，
+// 不是数据缺失」讲清楚，并给出一个可点的重试入口；既有渲染逻辑与文案一律不动。
+const throttle = reactive({ active: false, retryAfterSeconds: 0, message: '' })
+let offThrottle = null
+
+/** 把 api.js 的受限态只读快照落到本地响应式对象（字段名与快照一一对应，无派生、无推测）。 */
+function syncThrottle(s) {
+  throttle.active = !!s.active
+  throttle.retryAfterSeconds = s.retryAfterSeconds || 0
+  throttle.message = s.message || ''
+}
+
+/**
+ * 横幅「立即重试」：复用既有的两个刷新入口（元信息 + 实时区三块），不新造加载路径。
+ * `loadMarket()` 不触碰 `market.on`，所以 `data-market` 属性与「未接入」两态文案都不受影响。
+ */
+function retryThrottled() {
+  loadMeta()
+  loadMarket()
+  syncThrottle(throttleState())   // 顺手把读数刷到最新，点击后界面立刻有反馈
+}
 
 /** 取 ISO 时间的日期部分（`2026-09-25T23:59:59+08:00` → `2026-09-25`）。 */
 function datePart(iso) {
@@ -146,6 +176,77 @@ function stamp() {
   clock.value = `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`
 }
 
+// --------------------------------------------------------------------------
+// 反馈与建议（2026-10-17 新增）：把页脚「关于」列表里那条占位死链
+// `<a href="#" @click.prevent>反馈与建议</a>` 换成**真正可用**的本地入口。
+// 三条纪律：① 纯本地离线表单，提交内容只写 window.localStorage，不发任何网络请求；
+// ② 只改这一条链接的行为，页脚其余文案与结构一概不动；
+// ③ 无障碍做法与站内既有抽屉一致：打开时焦点移入弹层、Esc 可关、关闭后焦点还原到触发元素。
+// --------------------------------------------------------------------------
+const FEEDBACK_KEY = 'od.ashare.feedback'
+const fbOpen = ref(false)
+const fbText = ref('')
+const fbMsg = ref('')
+const fbDialog = ref(null)
+const fbTextarea = ref(null)
+let fbReturnFocus = null
+
+/** 读取已保存在本机的反馈条数；localStorage 不可用（隐私模式等）按 0 条如实计。 */
+function readLocalFeedback() {
+  try {
+    const arr = JSON.parse(window.localStorage.getItem(FEEDBACK_KEY) || '[]')
+    return Array.isArray(arr) ? arr : []
+  } catch (e) {
+    return []
+  }
+}
+
+/** 打开弹层：先按本机已存档的条数给出状态，再把焦点移入文本域（与抽屉的焦点做法一致）。 */
+async function openFeedback() {
+  fbReturnFocus = document.activeElement
+  const n = readLocalFeedback().length
+  fbMsg.value = n ? `已保存到本机（共 ${n} 条）` : '本机还没有保存过反馈（共 0 条）'
+  fbOpen.value = true
+  await nextTick()
+  if (fbDialog.value && typeof fbDialog.value.showModal === 'function') fbDialog.value.showModal()
+  else if (fbDialog.value) fbDialog.value.setAttribute('open', '')   // 旧内核兜底：仍可看见弹层
+  if (fbTextarea.value) fbTextarea.value.focus()
+}
+
+/**
+ * 关闭弹层：真正把 <dialog> 也关掉（Esc／点「关闭」／点遮罩三条路都走这里），
+ * 再把焦点还原到页脚那条「反馈与建议」。注意必须调原生 close()：只把 v-if／open 翻掉
+ * 并不会退出 top-layer，弹层会留在屏幕上。
+ */
+function closeFeedback() {
+  fbOpen.value = false
+  const d = fbDialog.value
+  if (d && d.open && typeof d.close === 'function') d.close()
+  if (fbReturnFocus && typeof fbReturnFocus.focus === 'function') fbReturnFocus.focus()
+}
+
+/**
+ * 保存到本地：只写 window.localStorage（键 `od.ashare.feedback`），不调用 api.js、
+ * 不发起任何请求。成功／失败都给出可见反馈；成功时汇报**本机累计条数 N**。
+ */
+function saveFeedback() {
+  const text = (fbText.value || '').trim()
+  if (!text) {
+    fbMsg.value = '内容为空，未保存（本表单只把文字写入本机，不写空条目）'
+    return
+  }
+  const list = readLocalFeedback()
+  list.push({ text, saved_at: new Date().toISOString() })
+  try {
+    window.localStorage.setItem(FEEDBACK_KEY, JSON.stringify(list))
+    fbText.value = ''
+    fbMsg.value = `已保存到本机（共 ${list.length} 条）`
+  } catch (e) {
+    // 存不进去（配额／隐私模式）也如实说，不假装保存成功
+    fbMsg.value = `保存失败（本机 localStorage 不可用）：${(e && e.message) || e}`
+  }
+}
+
 function toggleMarket() {
   market.on = !market.on
 }
@@ -219,6 +320,8 @@ watch(cur, (v) => {
 }, { immediate: true })
 
 onMounted(async () => {
+  // 先订阅再发请求：否则首屏那批请求若立刻被限流，横幅会错过第一个受限态
+  offThrottle = onThrottleChange(syncThrottle)
   document.body.setAttribute('data-market', market.on ? 'on' : 'off')
   field = mountField()
   initReveal()
@@ -232,6 +335,7 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   if (field) field.destroy && field.destroy()
   if (cursorCleanup) cursorCleanup()
+  if (offThrottle) { offThrottle(); offThrottle = null }
   if (clockT) { window.clearInterval(clockT); clockT = null }
 })
 </script>
@@ -282,7 +386,7 @@ onBeforeUnmount(() => {
         <span class="fresh__mk">
           <span class="mk-off">
             <span class="tag tag--muted">实时区未接入</span>
-            <span class="fresh__note">外部行情与新闻接口未接入；语料内近一周一块始终可用，见屏①「实时区 · 三块数据源」</span>
+            <span class="fresh__note">外部行情与新闻接口未接入；语料内近一周文档块始终可用</span>
           </span>
           <span class="mk-on">
             <span class="tag tag--red">已接入 · 按接口实返</span>
@@ -331,9 +435,27 @@ onBeforeUnmount(() => {
 
       <div class="topbar__right">
         <span class="topbar__cut">数据截至：{{ datePart(appMeta.dataCutoffTime) }}</span>
-        <button class="btn btn--primary btn--sm" @click="go('ask')">新建会话</button>
+        <!-- 2026-10-17 用户测试后改（产品口径决定 D：让文案追上实现）。
+             原来写「新建会话」，但它的实现自始至终只是 `go('ask')` —— 跳到提问页，
+             localStorage 里的 session_id（qa-console-session-id）**一个字都没变**。
+             本系统是单轮问答、没有多会话侧边栏，「新建会话」那套语义在这里并不存在；
+             如果一个按钮点了和「去提问」没有任何区别，就不该这样叫它。
+             故改名为「去提问」并加 title 说明它到底做什么（没有隐藏功能，只是把承诺说准）。 -->
+        <button class="btn btn--primary btn--sm" @click="go('ask')"
+                title="回到提问页；本系统是单轮问答，不维护多会话列表，历史记录按浏览器会话隔离（FR-06）">去提问</button>
       </div>
     </header>
+
+    <!-- 2026-10-17 新增：限流横幅。仅当受限态为真时渲染，且只补「正在等待的秒数 +
+         「是后端限流，不是数据缺失」 + 立即重试」这三件事；上方「数据新鲜度条 + 顶栏」与
+         下方各页的渲染逻辑、文案、data-market 属性一概不动。 -->
+    <div v-if="throttle.active" class="throttle wrap" role="status" aria-live="polite">
+      <span class="tag tag--red">后端限流</span>
+      <span class="throttle__text">
+        预计还需 <b class="mono">{{ throttle.retryAfterSeconds }}</b> 秒：{{ throttle.message }}
+      </span>
+      <button class="btn btn--quiet btn--sm throttle__btn" type="button" @click="retryThrottled">立即重试</button>
+    </div>
   </div>
 
   <main>
@@ -375,7 +497,9 @@ onBeforeUnmount(() => {
             <li><a href="#" @click.prevent>技术白皮书</a></li>
             <li><a href="#" @click.prevent>事件抽取口径</a></li>
             <li><a href="#" @click.prevent>更新日志</a></li>
-            <li><a href="#" @click.prevent>反馈与建议</a></li>
+            <!-- 2026-10-17：原先这里是占位死链（href="#" + @click.prevent，点了没反应）；
+                 现在只改这一条链接的行为，打开本地离线反馈弹层；页脚其余项与结构不动。 -->
+            <li><a href="#" @click.prevent="openFeedback">反馈与建议</a></li>
           </ul>
         </div>
       </div>
@@ -385,4 +509,61 @@ onBeforeUnmount(() => {
       </div>
     </div>
   </footer>
+
+  <!-- 2026-10-17 新增：页脚「反馈与建议」的本地离线弹层。
+       <dialog> ＋ showModal()：原生把焦点困在弹层内、原生挡住背景交互，并**原生支持 Esc 关闭**
+       （@cancel.prevent 复用同一套关闭逻辑，@close 负责把焦点还原到页脚那条链接）。
+       本弹层不向任何服务器发请求：内容只写 window.localStorage，键 `od.ashare.feedback`。 -->
+  <dialog ref="fbDialog" class="fb" aria-labelledby="fbTitle" @cancel.prevent="closeFeedback" @close="closeFeedback">
+    <div class="fb__head">
+      <h2 class="h2" id="fbTitle">反馈与建议</h2>
+      <button class="btn btn--ghost btn--sm" type="button" @click="closeFeedback">关闭</button>
+    </div>
+    <p class="small" style="margin-top:12px">
+      本表单为本地离线表单，提交内容只写入浏览器本地存储，不会上传到任何服务器。
+    </p>
+    <label class="label" for="fbText">反馈内容</label>
+    <textarea id="fbText" ref="fbTextarea" v-model="fbText" class="fb__text" rows="5"
+              placeholder="例如：某条证据的标题看不全、某个数字不好核对……（内容只留在本机）"></textarea>
+    <div class="fb__acts">
+      <button class="btn btn--primary btn--sm" type="button" @click="saveFeedback">保存到本地</button>
+      <span class="small"><span class="mono">od.ashare.feedback</span> · {{ fbMsg }}</span>
+    </div>
+    <p class="small" style="margin-top:10px">按 Esc 或点「关闭」退出；再次打开时，本机已存的反馈条数照实显示，内容不做改写、不合并。</p>
+  </dialog>
 </template>
+
+<style scoped>
+/* 2026-10-17 新增：限流横幅的窄带样式。配色一律取 theme.css 已有的令牌，
+   按钮／标签直接复用已有类名风格（.tag--red／.btn--quiet／.mono），
+   不在 App.vue 里另造一套设计语言，也不写大段新 CSS。 */
+.throttle{
+  display:flex;align-items:center;gap:12px;
+  /* 只加垂直内边距：水平内边距继续由 .wrap 提供，横幅与顶栏左右对齐 */
+  padding-top:7px;padding-bottom:7px;
+  border-top:1px solid var(--border-soft);
+  background:var(--accent-soft);
+  font-size:12px;line-height:1.5;color:var(--muted);
+}
+.throttle__text{flex:1;min-width:0}
+.throttle__text b{color:var(--accent-ink);font-weight:600}
+.throttle__btn{flex:none}
+
+/* 2026-10-17 新增：反馈弹层的样式。配色／圆角一律取 theme.css 已有的令牌，
+   标题与按钮直接复用已有类名（.h2／.btn--primary／.btn--ghost／.small／.label／.mono），
+   这里只补弹层自身的定位、遮罩与新引入的 textarea 两个必需样式。 */
+.fb{
+  position:fixed;inset:0;margin:auto;width:min(620px,92vw);height:max-content;max-height:88vh;
+  overflow:auto;padding:24px 26px 22px;background:var(--bg-deep);color:var(--fg);
+  border:1px solid var(--border);border-radius:var(--r-lg);
+  box-shadow:0 40px 80px -40px rgba(0,0,0,.9);
+}
+.fb::backdrop{background:rgba(8,8,9,.72);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.fb__head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.fb__text{
+  width:100%;margin-top:8px;min-height:120px;resize:vertical;padding:10px 12px;
+  background:var(--surface);color:var(--fg);border:1px solid var(--border);border-radius:7px;
+  font-family:var(--f-mono);font-size:12.5px;line-height:1.7;
+}
+.fb__acts{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px}
+</style>

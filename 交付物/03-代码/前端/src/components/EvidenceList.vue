@@ -29,6 +29,17 @@ const grouped = computed(() => {
   return out
 })
 
+// 卡片上「同文档」那一行原来写的说法是「已合并展示」——与事实不符：代码只是把同 doc_id
+// 的其他 rank 列出来，两张卡各占一块、都完整显示，**什么都没合并**
+//（实测 answer 1 里 doc 1001 占 2 条、doc 1088 占 3 条、doc 1375 占 2 条）。
+// 按约定本次也**不实现合并**（合并会改动证据与 rank 的对应关系，超出范围），故只改文案，与事实一致。
+// 同 doc_id 的其他片段编号（用于在卡片上标注「本文档还召回了证据N、证据M」，避免用户误以为是多篇不同文献）
+function siblingsOf(it) {
+  return props.items
+    .filter((o) => o.doc_id === it.doc_id && o.rank !== it.rank)
+    .map((o) => '证据' + o.rank)
+}
+
 function countOf(t) {
   const n = props.groups ? props.groups[t] : undefined
   return typeof n === 'number' ? n : grouped.value[t].length
@@ -91,6 +102,10 @@ async function toggleCtx(it) {
               <i v-else>记录未给出</i></div>
             <div class="ev__row"><span>文档号</span><i>doc_id={{ it.doc_id }}</i></div>
             <div class="ev__row"><span>块序号</span><i>chunk_id={{ it.chunk_id }}</i></div>
+            <div v-if="siblingsOf(it).length" class="ev__row ev__row--dup">
+              <!-- 缺陷 3：只列同 doc_id 的其他 rank，未做任何合并，故文案如实写「未合并」 -->
+              <span>同文档</span><i>本文档另召回了 {{ siblingsOf(it).join('、') }}（同文档多块，未合并）</i>
+            </div>
           </div>
 
           <div class="ev__src">

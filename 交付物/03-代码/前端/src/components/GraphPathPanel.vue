@@ -15,6 +15,24 @@ import { computed } from 'vue'
 
 const NO_GRAPH_MARKER = '本次回答未使用图谱扩展'
 
+// 关系类型中文化（与 lib/graph.js 的 RELNAME 一致）
+const REL_CN = {
+  HAS_EXECUTIVE: '任职', PARTICIPATES_IN: '参与', ISSUED_BY: '发布', BELONGS_TO: '属于',
+  RELATED_TO: '相关', CUSTOMER_OF: '客户关系', COMPETES_WITH: '同业竞争', EVIDENCED_BY: '证据指向',
+}
+function relCn(rel) { return REL_CN[rel] || rel }
+
+// 节点类型前缀 fallback（Neo4j 离线补名失败时，把纯编号变成可读形式）
+const ID_PREFIX = [
+  { re: /^PER-/, name: '人物 ' }, { re: /^EVT-/, name: '事件 ' },
+  { re: /^INST-|^ORG-/, name: '机构 ' }, { re: /^POL-/, name: '政策 ' },
+  { re: /^IND-/, name: '行业 ' }, { re: /^\d{6}$/, name: '' },
+]
+function idFallback(id) {
+  for (const p of ID_PREFIX) if (p.re.test(id)) return p.name + id
+  return '节点 ' + id
+}
+
 const props = defineProps({
   isGraphExtended: { type: [Number, String], default: 0 },
   /** 解析后的路径数组；也容忍后端偶发传回的 JSON 字符串（会就地解析）。 */
@@ -36,6 +54,17 @@ const paths = computed(() => {
   return Array.isArray(raw) ? raw : []
 })
 
+// 路径深度上限（2026-10-17）：只读载荷现算，与父视图「路径深度上限」卡片同一算法、同一来源。
+// 实测 answer 1 的 4 条路径 depth 均为 1（不是应用层配置的 1～2 跳上限），故这里显示的是
+// 「这条回答实际记录里的最大 depth」；载荷没给 depth 就返回 null，由模板写「depth 未给出」，不猜。
+const maxDepth = computed(() => {
+  const d = paths.value.reduce((a, p) => {
+    const hops = (p.depth != null) ? Number(p.depth) : ((p.relations || p.edges || []).length || 0)
+    return Math.max(a, hops)
+  }, 0)
+  return d > 0 ? d : null
+})
+
 /** 单个节点的展示名：兼容「字符串 id」与「对象 {node_id, name, label}」两种形态；
  *  字符串 id 优先查父视图补好的 nameMap（查不到保持编号）。 */
 function nodeLabel(node) {
@@ -43,11 +72,11 @@ function nodeLabel(node) {
   if (typeof node === 'string' || typeof node === 'number') {
     const id = String(node)
     const named = props.nameMap && props.nameMap[id]
-    return named ? `${named}（${id}）` : id
+    return named ? `${named}（${id}）` : idFallback(id)
   }
   const id = node.node_id ?? node.id ?? ''
   const name = node.name ?? ''
-  return name ? `${name}（${id}）` : String(id || '—')
+  return name ? `${name}（${id}）` : idFallback(String(id || '—'))
 }
 
 /** 关系边的四项证据属性（role／confidence／source_doc_id／source_chunk_id）。 */
@@ -109,14 +138,16 @@ function pathMeta(p, i) {
       <p v-if="!paths.length" class="small" style="margin-bottom:12px">
         标记为使用了图谱扩展（is_graph_extended=1），但 `graph_path` 未返回任何路径。
       </p>
-      <p v-else class="small" style="margin-bottom:12px">共 {{ paths.length }} 条图谱路径。</p>
+      <p v-else class="small" style="margin-bottom:12px">
+        共 {{ paths.length }} 条图谱路径，载荷内路径深度上限 {{ maxDepth != null ? maxDepth + ' 跳' : 'depth 未给出' }}（按落库载荷现算，逐条 depth 见下方属性行）。
+      </p>
 
       <div v-if="paths.length" class="paths">
         <div v-for="(p, i) in paths" :key="i" class="path">
           <template v-for="(seg, j) in chainOf(p)" :key="j">
             <span v-if="seg.kind === 'node'" class="path__node">{{ seg.text }}</span>
             <span v-else class="path__rel">
-              {{ seg.direction === 'in' ? '←' : '—' }}[{{ seg.relation }}]{{ seg.direction === 'in' ? '—' : '→' }}
+              {{ seg.direction === 'in' ? '←' : '—' }}[{{ relCn(seg.relation) }}]{{ seg.direction === 'in' ? '—' : '→' }}
               <em v-if="seg.attrs" style="color:var(--faint)">（{{ seg.attrs }}）</em>
             </span>
           </template>

@@ -39,6 +39,12 @@ let drawerReturnFocus = null
 const current = ref(null)
 const detail = ref(null)
 const gp = ref(null)
+/* 缺陷 2（诚实性）：表二那张图（answer.graph_path）的读取失败**不再静默吞掉**。
+   实测限流确实会发生（后端 60 次／60 秒／来源 IP，而打开一次抽屉约 7 个请求，
+   本次用户测试在历史页与答案页都实测到 429／code 1004）；api.js 的 request() 已把
+   「，请约 N 秒后重试」拼进 e.message，这里记下来并展示，不再让用户把「被限流」
+   误读成「这条记录本来就没有图谱路径」。 */
+const gpError = ref('')
 const cutoffLabel = computed(() => (appMeta && appMeta.dataCutoffTime) || '—')
 const drawerLoading = ref(false)
 const drawerError = ref('')
@@ -81,14 +87,61 @@ const qRows = computed(() => {
     ['answer_id', d.answer_id],
   ]
 })
-const refsCount = computed(() => {
-  const t = (detail.value && detail.value.answer_text) || ''
-  const m = t.match(/\[证据(\d+)\]/g)
-  return m ? m.length : 0
+// 与屏②同一套段头口径（逐字对齐 AnswerSections.vue 的 HEADERS，不导入、不改造那个组件）
+const SECTION_HEADERS = ['【回答】', '【证据来源】', '【知识图谱路径】', '【数据截至与判定区间】']
+
+/**
+ * 按固定段头把 answer_text 切成四段：返回每段的 present 与 body（已 trim），
+ * 切分口径与屏② AnswerSections.vue 的 sections 完全一致（纯文本定位，不改写内容）。
+ * @param {string} text 答案正文
+ */
+function splitSections(text) {
+  const t = typeof text === 'string' ? text : ''
+  const indexes = SECTION_HEADERS.map((h) => t.indexOf(h))
+  const out = []
+  for (let i = 0; i < SECTION_HEADERS.length; i++) {
+    const header = SECTION_HEADERS[i]
+    const start = indexes[i]
+    if (start < 0) { out.push({ header, body: '', present: false }); continue }
+    let end = t.length
+    for (let j = 0; j < SECTION_HEADERS.length; j++) {
+      const pos = indexes[j]
+      if (pos > start && pos < end) end = pos
+    }
+    out.push({ header, body: t.slice(start + header.length, end).trim(), present: true })
+  }
+  return out
+}
+
+/**
+ * 缺陷 1（诚实性，实测 43／43 条 refsCount 与证据条数不符）：
+ * 旧实现对**整段** answer_text 做 /\[证据(\d+)\]/g 全局匹配，把【证据来源】段里那
+ * 10 行清单本身也数了进去 —— 例如 answer 1 显示 12 处（【回答】段内实际只有 2 处）、
+ * answer 5 显示 23 处（【回答】段内 13 处），数字被虚增 20%～130%。
+ * 这里改为**只统计【回答】段**（与屏②同一套段头口径）；
+ * 段头缺失导致截取失败时返回 count=null，由模板如实退化为「段头缺失，无法按段统计」，
+ * 不静默按全文数。
+ */
+const refsStat = computed(() => {
+  const d = detail.value
+  if (!d) return { count: null, sectionPresent: false }
+  const sec = splitSections(d.answer_text || '')[0]
+  if (!sec.present) return { count: null, sectionPresent: false }
+  const m = sec.body.match(/\[证据(\d+)\]/g)
+  return { count: m ? m.length : 0, sectionPresent: true }
 })
 const pathCount = computed(() => {
   const p = gp.value && gp.value.paths
-  return Array.isArray(p) ? p.length : (detail.value && detail.value.graph_path_available ? '—' : 0)
+  return Array.isArray(p) ? p.length : '—'
+})
+
+/* 缺陷 2：表二那张图（graph_path）一格要**如实区分**三种状态 —— ①载荷已读到；
+   ②载荷读取失败（把 e.code 与 e.message 原样摆出，含 1004 限流时的重试秒数）；
+   ③记录里本来就没有路径载荷（graph_path_available = false）。绝不把 ② 说成 ③。 */
+const graphPathNote = computed(() => {
+  if (gp.value) return `原始 JSON 文本 · ${pathCount.value} 条路径 · 深度上限见载荷 —— 即下方「表四」的还原来源`
+  if (gpError.value) return `路径载荷读取失败 —— 路径条数如实记「—」（未能取到「原始 JSON 文本」，故不写条数、不猜条数）：${gpError.value}`
+  return '本次记录未存路径载荷（graph_path_available = false），表四只给固定文案，不补画节点或边'
 })
 
 async function openRow(row) {
@@ -98,13 +151,22 @@ async function openRow(row) {
   document.body.setAttribute('data-drawer', 'on')
   detail.value = null
   gp.value = null
+  gpError.value = ''
   drawerError.value = ''
   drawerLoading.value = true
   try {
     const d = await getHistoryDetail(row.question_id)
     detail.value = d
     if (d && d.graph_path_available && d.answer_id) {
-      try { gp.value = await getGraphPath(d.answer_id) } catch (e) { gp.value = null }
+      // 缺陷 2：这里过去是 `catch (e) { gp.value = null }` —— 错误被整个丢掉，
+      // 表四随之留白、表二那格还写着「原始 JSON 文本」，用户会把限流（429／1004）
+      // 误读成「这条记录本来就没有图谱路径」。现在记下 code 与 message 并在页面上展示。
+      try {
+        gp.value = await getGraphPath(d.answer_id)
+      } catch (e) {
+        gp.value = null
+        gpError.value = `${e && e.code ? '[' + e.code + '] ' : ''}${(e && e.message) || e}`
+      }
     }
   } catch (e) {
     drawerError.value = `${e && e.code ? '[' + e.code + '] ' : ''}${(e && e.message) || e}`
@@ -195,7 +257,7 @@ onBeforeUnmount(() => {
       <div class="hstats reveal">
         <div class="hstat"><span class="label">本会话记录</span><b>{{ total }}</b></div>
         <div class="hstat"><span class="label">当前页</span><b>{{ items.length }}</b></div>
-        <div class="hstat"><span class="label">图谱深度上限</span><b>标记载荷</b></div>
+        <div class="hstat"><span class="label">图谱深度上限</span><b>2 跳</b></div>
         <div class="hstat"><span class="label">数据截止</span><b style="font-size:13px">{{ cutoffLabel }}</b></div>
       </div>
 
@@ -207,6 +269,12 @@ onBeforeUnmount(() => {
       <div v-else-if="!items.length" class="graphOff">
         <b>未检索到匹配记录</b>
         <p class="small" style="margin-top:8px">本会话暂无历史记录（这是正常空结果，不是错误）。去「提问台」提一个问题即可留痕。</p>
+        <!-- 缺陷 4（可操作性）：会话隔离（FR-06）是设计行为，但新访客／答辩评委第一眼看到
+             「没有历史」会判成功能缺失。这里只在空态补一句可操作说明，把「为什么空」和
+             「哪里有数据」讲清楚；**不**去读别的会话的数据，隔离照旧。 -->
+        <p class="small" style="margin-top:8px">
+          本页按浏览器会话隔离（FR-06）：这里的记录只属于当前会话。库中既有的历史记录属于会话 <span class="mono">S-001</span>，需要查看时可在地址栏把本页改为 <span class="mono">/history?session_id=S-001</span>。
+        </p>
       </div>
 
       <div v-else class="hrows">
@@ -280,9 +348,12 @@ onBeforeUnmount(() => {
                   <thead><tr><th>字段</th><th>值</th></tr></thead>
                   <tbody>
                     <tr><td class="k mono">answer_text</td><td class="ans" style="white-space:pre-wrap">{{ detail.answer_text }}</td></tr>
-                    <tr><td class="k mono">refs_in_text</td><td>[证据n] 共 {{ refsCount }} 处，与证据清单的 rank 一一对应</td></tr>
+                     <!-- 缺陷 1：只数【回答】段内的引用，并把「不含证据清单行」写进文案 -->
+                     <tr><td class="k mono">refs_in_text</td>
+                       <td v-if="refsStat.count !== null">【回答】段内 <span class="mono">[证据n]</span> 共 {{ refsStat.count }} 处（不含【证据来源】清单行）</td>
+                       <td v-else>—（段头缺失，无法按段统计）</td></tr>
                     <tr><td class="k mono">graph_path</td>
-                      <td class="mono">{{ detail.graph_path_available ? ('原始 JSON 文本 · ' + pathCount + ' 条路径 · 深度上限见载荷 —— 即下方「表四」的还原来源') : '本次记录未存路径载荷（graph_path_available = false），表四只给固定文案，不补画节点或边' }}</td></tr>
+                       <td class="mono">{{ graphPathNote }}</td></tr>
                     <tr><td class="k mono">output_mode</td><td>单轮一次生成（非流式，没有逐字输出过程）</td></tr>
                   </tbody>
                 </table>
@@ -314,17 +385,35 @@ onBeforeUnmount(() => {
               </div>
 
               <!-- 表四 · 图谱路径可视化 -->
-              <div class="dsub" :hidden="!detail.graph_path_available">
+              <!-- 缺陷 2／5：表四的显示条件扩到「记录里有载荷」「读过载荷但失败了」两种；
+                   失败时**显式写出「路径载荷读取失败：…」**（含 e.code 与含重试秒数的 e.message），
+                   不许留白；成功时把 getGraphPath 的载荷原样放进默认折叠的 <details><pre>。 -->
+              <div class="dsub" :hidden="!detail.graph_path_available && !gpError">
                 <div class="dsub__h">
                   <span class="label">表四 · 图谱路径可视化</span>
                   <span class="label">与屏③同一套渲染器 · 同一张图例 · 同一句准确性声明</span>
                 </div>
-                <div ref="graphHost" class="dgraph"></div>
-                <p class="small" style="margin-top:10px">
+                <!-- 读取失败：这一块不留白，把失败原因与重试提示写在原地 -->
+                <div v-if="gpError" class="graphOff" style="border-color:var(--accent-line)">
+                  <b>路径载荷读取失败：{{ gpError }}</b>
+                  <p class="small" style="margin-top:8px">
+                    这条记录<b>当时是否存了路径载荷</b>见上表 <span class="mono">graph_path_available</span>；
+                    此处的空不是「本来没有路径」，而是<b>这一次没能把载荷读上来</b>。
+                    按提示秒数稍后重开这一条即可重试（重开抽屉会重新请求）。
+                  </p>
+                </div>
+                <div v-if="detail.graph_path_available && gp" ref="graphHost" class="dgraph"></div>
+                <p v-if="detail.graph_path_available && gp" class="small" style="margin-top:10px">
                   路径载荷里只存节点编号（拓扑与边原样）；画布挂载前按编号前缀判类（PER-＝人物、EVT-＝事件、INST-／ORG-＝机构、六位数字＝公司，判不出的按文档处理、不猜），并经<b>单实体详情接口</b>把编号补成实体名（3 并发防限流，单个失败保持编号）；<b>不重新查询图谱路径</b>，拓扑仍 100% 来自当时载荷。
                 </p>
+                <!-- 缺陷 5：「原始 JSON 文本」此前一个 JSON 字符都不给；这里把已有载荷原样摊开
+                     （默认折叠、不美化、不重排、不截断），拿不到就不渲染，绝不显示空 <pre>。 -->
+                <details v-if="gp" class="dsub__raw">
+                  <summary class="small">原始 JSON 文本（<span class="mono">GET /api/evidence/{answer_id}/graph-path</span> 的返回载荷，原样、未改写）</summary>
+                  <pre class="dsub__pre mono">{{ JSON.stringify(gp, null, 0) }}</pre>
+                </details>
               </div>
-              <div v-if="!detail.graph_path_available" class="notice">
+              <div v-if="!detail.graph_path_available && !gpError" class="notice">
                 <svg aria-hidden="true"><use href="#i-alert"></use></svg>
                 <span>本次记录未存 <span class="mono">answer.graph_path</span> 载荷，表四只给固定文案，不补画任何节点或边。</span>
               </div>
@@ -342,4 +431,11 @@ onBeforeUnmount(() => {
 .tblWrap { margin-top: 16px; }
 .dsub { margin-top: 16px; }
 .dgraph { min-height: 420px; }
+/* 缺陷 5：「原始 JSON 文本」的原样文本块。只显示用到的 4 个变量，不新增设计令牌 */
+.dsub__raw { margin-top: 14px; }
+.dsub__pre {
+  margin: 8px 0 0; white-space: pre-wrap; word-break: break-word; max-height: 420px; overflow: auto;
+  font-size: 11.5px; line-height: 1.7; color: var(--muted); background: var(--surface);
+  border: 1px solid var(--border-soft); border-radius: 7px; padding: 10px 12px;
+}
 </style>

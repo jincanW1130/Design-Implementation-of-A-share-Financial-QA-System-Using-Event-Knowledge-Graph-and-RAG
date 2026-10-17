@@ -120,10 +120,19 @@ export async function buildReplayDataset(payload) {
   }
   if (!nodeSet.size) return null
   const nameMap = await enrichNames([...nodeSet])
-  const nodes = [...nodeSet].map((id) => ({
-    id, eid: id, type: typeOfId(id),
-    name: nameMap.get(id) || id,          // 补名成功＝实体名；失败保持编号（如实降级，不编造）
-    code: '', sub: '', time: null,
-  }))
+  // 补名失败时按节点类型给一个可读前缀（不编造名称，只把纯编号变成"事件 EVT-0236"这种可读形式）
+  const FALLBACK_PREFIX = {
+    company: '公司 ', event: '事件 ', policy: '政策 ', org: '机构 ',
+    person: '人物 ', industry: '行业 ', doc: '文档 ',
+  }
+  const nodes = [...nodeSet].map((id) => {
+    const t = typeOfId(id)
+    const realName = nameMap.get(id)
+    return {
+      id, eid: id, type: t,
+      name: realName || ((FALLBACK_PREFIX[t] || '节点 ') + id),
+      code: '', sub: '', time: null,
+    }
+  })
   return buildDataset('replay', nodes, edges)
 }

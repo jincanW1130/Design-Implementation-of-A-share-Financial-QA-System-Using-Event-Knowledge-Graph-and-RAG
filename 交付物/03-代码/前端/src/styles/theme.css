@@ -231,8 +231,16 @@ body[data-market="on"]  .mk-off{display:none!important}
         padding:20px 20px 16px;transition:border-color .3s var(--ease),box-shadow .3s var(--ease)}
 .askbox:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .askbox__top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}
-.askbox textarea{width:100%;min-height:82px;background:transparent;border:0;outline:none;resize:none;
+/* 2026-10-17 用户测试（T5 键盘可达性）修复：原来是 `outline:none`，焦点可见性**只**由
+   `.askbox:focus-within` 换个边框色承担（0,2,0 的类特异度）；实测在真实浏览器里量到
+   聚焦后 `.askbox` 的 border-color 仍是失焦值 rgba(255,255,255,.09)、box-shadow 仍是 none，
+   而那行 `outline:none` 反而稳定生效——也就是说这条输入框**没有任何可靠的焦点指示**。
+   这里把 textarea 自己的 `:focus-visible` 显式画出来（1 类 ＋ 1 伪类 ＝ 0,2,0，且晚于上方声明），
+   不再依赖父容器的边框变化；`.askbox:focus-within` 那行保留不动，作为第二重提示。 */
+.askbox textarea{width:100%;min-height:82px;background:transparent;border:0;resize:none;
                  font-size:19px;line-height:1.5;letter-spacing:-.01em;color:var(--fg)}
+.askbox textarea:focus{outline:none}
+.askbox textarea:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:4px}
 .askbox textarea::placeholder{color:rgba(154,160,171,.85)}
 .askbox__foot{display:flex;align-items:center;justify-content:space-between;gap:16px;
               margin-top:14px;padding-top:14px;border-top:1px solid var(--border-soft)}
@@ -355,7 +363,12 @@ body[data-market="on"]  .mk-off{display:none!important}
 .qhead{display:flex;align-items:flex-start;justify-content:space-between;gap:28px;flex-wrap:wrap;
        padding:clamp(28px,3.4vw,44px) 0 24px;border-bottom:1px solid var(--border)}
 .qhead__l{min-width:0;max-width:800px}
-.qhead__q{margin-top:14px}
+.qhead__q{margin-top:14px;word-break:break-word;overflow-wrap:anywhere}
+/* 2026-10-16 第二轮回归：长问题标题按字数降档，避免 500 字上限内的问题撑爆首屏 */
+.qhead__q--md{font-size:clamp(24px,2.6vw,34px);line-height:1.12}
+.qhead__q--lg{font-size:clamp(20px,1.9vw,26px);line-height:1.22;letter-spacing:-.02em}
+.qhead__q--xl{font-size:clamp(16px,1.4vw,19px);line-height:1.4;letter-spacing:-.01em;
+              max-height:9.8em;overflow-y:auto;padding-right:10px;font-weight:600}
 .qhead__r{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .aSec{padding:36px 0;border-bottom:1px solid var(--border-soft)}
 .aSec:last-child{border-bottom:0}
@@ -536,7 +549,8 @@ body[data-market="on"]  .mk-off{display:none!important}
 .hrow:hover{background:rgba(255,255,255,.022)}
 .hrow__no{font-family:var(--f-mono);font-size:12px;color:var(--accent-ink);letter-spacing:.08em;align-self:start;padding-top:9px}
 .hrow__q{font-family:var(--f-display);font-weight:700;letter-spacing:-.032em;line-height:1.06;
-         font-size:clamp(21px,2.1vw,30px);color:var(--fg);transition:color .3s var(--ease);text-wrap:balance}
+         font-size:clamp(21px,2.1vw,30px);color:var(--fg);transition:color .3s var(--ease);text-wrap:balance;
+         word-break:break-word;overflow-wrap:anywhere}
 .hrow:hover .hrow__q{color:#fff}
 .hrow__sub{display:flex;align-items:center;gap:14px;margin-top:11px;flex-wrap:wrap}
 .hrow__meta{display:flex;flex-direction:column;align-items:flex-end;gap:8px;text-align:right}

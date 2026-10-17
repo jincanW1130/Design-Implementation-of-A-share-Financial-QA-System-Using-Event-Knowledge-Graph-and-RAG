@@ -411,9 +411,11 @@ export function mountGraph(host, opt) {
     const dx = b.x - a.x, dy = b.y - a.y, d = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / d, uy = dy / d
     const x1 = a.x + ux * (a.r + 3), y1 = a.y + uy * (a.r + 3)
     const x2 = b.x - ux * (b.r + 10), y2 = b.y - uy * (b.r + 10)
-    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2
+    // 标签放在 65% 位置（靠近目标节点），避免星型辐射时多条边的中点标签相互重叠
+    const T = 0.65
+    const mx = x1 + (x2 - x1) * T, my = y1 + (y2 - y1) * T
     const off = (e.clat || 0) * (e.f === e.canonFrom ? 1 : -1)
-    const cx = mx - uy * off * 2, cy = my + ux * off * 2
+    const cx = (x1 + x2) / 2 - uy * off * 2, cy = (y1 + y2) / 2 + ux * off * 2
     const lx = mx - uy * off, ly = my + ux * off
     return { x1, y1, x2, y2, lx, ly, d: 'M' + x1.toFixed(1) + ',' + y1.toFixed(1) + ' Q' + cx.toFixed(1) + ',' + cy.toFixed(1) + ' ' + x2.toFixed(1) + ',' + y2.toFixed(1) }
   }

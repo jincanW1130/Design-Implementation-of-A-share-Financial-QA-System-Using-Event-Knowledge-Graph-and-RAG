@@ -16,9 +16,13 @@
 //
 // 时间轴：只在**记录里真实出现过**的月份上取值——文档节点取边的 evidence.publish_time、
 // 事件节点取 GET /api/graph/events/{id} 的 event_time（为空则不落到轴上，与原型一致）。
+//
+// 2026-10-17：修本页搜索区三处实测缺陷（搜不到时旧锚点仍留在画布／属性面板上、点选候选后
+// 「我搜的是什么」没有任何留痕、检索失败被当成「（无结果）」），另把候选区计数改成如实回报
+// 接口返回的 total 与已显示数、候选 chip 补上 stock_code／node_id 作可区分标识。改动只在本文件内。
 
-import { inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import {
   getChunk, getEntity, getEntityEvidence, getEventDetail, getNeighbors, getPaths, listEntities,
 } from '../api.js'
@@ -26,6 +30,7 @@ import { buildDataset, mountGraph, typeOfLabel, TKEYS, TYPE } from '../lib/graph
 
 const appMeta = inject('appMeta', null)
 const route = useRoute()
+const router = useRouter()
 
 // 2026-10-14：锚点支持由答案页带入（?entity=600887）；无参数时保持默认 600519。
 const DEFAULT_ANCHOR = '600519'
@@ -34,14 +39,58 @@ const loading = ref(false)
 const error = ref('')
 const note = ref('')
 
+// 2026-10-16 P3-4：错误提示不再暴露服务器内部路径，并区分「图数据库（Neo4j）离线」与「后端服务不可达」两种情形。
+const graphOffline = computed(() => /\b3001\b/.test(error.value) || /图谱服务不可用|Neo4j|图数据库|7687/i.test(error.value))
+const graphHint = computed(() => (graphOffline.value
+  ? '图谱服务（Neo4j 图数据库）当前不可用，通常是图数据库未启动或连接超时。问答与证据功能不受影响，仍可在「答案与证据」页查看已落库的图谱路径；图数据库恢复后刷新本页即可。'
+  : '暂时无法连接后端服务，请确认服务已正常运行后重试，或更换一个锚点实体。'))
+
 const graphWrap = ref(null)
 const tlSvg = ref(null)
 const tlRange = ref('')
 const months = ref([])
 
+// —— 搜索区状态（2026-10-17 修屏③三处实测缺陷）——
+// 实测事实：① 锚点是 600519 时搜一个不存在的关键词，接口返回 {total:0,items:[]}（HTTP 200），
+// 但旧代码只写 results，画布与属性面板仍完整显示 600519 的 11 节点 11 边，用户会以为
+// 「搜到的就是这个」并据此去引用错标的（600519）的数据；② useAnchor 里 kw.value='' 让「我搜的是什么」
+// 页面内再无留痕（「当前锚点」显示的是 node_id，不是用户输入的词）；③ doSearch 的 catch 把
+// results 清空，于是「后端限流 429／网络失败」被显示成「（无结果）」，等于把「被限流」误报成
+// 「库里没有这家公司」。
+const SEARCH_PAGE = 8         // 每次请求的候选条数；后端真正认的参数名是 page_size（实测 limit 会被忽略）
+const SEARCH_PAGE_MAX = 200   // 后端 api\graph.py 的 PAGE_SIZE_MAX，超出会返回 1002
 const kw = ref('')
 const results = ref([])
 const searching = ref(false)
+const pageSize = ref(SEARCH_PAGE)
+const searchTotal = ref(null)      // 接口实返的 total：候选计数一律用它，不拿 items.length 冒充总数
+const lastSearchQ = ref(String(route.query.q || '').trim())  // 缺陷2：搜索词留痕（URL 的 q ＋ 常显文案）
+const searchErr = ref('')          // 缺陷3：检索失败的实返 code＋message，与「真的搜不到」分开呈现
+const emptyQ = ref('')             // 缺陷1：把画布清空的那次检索词，必须在空态文案里回显给用户
+const emptyTotal = ref(null)
+const cleared = ref(false)         // 缺陷1：画布已被清空（空结果态）；翻回 false 只在 renderGraph 真重建画布时
+
+// 候选区计数：出现的每个数字都能指回某个接口字段——总数用 d.total，已显示数用本次真实拿到的 items
+const resultSummary = computed(() => {
+  const n = results.value.length
+  if (!n) return ''
+  const t = searchTotal.value
+  if (t === null || t === undefined) return '本次返回 ' + n + ' 个候选（接口未返回 total，不推算总数）'
+  return t > n ? '共 ' + t + ' 个匹配，已显示前 ' + n + ' 个' : '共 ' + t + ' 个匹配，已全部显示'
+})
+const canShowMore = computed(() => results.value.length > 0
+  && typeof searchTotal.value === 'number' && searchTotal.value > results.value.length
+  && pageSize.value + SEARCH_PAGE <= SEARCH_PAGE_MAX)
+// 缺陷1 的空态文案：把用户输入的词原样回显，并给出可操作的下一步
+const emptyMessage = computed(() => '未检索到与「' + emptyQ.value + '」匹配的实体（接口实返 total = '
+  + (emptyTotal.value === null ? '—（空）' : emptyTotal.value) + '、items = 0，是 HTTP 200 的空结果）：画布已清空，'
+  + '上一次锚点的节点、边、路径列表与属性面板的选择态一并清除，不会再把旧图当成「这次搜到的结果」。'
+  + '可改用 6 位股票代码（如 600519）或更短的公司简称重试。')
+// 缺陷3 的提示：检索失败不动画布，这里如实说明画布上还留着什么
+const searchErrHint = computed(() => (anchor.value
+  ? '画布保持上一次成功加载的锚点「' + anchor.value + '」不变（检索失败不清空画布）。'
+  : '画布保持上一步的空状态（当前没有已加载的锚点）。')
+  + '错误码与提示都原样来自接口返回，未改写；稍后重试即可，无需刷新页面。')
 
 let G = null
 const DOC_TIME = {}                 // 文档节点 id → 'YYYY-MM-DD'（取自边的 evidence.publish_time）
@@ -172,6 +221,10 @@ function renderGraph(anchorId, dsA, dsB) {
   graphWrap.value.innerHTML = ''
   const el = document.createElement('div')
   graphWrap.value.appendChild(el)
+  // 缺陷1 配套：画布由真实数据集重建成功，才解除「空结果态」（清空与恢复只在画布真正重建时翻转）
+  cleared.value = false
+  emptyQ.value = ''
+  emptyTotal.value = null
 
   const modes = (dsB && dsB.nodes.length) ? [
     { key: 'neighbors', label: '1 跳邻居', ds: dsA, select: anchorId,
@@ -285,25 +338,96 @@ function tlUp(e) {
   }
 }
 
-async function doSearch() {
-  const k = kw.value.trim()
+// ---------------------------------------------------------------------------
+// 搜索区：检索候选 → 点选锚点（2026-10-17 修缺陷 1／2／3／4，逐处注释见函数内）
+// ---------------------------------------------------------------------------
+/**
+ * 检索实体候选。
+ * @param {string} [term] 检索词；省略时取输入框内容（「显示更多」用上一次的词扩容重查）
+ * @param {number} [size] 本次请求的 page_size（后端参数名，1～PAGE_SIZE_MAX）
+ */
+async function doSearch(term, size) {
+  const k = String(term === undefined || term === null ? kw.value : term).trim()
   if (!k) return
+  const ps = Math.min(Math.max(Number(size) || SEARCH_PAGE, 1), SEARCH_PAGE_MAX)
   searching.value = true
+  searchErr.value = ''
   results.value = []
+  searchTotal.value = null
+  // 缺陷2：先把用户搜的词记下来——检索失败时也要能看出「我搜的是什么」
+  lastSearchQ.value = k
   try {
-    const d = await listEntities({ keyword: k, limit: 8 })
-    results.value = (d && d.items) || []
+    // 缺陷4：后端实测只认 page／page_size（原来传的 limit: 8 会被直接忽略），所以这里按 page_size 取候选，
+    // 候选区再按实返 total 说明「总共多少个、这次显示了几个」，不再让用户以为「只有 8 个相关实体」。
+    const d = await listEntities({ keyword: k, page: 1, page_size: ps })
+    const items = (d && d.items) || []
+    results.value = items
+    searchTotal.value = (d && typeof d.total === 'number') ? d.total : null
+    pageSize.value = ps
+    if (!items.length) clearCanvasForEmpty(k, searchTotal.value)
   } catch (e) {
-    results.value = []
+    // 缺陷3：后端限流（60 次/60 秒/来源 IP，HTTP 429 ＋ code 1004）与网络层失败都落到这里。
+    // 旧代码在这里把 results 清空 → 页面显示「（无结果）」，等于把「被限流」误报成「库里没有这家公司」。
+    // 现在：① 画布保持原图不动（检索失败 ≠ 没有这家公司）；② 把接口实返的 code 与 message 原样贴出——
+    // api.js 已把「，请约 N 秒后重试」拼进 message，这里不丢弃、不改写。
+    const code = (e && e.code !== undefined && e.code !== null) ? e.code : 0
+    searchErr.value = '错误码 ' + code + ' · ' + ((e && e.message) || String(e))
   } finally {
     searching.value = false
   }
 }
-function useAnchor(id) {
-  results.value = []
-  kw.value = ''
+
+/**
+ * 缺陷1：检索到 0 条时清掉旧锚点的全部呈现。
+ * 实测：锚点 600519（贵州茅台）时搜「zzzz不存在的实体xyz」，旧代码下画布仍是该锚点的 11 个节点
+ * 与 11 条边、属性面板仍写着「已选中 · 贵州茅台 600519」，属事实性误导。这里走与 renderGraph()
+ * 相同的销毁路径（G.destroy() ＋ 清空 graphWrap），但**不重建**，让画布真的空下来。
+ */
+function clearCanvasForEmpty(word, total) {
+  cleared.value = true
+  emptyQ.value = word
+  emptyTotal.value = (typeof total === 'number') ? total : null
+  anchor.value = ''                       // 「当前锚点」不能再指向上一家
+  if (G && G.destroy) G.destroy()         // G 在 document 上挂了 Esc 监听，一并卸掉
+  G = null
+  if (graphWrap.value) graphWrap.value.innerHTML = ''   // 节点／边／属性面板／证据区都在这个容器里，一次清干净
+  months.value = []                       // 时间轴的月份与落点都由上一个锚点算出来，必须一起清
+  TL.i0 = 0
+  TL.i1 = 0
+  tlRange.value = '画布已清空（本次检索 total=' + (emptyTotal.value === null ? '—（空）' : emptyTotal.value) + '），时间轴无可用数据集'
+  paintTimeline()                         // G 已为 null → 直接清空时间轴 svg，不留旧刻度与落点
   note.value = ''
+  // URL 也要如实：画布上已经没有这个锚点了，刷新／分享都不该把它带回来；同时把检索词写进 q 留痕。
+  // 这次 replace 会让 route.query.entity 变成 undefined，而下方 watcher 只对「非空且与 anchor 不同」的
+  // entity 反应，所以不会触发重复加载。
+  const next = { ...route.query, q: word }
+  delete next.entity
+  router.replace({ query: next }).catch(() => {})
+}
+
+/** 缺陷4 配套：候选区扩容重查（用**上一次检索的词**，避免用户改了输入框却换了一批候选）。 */
+function showMore() {
+  if (searching.value) return
+  const next = pageSize.value + SEARCH_PAGE
+  if (next > SEARCH_PAGE_MAX) return
+  doSearch(lastSearchQ.value, next)
+}
+
+function useAnchor(id, term) {
+  results.value = []
+  searchErr.value = ''
+  note.value = ''
+  // 缺陷2：旧代码在这里写 kw.value = ''，点选候选后输入框被清空，而「当前锚点」显示的是 node_id（如 600519），
+  // 页面再无任何「我搜的是什么」的留痕。现在：① 输入框保留原词（不写 kw.value = ''）；② 搜索区常显
+  // 「上次搜索」；③ 把 entity ＋ q 写进 URL query，刷新／分享都能回看是搜哪个词得到的这张图。
+  // 注意顺序：先把 anchor 落好再改 URL —— watch(route.query.entity) 里 «id !== anchor.value» 不成立，
+  // 所以这次 replace 不会触发第二次 load（浏览器实测：点选候选后 neighbors 只请求 1 次）。
+  if (term !== undefined && term !== null && String(term).trim()) lastSearchQ.value = String(term).trim()
   anchor.value = id
+  const next = { ...route.query, entity: id }
+  if (lastSearchQ.value) next.q = lastSearchQ.value
+  else delete next.q
+  router.replace({ query: next }).catch(() => {})
   load(id)
 }
 
@@ -346,27 +470,50 @@ onBeforeUnmount(() => {
       <div class="gbar reveal gsearch">
         <span class="label">锚点实体</span>
         <input v-model="kw" class="gsearch__in" type="text" placeholder="公司名／股票代码／实体编号，如 贵州茅台、600519、EVT-0288"
-               aria-label="搜索实体作为图谱锚点" @keyup.enter="doSearch">
-        <button class="chip" type="button" @click="doSearch">搜索</button>
-        <span class="label">当前锚点 <b>{{ anchor }}</b></span>
+               aria-label="搜索实体作为图谱锚点" @keyup.enter="doSearch()">
+        <button class="chip" type="button" @click="doSearch()">搜索</button>
+        <span class="label">当前锚点 <b>{{ anchor || '—（无 · 画布已清空）' }}</b></span>
+        <!-- 缺陷2：搜索词常显——点选候选后输入框不再被清空，这里再留一份「上次搜索」，?q= 刷新后也能回看 -->
+        <span v-if="lastSearchQ" class="label gsearch__q">上次搜索 <b>{{ lastSearchQ }}</b></span>
+        <!-- 缺陷5：同名实体靠 label（英文类型名）分不开，chip 上补 stock_code／node_id 作可区分标识 -->
         <template v-for="r in results" :key="r.node_id">
-          <button class="chip chip--mini" type="button" @click="useAnchor(r.node_id)">{{ r.name }} · {{ r.label }}</button>
+          <button class="chip chip--mini" type="button" @click="useAnchor(r.node_id, lastSearchQ)">
+            {{ r.name }} · {{ r.label }}<template v-if="r.stock_code || r.node_id"> · {{ r.stock_code || r.node_id }}</template>
+          </button>
         </template>
         <span v-if="searching" class="label">搜索中…</span>
-        <span v-else-if="kw && !results.length" class="label">（无结果）</span>
+        <template v-else-if="resultSummary">
+          <!-- 缺陷4：总数用接口实返 total，已显示数用本次真实拿到的候选条数 -->
+          <span class="label gsearch__sum">{{ resultSummary }}</span>
+          <button v-if="canShowMore" class="chip chip--mini" type="button" @click="showMore">显示更多</button>
+        </template>
+      </div>
+
+      <!-- 缺陷3：检索失败（网络错误／后端 429 限流）单独成条，把接口实返的 code 与 message 原样展示；
+           这里不动画布（检索失败 ≠ 没有这家公司），避免把「被限流」误报成「库里没有」 -->
+      <div v-if="searchErr" class="graphOff" style="border-color:var(--accent-line)" role="alert">
+        <b>实体检索失败：是「这次检索没成功」，不是「库里没有这家公司」</b>
+        <p class="small" style="margin-top:8px">{{ searchErr }}</p>
+        <p class="small">{{ searchErrHint }}</p>
       </div>
 
       <div v-if="loading" class="sec"><p class="small">正在从真实接口读取图谱数据…</p></div>
       <div v-else-if="error" class="graphOff" style="border-color:var(--accent-line)">
         <b>图谱数据读取失败</b>
         <p class="small" style="margin-top:8px">{{ error }}</p>
-        <p class="small">请确认后端已启动（python "交付物/03-代码\后端\run.py"，端口 8000），并换一个锚点实体重试。</p>
+        <p class="small">{{ graphHint }}</p>
+      </div>
+      <div v-else-if="cleared" class="graphOff" style="border-color:var(--accent-line)" role="status">
+        <!-- 缺陷1：检索到 0 条时画布已被清空（节点／边／属性面板都销毁），这里把用户输入的词回显出来并说明旧图已清除 -->
+        <b>未检索到与「{{ emptyQ }}」匹配的实体</b>
+        <p class="small" style="margin-top:8px">{{ emptyMessage }}</p>
+        <p class="small">画布上目前没有任何节点：从上面的候选里点选一个实体，或用 6 位股票代码重新搜索，即可重新载入图谱。</p>
       </div>
 
       <!-- 图谱本体（图例／工具条／属性面板／实体证据区／路径列表／孤立节点／准确性声明）由 mountGraph 渲染 -->
-      <div v-show="!loading && !error" ref="graphWrap" class="reveal" style="--d:70ms"></div>
+      <div v-show="!loading && !error && !cleared" ref="graphWrap" class="reveal" style="--d:70ms"></div>
 
-      <div v-show="!loading && !error" class="tl reveal" style="--d:140ms">
+      <div v-show="!loading && !error && !cleared" class="tl reveal" style="--d:140ms">
         <div class="tl__head">
           <div class="sec__title">
             <span class="label">时间轴 · 按 event_time／publish_time 过滤</span>
@@ -406,4 +553,9 @@ onBeforeUnmount(() => {
 }
 .gsearch__in::placeholder { color: var(--faint); }
 .gsearch__in:focus { outline: none; border-color: var(--accent); }
+/* 缺陷2：搜索词常显（弱化底色，避免与「当前锚点」抢视线） */
+.gsearch__q { color: var(--muted); }
+.gsearch__q b { color: var(--fg); font-weight: 600; max-width: 24ch; overflow-wrap: anywhere; }
+/* 缺陷4：候选计数 —— 数字用等宽体，与页面上其它计数口径一致 */
+.gsearch__sum { color: var(--muted); font-variant-numeric: tabular-nums; }
 </style>

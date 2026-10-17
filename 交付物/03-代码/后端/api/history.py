@@ -25,7 +25,7 @@ from __future__ import annotations
 
 import sys
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Header
 
 import errors
 import services.qa_service as qa_service
@@ -66,9 +66,14 @@ def _require_session_id(session_id: str | None) -> str:
 
 @router.get("")
 async def list_history(session_id: str | None = None, page: str | None = None,
-                       page_size: str | None = None):
-    """按会话分页列出历史问答（`ask_time` 倒序）；无记录 → HTTP 200 空结果。"""
-    sid = _require_session_id(session_id)
+                       page_size: str | None = None,
+                       x_session_id: str | None = Header(default=None, alias="X-Session-Id")):
+    """按会话分页列出历史问答（`ask_time` 倒序）；无记录 → HTTP 200 空结果。
+
+    P3-6：会话标识同时接受 query 参数 `session_id` 与请求头 `X-Session-Id`（query 优先），
+    与其它接口的鉴权头用法对齐；此前只认 query，带头会被误判为「缺少 session_id」返 1002。
+    """
+    sid = _require_session_id(session_id or x_session_id)
     page_no = _parse_int(page, "page", default=1)
     if page_no is None or page_no < 1:
         raise errors.ApiError(1002, detail="page 必须是不小于 1 的整数：%r" % page)
@@ -81,7 +86,11 @@ async def list_history(session_id: str | None = None, page: str | None = None,
 
 
 @router.get("/{question_id}")
-async def history_detail(question_id: int, session_id: str | None = None):
-    """回看一条历史问答（只还原三表内容，不重新渲染图谱路径）；跨会话／不存在 → 2001。"""
-    sid = _require_session_id(session_id)
+async def history_detail(question_id: int, session_id: str | None = None,
+                         x_session_id: str | None = Header(default=None, alias="X-Session-Id")):
+    """回看一条历史问答（只还原三表内容，不重新渲染图谱路径）；跨会话／不存在 → 2001。
+
+    P3-6：同列表接口，会话标识也接受 `X-Session-Id` 请求头（query 优先）。
+    """
+    sid = _require_session_id(session_id or x_session_id)
     return errors.ok(qa_service.history_detail(question_id, sid))

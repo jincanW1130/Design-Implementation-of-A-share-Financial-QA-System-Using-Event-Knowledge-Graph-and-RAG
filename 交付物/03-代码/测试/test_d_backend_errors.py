@@ -4,8 +4,8 @@
 
 覆盖（评审 P1-12 点名的"错误码映射"）：
 
-1. **14 个错误码的语义单一性**：码表逐码检查（message 非空且互不重复、HTTP 状态落在登记值上、
-   2002 是"不是错误的正常业务状态"）；
+1. **15 个错误码的语义单一性**（2026-10-17：原为 14，随 `errors.py` 增 1005 一并对齐）：
+   码表逐码检查（message 非空且互不重复、HTTP 状态落在登记值上、2002 是"不是错误的正常业务状态"）；
 2. **映射函数的纯逻辑**：`message_of`／`http_status_of`／`is_normal`／未知码兜底／
    `HTTP_STATUS_TO_CODE` 的往返一致性／响应体键集合**恰为** `{code, message}`（detail 只进日志）；
 3. **`_classify_failure` 按中文措辞猜码**：用**参数化用例把已知的措辞逐条钉住**，
@@ -39,12 +39,18 @@ import _bootstrap  # noqa: E402
 errors = _bootstrap.load_backend("errors")
 qa_service = _bootstrap.load_backend("services.qa_service")
 
-# 14 个错误码及其登记语义（逐条抄自 `errors.py` 的 CODES，作为**独立于实现的**期望表）
+# 15 个错误码及其登记语义（逐条抄自 `errors.py` 的 CODES，作为**独立于实现的**期望表）
+# 2026-10-17 修（用户测试收尾）：本表长期停在 14 码，而 `errors.py` 已于 **2026-10-16** 增
+# `1005: ("请求方法不允许", 405)`（P3-1：对只读接口发 DELETE／POST 时明确拒绝，而不再落成 404／500），
+# 于是 `len(CODES)==len(EXPECTED_CODES)==14` 与下面的 HTTP 映射两条断言**在本次改动之前就已经红着**
+# ——不是本次体验优化引入的回归。按「实现是对的、期望表过期」补齐，期望值仍逐条独立抄写、不 import 实现：
+# 1005 的 HTTP 状态单值、与其余 14 码语义互不重复，且已在 `HTTP_STATUS_TO_CODE` 里登记 405→1005。
 EXPECTED_CODES = {
     1001: ("输入为空或长度超出限制", 400),
     1002: ("参数格式错误", 400),
     1003: ("必填字段缺失", 400),
     1004: ("请求频率超出限制", 429),
+    1005: ("请求方法不允许", 405),
     2001: ("资源不存在", 404),
     2002: ("查询结果为空", 200),
     2003: ("文档已被历史回答引用", 409),
@@ -59,10 +65,10 @@ EXPECTED_CODES = {
 
 
 # ---------------------------------------------------------------------------
-# D1 码表：14 个码、语义单一
+# D1 码表：15 个码、语义单一（2026-10-17：原写 14，随 `errors.py` 增 1005 一并对齐，见 EXPECTED_CODES 上方说明）
 # ---------------------------------------------------------------------------
-def test_codes_table_has_fourteen_single_meaning_codes():
-    assert len(errors.CODES) == len(EXPECTED_CODES) == 14
+def test_codes_table_has_fifteen_single_meaning_codes():
+    assert len(errors.CODES) == len(EXPECTED_CODES) == 15
     assert set(errors.CODES) == set(EXPECTED_CODES)
     messages = [value[0] for value in errors.CODES.values()]
     assert len(set(messages)) == len(messages), "同一条 message 不得对应两个码（语义必须单一）"
@@ -149,7 +155,8 @@ def test_non_numeric_code_is_normalized_to_9999():
 # D4 HTTP 状态 → 错误码：取值必须在码表内，且往返一致
 # ---------------------------------------------------------------------------
 def test_http_status_to_code_mapping_is_consistent():
-    expected = {400: 1002, 401: 4001, 403: 4002, 404: 2001, 409: 2003, 429: 1004,
+    # 2026-10-17：补 405→1005（见上面对 EXPECTED_CODES 的说明；此前这条断言同样因期望表过期而红着）
+    expected = {400: 1002, 401: 4001, 403: 4002, 404: 2001, 405: 1005, 409: 2003, 429: 1004,
                 503: 3001, 504: 3002}
     assert errors.HTTP_STATUS_TO_CODE == expected
     for status, code in errors.HTTP_STATUS_TO_CODE.items():

@@ -48,6 +48,7 @@ import json
 import logging
 import os
 import re
+import http.client
 import socket
 import sys
 import threading
@@ -170,15 +171,33 @@ def _headers(referer: str | None = None) -> dict:
 
 
 def _http_get(url: str, referer: str | None = None) -> str:
-    """一次 GET，返回解码后的文本；非 200 或网络异常**抛异常**（由调用方降级）。"""
+    """一次 GET，返回解码后的文本；非 200 或网络异常**抛异常**（由调用方降级）。
+
+    P3-7：外部行情源偶发主动断连（`RemoteDisconnected`／连接重置）属瞬时网络抖动，
+    对**网络层异常**做一次轻量重试（间隔 0.6 s）；**不重试 `HTTPError`**（4xx/5xx 是
+    服务端的明确响应，重试无意义）。重试仍失败则照常抛出，由调用方走降级，不改变语义。
+    """
     req = urllib.request.Request(url, headers=_headers(referer))
     timeout = float(config.MARKET_ZONE["timeout_seconds"])
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        status = getattr(resp, "status", 200)
-        raw = resp.read()
-    if status != 200:
-        raise urllib.error.HTTPError(url, status, "HTTP %s" % status, None, None)
-    return raw.decode("utf-8", "replace")
+    last_exc: Exception | None = None
+    for attempt in range(2):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                status = getattr(resp, "status", 200)
+                raw = resp.read()
+            if status != 200:
+                raise urllib.error.HTTPError(url, status, "HTTP %s" % status, None, None)
+            return raw.decode("utf-8", "replace")
+        except urllib.error.HTTPError:
+            raise                                      # 服务端明确响应，不重试
+        except (urllib.error.URLError, http.client.HTTPException,
+                ConnectionError, socket.timeout, TimeoutError) as exc:
+            last_exc = exc
+            if attempt == 0:
+                time.sleep(0.6)
+                continue
+            raise
+    raise last_exc
 
 
 def _short_reason(exc: Exception) -> str:

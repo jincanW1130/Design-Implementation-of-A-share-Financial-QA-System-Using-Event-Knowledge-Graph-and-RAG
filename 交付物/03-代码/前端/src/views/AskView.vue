@@ -72,6 +72,29 @@ const examples = [
 ]
 function useExample(t) { question.value = t; submit() }
 
+// --------------------------------------------------------------------------
+// 示例答案（2026-10-17 用户测试后的产品口径决定 A：让实现追上按钮文案）
+// --------------------------------------------------------------------------
+// 原来这个 CTA 是 `router.push('/history')`，打开的是**历史记录页**而不是一条答案；
+// 而历史记录按浏览器会话隔离（FR-06：session_id 是浏览器首次访问时生成的 UUID），
+// 新访客那一页必然是「未检索到匹配记录」——承诺「给你看一条答案」，实际给的是空记录页。
+//
+// 现在直达一条**真实落库**的回答：`answer_id = 16`，它就是首页第一条示例问题
+// 「平安银行与伊利股份共同参与的事件是什么？」的真实回答（实测：8 条证据、17 条图谱路径、
+// 正文含「模型分析（非公开事实）」标注、含【数据截至与判定区间】段）。
+// 选它的理由：新访客一点就能和上面那个示例问题对上，且四段结构与图谱扩展都齐全。
+//
+// **口径说明**：这不是「造一条演示数据」，而是**指向库里既有的一条真实记录**；
+// 屏②页脚本来就写着「取自一次真实问答输出，原样呈现，未做改写」，该声明对这条记录同样成立。
+// 若将来这条记录被清理，本按钮会落到屏②的 2001「资源不存在」提示（如实报错，不伪造），
+// 届时把下面的常量换成另一条既有 answer_id 即可。
+const DEMO_ANSWER_ID = 16
+const DEMO_QUESTION = '平安银行与伊利股份共同参与的事件是什么？'
+const demoTitle = `直达库里一条真实回答：${DEMO_QUESTION}（answer_id=${DEMO_ANSWER_ID}）`
+function openDemoAnswer() {
+  router.push({ name: 'answer', params: { answerId: String(DEMO_ANSWER_ID) } })
+}
+
 function focusAsk() {
   nextTick(() => { if (qEl.value) { qEl.value.focus(); qEl.value.scrollIntoView({ block: 'center', behavior: 'smooth' }) } })
 }
@@ -128,7 +151,12 @@ onMounted(() => { if (appMeta && !appMeta.health) { /* health 由 App.vue 拉取
         <p class="lead hero__lead reveal" style="--d:140ms">把公告、新闻、研报与部委政策切成可检索的证据块，再用事件知识图谱把公司、人物、机构、事件与行业连起来。每一次回答都带着来源网站、文档号与图谱路径，可以逐条回查。</p>
         <div class="hero__cta reveal" style="--d:210ms">
           <button class="btn btn--primary" @click="focusAsk">开始提问</button>
-          <button class="btn btn--ghost" @click="router.push('/history')">查看一条示例答案</button>
+          <!-- 2026-10-17 用户测试后改（产品口径决定 A：让实现追上文案）：
+               原实现是 `router.push('/history')` —— 打开的是「历史记录」页，不是一条答案。
+               而历史记录按浏览器会话隔离（FR-06，session_id 存在浏览器本地），新访客那一页是空的
+               → 按钮承诺「给你看一条答案」，实际给的是一个空记录页（实测 T1 的证据里就复现过）。
+               现改为直达一条**真实落库**的回答 `/answer/DEMO_ANSWER_ID`（见脚本里的常量与注释）。 -->
+          <button class="btn btn--ghost" @click="openDemoAnswer" :title="demoTitle">查看一条示例答案</button>
         </div>
         <div class="hero__meta reveal" style="--d:280ms">
           <div class="hero__meta-item"><span class="label">语料截止</span><b>{{ cutoff }}</b></div>
@@ -372,11 +400,12 @@ onMounted(() => { if (appMeta && !appMeta.health) { /* health 由 App.vue 拉取
                 </div>
               </div>
               <div class="mock__grp">
-                <span class="label">运行状态</span>
-                <div class="mock__probe"><i class="on"></i><span>MySQL · 事件库</span><em>正常</em></div>
-                <div class="mock__probe"><i class="on"></i><span>Neo4j · 事件图谱</span><em>正常</em></div>
-                <div class="mock__probe"><i class="on"></i><span>向量索引</span><em>{{ vecCount }} · {{ (appMeta && appMeta.vectorDim) || '—' }} 维</em></div>
-                <div class="mock__probe"><i class="on"></i><span>{{ (appMeta && appMeta.modelName) || '模型' }}</span><em>正常</em></div>
+                <span class="label">运行状态（与上方实时探针一致）</span>
+                <div class="mock__probe" v-for="(p, i) in probes" :key="i">
+                  <i :class="p.live ? 'on' : ''"></i>
+                  <span>{{ p.name }}</span>
+                  <em>{{ p.v }}</em>
+                </div>
               </div>
               <div class="mock__grp">
                 <span class="label">数据口径说明</span>
