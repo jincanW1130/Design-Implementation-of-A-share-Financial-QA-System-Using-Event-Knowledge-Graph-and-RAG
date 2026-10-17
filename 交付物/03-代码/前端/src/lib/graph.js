@@ -525,7 +525,19 @@ export function mountGraph(host, opt) {
     fitView()
   }
   if (cwrap) {
-    if (window.ResizeObserver) { try { new ResizeObserver(onCanvasResize).observe(cwrap) } catch (e) { /* noop */ } }
+    if (window.ResizeObserver) {
+      // 2026-10-17 跨引擎走查修正：回调里同步读布局并重绘，WebKit（Safari 内核）会抛未捕获异常
+      // "ResizeObserver loop completed with undelivered notifications."；推到下一帧执行即可，
+      // 同时用一个 pending 标记合并同一帧内的多次回调（拖动窗口时不会积压）。
+      let roPending = false
+      try {
+        new ResizeObserver(() => {
+          if (roPending) return
+          roPending = true
+          requestAnimationFrame(() => { roPending = false; onCanvasResize() })
+        }).observe(cwrap)
+      } catch (e) { /* noop */ }
+    }
     else window.addEventListener('resize', onCanvasResize)
   }
   function refit() { refresh(); fitView() }

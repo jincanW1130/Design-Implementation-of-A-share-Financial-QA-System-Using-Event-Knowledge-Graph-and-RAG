@@ -969,6 +969,10 @@ body[data-market="on"]  .mk-off{display:none!important}
   .rt__item{grid-template-columns:80px minmax(0,1fr);row-gap:6px}
   .rt__go{grid-column:2;justify-self:start}
   .rt__empty{flex-direction:column;align-items:flex-start;gap:12px}
+  /* 2026-10-17 跨引擎／设备走查修正：路径链的 white-space:nowrap 在窄屏会被
+     role／confidence／source_doc_id 这类长属性串撑到 542px（视口 390 时整页横向溢出 186~189px，
+     Chromium／Firefox／WebKit 三个内核一致复现）。窄屏改为可换行；宽屏仍是单行链式展示。 */
+  .path__rel,.gpath__rel{white-space:normal;overflow-wrap:anywhere}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
