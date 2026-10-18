@@ -1,0 +1,78 @@
+{
+  "tool": "工具/数据质量校验.py",
+  "generated_at": "2026-10-18T21:17:45+08:00",
+  "mode": "dry-run/read-only",
+  "violation_total": 0,
+  "violations": [],
+  "stats": {
+    "documents": {
+      "rows": 709,
+      "unique_doc_id": 709,
+      "duplicate_doc_id": 0,
+      "duplicate_url": 0,
+      "duplicate_title": 0
+    },
+    "chunks": {
+      "rows": 5018,
+      "unique_chunk_id": 5018,
+      "duplicate_chunk_id": 0,
+      "duplicate_vector_id": 0,
+      "duplicate_doc_index": 0,
+      "documents_without_chunk": 0
+    },
+    "qa_records": {
+      "rows": 30,
+      "questions": 30,
+      "answers": 30,
+      "evidence": 293,
+      "duplicate_question_id": 0,
+      "duplicate_answer_id": 0
+    },
+    "files": {
+      "documents": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物\\04-数据与知识图谱\\数据准备\\数据集\\v2.1\\clean\\documents.jsonl",
+      "chunks": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物\\04-数据与知识图谱\\数据准备\\数据集\\v2.1\\chunks\\chunks.jsonl",
+      "qa_records": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物\\05-系统实现\\智能问答系统\\问答产出\\qa_records.jsonl"
+    }
+  },
+  "db": {
+    "status": "checked",
+    "server_version": "8.4.9",
+    "counts": {
+      "user": 0,
+      "document": 709,
+      "document_chunk": 5018,
+      "question": 30,
+      "answer": 30,
+      "answer_evidence": 293
+    },
+    "expected_counts": {
+      "document": 709,
+      "document_chunk": 5018,
+      "question": 30,
+      "answer": 30,
+      "answer_evidence": 293
+    },
+    "orphan": {
+      "chunk_orphan_doc": 0,
+      "answer_orphan_question": 0,
+      "evidence_orphan_answer": 0,
+      "evidence_orphan_chunk": 0,
+      "evidence_orphan_doc": 0,
+      "evidence_doc_mismatch": 0,
+      "question_over_baseline": 0
+    },
+    "duplicates": {
+      "document_doc_id": 0,
+      "chunk_chunk_id": 0,
+      "chunk_vector_id": 0,
+      "question_question_id": 0,
+      "answer_answer_id": 0
+    },
+    "text_mismatch": {
+      "question": 0,
+      "answer": 0
+    },
+    "evidence_mismatch_questions": 0,
+    "note": "只读核对；未执行任何写操作。"
+  }
+}

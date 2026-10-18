@@ -1,0 +1,110 @@
+{
+  "at": "2026-10-18T13:05:03.970Z",
+  "base": "http://127.0.0.1:5173",
+  "browser": "chromium 156.0.8078.4",
+  "cases": [
+    {
+      "id": "over_500",
+      "title": "输入 501 字提交",
+      "ui": {
+        "counter": "501 / 500 字（超出上限，提交会被拒绝）",
+        "error": "问题长度 501 字，超过上限 500 字；请缩短后再提交（后端同样会拒收超长问题）。"
+      },
+      "ask_requests": 0,
+      "passed": true,
+      "screenshot": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物\\06-实验与评测\\系统指标\\证据_第三轮边界\\01-500字上限.png"
+    },
+    {
+      "id": "control_char",
+      "title": "输入含 NUL 控制字符的问题",
+      "ui": {
+        "error": "问题中含有不可见的控制字符（如 NUL、退格等），请删除后重试。换行与制表符可以使用。"
+      },
+      "ask_requests": 0,
+      "passed": true,
+      "screenshot": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物\\06-实验与评测\\系统指标\\证据_第三轮边界\\02-控制字符.png"
+    },
+    {
+      "id": "empty_2002",
+      "title": "后端 200＋empty（响应替身）",
+      "ui": {
+        "notice": "未检索到可引用的证据：这个问题在现有数据里找不到能支撑回答的原文。可以换一种问法，或指明公司、时间与事件类型后再试。",
+        "has_red_error": false
+      },
+      "ask_requests": 1,
+      "passed": true,
+      "screenshot": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物\\06-实验与评测\\系统指标\\证据_第三轮边界\\03-2002空结果.png"
+    },
+    {
+      "id": "timeout_320s",
+      "title": "前端 320 秒超时分支（定时器缩短为 1.2 秒）",
+      "ui": {
+        "notice": "请求超时（等待超过 320 秒仍未返回）。本次不再等待，但后端可能仍会完成生成并写入本会话历史；稍后可在「历史记录」中查看是否已留痕。"
+      },
+      "ask_requests": 1,
+      "passed": true,
+      "screenshot": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物\\06-实验与评测\\系统指标\\证据_第三轮边界\\04-超时文案.png"
+    },
+    {
+      "id": "real_cancel",
+      "title": "真实长问答中点击「取消等待」",
+      "ui": {
+        "question_chars": 20,
+        "loading_text": "正在生成答案，已等待 0 秒（通常 10～30 秒，最长约 5 分钟；可点「取消等待」）",
+        "notice": "请求已取消。本次不再等待，但后端可能仍会完成生成并写入本会话历史；稍后可在「历史记录」中查看是否已留痕。",
+        "cancel_button_gone": true,
+        "ask_button_enabled_after": true
+      },
+      "ask_requests": 1,
+      "aborted_requests": [
+        {
+          "url": "http://127.0.0.1:5173/api/qa/ask",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "elapsed_before_cancel_seconds": 2.2,
+      "passed": true,
+      "screenshot": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物\\06-实验与评测\\系统指标\\证据_第三轮边界\\05-真实取消等待.png",
+      "note": "取消只停止浏览器等待；后端可能继续完成并落库，脚本不删库，需另行核对 30/30/293 基线。",
+      "backend_after_cancel": {
+        "question_id": 31,
+        "answer_id": 31,
+        "answer_chars": 3598,
+        "evidence_count": 8,
+        "note": "取消等待后后端仍完成生成并落库（与界面文案一致）；本次已清理。"
+      }
+    }
+  ],
+  "notes": [
+    "500 字与控制字符用例走前端校验，不应发出 /api/qa/ask。",
+    "2002 用例使用响应替身，仅核对前端呈现，不声称后端在该次请求中返回 2002。",
+    "超时用例把前端 ≥300000ms 的定时器缩短为 1200ms，只用于走通超时分支；文案中的「320 秒」为真实配置值。",
+    "真实取消用例会调用模型并可能写库；脚本不删库，运行后需按 question_id>30 核对清理。"
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "all_passed": true
+  },
+  "cleanup": {
+    "deleted_questions": 1,
+    "before": {
+      "user": 0,
+      "document": 709,
+      "document_chunk": 5018,
+      "question": 31,
+      "answer": 31,
+      "answer_evidence": 301
+    },
+    "after": {
+      "user": 0,
+      "document": 709,
+      "document_chunk": 5018,
+      "question": 30,
+      "answer": 30,
+      "answer_evidence": 293
+    },
+    "baseline_restored": true,
+    "scope": "question_id>30（级联 answer/answer_evidence）"
+  }
+}

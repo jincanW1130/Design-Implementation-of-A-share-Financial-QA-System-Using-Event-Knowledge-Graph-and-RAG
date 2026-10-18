@@ -99,7 +99,8 @@ import sys
 import threading
 from datetime import datetime
 
-from fastapi import APIRouter, Body, Depends, Request
+from fastapi import APIRouter, Body, Depends, Request, Security
+from fastapi.security import APIKeyHeader
 from starlette.responses import JSONResponse
 
 import config
@@ -459,7 +460,22 @@ def _ordinary_user_reason(request: Request) -> str | None:
     return None
 
 
-async def require_admin(request: Request) -> None:
+ADMIN_TOKEN_SCHEME = APIKeyHeader(
+    name="X-Admin-Token",
+    scheme_name="AdminToken",
+    description=("管理面共享密钥：取值 = config.local.json 的 admin_token。"
+                 "缺失或错误返回 4001（HTTP 401）；未配置时 fail closed。"
+                 "该请求头只用于运维／实验通道，前端普通用户通道携带 Origin／Referer "
+                 "会被 4002 拒绝。"),
+    auto_error=False,
+)
+"""OpenAPI 安全方案（第三轮 13.5）：让 `/docs` 出现 Authorize 按钮并标注后台接口的
+鉴权方式。`auto_error=False` 保证缺头时仍由 `require_admin` 按既定口径统一回 4001，
+不改变任何运行时行为。"""
+
+
+async def require_admin(request: Request,
+                        _admin_token: str | None = Security(ADMIN_TOKEN_SCHEME)) -> None:
     """路由级依赖：后台前缀的双重守卫（2026-10-11 按 S1 加固）。
 
     1. **普通用户通道 → 4002**（HTTP 403）：带 `X-Client-Role: user` 一类取值、或

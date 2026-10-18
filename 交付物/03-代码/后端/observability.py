@@ -30,6 +30,9 @@
 * `routes`：按「方法 + 路由模板」分组（模板不含具体 id，避免高基数），
   `p50_ms`／`p95_ms`／`p99_ms` 取最近 300 s 样本，`qps` 与 `error_rate` 取最近 60 s；
 * `qa`：`/api/qa/ask` 的成功／失败计数（按 HTTP 状态；200＝成功，≥400＝失败）；
+* `retrieval`：问答链路的**检索侧计数**（第三轮 8.2）——实际跑链路的次数、图谱查询
+  次数、证据总数、空结果数、复用次数。由 `services/qa_service.py` 在链路返回后写入；
+  不记录问题原文，不增加路由，仍是进程内口径。
 * `rate_limit`：限流中间件实际拒绝的次数（1004／429）。
 * 每个路由最多保留 2000 个样本、最多 128 个路由键；超出后旧样本自然淘汰或归入
   `__other__`，防止探测工具制造高基数把内存打满。
@@ -107,6 +110,14 @@ class MetricsRegistry:
         self._qa_success = 0
         self._qa_failure = 0
         self._rate_limit_hits = 0
+        # 检索侧计数（第三轮 8.2）：只累计，不做滑动窗口；重启清零。
+        self._retrieval = {
+            "vector_searches": 0,
+            "graph_queries": 0,
+            "evidence_total": 0,
+            "empty_results": 0,
+            "reused_answers": 0,
+        }
 
     # ---- 写入 ----
     def record_request(self, method: str, route: str, status: int,
@@ -135,6 +146,32 @@ class MetricsRegistry:
         with self._lock:
             self._rate_limit_hits += 1
 
+    def record_qa_retrieval(self, *, evidence_count: int = 0, graph_used: bool = False,
+                            empty: bool = False, reused: bool = False) -> None:
+        """记录一次问答的检索侧结果（第三轮 8.2）。
+
+        * `reused=True`：命中同会话已有回答，**没有**发生新的向量检索；
+        * 其余情况：`vector_searches` +1；`graph_used` 为真时 `graph_queries` +1；
+        * `evidence_count` 累加进 `evidence_total`（空结果为 0）；
+        * `empty=True` 时 `empty_results` +1。
+
+        全部为整数计数，不保存问题/答案文本，不引入高基数标签。
+        """
+        with self._lock:
+            if reused:
+                self._retrieval["reused_answers"] += 1
+                return
+            self._retrieval["vector_searches"] += 1
+            if graph_used:
+                self._retrieval["graph_queries"] += 1
+            if empty:
+                self._retrieval["empty_results"] += 1
+            try:
+                count = int(evidence_count)
+            except (TypeError, ValueError):
+                count = 0
+            self._retrieval["evidence_total"] += max(count, 0)
+
     # ---- 读取 ----
     def snapshot(self) -> dict:
         now = time.monotonic()
@@ -145,6 +182,7 @@ class MetricsRegistry:
             qa_success = self._qa_success
             qa_failure = self._qa_failure
             hits = self._rate_limit_hits
+            retrieval = dict(self._retrieval)
             uptime = now - self._started
 
         all_samples = []
@@ -188,6 +226,12 @@ class MetricsRegistry:
                 "failure": qa_failure,
                 "success_rate": round(qa_success / qa_total, 4) if qa_total else 0.0,
             },
+            "retrieval": {
+                **retrieval,
+                "evidence_avg": (round(retrieval["evidence_total"]
+                                       / retrieval["vector_searches"], 2)
+                                 if retrieval["vector_searches"] else 0.0),
+            },
             "rate_limit": {"hits": hits},
         }
 
@@ -207,6 +251,10 @@ METRICS = MetricsRegistry()
 
 def record_rate_limit_hit() -> None:
     METRICS.record_rate_limit_hit()
+
+
+def record_qa_retrieval(**kwargs) -> None:
+    METRICS.record_qa_retrieval(**kwargs)
 
 
 def snapshot() -> dict:

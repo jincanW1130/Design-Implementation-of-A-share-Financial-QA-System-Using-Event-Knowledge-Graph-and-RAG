@@ -1,0 +1,64 @@
+{
+  "run_dir": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物\\05-系统实现\\前后端系统集成\\_工作底稿\\qa_runs\\ask_C_jmt5guel",
+  "request_id": "7876d5929dde4fb1",
+  "backend_wait_seconds": 16.759,
+  "llm_calls": 1,
+  "llm_seconds": [
+    7.428
+  ],
+  "llm_total_seconds": 7.428,
+  "chain_other_seconds": 9.331,
+  "chain_other_note": "backend_wait − Σllm_seconds；含检索子进程启动、向量化、图谱查询、装配、落库与 HTTP 开销",
+  "attempts": [
+    {
+      "attempt": 1,
+      "body_chars": 136,
+      "completion_tokens": 190,
+      "empty_body": false,
+      "error": null,
+      "finish_reason": "stop",
+      "ok": true,
+      "prompt_tokens": 3555,
+      "reasoning_chars": 173,
+      "seconds": 7.428,
+      "status": 200
+    }
+  ],
+  "graph_used": true,
+  "graph_event_triples": 3,
+  "graph_path_nodes": 4,
+  "evidence_count": 10,
+  "k": 10,
+  "n": 20,
+  "context_token_budget": 3600,
+  "token_account": {
+    "event_triple_tokens": 21,
+    "graph_tokens": 141,
+    "path_tokens": 120,
+    "text_tokens": 3361,
+    "total_tokens": 3502
+  },
+  "gates_passed": true,
+  "gate_failures": [],
+  "prompt_chars": 6396,
+  "prompt_sha256": "af0b07b3623e5cbd7b6908663b0f82503d68588b18fe83c4997eed0ef0c0d3f7",
+  "question_chars": 47,
+  "question_sha256_16": "da626d696b3d6c76",
+  "answer_chars": 1955,
+  "answer_id": "A-001",
+  "question_id": "Q-001",
+  "http": {
+    "status": 200,
+    "request_id": "7876d5929dde4fb1",
+    "answer_id": 31,
+    "question_id": 31,
+    "empty": false,
+    "reused": false,
+    "error_code": null
+  },
+  "files": [
+    "answer_trace.jsonl",
+    "prompt_snapshot.json",
+    "qa_records.jsonl"
+  ]
+}

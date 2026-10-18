@@ -147,6 +147,10 @@ def error_responses(*codes: int, rate_limit: bool = True) -> dict:
     * 只影响 OpenAPI 文档，不改变路由数量、操作数量或任何运行时响应。
 
     用法：`@router.get("/x", responses=errors.error_responses(1002, 2001))`。
+
+    第三轮（13.5）：同一状态码的说明里可能合并多个业务码，故 `example` 只取**首个**
+    业务码（如 400 取 1001）给出一个可直接在 `/docs` 里看到的 `{code, message}` 样例；
+    其余业务码的 message 仍完整列在 `description` 中。只影响文档，不影响运行时响应。
     """
     grouped: dict[int, list[int]] = {}
     for code in codes:
@@ -156,9 +160,13 @@ def error_responses(*codes: int, rate_limit: bool = True) -> dict:
     out: dict[int, dict] = {}
     for status in sorted(grouped):
         items = grouped[status]
+        first = items[0]
         out[status] = {
             "description": "；".join("%d %s" % (code, message_of(code)) for code in items),
-            "content": {"application/json": {"schema": ERROR_BODY_SCHEMA}},
+            "content": {"application/json": {
+                "schema": ERROR_BODY_SCHEMA,
+                "example": {"code": first, "message": message_of(first)},
+            }},
         }
     return out
 

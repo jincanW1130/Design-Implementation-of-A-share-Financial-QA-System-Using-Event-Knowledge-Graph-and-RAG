@@ -68,6 +68,7 @@ from datetime import datetime
 import config
 import db
 import errors
+import observability
 from errors import ApiError
 
 for _stream in (sys.stdout, sys.stderr):
@@ -845,12 +846,25 @@ def ask(question: str, session_id: str, group: str | None = None,
         if reuse:
             reused = _reuse_existing_answer(session_id, question)
             if reused is not None:
+                observability.record_qa_retrieval(reused=True)
                 logger.info("重复提问复用已有回答：question_id=%s answer_id=%s session=%s %s",
                             reused["question_id"], reused["answer_id"], session_id,
                             _question_digest(question))
                 return reused
         ran = _run_chain(question, group, session_id, datetime.now().astimezone().isoformat(
             timespec="seconds"))
+    # 第三轮 8.2：检索侧计数在链路返回后、分支处理前写入，空结果也计入一次向量检索。
+    _trace = ran.get("trace") if isinstance(ran.get("trace"), dict) else {}
+    try:
+        _evidence_count = int(_trace.get("evidence_count") or 0)
+    except (TypeError, ValueError):
+        _evidence_count = 0
+    _graph_used = bool(_trace.get("graph_used")
+                       or (_trace.get("graph_payload") or {}).get("graph_used"))
+    observability.record_qa_retrieval(
+        evidence_count=_evidence_count,
+        graph_used=_graph_used,
+        empty=bool(ran.get("empty")))
     # 2026-10-18 全面审查 F2：没有可引用证据时**不落库、不造答案**，按 2002 语义返回
     # 正常空结果（HTTP 200），由前端给友好提示。旧行为是 502＋3004「装配账目守卫未通过」。
     if ran.get("empty"):

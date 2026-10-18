@@ -1,0 +1,240 @@
+{
+  "tool": "工具/安全最小权限检查.py",
+  "generated_at": "2026-10-18T21:17:37+08:00",
+  "mode": "read-only/audit",
+  "config": {
+    "config_local": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物\\03-代码\\后端\\config.local.json",
+    "exists": true,
+    "git_ignored": true,
+    "git_tracked": false,
+    "admin_token_configured": true,
+    "admin_token_length": 16,
+    "mysql_password_configured": true,
+    "neo4j_password_configured": true,
+    "acl_raw": "C:\\Users\\15129\\Desktop\\��ҵ���\\������\\03-����\\���\\config.local.json admin\\CodexSandboxUsers:(I)(RX)\n                                                           NT AUTHORITY\\SYSTEM:(I)(F)\n                                                           BUILTIN\\Administrators:(I)(F)\n                                                           ADMIN\\15129:(I)(F)\n\nSuccessfully processed 1 files; Failed processing 0 files",
+    "acl_broad_principals": [
+      "C:\\Users\\15129\\Desktop\\��ҵ���\\������\\03-����\\���\\config.local.json admin\\CodexSandboxUsers:(I)(RX)"
+    ],
+    "cors_origins": [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173"
+    ],
+    "rate_limit": {
+      "window_seconds": 60,
+      "max_requests": 60
+    }
+  },
+  "mysql": {
+    "status": "checked",
+    "cu": "root@localhost",
+    "version": "8.4.9",
+    "bind_address": "*",
+    "port": "3306",
+    "grants": [
+      "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, SHUTDOWN, PROCESS, FILE, REFERENCES, INDEX, ALTER, SHOW DATABASES, SUPER, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, REPLICATION SLAVE, REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, TRIGGER, CREATE TABLESPACE, CREATE ROLE, DROP ROLE ON *.* TO `root`@`localhost` WITH GRANT OPTION",
+      "GRANT ALLOW_NONEXISTENT_DEFINER,APPLICATION_PASSWORD_ADMIN,AUDIT_ABORT_EXEMPT,AUDIT_ADMIN,AUTHENTICATION_POLICY_ADMIN,BACKUP_ADMIN,BINLOG_ADMIN,BINLOG_ENCRYPTION_ADMIN,CLONE_ADMIN,CONNECTION_ADMIN,ENCRYPTION_KEY_ADMIN,FIREWALL_EXEMPT,FLUSH_OPTIMIZER_COSTS,FLUSH_PRIVILEGES,FLUSH_STATUS,FLUSH_TABLES,FLUSH_USER_RESOURCES,GROUP_REPLICATION_ADMIN,GROUP_REPLICATION_STREAM,INNODB_REDO_LOG_ARCHIVE,INNODB_REDO_LOG_ENABLE,OPTIMIZE_LOCAL_TABLE,PASSWORDLESS_USER_ADMIN,PERSIST_RO_VARIABLES_ADMIN,REPLICATION_APPLIER,REPLICATION_SLAVE_ADMIN,RESOURCE_GROUP_ADMIN,RESOURCE_GROUP_USER,ROLE_ADMIN,SENSITIVE_VARIABLES_OBSERVER,SERVICE_CONNECTION_ADMIN,SESSION_VARIABLES_ADMIN,SET_ANY_DEFINER,SHOW_ROUTINE,SYSTEM_USER,SYSTEM_VARIABLES_ADMIN,TABLE_ENCRYPTION_ADMIN,TELEMETRY_LOG_ADMIN,TRANSACTION_GTID_TAG,XA_RECOVER_ADMIN ON *.* TO `root`@`localhost` WITH GRANT OPTION",
+      "GRANT PROXY ON ``@`` TO `root`@`localhost` WITH GRANT OPTION"
+    ]
+  },
+  "neo4j": {
+    "status": "checked",
+    "component": {
+      "name": "Neo4j Kernel",
+      "versions": [
+        "5.26.31"
+      ],
+      "edition": "community"
+    },
+    "current_user": {
+      "user": "neo4j",
+      "roles": null,
+      "passwordChangeRequired": false,
+      "suspended": null,
+      "home": null
+    }
+  },
+  "listeners": {
+    "status": "checked",
+    "listeners": [
+      {
+        "local": "0.0.0.0:3306",
+        "port": 3306
+      },
+      {
+        "local": "0.0.0.0:33060",
+        "port": 33060
+      },
+      {
+        "local": "127.0.0.1:5173",
+        "port": 5173
+      },
+      {
+        "local": "127.0.0.1:7474",
+        "port": 7474
+      },
+      {
+        "local": "127.0.0.1:7687",
+        "port": 7687
+      }
+    ]
+  },
+  "http": {
+    "health": {
+      "error": "URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>"
+    },
+    "admin_without_token": {
+      "error": "URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>"
+    },
+    "admin_with_frontend_origin": {
+      "error": "URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>"
+    }
+  },
+  "secret_scan": {
+    "status": "checked",
+    "scanned_files": 5046,
+    "secret_kinds": [
+      "admin_token",
+      "neo4j_password"
+    ],
+    "short_secrets_excluded": [
+      "mysql_password"
+    ],
+    "hits": []
+  },
+  "findings": [
+    {
+      "severity": "info",
+      "area": "config",
+      "title": "config.local.json 已被 git 忽略",
+      "detail": ".gitignore:76:交付物/03-代码/后端/config.local.json\t\"C:\\\\Users\\\\15129\\\\Desktop\\\\\\346\\257\\225\\344\\270\\232\\350\\256\\276\\350\\256\\241\\\\\\344\\272\\244\\344\\273\\230\\347\\211\\251\\\\03-\\344\\273\\243\\347\\240\\201\\\\\\345\\220\\216\\347\\253\\257\\\\config.local.json\"",
+      "advice": "保持现状。"
+    },
+    {
+      "severity": "high",
+      "area": "config",
+      "title": "admin_token 长度偏短",
+      "detail": "实测长度 16（不显示取值）。",
+      "advice": "至少 32 字符的密码学随机串；轮换后同步更新运维脚本的密钥来源。"
+    },
+    {
+      "severity": "medium",
+      "area": "config",
+      "title": "config.local.json ACL 含较宽主体",
+      "detail": "C:\\Users\\15129\\Desktop\\��ҵ���\\������\\03-����\\���\\config.local.json admin\\CodexSandboxUsers:(I)(RX)",
+      "advice": "仅保留当前用户、SYSTEM、Administrators 的完全控制；移除其他主体的读取权限。"
+    },
+    {
+      "severity": "info",
+      "area": "config",
+      "title": "CORS 为白名单",
+      "detail": "http://localhost:5173、http://127.0.0.1:5173",
+      "advice": "生产环境只保留实际域名。"
+    },
+    {
+      "severity": "info",
+      "area": "config",
+      "title": "限流参数",
+      "detail": "window=60 s，max=60 次",
+      "advice": "生产环境按容量复核；压测时才临时放宽。"
+    },
+    {
+      "severity": "high",
+      "area": "mysql",
+      "title": "应用使用 root 账号",
+      "detail": "CURRENT_USER()=root@localhost。应用拥有建库/授权/关闭服务等全部权限。",
+      "advice": "为运行期创建 DML-only 账号；root 仅用于一次性建表/导入/运维。"
+    },
+    {
+      "severity": "high",
+      "area": "mysql",
+      "title": "MySQL 监听所有网卡",
+      "detail": "@@bind_address='*'，端口 3306。",
+      "advice": "仅在需要远程访问时开放；单机部署改为 127.0.0.1 并配置防火墙。"
+    },
+    {
+      "severity": "high",
+      "area": "mysql",
+      "title": "应用账号权限过大",
+      "detail": "授权含 ALL PRIVILEGES 或 GRANT OPTION（详见报告 grants 字段）。",
+      "advice": "运行期账号只保留 SELECT/INSERT/UPDATE/DELETE ON ashare_qa.*。"
+    },
+    {
+      "severity": "high",
+      "area": "mysql",
+      "title": "应用账号可管理账号/角色",
+      "detail": "授权含 CREATE USER／CREATE ROLE／DROP ROLE。",
+      "advice": "账号管理只留给独立 DBA 账号。"
+    },
+    {
+      "severity": "medium",
+      "area": "neo4j",
+      "title": "Community Edition 无细粒度 RBAC",
+      "detail": "实测 edition=community，SHOW ROLES 不受支持；无法按标签/属性授权。",
+      "advice": "用独立实例+127.0.0.1 绑定+防火墙隔离；需要细粒度角色时升级 Enterprise。"
+    },
+    {
+      "severity": "medium",
+      "area": "neo4j",
+      "title": "使用默认管理员账号 neo4j",
+      "detail": "当前账号为 neo4j（内置管理员）。",
+      "advice": "如版本支持，创建专用应用账号；否则用网络隔离与独立实例限制影响面。"
+    },
+    {
+      "severity": "high",
+      "area": "network",
+      "title": "MySQL 对非本机开放",
+      "detail": "3306 监听 0.0.0.0/::。",
+      "advice": "单机部署改为 bind-address=127.0.0.1，或限制防火墙来源。"
+    },
+    {
+      "severity": "medium",
+      "area": "network",
+      "title": "MySQL X Protocol 对非本机开放",
+      "detail": "33060 监听所有网卡。",
+      "advice": "不需要 X Protocol 时关闭；需要时限制来源。"
+    },
+    {
+      "severity": "high",
+      "area": "http",
+      "title": "健康检查不可用",
+      "detail": "{\"error\": \"URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\"}",
+      "advice": "确认后端已启动。"
+    },
+    {
+      "severity": "critical",
+      "area": "http",
+      "title": "后台缺令牌未按 4001 拒绝",
+      "detail": "{\"error\": \"URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\"}",
+      "advice": "检查 require_admin 依赖与 admin_token 配置。"
+    },
+    {
+      "severity": "high",
+      "area": "http",
+      "title": "前端来源访问后台未按 4002 拒绝",
+      "detail": "{\"error\": \"URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\"}",
+      "advice": "检查普通用户通道判定。"
+    },
+    {
+      "severity": "medium",
+      "area": "secret_scan",
+      "title": "存在短口令，未纳入精确泄露扫描",
+      "detail": "长度 <8 的密钥：mysql_password（长度过短本身也是风险；不显示取值）。",
+      "advice": "改为至少 12 字符的随机口令；轮换后重新运行本脚本。"
+    },
+    {
+      "severity": "info",
+      "area": "secret_scan",
+      "title": "已跟踪文本文件未发现真实密钥",
+      "detail": "扫描 5046 个文件，密钥种类：admin_token、neo4j_password",
+      "advice": "继续保持；注意报告/截图也可能泄露。"
+    }
+  ],
+  "summary": {
+    "critical": 1,
+    "high": 8,
+    "medium": 5,
+    "low": 0,
+    "info": 4
+  },
+  "note": "只读审计：未修改口令/账号/授权/配置/防火墙，未写数据库。所有 detail 均不含密钥取值。"
+}
