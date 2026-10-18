@@ -380,6 +380,25 @@ def _classify_failure(text: str, contract_path: str | None = None,
     return 9999
 
 
+def _is_citation_only_failure(contract) -> bool:
+    """契约是否属于「**只**因缺引用被守卫拦下」。
+
+    2026-10-18 全面审查 F2：`citation_missing` 表示模型没给出 `[证据n]`——对
+    「没有检索价值的输入」（乱码、脚本片段、路径穿越串）这是**正常结果**，不该按
+    502 报错。此类失败改判为 **2002（查询结果为空，HTTP 200）**，由前端提示
+    「未检索到可引用证据」。其余失败类型（越界引用、装配账目不符等）仍是 3004。
+    """
+    if not contract:
+        return False
+    if contract.get("reason") != "answer_gate_failed":
+        return False
+    failures = (contract.get("extra") or {}).get("failures") or {}
+    reasons = [set(v or []) for v in failures.values()]
+    if not reasons or not any(reasons):
+        return False                      # 空失败集不算「只有缺引用」
+    return all(r and r <= {"citation_missing"} for r in reasons)
+
+
 def _kill_process_tree(pid: int) -> None:
     """整树终止一个进程（S3，2026-10-11 审查）。
 
@@ -506,6 +525,13 @@ def _run_chain(question: str, group: str, session_id: str, now_iso: str) -> dict
     if proc.returncode != 0:
         # 评审 P1-9：**先读上游的结构化失败契约**（判据不含任何措辞）；
         # 契约缺失／不可解析时 _classify_failure 才回落措辞匹配，并打 WARNING（不静默）。
+        contract = read_error_contract(out_dir) if out_dir else None
+        # 2026-10-18 全面审查 F2：只缺引用 → 不是故障，按「查询结果为空」正常返回。
+        if _is_citation_only_failure(contract):
+            logger.info("问答未检索到可引用证据（装配守卫 citation_missing）：正常空结果，"
+                        "按 2002 语义返回 HTTP 200；out_dir=%s 耗时=%.1fs", out_dir, elapsed)
+            return {"empty": True, "empty_reason": "no_citable_evidence",
+                    "out_dir": out_dir, "elapsed_seconds": round(elapsed, 1), "now": now_iso}
         code = _classify_failure((stdout or "") + "\n" + (stderr or ""),
                                  exit_code=proc.returncode, out_dir=out_dir)
         logger.warning("问答链路非零退出：exit=%s 耗时=%.1fs out_dir=%s\n--- stdout 尾部 ---\n%s"
@@ -712,6 +738,26 @@ def ask(question: str, session_id: str, group: str | None = None) -> dict:
     group = group or DEFAULT_GROUP
     ran = _run_chain(question, group, session_id, datetime.now().astimezone().isoformat(
         timespec="seconds"))
+    # 2026-10-18 全面审查 F2：没有可引用证据时**不落库、不造答案**，按 2002 语义返回
+    # 正常空结果（HTTP 200），由前端给友好提示。旧行为是 502＋3004「装配账目守卫未通过」。
+    if ran.get("empty"):
+        logger.info("问答空结果（未检索到可引用证据）：question=%.40s session=%s 耗时=%.1fs",
+                    question, session_id, ran["elapsed_seconds"])
+        return {
+            "empty": True,
+            "empty_reason": ran.get("empty_reason") or "no_citable_evidence",
+            "notice": "未检索到可引用的证据：这个问题在现有数据里找不到能支撑回答的原文。"
+                      "可以换一种问法，或指明公司、时间与事件类型后再试。",
+            "answer_id": None,
+            "question_id": None,
+            "answer_text": "",
+            "evidence": [],
+            "graph_path": None,
+            "is_graph_extended": 0,
+            "time_interpretation": None,
+            "data_cutoff_time": config.dataset_meta()["data_cutoff_time"],
+            "answer_type": ANSWER_TYPE_FALLBACK,
+        }
     record = ran["record"]
     question_block = record.get("question") or {}
     answer_block = record.get("answer") or {}

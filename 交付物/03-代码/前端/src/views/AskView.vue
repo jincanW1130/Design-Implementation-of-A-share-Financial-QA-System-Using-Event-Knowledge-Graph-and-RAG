@@ -34,6 +34,9 @@ const question = ref('')
 const loading = ref(false)
 const elapsed = ref(0)
 const error = ref(null)
+// 2026-10-18 全面审查 F2：无证据可引用时后端按 2002 语义返回 HTTP 200＋empty，
+// 这里给中性提示（不是错误红字）：换了问法还能继续问。
+const notice = ref(null)
 let timer = null
 function startTimer() { elapsed.value = 0; timer = window.setInterval(() => { elapsed.value += 1 }, 1000) }
 function stopTimer() { if (timer) { window.clearInterval(timer); timer = null } }
@@ -41,6 +44,7 @@ function stopTimer() { if (timer) { window.clearInterval(timer); timer = null } 
 async function submit() {
   const text = question.value.trim()
   error.value = null
+  notice.value = null
   if (!text) { error.value = { code: '', message: '请输入问题后再提交。' }; return }
   if (loading.value) return
   loading.value = true
@@ -49,6 +53,11 @@ async function submit() {
     const data = await askQuestion(text)
     stopTimer()
     loading.value = false
+    // 2002 语义：后端没检索到可引用证据，返回 200＋empty（不是错误）。
+    if (data && data.empty) {
+      notice.value = data.notice || '未检索到可引用的证据，换一种问法试试。'
+      return
+    }
     if (data && data.answer_id !== undefined && data.answer_id !== null) {
       router.push({ name: 'answer', params: { answerId: String(data.answer_id) } })
     } else {
@@ -191,6 +200,9 @@ onMounted(() => { if (appMeta && !appMeta.health) { /* health 由 App.vue 拉取
             <p v-if="loading" class="small" style="margin-top:10px">正在生成答案，已等待 {{ elapsed }} 秒（链路约 10～30 s，请勿关闭页面）</p>
             <p v-if="error" class="small" style="margin-top:10px;color:var(--accent-ink)">
               <span v-if="error.code !== '' && error.code !== undefined && error.code !== null">[{{ error.code }}] </span>{{ error.message }}
+            </p>
+            <p v-if="notice" class="small" style="margin-top:10px;color:var(--ink-2)" data-testid="empty-notice">
+              {{ notice }}
             </p>
           </div>
           <div class="chips reveal" style="--d:80ms">

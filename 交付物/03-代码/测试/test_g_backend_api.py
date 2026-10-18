@@ -296,6 +296,34 @@ def test_g2_ask_question_too_long_is_1001(client):
     assert r.json()["code"] == 1001
 
 
+def test_g2_citation_only_failure_is_empty_result_not_500(client, monkeypatch):
+    """2026-10-18 全面审查 F2：只缺引用的守卫失败按 2002 语义返回 200＋empty。
+
+    旧行为：`run_answer` 因 `citation_missing` 退出 1 → 契约 reason=answer_gate_failed
+    → 后端判 3004 → HTTP 502「装配账目守卫未通过」。审查实测乱码输入 2/5 触发。
+    新行为：`_run_chain` 识别「只缺引用」→ 返回 empty 标记；`ask()` 不落库、不造答案，
+    返回 HTTP 200 ＋ `empty=true` ＋ 友好 notice。
+    """
+    from services import qa_service
+    # ① 纯判据的单测（不跑链路）
+    assert qa_service._is_citation_only_failure(
+        {"reason": "answer_gate_failed", "extra": {"failures": {"Q-CUSTOM": ["citation_missing"]}}})
+    assert not qa_service._is_citation_only_failure(
+        {"reason": "answer_gate_failed",
+         "extra": {"failures": {"Q-CUSTOM": ["citation_missing", "citation_out_of_range"]}}})
+    assert not qa_service._is_citation_only_failure({"reason": "other"})
+    assert not qa_service._is_citation_only_failure(
+        {"reason": "answer_gate_failed", "extra": {"failures": {"Q-CUSTOM": []}}})
+    # ② ask() 的空结果分支：不落库，返回 empty 载荷
+    monkeypatch.setattr(qa_service, "_run_chain",
+                        lambda *a, **k: {"empty": True, "empty_reason": "no_citable_evidence",
+                                         "out_dir": "-", "elapsed_seconds": 1.0, "now": "-"})
+    payload = qa_service.ask("asdfjkl;qweruiop", "S-G-TEST-0001")
+    assert payload["empty"] is True
+    assert payload["answer_id"] is None and payload["evidence"] == []
+    assert "未检索到可引用的证据" in payload["notice"]
+
+
 def test_g2_ask_group_switch_field_is_1002(client):
     """硬约束 9：出现分组开关字段一律 1002。"""
     r = client.post("/api/qa/ask", json={"question": "q", "session_id": "S-G-TEST-0001",
