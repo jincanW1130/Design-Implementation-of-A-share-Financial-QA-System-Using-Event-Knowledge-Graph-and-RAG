@@ -1,0 +1,18 @@
+{
+  "concurrency": 5,
+  "failed": 0,
+  "failures": [],
+  "latency_ms": {
+    "max": 283.793,
+    "mean": 152.159,
+    "min": 100.566,
+    "p50": 133.596,
+    "p95": 219.701,
+    "p99": 283.793
+  },
+  "ok": 20,
+  "qps": 31.202,
+  "requests": 20,
+  "url": "http://127.0.0.1:8000/api/health",
+  "wall_seconds": 0.641
+}

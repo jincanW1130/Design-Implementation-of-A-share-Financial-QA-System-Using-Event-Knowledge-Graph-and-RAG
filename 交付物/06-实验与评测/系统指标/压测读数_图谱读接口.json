@@ -1,0 +1,18 @@
+{
+  "concurrency": 5,
+  "failed": 0,
+  "failures": [],
+  "latency_ms": {
+    "max": 441.269,
+    "mean": 377.629,
+    "min": 329.257,
+    "p50": 367.294,
+    "p95": 441.226,
+    "p99": 441.269
+  },
+  "ok": 20,
+  "qps": 13.224,
+  "requests": 20,
+  "url": "http://127.0.0.1:8000/api/graph/entities?keyword=600519&page=1&page_size=10",
+  "wall_seconds": 1.5125
+}
