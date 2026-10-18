@@ -20,6 +20,19 @@ export default defineConfig({
     host: '127.0.0.1',
     port: 5173,
     strictPort: true,
+    // 2026-10-18 修复：dev server 会监听**整个前端目录**，而 `测试/uat/` 下有 node_modules、
+    // 证据截图与编辑器原子写产生的 `.xxx.tmpdir/`。实测过一次真崩溃：编辑器在
+    // `测试/uat/` 下写临时文件时，chokidar 触发 `EBUSY: resource busy or locked` → FSWatcher
+    // 抛错 → **整个 vite 进程退出（exit 1）**，5173 直接不可用（答辩现场若发生等同演示中断）。
+    // 故显式排除测试资产与构建产物：它们不被产品代码 import，无需热更新。
+    watch: {
+      ignored: [
+        '**/测试/**',
+        '**/dist/**',
+        '**/.git/**',
+        '**/*.tmpdir/**',
+      ],
+    },
     proxy: {
       '/api': {
         target: BACKEND_ORIGIN,
