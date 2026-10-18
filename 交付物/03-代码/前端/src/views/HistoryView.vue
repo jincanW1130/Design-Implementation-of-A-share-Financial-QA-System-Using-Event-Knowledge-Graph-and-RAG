@@ -149,6 +149,12 @@ async function openRow(row) {
   drawerReturnFocus = document.activeElement        // M13：记录触发元素，关闭时还原
   drawerOn.value = true
   document.body.setAttribute('data-drawer', 'on')
+  // M13（2026-10-18 修正）：焦点必须在**抽屉一出现**时就移入面板，不能等详情／路径数据回来。
+  // 原实现把 focus() 放在 openRow 末尾（`await getHistoryDetail(...)` 与 `await mountReplay()` 之后），
+  // 于是数据慢或失败期间键盘焦点仍停在背后的列表行上——Tab 会穿透遮罩，抽屉的焦点陷阱也不生效；
+  // E2E `test_e2e_10` 正是按「#drawerTitle 可见即断言焦点已在抽屉内」的口径把它抓出来的。
+  await nextTick()
+  if (drawerPanel.value) drawerPanel.value.focus()
   detail.value = null
   gp.value = null
   gpError.value = ''
@@ -175,7 +181,8 @@ async function openRow(row) {
   }
   await nextTick()
   await mountReplay()
-  if (drawerPanel.value) drawerPanel.value.focus()   // M13：焦点移入抽屉
+  // 焦点已在抽屉打开时移入（见本函数开头）；此处不再重复 focus()，
+  // 以免数据回填后把用户已经从面板里 Tab 到别的控件上的焦点抢回来。
 }
 
 function closeDrawer() {
