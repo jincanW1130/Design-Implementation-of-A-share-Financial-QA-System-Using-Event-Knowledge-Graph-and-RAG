@@ -26,6 +26,7 @@ import sys
 
 from fastapi import APIRouter
 
+import cache
 import errors
 import services.qa_service as qa_service
 
@@ -66,10 +67,17 @@ def _check_group_by(group_by: str | None) -> str | None:
 @router.get("/{answer_id}", responses=errors.error_responses(1002, 2001, 9999))
 async def evidence_of_answer(answer_id: int, evidence_type: str | None = None,
                              group_by: str | None = None):
-    """某条回答的证据：四类分组计数 ＋ 明细（含文档元数据）。不存在 → 2001；空 → 200。"""
-    data = qa_service.evidence_of_answer(answer_id,
-                                         evidence_type=_check_evidence_type(evidence_type),
-                                         group_by=_check_group_by(group_by))
+    """某条回答的证据：四类分组计数 ＋ 明细（含文档元数据）。不存在 → 2001；空 → 200。
+
+    第四轮：成功结果按 `config.CACHE` 做进程内 TTL＋LRU 缓存（可关闭）；key 含
+    `answer_id／evidence_type／group_by` 三个参数，错误（2001／1002）不缓存；
+    `errors.ok()` 每次重新生成 `meta`，命中缓存与实时查询的响应逐字节一致。
+    """
+    etype = _check_evidence_type(evidence_type)
+    group = _check_group_by(group_by)
+    data = cache.EVIDENCE_CACHE.get_or_load(
+        (answer_id, etype or "", group or ""),
+        lambda: qa_service.evidence_of_answer(answer_id, evidence_type=etype, group_by=group))
     return errors.ok(data)
 
 

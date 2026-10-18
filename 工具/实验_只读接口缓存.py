@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-"""工具\\实验_只读接口缓存.py —— 第 6 轮：只读热点接口缓存的 HTTP 实测。
+"""工具\\实验_只读接口缓存.py —— 只读热点接口缓存的 HTTP 实测。
 
-对 `GET /api/config/meta` 与 `GET /api/graph/entities/000001` 各发 N 次请求，
-统计 p50／p95／p99、响应体哈希（应全程一致），并从 `/api/health` 读取缓存命中率。
+第 6 轮覆盖 `GET /api/config/meta` 与 `GET /api/graph/entities/000001`；
+**第四轮扩展**再覆盖 `GET /api/graph/events?page_size=20` 与 `GET /api/evidence/30`。
+每个端点各发 N 次请求，统计 p50／p95／p99、响应体哈希（应全程一致），并从
+`/api/health` 读取缓存命中率；两次运行（缓存关／开）会逐端点比对响应体 SHA-256。
 
 **对比方式**：先用 `ASHARE_CACHE_ENABLED=0` 启动后端跑一次 `--label before`，
 再用默认配置（缓存开启）重启后端跑一次 `--label after`；两次结果合并进同一个 JSON。
@@ -28,10 +30,13 @@ import time
 _HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(_HERE)
 DEFAULT_OUT = os.path.join(ROOT, "交付物/05-系统实现/前后端系统集成/_工作底稿",
-                           "只读接口缓存_第6轮.json")
+                           "只读接口缓存_第四轮.json")
 PATHS = {
     "config_meta": "/api/config/meta",
     "entity_detail": "/api/graph/entities/000001",
+    # 第四轮新增：缓存候选（只读热点）
+    "graph_events": "/api/graph/events?page_size=20",
+    "evidence_detail": "/api/evidence/30",
 }
 
 for _stream in (sys.stdout, sys.stderr):
@@ -116,6 +121,24 @@ def main() -> int:
         "health_cache": health.get("cache"),
         "health_status": health.get("status"),
     }
+
+    # 缓存关／开两次运行的响应体逐端点比对（来自各自 N 次请求的唯一 SHA-256）
+    runs = payload["runs"]
+    if {"before", "after"} <= set(runs):
+        comparison = {}
+        for key in PATHS:
+            before = ((runs["before"].get("latency") or {}).get(key) or {})
+            after = ((runs["after"].get("latency") or {}).get(key) or {})
+            b_hash, a_hash = before.get("response_sha256"), after.get("response_sha256")
+            comparison[key] = {
+                "before_sha256": b_hash,
+                "after_sha256": a_hash,
+                "identical": bool(b_hash and a_hash and b_hash == a_hash),
+                "before_distinct_bodies": before.get("distinct_response_bodies"),
+                "after_distinct_bodies": after.get("distinct_response_bodies"),
+            }
+        payload["cache_on_off_identical"] = comparison
+
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     with open(args.out, "w", encoding="utf-8", newline="\n") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2, sort_keys=True)
@@ -128,9 +151,13 @@ def main() -> int:
              cache.get("hits"), cache.get("misses")))
     print("  首请求：%s" % run["first_request_ms"])
     for key, r in results.items():
-        print("  %-14s n=%d p50=%.3f p95=%.3f p99=%.3f ms；响应体种类=%d"
+        print("  %-16s n=%d p50=%.3f p95=%.3f p99=%.3f ms；响应体种类=%d"
               % (key, r["requests"], r["p50_ms"], r["p95_ms"], r["p99_ms"],
                  r["distinct_response_bodies"]))
+    if "cache_on_off_identical" in payload:
+        print("缓存关／开响应体逐端点比对：")
+        for key, item in payload["cache_on_off_identical"].items():
+            print("  %-16s identical=%s" % (key, item["identical"]))
     print("结论 JSON：%s" % args.out)
     return 0
 

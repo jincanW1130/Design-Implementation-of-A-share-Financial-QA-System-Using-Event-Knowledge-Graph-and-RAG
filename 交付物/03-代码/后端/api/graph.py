@@ -1263,18 +1263,24 @@ async def list_events(event_type: str | None = None, stock_code: str | None = No
         raise errors.ApiError(1002, detail="start_time 晚于 end_time：%s > %s" % (lo, hi))
     page_no, size = _page_args(page, page_size)
 
-    with reader() as rd:
-        if code:
-            env = rd.graph.g4_company_events(code)
-            views = env.get("results") or []          # 公司未匹配到 → 空结果（表 4-13 只列 1002／2002）
-        elif etype:
-            env = rd.graph.g3_events_by_type(etype)
-            views = env.get("results") or []
-        else:
-            views = rd.all_events()
-        views = _events_in_window(views, lo, hi)
-        views.sort(key=lambda e: (_s(e.get("event_time")), _s(e.get("node_id"))))
-        items = [_event_item(v) for v in views]
+    def _load_items():
+        with reader() as rd:
+            if code:
+                env = rd.graph.g4_company_events(code)
+                views = env.get("results") or []      # 公司未匹配到 → 空结果（表 4-13 只列 1002／2002）
+            elif etype:
+                env = rd.graph.g3_events_by_type(etype)
+                views = env.get("results") or []
+            else:
+                views = rd.all_events()
+            views = _events_in_window(views, lo, hi)
+            views.sort(key=lambda e: (_s(e.get("event_time")), _s(e.get("node_id"))))
+            return [_event_item(v) for v in views]
+
+    # 第四轮：过滤／排序后的完整列表按（类型、股票代码、时间窗）缓存；分页在缓存外切片，
+    # 响应内容与未接缓存完全一致（errors.ok_page 每次重新生成 meta）。
+    cache_key = (etype or "", code, lo or "", hi or "")
+    items = cache.GRAPH_EVENTS_CACHE.get_or_load(cache_key, _load_items)
     start = (page_no - 1) * size
     return errors.ok_page(len(items), items[start:start + size], page_no, size)
 

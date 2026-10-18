@@ -15,6 +15,9 @@
 * **只缓存成功结果**：加载函数抛异常时异常原样上抛且不落缓存（400／404 等错误不缓存）。
 * **统计**：`hits／misses／hit_rate／sets／evictions／expired／size` 随
   `GET /api/health` 的 `cache` 区块返回（不新增路由）。
+* **第四轮扩展**：新增 `GRAPH_EVENTS_CACHE`（`/api/graph/events` 的**过滤＋排序后的
+  完整事件项列表**，分页在缓存外）与 `EVIDENCE_CACHE`（`/api/evidence/{answer_id}`
+  的 `data` 区块），与既有两个缓存共用同一套开关／TTL／LRU／统计口径。
 
 线程安全：所有读写都在同一把 `RLock` 内完成；加载函数也在锁内执行，天然避免
 缓存击穿（同一 key 的并发请求只会真正加载一次）。
@@ -145,7 +148,12 @@ CONFIG_META_CACHE = TTLCache("config_meta", _CFG["ttl_seconds"], _CFG["max_entri
                              enabled=_CFG["enabled"])
 ENTITY_DETAIL_CACHE = TTLCache("entity_detail", _CFG["ttl_seconds"], _CFG["max_entries"],
                                enabled=_CFG["enabled"])
-_CACHES = (CONFIG_META_CACHE, ENTITY_DETAIL_CACHE)
+# 第四轮：只读热点接口扩展（key 含全部过滤／分页之外的查询参数；分页在缓存外切片）
+GRAPH_EVENTS_CACHE = TTLCache("graph_events", _CFG["ttl_seconds"], _CFG["max_entries"],
+                              enabled=_CFG["enabled"])
+EVIDENCE_CACHE = TTLCache("evidence", _CFG["ttl_seconds"], _CFG["max_entries"],
+                          enabled=_CFG["enabled"])
+_CACHES = (CONFIG_META_CACHE, ENTITY_DETAIL_CACHE, GRAPH_EVENTS_CACHE, EVIDENCE_CACHE)
 
 
 def snapshot() -> dict:

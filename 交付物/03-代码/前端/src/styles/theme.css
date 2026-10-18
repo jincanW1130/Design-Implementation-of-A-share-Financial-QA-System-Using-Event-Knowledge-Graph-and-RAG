@@ -80,7 +80,9 @@ svg{display:block}
      background:rgba(255,255,255,.05);border:1px solid var(--border-soft);
      font-size:11px;letter-spacing:.06em;color:var(--muted);font-family:var(--f-mono)}
 .tag--demo{border-color:var(--border-soft);color:var(--faint)}
-.tag--red{border-color:var(--accent-line);color:var(--accent-ink);background:var(--accent-soft)}
+/* 第四轮对比度实测：11px 小字用 #FF3B30 在 accent-soft 合成底 #362121 上仅 4.25:1，
+   改用为小字准备的 --accent-soft-text(#FF7A72)，实测 5.9:1，达 WCAG AA。 */
+.tag--red{border-color:var(--accent-line);color:var(--accent-soft-text);background:var(--accent-soft)}
 .tag--muted{border-color:rgba(143,166,178,.38);color:var(--ok)}   /* 青灰：未接入/未收录，不用绿 */
 .tagrow{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 

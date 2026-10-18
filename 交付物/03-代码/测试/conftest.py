@@ -173,6 +173,13 @@ def forbid_network():
                 target = args[1] if len(args) > 1 else None
                 if isinstance(target, tuple) and target and target[0] in _LOOPBACK:
                     return
+            # 第四轮：真实 MySQL／Neo4j 只读集成测试（T 组）连接的都是 127.0.0.1，
+            # 驱动在建连前会做一次域名解析。这里只放行**环回主机名**的解析；
+            # 外部域名仍然零容忍（「离线」指不出网卡、不调模型）。
+            if event in ("socket.getaddrinfo", "socket.gethostbyname"):
+                host = args[0] if args else None
+                if isinstance(host, str) and host in _LOOPBACK:
+                    return
         if event in events:
             raise RuntimeError(
                 "单元测试必须离线：拦截到网络事件 %r（参数 %r）——本套测试不得联网、"
@@ -180,6 +187,25 @@ def forbid_network():
 
     sys.addaudithook(_hook)
     yield
+
+
+@pytest.fixture(autouse=True)
+def reset_backend_caches():
+    """每个用例前后清空后端进程内缓存（第四轮扩展后，路由缓存不得跨用例串数据）。
+
+    背景：G 组用替身 Reader、J 组用真实内存后端，两组可能请求**同一组过滤参数**的
+    `/api/graph/events`；若缓存跨用例保留，后跑的组会读到前一组替身的结果。这里只清
+    数据与统计，不改缓存开关／TTL／LRU 语义。`test_l_inproc_cache.py` 自己也在用例内
+    重置，二者不冲突。
+    """
+    try:
+        cache_mod = _bootstrap.load_backend("cache")
+    except Exception:                                    # 后端装配失败时不影响本夹具
+        yield
+        return
+    cache_mod.reset_all()
+    yield
+    cache_mod.reset_all()
 
 
 @pytest.fixture(scope="session")

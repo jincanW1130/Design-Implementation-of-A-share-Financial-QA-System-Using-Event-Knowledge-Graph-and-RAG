@@ -16,6 +16,8 @@
 
     python 工具\\实验_BM25离线对照.py
     python 工具\\实验_BM25离线对照.py --ngram-min 1 --ngram-max 2
+    # 第四轮：正式集（120 题，含 gold_evidence_chunk_ids）同口径复验
+    python 工具\\实验_BM25离线对照.py --questions 交付物\\06-实验与评测\\测试集\\questions.jsonl --json <落盘路径>
 """
 
 from __future__ import annotations
@@ -101,9 +103,19 @@ def main(argv=None) -> int:
     parser.add_argument("--k1", type=float, default=1.5)
     parser.add_argument("--b", type=float, default=0.75)
     parser.add_argument("--rrf-k", type=int, default=60)
+    parser.add_argument("--questions", default=config.QUESTION_FILES["questions"],
+                        help="题集 JSONL（缺省为 30 题预实验集；正式集需含 gold_evidence_chunk_ids）")
+    parser.add_argument("--json", default=None,
+                        help="把平均值与逐题明细写入该 JSON 路径（缺省只打印）")
     args = parser.parse_args(argv)
 
-    questions = load_jsonl(config.QUESTION_FILES["questions"])
+    questions = load_jsonl(args.questions)
+    missing_gold = [row.get("qid") for row in questions
+                    if not (row.get("gold_evidence_chunk_ids") or [])]
+    if missing_gold:
+        print("[对照] 题集缺少 gold_evidence_chunk_ids（%d 题）：%s —— 无法计算检索指标，退出。"
+              % (len(missing_gold), "、".join(str(q) for q in missing_gold[:10])))
+        return 2
     chunks = load_jsonl(config.CHUNKS_PATH)
     print("[对照] 题集 %d 题｜语料 %d 块｜K=%d、N=%d｜BM25 n-gram=%d～%d、k1=%.2f、b=%.2f"
           % (len(questions), len(chunks), K, N, args.ngram_min, args.ngram_max,
@@ -148,6 +160,7 @@ def main(argv=None) -> int:
         hybrid_rows.append(hybrid_eval)
         detail.append({
             "qid": row["qid"], "task_type": row.get("task_type"),
+            "subset": row.get("subset"),
             "gold_count": len(gold),
             "vector_recall": vector_eval["recall_at_k"],
             "lexical_recall": lexical_eval["recall_at_k"],
@@ -158,20 +171,39 @@ def main(argv=None) -> int:
         })
     search_seconds = time.time() - t2
 
-    summaries = [summarize("vector（现有基线）", vector_rows),
-                 summarize("BM25（字符 n-gram）", lexical_rows),
-                 summarize("RRF（向量+BM25，诊断）", hybrid_rows)]
-    print("\n[结果] 30 题平均（K=%d；指标为 chunk 级，Complete 为问题级）" % K)
-    header = "%-24s %8s %8s %8s %8s %8s %8s" % (
-        "system", "R@10", "MRR", "Complete", "Hit@1", "Hit@10", "首命中均位")
-    print(header)
-    print("-" * len(header))
-    for item in summaries:
-        first = item["first_hit_rank_mean_of_hits"]
-        print("%-24s %8.4f %8.4f %8.4f %8.4f %8.4f %8s"
-              % (item["system"], item["recall_at_10"], item["mrr"],
-                 item["complete_at_10"], item["hit_at_1"], item["hit_at_10"],
-                 "-" if first is None else "%.2f" % first))
+    def _summaries(rows_v, rows_l, rows_h):
+        return [summarize("vector（现有基线）", rows_v),
+                summarize("BM25（字符 n-gram）", rows_l),
+                summarize("RRF（向量+BM25，诊断）", rows_h)]
+
+    summaries = _summaries(vector_rows, lexical_rows, hybrid_rows)
+
+    # 正式集带 `subset`（核心／压力）：压力子集单独报告，不并入核心平均。
+    subsets = sorted({str(row.get("subset")) for row in questions if row.get("subset")})
+    subset_summaries = {}
+    for subset in subsets:
+        idx = [i for i, row in enumerate(questions) if str(row.get("subset")) == subset]
+        subset_summaries[subset] = _summaries(
+            [vector_rows[i] for i in idx], [lexical_rows[i] for i in idx],
+            [hybrid_rows[i] for i in idx])
+
+    def _print_summaries(title, items):
+        print("\n[结果] %s（K=%d；指标为 chunk 级，Complete 为问题级）" % (title, K))
+        header = "%-24s %8s %8s %8s %8s %8s %8s" % (
+            "system", "R@10", "MRR", "Complete", "Hit@1", "Hit@10", "首命中均位")
+        print(header)
+        print("-" * len(header))
+        for item in items:
+            first = item["first_hit_rank_mean_of_hits"]
+            print("%-24s %8.4f %8.4f %8.4f %8.4f %8.4f %8s"
+                  % (item["system"], item["recall_at_10"], item["mrr"],
+                     item["complete_at_10"], item["hit_at_1"], item["hit_at_10"],
+                     "-" if first is None else "%.2f" % first))
+
+    _print_summaries("%d 题平均" % len(questions), summaries)
+    for subset in subsets:
+        n_sub = sum(1 for row in questions if str(row.get("subset")) == subset)
+        _print_summaries("子集「%s」%d 题平均" % (subset, n_sub), subset_summaries[subset])
 
     wins = sum(1 for row in detail if row["lexical_recall"] > row["vector_recall"])
     ties = sum(1 for row in detail if row["lexical_recall"] == row["vector_recall"])
@@ -190,8 +222,41 @@ def main(argv=None) -> int:
 
     print("\n[口径声明] 本实验为**离线诊断**：向量侧只取独立 Top-K，不经过图谱通道、五步裁剪、"
           "证据排序；未跑 LLM、未联网、未改题集与默认实验口径。结论不得直接外推为正式 A～E 组读数。")
-    print("[耗时] 词汇索引 %.2f s｜向量加载 %.2f s｜60 次检索 %.2f s"
-          % (build_seconds, load_seconds, search_seconds))
+    print("[耗时] 词汇索引 %.2f s｜向量加载 %.2f s｜%d 题×两路检索 %.2f s"
+          % (build_seconds, load_seconds, len(questions), search_seconds))
+
+    if args.json:
+        payload = {
+            "generated_by": "工具/实验_BM25离线对照.py",
+            "questions_file": os.path.relpath(args.questions, ROOT).replace("\\", "/"),
+            "question_count": len(questions),
+            "K": K, "N": N,
+            "bm25": {"ngram_min": args.ngram_min, "ngram_max": args.ngram_max,
+                     "k1": args.k1, "b": args.b},
+            "rrf_k": args.rrf_k,
+            "summaries": summaries,
+            "subsets": {key: value for key, value in subset_summaries.items()},
+            "engineering": {
+                "tokens": len(index.postings),
+                "postings": index.posting_count,
+                "index_build_seconds": round(build_seconds, 2),
+                "vector_model_load_seconds": round(load_seconds, 2),
+                "search_seconds": round(search_seconds, 2),
+                "tracemalloc_peak_mb": round(peak / 1024 / 1024, 2),
+            },
+            "detail": detail,
+            "notes": [
+                "离线诊断：向量侧独立 Top-10，不经过图谱通道／五步裁剪／证据排序",
+                "零 LLM 调用、零联网、零写库；未改题集与默认 A～E 口径",
+            ],
+        }
+        out_dir = os.path.dirname(os.path.abspath(args.json))
+        if out_dir:
+            os.makedirs(out_dir, exist_ok=True)
+        with open(args.json, "w", encoding="utf-8", newline="\n") as fh:
+            json.dump(payload, fh, ensure_ascii=False, indent=2)
+            fh.write("\n")
+        print("[落盘] %s" % os.path.abspath(args.json))
     return 0
 
 

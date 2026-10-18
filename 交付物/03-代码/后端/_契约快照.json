@@ -1,8 +1,3288 @@
 {
+  "error_responses": {
+    "DELETE /api/admin/documents/{doc_id}": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "401": {
+        "example": {
+          "code": 4001,
+          "message": "凭据无效"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "403": {
+        "example": {
+          "code": 4002,
+          "message": "无操作权限"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "404": {
+        "example": {
+          "code": 2001,
+          "message": "资源不存在"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "409": {
+        "example": {
+          "code": 2003,
+          "message": "文档已被历史回答引用"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/admin/consistency-check": {
+      "401": {
+        "example": {
+          "code": 4001,
+          "message": "凭据无效"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "403": {
+        "example": {
+          "code": 4002,
+          "message": "无操作权限"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "503": {
+        "example": {
+          "code": 3001,
+          "message": "图谱服务不可用"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/admin/documents": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "401": {
+        "example": {
+          "code": 4001,
+          "message": "凭据无效"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "403": {
+        "example": {
+          "code": 4002,
+          "message": "无操作权限"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/admin/extraction/disambiguation": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "401": {
+        "example": {
+          "code": 4001,
+          "message": "凭据无效"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "403": {
+        "example": {
+          "code": 4002,
+          "message": "无操作权限"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/admin/extraction/events": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "401": {
+        "example": {
+          "code": 4001,
+          "message": "凭据无效"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "403": {
+        "example": {
+          "code": 4002,
+          "message": "无操作权限"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/admin/extraction/tasks/{task_id}": {
+      "401": {
+        "example": {
+          "code": 4001,
+          "message": "凭据无效"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "403": {
+        "example": {
+          "code": 4002,
+          "message": "无操作权限"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "404": {
+        "example": {
+          "code": 2001,
+          "message": "资源不存在"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/config/meta": {
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/documents/{doc_id}/chunks/{chunk_id}": {
+      "404": {
+        "example": {
+          "code": 2001,
+          "message": "资源不存在"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/evidence/{answer_id}": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "404": {
+        "example": {
+          "code": 2001,
+          "message": "资源不存在"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/evidence/{answer_id}/graph-path": {
+      "404": {
+        "example": {
+          "code": 2001,
+          "message": "资源不存在"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/graph/entities": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "503": {
+        "example": {
+          "code": 3001,
+          "message": "图谱服务不可用"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/graph/entities/{node_id}": {
+      "404": {
+        "example": {
+          "code": 2001,
+          "message": "资源不存在"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "503": {
+        "example": {
+          "code": 3001,
+          "message": "图谱服务不可用"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/graph/entities/{node_id}/evidence": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "404": {
+        "example": {
+          "code": 2001,
+          "message": "资源不存在"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "503": {
+        "example": {
+          "code": 3001,
+          "message": "图谱服务不可用"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/graph/entities/{node_id}/neighbors": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "404": {
+        "example": {
+          "code": 2001,
+          "message": "资源不存在"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "503": {
+        "example": {
+          "code": 3001,
+          "message": "图谱服务不可用"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/graph/events": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "503": {
+        "example": {
+          "code": 3001,
+          "message": "图谱服务不可用"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/graph/events/{event_id}": {
+      "404": {
+        "example": {
+          "code": 2001,
+          "message": "资源不存在"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "503": {
+        "example": {
+          "code": 3001,
+          "message": "图谱服务不可用"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/graph/paths": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "404": {
+        "example": {
+          "code": 2001,
+          "message": "资源不存在"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "503": {
+        "example": {
+          "code": 3001,
+          "message": "图谱服务不可用"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/history": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/history/{question_id}": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "404": {
+        "example": {
+          "code": 2001,
+          "message": "资源不存在"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/market/announcements": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/market/news": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/market/quote": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/market/reports": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "GET /api/qa/answers/{answer_id}": {
+      "404": {
+        "example": {
+          "code": 2001,
+          "message": "资源不存在"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "POST /api/admin/documents": {
+      "400": {
+        "example": {
+          "code": 1001,
+          "message": "输入为空或长度超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "401": {
+        "example": {
+          "code": 4001,
+          "message": "凭据无效"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "403": {
+        "example": {
+          "code": 4002,
+          "message": "无操作权限"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "POST /api/admin/experiment/ask": {
+      "400": {
+        "example": {
+          "code": 1001,
+          "message": "输入为空或长度超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "401": {
+        "example": {
+          "code": 4001,
+          "message": "凭据无效"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "403": {
+        "example": {
+          "code": 4002,
+          "message": "无操作权限"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "404": {
+        "example": {
+          "code": 2001,
+          "message": "资源不存在"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 3003,
+          "message": "向量索引不可用"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "503": {
+        "example": {
+          "code": 3001,
+          "message": "图谱服务不可用"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "504": {
+        "example": {
+          "code": 3002,
+          "message": "大模型接口超时"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "POST /api/admin/extraction/disambiguation/{item_id}": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "401": {
+        "example": {
+          "code": 4001,
+          "message": "凭据无效"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "403": {
+        "example": {
+          "code": 4002,
+          "message": "无操作权限"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "404": {
+        "example": {
+          "code": 2001,
+          "message": "资源不存在"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "POST /api/admin/extraction/run": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "401": {
+        "example": {
+          "code": 4001,
+          "message": "凭据无效"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "403": {
+        "example": {
+          "code": 4002,
+          "message": "无操作权限"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "POST /api/admin/reprocess": {
+      "400": {
+        "example": {
+          "code": 1002,
+          "message": "参数格式错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "401": {
+        "example": {
+          "code": 4001,
+          "message": "凭据无效"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "403": {
+        "example": {
+          "code": 4002,
+          "message": "无操作权限"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "POST /api/qa/ask": {
+      "400": {
+        "example": {
+          "code": 1001,
+          "message": "输入为空或长度超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 3003,
+          "message": "向量索引不可用"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "503": {
+        "example": {
+          "code": 3001,
+          "message": "图谱服务不可用"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "504": {
+        "example": {
+          "code": 3002,
+          "message": "大模型接口超时"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "PUT /api/admin/documents/{doc_id}": {
+      "400": {
+        "example": {
+          "code": 1001,
+          "message": "输入为空或长度超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "401": {
+        "example": {
+          "code": 4001,
+          "message": "凭据无效"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "403": {
+        "example": {
+          "code": 4002,
+          "message": "无操作权限"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "404": {
+        "example": {
+          "code": 2001,
+          "message": "资源不存在"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "409": {
+        "example": {
+          "code": 2003,
+          "message": "文档已被历史回答引用"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "500": {
+        "example": {
+          "code": 9999,
+          "message": "服务内部错误"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    }
+  },
   "generated_by": "工具/契约快照.py",
   "openapi_version": "3.1.0",
-  "path_count": 30,
   "operation_count": 33,
+  "operations": [
+    "DELETE /api/admin/documents/{doc_id}",
+    "GET /api/admin/consistency-check",
+    "GET /api/admin/documents",
+    "GET /api/admin/extraction/disambiguation",
+    "GET /api/admin/extraction/events",
+    "GET /api/admin/extraction/tasks/{task_id}",
+    "GET /api/config/meta",
+    "GET /api/documents/{doc_id}/chunks/{chunk_id}",
+    "GET /api/evidence/{answer_id}",
+    "GET /api/evidence/{answer_id}/graph-path",
+    "GET /api/graph/entities",
+    "GET /api/graph/entities/{node_id}",
+    "GET /api/graph/entities/{node_id}/evidence",
+    "GET /api/graph/entities/{node_id}/neighbors",
+    "GET /api/graph/events",
+    "GET /api/graph/events/{event_id}",
+    "GET /api/graph/paths",
+    "GET /api/health",
+    "GET /api/history",
+    "GET /api/history/{question_id}",
+    "GET /api/market/announcements",
+    "GET /api/market/news",
+    "GET /api/market/quote",
+    "GET /api/market/reports",
+    "GET /api/qa/answers/{answer_id}",
+    "HEAD /api/health",
+    "POST /api/admin/documents",
+    "POST /api/admin/experiment/ask",
+    "POST /api/admin/extraction/disambiguation/{item_id}",
+    "POST /api/admin/extraction/run",
+    "POST /api/admin/reprocess",
+    "POST /api/qa/ask",
+    "PUT /api/admin/documents/{doc_id}"
+  ],
+  "path_count": 30,
   "paths": {
     "/api/admin/consistency-check": [
       "GET"
@@ -98,43 +3378,58 @@
       "POST"
     ]
   },
-  "operations": [
-    "DELETE /api/admin/documents/{doc_id}",
-    "GET /api/admin/consistency-check",
-    "GET /api/admin/documents",
-    "GET /api/admin/extraction/disambiguation",
-    "GET /api/admin/extraction/events",
-    "GET /api/admin/extraction/tasks/{task_id}",
-    "GET /api/config/meta",
-    "GET /api/documents/{doc_id}/chunks/{chunk_id}",
-    "GET /api/evidence/{answer_id}",
-    "GET /api/evidence/{answer_id}/graph-path",
-    "GET /api/graph/entities",
-    "GET /api/graph/entities/{node_id}",
-    "GET /api/graph/entities/{node_id}/evidence",
-    "GET /api/graph/entities/{node_id}/neighbors",
-    "GET /api/graph/events",
-    "GET /api/graph/events/{event_id}",
-    "GET /api/graph/paths",
-    "GET /api/health",
-    "GET /api/history",
-    "GET /api/history/{question_id}",
-    "GET /api/market/announcements",
-    "GET /api/market/news",
-    "GET /api/market/quote",
-    "GET /api/market/reports",
-    "GET /api/qa/answers/{answer_id}",
-    "HEAD /api/health",
-    "POST /api/admin/documents",
-    "POST /api/admin/experiment/ask",
-    "POST /api/admin/extraction/disambiguation/{item_id}",
-    "POST /api/admin/extraction/run",
-    "POST /api/admin/reprocess",
-    "POST /api/qa/ask",
-    "PUT /api/admin/documents/{doc_id}"
-  ],
+  "schema_fields": {
+    "HTTPValidationError": {
+      "properties": {
+        "detail": {
+          "items": {
+            "ref": "ValidationError"
+          },
+          "type": "array"
+        }
+      },
+      "required": [],
+      "type": "object"
+    },
+    "ValidationError": {
+      "properties": {
+        "ctx": {
+          "type": "object"
+        },
+        "input": {
+          "kind": "any"
+        },
+        "loc": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "msg": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "loc",
+        "msg",
+        "type"
+      ],
+      "type": "object"
+    }
+  },
   "schemas": [
     "HTTPValidationError",
     "ValidationError"
-  ]
+  ],
+  "snapshot_level": "field"
 }

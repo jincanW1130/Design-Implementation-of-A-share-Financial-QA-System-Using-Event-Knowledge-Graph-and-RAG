@@ -96,10 +96,22 @@ def test_network_guard_is_armed():
     （审计事件在真正发起调用之前抛出，因此这条用例不会产生任何真实网络流量）。
     """
     import socket
+    # 外部域名解析／外部地址连接：仍零容忍、当场抛错。
     with pytest.raises(RuntimeError, match="单元测试必须离线"):
         socket.getaddrinfo("example.com", 80)
     with pytest.raises(RuntimeError, match="单元测试必须离线"):
-        socket.create_connection(("127.0.0.1", 9), timeout=0.01)
+        socket.create_connection(("192.0.2.1", 9), timeout=0.01)
+    # 第四轮：真实 MySQL／Neo4j 只读集成测试（T 组）需要环回连接，守卫只放行环回。
+    # 这里用本进程自建的环回监听验证“放行”是真的（不出网卡、不依赖任何外部服务）。
+    server = socket.socket()
+    try:
+        server.bind(("127.0.0.1", 0))
+        server.listen(1)
+        port = server.getsockname()[1]
+        client = socket.create_connection(("127.0.0.1", port), timeout=1)
+        client.close()
+    finally:
+        server.close()
 
 
 def test_pipeline_refuses_a_foreign_config():
