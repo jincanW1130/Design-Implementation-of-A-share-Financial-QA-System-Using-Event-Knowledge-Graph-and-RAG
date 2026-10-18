@@ -604,23 +604,38 @@ def _make_driver():
 # --------------------------------------------------------------------------
 # 4. 后端选择
 # --------------------------------------------------------------------------
+BACKEND_FACTORIES = {
+    NEO4J_BACKEND: Neo4jGraphQuery,
+    MEMORY_BACKEND: GraphQuery,
+}
+"""后端名 → 工厂（无参构造）。第 2 轮把原来的 `if/else` 收敛成注册表：
+新增一种后端只需 `register_backend("name", Factory)`，`open_backend()` 与命令行
+`--backend` 的合法值集合随之扩展，核心选择逻辑不用改（开闭原则）。"""
+
+
+def register_backend(name: str, factory) -> None:
+    """注册一个图谱后端工厂；同名覆盖（便于测试替换）。名称统一转小写去空白。"""
+    key = str(name).strip().lower()
+    if not key or not callable(factory):
+        raise ValueError("后端名必须非空、factory 必须可调用")
+    BACKEND_FACTORIES[key] = factory
+
+
 def resolve_backend_name(name: str | None = None) -> str:
     """`GRAPH_BACKEND` 环境变量 → 后端 config 开关 → 缺省 `neo4j`。"""
     chosen = (name or os.environ.get("GRAPH_BACKEND")
               or getattr(config, "GRAPH_BACKEND", None) or DEFAULT_BACKEND)
     chosen = str(chosen).strip().lower()
-    if chosen not in (NEO4J_BACKEND, MEMORY_BACKEND):
-        raise SystemExit("未知的 GRAPH_BACKEND=%r（合法值：%s／%s）"
-                         % (chosen, NEO4J_BACKEND, MEMORY_BACKEND))
+    if chosen not in BACKEND_FACTORIES:
+        raise SystemExit("未知的 GRAPH_BACKEND=%r（合法值：%s）"
+                         % (chosen, "／".join(BACKEND_FACTORIES)))
     return chosen
 
 
 def open_backend(name: str | None = None):
     """打开一个图谱查询后端实例。`memory` 就是第 7 阶段的 `GraphQuery`（未改一字节）。"""
     chosen = resolve_backend_name(name)
-    if chosen == MEMORY_BACKEND:
-        return GraphQuery(), MEMORY_BACKEND
-    return Neo4jGraphQuery(), NEO4J_BACKEND
+    return BACKEND_FACTORIES[chosen](), chosen
 
 
 def close_backend(graph) -> None:

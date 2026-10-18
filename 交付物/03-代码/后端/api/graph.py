@@ -42,8 +42,10 @@ from datetime import datetime
 
 from fastapi import APIRouter
 
+import config
 import db
 import errors
+import params
 from services import graph_service as gs
 
 for _stream in (sys.stdout, sys.stderr):
@@ -69,12 +71,12 @@ EVIDENCE_ATTRS = list(gs.EVIDENCE_ATTRS)
 EVIDENCED_BY = gs.EVIDENCED_BY
 EVENT_TYPES = list(gs.EVENT_TYPES)
 
-PAGE_SIZE_MAX = 200
-"""`page_size` 上限（与 `api\\history.py` 同值，防止一次拉全图）。"""
+PAGE_SIZE_MAX = int(config.API_LIMITS["page_size_max"])
+"""`page_size` 上限（与 `api\\history.py` 同值，防止一次拉全图；取自 `config.API_LIMITS`）。"""
 
-DEFAULT_PAGE_SIZE = 20
+DEFAULT_PAGE_SIZE = int(config.API_LIMITS["default_page_size"])
 
-MAX_NODE_ID_LEN = 128
+MAX_NODE_ID_LEN = int(config.API_LIMITS["node_id_max_chars"])
 """实体详情路径参数 `node_id` 的长度上限（超长 → 1002）。本项目最长的节点标识形如
 `PER-0001`／`EVT-0236`／`HCONF-…`，128 足够宽裕，只用于挡住异常长的输入。"""
 
@@ -88,9 +90,8 @@ NULL_TIME_POLICY = str(gs.RETRIEVAL_CONFIG.RETRIEVAL.get("time_filter_null_polic
 # --------------------------------------------------------------------------
 # 2. 通用小工具
 # --------------------------------------------------------------------------
-def _s(value) -> str:
-    """统一成字符串（None → ""），与 `graph_service._s` 同义。"""
-    return "" if value is None else str(value)
+_s = params.text
+"""统一成字符串（None → ""，**不 strip**）；实现见 `params.text`。"""
 
 
 def _norm(text) -> str:
@@ -117,35 +118,18 @@ def _iso(value) -> str:
     return _s(value)
 
 
-def _parse_int(raw, name: str, default=None):
-    """查询参数取整数；空串／缺失取默认值，非法值抛 `ApiError(1002)`。"""
-    if raw is None or _s(raw).strip() == "":
-        return default
-    try:
-        return int(_s(raw).strip())
-    except (TypeError, ValueError):
-        raise errors.ApiError(1002, detail="%s 不是整数：%r" % (name, raw))
+_parse_int = params.parse_int
+"""查询参数取整数；空串／缺失取默认值，非法值抛 `ApiError(1002)`（实现见 `params`）。"""
 
 
 def _page_args(page, page_size) -> tuple:
     """分页参数统一校验（`page ≥ 1`、`1 ≤ page_size ≤ PAGE_SIZE_MAX`），非法 → 1002。"""
-    page_no = _parse_int(page, "page", default=1)
-    if page_no is None or page_no < 1:
-        raise errors.ApiError(1002, detail="page 必须是不小于 1 的整数：%r" % page)
-    size = _parse_int(page_size, "page_size", default=DEFAULT_PAGE_SIZE)
-    if size is None or size < 1 or size > PAGE_SIZE_MAX:
-        raise errors.ApiError(1002, detail="page_size 必须是 1～%d 的整数：%r"
-                              % (PAGE_SIZE_MAX, page_size))
-    return page_no, size
+    return params.page_args(page, page_size, page_size_max=PAGE_SIZE_MAX,
+                            default_page_size=DEFAULT_PAGE_SIZE)
 
 
-def _truthy(raw) -> bool:
-    """布尔开关：`1`／`true`／`yes`／`on`（大小写不敏感）为真，其余（含缺省）为假。
-
-    用于 `with_evidence`／`with_properties`（第 9 阶段新增的**可选**开关）：缺省与任何
-    非真值都按「关」处理，以保证「不带参数时响应逐字节与旧版一致」这条硬约束不受参数杂音影响。
-    """
-    return _s(raw).strip().lower() in ("1", "true", "yes", "on")
+_truthy = params.truthy
+"""布尔开关（`1／true／yes／on` 为真）；实现见 `params.truthy`。"""
 
 
 def _node_id_arg(node_id) -> str:
@@ -988,7 +972,7 @@ async def entity_evidence(node_id: str, depth: str | None = None,
     * 返回键：`node`／`counts`／`documents`／`documents_total`／`chunks_total`／
       `relations_without_evidence`／`depth`／`params`／`scope`／`source`。
     """
-    depth_no = _parse_int(depth, "depth", default=1)
+    depth_no = _parse_int(depth, "depth", default=int(config.API_LIMITS["graph_default_depth"]))
     if depth_no not in (1, 2):
         raise errors.ApiError(1002, detail="depth 只能是 1 或 2：%r" % depth)
     page_no, size = _page_args(page, page_size)
@@ -1144,7 +1128,7 @@ async def paths(from_node: str | None = None, to_node: str | None = None,
     rel = _check_relation(relation)
     if not target and not rel:
         raise errors.ApiError(1002, detail="必须给出 to_node，或给出 relation（二者至少其一）")
-    hop_no = _parse_int(hop, "hop", default=2)
+    hop_no = _parse_int(hop, "hop", default=int(config.API_LIMITS["graph_default_hop"]))
     if hop_no not in (1, 2):
         raise errors.ApiError(1002, detail="hop 只能是 1 或 2：%r" % hop)
     lo = _time_bound(start_time, "start_time")

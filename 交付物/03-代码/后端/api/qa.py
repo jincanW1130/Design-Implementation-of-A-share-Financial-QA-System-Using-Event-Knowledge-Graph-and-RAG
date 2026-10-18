@@ -32,6 +32,7 @@ from fastapi import APIRouter, Body
 
 import config
 import errors
+import params
 import services.qa_service as qa_service
 
 for _stream in (sys.stdout, sys.stderr):
@@ -59,7 +60,7 @@ GROUP_SWITCH_KEYS = frozenset({
 })
 """分组／试验开关字段名（小写去下划线后比对）——出现即 1002。"""
 
-SESSION_ID_MAX_CHARS = 36
+SESSION_ID_MAX_CHARS = int(config.API_LIMITS["session_id_max_chars"])
 """`session_id` 的上限：浏览器生成的 UUID 是 36 字符（`question.session_id` 为 CHAR(36)）。"""
 
 
@@ -87,9 +88,8 @@ def _reject_switches(payload: dict) -> None:
 
 
 def _validate_question(raw) -> str:
-    """复用 `main.validate_question`（延迟导入：`main` 在装配期才 import 本模块）。"""
-    import main                                  # noqa: PLC0415（避免装配期循环导入）
-    return main.validate_question(raw)
+    """复用公共校验 `params.validate_question`（路由层不再反向依赖 `main`）。"""
+    return params.validate_question(raw)
 
 
 @router.post("/ask")

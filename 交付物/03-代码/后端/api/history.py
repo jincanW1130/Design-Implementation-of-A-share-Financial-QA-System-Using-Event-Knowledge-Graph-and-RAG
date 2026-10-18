@@ -27,7 +27,9 @@ import sys
 
 from fastapi import APIRouter, Header
 
+import config
 import errors
+import params
 import services.qa_service as qa_service
 
 for _stream in (sys.stdout, sys.stderr):
@@ -39,10 +41,13 @@ for _stream in (sys.stdout, sys.stderr):
 
 router = APIRouter(tags=["history"])
 
-PAGE_SIZE_MAX = 200
-"""`page_size` 上限（防止一次拉全表；取值登记在《25-文档更新登记》）。"""
+PAGE_SIZE_MAX = int(config.API_LIMITS["page_size_max"])
+"""`page_size` 上限（防止一次拉全表；取值登记在《25-文档更新登记》，第 2 轮收敛到 config）。"""
 
-PAGE_MAX = 100000
+PAGE_MAX = int(config.API_LIMITS["page_max"])
+
+SESSION_ID_MAX_CHARS = int(config.API_LIMITS["session_id_max_chars"])
+"""`session_id` 上限：与 `question.session_id` 的 CHAR(36) 一致（取自 `config`）。"""
 """`page` 上限（2026-10-18 全面审查 A3 新增）。
 
 审查实测：`page=999999999999999999999` 时 `(page-1)*page_size` 溢出成 10^21 量级，
@@ -52,14 +57,15 @@ PAGE_MAX = 100000
 """
 
 
-def _parse_int(raw, name: str, default: int | None = None) -> int | None:
-    """查询参数取整数；空串／缺失取默认值，非法值抛 `ApiError(1002)`。"""
-    if raw is None or str(raw).strip() == "":
-        return default
-    try:
-        return int(str(raw).strip())
-    except (TypeError, ValueError):
-        raise errors.ApiError(1002, detail="%s 不是整数：%r" % (name, raw))
+_parse_int = params.parse_int
+"""查询参数取整数；空串／缺失取默认值，非法值抛 `ApiError(1002)`（实现见 `params`）。"""
+
+
+def _page_args(page, page_size) -> tuple:
+    """历史列表的分页口径：`page ≤ PAGE_MAX`、`1 ≤ page_size ≤ PAGE_SIZE_MAX`。"""
+    return params.page_args(page, page_size, page_size_max=PAGE_SIZE_MAX,
+                            default_page_size=int(config.API_LIMITS["default_page_size"]),
+                            page_max=PAGE_MAX)
 
 
 def _require_session_id(session_id: str | None) -> str:
@@ -68,8 +74,9 @@ def _require_session_id(session_id: str | None) -> str:
         raise errors.ApiError(1002, detail="缺少 session_id —— 历史记录按会话隔离（FR-06），"
                               "该参数为强制项")
     text = session_id.strip()
-    if len(text) > 36:
-        raise errors.ApiError(1002, detail="session_id 长度 %d 超过 36（应为 UUID）" % len(text))
+    if len(text) > SESSION_ID_MAX_CHARS:
+        raise errors.ApiError(1002, detail="session_id 长度 %d 超过 %d（应为 UUID）"
+                              % (len(text), SESSION_ID_MAX_CHARS))
     return text
 
 
@@ -83,15 +90,7 @@ async def list_history(session_id: str | None = None, page: str | None = None,
     与其它接口的鉴权头用法对齐；此前只认 query，带头会被误判为「缺少 session_id」返 1002。
     """
     sid = _require_session_id(session_id or x_session_id)
-    page_no = _parse_int(page, "page", default=1)
-    if page_no is None or page_no < 1:
-        raise errors.ApiError(1002, detail="page 必须是不小于 1 的整数：%r" % page)
-    if page_no > PAGE_MAX:
-        raise errors.ApiError(1002, detail="page 超过上限 %d：%r" % (PAGE_MAX, page))
-    size = _parse_int(page_size, "page_size", default=20)
-    if size is None or size < 1 or size > PAGE_SIZE_MAX:
-        raise errors.ApiError(1002, detail="page_size 必须是 1～%d 的整数：%r"
-                              % (PAGE_SIZE_MAX, page_size))
+    page_no, size = _page_args(page, page_size)
     data = qa_service.history_list(sid, page_no, size)
     return errors.ok(data)
 

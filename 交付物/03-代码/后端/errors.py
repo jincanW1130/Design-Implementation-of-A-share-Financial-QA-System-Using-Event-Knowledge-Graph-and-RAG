@@ -25,10 +25,12 @@
 
 from __future__ import annotations
 
+import contextvars
 import logging
 import logging.handlers  # noqa: F401  （RotatingFileHandler 用；本文件 setup_logging 里显式引用）
 import os
 import sys
+import uuid
 
 from starlette.responses import JSONResponse
 
@@ -42,6 +44,32 @@ for _stream in (sys.stdout, sys.stderr):
             pass
 
 logger = logging.getLogger("ashare_qa.backend")
+
+# --------------------------------------------------------------------------
+# 0. 请求 ID（第 2 轮新增：异常带请求 ID，且只进日志／响应头，不进响应体）
+# --------------------------------------------------------------------------
+REQUEST_ID_HEADER = "X-Request-Id"
+REQUEST_ID_MAX_CHARS = 64
+"""客户端可自带 `X-Request-Id`（如网关生成）；超过 64 字符或不可打印一律改用新生成的 ID。"""
+
+request_id_var: contextvars.ContextVar[str] = contextvars.ContextVar(
+    "ashare_request_id", default="-")
+"""当前请求的 ID。异步请求各自一份上下文，不会串号。"""
+
+
+class RequestIdFilter(logging.Filter):
+    """给每条日志补 `request_id` 字段；无请求上下文时取默认值 `-`。
+
+    只挂在 `setup_logging()` 自己创建的 handler 上，不影响 pytest／uvicorn 的日志格式。
+    """
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        if not getattr(record, "request_id", None):
+            record.request_id = request_id_var.get()
+        return True
+
+
+LOG_FORMAT = "%(asctime)s %(levelname)s [%(request_id)s] %(name)s %(message)s"
 
 # --------------------------------------------------------------------------
 # 1. 错误码表（code → (message, http_status)）
@@ -200,8 +228,8 @@ def setup_logging(level: int = logging.INFO) -> None:
       目录不存在时先尝试 `os.makedirs`（`log_path` 允许指向尚未创建的目录）。
     """
     handler = logging.StreamHandler(stream=sys.stderr)
-    handler.setFormatter(logging.Formatter(
-        "%(asctime)s %(levelname)s %(name)s %(message)s"))
+    handler.setFormatter(logging.Formatter(LOG_FORMAT))
+    handler.addFilter(RequestIdFilter())
     handlers = [handler]
 
     log_path = getattr(config, "LOG_PATH", None)
@@ -219,8 +247,8 @@ def setup_logging(level: int = logging.INFO) -> None:
                 backupCount=int(rotation.get("backup_count", 5)),
                 encoding=str(rotation.get("encoding", "utf-8")),
                 delay=True)
-            file_handler.setFormatter(logging.Formatter(
-                "%(asctime)s %(levelname)s %(name)s %(message)s"))
+            file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+            file_handler.addFilter(RequestIdFilter())
             handlers.append(file_handler)
         except OSError as exc:
             # detail 只进日志：这里只报**路径与异常类型**，绝不回显任何凭据取值。
@@ -281,8 +309,30 @@ def install_exception_handlers(app) -> None:
 
 
 def register_request_id(app) -> None:
-    """预留：给每个请求打一个 request-id（日志用）。第一版只记方法＋路径，不落额外字段。"""
-    return None
+    """给每个请求打一个 request-id：进日志上下文与响应头，**不进响应体**。
+
+    取值优先用客户端自带的 `X-Request-Id`（网关／前端便于串联），格式不合法时生成
+    16 位十六进制串。`contextvars` 保证并发请求各自一份上下文；`RequestIdFilter`
+    把它填进每条日志。响应体键集合仍恰为 `{code, message}`（`data`/`meta` 用于成功），
+    错误契约不受影响。
+    """
+    @app.middleware("http")
+    async def _request_id(request, call_next):
+        incoming = (request.headers.get(REQUEST_ID_HEADER) or "").strip()
+        if incoming and len(incoming) <= REQUEST_ID_MAX_CHARS and incoming.isprintable():
+            request_id = incoming
+        else:
+            request_id = uuid.uuid4().hex[:16]
+        token = request_id_var.set(request_id)
+        request.state.request_id = request_id
+        try:
+            response = await call_next(request)
+        except Exception:
+            request_id_var.reset(token)          # 异常交给 errors 的处理器记录（已带 ID）
+            raise
+        response.headers[REQUEST_ID_HEADER] = request_id
+        request_id_var.reset(token)
+        return response
 
 
 # --------------------------------------------------------------------------

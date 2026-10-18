@@ -527,6 +527,13 @@ def _run_chain(question: str, group: str, session_id: str, now_iso: str) -> dict
             proc.communicate(timeout=30)            # 回收管道与退出码（树已死，立即返回）
         raise ApiError(3002, detail="run_answer 超时 %ds（out_dir=%s）"
                        % (CHAIN_TIMEOUT_SECONDS, out_dir))
+    finally:
+        # 资源释放兜底（第 2 轮）：正常路径 `communicate` 已关闭管道；超时路径若第二次
+        # 回收也失败，这里显式关一次，避免文件句柄滞留到 GC。重复 close 是幂等的。
+        for _pipe in (getattr(proc, "stdout", None), getattr(proc, "stderr", None)):
+            if _pipe is not None:
+                with contextlib.suppress(Exception):
+                    _pipe.close()
 
     elapsed = (datetime.now() - started).total_seconds()
     if proc.returncode != 0:

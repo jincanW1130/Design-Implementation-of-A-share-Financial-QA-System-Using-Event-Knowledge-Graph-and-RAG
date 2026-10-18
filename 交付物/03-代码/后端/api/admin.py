@@ -21,8 +21,8 @@
 **4002**、②普通请求按**2001**（资源不存在）如实拒——这样「后台前缀不对普通用户开放」
 这句话在整个前缀上都成立，而不只在我明确登记的那 12 条上成立（见第 2 节）。
 
-十条纪律
---------
+十一条纪律
+----------
 1. **4002 的落点**（《24》硬约束与表 4-13「后台一栏不对普通用户开放」）：本项目第一版
    **不启用登录**，故按**路径前缀**实现，且**不改 `main.py`**——守卫做成挂在
    `router` 上的路由级依赖 `require_admin`（`api\\admin.py` 内的 `router` 由
@@ -79,6 +79,12 @@
 10. **响应体纪律**：成功一律 `errors.ok(...)`／`errors.ok_page(...)` 信封（表 4-13 的
     示例给的是 `data` 内的字段，信封由本项目既定约定统一加，与既有三条接口一致）；
     错误体恰为 `{code, message}`（2003 见第 2 条）。`detail` 只进日志。
+11. **分层口径（第 2 轮登记）**：本文件是**后台运维 CRUD 的适配层**，按第 1 条的口径
+    仍需直接读写 MySQL（显式 SQL、无 ORM）。它不承载检索／问答领域逻辑：一致性检查的
+    图谱计数、实验问答分别委派 `graph_service`／`qa_service`；文档切分复用第 5 阶段
+    `chunk.py`。依赖方向门禁（`services ↛ api`、`db ↛ services/api`）保持全绿；
+    把纯 SQL 再下沉一层会引入与现有测试 monkeypatch（`admin_api.db`）冲突的间接层，
+    收益低于风险，故本轮**有意保留**为已登记的适配层例外。
 """
 
 from __future__ import annotations
@@ -99,8 +105,8 @@ from starlette.responses import JSONResponse
 import config
 import db
 import errors
+import params
 from api import graph as graph_api
-from services import graph_service as gs
 
 for _stream in (sys.stdout, sys.stderr):
     if hasattr(_stream, "reconfigure"):
@@ -153,6 +159,11 @@ DOC_SOURCE_MAX = 128               # document.source VARCHAR(128)
 DOC_URL_MAX = 1024                 # document.url VARCHAR(1024)
 DOC_CATEGORY_MAX = 64              # document.category VARCHAR(64)
 DOC_COMPANY_LIST_MAX = 512         # document.company_list VARCHAR(512)
+PROMPT_VERSION_MAX = int(config.API_LIMITS["prompt_version_max_chars"])
+"""`extraction/run` 的 prompt_version 覆盖字段上限（取自 `config.API_LIMITS`）。"""
+
+SESSION_ID_MAX_CHARS = int(config.API_LIMITS["session_id_max_chars"])
+"""`session_id` 上限（与 `question.session_id` 的 CHAR(36) 一致）。"""
 
 TASK_LEDGER = os.path.join(config.WORK_DIR, "后台任务台账.jsonl")
 """任务台账（`reprocess`／`extraction/run`／导入触发的重处理）。落 `_工作底稿` 而非
@@ -773,7 +784,8 @@ def _check_document_payload(payload) -> dict:
 
     row = {
         "title": _check_text(payload.get("title"), "title", DOC_TITLE_MAX),
-        "content": _check_text(payload.get("content"), "content", 16 * 1024 * 1024),
+        "content": _check_text(payload.get("content"), "content",
+                               int(config.API_LIMITS["document_content_max_bytes"])),
         "source": _check_text(payload.get("source"), "source", DOC_SOURCE_MAX),
         "publish_time": _parse_dt(payload.get("publish_time"), "publish_time"),
     }
@@ -1195,8 +1207,9 @@ async def extraction_run(payload: dict | None = Body(default=None)):
     scope = _check_scope(payload.get("scope"))
     doc_ids = _check_doc_ids(payload.get("doc_ids"))
     prompt_version = _s(payload.get("prompt_version")).strip() or config.PROMPT_VERSION
-    if len(prompt_version) > 64:
-        raise errors.ApiError(1002, detail="prompt_version 长度 %d 超过 64" % len(prompt_version))
+    if len(prompt_version) > PROMPT_VERSION_MAX:
+        raise errors.ApiError(1002, detail="prompt_version 长度 %d 超过 %d"
+                              % (len(prompt_version), PROMPT_VERSION_MAX))
     task = _record_task("extraction", scope=scope, doc_ids=doc_ids,
                         prompt_version=prompt_version,
                         note=NOT_RUN_NOTE + "scope=%s doc_ids=%s prompt_version=%s。"
@@ -1527,14 +1540,13 @@ async def experiment_ask(payload: dict | None = Body(default=None)):
         raise errors.ApiError(1002, detail="请求体含未登记字段 %s（本接口只接受 question、"
                               "session_id、experiment_group、run_id）" % "、".join(unknown))
 
-    import main as backend_main                                # noqa: PLC0415（延迟导入，避免装配期循环）
-    question = backend_main.validate_question(payload.get("question"))     # 空／超长 → 1001
+    question = params.validate_question(payload.get("question"))           # 空／超长 → 1001
     session_id = _s(payload.get("session_id")).strip()
     if not session_id:                                          # 输入为空 → 1001（表 4-13 列了 1001）
         raise errors.ApiError(1001, detail="session_id 缺失或为空")
-    if len(session_id) > 36:                                    # question.session_id CHAR(36)
-        raise errors.ApiError(1002, detail="session_id 长度 %d 超过 36（应为 UUID）"
-                              % len(session_id))
+    if len(session_id) > SESSION_ID_MAX_CHARS:                  # question.session_id CHAR(36)
+        raise errors.ApiError(1002, detail="session_id 长度 %d 超过 %d（应为 UUID）"
+                              % (len(session_id), SESSION_ID_MAX_CHARS))
     group = _check_group(payload.get("experiment_group"))
     run_id = _s(payload.get("run_id")).strip() or None
 

@@ -45,8 +45,8 @@ logger = errors.logger
 
 router = APIRouter(tags=["market"])
 
-DEFAULT_PAGE_SIZE = 20
-"""`page_size` 缺省值（各接口一致）。"""
+DEFAULT_PAGE_SIZE = int(config.API_LIMITS["default_page_size"])
+"""`page_size` 缺省值（各接口一致；取自 `config.API_LIMITS`）。"""
 
 
 def _check_codes(raw):

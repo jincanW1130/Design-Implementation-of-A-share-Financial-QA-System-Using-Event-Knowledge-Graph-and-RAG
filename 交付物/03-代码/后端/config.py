@@ -450,6 +450,31 @@ LIMITS = {
     "question_max_chars": 500,    # question 最长长度（超长按 1001 拒）
 }
 
+# 接口层的分页／标识长度门槛：**第 2 轮从各 api 模块收敛到此处，取值一个未改**。
+# 集中在这里的意义：同一口径只登记一次（此前 graph/history/qa/admin 各写一份数字），
+# 改门槛时不会出现「列表接口放了、详情接口没放」的口径漂移。
+API_LIMITS = {
+    "page_size_max": 200,
+    # 单页上限：防止一次拉全表／全图（graph 与 history 原值同为 200）。
+    "default_page_size": 20,
+    # 单页缺省：与前端列表的默认每页条数一致（graph/history/market 原值同为 20）。
+    "page_max": 100000,
+    # 页码上限（仅历史接口使用）：2026-10-18 审查 A3 实测超大 page 会把
+    # (page-1)*page_size 溢出成非法 SQL → 500；限制该值使偏移量始终可安全拼入 LIMIT。
+    "session_id_max_chars": 36,
+    # question.session_id 为 CHAR(36)（浏览器 UUID 的标准长度）。
+    "node_id_max_chars": 128,
+    # 实体详情路径参数上限：本项目节点标识形如 PER-0001／EVT-0236／HCONF-…，128 足够宽裕。
+    "prompt_version_max_chars": 64,
+    # admin 的 prompt_version 覆盖字段上限（config.PROMPT_VERSION 的版本号形态远短于此）。
+    "document_content_max_bytes": 16 * 1024 * 1024,
+    # 后台导入文档正文上限（16 MiB）：与表结构 MEDIUMTEXT 的容量口径一致。
+    "graph_default_depth": 1,
+    # 实体关系查询的默认展开层数（接口缺省值；显式传 depth 时以参数为准）。
+    "graph_default_hop": 2,
+    # 两点间路径查询的默认跳数（接口缺省值；显式传 hop 时以参数为准）。
+}
+
 # --------------------------------------------------------------------------
 # 8. 固定项：读到 None／空串／"TBD" 即报错退出（不用默认值兜底）
 # --------------------------------------------------------------------------
