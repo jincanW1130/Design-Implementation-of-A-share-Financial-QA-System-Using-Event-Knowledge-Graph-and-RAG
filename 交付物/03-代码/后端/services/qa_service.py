@@ -564,6 +564,23 @@ def _run_chain(question: str, group: str, session_id: str, now_iso: str) -> dict
                        out_dir, _redact_question(_tail(stdout), question))
         raise ApiError(3003, detail="qa_records.jsonl 无记录（out_dir=%s）" % out_dir)
     trace = _first_jsonl(os.path.join(out_dir, "answer_trace.jsonl"))
+
+    # 第 4 轮 8.3（链路追踪）：一次问答的耗时分解只落日志，**不进响应体**。
+    # 口径：backend_wait＝后端等待整条子进程链路的墙钟；llm_seconds＝answer_trace 里每次
+    # 模型调用的实测秒数（含重试）；其余（检索子进程启动、向量化、图谱查询、装配、落盘）
+    # 归入「链路其余部分」，可由 backend_wait − Σllm_seconds 得出。
+    # 与 out_dir ＋ 请求 ID 一起即可把「后端→检索子进程→图谱→LLM」串起来；
+    # **不打印问题原文、不打印 Prompt、不打印模型密钥**。
+    attempts = trace.get("attempts") if isinstance(trace, dict) else None
+    llm_seconds = [a.get("seconds") for a in attempts or []
+                   if isinstance(a, dict) and isinstance(a.get("seconds"), (int, float))]
+    logger.info("问答链路耗时分解：backend_wait=%.1fs；llm_calls=%d；llm_seconds=%s；"
+                "graph_used=%s；evidence=%s；out_dir=%s",
+                elapsed, len(llm_seconds), llm_seconds,
+                (trace or {}).get("graph_used") if isinstance(trace, dict) else None,
+                (trace or {}).get("evidence_count") if isinstance(trace, dict) else None,
+                out_dir)
+
     return {"record": record, "trace": trace, "out_dir": out_dir,
             "elapsed_seconds": round(elapsed, 1), "now": now_iso}
 

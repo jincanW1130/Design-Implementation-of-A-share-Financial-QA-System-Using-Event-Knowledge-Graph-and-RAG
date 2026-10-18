@@ -40,6 +40,7 @@ from starlette.responses import JSONResponse
 import config
 import errors
 import middleware
+import observability
 import probes
 from params import validate_question       # noqa: F401（重导出：测试与既有调用方直接取用）
 
@@ -143,6 +144,11 @@ def create_app() -> FastAPI:
 
     # 基础安全响应头 ＋ 裸 OPTIONS 兜底（顺序与拆分前一致）
     middleware.install_response_middlewares(app)
+
+    # 访问日志／进程内指标（第 4 轮 8.1／8.2）：挂在请求 ID 内层、限流与校验外层，
+    # 这样被拒请求也计数，且日志自动带同一个 request_id。指标摘要随 /api/health 返回，
+    # **不新增路由**（OpenAPI 操作数不变）。
+    observability.install_metrics(app)
 
     # 请求 ID 最后挂 → 位于最外层，限流／校验拒绝的响应同样带 X-Request-Id，
     # 且相关日志都能取到同一个 ID。它只写响应头与日志上下文，不改响应体。

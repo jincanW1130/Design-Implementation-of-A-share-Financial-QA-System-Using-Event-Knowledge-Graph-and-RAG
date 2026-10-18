@@ -7,7 +7,7 @@
 #
 # `torch` 按 CPU 用法锁定（本机为 CPU 版）。如需安装 CPU-only 轮子以显著减小体积，
 # 可改用 PyTorch 官方 CPU 源（版本号不变，只换来源）：
-#     pip install --index-url https://download.pytorch.org/whl/cpu "torch==2.12.1"
+#     pip install --index-url https://download.pytorch.org/whl/cpu "torch==2.13.0"
 #
 # ★ 改动本文件【必须同步】交付物/10-部署\Dockerfile：镜像即 `pip install -r requirements.txt`，
 #   两边不同源会让"本机能跑、容器跑不起来"（典型如漏装 numpy/faiss/torch/transformers
@@ -59,6 +59,11 @@ openai==2.44.0                # 交付物/03-代码\抽取与图谱\*.py 与 交
 #     pip install "uvicorn[standard]==0.54.0"
 # =============================================================================
 
+
+# ---------------------------------------------------------------------------
+# 文档与构建工具（工具\导出论文docx.py 等；第 4 轮加入一键构建链路）
+# ---------------------------------------------------------------------------
+python-docx==1.2.0       # import 名为 docx；把《29》论文 Markdown 导出为 Word 提交件
 
 # ---------------------------------------------------------------------------
 # 单元测试（交付物/03-代码\测试\）

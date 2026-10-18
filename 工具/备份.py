@@ -1,0 +1,345 @@
+# -*- coding: utf-8 -*-
+"""工具\\备份.py —— 第 4 轮（11.2）本机数据备份与**导入回验**。
+
+备份内容（每次运行产出一个带时间戳的目录，落在 `交付物/10-部署/备份/`，已被 .gitignore 覆盖）：
+
+| 子目录／文件 | 来源 | 说明 |
+| --- | --- | --- |
+| `mysql/ashare_qa.sql` | `mysqldump` | `--single-transaction --quick`，含六表数据；不含建库语句 |
+| `neo4j/nodes.jsonl`、`relationships.jsonl` | Neo4j 逻辑导出 | 逐节点／逐关系 JSONL，按 elementId 排序，可重放 |
+| `vector/faiss.index`、`vector_map.jsonl`、`build_meta.json` | 数据集 index 目录 | 原样复制（只读输入） |
+| `manifest.json` | 本脚本 | 文件 sha256／字节数、六表计数、Neo4j 计数、环境与工具版本；**不含口令** |
+
+**导入回验**：dump 完成后先建临时库 `ashare_qa_bakverify_<时间戳>`，用 `mysql` 客户端把
+dump 灌进去，逐表比对计数，再 `DROP DATABASE`。临时库一定在 finally 中删除；正式库
+`ashare_qa` 全程只读，不写入。这样「备份文件可恢复」有实测证据，不是只看看文件大小。
+
+纪律
+----
+* 口令只写进 `%TEMP%` 下的临时 option 文件（尽力设 0600），进程结束即删除；不打印、不入 manifest。
+* `--dry-run` 只做连通性与可用性检查、打印计划，不创建目录、不写任何文件、不建临时库。
+* 退出码：成功 0；任一步失败 1（并保留已完成的部分与本轮目录，便于排障）。
+* 不触碰 Docker 容器：Neo4j 走 bolt 逻辑导出，不需要 `docker exec`，也不影响保活。
+
+用法
+----
+    python 工具\\备份.py                 # 完整备份 + 导入回验
+    python 工具\\备份.py --dry-run       # 只检查并打印计划
+    python 工具\\备份.py --out D:\\bak   # 指定输出根目录
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
+from datetime import datetime
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BACKEND_DIR = os.path.join(ROOT, "交付物", "03-代码", "后端")
+DEFAULT_OUT_ROOT = os.path.join(ROOT, "交付物", "10-部署", "备份")
+if BACKEND_DIR not in sys.path:
+    sys.path.insert(0, BACKEND_DIR)
+
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        try:
+            _stream.reconfigure(encoding="utf-8")
+        except Exception:
+            pass
+
+VERIFY_TABLES = ("user", "document", "document_chunk", "question", "answer", "answer_evidence")
+
+
+def _sha256(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for block in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+def _find_mysql_bin(name: str) -> str | None:
+    found = shutil.which(name)
+    if found:
+        return found
+    for base in (r"C:\Program Files\MySQL\MySQL Server 8.4\bin",
+                 r"C:\Program Files\MySQL\MySQL Server 8.0\bin",
+                 r"C:\Program Files\MySQL\MySQL Server 9.0\bin"):
+        candidate = os.path.join(base, name + ".exe")
+        if os.path.isfile(candidate):
+            return candidate
+    return None
+
+
+def _option_file(password: str, host: str, port: int, user: str):
+    """写临时 MySQL option 文件；返回值 (路径, 清理函数)。口令不进命令行。"""
+    fd, path = tempfile.mkstemp(prefix="ashare_bak_", suffix=".cnf")
+    escaped = password.replace("\\", "\\\\").replace('"', '\\"')
+    content = (
+        "[client]\n"
+        "host=%s\n"
+        "port=%d\n"
+        "user=%s\n"
+        'password="%s"\n'
+        "default-character-set=utf8mb4\n"
+        % (host, port, user, escaped)
+    )
+    with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as f:
+        f.write(content)
+    try:
+        os.chmod(path, 0o600)
+    except Exception:
+        pass
+
+    def cleanup():
+        try:
+            os.remove(path)
+        except OSError:
+            pass
+    return path, cleanup
+
+
+def _db_counts(cursor) -> dict:
+    counts = {}
+    for table in VERIFY_TABLES:
+        cursor.execute("SELECT COUNT(*) AS n FROM `%s`" % table)
+        counts[table] = int(cursor.fetchone()["n"])
+    return counts
+
+
+def _connect(config):
+    import pymysql
+    params = config.db_params()
+    return pymysql.connect(connect_timeout=5, read_timeout=60,
+                           cursorclass=pymysql.cursors.DictCursor, **params), params
+
+
+def _export_neo4j(config, out_dir: str) -> dict:
+    from neo4j import GraphDatabase
+    params = config.neo4j_params()
+    driver = GraphDatabase.driver(params["uri"],
+                                  auth=(params["user"], params["password"] or None),
+                                  connection_timeout=5.0)
+    nodes_path = os.path.join(out_dir, "nodes.jsonl")
+    rels_path = os.path.join(out_dir, "relationships.jsonl")
+    try:
+        driver.verify_connectivity()
+        with driver.session() as session:
+            nodes = sorted(
+                (dict(r["n"]) for r in session.run(
+                    "MATCH (n) RETURN {eid: elementId(n), labels: labels(n), props: properties(n)} AS n")),
+                key=lambda x: x["eid"])
+            rels = sorted(
+                (dict(r["r"]) for r in session.run(
+                    "MATCH (a)-[r]->(b) RETURN {eid: elementId(r), type: type(r), "
+                    "start: elementId(a), end: elementId(b), props: properties(r)} AS r")),
+                key=lambda x: x["eid"])
+        with open(nodes_path, "w", encoding="utf-8", newline="\n") as f:
+            for row in nodes:
+                f.write(json.dumps(row, ensure_ascii=False, sort_keys=True, default=str) + "\n")
+        with open(rels_path, "w", encoding="utf-8", newline="\n") as f:
+            for row in rels:
+                f.write(json.dumps(row, ensure_ascii=False, sort_keys=True, default=str) + "\n")
+        return {"nodes": len(nodes), "relationships": len(rels)}
+    finally:
+        try:
+            driver.close()
+        except Exception:
+            pass
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser(description="备份 MySQL／Neo4j／向量索引并做导入回验")
+    ap.add_argument("--dry-run", action="store_true", help="只检查并打印计划，不写文件")
+    ap.add_argument("--out", default=DEFAULT_OUT_ROOT, help="输出根目录（默认 交付物/10-部署/备份）")
+    args = ap.parse_args(argv)
+
+    print("=" * 78)
+    print("备份%s（仓库根：%s）" % ("（dry-run，不写文件）" if args.dry_run else "", ROOT))
+    print("=" * 78)
+
+    try:
+        import config
+    except SystemExit as exc:
+        print("[FAIL] 后端配置不可加载：%s" % str(exc).splitlines()[0])
+        return 1
+
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    target = os.path.join(args.out, stamp)
+    mysqldump = _find_mysql_bin("mysqldump")
+    mysql_cli = _find_mysql_bin("mysql")
+
+    print("  MySQL 数据库   = %s" % config._LOCAL["mysql_database"])       # noqa: SLF001
+    print("  Neo4j          = %s" % config.neo4j_params()["uri"])
+    print("  mysqldump      = %s" % (mysqldump or "未找到"))
+    print("  mysql 客户端   = %s" % (mysql_cli or "未找到"))
+    print("  输出目录       = %s" % target)
+    if not (mysqldump and mysql_cli):
+        print("[FAIL] 找不到 mysqldump／mysql 客户端，无法完成备份与回验。")
+        return 1
+
+    # 先做只读连通性检查（dry-run 也做，确认「现在能备份」）
+    conn, db_params = None, None
+    try:
+        conn, db_params = _connect(config)
+        with conn.cursor() as cur:
+            counts_before = _db_counts(cur)
+        print("  六表计数       = %s" % json.dumps(counts_before, ensure_ascii=False, sort_keys=True))
+    except Exception as exc:                               # noqa: BLE001
+        first = str(exc).splitlines()[0] if str(exc) else type(exc).__name__
+        print("[FAIL] MySQL 连接／计数失败：%s" % first)
+        return 1
+    finally:
+        if conn is not None:
+            try:
+                conn.close()
+            except Exception:
+                pass
+
+    free_bytes = shutil.disk_usage(os.path.dirname(args.out) or ROOT).free
+    print("  可用磁盘       = %.1f GB" % (free_bytes / 1024.0 / 1024.0 / 1024.0))
+    if free_bytes < 1024 * 1024 * 1024:
+        print("[WARN] 可用磁盘不足 1 GB，备份可能失败。")
+
+    if args.dry_run:
+        print("\n[dry-run] 计划：")
+        print("  1. mysqldump --single-transaction → %s/mysql/ashare_qa.sql" % target)
+        print("  2. Neo4j 逻辑导出 → %s/neo4j/{nodes,relationships}.jsonl" % target)
+        print("  3. 复制向量索引三件 → %s/vector/" % target)
+        print("  4. 建临时库回验 dump，逐表比对后 DROP DATABASE")
+        print("  5. 写 manifest.json（sha256／计数／版本，不含口令）")
+        print("\n结论：检查通过，可执行真实备份。退出码 0。")
+        return 0
+
+    out_mysql = os.path.join(target, "mysql")
+    out_neo4j = os.path.join(target, "neo4j")
+    out_vector = os.path.join(target, "vector")
+    for path in (out_mysql, out_neo4j, out_vector):
+        os.makedirs(path, exist_ok=True)
+
+    option_path, cleanup_option = _option_file(
+        db_params["password"], db_params["host"], db_params["port"], db_params["user"])
+    verify_db = "ashare_qa_bakverify_" + stamp
+    verify_created = False
+    manifest = {
+        "schema": "stage11-backup-1.0",
+        "created_at": datetime.now().isoformat(timespec="seconds"),
+        "env": config.ENV_NAME,
+        "mysql": {"database": db_params.get("database"), "tables": counts_before},
+        "neo4j": {"uri": config.neo4j_params()["uri"]},
+        "files": [],
+        "verify": {"temp_database": verify_db, "imported": False, "counts_match": False},
+    }
+    started = time.perf_counter()
+    try:
+        # ---------------------------------------------------------- MySQL dump
+        dump_path = os.path.join(out_mysql, "ashare_qa.sql")
+        print("\n[1/4] mysqldump → %s" % os.path.relpath(dump_path, ROOT))
+        cmd = [mysqldump, "--defaults-extra-file=" + option_path,
+               "--single-transaction", "--quick", "--no-tablespaces",
+               "--set-gtid-purged=OFF", "--default-character-set=utf8mb4",
+               "--hex-blob", db_params.get("database")]
+        with open(dump_path, "wb") as out:
+            proc = subprocess.run(cmd, stdout=out, stderr=subprocess.PIPE)
+        if proc.returncode != 0:
+            raise RuntimeError("mysqldump 失败：%s"
+                               % (proc.stderr.decode("utf-8", "replace").strip().splitlines()[-1:]))
+        print("      %.2f MB，sha256=%s"
+              % (os.path.getsize(dump_path) / 1024.0 / 1024.0, _sha256(dump_path)[:16]))
+
+        # ---------------------------------------------------------- Neo4j 导出
+        print("\n[2/4] Neo4j 逻辑导出")
+        neo = _export_neo4j(config, out_neo4j)
+        manifest["neo4j"].update(neo)
+        print("      节点 %(nodes)d，关系 %(relationships)d" % neo)
+
+        # ---------------------------------------------------------- 向量索引
+        print("\n[3/4] 复制向量索引三件")
+        for src, name in ((config.VECTOR_INDEX_PATH, "faiss.index"),
+                          (config.VECTOR_MAP_PATH, "vector_map.jsonl"),
+                          (config.BUILD_META_PATH, "build_meta.json")):
+            dst = os.path.join(out_vector, name)
+            shutil.copy2(src, dst)
+            print("      %-18s %.2f MB" % (name, os.path.getsize(dst) / 1024.0 / 1024.0))
+
+        # ---------------------------------------------------------- 导入回验
+        print("\n[4/4] 导入回验：建临时库 → 灌入 dump → 逐表比对 → 删库")
+        import pymysql
+        admin = pymysql.connect(connect_timeout=5, read_timeout=120,
+                                cursorclass=pymysql.cursors.DictCursor, **db_params)
+        try:
+            with admin.cursor() as cur:
+                cur.execute("CREATE DATABASE `%s` CHARACTER SET utf8mb4 "
+                            "COLLATE utf8mb4_0900_ai_ci" % verify_db)
+            admin.commit()
+            verify_created = True
+            import_cmd = [mysql_cli, "--defaults-extra-file=" + option_path,
+                          "--default-character-set=utf8mb4", verify_db]
+            with open(dump_path, "rb") as src:
+                proc = subprocess.run(import_cmd, stdin=src, stderr=subprocess.PIPE)
+            if proc.returncode != 0:
+                raise RuntimeError("mysql 导入临时库失败：%s"
+                                   % proc.stderr.decode("utf-8", "replace").strip().splitlines()[-1:])
+            with admin.cursor() as cur:
+                cur.execute("USE `%s`" % verify_db)
+                counts_after = _db_counts(cur)
+            manifest["verify"]["imported"] = True
+            manifest["verify"]["counts"] = counts_after
+            manifest["verify"]["counts_match"] = counts_after == counts_before
+            for table in VERIFY_TABLES:
+                same = counts_after.get(table) == counts_before.get(table)
+                print("      %-16s 源 %d／回验 %d  %s"
+                      % (table, counts_before.get(table, -1), counts_after.get(table, -1),
+                         "OK" if same else "FAIL"))
+            if not manifest["verify"]["counts_match"]:
+                raise RuntimeError("导入后计数与源库不一致")
+        finally:
+            try:
+                if verify_created:
+                    with admin.cursor() as cur:
+                        cur.execute("DROP DATABASE `%s`" % verify_db)
+                    admin.commit()
+                    print("      临时库已删除：%s" % verify_db)
+            finally:
+                admin.close()
+
+        # ---------------------------------------------------------- manifest
+        for base, _, names in os.walk(target):
+            for name in names:
+                if name == "manifest.json":
+                    continue
+                path = os.path.join(base, name)
+                manifest["files"].append({
+                    "path": os.path.relpath(path, target).replace("\\", "/"),
+                    "bytes": os.path.getsize(path),
+                    "sha256": _sha256(path),
+                })
+        manifest["files"].sort(key=lambda x: x["path"])
+        manifest["elapsed_seconds"] = round(time.perf_counter() - started, 2)
+        manifest_path = os.path.join(target, "manifest.json")
+        with open(manifest_path, "w", encoding="utf-8", newline="\n") as f:
+            json.dump(manifest, f, ensure_ascii=False, indent=2, sort_keys=True)
+            f.write("\n")
+        print("\n备份完成：%s" % target)
+        print("  manifest：%s（%d 个文件）"
+              % (os.path.relpath(manifest_path, ROOT), len(manifest["files"])))
+        print("结论：备份＋导入回验通过。退出码 0。")
+        return 0
+    except Exception as exc:                               # noqa: BLE001
+        first = str(exc).splitlines()[0] if str(exc) else type(exc).__name__
+        print("\n[FAIL] %s" % first)
+        print("      已完成的部分保留在：%s" % target)
+        return 1
+    finally:
+        cleanup_option()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

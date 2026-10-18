@@ -15,6 +15,7 @@ from __future__ import annotations
 import os
 
 import config
+import observability
 
 
 def probe_mysql() -> dict:
@@ -95,13 +96,20 @@ def model_config_block() -> dict:
 
 
 def health_payload() -> dict:
-    """`/api/health` 的响应体：`{status, mysql, neo4j, vector_index, model_config}`。
+    """`/api/health` 的响应体：四项依赖 ＋ `status` ＋ `metrics` 摘要。
 
-    `status` = 四项全 `ok` 取 `"ok"`，否则 `"degraded"`。**HTTP 状态恒为 200**
-    （服务本身活着；某一项不 ok 是依赖状态，不是接口失败）。
+    * `status` 仍只由四项依赖决定（`metrics` 是观测信息，不参与就绪判定）；
+    * `metrics` 是第 4 轮新增的**进程内**指标摘要（8.2），**不新增路由**；
+    * 指标快照失败时不拖垮探针：只把 `metrics.available` 置 false 并给出异常类型，
+      不返回堆栈、不返回任何凭据。
+    **HTTP 状态恒为 200**（服务本身活着；某一项不 ok 是依赖状态，不是接口失败）。
     """
     blocks = {"mysql": probe_mysql(), "neo4j": probe_neo4j(),
               "vector_index": probe_vector_index(), "model_config": model_config_block()}
     payload = {"status": "ok" if all(b["ok"] for b in blocks.values()) else "degraded"}
     payload.update(blocks)
+    try:
+        payload["metrics"] = observability.snapshot()
+    except Exception as exc:                              # 观测失败不影响就绪判定
+        payload["metrics"] = {"available": False, "info": type(exc).__name__}
     return payload

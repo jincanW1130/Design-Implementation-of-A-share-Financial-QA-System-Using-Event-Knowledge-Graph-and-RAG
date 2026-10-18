@@ -1,0 +1,124 @@
+# =============================================================================
+# docker-compose.yml —— 第 4 轮（7.2 容器化）：后端 ＋ MySQL ＋ Neo4j ＋ 前端静态服务
+# =============================================================================
+# 口径与边界（先读再跑）
+# -----------------------------------------------------------------------------
+# 1. 本文件是**本机演示／换机复现**用的 Compose 清单，不引入 K8s、不引入编排平台；
+#    与既有 `Dockerfile`（后端）和 `Dockerfile.frontend`（前端多阶段构建）配套。
+# 2. 口令一律从同目录 `.env` 注入（模板见 `.env.example`），**不写死在本文件**：
+#      cp .env.example .env  →  填 MYSQL_ROOT_PASSWORD / NEO4J_PASSWORD
+#    `.env` 已被仓库根 .gitignore 的 `.env`／`.env.*` 规则覆盖，不入公开仓库。
+# 3. 后端配置仍只认 `交付物/03-代码/后端/config.local.json`：这里把本机已有的
+#    `config.docker.json` 只读挂进去，再用第 4 轮新增的 `ASHARE_*` 环境变量覆盖
+#    主机名／口令（容器网络里 MySQL＝mysql、Neo4j＝neo4j，不能用 127.0.0.1）。
+# 4. embedding 模型快照不打进镜像；用 `HF_CACHE_DIR` 把本机 HF 缓存只读挂到 /app/hf，
+#    否则向量检索不可用（后端以 3003 明确报错，不静默降级）。
+# 5. **不要求本机一定构建**：Windows 宿主没有 Docker CLI，Docker 在 WSL2 Engine 内；
+#    本文件已通过 YAML 解析与 `docker compose config` 语法校验（见方案文档）。
+#    首次启动前需导入六张表的数据（schema 只建表）：
+#      docker compose exec -T backend python 交付物/03-代码/后端/tools/import_data.py
+#    或按部署 README 的本机形态导入。
+# 6. 端口保持既有口径：后端 8000、前端 5173、MySQL 3306、Neo4j 7474／7687。
+# =============================================================================
+
+name: ashare-qa
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: ashare-qa-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?请在 .env 中设置 MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ashare_qa}
+      TZ: Asia/Shanghai
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      # 只建六张表（DDL 里不写库名，由 MYSQL_DATABASE 承载）；数据需另行导入。
+      - ../03-代码/后端/schema/六张表.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    restart: unless-stopped
+
+  neo4j:
+    image: neo4j:5.26-community
+    container_name: ashare-qa-graph
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:?请在 .env 中设置 NEO4J_PASSWORD}
+      TZ: Asia/Shanghai
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j-data:/data
+      - neo4j-logs:/logs
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p \"$$NEO4J_PASSWORD\" 'RETURN 1' >/dev/null 2>&1"]
+      interval: 15s
+      timeout: 10s
+      retries: 12
+      start_period: 40s
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ../..
+      dockerfile: 交付物/10-部署/Dockerfile
+    container_name: ashare-qa-backend
+    environment:
+      ASHARE_ENV: ${ASHARE_ENV:-prod}
+      ASHARE_MYSQL_HOST: mysql
+      ASHARE_MYSQL_PORT: "3306"
+      ASHARE_MYSQL_USER: root
+      ASHARE_MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD:?请在 .env 中设置 MYSQL_ROOT_PASSWORD}
+      ASHARE_MYSQL_DATABASE: ${MYSQL_DATABASE:-ashare_qa}
+      ASHARE_NEO4J_URI: bolt://neo4j:7687
+      ASHARE_NEO4J_USER: neo4j
+      ASHARE_NEO4J_PASSWORD: ${NEO4J_PASSWORD:?请在 .env 中设置 NEO4J_PASSWORD}
+      ASHARE_BACKEND_PORT: "8000"
+      ASHARE_FRONTEND_PORT: "5173"
+      ASHARE_LOG_PATH: /app/logs/backend.log
+      HF_HOME: /app/hf
+      TZ: Asia/Shanghai
+      # HF 缓存体积大，且容器只读使用；用环境变量指向本机实际缓存目录。
+      HF_HUB_CACHE: /app/hf/hub
+    volumes:
+      - ${ASHARE_CONFIG_FILE:-./config.docker.json}:/app/交付物/03-代码/后端/config.local.json:ro
+      - ${HF_CACHE_DIR:-/mnt/d/Cache/huggingface}:/app/hf:ro
+      - backend-logs:/app/logs
+      - backend-work:/app/交付物/05-系统实现/前后端系统集成/_工作底稿
+    ports:
+      - "8000:8000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ../..
+      dockerfile: 交付物/10-部署/Dockerfile.frontend
+    container_name: ashare-qa-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      backend:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
+  neo4j-data:
+  neo4j-logs:
+  backend-logs:
+  backend-work:

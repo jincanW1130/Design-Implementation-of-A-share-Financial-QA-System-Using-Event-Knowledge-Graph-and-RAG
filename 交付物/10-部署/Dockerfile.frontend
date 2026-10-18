@@ -1,0 +1,26 @@
+# 前端静态镜像（第 4 轮 7.2）：Node 多阶段构建 → nginx 托管 dist。
+#
+# 构建上下文是**仓库根**（与后端 Dockerfile 一致），这样 nginx.conf 与本文件同目录、
+# 不用把部署配置复制进前端源码目录：
+#   docker build -f 交付物/10-部署/Dockerfile.frontend -t ashare-qa-frontend:local .
+#
+# 依赖版本以 `交付物/03-代码/前端/package-lock.json` 为准（npm ci 严格按锁文件）；
+# 构建产物不进仓库（dist/ 已 gitignore），只在镜像层里存在。
+
+FROM node:22-alpine AS build
+WORKDIR /app
+
+# 先只拷依赖清单，利用 Docker 层缓存：改源码不会重装 npm 依赖。
+COPY 交付物/03-代码/前端/package.json 交付物/03-代码/前端/package-lock.json ./
+RUN npm ci --no-audit --no-fund
+
+COPY 交付物/03-代码/前端/ ./
+RUN npm run build
+
+FROM nginx:1.27-alpine
+COPY 交付物/10-部署/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD wget -q -O /dev/null http://127.0.0.1/ || exit 1

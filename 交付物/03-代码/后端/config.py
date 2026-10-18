@@ -72,8 +72,61 @@ WORK_DIR = os.path.join(STAGE9, "_工作底稿")                        # 勘察
 SCHEMA_DIR = os.path.join(BACKEND_DIR, "schema")
 SCHEMA_SQL = os.path.join(SCHEMA_DIR, "六张表.sql")                 # 六张表的 DDL（唯一 schema 出处）
 
-LOCAL_CONFIG_PATH = os.path.join(BACKEND_DIR, "config.local.json")
+# --------------------------------------------------------------------------
+# 1.1 运行环境分层（第 4 轮：工程化 7.1；**缺省行为与分层前逐项一致**）
+# --------------------------------------------------------------------------
+# 取值来源与优先级（后者覆盖前者，键名不变）：
+#   ① 基础文件：缺省 `config.local.json`；可用 `ASHARE_CONFIG_FILE` 指向另一份同结构 JSON。
+#   ② 环境叠加：`config.<env>.local.json`（同目录，存在才叠加；`*.local.json` 已被 .gitignore
+#      覆盖，不会入库）。缺省 `ASHARE_ENV=dev`，且本机没有 `config.dev.local.json`，
+#      因此**不设环境变量时读到的每一个值与分层前完全相同**。
+#   ③ 环境变量：只覆盖连接／端口／日志路径等运行期参数（下表 `_ENV_OVERRIDES`），
+#      仍受同一套必填／类型／占位串校验。口令只经环境注入，不打印、不落盘、不进日志。
+#
+# 纪律：环境名只接受 dev／test／prod；写错即 SystemExit，不静默回落到 dev（防止
+# 「以为切到 prod、实际还在 dev」）。配置中心（Nacos／Apollo 等）不在本机环境内，
+# 只写在方案文档里，不引入新服务。
+VALID_ENVS = ("dev", "test", "prod")
+ENV_NAME = (os.environ.get("ASHARE_ENV", "").strip().lower() or "dev")
+if ENV_NAME not in VALID_ENVS:
+    raise SystemExit("ASHARE_ENV=%r 不合法；只接受 %s（缺省 dev）"
+                     % (ENV_NAME, "／".join(VALID_ENVS)))
+
+
+def _resolve_config_path(raw: str | None, default: str) -> str:
+    """`ASHARE_CONFIG_FILE` 的相对路径按后端目录解析（保证从任意 cwd 启动一致）。"""
+    text = (raw or "").strip()
+    if not text:
+        return default
+    return text if os.path.isabs(text) else os.path.join(BACKEND_DIR, text)
+
+
+LOCAL_CONFIG_PATH = _resolve_config_path(
+    os.environ.get("ASHARE_CONFIG_FILE"), os.path.join(BACKEND_DIR, "config.local.json"))
 LOCAL_CONFIG_EXAMPLE = os.path.join(BACKEND_DIR, "config.local.json.example")
+ENV_OVERLAY_PATH = os.path.join(BACKEND_DIR, "config.%s.local.json" % ENV_NAME)
+
+# 环境变量 → 配置键（**只允许这些键**；不在表内的键一律不认，避免拼写错误被静默忽略）
+_ENV_OVERRIDES = {
+    "ASHARE_MYSQL_HOST": "mysql_host",
+    "ASHARE_MYSQL_PORT": "mysql_port",
+    "ASHARE_MYSQL_USER": "mysql_user",
+    "ASHARE_MYSQL_PASSWORD": "mysql_password",
+    "ASHARE_MYSQL_DATABASE": "mysql_database",
+    "ASHARE_MYSQL_CHARSET": "mysql_charset",
+    "ASHARE_NEO4J_URI": "neo4j_uri",
+    "ASHARE_NEO4J_USER": "neo4j_user",
+    "ASHARE_NEO4J_PASSWORD": "neo4j_password",
+    "ASHARE_BACKEND_PORT": "backend_port",
+    "ASHARE_FRONTEND_PORT": "frontend_port",
+    "ASHARE_LOG_PATH": "log_path",
+    "ASHARE_ADMIN_TOKEN": "admin_token",
+    "ASHARE_TRUST_PROXY_HEADERS": "trust_proxy_headers",
+    "ASHARE_QA_RUNS_RETENTION_DAYS": "qa_runs_retention_days",
+}
+_INT_OVERRIDE_KEYS = frozenset({"mysql_port", "backend_port", "frontend_port",
+                                "qa_runs_retention_days"})
+_BOOL_OVERRIDE_KEYS = frozenset({"trust_proxy_headers"})
 
 # --------------------------------------------------------------------------
 # 2. 上游输入清单（**只读**；《24》第三节 八项）
@@ -268,24 +321,63 @@ def _is_placeholder(value) -> bool:
     return any(mark in text for mark in PLACEHOLDER_MARKERS)
 
 
-def _load_local_config() -> dict:
-    if not os.path.isfile(LOCAL_CONFIG_PATH):
+def _read_config_json(path: str, role: str) -> dict:
+    """读一份配置 JSON（基础文件／环境叠加文件共用），去掉 `_说明` 注释键。"""
+    if not os.path.isfile(path):
         raise SystemExit(
-            "本机配置不存在：%s\n"
+            "%s不存在：%s\n"
             "请先复制模板并填入本机取值：\n"
             "    copy \"%s\" \"%s\"\n"
             "后端只从它读连接参数，不写死、不兜底。"
-            % (LOCAL_CONFIG_PATH, LOCAL_CONFIG_EXAMPLE, LOCAL_CONFIG_PATH))
+            % (role, path, LOCAL_CONFIG_EXAMPLE, LOCAL_CONFIG_PATH))
     try:
-        with open(LOCAL_CONFIG_PATH, "r", encoding="utf-8") as f:
+        with open(path, "r", encoding="utf-8") as f:
             raw = json.load(f)
     except Exception as exc:
-        raise SystemExit("本机配置无法解析（%s）：%s" % (type(exc).__name__, LOCAL_CONFIG_PATH))
+        raise SystemExit("%s无法解析（%s）：%s" % (role, type(exc).__name__, path))
     if not isinstance(raw, dict):
-        raise SystemExit("本机配置的顶层必须是 JSON 对象：%s" % LOCAL_CONFIG_PATH)
+        raise SystemExit("%s的顶层必须是 JSON 对象：%s" % (role, path))
+    return {k: v for k, v in raw.items() if not str(k).startswith("_")}
 
-    # 去掉 `_说明` 一类的注释键
-    cfg = {k: v for k, v in raw.items() if not str(k).startswith("_")}
+
+def _apply_env_overrides(cfg: dict) -> list:
+    """用 `ASHARE_*` 环境变量覆盖配置；返回实际生效的配置键名（**不含取值**）。"""
+    applied = []
+    for env_key, cfg_key in _ENV_OVERRIDES.items():
+        raw = os.environ.get(env_key)
+        if raw is None or not str(raw).strip():
+            continue
+        if cfg_key in _INT_OVERRIDE_KEYS:
+            try:
+                cfg[cfg_key] = int(str(raw).strip())
+            except ValueError:
+                raise SystemExit("环境变量 %s 必须是整数" % env_key)
+        elif cfg_key in _BOOL_OVERRIDE_KEYS:
+            text = str(raw).strip().lower()
+            if text in ("1", "true", "yes", "on"):
+                cfg[cfg_key] = True
+            elif text in ("0", "false", "no", "off"):
+                cfg[cfg_key] = False
+            else:
+                raise SystemExit("环境变量 %s 只接受 1/0、true/false、yes/no、on/off" % env_key)
+        else:
+            cfg[cfg_key] = str(raw)
+        applied.append(cfg_key)
+    return applied
+
+
+def _load_local_config() -> dict:
+    cfg = _read_config_json(LOCAL_CONFIG_PATH, "本机配置")
+
+    # ② 环境叠加文件（存在才叠加；dev 缺省时本机没有该文件 → 行为与分层前一致）
+    if (os.path.isfile(ENV_OVERLAY_PATH)
+            and os.path.abspath(ENV_OVERLAY_PATH) != os.path.abspath(LOCAL_CONFIG_PATH)):
+        cfg.update(_read_config_json(ENV_OVERLAY_PATH, "环境叠加配置"))
+
+    # ③ 环境变量覆盖（只认白名单键）
+    applied = _apply_env_overrides(cfg)
+    global ENV_OVERRIDE_KEYS_APPLIED
+    ENV_OVERRIDE_KEYS_APPLIED = applied
 
     # —— 导入期硬校验：键缺失／类型不对／关键字符串为空或占位 ——
     for key, typ in _REQUIRED_KEYS.items():
@@ -307,6 +399,8 @@ def _load_local_config() -> dict:
 
 
 _LOCAL = _load_local_config()
+ENV_OVERLAY_LOADED = (os.path.isfile(ENV_OVERLAY_PATH)
+                      and os.path.abspath(ENV_OVERLAY_PATH) != os.path.abspath(LOCAL_CONFIG_PATH))
 
 # 导入期只报告、不回显
 MYSQL_PASSWORD_READY = not _is_placeholder(_LOCAL["mysql_password"])
@@ -679,6 +773,13 @@ def selftest() -> int:
              str(DATA_CUTOFF_TIME_UPSTREAM) == str(meta.get("data_cutoff_time"))))
     print()
 
+    print("--- 运行环境分层（7.1；缺省 dev，且分层不改变任何取值）---")
+    print("  ASHARE_ENV          = %s（合法取值 %s）" % (ENV_NAME, "／".join(VALID_ENVS)))
+    print("  基础配置文件        = %s" % LOCAL_CONFIG_PATH)
+    print("  环境叠加文件        = %s（存在=%s）" % (ENV_OVERLAY_PATH, ENV_OVERLAY_LOADED))
+    print("  环境变量覆盖键      = %s" % ("、".join(ENV_OVERRIDE_KEYS_APPLIED) or "无"))
+    print("  （只打印键名；口令类取值一律不回显、不落盘、不进日志）")
+    print()
     print("--- 本机配置（只报「已配置／未配置」，不回显任何口令）---")
     print("  配置文件            = %s（存在=%s）"
           % (LOCAL_CONFIG_PATH, os.path.isfile(LOCAL_CONFIG_PATH)))

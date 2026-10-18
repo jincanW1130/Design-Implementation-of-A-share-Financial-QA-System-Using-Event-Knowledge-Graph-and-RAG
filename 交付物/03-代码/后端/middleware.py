@@ -28,6 +28,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 
 import errors
+import observability
 import params
 
 
@@ -117,6 +118,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         if path.startswith(self.scope_prefix) and path not in self.exempt_paths:
             ip = self._client_ip(request)
             if self._over_limit(ip):
+                observability.record_rate_limit_hit()      # 第 4 轮 8.2：限流命中计数
                 errors.logger.warning("限流：ip=%s path=%s 在 %ss 窗口内超过 %d 次",
                                       ip, path, self.window, self.max_requests)
                 response = errors.error_response(

@@ -3,8 +3,11 @@
 > 规格来源：《24-第9阶段任务书（前后端系统集成）》第4.4节（部署与脚本）、第八节 H 组验收；
 > 《02-项目执行总控文档》第8.4节（技术栈边界：**Docker 只用于统一运行环境，不引入容器编排系统**）。
 
-本目录交付三件：`Dockerfile`（后端镜像）、`启动.ps1`（一键启动）、本文件（部署说明）。
-**不含** docker-compose／K8s 清单——那属于被排除的容器编排。
+本目录交付：`Dockerfile`（后端镜像）、`Dockerfile.frontend`＋`nginx.conf`（前端静态镜像与
+`/api` 反代）、`docker-compose.yml`（第 4 轮 7.2 的单机 Compose 清单：后端＋MySQL＋Neo4j＋
+前端静态服务）、`启动.ps1`（本机一键启动）、`.env.example`（Compose 口令模板）、本文件。
+**仍然不含** K8s／多机编排清单——本机只有单节点 Docker Engine，Compose 只用于统一运行环境
+与换机复现。
 
 ---
 
@@ -54,6 +57,26 @@ curl -s http://127.0.0.1:8000/api/health
 （第 3 行 `-v ...:/app/hf:ro` 是 embedding 模型缓存挂载，见「已知限制」第 7 条；
 在 Windows／Docker Desktop 主机上执行时改写成 `-v D:/Cache/huggingface:/app/hf:ro`。）
 
+### Compose 形态（第 4 轮 7.2，**未在本机实际拉起**）
+
+`docker-compose.yml` 编排四个服务：`mysql`（8.4，首次启动执行 `schema/六张表.sql` 建表）、
+`neo4j`（5.26-community）、`backend`（本目录 `Dockerfile`）、`frontend`（`Dockerfile.frontend`
+多阶段构建 + `nginx.conf` 静态托管并反代 `/api/`）。
+
+```bash
+cd 交付物/10-部署
+cp .env.example .env          # 填 MYSQL_ROOT_PASSWORD / NEO4J_PASSWORD / HF_CACHE_DIR
+docker compose up -d --build
+docker compose exec -T backend python 交付物/03-代码/后端/tools/import_data.py   # 首次导入数据
+curl -s http://127.0.0.1:8000/api/health
+```
+
+配置关系：Compose 把 `config.docker.json` 只读挂成容器内的 `config.local.json`，再用第 4 轮
+新增的 `ASHARE_*` 环境变量覆盖主机名与口令（容器网络里 MySQL＝`mysql`、Neo4j＝`neo4j`）；
+口令只来自 `.env`，不写进清单。**本机限制**：WSL2 的 `docker.io` 包不带 compose 插件，
+故本清单只做了 YAML 语法与 `services`／`volumes` 结构校验（见
+`交付物/10-部署/工程化与可观测性方案.md`）。
+
 镜像内容：Python 3.12-slim ＋ **仓库根 `requirements.txt` 里锁定的全部依赖**（该文件是全项目
 Python 依赖的单一来源，与 `交付物/10-部署\Dockerfile` 同源——Dockerfile 用 `pip install -r requirements.txt`
 安装，另单独补 `uvicorn[standard]` 的 extras）；`交付物/03-代码\后端\`＋`交付物/03-代码\检索\`＋`交付物/03-代码\问答\`（后端 import
@@ -92,7 +115,10 @@ Python 依赖的单一来源，与 `交付物/10-部署\Dockerfile` 同源——
    `wsl --shutdown` 后重跑启动脚本即可恢复；`启动.ps1` 的所有 WSL 调用都加了超时与作业包装，
    避免裸调挂住脚本。
 5. **限流**：单进程内滑动窗口（60 次／60 秒，`/api/health` 豁免），多进程／多实例不共享计数。
-6. **不引入容器编排**：只交付 `Dockerfile` 与启动脚本，**没有** docker-compose 与 K8s 清单。
+6. **不引入多机编排**：第 4 轮补了**单机** `docker-compose.yml`（7.2），仍**没有** K8s／
+   swarm 清单；本机 WSL2 的 `docker.io` 包**不带 compose 插件**（实测
+   `docker compose` → `unknown command`，也没有独立的 `docker-compose` 二进制），
+   因此本清单只做了 YAML 语法与 `services`／`volumes` 结构校验，**未在本机实际拉起**。
 7. **容器形态下 embedding 模型须用 `-v` 挂载 HF 缓存**：embedding 模型快照
    `BAAI/bge-small-zh-v1.5`（约 183 MB）**不打进镜像**（避免构建上下文携带大文件、便于换机替换），
    容器内以环境变量 `HF_HOME=/app/hf` 为缓存根。**必须**把本机 HF 缓存 bind mount 到 `/app/hf`，
@@ -109,6 +135,21 @@ Python 依赖的单一来源，与 `交付物/10-部署\Dockerfile` 同源——
    日志丢了就没有任何排障依据（第 9 阶段排查 PE-03 时正踩在这条上）。容器形态建议把 `log_path`
    指到挂载出来的卷（`-v <宿主目录>:/app/logs` ＋ `"log_path": "/app/logs/backend.log"`），
    否则容器一删日志即丢。日志格式与日志内容**不含**任何凭据取值。
+
+---
+
+## 三之二、工程化与运维脚本（第 4 轮）
+
+| 脚本 | 用途 | 产物／说明 |
+| --- | --- | --- |
+| `工具\一键构建.py` | 装依赖→后端测试→三道门禁→前端测试与构建→导出论文 | 论文落 `构建产物/`（gitignore）；失败非零退出；不跑 `验收第9阶段.py` |
+| `工具\启动自检.py` | 启动前只读体检（配置／输入／索引／模型／MySQL／Neo4j／端口／日志） | 全 OK/WARN 退出 0，任一 FAIL 退出 1 |
+| `工具\备份.ps1` | MySQL dump＋Neo4j 逻辑导出＋FAISS＋manifest，并做临时库导入回验 | 落 `备份/<时间戳>/`（gitignore）；支持 `-DryRun` |
+| `工具\运维巡检.py` | 磁盘／内存／CPU／端口／健康指标／日志轮转体检 | `--strict` 异常退出 1；可配合任务计划程序 |
+
+方案、取舍、实测读数与告警／恢复／轮转细节见
+`交付物/10-部署/工程化与可观测性方案.md`；版本与提交流程见
+`交付物/10-部署/版本与分支约定.md`。
 
 ---
 
