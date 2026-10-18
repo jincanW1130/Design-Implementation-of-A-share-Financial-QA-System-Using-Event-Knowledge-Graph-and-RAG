@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-18T09:35:29+08:00",
+  "generated_at": "2026-10-18T10:13:18+08:00",
   "root": "交付物/",
   "entries": [
     {
@@ -36,36 +36,6 @@
           "sha256": "4052ed9a251eb0c8276a2bb5fd81e7ced5e4ccdc6cc03c126c0740d68368ef87"
         }
       ]
-    },
-    {
-      "role": "真值·数据集（历史）",
-      "stage": "第 5 阶段",
-      "path": "交付物/04-数据与知识图谱/数据准备/数据集/v2.0",
-      "files": 507,
-      "bytes": 19039936,
-      "is_delivery_truth": false,
-      "note": "上一版数据集 v2.0（历史，保留可追溯）",
-      "key_files": []
-    },
-    {
-      "role": "真值·数据集（历史）",
-      "stage": "第 5 阶段",
-      "path": "交付物/04-数据与知识图谱/数据准备/数据集/v1.1",
-      "files": 116,
-      "bytes": 3656123,
-      "is_delivery_truth": false,
-      "note": "更早版本 v1.1（历史）",
-      "key_files": []
-    },
-    {
-      "role": "真值·数据集（历史）",
-      "stage": "第 5 阶段",
-      "path": "交付物/04-数据与知识图谱/数据准备/数据集/v1.0",
-      "files": 116,
-      "bytes": 3645466,
-      "is_delivery_truth": false,
-      "note": "更早版本 v1.0（历史）",
-      "key_files": []
     },
     {
       "role": "评测集",
