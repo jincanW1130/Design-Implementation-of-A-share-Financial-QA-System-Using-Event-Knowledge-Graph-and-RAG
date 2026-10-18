@@ -430,8 +430,26 @@ def create_app() -> FastAPI:
         response.headers.setdefault("Referrer-Policy", "no-referrer")
         return response
 
+    # 2026-10-18（第二轮）HTTP 语义：非 CORS 预检的 OPTIONS 也要可用。
+    # Starlette 的 CORSMiddleware 只对「带 Origin ＋ Access-Control-Request-Method」的预检
+    # 短路；裸 OPTIONS（探测工具常见）此前落到路由匹配 → 405 且无 Allow。这里兜一层：
+    # 返回 204 ＋ Allow，且**不**覆盖预检响应（预检在更外层已被 CORS 处理）。
+    @app.middleware("http")
+    async def _options(request, call_next):
+        # 只兜「裸 OPTIONS」：带 Access-Control-Request-Method 的是 CORS 预检，
+        # 必须放行给 CORSMiddleware 处理（否则预检响应缺 ACAO 头）。
+        if request.method == "OPTIONS" and not request.headers.get("access-control-request-method"):
+            from starlette.responses import Response as _Response
+            resp = _Response(status_code=204)
+            resp.headers["Allow"] = "GET, HEAD, POST, PUT, DELETE, OPTIONS"
+            return resp
+        return await call_next(request)
+
     # 本批唯一注册的业务路由
-    @app.get("/api/health", tags=["health"])
+    # 2026-10-18 全面审查（第二轮）HTTP 语义修复：
+    # ① GET 之外补 **HEAD**（探活工具常用 HEAD，此前 405）；
+    # ② OPTIONS 由下面的 `_options` 兜底统一返回 204＋Allow（此前对非预检 OPTIONS 报 405 且无 Allow）。
+    @app.api_route("/api/health", methods=["GET", "HEAD"], tags=["health"])
     def health():
         """就绪探针（门禁 A5）：四项依赖的可用状态 ＋ 总体 status。
 

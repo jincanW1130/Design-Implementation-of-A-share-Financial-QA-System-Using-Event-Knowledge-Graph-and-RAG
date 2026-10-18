@@ -51,9 +51,9 @@ COPY requirements.txt /app/requirements.txt
 # 首次重建实测：默认 PyPI 拉的是 **CUDA 版 torch ＋ nvidia-* 依赖（合计数 GB）**，在本机到
 # files.pythonhosted.org 约 400 KB/s 的带宽下不可行（首轮还因读超时失败）；而 CPU 源实测
 # **约 1.9 MB/s、wheel 小一个量级**。容器无 GPU、只用 CPU 推理，故按 CPU 源两步安装：
-# torch 先装（版本号不变 ==2.12.1），随后整表安装时 pip 视其已满足而跳过。
+# torch 先装（版本与 requirements.txt 一致 ==2.13.0；2026-10-18 由 2.12.1 升级），随后整表安装时 pip 视其已满足而跳过。
 # 超时／重试参数一并放宽（--timeout 120 --retries 15），提高弱网下的构建成功率。
-RUN pip install --no-cache-dir --timeout 120 --retries 15 "torch==2.12.1" \
+RUN pip install --no-cache-dir --timeout 120 --retries 15 "torch==2.13.0" \
         --index-url https://download.pytorch.org/whl/cpu
 RUN pip install --no-cache-dir --timeout 120 --retries 15 -r /app/requirements.txt
 

@@ -29,7 +29,11 @@ neo4j==6.3.1
 # ---------------------------------------------------------------------------
 numpy==2.5.1              # 交付物/03-代码\检索\vector_search.py 顶层 import
 faiss-cpu==1.15.1         # import 名为 faiss
-torch==2.12.1             # import 名为 torch；CPU 用法，见文件头
+torch==2.13.0             # import 名为 torch；CPU 用法，见文件头
+#   ↑ 2026-10-18 全面审查（第二轮）按 pip-audit 的 PYSEC-2025-194 从 2.12.1 升到 2.13.0；
+#     升后 transformers 5.13.0 与本地 BGE 快照加载、真实问答链路均复验通过（11.8s／10 条证据）。
+#     torchvision 0.27.1 的元数据仍要求 torch==2.12.1，但本项目**不使用** torchvision，
+#     其实测可导入、不参与任何链路，故留作环境噪声（不写进本清单）。
 transformers==5.13.0      # 交付物/03-代码\检索\vector_search.py 用 AutoModel/AutoTokenizer 直接加载
 huggingface_hub==1.22.0   # resolve_snapshot_dir() 依赖 HF_HUB_CACHE 定位本地模型快照
 
