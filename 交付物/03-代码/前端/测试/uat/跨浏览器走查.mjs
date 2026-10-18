@@ -55,9 +55,9 @@ const PROFILE_MAP = {
 }
 
 const PAGES = [
-  { id: 'ask', url: '/ask', name: '提问台', expect: 'hasAskBox', label: '提问框 #q' },
-  { id: 'answer', url: '/answer/40', name: '答案与证据', expect: 'hasAnswer', label: '答案段头【回答】' },
-  { id: 'graph', url: '/graph', name: '知识图谱', expect: 'hasAnchor', label: '「当前锚点」或 ≥1 个 .gnode' },
+  { id: 'ask', url: '/ask', name: '提问台', expect: 'hasAskBox', label: '提问框 #q', settledSel: '#q', settledLabel: '提问框 #q' },
+  { id: 'answer', url: '/answer/40', name: '答案与证据', expect: 'hasAnswer', label: '答案段头【回答】', settledSel: 'text=【回答】', settledLabel: '答案段头【回答】' },
+  { id: 'graph', url: '/graph', name: '知识图谱', expect: 'hasAnchor', label: '「当前锚点」或 ≥1 个 .gnode', settledSel: '.gnode', settledLabel: '图谱节点 .gnode' },
 ]
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -100,15 +100,25 @@ for (const engineId of ENGINES) {
 
       const url = BASE + pg.url
       let status = 0
+      let settled = false
       const t0 = Date.now()
       try {
         const resp = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 })
         status = resp ? resp.status() : 0
-        await page.waitForTimeout(2500)   // 让首屏接口与图形落定
+        // 2026-10-18 改：原先固定等 2.5 秒，移动档（DPR 2.75／3）渲染慢，2.5 秒时图谱页只到
+        // 757 字、0 个节点，会被误判成异常。改为**按该页就绪标志等待**，再补 800ms 收尾。
+        try {
+          await page.waitForSelector(pg.settledSel, { timeout: 20000 })
+          settled = true
+        } catch {
+          settled = false
+        }
+        await page.waitForTimeout(800)
       } catch (e) {
         record('error', engineId, profId, pg.id, `打开失败：${e.message.split('\n')[0]}`)
       }
       const ms = Date.now() - t0
+      if (!settled) record('major', engineId, profId, pg.id, `20 秒内未出现就绪标志「${pg.settledLabel}」（疑似加载失败或错误态）`)
 
       if (status !== 200) {
         record('error', engineId, profId, pg.id, `HTTP ${status}`)

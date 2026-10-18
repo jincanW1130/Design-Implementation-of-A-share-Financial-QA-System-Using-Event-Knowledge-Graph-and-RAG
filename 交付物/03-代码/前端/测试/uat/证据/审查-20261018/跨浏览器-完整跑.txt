@@ -1,0 +1,114 @@
+# 跨浏览器 × 移动设备走查（审查-20261018）
+
+- 目标：http://127.0.0.1:5173
+- 引擎／设备：chromium(desktop-1440x900 + pixel5)；firefox(desktop-1440x900 + pixel5)；webkit(desktop-1440x900 + iphone13)
+- 汇总：通过 90｜记录 23｜严重 0｜错误 0
+
+[pass] chromium/desktop-1440x900 ask | HTTP 200（2680 ms）
+[pass] chromium/desktop-1440x900 ask | 无横向溢出（视口 1440px，滚动宽 1440px）
+[pass] chromium/desktop-1440x900 ask | 主标题非空：A 股财经信息智能问答现在，开箱即用
+[pass] chromium/desktop-1440x900 ask | 可见文本 2970 字
+[info] chromium/desktop-1440x900 ask | DPR=1｜touch=false｜h1=100.8px/800｜canvas=1｜svg=11｜gnode=0
+[pass] chromium/desktop-1440x900 ask | 控制台无错误（429 另计）
+[pass] chromium/desktop-1440x900 answer | HTTP 200（2593 ms）
+[pass] chromium/desktop-1440x900 answer | 无横向溢出（视口 1440px，滚动宽 1440px）
+[pass] chromium/desktop-1440x900 answer | 主标题非空：平安银行2026年的业绩情况如何？
+[pass] chromium/desktop-1440x900 answer | 可见文本 8856 字
+[info] chromium/desktop-1440x900 answer | DPR=1｜touch=false｜h1=51.84px/700｜canvas=1｜svg=45｜gnode=8
+[pass] chromium/desktop-1440x900 answer | 控制台无错误（429 另计）
+[pass] chromium/desktop-1440x900 graph | HTTP 200（2590 ms）
+[pass] chromium/desktop-1440x900 graph | 无横向溢出（视口 1440px，滚动宽 1440px）
+[pass] chromium/desktop-1440x900 graph | 主标题非空：从公司出发，把事件连成能走的路
+[pass] chromium/desktop-1440x900 graph | 可见文本 6530 字
+[info] chromium/desktop-1440x900 graph | DPR=1｜touch=false｜h1=51.84px/700｜canvas=1｜svg=52｜gnode=11
+[pass] chromium/desktop-1440x900 graph | 控制台无错误（429 另计）
+[pass] chromium/pixel5 ask | HTTP 200（2659 ms）
+[pass] chromium/pixel5 ask | 无横向溢出（视口 393px，滚动宽 393px）
+[pass] chromium/pixel5 ask | 主标题非空：A 股财经信息智能问答现在，开箱即用
+[pass] chromium/pixel5 ask | 可见文本 2955 字
+[info] chromium/pixel5 ask | DPR=2.75｜touch=true｜h1=44px/800｜canvas=1｜svg=11｜gnode=0
+[pass] chromium/pixel5 ask | 控制台无错误（429 另计）
+[pass] chromium/pixel5 answer | HTTP 200（2578 ms）
+[pass] chromium/pixel5 answer | 无横向溢出（视口 393px，滚动宽 393px）
+[pass] chromium/pixel5 answer | 主标题非空：平安银行2026年的业绩情况如何？
+[pass] chromium/pixel5 answer | 可见文本 8841 字
+[info] chromium/pixel5 answer | DPR=2.75｜touch=true｜h1=32px/700｜canvas=1｜svg=45｜gnode=8
+[pass] chromium/pixel5 answer | 控制台无错误（429 另计）
+[pass] chromium/pixel5 graph | HTTP 200（2600 ms）
+[pass] chromium/pixel5 graph | 无横向溢出（视口 393px，滚动宽 393px）
+[pass] chromium/pixel5 graph | 主标题非空：从公司出发，把事件连成能走的路
+[pass] chromium/pixel5 graph | 可见文本 757 字
+[info] chromium/pixel5 graph | DPR=2.75｜touch=true｜h1=32px/700｜canvas=1｜svg=4｜gnode=0
+[pass] chromium/pixel5 graph | 控制台无错误（429 另计）
+[pass] firefox/desktop-1440x900 ask | HTTP 200（2838 ms）
+[pass] firefox/desktop-1440x900 ask | 无横向溢出（视口 1440px，滚动宽 1440px）
+[pass] firefox/desktop-1440x900 ask | 主标题非空：A 股财经信息智能问答现在，开箱即用
+[pass] firefox/desktop-1440x900 ask | 可见文本 2970 字
+[info] firefox/desktop-1440x900 ask | DPR=1｜touch=false｜h1=100.75px/800｜canvas=1｜svg=11｜gnode=0
+[pass] firefox/desktop-1440x900 ask | 控制台无错误（429 另计）
+[pass] firefox/desktop-1440x900 answer | HTTP 200（2626 ms）
+[pass] firefox/desktop-1440x900 answer | 无横向溢出（视口 1440px，滚动宽 1440px）
+[pass] firefox/desktop-1440x900 answer | 主标题非空：平安银行2026年的业绩情况如何？
+[pass] firefox/desktop-1440x900 answer | 可见文本 8856 字
+[info] firefox/desktop-1440x900 answer | DPR=1｜touch=false｜h1=51.8125px/700｜canvas=1｜svg=45｜gnode=8
+[pass] firefox/desktop-1440x900 answer | 控制台无错误（429 另计）
+[pass] firefox/desktop-1440x900 graph | HTTP 200（2631 ms）
+[pass] firefox/desktop-1440x900 graph | 无横向溢出（视口 1440px，滚动宽 1440px）
+[pass] firefox/desktop-1440x900 graph | 主标题非空：从公司出发，把事件连成能走的路
+[pass] firefox/desktop-1440x900 graph | 可见文本 6530 字
+[info] firefox/desktop-1440x900 graph | DPR=1｜touch=false｜h1=51.8125px/700｜canvas=1｜svg=52｜gnode=11
+[pass] firefox/desktop-1440x900 graph | 控制台无错误（429 另计）
+[pass] firefox/pixel5 ask | HTTP 200（2624 ms）
+[pass] firefox/pixel5 ask | 无横向溢出（视口 393px，滚动宽 393px）
+[pass] firefox/pixel5 ask | 主标题非空：A 股财经信息智能问答现在，开箱即用
+[pass] firefox/pixel5 ask | 可见文本 2955 字
+[info] firefox/pixel5 ask | DPR=2.75｜touch=true｜h1=44px/800｜canvas=1｜svg=11｜gnode=0
+[pass] firefox/pixel5 ask | 控制台无错误（429 另计）
+[pass] firefox/pixel5 answer | HTTP 200（2602 ms）
+[pass] firefox/pixel5 answer | 无横向溢出（视口 393px，滚动宽 393px）
+[pass] firefox/pixel5 answer | 主标题非空：平安银行2026年的业绩情况如何？
+[pass] firefox/pixel5 answer | 可见文本 8841 字
+[info] firefox/pixel5 answer | DPR=2.75｜touch=true｜h1=32px/700｜canvas=1｜svg=45｜gnode=8
+[pass] firefox/pixel5 answer | 控制台无错误（429 另计）
+[pass] firefox/pixel5 graph | HTTP 200（2602 ms）
+[pass] firefox/pixel5 graph | 无横向溢出（视口 393px，滚动宽 393px）
+[pass] firefox/pixel5 graph | 主标题非空：从公司出发，把事件连成能走的路
+[pass] firefox/pixel5 graph | 可见文本 757 字
+[info] firefox/pixel5 graph | DPR=2.75｜touch=true｜h1=32px/700｜canvas=1｜svg=4｜gnode=0
+[pass] firefox/pixel5 graph | 控制台无错误（429 另计）
+[pass] webkit/desktop-1440x900 ask | HTTP 200（2658 ms）
+[pass] webkit/desktop-1440x900 ask | 无横向溢出（视口 1440px，滚动宽 1440px）
+[pass] webkit/desktop-1440x900 ask | 主标题非空：A 股财经信息智能问答现在，开箱即用
+[pass] webkit/desktop-1440x900 ask | 可见文本 2970 字
+[info] webkit/desktop-1440x900 ask | DPR=1｜touch=false｜h1=100.800003px/800｜canvas=1｜svg=11｜gnode=0
+[pass] webkit/desktop-1440x900 ask | 控制台无错误（429 另计）
+[pass] webkit/desktop-1440x900 answer | HTTP 200（2617 ms）
+[pass] webkit/desktop-1440x900 answer | 无横向溢出（视口 1440px，滚动宽 1440px）
+[pass] webkit/desktop-1440x900 answer | 主标题非空：平安银行2026年的业绩情况如何？
+[pass] webkit/desktop-1440x900 answer | 可见文本 8856 字
+[info] webkit/desktop-1440x900 answer | DPR=1｜touch=false｜h1=51.84px/700｜canvas=1｜svg=45｜gnode=8
+[pass] webkit/desktop-1440x900 answer | 控制台无错误（429 另计）
+[pass] webkit/desktop-1440x900 graph | HTTP 200（2626 ms）
+[pass] webkit/desktop-1440x900 graph | 无横向溢出（视口 1440px，滚动宽 1440px）
+[pass] webkit/desktop-1440x900 graph | 主标题非空：从公司出发，把事件连成能走的路
+[pass] webkit/desktop-1440x900 graph | 可见文本 6530 字
+[info] webkit/desktop-1440x900 graph | DPR=1｜touch=false｜h1=51.84px/700｜canvas=1｜svg=52｜gnode=11
+[pass] webkit/desktop-1440x900 graph | 控制台无错误（429 另计）
+[pass] webkit/iphone13 ask | HTTP 200（2641 ms）
+[pass] webkit/iphone13 ask | 无横向溢出（视口 390px，滚动宽 390px）
+[pass] webkit/iphone13 ask | 主标题非空：A 股财经信息智能问答现在，开箱即用
+[pass] webkit/iphone13 ask | 可见文本 2955 字
+[info] webkit/iphone13 ask | DPR=3｜touch=true｜h1=44px/800｜canvas=1｜svg=11｜gnode=0
+[pass] webkit/iphone13 ask | 控制台无错误（429 另计）
+[pass] webkit/iphone13 answer | HTTP 200（2637 ms）
+[pass] webkit/iphone13 answer | 无横向溢出（视口 390px，滚动宽 390px）
+[pass] webkit/iphone13 answer | 主标题非空：平安银行2026年的业绩情况如何？
+[pass] webkit/iphone13 answer | 可见文本 8841 字
+[info] webkit/iphone13 answer | DPR=3｜touch=true｜h1=32px/700｜canvas=1｜svg=45｜gnode=8
+[pass] webkit/iphone13 answer | 控制台无错误（429 另计）
+[pass] webkit/iphone13 graph | HTTP 200（2621 ms）
+[pass] webkit/iphone13 graph | 无横向溢出（视口 390px，滚动宽 390px）
+[pass] webkit/iphone13 graph | 主标题非空：从公司出发，把事件连成能走的路
+[pass] webkit/iphone13 graph | 可见文本 757 字
+[info] webkit/iphone13 graph | DPR=3｜touch=true｜h1=32px/700｜canvas=1｜svg=4｜gnode=0
+[pass] webkit/iphone13 graph | 控制台无错误（429 另计）
