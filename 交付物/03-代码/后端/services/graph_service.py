@@ -44,8 +44,9 @@ results, **extra}`；`code` 取值同为 `OK`／`EMPTY`／`NOT_FOUND`／`INVALID
   本批数据全在 BMP 内，实测一致；含增补平面字符时会分叉，登记为限制。
 * `_s()`（Python `strip()`）在 Cypher 侧用 `trim()` 近似（Java 空白定义）；本批 CSV
   **没有任何列存在两端空白**（导入前已实测），故实测一致。
-* Neo4j 后端在 G6 上按第 7 阶段的写法**逐事件**取 `chunk_id`（与内存后端同样的
-  N 次调用），这是行为一致优先于往返次数的一次取舍，登记为已知限制。
+* Neo4j 后端在 G6 上原先按第 7 阶段的写法**逐事件**取 `chunk_id`（N 次往返）；
+  2026-10-18 性能优化改为 `event_chunk_ids_batch` 一条 Cypher 批量取回（结果逐项一致，
+  实测 167 个事件：1244 ms → 65.8 ms；批量取块本身 571.4 ms → 7.7 ms）。内存后端不受影响。
 * 内存后端返回的 `results` 与 Neo4j 后端**在关键字段上一致**；`cypher` 字段两端同为
   表 18-F 的等效 Cypher 字符串（同一常量）。Neo4j 后端**实际执行**的 Cypher 不塞进
   envelope（以免两端 envelope 出现额外键），改用 `NEO4J_CYPHER` 常量与
@@ -233,6 +234,11 @@ _RESOLVE_BY_NAME = ("MATCH (n) WHERE %s = $key OR %s = $key "
                     % (_norm_expr("n.name"), _norm_expr("n.short_name"), _norm_expr("_a")))
 _LABELS_OF = "MATCH (n) WHERE n.node_id IN $ids RETURN n.node_id AS node_id, labels(n)[0] AS label"
 _LABEL_OF = "MATCH (n {node_id:$id}) RETURN labels(n)[0] AS label"
+# G6 的批量取证据块：一条 Cypher 取回所有事件的语义边 chunk_id（替代逐事件调 G5 的 N+1）
+_BATCH_EVENT_CHUNK_IDS = (
+    "MATCH (e) WHERE e.node_id IN $ids "
+    "MATCH (e)-[r]-(x) WHERE type(r) <> $evidenced "
+    "RETURN e.node_id AS event_id, r.source_chunk_id AS source_chunk_id")
 
 
 # --------------------------------------------------------------------------
@@ -460,6 +466,27 @@ class Neo4jGraphQuery:
         """单个事件经 8 条语义边携带的 `chunk_id` 集合（升序）；**不含 `EVIDENCED_BY`**。"""
         return self.g5_event_evidence(event_id)["chunk_ids"]
 
+    def event_chunk_ids_batch(self, event_ids) -> dict:
+        """批量版 `event_chunk_ids`：`{event_id: [chunk_id, …]}`，**一次 Cypher**。
+
+        语义与逐个调 `event_chunk_ids`（即 `g5_event_evidence`）逐项一致：排除
+        `EVIDENCED_BY`，只要边带非空 `source_chunk_id`；每个事件的集合按 `(长度, 值)` 升序。
+        用于 G6——原先 167 个事件要发 167 次 Cypher（实测 1244 ms），批量后为 1 次。
+        """
+        ids = [_s(x) for x in (event_ids or [])]
+        collected = {eid: set() for eid in ids}
+        if not ids:
+            return {eid: [] for eid in ids}
+        for row in self._run(_BATCH_EVENT_CHUNK_IDS, ids=ids, evidenced=EVIDENCED_BY):
+            cid = row.get("source_chunk_id")
+            if not cid:                                       # 与 G5 的入池条件同一判定
+                continue
+            bucket = collected.get(_s(row.get("event_id")))
+            if bucket is not None:
+                bucket.add(cid)
+        return {eid: sorted(bucket, key=lambda x: (len(x), x))
+                for eid, bucket in collected.items()}
+
     # ---------------------------------------------------------------- G6
     def g6_time_filter(self, event_ids, lo: str, hi: str, null_policy: str | None = None) -> dict:
         policy = (config.RETRIEVAL["time_filter_null_policy"]
@@ -500,10 +527,11 @@ class Neo4jGraphQuery:
         removed = sorted(removed_null + removed_range)
 
         survived_chunks, removed_chunks = set(), set()
+        chunk_map = self.event_chunk_ids_batch(passed + removed)
         for eid in passed:
-            survived_chunks.update(self.event_chunk_ids(eid))
+            survived_chunks.update(chunk_map.get(eid, ()))
         for eid in removed:
-            removed_chunks.update(self.event_chunk_ids(eid))
+            removed_chunks.update(chunk_map.get(eid, ()))
         ck = lambda s: sorted(s, key=lambda x: (len(x), x))     # noqa: E731
         diff = removed_chunks - survived_chunks
         diff_rev = survived_chunks - removed_chunks

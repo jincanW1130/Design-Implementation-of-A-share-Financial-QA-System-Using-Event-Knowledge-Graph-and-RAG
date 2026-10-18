@@ -1266,14 +1266,17 @@ async def extraction_events(event_type: str | None = None, start_time: str | Non
         if cmin is not None:
             items = [it for it in items
                      if isinstance(it.get("confidence"), float) and it["confidence"] >= cmin]
+        # 先切片再计数：只为当前页的事件跑一次批量证据文档计数（原先对全量事件计数，
+        # 结果一样但白算 total 之外的行；实测 1098 事件 → 当前页 20 条）
+        start = (page_no - 1) * size
+        page_items = items[start:start + size]
         # 证据文档数按**节点编号**实算（`evidence_doc_counts` 查的是 `e.node_id`；
         # 本项目 event_id 与 node_id 同值，但仍按 node_id 取键，避免将来分叉时错配）
-        keys = [(it["node_id"] or it["event_id"]) for it in items]
+        keys = [(it["node_id"] or it["event_id"]) for it in page_items]
         counts = rd.evidence_doc_counts(keys)
-    for item in items:
+    for item in page_items:
         item["evidence_doc_count"] = int(counts.get(item["node_id"] or item["event_id"], 0))
-    start = (page_no - 1) * size
-    return errors.ok_page(len(items), items[start:start + size], page_no, size)
+    return errors.ok_page(len(items), page_items, page_no, size)
 
 
 def _disambig_rows() -> tuple:

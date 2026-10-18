@@ -369,6 +369,38 @@ class GraphReader:
         node = (self.graph.nodes or {}).get(nid)
         return dict(node) if node else None
 
+    def raw_nodes(self, node_ids) -> dict:
+        """**批量**取多个节点的原始属性字典：`{node_id: props}`（一次 Cypher／一次遍历）。
+
+        不存在的节点不会出现在返回值里。语义与逐个 `_raw_node()` 一致（Neo4j 侧同样把
+        `labels(n)[0]` 并回 `props["label"]`）。用于路径接口一次性取全路径节点，
+        消除「每个节点一条 Cypher」的 N+1。
+        """
+        ids = sorted({_s(x) for x in (node_ids or []) if _s(x)})
+        if not ids:
+            return {}
+        if self.backend == "neo4j":
+            rows = self._run(
+                "MATCH (n) WHERE n.node_id IN $ids "
+                "RETURN n.node_id AS node_id, labels(n)[0] AS label, properties(n) AS p",
+                ids=ids)
+            out = {}
+            for row in rows:
+                props = dict(row["p"] or {})
+                props["label"] = _s(row["label"])
+                out[_s(row["node_id"])] = props
+            return out
+        nodes = self.graph.nodes or {}
+        return {nid: dict(nodes[nid]) for nid in ids if nid in nodes}
+
+    def briefs(self, node_ids) -> dict:
+        """**批量**版 `brief()`：`{node_id: {node_id, label, name, stock_code}}`。"""
+        raw = self.raw_nodes(node_ids)
+        return {nid: {"node_id": nid, "label": _s(raw.get(nid, {}).get("label")),
+                      "name": _s(raw.get(nid, {}).get("name")),
+                      "stock_code": _s(raw.get(nid, {}).get("stock_code"))}
+                for nid in sorted({_s(x) for x in (node_ids or []) if _s(x)})}
+
     def label_of(self, node_id: str) -> str | None:
         node = self._raw_node(node_id)
         return _s(node.get("label")) or None if node else None
@@ -706,16 +738,23 @@ def _edge_id(item: dict):
 
 
 def _path_payload(reader_obj: GraphReader, path: dict, with_evidence: bool = False,
-                  doc_meta: dict | None = None, chunk_meta: dict | None = None) -> dict:
+                  doc_meta: dict | None = None, chunk_meta: dict | None = None,
+                  brief_map: dict | None = None) -> dict:
     """把内部路径项整形为表 4-13／《10》4.7.3 的 `paths[i]`：
 
     `{start, end, depth, nodes:[{node_id,label,name}], edges:[…证据属性…]}`。
 
     `with_evidence=True` 时每条边**追加**一个 `evidence` 对象（元数据由调用方**批量**查库后
     经 `doc_meta`／`chunk_meta` 传入）；默认 False 时产物与既有版本逐字节一致。
+
+    `brief_map` 是调用方用 `GraphReader.briefs()` **一次性**取好的节点简述表；缺省时退回
+    逐节点 `brief()`（保持旧调用方式可用）。批量传入可消掉路径接口的 N+1 查询。
     """
     node_ids = list(path.get("nodes") or [])
-    briefs = [reader_obj.brief(nid) for nid in node_ids]
+    if brief_map is None:
+        briefs = [reader_obj.brief(nid) for nid in node_ids]
+    else:
+        briefs = [brief_map.get(_s(nid)) or reader_obj.brief(nid) for nid in node_ids]
     edges = []
     for rel in path.get("relations") or []:
         neighbor = _s(rel.get("neighbor"))
@@ -1132,15 +1171,25 @@ async def paths(from_node: str | None = None, to_node: str | None = None,
                 for nid in res["node_ids"]:
                     raw += rd.relation_paths(nid, rel, hop_no)
         raw = _dedup_paths(raw)
+        # 全部路径的节点一起取（一次 Cypher）→ 时间过滤与响应整形都不再逐节点查
+        all_node_ids = {nid for p in raw for nid in (p.get("nodes") or [])}
+        raw_meta = rd.raw_nodes(all_node_ids) if hasattr(rd, "raw_nodes") else None
         if lo or hi:
-            raw = [p for p in raw if _path_in_window(rd, p, lo, hi)]
+            raw = [p for p in raw if _path_in_window(rd, p, lo, hi, raw_meta)]
         with_ev = _truthy(with_evidence)
         doc_meta = chunk_meta = None
         if with_ev:
             # 全部路径上的边一起收集 → 一次 IN 批量补元数据（不逐条查）
             all_raw = [rel for p in raw for rel in (p.get("relations") or [])]
             doc_meta, chunk_meta = _evidence_index(all_raw)
-        payload = [_path_payload(rd, p, with_ev, doc_meta, chunk_meta) for p in raw]
+        brief_map = None
+        if raw_meta is not None:
+            brief_map = {nid: {"node_id": nid, "label": _s(props.get("label")),
+                               "name": _s(props.get("name")),
+                               "stock_code": _s(props.get("stock_code"))}
+                         for nid, props in raw_meta.items()}
+        payload = [_path_payload(rd, p, with_ev, doc_meta, chunk_meta, brief_map)
+                   for p in raw]
         payload = _sort_paths(payload)
     return errors.ok({"paths": payload, "hop": hop_no,
                       "is_graph_extended": bool(payload),
@@ -1148,13 +1197,22 @@ async def paths(from_node: str | None = None, to_node: str | None = None,
                       "start_time": lo or None, "end_time": hi or None})
 
 
-def _path_in_window(rd: GraphReader, path: dict, lo: str, hi: str) -> bool:
-    """路径是否落在时间窗内（按路径上 Event 节点的 `event_time`；空值按策略剔除）。"""
-    events = [nid for nid in (path.get("nodes") or []) if rd.label_of(nid) == "Event"]
+def _path_in_window(rd: GraphReader, path: dict, lo: str, hi: str,
+                    raw_meta: dict | None = None) -> bool:
+    """路径是否落在时间窗内（按路径上 Event 节点的 `event_time`；空值按策略剔除）。
+
+    `raw_meta` 是调用方用 `GraphReader.raw_nodes()` 一次性取好的 `{node_id: props}`；
+    缺省时退回逐节点 `_raw_node()`（保持旧调用方式可用）。
+    """
+    node_ids = list(path.get("nodes") or [])
+    if raw_meta is None:
+        raw_meta = {nid: (rd._raw_node(nid) or {}) for nid in node_ids}   # noqa: SLF001
+    events = [nid for nid in node_ids
+              if _s((raw_meta.get(_s(nid)) or {}).get("label")) == "Event"]
     if not events:
         return True                                   # 与时间无关的路径原样保留
     for nid in events:
-        node = rd._raw_node(nid) or {}                # noqa: SLF001
+        node = raw_meta.get(_s(nid)) or {}
         et = _norm_event_time(node.get("event_time"))
         if not et:
             if NULL_TIME_POLICY == "keep":
