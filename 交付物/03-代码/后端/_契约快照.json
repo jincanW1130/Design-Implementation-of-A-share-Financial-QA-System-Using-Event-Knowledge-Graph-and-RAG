@@ -2292,6 +2292,57 @@
         }
       }
     },
+    "GET /api/search/keywords": {
+      "400": {
+        "example": {
+          "code": 1001,
+          "message": "输入为空或长度超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "422": {
+        "schema": {
+          "ref": "HTTPValidationError"
+        }
+      },
+      "429": {
+        "example": {
+          "code": 1004,
+          "message": "请求频率超出限制"
+        },
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      }
+    },
     "POST /api/admin/documents": {
       "400": {
         "example": {
@@ -3246,7 +3297,7 @@
   },
   "generated_by": "工具/契约快照.py",
   "openapi_version": "3.1.0",
-  "operation_count": 33,
+  "operation_count": 34,
   "operations": [
     "DELETE /api/admin/documents/{doc_id}",
     "GET /api/admin/consistency-check",
@@ -3273,6 +3324,7 @@
     "GET /api/market/quote",
     "GET /api/market/reports",
     "GET /api/qa/answers/{answer_id}",
+    "GET /api/search/keywords",
     "HEAD /api/health",
     "POST /api/admin/documents",
     "POST /api/admin/experiment/ask",
@@ -3282,7 +3334,7 @@
     "POST /api/qa/ask",
     "PUT /api/admin/documents/{doc_id}"
   ],
-  "path_count": 30,
+  "path_count": 31,
   "paths": {
     "/api/admin/consistency-check": [
       "GET"
@@ -3376,6 +3428,9 @@
     ],
     "/api/qa/ask": [
       "POST"
+    ],
+    "/api/search/keywords": [
+      "GET"
     ]
   },
   "schema_fields": {

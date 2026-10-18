@@ -6,7 +6,7 @@
 * 题集：30 题预实验集（`检索/config.py` 的 `QUESTION_FILES["questions"]`），**不改题、不改 gold**。
 * 向量基线：现有 `VectorSearcher.search(question, 10)`（本地 bge-small-zh-v1.5 + FAISS），
   与正式链路使用的同一份索引；**只取 Top-10**，不经过图谱通道与五步裁剪。
-* 词汇通道：`检索/lexical_search.py` 的纯 Python BM25（字符 1～3 n-gram），Top-10。
+* 词汇通道：`增强/lexical_search.py` 的纯 Python BM25（字符 1～3 n-gram），Top-10。
 * RRF：向量 Top-20 ＋ 词汇 Top-20 融合后取 Top-10（**仅诊断**，不是产品链路）。
 * 指标：`检索/metrics.py` 的 Recall@10、MRR；另行统计 Hit@1（首位即命中）、
   Hit@10（前 10 有命中）、Complete Evidence Recall@10 与首个 gold 的平均位次。
@@ -38,12 +38,17 @@ except AttributeError:  # pragma: no cover
 _HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(_HERE)
 RETRIEVAL_DIR = os.path.join(ROOT, "交付物", "03-代码", "检索")
+ENHANCEMENT_DIR = os.path.join(ROOT, "交付物", "03-代码", "增强")
+# 先插增强层、再插检索层：保证裸名 `import config` 命中**检索**组件（本脚本的唯一
+# 参数来源），而 `import lexical_search` 仍能在检索层之后命中增强层。
+if ENHANCEMENT_DIR not in sys.path:
+    sys.path.insert(0, ENHANCEMENT_DIR)
 if RETRIEVAL_DIR not in sys.path:
     sys.path.insert(0, RETRIEVAL_DIR)
 
 import config            # noqa: E402  检索组件唯一参数来源
 import metrics           # noqa: E402
-import lexical_search    # noqa: E402
+import lexical_search    # noqa: E402  工程增强层（原 检索/lexical_search.py）
 from vector_search import VectorSearcher   # noqa: E402
 
 K = int(config.RETRIEVAL["K"])

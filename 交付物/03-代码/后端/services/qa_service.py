@@ -69,6 +69,7 @@ import config
 import db
 import errors
 import observability
+import services.hybrid_search as hybrid_search
 from errors import ApiError
 
 for _stream in (sys.stdout, sys.stderr):
@@ -885,6 +886,10 @@ def ask(question: str, session_id: str, group: str | None = None,
             "time_interpretation": None,
             "data_cutoff_time": config.dataset_meta()["data_cutoff_time"],
             "answer_type": ANSWER_TYPE_FALLBACK,
+            # 工程增强（不在论文实验口径内）：空结果时附最多 3 条**关键词相关原文**，
+            # 只作补充提示，明确不是证据链的一部分，不作为答案依据。
+            "related_chunks": hybrid_search.search(question, 3),
+            "engineering_enhancement": True,
         }
     record = ran["record"]
     question_block = record.get("question") or {}

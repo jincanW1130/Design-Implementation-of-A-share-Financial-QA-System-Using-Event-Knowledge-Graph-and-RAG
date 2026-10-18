@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""O 组 · 可插拔 Rerank 接口（第 10 轮新增）—— 被测文件：`代码\\检索\\reranker.py`。
+"""O 组 · 可插拔 Rerank 接口（第 10 轮新增）—— 被测文件：`代码\\增强\\reranker.py`。
 
 必须证明的两条性质：
 
@@ -27,7 +27,7 @@ import _bootstrap  # noqa: E402
 from conftest import QUESTION  # noqa: E402
 
 pipe = _bootstrap.load_module("检索", "pipeline.py")
-reranker_mod = _bootstrap.load_module("检索", "reranker.py")
+reranker_mod = _bootstrap.load_module("增强", "reranker.py")
 cfg = _bootstrap.component_config("检索")
 
 

@@ -57,6 +57,9 @@ COMPONENT_DIRS = {
     "后端": os.path.join(CODE_DIR, "后端"),
     "数据准备": os.path.join(CODE_DIR, "数据准备"),
     "抽取与图谱": os.path.join(CODE_DIR, "抽取与图谱"),
+    # 2026-10-18：本项目优化新增的工程增强模块（BM25／Rerank／txt-md 解析）
+    # 已从上游只读目录移入 `代码\增强\`；本组件名只供测试加载用。
+    "增强": os.path.join(CODE_DIR, "增强"),
 }
 
 # 恢复时要还原的 `sys.modules` 键（产品代码内部的裸名导入）
@@ -76,6 +79,9 @@ _TOUCHED_KEYS = {
     # dedup.py 的 `from clean import …`），所以 `_Isolated` 同时把本组件目录插到 sys.path[0]。
     "数据准备": ("config",),
     "抽取与图谱": ("config",),
+    # 增强层的 `config.py` 只是转发 `数据准备/config.py`；`parse_text.py` 内部仍写
+    # `import config`，故同样在加载期顶替、退出还原。
+    "增强": ("config",),
 }
 
 _MISSING = object()

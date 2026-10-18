@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""P 组 · txt／md 最小解析入口（第 10 轮新增）—— 被测文件：`代码\\数据准备\\parse_text.py`。
+"""P 组 · txt／md 最小解析入口（第 10 轮新增）—— 被测文件：`代码\\增强\\parse_text.py`。
 
 覆盖：编码回退（UTF-8 BOM／GB18030）、Markdown 标题、必填元信息不编造、
 raw 字段与 `fetch.Doc.to_raw()` 对齐、`raw\\{doc_id}.json` 落盘与幂等拒绝覆盖。
@@ -20,8 +20,8 @@ if _HERE not in sys.path:
 
 import _bootstrap  # noqa: E402
 
-parse_text = _bootstrap.load_module("数据准备", "parse_text.py")
-cfg = _bootstrap.component_config("数据准备")
+parse_text = _bootstrap.load_module("增强", "parse_text.py")
+cfg = _bootstrap.component_config("增强")
 
 RAW_KEYS = {"doc_id", "category", "source", "title", "company_list", "publish_time",
             "page_url", "content_url", "raw_text", "extract_method", "fetched_at",

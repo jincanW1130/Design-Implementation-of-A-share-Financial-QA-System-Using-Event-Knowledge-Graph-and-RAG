@@ -29,7 +29,8 @@ A～I 共 **58 行**（A6＋B8＋C10＋D6＋E6＋F6＋G6＋H5＋I5）。
   （`db_counts.json` 已改为「内容未变则不重写」，故重跑不再把该交付件改脏。）
 * 环境未就绪 ≠ 内容失败（《24》硬约束 25）：服务没起来时，实况行记 UNRUN 并单独成栏，退出码 2。
 * C1 用 `app.openapi()["paths"]`（**不是** `main.py` 的 `api_routes()`）：预期 = 表 4-13 的 25 个业务接口
-  ＋ **已登记新增**（`REGISTERED_ADDITIONS`：`/api/health` ＋ 4 个 `/api/market/*`；3 个 `/api/auth/*` 不注册）。
+  ＋ **已登记新增**（`REGISTERED_ADDITIONS`：`/api/health` ＋ 4 个 `/api/market/*` ＋ 2 个 graph 详情／证据
+  ＋ 1 个工程增强关键词召回 `/api/search/keywords`；3 个 `/api/auth/*` 不注册）。
   「缺」→ FAIL（一个都不能少）；「多」逐条比对登记清单：清单内记「已登记新增」并打印，**清单外一律 FAIL**。
 * `2003` 是响应体纪律的唯一例外：错误响应键集 ⊆ {code, message}；2003 允许且必须带
   `retained_for_history=true`；**任何**响应都不得出现 `detail` 键。
@@ -169,6 +170,8 @@ REGISTERED_ADDITIONS = {
     # 2026-10-01 补登（《25》v1.6 / v1.8 已登记，本清单此前漏同步）：
     ("GET", "/api/graph/entities/{node_id}"),            # 实体详情（真实属性）
     ("GET", "/api/graph/entities/{node_id}/evidence"),   # 实体级证据
+    # 2026-10-18 工程增强：BM25 关键词召回（只读；不在论文 A～E 实验口径内；《25》4.1 已登记）
+    ("GET", "/api/search/keywords"),
 }
 
 # D1／D2 的**候选题列表**：依次尝试，取前若干道成功（HTTP 200）的题做机检。

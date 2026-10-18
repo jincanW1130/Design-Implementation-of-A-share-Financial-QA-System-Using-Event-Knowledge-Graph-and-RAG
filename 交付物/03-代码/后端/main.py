@@ -74,6 +74,8 @@ OPTIONAL_ROUTERS = [
     ("graph", "/api/graph"),
     ("admin", "/api/admin"),
     ("market", "/api/market"),
+    # 2026-10-18 工程增强：BM25 关键词召回（只读；不进入论文 A～E 实验口径）
+    ("search", "/api/search"),
 ]
 
 

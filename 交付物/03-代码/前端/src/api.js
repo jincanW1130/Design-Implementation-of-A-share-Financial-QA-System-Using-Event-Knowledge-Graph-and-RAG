@@ -713,6 +713,18 @@ export function getConfigMeta() {
   return requestMeta('/config/meta')
 }
 
+// —— 关键词召回（api\search.py · 工程增强，不在论文实验口径内）——
+/**
+ * GET /api/search/keywords —— BM25／字符 n-gram 关键词召回（只读）。
+ *
+ * 返回 `{items, total, took_ms, index_ready}`；每条含 `{chunk_id, doc_id, title,
+ * snippet, score}`。**不属于证据链**：只作补充提示，不作为答案依据。
+ * 该路径不在只读缓存白名单里，每次调用都直连后端（关键词命中要反映当前索引状态）。
+ */
+export function searchKeywords(q, k = 5) {
+  return request('/search/keywords', { params: { q, k } })
+}
+
 // —— 证据与原文（api\evidence.py）——
 /** GET /api/evidence/{answer_id} —— 四类分组计数 ＋ 证据明细。 */
 export function getEvidence(answerId) {

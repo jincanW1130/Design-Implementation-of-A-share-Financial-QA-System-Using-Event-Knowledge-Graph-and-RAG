@@ -23,6 +23,7 @@ import {
   askQuestion,
   getAnswer,
   getConfigMeta,
+  searchKeywords,
   getEvidence,
   getGraphPath,
   getChunk,
@@ -423,6 +424,19 @@ describe('接口清单的路径与参数', () => {
     expect(calls[4].url).toBe('/api/graph/events/EV%201')
     expect(calls[5].url).toBe('/api/graph/entities/N%201')
     expect(calls[6].url).toContain('/api/graph/entities/N%201/evidence?depth=2&limit=5')
+  })
+
+  it('关键词召回接口（工程增强）：q 编码、k 缺省 5、不在只读缓存白名单', async () => {
+    const { calls } = stubFetch(() => ({ status: 200, body: okEnvelope({
+      items: [], total: 0, took_ms: 1, index_ready: true }) }))
+    await searchKeywords('长城汽车 股票期权')
+    await searchKeywords('长城汽车', 3)
+    expect(calls[0].url).toContain('/api/search/keywords?')
+    expect(calls[0].url).toContain('k=5')
+    expect(calls[0].url).toContain('q=%E9%95%BF%E5%9F%8E%E6%B1%BD%E8%BD%A6%20%E8%82%A1%E7%A5%A8%E6%9C%9F%E6%9D%83')
+    expect(calls[1].url).toContain('k=3')
+    // 不在缓存白名单：两次调用都要真正打接口（不能被 60 秒缓存合并成一次）
+    expect(calls).toHaveLength(2)
   })
 
   it('实时数据区四接口（scope=display_only，不进问答证据链）', async () => {

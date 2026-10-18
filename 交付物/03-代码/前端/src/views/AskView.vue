@@ -37,6 +37,9 @@ const error = ref(null)
 // 2026-10-18 全面审查 F2：无证据可引用时后端按 2002 语义返回 HTTP 200＋empty，
 // 这里给中性提示（不是错误红字）：换了问法还能继续问。
 const notice = ref(null)
+// 工程增强（不在论文实验口径内）：空结果时后端附最多 3 条关键词相关原文。
+// 只作补充提示，**不是证据链的一部分**，也不作为答案依据。
+const relatedChunks = ref([])
 let timer = null
 // 2026-10-18（第 3 轮）：边界与可取消。
 //   · 长度口径与后端 `params.validate_question` 一致：1～500 字（后端按折叠空白后的长度判，
@@ -63,6 +66,7 @@ async function submit() {
   const text = raw.trim()
   error.value = null
   notice.value = null
+  relatedChunks.value = []
   if (!text) { error.value = { code: '', message: '请输入问题后再提交。' }; return }
   if (text.length > MAX_QUESTION_CHARS) {
     error.value = {
@@ -87,6 +91,8 @@ async function submit() {
     // 2002 语义：后端没检索到可引用证据，返回 200＋empty（不是错误）。
     if (data && data.empty) {
       notice.value = data.notice || '未检索到可引用的证据，换一种问法试试。'
+      // 关键词相关原文（工程增强）：为空时保持原文案不变，不渲染该区块。
+      relatedChunks.value = Array.isArray(data.related_chunks) ? data.related_chunks : []
       return
     }
     if (data && data.answer_id !== undefined && data.answer_id !== null) {
@@ -293,6 +299,27 @@ onMounted(() => {
             <p v-if="notice" class="small" style="margin-top:10px;color:var(--ink-2)" data-testid="empty-notice">
               {{ notice }}
             </p>
+            <!-- 工程增强：关键词相关原文（BM25）。明确标注不是证据链的一部分，
+                 只用标题／块号／摘要做补充提示，不提供「以此作答」的入口。 -->
+            <div v-if="notice && relatedChunks.length" class="related" data-testid="related-chunks">
+              <div class="related__head">
+                <span class="label">关键词相关原文（工程增强，非正式证据）</span>
+                <span class="tag tag--muted">不属于证据链</span>
+              </div>
+              <p class="small related__note">
+                以下条目由关键词（BM25）召回，只作补充提示，<b>不是正式证据，也不作为答案依据</b>；
+                如需正式引用，请换一种问法让检索链路找到可引用证据。
+              </p>
+              <ol class="related__list">
+                <li v-for="it in relatedChunks" :key="it.chunk_id" class="related__item">
+                  <div class="related__ttl">
+                    {{ it.title || '（无标题）' }}
+                    <span class="mono small related__id">chunk_id={{ it.chunk_id }}</span>
+                  </div>
+                  <p class="small related__snip">{{ it.snippet }}</p>
+                </li>
+              </ol>
+            </div>
           </div>
           <div class="chips reveal" style="--d:80ms">
             <button v-for="(t, i) in examples" :key="i" class="chip" :disabled="loading" @click="useExample(t)">{{ t }}</button>
@@ -671,4 +698,13 @@ onMounted(() => {
 .recent__q { color: var(--fg); text-decoration: none; font-size: 13px; line-height: 1.5; }
 .recent__q:hover { color: var(--accent-ink); text-decoration: underline; }
 .recent__meta { color: var(--faint); white-space: nowrap; }
+/* 关键词相关原文（工程增强）：视觉上明确弱于正式证据，且带口径说明 */
+.related { margin-top: 12px; padding: 12px 14px; border: 1px dashed var(--border-soft);
+           border-radius: var(--r-md, 10px); background: var(--surface); }
+.related__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.related__note { margin: 7px 0 9px; color: var(--muted); }
+.related__list { margin: 0; padding-left: 18px; display: grid; gap: 8px; }
+.related__ttl { font-size: 13px; line-height: 1.5; }
+.related__id { color: var(--faint); margin-left: 8px; white-space: nowrap; }
+.related__snip { margin: 3px 0 0; color: var(--ink-2); }
 </style>
