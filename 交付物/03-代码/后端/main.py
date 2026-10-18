@@ -86,6 +86,16 @@ def validate_question(raw) -> str:
     if raw is None or not isinstance(raw, str):
         raise errors.ApiError(1001, detail="question 缺失或不是字符串（type=%s）" % type(raw).__name__)
     text = raw.strip()
+    # 2026-10-18 全面审查 F1：控制字符必须在校验层拒绝。
+    # 审查实测：`"\x00\x01\x02"` 能通过旧校验（长度 3 ≥ 1），随后在链路里落到
+    # 文件路径／子进程参数上，抛 `ValueError: embedded null character` → 未捕获异常
+    # → HTTP 500 ＋ 9999（服务内部错误）。改为在入口按 1001 拒绝，并保留 `\t\r\n`
+    # 后统一折成单空格（复制粘贴来的多行问题仍可用）。
+    if any(ch < " " for ch in text if ch not in "\t\r\n") or "\x7f" in text:
+        bad = next(ch for ch in text if (ch < " " and ch not in "\t\r\n") or ch == "\x7f")
+        raise errors.ApiError(1001, detail="question 含控制字符（U+%04X）" % ord(bad))
+    if any(ch in "\t\r\n" for ch in text):
+        text = " ".join(text.split())
     lo = int(config.LIMITS["question_min_chars"])
     hi = int(config.LIMITS["question_max_chars"])
     if len(text) < lo:

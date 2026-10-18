@@ -271,6 +271,24 @@ def test_g2_ask_missing_session_id_is_1003(client):
     assert r.json()["code"] == 1003
 
 
+def test_g2_ask_control_char_is_1001(client):
+    """2026-10-18 全面审查 F1：控制字符（含 NUL）必须按 1001 拒绝，不得 500/9999。
+
+    审查实测：`"\\x00\\x01\\x02"` 旧实现通过校验，随后在链路里触发
+    `ValueError: embedded null character` → HTTP 500 ＋ 9999。
+    """
+    for q in ("\x00\x01\x02", "茅台\x00发生了什么", "问\x7f题"):
+        r = client.post("/api/qa/ask", json={"question": q, "session_id": "S-G-TEST-0001"})
+        assert r.status_code == 400, (q, r.status_code)
+        assert r.json()["code"] == 1001, (q, r.json())
+
+
+def test_g2_ask_multiline_is_normalized_not_rejected(client):
+    """`\\t\\r\\n` 不算控制字符：多行问题折成单空格后放行（不至于把粘贴内容判 1001）。"""
+    from main import validate_question
+    assert validate_question("茅台\t最近\n发生了什么？") == "茅台 最近 发生了什么？"
+
+
 def test_g2_ask_question_too_long_is_1001(client):
     r = client.post("/api/qa/ask",
                     json={"question": "x" * 501, "session_id": "S-G-TEST-0001"})

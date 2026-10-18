@@ -435,6 +435,15 @@ RATE_LIMIT = {
     "window_seconds": 60,         # 滑动窗口长度
     "max_requests": 60,           # 同一来源 IP 在窗口内允许的请求数
 }
+# **2026-10-18 全面审查新增：本地压测用的临时放宽开关。**
+# 目的：全维度回归（接口矩阵／E2E／跨引擎走查）会在一分钟内发出上百次请求，
+# 被 60 次/60 秒的额度截断，测出来的失败分不清是缺陷还是限流。
+# 约定：**只在本机测试时**通过环境变量 `ASHARE_RATE_LIMIT_MAX` 放宽；
+# 不设该变量时上面字典里的 60 就是唯一真值（`验收第9阶段.py` 的 C9 仍按 60 校验，
+# 因为它读的是字典字面量），故默认行为与判据强度均未改变。
+_rl_max_override = os.environ.get("ASHARE_RATE_LIMIT_MAX", "").strip()
+if _rl_max_override.isdigit() and int(_rl_max_override) > 0:
+    RATE_LIMIT["max_requests"] = int(_rl_max_override)
 LIMITS = {
     "max_body_bytes": 64 * 1024,  # 请求体上限（64 KiB）
     "question_min_chars": 1,      # question 最短长度（空串按 1001 拒）
