@@ -55,9 +55,9 @@ const PROFILE_MAP = {
 }
 
 const PAGES = [
-  { id: 'ask', url: '/ask', name: '提问台' },
-  { id: 'answer', url: '/answer/40', name: '答案与证据' },
-  { id: 'graph', url: '/graph', name: '知识图谱' },
+  { id: 'ask', url: '/ask', name: '提问台', expect: 'hasAskBox', label: '提问框 #q' },
+  { id: 'answer', url: '/answer/40', name: '答案与证据', expect: 'hasAnswer', label: '答案段头【回答】' },
+  { id: 'graph', url: '/graph', name: '知识图谱', expect: 'hasAnchor', label: '「当前锚点」或 ≥1 个 .gnode' },
 ]
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -136,6 +136,12 @@ for (const engineId of ENGINES) {
             canvas: document.querySelectorAll('canvas').length,
             svg: document.querySelectorAll('svg').length,
             gnode: document.querySelectorAll('.gnode').length,
+            // 2026-10-18 补：逐页「内容达标」判据。
+            // 起因：本装置原先只判「可见文本 ≥20 字」，于是一次图谱页因请求失败退化成错误态
+            // （仅 757 字、0 个节点）仍被判 pass——判据太松会把坏页面记成好页面。
+            hasAskBox: !!document.querySelector('#q'),
+            hasAnswer: (document.body.innerText || '').includes('【回答】'),
+            hasAnchor: (document.body.innerText || '').includes('当前锚点') || document.querySelectorAll('.gnode').length > 0,
           }
         })
       } catch (e) {
@@ -153,6 +159,10 @@ for (const engineId of ENGINES) {
       if (metrics.textLen !== undefined) {
         if (metrics.textLen >= 20) record('pass', engineId, profId, pg.id, `可见文本 ${metrics.textLen} 字`)
         else record('major', engineId, profId, pg.id, `可见文本仅 ${metrics.textLen} 字（疑似白屏）`)
+      }
+      if (metrics[pg.expect] !== undefined) {
+        if (metrics[pg.expect]) record('pass', engineId, profId, pg.id, `内容达标：${pg.label}`)
+        else record('major', engineId, profId, pg.id, `未渲染预期内容（疑似错误态）：缺少 ${pg.label}；可见文本 ${metrics.textLen} 字`)
       }
       if (metrics.dpr !== undefined) {
         record('info', engineId, profId, pg.id,
