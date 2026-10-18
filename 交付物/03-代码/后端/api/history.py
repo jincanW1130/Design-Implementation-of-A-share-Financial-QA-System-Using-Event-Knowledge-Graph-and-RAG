@@ -80,7 +80,7 @@ def _require_session_id(session_id: str | None) -> str:
     return text
 
 
-@router.get("")
+@router.get("", responses=errors.error_responses(1002, 9999))
 async def list_history(session_id: str | None = None, page: str | None = None,
                        page_size: str | None = None,
                        x_session_id: str | None = Header(default=None, alias="X-Session-Id")):
@@ -95,7 +95,7 @@ async def list_history(session_id: str | None = None, page: str | None = None,
     return errors.ok(data)
 
 
-@router.get("/{question_id}")
+@router.get("/{question_id}", responses=errors.error_responses(1002, 2001, 9999))
 async def history_detail(question_id: int, session_id: str | None = None,
                          x_session_id: str | None = Header(default=None, alias="X-Session-Id")):
     """回看一条历史问答（只还原三表内容，不重新渲染图谱路径）；跨会话／不存在 → 2001。

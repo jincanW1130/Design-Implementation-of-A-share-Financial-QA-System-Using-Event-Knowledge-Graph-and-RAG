@@ -16,10 +16,14 @@
 ----
     python 工具\\一键构建.py                 # 完整流程
     python 工具\\一键构建.py --skip-deps     # 依赖已装好时跳过安装
+    python 工具\\一键构建.py --gate          # 全门禁：单测→跨文档→第10→第11→契约快照→前端 test+build
     python 工具\\一键构建.py --skip-deps --skip-frontend --skip-paper   # 只跑后端测试与门禁
 
 可选参数
 --------
+--gate            门禁模式：固定执行「后端单测→跨文档核验→验收第10→验收第11→
+                  契约快照比对→前端 test＋build」，不装依赖、不导出论文；
+                  与 `--skip-frontend`／`--skip-paper` 冲突时以门禁序列为准
 --skip-deps       跳过 `pip install -r requirements.txt` 与前端依赖安装
 --skip-frontend   跳过前端测试与构建
 --skip-paper      跳过论文导出
@@ -41,6 +45,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FRONTEND_DIR = os.path.join(ROOT, "交付物", "03-代码", "前端")
 BUILD_DIR = os.path.join(ROOT, "交付物", "10-部署", "构建产物")
 PAPER_OUT = os.path.join(BUILD_DIR, "论文_一键构建.docx")
+MIN_BACKEND_TESTS = 422
+MIN_FRONTEND_TESTS = 67
 
 for _stream in (sys.stdout, sys.stderr):
     if hasattr(_stream, "reconfigure"):
@@ -110,11 +116,21 @@ def _node_deps_stale() -> bool:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="一键构建：装依赖→测试→门禁→前端构建→导出论文")
+    ap.add_argument("--gate", action="store_true",
+                    help="全门禁模式（单测→跨文档→第10→第11→契约快照→前端 test+build）")
     ap.add_argument("--skip-deps", action="store_true", help="跳过依赖安装")
     ap.add_argument("--skip-frontend", action="store_true", help="跳过前端测试与构建")
     ap.add_argument("--skip-paper", action="store_true", help="跳过论文导出")
     ap.add_argument("--keep-going", action="store_true", help="失败后继续其余步骤")
     args = ap.parse_args(argv)
+
+    if args.gate:
+        # 门禁序列是固定口径：不装依赖、不导出论文、前端必须跑。
+        if args.skip_frontend or args.skip_paper:
+            print("[gate] --gate 模式下忽略 --skip-frontend／--skip-paper（门禁必须覆盖前端）。")
+        args.skip_deps = True
+        args.skip_frontend = False
+        args.skip_paper = True
 
     timings = []
     failures = []
@@ -164,14 +180,16 @@ def main(argv=None) -> int:
                    [sys.executable, "-m", "pytest", "交付物/03-代码/测试", "-q"])
         match = re.search(r"(\d+) passed", out)
         passed = int(match.group(1)) if match else 0
-        if passed < 293:
-            raise BuildFailure("后端单元测试（期望 ≥293 passed，实际 %d）" % passed, 1)
+        if passed < MIN_BACKEND_TESTS:
+            raise BuildFailure("后端单元测试（期望 ≥%d passed，实际 %d）"
+                               % (MIN_BACKEND_TESTS, passed), 1)
 
         # ---------------------------------------------------------------- 4
         step("跨文档核验", [sys.executable, os.path.join(ROOT, "工具", "跨文档核验.py"),
                             "--strict-citations"])
         step("验收第10阶段", [sys.executable, os.path.join(ROOT, "工具", "验收第10阶段.py")])
         step("验收第11阶段", [sys.executable, os.path.join(ROOT, "工具", "验收第11阶段.py")])
+        step("契约快照比对", [sys.executable, os.path.join(ROOT, "工具", "契约快照.py")])
         # **刻意不调用 验收第9阶段.py**（B5 会 --reset 重置六表）。
 
         # ---------------------------------------------------------------- 5
@@ -182,8 +200,9 @@ def main(argv=None) -> int:
             # 必须锚定 "Tests"，否则会把测试文件数误当成用例数。
             match = re.search(r"Tests\s+(\d+) passed", out)
             fe_passed = int(match.group(1)) if match else 0
-            if fe_passed < 67:
-                raise BuildFailure("前端单元测试（期望 ≥67 passed，实际 %d）" % fe_passed, 1)
+            if fe_passed < MIN_FRONTEND_TESTS:
+                raise BuildFailure("前端单元测试（期望 ≥%d passed，实际 %d）"
+                                   % (MIN_FRONTEND_TESTS, fe_passed), 1)
             step("前端构建", [npm, "run", "build"], cwd=FRONTEND_DIR, env=fe)
         else:
             print("\n[构建] --skip-frontend：跳过前端测试与构建")
@@ -217,9 +236,12 @@ def main(argv=None) -> int:
             print("\n构建失败：%s" % "；".join(str(f) for f in failures))
             print("=" * 78)
             return failures[0].code or 1
+        if args.gate:
+            print("\n门禁通过：单测／跨文档核验／第10／第11／契约快照／前端 test＋build 全部 OK。")
         skipped = any((args.skip_deps, args.skip_frontend, args.skip_paper))
-        print("\n构建成功：所选步骤全部完成%s。"
-              % ("（跳过的步骤见上）" if skipped else ""))
+        if not args.gate:
+            print("\n构建成功：所选步骤全部完成%s。"
+                  % ("（跳过的步骤见上）" if skipped else ""))
         print("=" * 78)
         return 0
 

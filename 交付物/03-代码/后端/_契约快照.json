@@ -1,0 +1,140 @@
+{
+  "generated_by": "工具/契约快照.py",
+  "openapi_version": "3.1.0",
+  "path_count": 30,
+  "operation_count": 33,
+  "paths": {
+    "/api/admin/consistency-check": [
+      "GET"
+    ],
+    "/api/admin/documents": [
+      "GET",
+      "POST"
+    ],
+    "/api/admin/documents/{doc_id}": [
+      "DELETE",
+      "PUT"
+    ],
+    "/api/admin/experiment/ask": [
+      "POST"
+    ],
+    "/api/admin/extraction/disambiguation": [
+      "GET"
+    ],
+    "/api/admin/extraction/disambiguation/{item_id}": [
+      "POST"
+    ],
+    "/api/admin/extraction/events": [
+      "GET"
+    ],
+    "/api/admin/extraction/run": [
+      "POST"
+    ],
+    "/api/admin/extraction/tasks/{task_id}": [
+      "GET"
+    ],
+    "/api/admin/reprocess": [
+      "POST"
+    ],
+    "/api/config/meta": [
+      "GET"
+    ],
+    "/api/documents/{doc_id}/chunks/{chunk_id}": [
+      "GET"
+    ],
+    "/api/evidence/{answer_id}": [
+      "GET"
+    ],
+    "/api/evidence/{answer_id}/graph-path": [
+      "GET"
+    ],
+    "/api/graph/entities": [
+      "GET"
+    ],
+    "/api/graph/entities/{node_id}": [
+      "GET"
+    ],
+    "/api/graph/entities/{node_id}/evidence": [
+      "GET"
+    ],
+    "/api/graph/entities/{node_id}/neighbors": [
+      "GET"
+    ],
+    "/api/graph/events": [
+      "GET"
+    ],
+    "/api/graph/events/{event_id}": [
+      "GET"
+    ],
+    "/api/graph/paths": [
+      "GET"
+    ],
+    "/api/health": [
+      "GET",
+      "HEAD"
+    ],
+    "/api/history": [
+      "GET"
+    ],
+    "/api/history/{question_id}": [
+      "GET"
+    ],
+    "/api/market/announcements": [
+      "GET"
+    ],
+    "/api/market/news": [
+      "GET"
+    ],
+    "/api/market/quote": [
+      "GET"
+    ],
+    "/api/market/reports": [
+      "GET"
+    ],
+    "/api/qa/answers/{answer_id}": [
+      "GET"
+    ],
+    "/api/qa/ask": [
+      "POST"
+    ]
+  },
+  "operations": [
+    "DELETE /api/admin/documents/{doc_id}",
+    "GET /api/admin/consistency-check",
+    "GET /api/admin/documents",
+    "GET /api/admin/extraction/disambiguation",
+    "GET /api/admin/extraction/events",
+    "GET /api/admin/extraction/tasks/{task_id}",
+    "GET /api/config/meta",
+    "GET /api/documents/{doc_id}/chunks/{chunk_id}",
+    "GET /api/evidence/{answer_id}",
+    "GET /api/evidence/{answer_id}/graph-path",
+    "GET /api/graph/entities",
+    "GET /api/graph/entities/{node_id}",
+    "GET /api/graph/entities/{node_id}/evidence",
+    "GET /api/graph/entities/{node_id}/neighbors",
+    "GET /api/graph/events",
+    "GET /api/graph/events/{event_id}",
+    "GET /api/graph/paths",
+    "GET /api/health",
+    "GET /api/history",
+    "GET /api/history/{question_id}",
+    "GET /api/market/announcements",
+    "GET /api/market/news",
+    "GET /api/market/quote",
+    "GET /api/market/reports",
+    "GET /api/qa/answers/{answer_id}",
+    "HEAD /api/health",
+    "POST /api/admin/documents",
+    "POST /api/admin/experiment/ask",
+    "POST /api/admin/extraction/disambiguation/{item_id}",
+    "POST /api/admin/extraction/run",
+    "POST /api/admin/reprocess",
+    "POST /api/qa/ask",
+    "PUT /api/admin/documents/{doc_id}"
+  ],
+  "schemas": [
+    "HTTPValidationError",
+    "ValidationError"
+  ]
+}

@@ -63,7 +63,7 @@ def _check_group_by(group_by: str | None) -> str | None:
     return group_by
 
 
-@router.get("/{answer_id}")
+@router.get("/{answer_id}", responses=errors.error_responses(1002, 2001, 9999))
 async def evidence_of_answer(answer_id: int, evidence_type: str | None = None,
                              group_by: str | None = None):
     """某条回答的证据：四类分组计数 ＋ 明细（含文档元数据）。不存在 → 2001；空 → 200。"""
@@ -73,13 +73,14 @@ async def evidence_of_answer(answer_id: int, evidence_type: str | None = None,
     return errors.ok(data)
 
 
-@router.get("/{answer_id}/graph-path")
+@router.get("/{answer_id}/graph-path", responses=errors.error_responses(2001, 9999))
 async def graph_path_of_answer(answer_id: int):
     """某条回答用的图谱路径：`is_graph_extended`／`paths`／`display_mode`。不存在 → 2001。"""
     return errors.ok(qa_service.graph_path_of_answer(answer_id))
 
 
-@documents_router.get("/{doc_id}/chunks/{chunk_id}")
+@documents_router.get("/{doc_id}/chunks/{chunk_id}",
+                     responses=errors.error_responses(2001, 9999))
 async def chunk_detail(doc_id: int, chunk_id: int):
     """文本块原文 ＋ 前后各两块 ＋ 所属文档元数据。不存在（或不属于该文档）→ 2001。"""
     return errors.ok(qa_service.chunk_detail(doc_id, chunk_id))

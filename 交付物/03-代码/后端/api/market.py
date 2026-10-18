@@ -109,13 +109,13 @@ def _check_page_size(raw):
     return size
 
 
-@router.get("/quote")
+@router.get("/quote", responses=errors.error_responses(1002, 9999))
 async def quote(codes: str | None = None):
     """实时行情（只作展示）。`codes` 缺省取 `config` 的默认股列表；格式非法 → 1002。"""
     return errors.ok(await asyncio.to_thread(market_service.quotes, _check_codes(codes)))
 
 
-@router.get("/announcements")
+@router.get("/announcements", responses=errors.error_responses(1002, 1003, 9999))
 async def announcements(code: str | None = None, days: str | None = None,
                         page_size: str | None = None):
     """个股公告（近 `days` 天；只作展示）。缺 `code` → 1003；`days` 只认 1～30，否则 1002。"""
@@ -124,7 +124,7 @@ async def announcements(code: str | None = None, days: str | None = None,
         _check_page_size(page_size)))
 
 
-@router.get("/news")
+@router.get("/news", responses=errors.error_responses(1002, 1003, 9999))
 async def news(keyword: str | None = None, page_size: str | None = None):
     """个股新闻（只作展示）。缺 `keyword` → 1003。"""
     if keyword is None or not str(keyword).strip():
@@ -133,7 +133,7 @@ async def news(keyword: str | None = None, page_size: str | None = None):
         market_service.news, str(keyword).strip(), _check_page_size(page_size)))
 
 
-@router.get("/reports")
+@router.get("/reports", responses=errors.error_responses(1002, 9999))
 async def reports(days: str | None = None, page_size: str | None = None):
     """**语料内**近一周文档（不依赖外部源；只作展示）。`days` 只认 1～30，否则 1002。"""
     return errors.ok(await asyncio.to_thread(

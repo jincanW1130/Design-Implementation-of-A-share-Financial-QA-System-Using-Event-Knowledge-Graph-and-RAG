@@ -93,7 +93,8 @@ def _validate_question(raw) -> str:
     return params.validate_question(raw)
 
 
-@router.post("/ask")
+@router.post("/ask", responses=errors.error_responses(
+    1001, 1002, 1003, 3001, 3002, 3003, 9999))
 async def ask(payload: dict | None = Body(default=None)):
     """提问：跑一次问答链路并落库，返回表 4-13 规定的九项载荷。
 
@@ -134,13 +135,13 @@ async def ask(payload: dict | None = Body(default=None)):
     return errors.ok(data)
 
 
-@router.get("/answers/{answer_id}")
+@router.get("/answers/{answer_id}", responses=errors.error_responses(2001, 9999))
 async def get_answer(answer_id: int):
     """按 `answer_id` 取回回答（含证据与图谱路径）；不存在 → 2001。"""
     return errors.ok(qa_service.get_answer(answer_id))
 
 
-@config_router.get("/meta")
+@config_router.get("/meta", responses=errors.error_responses(9999))
 async def config_meta():
     """当前生效的只读口径（数据集版本／截止时间／Prompt 版本／K／N／预算／模型名）。
 

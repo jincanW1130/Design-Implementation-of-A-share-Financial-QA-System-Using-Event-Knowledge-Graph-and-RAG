@@ -348,50 +348,6 @@ def table_counts() -> dict:
     return out
 
 
-def table_columns(table: str) -> list:
-    """`information_schema` 的列定义（供门禁 B1 逐字段比对）。"""
-    return query(
-        "SELECT ORDINAL_POSITION, COLUMN_NAME, COLUMN_TYPE, DATA_TYPE, IS_NULLABLE, "
-        "       COLUMN_KEY, COLUMN_DEFAULT, EXTRA "
-        "FROM information_schema.COLUMNS "
-        "WHERE TABLE_SCHEMA=%s AND TABLE_NAME=%s ORDER BY ORDINAL_POSITION",
-        (config.db_database(), table))
-
-
-def table_indexes(table: str) -> list:
-    """索引与唯一键（供门禁 B2 取证）。"""
-    return query(
-        "SELECT INDEX_NAME, NON_UNIQUE, SEQ_IN_INDEX, COLUMN_NAME "
-        "FROM information_schema.STATISTICS "
-        "WHERE TABLE_SCHEMA=%s AND TABLE_NAME=%s "
-        "ORDER BY INDEX_NAME, SEQ_IN_INDEX",
-        (config.db_database(), table))
-
-
-def foreign_keys(table: str) -> list:
-    """外键与 ON DELETE／ON UPDATE 行为（供门禁 B2 取证：RESTRICT 必须出现在
-    `fk_ae_doc`／`fk_ae_chunk` 上）。"""
-    return query(
-        "SELECT k.CONSTRAINT_NAME, k.COLUMN_NAME, k.REFERENCED_TABLE_NAME, "
-        "       k.REFERENCED_COLUMN_NAME, r.DELETE_RULE, r.UPDATE_RULE "
-        "FROM information_schema.KEY_COLUMN_USAGE k "
-        "JOIN information_schema.REFERENTIAL_CONSTRAINTS r "
-        "  ON r.CONSTRAINT_SCHEMA=k.CONSTRAINT_SCHEMA AND r.CONSTRAINT_NAME=k.CONSTRAINT_NAME "
-        "WHERE k.TABLE_SCHEMA=%s AND k.TABLE_NAME=%s AND k.REFERENCED_TABLE_NAME IS NOT NULL "
-        "ORDER BY k.CONSTRAINT_NAME",
-        (config.db_database(), table))
-
-
-def primary_key(table: str) -> list:
-    """主键列（按序）。`answer_evidence` 必须返回 ['answer_id', 'chunk_id']。"""
-    rows = query(
-        "SELECT COLUMN_NAME FROM information_schema.KEY_COLUMN_USAGE "
-        "WHERE TABLE_SCHEMA=%s AND TABLE_NAME=%s AND CONSTRAINT_NAME='PRIMARY' "
-        "ORDER BY ORDINAL_POSITION",
-        (config.db_database(), table))
-    return [r["COLUMN_NAME"] for r in rows]
-
-
 # --------------------------------------------------------------------------
 # 5. 自检（需要可用凭据；凭据未填时打印明确原因并以非零退出）
 # --------------------------------------------------------------------------

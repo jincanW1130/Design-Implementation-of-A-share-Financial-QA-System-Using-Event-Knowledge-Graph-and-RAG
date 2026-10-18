@@ -26,6 +26,8 @@ import copy
 import threading
 import time
 from collections import OrderedDict
+from collections.abc import Callable
+from typing import Any
 
 import config
 
@@ -36,7 +38,7 @@ class TTLCache:
     """线程安全的 TTL＋LRU 缓存；`clock` 可注入，便于单测直接拨表。"""
 
     def __init__(self, name: str, ttl_seconds: float, max_entries: int,
-                 enabled: bool = True, clock=time.monotonic):
+                 enabled: bool = True, clock: Callable[[], float] = time.monotonic):
         if ttl_seconds <= 0:
             raise ValueError("ttl_seconds 必须为正数")
         if max_entries <= 0:
@@ -47,7 +49,7 @@ class TTLCache:
         self.enabled = bool(enabled)
         self._clock = clock
         self._lock = threading.RLock()
-        self._data: OrderedDict = OrderedDict()
+        self._data: OrderedDict[Any, tuple[float, Any]] = OrderedDict()
         self._hits = 0
         self._misses = 0
         self._sets = 0
@@ -55,7 +57,7 @@ class TTLCache:
         self._expired = 0
 
     # ------------------------------------------------------------ 读写
-    def get(self, key):
+    def get(self, key: Any) -> Any:
         """命中返回值（深拷贝）；未命中／已过期／缓存关闭返回 `_MISS`。"""
         with self._lock:
             if not self.enabled:
@@ -75,7 +77,7 @@ class TTLCache:
             self._hits += 1
             return copy.deepcopy(value)
 
-    def set(self, key, value) -> bool:
+    def set(self, key: Any, value: Any) -> bool:
         """写入（深拷贝）；缓存关闭时返回 False 且不保存。"""
         with self._lock:
             if not self.enabled:
@@ -88,7 +90,7 @@ class TTLCache:
                 self._evictions += 1
             return True
 
-    def get_or_load(self, key, loader):
+    def get_or_load(self, key: Any, loader: Callable[[], Any]) -> Any:
         """命中直接返回；未命中则调用 `loader()` 并缓存其结果。
 
         异常不吞、不缓存。加载在锁内执行：同一 key 的并发请求只加载一次。
@@ -102,7 +104,7 @@ class TTLCache:
                 self.set(key, value)
             return copy.deepcopy(value)
 
-    def invalidate(self, key) -> bool:
+    def invalidate(self, key: Any) -> bool:
         """删除单个 key；返回是否原本存在。"""
         with self._lock:
             return self._data.pop(key, None) is not None
@@ -136,12 +138,6 @@ class TTLCache:
                 "evictions": self._evictions,
                 "expired": self._expired,
             }
-
-
-def _as_bool(value) -> bool:
-    if isinstance(value, bool):
-        return value
-    return str(value).strip().lower() in ("1", "true", "yes", "on")
 
 
 _CFG = config.CACHE

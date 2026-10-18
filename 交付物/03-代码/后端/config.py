@@ -458,11 +458,6 @@ def neo4j_params() -> dict:
             "password": _LOCAL["neo4j_password"]}
 
 
-def mysql_configured() -> bool:
-    """只回答「口令填了没有」，**不返回也不打印口令**。"""
-    return MYSQL_PASSWORD_READY
-
-
 # --------------------------------------------------------------------------
 # 6.1 日志落盘（评审 P1-11：`errors.setup_logging()` 原先只挂 stderr、不落盘、无轮转）
 # --------------------------------------------------------------------------
@@ -675,17 +670,6 @@ def count_jsonl(path: str) -> int:
     return n
 
 
-def fields_of_jsonl(path: str, limit: int = 1) -> list:
-    """读前 `limit` 行的键集合（**按真实数据取字段名，不凭猜**）。"""
-    keys = set()
-    for i, row in enumerate(iter_jsonl(path)):
-        if isinstance(row, dict):
-            keys |= set(row.keys())
-        if i + 1 >= limit:
-            break
-    return sorted(keys)
-
-
 # --------------------------------------------------------------------------
 # 9.1 实时数据区（作者新增意见：实时数据再完善一些）
 # --------------------------------------------------------------------------
@@ -729,11 +713,6 @@ MARKET_ZONE = {
 MARKET_MARKET_PREFIX = {"sh": "1", "sz": "0"}
 MARKET_SECID_PREFIX_BY_HEAD = {"6": "1", "0": "0", "3": "0", "4": "0", "8": "0"}
 MARKET_SECID_DEFAULT_PREFIX = "0"
-
-
-def market_zone() -> dict:
-    """实时数据区参数（返回**浅拷贝**，调用方不得就地改这份配置）。"""
-    return dict(MARKET_ZONE)
 
 
 def market_default_codes() -> list:

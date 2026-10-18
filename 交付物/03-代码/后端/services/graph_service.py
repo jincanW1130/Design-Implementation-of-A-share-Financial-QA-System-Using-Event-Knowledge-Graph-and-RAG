@@ -71,6 +71,7 @@ if _BACKEND not in sys.path:
     sys.path.insert(0, _BACKEND)
 
 import config  # noqa: E402  （后端 config：路径、Neo4j 连接参数；**只读**）
+import db      # noqa: E402  （MySQL 只读元数据；DAO 留在 service 层，api/graph.py 不再直接连库）
 
 for _stream in (sys.stdout, sys.stderr):
     if hasattr(_stream, "reconfigure"):
@@ -83,6 +84,36 @@ GRAPH_QUERY_PATH = os.path.join(config.ROOT, "交付物/03-代码", "检索", "g
 NEO4J_BACKEND = "neo4j"
 MEMORY_BACKEND = "memory"
 DEFAULT_BACKEND = NEO4J_BACKEND
+
+
+# --------------------------------------------------------------------------
+# 0.1 MySQL 内容元数据（**只读 DAO**；第 7 轮分层加固）
+# --------------------------------------------------------------------------
+# 背景：`api/graph.py` 的实体级证据与事件证据需要按 doc_id／chunk_id 批量补全
+# 标题、来源、发布时间、链接与块序号。第 9 阶段直接在路由层写了 4 条 `db.query`，
+# 违反「Controller → Service → DAO」。本轮把 SQL 收到 service 层，路由只做整形；
+# 查询仍是**一条 `IN (...)`**（不引入 N+1），字段与返回顺序不变。
+def document_meta_rows(doc_ids) -> list:
+    """按 `doc_id` 批量取文档元数据（一条 `IN (...)`）；未知 id 不返回。"""
+    ids = sorted({int(x) for x in doc_ids if x is not None})
+    if not ids:
+        return []
+    marks = ",".join(["%s"] * len(ids))
+    return list(db.query(
+        "SELECT doc_id, title, source, publish_time, url, category FROM document "
+        "WHERE doc_id IN (%s)" % marks, tuple(ids)))
+
+
+def chunk_meta_rows(chunk_ids, with_tokens: bool = False) -> list:
+    """按 `chunk_id` 批量取块序号（可选带 `token_count`）；未知 id 不返回。"""
+    ids = sorted({int(x) for x in chunk_ids if x is not None})
+    if not ids:
+        return []
+    marks = ",".join(["%s"] * len(ids))
+    columns = "chunk_id, chunk_index, token_count" if with_tokens else "chunk_id, chunk_index"
+    return list(db.query(
+        "SELECT %s FROM document_chunk WHERE chunk_id IN (%s)" % (columns, marks),
+        tuple(ids)))
 
 
 # --------------------------------------------------------------------------

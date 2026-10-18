@@ -31,6 +31,7 @@ import logging.handlers  # noqa: F401  （RotatingFileHandler 用；本文件 se
 import os
 import sys
 import uuid
+from typing import Any
 
 from starlette.responses import JSONResponse
 
@@ -120,6 +121,49 @@ def is_normal(code: int) -> bool:
 
 
 # --------------------------------------------------------------------------
+# 1.1 OpenAPI 错误响应建模（第 7 轮）
+# --------------------------------------------------------------------------
+ERROR_BODY_SCHEMA: dict = {
+    "type": "object",
+    "required": ["code", "message"],
+    "properties": {
+        "code": {"type": "integer", "description": "错误码（见 errors.CODES）"},
+        "message": {"type": "string", "description": "面向用户的错误说明"},
+    },
+    "additionalProperties": False,
+}
+"""统一错误响应体：键集合恰为 `{code, message}`（与 `ApiError.payload()` 一致）。
+
+用**内联 schema**（而不是 Pydantic 模型）建模，避免给 `components.schemas` 增加新的
+自动命名组件——契约快照里的关键 schema 名单因此保持稳定。
+"""
+
+
+def error_responses(*codes: int, rate_limit: bool = True) -> dict:
+    """把错误码表转成 FastAPI 路由的 `responses={...}`（**状态码 → 说明**）。
+
+    * 同一 HTTP 状态下的多个业务码合并成一条说明（如 400 → 1001／1002／1003）；
+    * 缺省附带 429／1004（限流中间件对所有 `/api/*` 生效，`/api/health` 除外）；
+    * 只影响 OpenAPI 文档，不改变路由数量、操作数量或任何运行时响应。
+
+    用法：`@router.get("/x", responses=errors.error_responses(1002, 2001))`。
+    """
+    grouped: dict[int, list[int]] = {}
+    for code in codes:
+        grouped.setdefault(http_status_of(code), []).append(int(code))
+    if rate_limit and 429 not in grouped:
+        grouped[429] = [1004]
+    out: dict[int, dict] = {}
+    for status in sorted(grouped):
+        items = grouped[status]
+        out[status] = {
+            "description": "；".join("%d %s" % (code, message_of(code)) for code in items),
+            "content": {"application/json": {"schema": ERROR_BODY_SCHEMA}},
+        }
+    return out
+
+
+# --------------------------------------------------------------------------
 # 2. 统一异常类型与响应体构造（纯函数，便于自检）
 # --------------------------------------------------------------------------
 class ApiError(Exception):
@@ -176,7 +220,7 @@ def uncaught_payload() -> dict:
 # --------------------------------------------------------------------------
 # 3. 成功响应封装（《24》第六节 格式决策 3）
 # --------------------------------------------------------------------------
-def ok(data, meta: dict | None = None) -> dict:
+def ok(data: Any, meta: dict | None = None) -> dict:
     """成功响应：`{"data": …, "meta": {"dataset_version": …, "data_cutoff_time": …}}`。
 
     `meta` 缺省取数据集版本级属性（`meta\\dataset.json`）；传入的键会覆盖／补充默认值。
@@ -265,7 +309,7 @@ def setup_logging(level: int = logging.INFO) -> None:
 # --------------------------------------------------------------------------
 # 5. FastAPI 异常处理装配
 # --------------------------------------------------------------------------
-def install_exception_handlers(app) -> None:
+def install_exception_handlers(app: Any) -> None:
     """把 `ApiError` 与未捕获异常统一转成 `{"code": …, "message": …}`。
 
     三类处理：
@@ -308,7 +352,7 @@ def install_exception_handlers(app) -> None:
                             content=uncaught_payload())
 
 
-def register_request_id(app) -> None:
+def register_request_id(app: Any) -> None:
     """给每个请求打一个 request-id：进日志上下文与响应头，**不进响应体**。
 
     取值优先用客户端自带的 `X-Request-Id`（网关／前端便于串联），格式不合法时生成

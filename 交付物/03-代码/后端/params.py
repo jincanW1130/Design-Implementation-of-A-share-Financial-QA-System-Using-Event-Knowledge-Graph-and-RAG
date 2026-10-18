@@ -29,17 +29,17 @@ import errors
 import config
 
 
-def text(value) -> str:
+def text(value: object) -> str:
     """统一成字符串（`None → ""`），**不改变其余取值**（不 strip、不转大小写）。"""
     return "" if value is None else str(value)
 
 
-def is_blank(raw) -> bool:
+def is_blank(raw: object) -> bool:
     """查询参数是否「缺失或只有空白」——用于「空串按缺省处理」的统一判断。"""
     return raw is None or text(raw).strip() == ""
 
 
-def parse_int(raw, name: str, default: int | None = None) -> int | None:
+def parse_int(raw: object, name: str, default: int | None = None) -> int | None:
     """查询参数取整数；空串／缺失取默认值，非法值抛 `ApiError(1002)`。"""
     if is_blank(raw):
         return default
@@ -49,7 +49,7 @@ def parse_int(raw, name: str, default: int | None = None) -> int | None:
         raise errors.ApiError(1002, detail="%s 不是整数：%r" % (name, raw))
 
 
-def page_args(page, page_size, *, page_size_max: int | None = None,
+def page_args(page: object, page_size: object, *, page_size_max: int | None = None,
               default_page_size: int | None = None,
               page_max: int | None = None) -> tuple[int, int]:
     """分页参数统一校验，返回 `(page, page_size)`；非法 → `ApiError(1002)`。
@@ -75,12 +75,12 @@ def page_args(page, page_size, *, page_size_max: int | None = None,
     return page_no, size
 
 
-def truthy(raw) -> bool:
+def truthy(raw: object) -> bool:
     """布尔开关：`1／true／yes／on`（大小写不敏感）为真，其余（含缺省）为假。"""
     return text(raw).strip().lower() in ("1", "true", "yes", "on")
 
 
-def validate_question(raw) -> str:
+def validate_question(raw: object) -> str:
     """校验问题文本，返回规范化后的字符串；不合规抛 `ApiError(1001)`。
 
     规则取自 `config.LIMITS`：去首尾空白后长度必须落在

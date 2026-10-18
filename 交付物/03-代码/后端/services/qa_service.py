@@ -274,7 +274,7 @@ def _summary(answer_text) -> str:
 # --------------------------------------------------------------------------
 # 2. 链路调用（复用第 8 阶段入口，不重写检索与生成）
 # --------------------------------------------------------------------------
-def read_error_contract(out_dir: str):
+def read_error_contract(out_dir: str) -> dict | None:
     """读上游 `run_answer.py` 落下的失败契约 `<out_dir>\\error_contract.json`。
 
     返回 `{"error_code","reason","schema","extra"}`（**已按 `errors.CODES` 校验**）或 `None`。
@@ -609,7 +609,7 @@ def _redact_question(text, question: str) -> str:
 # --------------------------------------------------------------------------
 # 3. 载荷组装（字段与表 4-13 逐项对齐）
 # --------------------------------------------------------------------------
-def answer_type_of(task_type) -> str:
+def answer_type_of(task_type: object) -> str:
     """`answer_type`：取自题目集标注 `question.task_type`；无标注时用登记过的缺省值。"""
     text = str(task_type or "").strip()
     if text in TASK_TYPES:
@@ -619,7 +619,7 @@ def answer_type_of(task_type) -> str:
     return ANSWER_TYPE_FALLBACK
 
 
-def time_interpretation_of(answer_text) -> str | None:
+def time_interpretation_of(answer_text: object) -> str | None:
     """从答案的「数据截至与判定区间」段落里**照抄**判定区间。
 
     段落头是第 8 阶段 `prompt.py` 里的固定字面量，本函数只做切片，不重算、不臆造；
@@ -652,11 +652,6 @@ def _evidence_rows(answer_id: int, evidence_type: str | None = None) -> list:
     return [{"rank": int(r["rank"]), "doc_id": int(r["doc_id"]), "chunk_id": int(r["chunk_id"]),
              "evidence_type": r["evidence_type"], "title": r["title"], "source": r["source"],
              "publish_time": _iso(r["publish_time"]), "url": r["url"]} for r in rows]
-
-
-def evidence_items(answer_id: int, evidence_type: str | None = None) -> list:
-    """证据明细列表（`api\\evidence.py` 与 `api\\history.py` 共用）。"""
-    return _evidence_rows(answer_id, evidence_type=evidence_type)
 
 
 def evidence_groups(items: list) -> dict:
@@ -913,7 +908,7 @@ def ask(question: str, session_id: str, group: str | None = None,
 # --------------------------------------------------------------------------
 # 6. 对外接口：GET /api/qa/answers/{answer_id}
 # --------------------------------------------------------------------------
-def answer_row(answer_id: int):
+def answer_row(answer_id: int) -> dict | None:
     """`answer` 联合 `question` 取一行；不存在返回 None。"""
     with _DB_LOCK:
         _fresh_conn()

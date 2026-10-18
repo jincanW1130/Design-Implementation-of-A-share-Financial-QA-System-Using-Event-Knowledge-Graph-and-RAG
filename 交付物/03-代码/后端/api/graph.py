@@ -44,7 +44,6 @@ from fastapi import APIRouter
 
 import cache
 import config
-import db
 import errors
 import params
 from services import graph_service as gs
@@ -602,14 +601,8 @@ def _fetch_doc_meta(doc_ids) -> dict:
 
     没有对应行的 `doc_id` **不会**出现在返回值里——调用方据此标 `missing=true`。
     """
-    ids = sorted({int(x) for x in doc_ids if x is not None})
-    if not ids:
-        return {}
-    marks = ",".join(["%s"] * len(ids))
     out = {}
-    for row in db.query(
-            "SELECT doc_id, title, source, publish_time, url, category FROM document "
-            "WHERE doc_id IN (%s)" % marks, tuple(ids)):
+    for row in gs.document_meta_rows(doc_ids):
         out[_as_int(row["doc_id"])] = {
             "title": _s(row["title"]), "source": _s(row["source"]),
             "publish_time": _iso(row["publish_time"]), "url": row["url"],
@@ -619,14 +612,8 @@ def _fetch_doc_meta(doc_ids) -> dict:
 
 def _fetch_chunk_meta(chunk_ids) -> dict:
     """按 `chunk_id` 批量取块序号（**一条 `IN (...)`**）：`{chunk_id: chunk_index}`。"""
-    ids = sorted({int(x) for x in chunk_ids if x is not None})
-    if not ids:
-        return {}
-    marks = ",".join(["%s"] * len(ids))
     return {_as_int(row["chunk_id"]): _as_int(row["chunk_index"])
-            for row in db.query(
-                "SELECT chunk_id, chunk_index FROM document_chunk "
-                "WHERE chunk_id IN (%s)" % marks, tuple(ids))}
+            for row in gs.chunk_meta_rows(chunk_ids)}
 
 
 def _evidence_index(raw_items: list) -> tuple:
@@ -787,7 +774,7 @@ def _dedup_paths(raw_paths: list) -> list:
 # --------------------------------------------------------------------------
 # 6. 接口一：GET /api/graph/entities
 # --------------------------------------------------------------------------
-@router.get("/entities")
+@router.get("/entities", responses=errors.error_responses(1002, 3001, 9999))
 async def list_entities(keyword: str | None = None, type: str | None = None,   # noqa: A002
                         page: str | None = None, page_size: str | None = None):
     """按名称或代码查实体；`type` 限定六个实体标签之一；空结果 → HTTP 200 空列表。"""
@@ -805,7 +792,8 @@ async def list_entities(keyword: str | None = None, type: str | None = None,   #
 # --------------------------------------------------------------------------
 # 7. 接口二：GET /api/graph/entities/{node_id}/neighbors
 # --------------------------------------------------------------------------
-@router.get("/entities/{node_id}/neighbors")
+@router.get("/entities/{node_id}/neighbors",
+            responses=errors.error_responses(1002, 2001, 3001, 9999))
 async def neighbors(node_id: str, relation: str | None = None, direction: str | None = None,
                     with_evidence: str | None = None, with_properties: str | None = None):
     """一跳邻居（走 `graph_service` 的 G1）；节点不存在 → 2001；无边 → HTTP 200 空结果。
@@ -967,7 +955,8 @@ def _evidence_documents(edges: list) -> tuple:
     return documents, without, chunk_total
 
 
-@router.get("/entities/{node_id}/evidence")
+@router.get("/entities/{node_id}/evidence",
+            responses=errors.error_responses(1002, 2001, 3001, 9999))
 async def entity_evidence(node_id: str, depth: str | None = None,
                           page: str | None = None, page_size: str | None = None,
                           with_properties: str | None = None):
@@ -1088,7 +1077,7 @@ def _entity_detail_payload(nid: str) -> dict:
     }
 
 
-@router.get("/entities/{node_id}")
+@router.get("/entities/{node_id}", responses=errors.error_responses(2001, 3001, 9999))
 async def entity_detail(node_id: str):
     """**实体详情**（第 9 阶段新增，表 4-13 之外的新增接口）：返回单个实体在图谱里的真实属性。
 
@@ -1124,7 +1113,7 @@ async def entity_detail(node_id: str):
 # --------------------------------------------------------------------------
 # 8. 接口三：GET /api/graph/paths
 # --------------------------------------------------------------------------
-@router.get("/paths")
+@router.get("/paths", responses=errors.error_responses(1002, 2001, 3001, 9999))
 async def paths(from_node: str | None = None, to_node: str | None = None,
                 relation: str | None = None, hop: str | None = None,
                 start_time: str | None = None, end_time: str | None = None,
@@ -1261,7 +1250,7 @@ def _event_item(view: dict) -> dict:
             "confidence": _float(view.get("confidence"))}
 
 
-@router.get("/events")
+@router.get("/events", responses=errors.error_responses(1002, 3001, 9999))
 async def list_events(event_type: str | None = None, stock_code: str | None = None,
                       start_time: str | None = None, end_time: str | None = None,
                       page: str | None = None, page_size: str | None = None):
@@ -1293,7 +1282,7 @@ async def list_events(event_type: str | None = None, stock_code: str | None = No
 # --------------------------------------------------------------------------
 # 10. 接口五：GET /api/graph/events/{event_id}
 # --------------------------------------------------------------------------
-@router.get("/events/{event_id}")
+@router.get("/events/{event_id}", responses=errors.error_responses(2001, 3001, 9999))
 async def event_detail(event_id: str):
     """事件详情：六项核心属性 ＋ 参与方（含 role）＋ 发布方 ＋ 政策 ＋ 多来源证据。
 
@@ -1353,16 +1342,6 @@ async def event_detail(event_id: str):
                       "primary_source_doc_id": (primary or {}).get("doc_id")})
 
 
-def _dedup_by(items: list, key: str) -> list:
-    seen, out = set(), []
-    for item in items:
-        if item.get(key) in seen:
-            continue
-        seen.add(item.get(key))
-        out.append(item)
-    return out
-
-
 def _event_evidences(rd: GraphReader, g5: dict) -> list:
     """把 G5 的两个结果（带 `source_chunk_id` 的语义边／`EVIDENCED_BY` 的文档）合成证据列表。
 
@@ -1412,25 +1391,16 @@ def _event_evidences(rd: GraphReader, g5: dict) -> list:
 
 def _fill_document_meta(rows: list) -> None:
     """用 MySQL 的 `document`／`document_chunk` 补齐标题、来源、发布时间、链接与块序号。"""
-    doc_ids = sorted({r["doc_id"] for r in rows if r["doc_id"] is not None})
-    if doc_ids:
-        marks = ",".join(["%s"] * len(doc_ids))
-        for doc in db.query(
-                "SELECT doc_id, title, source, publish_time, url FROM document "
-                "WHERE doc_id IN (%s)" % marks, tuple(doc_ids)):
-            for row in rows:
-                if row["doc_id"] == _as_int(doc["doc_id"]):
-                    row["title"] = _s(doc["title"])
-                    row["source"] = _s(doc["source"])
-                    row["publish_time"] = _iso(doc["publish_time"])
-                    row["url"] = doc["url"]
-    chunk_ids = sorted({r["chunk_id"] for r in rows if r["chunk_id"] is not None})
-    if chunk_ids:
-        marks = ",".join(["%s"] * len(chunk_ids))
-        for chunk in db.query(
-                "SELECT chunk_id, chunk_index, token_count FROM document_chunk "
-                "WHERE chunk_id IN (%s)" % marks, tuple(chunk_ids)):
-            for row in rows:
-                if row["chunk_id"] == _as_int(chunk["chunk_id"]):
-                    row["chunk_index"] = _as_int(chunk["chunk_index"])
-                    row["token_count"] = _as_int(chunk["token_count"])
+    for doc in gs.document_meta_rows(r["doc_id"] for r in rows if r["doc_id"] is not None):
+        for row in rows:
+            if row["doc_id"] == _as_int(doc["doc_id"]):
+                row["title"] = _s(doc["title"])
+                row["source"] = _s(doc["source"])
+                row["publish_time"] = _iso(doc["publish_time"])
+                row["url"] = doc["url"]
+    for chunk in gs.chunk_meta_rows((r["chunk_id"] for r in rows if r["chunk_id"] is not None),
+                                    with_tokens=True):
+        for row in rows:
+            if row["chunk_id"] == _as_int(chunk["chunk_id"]):
+                row["chunk_index"] = _as_int(chunk["chunk_index"])
+                row["token_count"] = _as_int(chunk["token_count"])

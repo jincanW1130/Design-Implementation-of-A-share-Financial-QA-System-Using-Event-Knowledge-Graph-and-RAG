@@ -12,9 +12,10 @@ r"""工具\质量度量.py —— 代码质量四项度量的**零依赖自研�
    本基线如超阈先如实报红、由作者决定拆分）。
 2. **重复率**：对 `交付物/03-代码` 的 .py 做 **8 行滑动窗口哈希**（忽略空行与注释行），
    重复窗口数占比即重复率；阈值 **≤ 15%**（粗测口径：以窗口为单位，跨文件重复计入）。
-3. **依赖方向**：分层断言（`api → services/db/config/errors` 允许，
-   `services → api` 禁止，`db → services/api` 禁止；组件间（检索／问答／数据准备／
-   抽取与图谱）不得互相 import——它们只经**后端**按文件路径加载）；违规即退出码 1。
+3. **依赖方向**：分层断言（`api → services/config/errors` 允许、`api → db` 禁止
+   （`api/admin.py` 为显式登记例外）；`services → api` 禁止，`db → services/api` 禁止；
+   组件间（检索／问答／数据准备／抽取与图谱）不得互相 import——它们只经**后端**按
+   文件路径加载）；违规即退出码 1。
 4. **覆盖率门禁**：本工具给出命令与阈值（`--cov-fail-under=50`，对应第二轮实测
    49.2%→整改后 ≥50%），并检查上一轮覆盖率 json（若存在）的实际值是否达标；
    真正执行属 pytest-cov 职责，本工具做**口径守门**。
@@ -130,6 +131,13 @@ def dup_ratio():
 # --------------------------------------------------------------------------
 # ③ 依赖方向（分层断言）
 # --------------------------------------------------------------------------
+# api 层直连 `db` 的显式例外（第 7 轮登记）：
+#   api/admin.py 是后台运维 CRUD 适配层，按《25》的表 4-13 需要逐字段显式 SQL
+#   （分页／三方一致性／事务内改块），下沉到 service 会与既有 admin_api.db monkeypatch
+#   冲突、回归面大。其余 api/*.py 一律只经 service 访问数据库。
+DB_BY_API_EXCEPTIONS = {"api/admin.py"}
+
+
 def dep_direction():
     bad = []
     for path in py_files(BACKEND):
@@ -144,8 +152,9 @@ def dep_direction():
             for m in mods:
                 if layer == "services" and m.startswith(("api.", "api ")):
                     bad.append("%s: services 反向 import %s" % (rel, m))
-                if layer == "db" and False:
-                    pass
+                if layer == "api" and (m == "db" or m.startswith("db.")):
+                    if rel not in DB_BY_API_EXCEPTIONS:
+                        bad.append("%s: api 层直连 db（应经 service/DAO）" % rel)
                 if os.path.basename(path) == "db.py" and m.startswith(("services", "api.")):
                     bad.append("db.py: 反向 import %s" % m)
     # 组件互引：检索／问答／数据准备／抽取与图谱 之间不得裸名 import
@@ -220,11 +229,13 @@ def main(argv=None):
     report(ratio <= DUP_RATIO_LIMIT, "重复率 %.1f%% ≤ %.0f%%" % (ratio * 100, DUP_RATIO_LIMIT * 100))
 
     # ③ 依赖方向
-    print("\n③ 依赖方向（分层断言：services↛api；db↛services/api；四组件互不裸名 import）")
+    print("\n③ 依赖方向（分层断言：services↛api；api↛db（admin 例外）；db↛services/api；"
+          "四组件互不裸名 import）")
     bad = dep_direction()
     for b in bad[:10]:
         print("    !! %s" % b)
-    report(not bad, "依赖方向违规 %d 处" % len(bad))
+    report(not bad, "依赖方向违规 %d 处（api→db 显式例外 %d 个：%s）"
+           % (len(bad), len(DB_BY_API_EXCEPTIONS), "、".join(sorted(DB_BY_API_EXCEPTIONS))))
 
     # ④ 覆盖率门禁
     print("\n④ 覆盖率门禁（口径守门；真执行＝pytest --cov --cov-fail-under=%.0f）" % COV_FLOOR)

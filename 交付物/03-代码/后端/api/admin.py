@@ -905,7 +905,8 @@ def _retained_for_history(doc_id: int, action: str):
                                  "retained_for_history": True})
 
 
-@router.post("/documents")
+@router.post("/documents", responses=errors.error_responses(
+    1001, 1002, 1003, 4001, 4002, 9999))
 async def create_document(payload: dict | None = Body(default=None)):
     """导入财经文本并切分：写 `document` ＋ 按第 5 阶段参数切分写 `document_chunk`。
 
@@ -933,7 +934,8 @@ async def create_document(payload: dict | None = Body(default=None)):
     })
 
 
-@router.get("/documents")
+@router.get("/documents", responses=errors.error_responses(
+    1002, 4001, 4002, 9999))
 async def list_documents(source: str | None = None, category: str | None = None,
                          start_time: str | None = None, end_time: str | None = None,
                          page: str | None = None, page_size: str | None = None):
@@ -993,7 +995,8 @@ async def list_documents(source: str | None = None, category: str | None = None,
     return errors.ok_page(total, items, page_no, size)
 
 
-@router.put("/documents/{doc_id}")
+@router.put("/documents/{doc_id}", responses=errors.error_responses(
+    1001, 1002, 2001, 2003, 4001, 4002, 9999))
 async def update_document(doc_id: int, payload: dict | None = Body(default=None)):
     """修改文档并触发重新处理。
 
@@ -1032,7 +1035,8 @@ async def update_document(doc_id: int, payload: dict | None = Body(default=None)
     })
 
 
-@router.delete("/documents/{doc_id}")
+@router.delete("/documents/{doc_id}", responses=errors.error_responses(
+    1002, 2001, 2003, 4001, 4002, 9999))
 async def delete_document(doc_id: int):
     """删除文档并触发重新处理。
 
@@ -1063,7 +1067,8 @@ async def delete_document(doc_id: int):
 # --------------------------------------------------------------------------
 # 6. POST /api/admin/reprocess —— 只登记任务
 # --------------------------------------------------------------------------
-@router.post("/reprocess")
+@router.post("/reprocess", responses=errors.error_responses(
+    1002, 4001, 4002, 9999))
 async def reprocess(payload: dict | None = Body(default=None)):
     """触发一次重新处理流程（**第一版：只登记任务台账，不实际重跑**，见纪律 4）。
 
@@ -1092,7 +1097,8 @@ async def reprocess(payload: dict | None = Body(default=None)):
 # --------------------------------------------------------------------------
 # 7. GET /api/admin/consistency-check —— 一致性检查（读数为实读）
 # --------------------------------------------------------------------------
-@router.get("/consistency-check")
+@router.get("/consistency-check", responses=errors.error_responses(
+    3001, 4001, 4002, 9999))
 async def consistency_check():
     """比对文本块／向量／图谱三方计数（`chunk_count`／`vector_count`／`graph_node_counts`／
     `is_consistent`／`diff`）。
@@ -1189,7 +1195,8 @@ async def consistency_check():
 # --------------------------------------------------------------------------
 # 8. 抽取相关（run／tasks／events／disambiguation）
 # --------------------------------------------------------------------------
-@router.post("/extraction/run")
+@router.post("/extraction/run", responses=errors.error_responses(
+    1002, 4001, 4002, 9999))
 async def extraction_run(payload: dict | None = Body(default=None)):
     """触发一次抽取任务（**第一版：只登记任务台账，不实际重跑**，见纪律 4）。
 
@@ -1221,7 +1228,8 @@ async def extraction_run(payload: dict | None = Body(default=None)):
                       "executed": False, "note": task["note"], "ledger": TASK_LEDGER})
 
 
-@router.get("/extraction/tasks/{task_id}")
+@router.get("/extraction/tasks/{task_id}", responses=errors.error_responses(
+    2001, 4001, 4002, 9999))
 async def extraction_task(task_id: str):
     """查询抽取（或重处理）任务状态与统计；台账里没有这个号 → **2001**。"""
     want = _s(task_id).strip()
@@ -1243,7 +1251,8 @@ async def extraction_task(task_id: str):
     raise errors.ApiError(2001, detail="任务号不存在：%s（台账 %s）" % (want, TASK_LEDGER))
 
 
-@router.get("/extraction/events")
+@router.get("/extraction/events", responses=errors.error_responses(
+    1002, 4001, 4002, 9999))
 async def extraction_events(event_type: str | None = None, start_time: str | None = None,
                             end_time: str | None = None, confidence_min: str | None = None,
                             page: str | None = None, page_size: str | None = None):
@@ -1318,7 +1327,8 @@ def _confirmations() -> dict:
     return latest
 
 
-@router.get("/extraction/disambiguation")
+@router.get("/extraction/disambiguation", responses=errors.error_responses(
+    1002, 4001, 4002, 9999))
 async def disambiguation_list(page: str | None = None, page_size: str | None = None):
     """待消歧列表：`items` 每项 `item_id`／`raw_name`／`matched_candidates`／`stock_code`／
     `status`（表 4-13 五项，另附 `label`／`doc_id`／`reason`）。
@@ -1398,7 +1408,8 @@ async def disambiguation_list(page: str | None = None, page_size: str | None = N
         }})
 
 
-@router.post("/extraction/disambiguation/{item_id}")
+@router.post("/extraction/disambiguation/{item_id}", responses=errors.error_responses(
+    1002, 1003, 2001, 4001, 4002, 9999))
 async def disambiguation_confirm(item_id: str, payload: dict | None = Body(default=None)):
     """人工确认消歧结果：给 `stock_code` 或 `reject=true`（表 4-13 的请求字段）。
 
@@ -1520,7 +1531,8 @@ def _config_snapshot(group: str) -> dict:
     }
 
 
-@router.post("/experiment/ask")
+@router.post("/experiment/ask", responses=errors.error_responses(
+    1001, 1002, 1003, 2001, 3001, 3002, 3003, 4001, 4002, 9999))
 async def experiment_ask(payload: dict | None = Body(default=None)):
     """按指定组别运行一次问答（受控实验入口；《10》4.7.1 末段：分组切换只存在于此处）。
 
