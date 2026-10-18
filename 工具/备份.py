@@ -21,10 +21,21 @@ dump 灌进去，逐表比对计数，再 `DROP DATABASE`。临时库一定在 f
 * 退出码：成功 0；任一步失败 1（并保留已完成的部分与本轮目录，便于排障）。
 * 不触碰 Docker 容器：Neo4j 走 bolt 逻辑导出，不需要 `docker exec`，也不影响保活。
 
+保留期清理（第二轮第 9 轮）
+--------------------------
+`--keep N`（默认 **3**）只保留输出根目录下**最近 N 份**备份目录（按目录名时间戳倒序），
+更旧的整目录删除。安全边界：
+* 只认「目录名严格匹配 `YYYYMMDD_HHMMSS`」且**目录内有 `manifest.json`** 的目录——别的
+  文件／目录（如手工放的说明、临时文件）一律不碰；
+* 只删除输出根目录的**直接子目录**且 realpath 必须仍在根目录内（不跟随符号链接）；
+* **只在本次备份成功后才清理**；备份失败时旧备份原样保留；`--dry-run` 只打印将删除哪些；
+* **本次刚生成的目录永不删除**（系统时钟回拨时它可能排在旧备份之后，单独保护）。
+
 用法
 ----
-    python 工具\\备份.py                 # 完整备份 + 导入回验
-    python 工具\\备份.py --dry-run       # 只检查并打印计划
+    python 工具\\备份.py                 # 完整备份 + 导入回验 + 保留最近 3 份
+    python 工具\\备份.py --keep 7        # 保留最近 7 份
+    python 工具\\备份.py --dry-run       # 只检查并打印计划（含保留期计划）
     python 工具\\备份.py --out D:\\bak   # 指定输出根目录
 """
 
@@ -34,6 +45,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -121,6 +133,64 @@ def _connect(config):
                            cursorclass=pymysql.cursors.DictCursor, **params), params
 
 
+BACKUP_DIR_RE = re.compile(r"^\d{8}_\d{6}$")
+
+
+def _list_backup_dirs(out_root: str) -> list:
+    """列出可识别的备份目录：`YYYYMMDD_HHMMSS` 且含 `manifest.json`，按时间倒序。"""
+    if not os.path.isdir(out_root):
+        return []
+    entries = []
+    for name in os.listdir(out_root):
+        path = os.path.join(out_root, name)
+        if os.path.islink(path) or not os.path.isdir(path):
+            continue
+        if not BACKUP_DIR_RE.match(name):
+            continue
+        if not os.path.isfile(os.path.join(path, "manifest.json")):
+            continue
+        entries.append((name, path))
+    entries.sort(key=lambda item: item[0], reverse=True)
+    return entries
+
+
+def _prune_backups(out_root: str, keep: int, dry_run: bool = False,
+                   protect: str | None = None) -> list:
+    """只保留最近 `keep` 份备份；返回被删除（或 dry-run 下将被删除）的目录名。
+
+    `protect`：本次刚生成的备份目录（绝不允许删除——即使系统时钟回拨导致它的目录名
+    排在旧备份之后）。其余安全边界见模块 docstring：仅直接子目录、目录名匹配、
+    含 manifest.json、realpath 在根内。
+    """
+    root_real = os.path.realpath(out_root)
+    protect_real = os.path.realpath(protect) if protect else None
+    stale = _list_backup_dirs(out_root)[keep:]
+    removed = []
+    for name, path in stale:
+        path_real = os.path.realpath(path)
+        if protect_real and path_real == protect_real:
+            print("      [SKIP] 保留本次备份（时钟回拨保护）：%s" % name)
+            continue
+        # 双保险：必须是输出根的直接子目录，且仍未逃出根目录
+        if os.path.dirname(path_real) != root_real or not os.path.isdir(path_real):
+            print("      [SKIP] 不删除（路径不在输出根内或已不是目录）：%s" % name)
+            continue
+        if not os.path.isfile(os.path.join(path_real, "manifest.json")):
+            print("      [SKIP] 不删除（缺 manifest.json，可能不是本脚本产物）：%s" % name)
+            continue
+        if dry_run:
+            print("      [dry-run] 将删除旧备份：%s" % name)
+        else:
+            try:
+                shutil.rmtree(path_real)
+                print("      已删除旧备份：%s" % name)
+            except OSError as exc:
+                print("      [WARN] 删除旧备份失败（%s）：%s" % (name, exc))
+                continue
+        removed.append(name)
+    return removed
+
+
 def _export_neo4j(config, out_dir: str) -> dict:
     from neo4j import GraphDatabase
     params = config.neo4j_params()
@@ -159,7 +229,11 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="备份 MySQL／Neo4j／向量索引并做导入回验")
     ap.add_argument("--dry-run", action="store_true", help="只检查并打印计划，不写文件")
     ap.add_argument("--out", default=DEFAULT_OUT_ROOT, help="输出根目录（默认 交付物/10-部署/备份）")
+    ap.add_argument("--keep", type=int, default=3,
+                    help="只保留最近 N 份备份目录（默认 3；仅清理本脚本产物）")
     args = ap.parse_args(argv)
+    if args.keep < 1:
+        ap.error("--keep 必须 ≥ 1（至少保留本次备份）")
 
     print("=" * 78)
     print("备份%s（仓库根：%s）" % ("（dry-run，不写文件）" if args.dry_run else "", ROOT))
@@ -181,6 +255,7 @@ def main(argv=None) -> int:
     print("  mysqldump      = %s" % (mysqldump or "未找到"))
     print("  mysql 客户端   = %s" % (mysql_cli or "未找到"))
     print("  输出目录       = %s" % target)
+    print("  保留份数       = %d（更旧的同格式备份目录会在成功后清理）" % args.keep)
     if not (mysqldump and mysql_cli):
         print("[FAIL] 找不到 mysqldump／mysql 客户端，无法完成备份与回验。")
         return 1
@@ -215,6 +290,11 @@ def main(argv=None) -> int:
         print("  3. 复制向量索引三件 → %s/vector/" % target)
         print("  4. 建临时库回验 dump，逐表比对后 DROP DATABASE")
         print("  5. 写 manifest.json（sha256／计数／版本，不含口令）")
+        print("  6. 保留最近 %d 份备份（含本次待生成的一份），清理更旧的同格式目录：" % args.keep)
+        existing = _list_backup_dirs(args.out)
+        print("     当前可识别 %d 份" % len(existing))
+        # 模拟「本次备份已生成」后的状态：现有目录里只需再留 keep-1 份
+        _prune_backups(args.out, args.keep - 1, dry_run=True)
         print("\n结论：检查通过，可执行真实备份。退出码 0。")
         return 0
 
@@ -236,6 +316,7 @@ def main(argv=None) -> int:
         "neo4j": {"uri": config.neo4j_params()["uri"]},
         "files": [],
         "verify": {"temp_database": verify_db, "imported": False, "counts_match": False},
+        "retention": {"keep": args.keep, "deleted": []},
     }
     started = time.perf_counter()
     try:
@@ -330,6 +411,21 @@ def main(argv=None) -> int:
         print("\n备份完成：%s" % target)
         print("  manifest：%s（%d 个文件）"
               % (os.path.relpath(manifest_path, ROOT), len(manifest["files"])))
+
+        # ---------------------------------------------------------- 保留期清理
+        # 必须在 manifest 写好后执行：本脚本按「目录内有 manifest.json」识别自家产物，
+        # 这样本次备份才算进「最近 N 份」。
+        print("\n[保留期] 只保留最近 %d 份备份（含本次）" % args.keep)
+        deleted = _prune_backups(args.out, args.keep, protect=target)
+        if deleted:
+            manifest["retention"]["deleted"] = deleted
+            with open(manifest_path, "w", encoding="utf-8", newline="\n") as f:
+                json.dump(manifest, f, ensure_ascii=False, indent=2, sort_keys=True)
+                f.write("\n")
+            print("      已清理 %d 份旧备份（清单已回写 manifest）" % len(deleted))
+        else:
+            print("      没有需要清理的旧备份。")
+
         print("结论：备份＋导入回验通过。退出码 0。")
         return 0
     except Exception as exc:                               # noqa: BLE001

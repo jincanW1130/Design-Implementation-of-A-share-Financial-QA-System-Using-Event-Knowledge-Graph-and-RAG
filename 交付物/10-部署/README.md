@@ -144,12 +144,82 @@ Python 依赖的单一来源，与 `交付物/10-部署\Dockerfile` 同源——
 | --- | --- | --- |
 | `工具\一键构建.py` | 装依赖→后端测试→三道门禁→前端测试与构建→导出论文 | 论文落 `构建产物/`（gitignore）；失败非零退出；不跑 `验收第9阶段.py` |
 | `工具\启动自检.py` | 启动前只读体检（配置／输入／索引／模型／MySQL／Neo4j／端口／日志） | 全 OK/WARN 退出 0，任一 FAIL 退出 1 |
-| `工具\备份.ps1` | MySQL dump＋Neo4j 逻辑导出＋FAISS＋manifest，并做临时库导入回验 | 落 `备份/<时间戳>/`（gitignore）；支持 `-DryRun` |
+| `工具\备份.ps1` | MySQL dump＋Neo4j 逻辑导出＋FAISS＋manifest，并做临时库导入回验 | 落 `备份/<时间戳>/`（gitignore）；支持 `-DryRun`、`-Keep N` |
 | `工具\运维巡检.py` | 磁盘／内存／CPU／端口／健康指标／日志轮转体检 | `--strict` 异常退出 1；可配合任务计划程序 |
+| `工具\告警检查.py` | 读 `/api/health` 的依赖与 metrics，按阈值判定 | 超阈值退出 1；默认 5%／2 s／累计限流 20 |
+| `工具\校验compose.py` | 校验 Compose 的服务／卷／端口／依赖／口令来源 | 30 项结构检查；**不执行 docker** |
 
 方案、取舍、实测读数与告警／恢复／轮转细节见
-`交付物/10-部署/工程化与可观测性方案.md`；版本与提交流程见
+`交付物/10-部署/工程化与可观测性方案.md` 与
+`交付物/05-系统实现/性能与架构优化方案.md` §11；版本与提交流程见
 `交付物/10-部署/版本与分支约定.md`。
+
+### 日志落盘与轮转
+
+默认**只输出 stderr**（行为与引入该能力前一致）。需要落盘时，在
+`交付物/03-代码/后端/config.local.json` 增加非空 `log_path`，或用环境变量：
+
+```powershell
+$env:ASHARE_LOG_PATH = "{仓库根}\交付物\10-部署\构建产物\backend.log"
+python 交付物\03-代码\后端\run.py
+```
+
+启用后额外挂 `RotatingFileHandler`：**单文件 10 MiB、保留 5 个历史文件、UTF-8**；
+目录不存在会自动创建。容器形态已把 `ASHARE_LOG_PATH` 指到 `/app/logs/backend.log`，
+由 `backend-logs` 命名卷承载。验证（离线、只写临时目录）：
+
+```powershell
+python -m pytest 交付物\03-代码\测试\test_m_log_rotation.py -q   # 4 passed
+```
+
+覆盖「不设不写／设了会写／轮转生效／路径不可写时服务照常启动」四件事。
+
+### 告警阈值检查
+
+```powershell
+python 工具\告警检查.py
+python 工具\告警检查.py --error-rate 0.02 --p95-ms 1500 --rate-limit-hits 5
+```
+
+默认阈值：错误率 **5%**（最近 60 s）、非问答路由 P95 **2000 ms**、问答路由 P95
+**320000 ms**（LLM 链路单列）、进程启动以来累计限流命中 **20**。四项依赖任一
+`ok=false` 或 metrics 不可用同样判失败。**退出码 0 = 全部在阈值内，1 = 超阈值／后端不可达**。
+配合任务计划程序每 5 分钟执行一次即可作为最小告警：
+
+```bat
+schtasks /Create /SC MINUTE /MO 5 /TN "AshareAlert" ^
+  /TR "python {仓库根}\工具\告警检查.py"
+```
+
+### 备份与保留期
+
+```powershell
+python 工具\备份.py --dry-run          # 只检查并打印计划（含保留期计划）
+python 工具\备份.py --keep 3           # 备份＋导入回验，只保留最近 3 份
+powershell -ExecutionPolicy Bypass -File 工具\备份.ps1 -Keep 7
+```
+
+`--keep`（默认 3）**只在本次备份成功后**清理更旧的备份目录；只认「目录名
+`YYYYMMDD_HHMMSS` 且含 `manifest.json`」的直接子目录，不跟随符号链接、失败不清理；
+本次刚生成的备份目录永不删除（防系统时钟回拨误删）。
+备份产物仍落在 `交付物/10-部署/备份/`（已被 `.gitignore` 覆盖），不会污染工作区。
+每日 02:30 定时备份示例：
+
+```bat
+schtasks /Create /SC DAILY /ST 02:30 /TN "AshareBackup" ^
+  /TR "powershell -ExecutionPolicy Bypass -File {仓库根}\工具\备份.ps1 -Keep 3"
+```
+
+### Compose 结构校验
+
+```powershell
+python 工具\校验compose.py
+```
+
+解析 `docker-compose.yml`（PyYAML）并检查：4 个服务、5 个必需命名卷及挂载点、
+端口映射、依赖顺序、**口令只来自 `.env` 插值**（任何 `*PASSWORD*` 不得硬编码）、
+`.env.example` 两个口令键、backend 指向服务名与日志卷。实测 **30/30 通过**。
+**只读**：不执行 `docker compose up`，也不改任何容器／卷。
 
 ---
 
