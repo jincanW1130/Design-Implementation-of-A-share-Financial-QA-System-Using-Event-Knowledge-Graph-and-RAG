@@ -1,0 +1,314 @@
+{
+  "generated_at": "2026-10-18T09:35:29+08:00",
+  "root": "交付物/",
+  "entries": [
+    {
+      "role": "真值·数据集",
+      "stage": "第 5 阶段",
+      "path": "交付物/04-数据与知识图谱/数据准备/数据集/v2.1",
+      "files": 763,
+      "bytes": 26205251,
+      "is_delivery_truth": true,
+      "note": "现行数据集 v2.1：105 家公司／709 篇／5018 块；含 clean／chunks／meta／index（FAISS）",
+      "key_files": [
+        {
+          "file": "meta/dataset.json",
+          "bytes": 3108,
+          "rows": null,
+          "sha256": "41c82bc43008eaba262c029776e32384417d3cbe9a265f93b6fcd8663f5fc988"
+        },
+        {
+          "file": "clean/documents.jsonl",
+          "bytes": 4496547,
+          "rows": 709,
+          "sha256": "c838c608c20060adb1366d5c6f7566f9de25016110dc368f7f92fcb8a10f9eea"
+        },
+        {
+          "file": "chunks/chunks.jsonl",
+          "bytes": 5322875,
+          "rows": 5018,
+          "sha256": "2202cbf8e3915598fc9fa57a9fe6d32577705f59ce7bfdfab822903d949e8e44"
+        },
+        {
+          "file": "index/faiss.index",
+          "bytes": 10276909,
+          "rows": null,
+          "sha256": "4052ed9a251eb0c8276a2bb5fd81e7ced5e4ccdc6cc03c126c0740d68368ef87"
+        }
+      ]
+    },
+    {
+      "role": "真值·数据集（历史）",
+      "stage": "第 5 阶段",
+      "path": "交付物/04-数据与知识图谱/数据准备/数据集/v2.0",
+      "files": 507,
+      "bytes": 19039936,
+      "is_delivery_truth": false,
+      "note": "上一版数据集 v2.0（历史，保留可追溯）",
+      "key_files": []
+    },
+    {
+      "role": "真值·数据集（历史）",
+      "stage": "第 5 阶段",
+      "path": "交付物/04-数据与知识图谱/数据准备/数据集/v1.1",
+      "files": 116,
+      "bytes": 3656123,
+      "is_delivery_truth": false,
+      "note": "更早版本 v1.1（历史）",
+      "key_files": []
+    },
+    {
+      "role": "真值·数据集（历史）",
+      "stage": "第 5 阶段",
+      "path": "交付物/04-数据与知识图谱/数据准备/数据集/v1.0",
+      "files": 116,
+      "bytes": 3645466,
+      "is_delivery_truth": false,
+      "note": "更早版本 v1.0（历史）",
+      "key_files": []
+    },
+    {
+      "role": "评测集",
+      "stage": "第 5 阶段",
+      "path": "交付物/04-数据与知识图谱/数据准备/数据集/抽取评测集",
+      "files": 1783,
+      "bytes": 64275802,
+      "is_delivery_truth": true,
+      "note": "抽取评测用的 260 块评测集（v2.1）",
+      "key_files": []
+    },
+    {
+      "role": "中间产物",
+      "stage": "第 5～6 阶段",
+      "path": "交付物/04-数据与知识图谱/数据准备/数据集/_抽取缓存",
+      "files": 3188,
+      "bytes": 544840792,
+      "is_delivery_truth": false,
+      "note": "抽取管线缓存（可重跑重建）；后台接口会读取其落点，故不删",
+      "key_files": []
+    },
+    {
+      "role": "派生·图谱",
+      "stage": "第 6 阶段",
+      "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_3",
+      "files": 5,
+      "bytes": 2040219,
+      "is_delivery_truth": true,
+      "note": "现行图谱导出：nodes.csv／edges.csv／graph_stats.json（3607 节点／3614 边）",
+      "key_files": [
+        {
+          "file": "graph_stats.json",
+          "bytes": 47363,
+          "rows": null,
+          "sha256": "576e06b72f9406b8a750cdea1470ca09e8fbdc93c258f2c23843d49734e8c0dc"
+        },
+        {
+          "file": "nodes.csv",
+          "bytes": 788038,
+          "rows": null,
+          "sha256": "ecfaa43a650c42a5281eaf50defa79ada043985b2283847507b6ef3ad006341e"
+        },
+        {
+          "file": "edges.csv",
+          "bytes": 184551,
+          "rows": null,
+          "sha256": "0ff0eecfc23bb860f7307b85ed510b49265d6ec79b7ad22fc6b038df1738fe91"
+        }
+      ]
+    },
+    {
+      "role": "派生·图谱（历史）",
+      "stage": "第 6 阶段",
+      "path": "交付物/04-数据与知识图谱/事件抽取与知识图谱/图谱导出/v2.1_v1_2",
+      "files": 5,
+      "bytes": 1598184,
+      "is_delivery_truth": false,
+      "note": "v1.2 口径导出（历史，2802／2736）",
+      "key_files": []
+    },
+    {
+      "role": "派生·检索",
+      "stage": "第 7 阶段",
+      "path": "交付物/05-系统实现/RAG检索系统/检索产出",
+      "files": 6,
+      "bytes": 346094,
+      "is_delivery_truth": true,
+      "note": "逐题检索 trace（per_question_trace.jsonl）",
+      "key_files": [
+        {
+          "file": "per_question_trace.jsonl",
+          "bytes": 260054,
+          "rows": 30,
+          "sha256": "17566e9772f1e6e6d9fa7556d4bedfe0331e5535a8ec3348c376308cd1398b4b"
+        }
+      ]
+    },
+    {
+      "role": "派生·检索",
+      "stage": "第 7 阶段",
+      "path": "交付物/05-系统实现/RAG检索系统/预实验问题集",
+      "files": 6,
+      "bytes": 268073,
+      "is_delivery_truth": true,
+      "note": "30 题预实验问题集（questions.jsonl）",
+      "key_files": [
+        {
+          "file": "questions.jsonl",
+          "bytes": 102389,
+          "rows": 30,
+          "sha256": "9817534cba8066dbfd4cbfd03b416e839f649d847176952134fe7dda556e8be1"
+        }
+      ]
+    },
+    {
+      "role": "派生·问答",
+      "stage": "第 8 阶段",
+      "path": "交付物/05-系统实现/智能问答系统/问答产出",
+      "files": 7,
+      "bytes": 1255441,
+      "is_delivery_truth": true,
+      "note": "问答产出 qa_records.jsonl（30 条基线，导入 MySQL 的来源）",
+      "key_files": [
+        {
+          "file": "qa_records.jsonl",
+          "bytes": 253335,
+          "rows": 30,
+          "sha256": "a64d0f0bcf60a0449bc4dbe4d9866bdbbd51a1f1968c275f514d2984f092768d"
+        }
+      ]
+    },
+    {
+      "role": "集成产物",
+      "stage": "第 9 阶段",
+      "path": "交付物/05-系统实现/前后端系统集成/集成产出",
+      "files": 86,
+      "bytes": 404529,
+      "is_delivery_truth": true,
+      "note": "冒烟矩阵／异常场景／耗时／输入指纹／库表计数等 86 件",
+      "key_files": [
+        {
+          "file": "input_manifest.json",
+          "bytes": 8664,
+          "rows": null,
+          "sha256": "eaefcc5f054e3598135509c07d28aa561f52e2d659400b7dfebf5c785ce7294f"
+        },
+        {
+          "file": "db_counts.json",
+          "bytes": 3371,
+          "rows": null,
+          "sha256": "dba69d18dd090044158473ef595cb176f0b2f509b058c76bc1e8458ef182b28c"
+        },
+        {
+          "file": "smoke_matrix.jsonl",
+          "bytes": 11150,
+          "rows": 44,
+          "sha256": "084c74fdcbb9795d85bf1b3636920bbcd31dbdebbe2d678f5a248b529c7d8b1a"
+        },
+        {
+          "file": "error_scenarios.jsonl",
+          "bytes": 6622,
+          "rows": 16,
+          "sha256": "6a2300423aed10b731a4c407bcc1924b1545b3b8810caa6659c2d9ae244883a7"
+        }
+      ]
+    },
+    {
+      "role": "实验·测试集",
+      "stage": "第 10 阶段",
+      "path": "交付物/06-实验与评测/测试集",
+      "files": 9,
+      "bytes": 721511,
+      "is_delivery_truth": true,
+      "note": "正式 120 题测试集 questions.jsonl（核心 108＋压力 12）",
+      "key_files": [
+        {
+          "file": "questions.jsonl",
+          "bytes": 306243,
+          "rows": 120,
+          "sha256": "5864bda5627ed25d9d16a6f9a95e650aafa44bb2021eef7d0579cbb017275513"
+        }
+      ]
+    },
+    {
+      "role": "实验·对照（现行）",
+      "stage": "第 10 阶段",
+      "path": "交付物/06-实验与评测/对照产出_正式",
+      "files": 2312,
+      "bytes": 26785168,
+      "is_delivery_truth": true,
+      "note": "正式全量 A～E＋B1 落盘读数（现行主结果）",
+      "key_files": []
+    },
+    {
+      "role": "实验·对照（历史）",
+      "stage": "第 10 阶段",
+      "path": "交付物/06-实验与评测/对照产出_v13",
+      "files": 462,
+      "bytes": 6306062,
+      "is_delivery_truth": false,
+      "note": "v1.3 时期五组（历史）",
+      "key_files": []
+    },
+    {
+      "role": "实验·对照（历史）",
+      "stage": "第 10 阶段",
+      "path": "交付物/06-实验与评测/对照产出",
+      "files": 462,
+      "bytes": 6300533,
+      "is_delivery_truth": false,
+      "note": "v1.2 时期读数（历史）",
+      "key_files": []
+    },
+    {
+      "role": "实验·问答评分（现行）",
+      "stage": "第 10 阶段",
+      "path": "交付物/06-实验与评测/问答评分_正式",
+      "files": 2278,
+      "bytes": 6273812,
+      "is_delivery_truth": true,
+      "note": "正式集 582 条答案的三模型评审结果",
+      "key_files": []
+    },
+    {
+      "role": "实验·问答评分（历史）",
+      "stage": "第 10 阶段",
+      "path": "交付物/06-实验与评测/问答评分",
+      "files": 549,
+      "bytes": 1706968,
+      "is_delivery_truth": false,
+      "note": "30 题预实验集那一组（历史／对照）",
+      "key_files": []
+    },
+    {
+      "role": "实验·抽取评测",
+      "stage": "第 10 阶段",
+      "path": "交付物/06-实验与评测/抽取评测",
+      "files": 3,
+      "bytes": 125136,
+      "is_delivery_truth": true,
+      "note": "抽取评测报告与指标（模型参照集／金标准）",
+      "key_files": []
+    },
+    {
+      "role": "实验·系统指标",
+      "stage": "第 10 阶段",
+      "path": "交付物/06-实验与评测/系统指标",
+      "files": 2,
+      "bytes": 30530,
+      "is_delivery_truth": true,
+      "note": "NFR-01／NFR-02 读数",
+      "key_files": []
+    },
+    {
+      "role": "实验·复现包",
+      "stage": "第 10 阶段",
+      "path": "交付物/06-实验与评测/复现包",
+      "files": 9,
+      "bytes": 1224494,
+      "is_delivery_truth": true,
+      "note": "复现用脚本与说明",
+      "key_files": []
+    }
+  ],
+  "note": "只读盘点产物；本文件不移动任何数据。真值仍落在各自阶段目录（§「为什么不做物理搬迁」）。"
+}
