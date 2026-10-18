@@ -54,6 +54,7 @@ ID 分配
 from __future__ import annotations
 
 import contextlib
+import hashlib
 import json
 import os
 import shutil
@@ -521,7 +522,8 @@ def _run_chain(question: str, group: str, session_id: str, now_iso: str) -> dict
         # 先整树终止再回收管道，杜绝持 torch＋FAISS 的孙进程孤儿（S3）。
         logger.warning("问答链路超时（%ds）：out_dir=%s（整树终止 pid=%s）stdout=%s stderr=%s",
                        CHAIN_TIMEOUT_SECONDS, out_dir, proc.pid,
-                       _tail(getattr(exc, "stdout", "")), _tail(getattr(exc, "stderr", "")))
+                       _redact_question(_tail(getattr(exc, "stdout", "")), question),
+                       _redact_question(_tail(getattr(exc, "stderr", "")), question))
         _kill_process_tree(proc.pid)
         with contextlib.suppress(Exception):
             proc.communicate(timeout=30)            # 回收管道与退出码（树已死，立即返回）
@@ -550,7 +552,8 @@ def _run_chain(question: str, group: str, session_id: str, now_iso: str) -> dict
                                  exit_code=proc.returncode, out_dir=out_dir)
         logger.warning("问答链路非零退出：exit=%s 耗时=%.1fs out_dir=%s\n--- stdout 尾部 ---\n%s"
                        "\n--- stderr 尾部 ---\n%s", proc.returncode, elapsed, out_dir,
-                       _tail(stdout), _tail(stderr))
+                       _redact_question(_tail(stdout), question),
+                       _redact_question(_tail(stderr), question))
         raise ApiError(code, detail="run_answer 退出码 %s（耗时 %.1fs，out_dir=%s）"
                        % (proc.returncode, elapsed, out_dir))
     logger.info("问答链路完成：耗时 %.1fs out_dir=%s", elapsed, out_dir)
@@ -558,7 +561,7 @@ def _run_chain(question: str, group: str, session_id: str, now_iso: str) -> dict
     record = _first_jsonl(os.path.join(out_dir, "qa_records.jsonl"))
     if not isinstance(record, dict):
         logger.warning("问答链路未产出 qa_records.jsonl 记录：out_dir=%s stdout=%s",
-                       out_dir, _tail(stdout))
+                       out_dir, _redact_question(_tail(stdout), question))
         raise ApiError(3003, detail="qa_records.jsonl 无记录（out_dir=%s）" % out_dir)
     trace = _first_jsonl(os.path.join(out_dir, "answer_trace.jsonl"))
     return {"record": record, "trace": trace, "out_dir": out_dir,
@@ -569,6 +572,21 @@ def _tail(text, limit: int = 2000) -> str:
     """日志尾部摘要（**只进日志**；stdout／stderr 可能很长）。"""
     text = str(text or "")
     return text[-limit:] if len(text) > limit else text
+
+
+def _redact_question(text, question: str) -> str:
+    """把日志片段里出现的**问题正文**替换成摘要（长度＋SHA-256 前 12 位）。
+
+    上游链路在失败时可能把题目原文（或含题目的 Prompt／异常栈）打到 stdout／stderr；
+    本函数在写日志前统一脱敏，保证日志里不再出现完整用户问题。
+    只按「原文精确匹配」替换：上游若做了 JSON 转义（\\uXXXX）则匹配不到，属已知边界，
+    已在《性能与架构优化方案》里登记；不为了脱敏去改写上游输出。
+    """
+    body = str(text or "")
+    q = str(question or "")
+    if q and q in body:
+        body = body.replace(q, "[问题已脱敏 %s]" % _question_digest(q))
+    return body
 
 
 # --------------------------------------------------------------------------
@@ -744,24 +762,92 @@ def _persist(record: dict, question_id: int, answer_id: int) -> dict:
 # --------------------------------------------------------------------------
 # 5. 对外接口：POST /api/qa/ask
 # --------------------------------------------------------------------------
-def ask(question: str, session_id: str, group: str | None = None) -> dict:
+def _question_digest(question: str) -> str:
+    """日志脱敏用的题目摘要：只保留长度与 SHA-256 前 12 位，**不把题目正文写进日志**。
+
+    用户问题会原样落库（`question.question_text`），这是业务需要；但应用日志面向排障，
+    没有必要再留存一份可读正文（六.3 敏感信息最小化）。摘要足以把「同一条日志」与
+    「同一条提问」对上，且不可逆。
+    """
+    raw = str(question or "").encode("utf-8")
+    return "len=%d sha256=%s" % (len(question or ""), hashlib.sha256(raw).hexdigest()[:12])
+
+
+def _reuse_existing_answer(session_id: str, question_text: str) -> dict | None:
+    """同一会话内**重复提问**：命中已落库的成功回答时返回其完整载荷（不跑链路、不写库）。
+
+    为什么在跑链路之前查一次
+    ------------------------
+    旧实现只在落库阶段按 `(session_id, question_text)` 复用 `question_id`／`answer_id`，
+    但**模型链路已经完整跑过一遍**：重复提问仍会消耗 10～30 秒与一次模型调用，然后
+    用同一组 ID 覆盖旧答案。语料与 Prompt 都是冻结口径，覆盖后的内容不会变化，因此
+    这里把「复用」提前到链路之前——命中即原样返回既有回答，并在载荷里带
+    `reused=true` 与 `notice`，前端据此给出「已问过、复用已有回答」的提示。
+
+    只认**有正文的完整记录**（`answer_text` 非空）；空结果本来就不落库，残缺记录
+    仍走正常链路重新生成。`reuse=False` 的后台受控实验（A～E 组）不会走这条捷径。
+    """
+    with _DB_LOCK:
+        _fresh_conn()
+        row = db.query_one(
+            "SELECT q.question_id, q.task_type, a.answer_id, a.answer_text "
+            "FROM question q JOIN answer a ON a.question_id = q.question_id "
+            "WHERE q.session_id = %s AND q.question_text = %s "
+            "ORDER BY q.question_id DESC LIMIT 1",
+            (str(session_id), str(question_text)))
+    if row is None or not str(row["answer_text"] or "").strip():
+        return None
+
+    answer_id = int(row["answer_id"])
+    extended, graph_path = _graph_path_of_answer(answer_id)
+    notice = ("这个问题在当前会话中已经问过，直接复用已有回答（question_id=%d、"
+              "answer_id=%d），未重复调用模型。" % (int(row["question_id"]), answer_id))
+    return {
+        "answer_id": answer_id,
+        "question_id": int(row["question_id"]),
+        "answer_text": str(row["answer_text"]),
+        "evidence": _evidence_rows(answer_id),
+        "graph_path": graph_path,
+        "is_graph_extended": int(extended),
+        "time_interpretation": time_interpretation_of(str(row["answer_text"])),
+        "data_cutoff_time": config.dataset_meta()["data_cutoff_time"],
+        "answer_type": answer_type_of(row["task_type"]),
+        "reused": True,
+        "notice": notice,
+    }
+
+
+def ask(question: str, session_id: str, group: str | None = None,
+        reuse: bool = False) -> dict:
     """跑一次问答链路并落库，返回表 4-13 规定的载荷。
 
     `session_id` **按调用方传入值**使用（前端生成的 UUID），不使用脚本默认值 `S-001`。
+
+    `reuse` 由调用方显式选择：**面向用户的 `/api/qa/ask` 传 True**（同一会话内重复
+    提问直接复用既有回答、不重复调用模型）；后台受控实验 A～E 组与直接调用保持
+    默认 False（每次都跑新链路，保证分组对比与底层行为不变）。
     """
     group = group or DEFAULT_GROUP
     # A5：串行化重资源链路（见 _ASK_LOCK 注释）；排队期间不计入本条链路的超时。
     with _ASK_LOCK:
+        if reuse:
+            reused = _reuse_existing_answer(session_id, question)
+            if reused is not None:
+                logger.info("重复提问复用已有回答：question_id=%s answer_id=%s session=%s %s",
+                            reused["question_id"], reused["answer_id"], session_id,
+                            _question_digest(question))
+                return reused
         ran = _run_chain(question, group, session_id, datetime.now().astimezone().isoformat(
             timespec="seconds"))
     # 2026-10-18 全面审查 F2：没有可引用证据时**不落库、不造答案**，按 2002 语义返回
     # 正常空结果（HTTP 200），由前端给友好提示。旧行为是 502＋3004「装配账目守卫未通过」。
     if ran.get("empty"):
-        logger.info("问答空结果（未检索到可引用证据）：question=%.40s session=%s 耗时=%.1fs",
-                    question, session_id, ran["elapsed_seconds"])
+        logger.info("问答空结果（未检索到可引用证据）：%s session=%s 耗时=%.1fs",
+                    _question_digest(question), session_id, ran["elapsed_seconds"])
         return {
             "empty": True,
             "empty_reason": ran.get("empty_reason") or "no_citable_evidence",
+            "reused": False,
             "notice": "未检索到可引用的证据：这个问题在现有数据里找不到能支撑回答的原文。"
                       "可以换一种问法，或指明公司、时间与事件类型后再试。",
             "answer_id": None,

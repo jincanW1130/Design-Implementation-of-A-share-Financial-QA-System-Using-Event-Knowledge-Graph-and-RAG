@@ -126,7 +126,10 @@ async def ask(payload: dict | None = Body(default=None)):
 
     # 固定 C 组：分组取自检索侧 config 的 DEFAULT_GROUP，不由请求体决定（硬约束 9）。
     # 链路是同步阻塞调用（10～30 s），放到工作线程，避免堵住事件循环。
-    data = await asyncio.to_thread(qa_service.ask, question, session_id, config.DEFAULT_GROUP)
+    # reuse=True：同一会话内重复提问命中已有回答时直接复用（不重复调用模型），
+    # 载荷带 reused=True 与 notice，前端据此提示「已问过、复用已有回答」。
+    data = await asyncio.to_thread(qa_service.ask, question, session_id,
+                                   config.DEFAULT_GROUP, True)
     return errors.ok(data)
 
 

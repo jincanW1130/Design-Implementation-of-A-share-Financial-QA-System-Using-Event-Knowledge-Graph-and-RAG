@@ -178,8 +178,12 @@ def client(monkeypatch):
         yield c
 
 
-def _fake_ask(question, session_id, group):
-    """`qa_service.ask` 的九键替身（表 4-13 的载荷形状）。"""
+def _fake_ask(question, session_id, group, reuse=False):
+    """`qa_service.ask` 的九键替身（表 4-13 的载荷形状）。
+
+    2026-10-18 第 3 轮：真实 `ask()` 增加 `reuse` 开关（普通提问传 True），替身同步
+    接受该参数；断言口径未变。
+    """
     return {"answer_id": 40, "question_id": 40, "answer_text": "【回答】替身答案",
             "answer_type": "未标注", "data_cutoff_time": "2026-06-30T00:00:00+08:00",
             "evidence": [{"chunk_id": 101, "doc_id": 1}], "graph_path": None,

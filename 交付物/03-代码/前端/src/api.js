@@ -14,9 +14,17 @@
 //   * 后端错误响应的 `message` **可直接展示**（后端已保证响应体只有 code／message，无 detail）。
 //   * `2002` 的语义是 **HTTP 200 的空结果**，不是错误：`get()` 照常返回 data，
 //     由调用方按「空结果」（不是异常）分支处理。
+//
+// 2026-10-18（第 3 轮）：补「取消等待」与前端超时。
+//   · 后端问答链路单次最长 300 秒（`config.ANSWER.timeout_seconds`），前端在 320 秒处兜底；
+//   · 取消只停止**浏览器等待**，不终止后端子进程（HTTP 没有反向取消通道）——界面文案
+//     必须如实说明「后端可能仍会完成并写进本会话历史」，不能假装已彻底中止。
 
 const API_PREFIX = '/api'          // 后端路由前缀（不写后端主机名，交由代理转发）
 const SESSION_KEY = 'qa-console-session-id'   // localStorage 键名（仅前端本地，不含任何库名／凭据）
+
+/** 提问的前端等待上限：后端链路超时 300 秒，前端留 20 秒余量（毫秒）。 */
+export const ASK_TIMEOUT_MS = 320 * 1000
 
 // --------------------------------------------------------------------------
 // 1. 可展示的错误类型
@@ -26,18 +34,34 @@ export class ApiError extends Error {
    * @param {number} code   后端错误码（1001／1002／…／9999）；网络层失败时用 0
    * @param {string} message 可直接展示给用户的文本（来自后端 message，或本层的兜底文案）
    * @param {number} [httpStatus] HTTP 状态码；网络层失败时 undefined
+   * @param {boolean} [aborted] 是否由调用方取消或前端超时导致（不是后端错误，也不是断网）
    */
-  constructor(code, message, httpStatus) {
+  constructor(code, message, httpStatus, aborted = false) {
     super(message)
     this.name = 'ApiError'
     this.code = code
     this.httpStatus = httpStatus
+    this.aborted = !!aborted
   }
+}
+
+/** AbortController.abort() 触发的异常在各运行时的形态：一律按「已取消」处理。 */
+function isAbortError(e) {
+  return !!e && (e.name === 'AbortError' || e.code === 20 || e.code === 'ABORT_ERR')
 }
 
 // --------------------------------------------------------------------------
 // 2. 会话标识（格式决策 6）
 // --------------------------------------------------------------------------
+/** 生成一个新的会话标识（36 字符 UUID 形态，满足 `question.session_id` 的 CHAR(36)）。 */
+function newSessionId() {
+  // crypto.randomUUID 在安全上下文（http://127.0.0.1 属安全上下文）可用；
+  // 兜底：手工拼一个 UUID v4 形态的 36 字符串
+  return (window.crypto && typeof window.crypto.randomUUID === 'function')
+    ? window.crypto.randomUUID()
+    : fallbackUuid()
+}
+
 /** 取得（必要时生成）会话标识。首次访问用 `crypto.randomUUID()` 生成并落 localStorage。 */
 export function getSessionId() {
   let sid = null
@@ -48,17 +72,31 @@ export function getSessionId() {
     sid = null
   }
   if (!sid) {
-    // crypto.randomUUID 在安全上下文（http://127.0.0.1 属安全上下文）可用；
-    // 兜底：手工拼一个 UUID v4 形态的 36 字符串，满足 question.session_id 的 CHAR(36)
-    sid = (window.crypto && typeof window.crypto.randomUUID === 'function')
-      ? window.crypto.randomUUID()
-      : fallbackUuid()
+    sid = newSessionId()
     try {
       window.localStorage.setItem(SESSION_KEY, sid)
     } catch (e) {
       /* 落不了盘就用内存里的这一份，不阻断功能 */
     }
   }
+  return sid
+}
+
+/**
+ * 重置会话：生成新会话号写回 localStorage，并清空只读缓存。
+ *
+ * **只换浏览器本地会话号，不删除任何服务端记录**——旧会话的 question／answer／evidence
+ * 仍留在库里，只是不再出现在本浏览器的历史页（会话隔离 FR-06 的正常结果）。
+ * 返回值是新会话号，供界面立即显示。
+ */
+export function resetSessionId() {
+  const sid = newSessionId()
+  try {
+    window.localStorage.setItem(SESSION_KEY, sid)
+  } catch (e) {
+    /* localStorage 不可用时：本次调用返回的新号只对调用方可见，不阻断 */
+  }
+  clearApiCache()
   return sid
 }
 
@@ -375,7 +413,7 @@ function startCacheableRead(url, method, init, idempotent) {
   const pending = readInflight.get(url)
   if (pending) return pending
   const gen = cacheGeneration
-  const p = sendRequest(url, method, init, idempotent, false).then((data) => {
+  const p = sendRequest(url, method, init, idempotent, false, {}).then((data) => {
     // 只有仍属同一代际的响应才回填：clearApiCache() 之后返回的在途响应不写回旧数据
     if (gen === cacheGeneration) cachePut(url, data)
     return data
@@ -415,32 +453,98 @@ function qs(params) {
 }
 
 /**
+ * 发一次 fetch，并在调用方要求时接入「外部取消信号 ＋ 前端超时」。
+ *
+ * 返回 `{resp, finish, timedOut}`：`finish()` 必须在该响应体读完或放弃时调用，
+ * 用来清掉定时器与事件监听（避免长页面里泄漏监听器）。`timedOut()` 用于区分
+ * 「超时」与「用户主动取消」两种 abort 原因——对外都是 `ApiError.aborted = true`。
+ */
+async function fetchWithCancel(url, init, signal, timeoutMs) {
+  const method = String(init.method || 'GET').toUpperCase()
+  if (!signal && !timeoutMs) {
+    try {
+      return { resp: await fetch(url, init), finish: () => {}, timedOut: () => false }
+    } catch (e) {
+      if (isAbortError(e)) throw new ApiError(0, '请求已取消', undefined, true)
+      throw new ApiError(0, `无法连接后端服务（${method} ${url}）：${e.message || e}`, undefined)
+    }
+  }
+  const ctrl = new AbortController()
+  let timedOut = false
+  let timer = null
+  const onAbort = () => ctrl.abort()
+  if (signal) {
+    if (signal.aborted) ctrl.abort()
+    else if (typeof signal.addEventListener === 'function') {
+      signal.addEventListener('abort', onAbort, { once: true })
+    }
+  }
+  if (timeoutMs > 0) {
+    timer = setTimeout(() => { timedOut = true; ctrl.abort() }, timeoutMs)
+  }
+  const finish = () => {
+    if (timer) { clearTimeout(timer); timer = null }
+    if (signal && typeof signal.removeEventListener === 'function') {
+      signal.removeEventListener('abort', onAbort)
+    }
+  }
+  try {
+    const resp = await fetch(url, { ...init, signal: ctrl.signal })
+    return { resp, finish, timedOut: () => timedOut }
+  } catch (e) {
+    finish()
+    if (isAbortError(e)) {
+      const message = timedOut
+        ? `请求超时（等待超过 ${Math.round(timeoutMs / 1000)} 秒仍未返回）`
+        : '请求已取消'
+      throw new ApiError(0, message, undefined, true)
+    }
+    // 网络层失败（后端未起／代理不通／断网）：可展示错误，code 用 0 标记「非后端错误码」
+    throw new ApiError(0, `无法连接后端服务（${method} ${url}）：${e.message || e}`, undefined)
+  }
+}
+
+/**
  * 真正发一次请求：返回后端信封里的 `data`。
  * 失败（HTTP 非 2xx／响应体含 code）时抛 `ApiError`，其 `message` 可直接展示。
  * 限流（HTTP 429 或 `code === 1004`）且请求幂等时，先退避等待再**重试一次**（见第 3 节）。
- * 本函数（含重试语义与全部错误文案）与加入第 4 节缓存层之前**逐字一致**：只搬不改，
- * 缓存层只在它**外面**做「查表／合并并发」，不改动它内部的任何判据。
+ * 2026-10-18：新增可选的 `abortOpts = {signal, timeoutMs}`——只影响「这一次等待」，
+ * 限流退避、缓存与错误文案的既有语义不变。取消/超时抛 `ApiError(0, …, aborted=true)`。
  *
  * @param {string} url 已拼好的相对 URL（形如 `/api/config/meta?…`）
  * @param {string} method HTTP 方法（用于错误文案）
  * @param {object} init fetch 的第二个参数（headers／body）
  * @param {boolean} idempotent 是否允许「限流 → 退避 → 重试一次」（判据见 isIdempotentRequest）
  * @param {boolean} clearsReadCacheOnSuccess 成功时是否清空只读缓存（只有 `POST /qa/ask` 为真）
+ * @param {{signal?:AbortSignal, timeoutMs?:number}} [abortOpts] 取消信号与超时（毫秒）
  */
-async function sendRequest(url, method, init, idempotent, clearsReadCacheOnSuccess) {
+async function sendRequest(url, method, init, idempotent, clearsReadCacheOnSuccess, abortOpts = {}) {
+  const signal = abortOpts.signal
+  const timeoutMs = abortOpts.timeoutMs
   for (let attempt = 0; ; attempt++) {
-    let resp
-    try {
-      resp = await fetch(url, init)
-    } catch (e) {
-      // 网络层失败（后端未起／代理不通／断网）：给一个可展示的错误，code 用 0 标记「非后端错误码」
-      throw new ApiError(0, `无法连接后端服务（${method} ${url}）：${e.message || e}`, undefined)
-    }
+    // 取消信号在两次尝试之间（例如退避等待中）到达时，不再发起下一次请求。
+    if (signal && signal.aborted) throw new ApiError(0, '请求已取消', undefined, true)
+
+    // fetchWithCancel 已把 abort／断网翻译成可直接展示的 ApiError
+    const { resp, finish, timedOut } = await fetchWithCancel(url, init, signal, timeoutMs)
 
     // 响应体**只读一次**：下面的限流判据与错误 message 都复用这一份解析结果，
     // 不再二次读 body（重试时二次 `resp.text()` 只会拿到空串，反而误判成「空结果」）。
     let payload = null
-    const text = await resp.text()
+    let text
+    try {
+      text = await resp.text()
+    } catch (e) {
+      finish()
+      if (isAbortError(e)) {
+        const message = timedOut()
+          ? `请求超时（等待超过 ${Math.round(timeoutMs / 1000)} 秒仍未返回）`
+          : '请求已取消'
+        throw new ApiError(0, message, undefined, true)
+      }
+      throw new ApiError(0, `读取响应失败（HTTP ${resp.status}）：${e.message || e}`, resp.status)
+    }
+    finish()
     if (text) {
       try {
         payload = JSON.parse(text)
@@ -489,10 +593,13 @@ async function sendRequest(url, method, init, idempotent, clearsReadCacheOnSucce
  *   · 其余端点：与改动前**完全一致**，直接走 `sendRequest`（含限流退避重试一次）。
  *
  * @param {string} path  形如 `/qa/ask`（相对 `/api`）
- * @param {{method?:string, body?:object, params?:object, withSession?:boolean}} [opts]
+ * @param {{method?:string, body?:object, params?:object, withSession?:boolean,
+ *          signal?:AbortSignal, timeoutMs?:number}} [opts]
+ *   `signal`／`timeoutMs` 只对**非缓存**请求生效：可缓存只读请求会被多方并发合并，
+ *   单个调用方取消会把共享 Promise 一起拒掉，故带取消/超时的调用一律绕过缓存直连。
  */
 export async function request(path, opts = {}) {
-  const { method = 'GET', body, params, withSession = false } = opts
+  const { method = 'GET', body, params, withSession = false, signal, timeoutMs } = opts
   const query = { ...(params || {}) }
   if (withSession) query.session_id = getSessionId()
   const url = `${API_PREFIX}${path}${qs(query)}`
@@ -509,10 +616,12 @@ export async function request(path, opts = {}) {
   const idempotent = isIdempotentRequest(method, body, path)
   // 一次成功的 `POST /api/qa/ask` ＝ 新答案已入库：只读缓存可能已过期，整表清空
   const clearsReadCacheOnSuccess = String(method).toUpperCase() === 'POST' && path === '/qa/ask'
+  const abortOpts = { signal, timeoutMs }
+  const wantsAbort = !!signal || !!timeoutMs
 
-  if (!isCacheableReadRequest(path, method, body)) {
-    // 不在白名单／带 body／非 GET：不缓存、不合并，行为与改动前一致
-    return sendRequest(url, method, init, idempotent, clearsReadCacheOnSuccess)
+  if (wantsAbort || !isCacheableReadRequest(path, method, body)) {
+    // 不在白名单／带 body／非 GET／要求取消或超时：不缓存、不合并
+    return sendRequest(url, method, init, idempotent, clearsReadCacheOnSuccess, abortOpts)
   }
 
   const cached = cacheTake(url)
@@ -540,9 +649,21 @@ export async function requestMeta(path, opts = {}) {
 // --------------------------------------------------------------------------
 
 // —— 问答与配置（api\qa.py）——
-/** POST /api/qa/ask —— 提问（固定 C 组）。体只允许 {question, session_id}（硬约束 9）。 */
-export function askQuestion(question) {
-  return request('/qa/ask', { method: 'POST', body: { question, session_id: getSessionId() } })
+/**
+ * POST /api/qa/ask —— 提问（固定 C 组）。体只允许 {question, session_id}（硬约束 9）。
+ *
+ * 2026-10-18：支持 `{signal, timeoutMs}`。默认超时 `ASK_TIMEOUT_MS`（320 秒，后端链路
+ * 上限 300 秒 + 20 秒余量）。取消/超时抛出 `aborted=true` 的 ApiError，调用方应把它
+ * 当作「本次等待结束」而不是「后端报错」——后端可能仍会跑完并写进本会话历史。
+ */
+export function askQuestion(question, opts = {}) {
+  const timeoutMs = (opts && opts.timeoutMs != null) ? opts.timeoutMs : ASK_TIMEOUT_MS
+  return request('/qa/ask', {
+    method: 'POST',
+    body: { question, session_id: getSessionId() },
+    signal: opts && opts.signal,
+    timeoutMs,
+  })
 }
 /** GET /api/qa/answers/{answer_id} —— 单条回答（含证据与图谱路径）。 */
 export function getAnswer(answerId) {

@@ -1551,7 +1551,9 @@ async def experiment_ask(payload: dict | None = Body(default=None)):
     run_id = _s(payload.get("run_id")).strip() or None
 
     from services import qa_service
-    data = await asyncio.to_thread(qa_service.ask, question, session_id, group)
+    # 受控实验必须**每次都跑新链路**：同一问题在同一 session 下重复实验时，不能因为
+    # 「普通提问可复用」的幂等捷径而拿到旧答案（A～E 组对比会失真）。
+    data = await asyncio.to_thread(qa_service.ask, question, session_id, group, False)
     data = dict(data)
     data.update({"experiment_group": group, "run_id": run_id,
                  "experiment_config": _config_snapshot(group),

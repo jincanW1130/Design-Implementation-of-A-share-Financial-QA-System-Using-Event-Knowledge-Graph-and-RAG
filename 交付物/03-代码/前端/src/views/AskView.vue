@@ -38,35 +38,77 @@ const error = ref(null)
 // 这里给中性提示（不是错误红字）：换了问法还能继续问。
 const notice = ref(null)
 let timer = null
+// 2026-10-18（第 3 轮）：边界与可取消。
+//   · 长度口径与后端 `params.validate_question` 一致：1～500 字（后端按折叠空白后的长度判，
+//     前端按 trim 后长度判，只会更严、不会把后端会拒的输入放过去）；
+//   · 控制字符口径与后端一致：`\t\r\n` 允许（后端折叠为空格），其余 C0 控制符与 DEL 拒绝；
+//   · 取消只停止浏览器等待，不终止后端子进程——提示文案如实说明这一点。
+const MAX_QUESTION_CHARS = 500
+const CONTROL_CHARS = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/
+const charCount = computed(() => question.value.length)
+let askController = null
+
 function startTimer() { elapsed.value = 0; timer = window.setInterval(() => { elapsed.value += 1 }, 1000) }
 function stopTimer() { if (timer) { window.clearInterval(timer); timer = null } }
 
+/** 用户主动取消等待（不注销后端已开始的生成；见取消后的提示文案）。 */
+function cancelAsk() {
+  if (!loading.value || !askController) return
+  askController.abort()
+}
+
 async function submit() {
-  const text = question.value.trim()
+  // 用原始值判控制字符：trim 只能去掉首尾空白，题中的不可见字符仍会被后端拒（1001）。
+  const raw = question.value
+  const text = raw.trim()
   error.value = null
   notice.value = null
   if (!text) { error.value = { code: '', message: '请输入问题后再提交。' }; return }
+  if (text.length > MAX_QUESTION_CHARS) {
+    error.value = {
+      code: '',
+      message: `问题长度 ${text.length} 字，超过上限 ${MAX_QUESTION_CHARS} 字；请缩短后再提交（后端同样会拒收超长问题）。`,
+    }
+    return
+  }
+  if (CONTROL_CHARS.test(raw)) {
+    error.value = {
+      code: '',
+      message: '问题中含有不可见的控制字符（如 NUL、退格等），请删除后重试。换行与制表符可以使用。',
+    }
+    return
+  }
   if (loading.value) return
   loading.value = true
   startTimer()
+  askController = new AbortController()
   try {
-    const data = await askQuestion(text)
-    stopTimer()
-    loading.value = false
+    const data = await askQuestion(text, { signal: askController.signal })
     // 2002 语义：后端没检索到可引用证据，返回 200＋empty（不是错误）。
     if (data && data.empty) {
       notice.value = data.notice || '未检索到可引用的证据，换一种问法试试。'
       return
     }
     if (data && data.answer_id !== undefined && data.answer_id !== null) {
-      router.push({ name: 'answer', params: { answerId: String(data.answer_id) } })
+      // 2026-10-18：同一会话重复提问命中后端幂等复用（reused=true、未重复调用模型）；
+      // 用 query 把这一事实带到答案页如实展示，而不是让用户以为又生成了一次。
+      const query = (data.reused === true) ? { reused: '1' } : {}
+      router.push({ name: 'answer', params: { answerId: String(data.answer_id) }, query })
     } else {
       error.value = { code: '', message: '后端未返回 answer_id，无法跳转到答案页。' }
     }
   } catch (e) {
+    if (e && e.aborted) {
+      // 取消／超时不是后端错误：给中性提示，并如实说明后端可能已继续完成。
+      notice.value = `${e.message}。本次不再等待，但后端可能仍会完成生成并写入本会话历史；`
+        + '稍后可在「历史记录」中查看是否已留痕。'
+    } else {
+      error.value = { code: e.code, message: e.message }
+    }
+  } finally {
     stopTimer()
     loading.value = false
-    error.value = { code: e.code, message: e.message }
+    askController = null
   }
 }
 
@@ -187,17 +229,24 @@ onMounted(() => { if (appMeta && !appMeta.health) { /* health 由 App.vue 拉取
             <textarea id="q" ref="qEl" v-model="question" rows="3" :disabled="loading"
                       placeholder="请输入你的财经问题，例如：平安银行与伊利股份共同参与的事件是什么？"
                       @keydown.ctrl.enter="submit" @keydown.meta.enter="submit"></textarea>
+            <p class="small" style="margin:6px 0 0;text-align:right"
+               :style="charCount > MAX_QUESTION_CHARS ? 'color:var(--accent-ink)' : ''">
+              {{ charCount }} / {{ MAX_QUESTION_CHARS }} 字<span v-if="charCount > MAX_QUESTION_CHARS">（超出上限，提交会被拒绝）</span>
+            </p>
             <div class="askbox__foot">
               <div class="askbox__hints">
                 <span class="tag">数据集 {{ (appMeta && appMeta.datasetVersion) || '—' }}</span>
                 <span class="tag" title="图谱扩展能力已开启；每次提问是否真正扩展，由链路按检索与图谱证据如实判定——无可用图谱证据时不扩展、不编造路径">图谱扩展 开 · 按题判定</span>
                 <span class="tag">路径深度 1～2 跳</span>
               </div>
+              <button v-if="loading" class="btn btn--ghost" type="button" @click="cancelAsk">取消等待</button>
               <button class="btn btn--quiet" :disabled="loading" @click="submit">
                 {{ loading ? '生成中…' : '提问' }}
               </button>
             </div>
-            <p v-if="loading" class="small" style="margin-top:10px">正在生成答案，已等待 {{ elapsed }} 秒（链路约 10～30 s，请勿关闭页面）</p>
+            <p v-if="loading" class="small" style="margin-top:10px">
+              正在生成答案，已等待 {{ elapsed }} 秒（通常 10～30 秒，最长约 5 分钟；可点「取消等待」）
+            </p>
             <p v-if="error" class="small" style="margin-top:10px;color:var(--accent-ink)">
               <span v-if="error.code !== '' && error.code !== undefined && error.code !== null">[{{ error.code }}] </span>{{ error.message }}
             </p>

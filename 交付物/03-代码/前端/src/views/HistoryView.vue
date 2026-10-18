@@ -17,7 +17,7 @@
 // 空列表是正常业务状态（2002 语义），给「未检索到匹配记录」提示，不是错误。
 
 import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
-import { listHistory, getHistoryDetail, getGraphPath } from '../api.js'
+import { listHistory, getHistoryDetail, getGraphPath, getSessionId, resetSessionId } from '../api.js'
 import { mountGraph, EXT, DOMAIN } from '../lib/graph.js'
 import { buildReplayDataset } from '../lib/replay.js'
 
@@ -52,6 +52,22 @@ const graphHost = ref(null)
 let replayG = null
 
 const totalPages = computed(() => Math.max(1, Math.ceil(total.value / pageSize.value)))
+
+// —— 当前会话号展示与重置（2026-10-18 第 3 轮）——
+// 会话号只存在浏览器 localStorage，是 FR-06 隔离的键。重置只换本地键，**不删除任何服务端记录**；
+// 旧会话的 question／answer／evidence 仍在库里，只是不再出现在本浏览器的历史页。
+const sessionId = ref(getSessionId())
+function resetSession() {
+  const ok = window.confirm(
+    '重置会话只会为本浏览器换一个新的会话号；当前会话的历史记录仍保留在数据库中，不会被删除，'
+    + '但本页将不再显示它们。确定要重置吗？'
+  )
+  if (!ok) return
+  sessionId.value = resetSessionId()
+  page.value = 1
+  if (drawerOn.value) closeDrawer()
+  load()
+}
 
 async function load() {
   error.value = ''
@@ -258,7 +274,13 @@ onBeforeUnmount(() => {
             问题 → 答案四段 → 证据表 → 图谱路径可视化。图谱一节复用屏③同一套渲染器、同一张图例与同一句准确性声明，且<b>不重新查询图谱</b>。
           </p>
         </div>
-        <span class="label">共 {{ total }} 条 · 第 {{ page }} / {{ totalPages }} 页</span>
+        <div style="text-align:right">
+          <span class="label">共 {{ total }} 条 · 第 {{ page }} / {{ totalPages }} 页</span>
+          <p class="small" style="margin:8px 0 0">
+            当前会话 <span class="mono" :title="sessionId" data-testid="session-id">{{ sessionId }}</span>
+          </p>
+          <button class="btn btn--ghost btn--sm" type="button" style="margin-top:8px" @click="resetSession">重置会话</button>
+        </div>
       </div>
 
       <div class="hstats reveal">
@@ -277,10 +299,13 @@ onBeforeUnmount(() => {
         <b>未检索到匹配记录</b>
         <p class="small" style="margin-top:8px">本会话暂无历史记录（这是正常空结果，不是错误）。去「提问台」提一个问题即可留痕。</p>
         <!-- 缺陷 4（可操作性）：会话隔离（FR-06）是设计行为，但新访客／答辩评委第一眼看到
-             「没有历史」会判成功能缺失。这里只在空态补一句可操作说明，把「为什么空」和
-             「哪里有数据」讲清楚；**不**去读别的会话的数据，隔离照旧。 -->
+             「没有历史」会判成功能缺失。这里只在空态把「为什么空」讲清楚；**不**去读别的会话
+             的数据，隔离照旧。2026-10-18 修正：旧文案让用户「在地址栏改 /history?session_id=S-001」，
+             但本页根本不读地址栏的 session_id（只认浏览器本地会话），那句话做不到，已删除。 -->
         <p class="small" style="margin-top:8px">
-          本页按浏览器会话隔离（FR-06）：这里的记录只属于当前会话。库中既有的历史记录属于会话 <span class="mono">S-001</span>，需要查看时可在地址栏把本页改为 <span class="mono">/history?session_id=S-001</span>。
+          本页按浏览器会话隔离（FR-06）：记录只属于当前的浏览器会话（<span class="mono">{{ sessionId }}</span>）。
+          若刚重置过会话、换了浏览器或清过本地存储，就会看到这个空列表——这是隔离机制的正常结果，不是错误。
+          旧会话的记录仍保留在数据库中，但不会在这里展示。需要从空会话开始记录，直接去「提问台」提问即可。
         </p>
       </div>
 

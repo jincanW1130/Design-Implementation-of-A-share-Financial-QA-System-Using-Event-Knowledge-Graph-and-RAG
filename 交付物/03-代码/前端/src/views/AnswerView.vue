@@ -11,7 +11,7 @@
 // 正文 [证据N] 可点，跳到证据卡并高亮。外部链接 target=_blank rel=noopener「查看原文 ↗」。
 
 import { computed, inject, nextTick, onBeforeUnmount, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { getAnswer, getEvidence, getGraphPath } from '../api.js'
 import { mountGraph } from '../lib/graph.js'
 import { buildReplayDataset, collectPathNodes, enrichNames, firstCompanyOf } from '../lib/replay.js'
@@ -20,7 +20,11 @@ import EvidenceList from '../components/EvidenceList.vue'
 import GraphPathPanel from '../components/GraphPathPanel.vue'
 
 const router = useRouter()
+const route = useRoute()
 const props = defineProps({ answerId: { type: [String, Number], required: true } })
+// 2026-10-18：提问页命中「同会话重复提问、复用已有回答」时带 query.reused=1 跳过来。
+// 只在本次跳转的 URL 上显示，不写入任何数据；刷新页面仍会保留该 query（如实反映本次复用）。
+const reusedFromAsk = computed(() => String(route.query.reused || '') === '1')
 const appMeta = inject('appMeta', null)
 
 const loading = ref(false)
@@ -374,6 +378,11 @@ function onJump(id) {
               <span class="tag">数据截止 {{ (appMeta && appMeta.dataCutoffTime) || '—' }}</span>
               <span class="tag" :class="extended ? 'tag--red' : 'tag--muted'">图谱扩展 {{ extended ? '已启用' : '未启用' }}</span>
             </div>
+            <p v-if="reusedFromAsk" class="small" data-testid="reused-notice"
+               style="margin-top:12px;color:var(--ink-2)">
+              该问题在当前会话中已经问过，本次直接复用已有回答：未重复调用模型、未重复生成，
+              下面的答案就是当时落库的那一份。若要重新生成，请换一种问法或在历史记录中重置会话。
+            </p>
           </div>
           <div class="qhead__r">
             <span class="tag tag--red">真实记录 · 取自本系统落库六表</span>
