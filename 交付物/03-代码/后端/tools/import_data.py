@@ -126,6 +126,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as _dt
+import json
 import os
 import sys
 
@@ -543,6 +544,21 @@ def write_db_counts(b: Batch, counts: dict, detail: dict, all_match: bool, full:
         "generated_at": _dt.datetime.now().astimezone().isoformat(timespec="seconds"),
     }
     path = os.path.join(config.OUTPUT_DIR, "db_counts.json")
+    # 2026-10-18：**内容未变就不重写**。`验收第9阶段.py` 的 B5 行会连跑两次 `--reset` 导入，
+    # 每次都会刷新 generated_at，于是「跑一次门禁」就把这个交付件在工作区里改脏（实测发生过）。
+    # 判据排除 generated_at：只有真正的读数（行数/哈希/对拍结果等）变化时才落盘。
+    try:
+        if os.path.isfile(path):
+            with open(path, encoding="utf-8") as fh:
+                old = json.load(fh)
+            a = {k: v for k, v in old.items() if k != "generated_at"}
+            bnew = {k: v for k, v in payload.items() if k != "generated_at"}
+            if a == bnew:
+                print("[db_counts] 除 generated_at 外内容与现有文件一致，保持原文件不重写：%s"
+                      % os.path.relpath(path, config.ROOT))
+                return path
+    except Exception as exc:  # 读旧文件失败不算错误：照常覆盖
+        print("[db_counts] 旧文件不可解析，按新内容覆盖（%s）" % exc)
     config.write_json(path, payload)
     return path
 

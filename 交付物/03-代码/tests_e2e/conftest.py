@@ -22,6 +22,7 @@ r"""tests_e2e/conftest.py —— UI 级 E2E 的环境门与 UNRUN 语义（审�
 from __future__ import annotations
 
 import os
+import time
 import urllib.request
 
 import pytest
@@ -33,6 +34,37 @@ FRONTEND = os.environ.get("E2E_FRONTEND", "http://127.0.0.1:5173")
 SKIP_CHAIN = os.environ.get("E2E_SKIP_CHAIN", "") not in ("", "0", "false", "False")
 """跳过真实链路用例：设环境变量 E2E_SKIP_CHAIN=1（不用命令行选项——pytest 只允许
 rootdir 的 conftest 定义选项，本目录在主套件下是子目录，命令行参数会破坏主套件收集）。"""
+
+# ---------------------------------------------------------------------------
+# 用例间隔（2026-10-18 新增，与 UAT 装置 `--pace` 同口径）
+#
+# 为什么要有：每个用例都会新开浏览器上下文并整页加载，单页约 13～20 次 `/api/*`；
+# 10 个用例连着跑，60 秒窗口内就会逼近后端「60 次／60 秒／来源 IP」的上限，于是后段用例
+# 会拿到 429，页面显示「读取失败[1004]」，断言随之失败——那测的是装置的爆发速度，
+# 不是页面正确性（实测复现过：同一套用例单跑 10/10，紧接另一轮跑则出现 429 连带失败）。
+#
+# 默认 15000 ms（≈10 个用例 × 15 s，把整轮摊到约 2.5 分钟，折合每分钟约 50 次请求）；
+# 设 `E2E_PACE_MS=0` 可关掉配速、按原样复现「密集爆发」。
+# ---------------------------------------------------------------------------
+try:
+    PACE_MS = int(os.environ.get("E2E_PACE_MS", "15000"))
+except ValueError:
+    PACE_MS = 15000
+
+_LAST_END = {"t": 0.0}
+
+
+def pytest_runtest_setup(item):
+    """兜住用例之间的间隔：距上一个用例结束不足 PACE_MS 就补足。"""
+    if PACE_MS <= 0 or not _LAST_END["t"]:
+        return
+    gap_ms = (time.monotonic() - _LAST_END["t"]) * 1000.0
+    if gap_ms < PACE_MS:
+        time.sleep((PACE_MS - gap_ms) / 1000.0)
+
+
+def pytest_runtest_teardown(item, nextitem):
+    _LAST_END["t"] = time.monotonic()
 
 
 def pytest_configure(config):
