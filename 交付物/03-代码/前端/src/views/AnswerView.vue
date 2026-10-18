@@ -12,7 +12,7 @@
 
 import { computed, inject, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getAnswer, getEvidence, getGraphPath } from '../api.js'
+import { friendlyMessageOf, getAnswer, getEvidence, getGraphPath } from '../api.js'
 import { mountGraph } from '../lib/graph.js'
 import { buildReplayDataset, collectPathNodes, enrichNames, firstCompanyOf } from '../lib/replay.js'
 import AnswerSections from '../components/AnswerSections.vue'
@@ -281,7 +281,12 @@ async function load() {
     evidence.value = { groups: (ev && ev.groups) || {}, items: (ev && ev.items) || [] }
     graphPath.value = gp || graphPath.value
   } catch (e) {
-    error.value = { code: e.code, message: e.message }
+    // 第 8 轮：错误码→用户可读文案；后端原文保留在「技术信息」折叠里
+    error.value = {
+      code: e.code,
+      message: e.message,
+      friendly: friendlyMessageOf(e.code, e.message),
+    }
   } finally {
     loading.value = false
   }
@@ -359,9 +364,15 @@ function onJump(id) {
       <div v-else-if="error" class="sec">
         <div class="graphOff" style="border-color:var(--accent-line)">
           <b>读取失败</b>
-          <span v-if="error.code !== undefined && error.code !== null" class="mono small">［code={{ error.code }}］</span>
-          <p class="small" style="margin-top:8px">{{ error.message }}</p>
-          <p v-if="error.code === 2001" class="small">该 answer_id 在库中不存在，请回提问页重新提问。</p>
+          <span v-if="error.code !== undefined && error.code !== null" class="mono small">［错误码 {{ error.code }}］</span>
+          <p class="small" style="margin-top:8px">{{ error.friendly || error.message }}</p>
+          <p v-if="error.code === 2001" class="small">
+            这条回答可能已被清理，或不属于当前浏览器会话。请回「提问台」重新提问，或从「历史记录」点开一条。
+          </p>
+          <details v-if="error.friendly && error.message && error.message !== error.friendly" class="small" style="margin-top:6px">
+            <summary style="cursor:pointer;color:var(--muted)">技术信息（供管理员排查）</summary>
+            <p class="small" style="margin:6px 0 0">{{ error.message }}</p>
+          </details>
         </div>
       </div>
 

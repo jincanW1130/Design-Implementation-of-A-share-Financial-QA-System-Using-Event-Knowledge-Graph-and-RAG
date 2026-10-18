@@ -273,6 +273,10 @@ onBeforeUnmount(() => {
             一行一次会话（按当前会话隔离，只列出本会话的提问）。点开回看按当时记录的路径载荷还原四段：
             问题 → 答案四段 → 证据表 → 图谱路径可视化。图谱一节复用屏③同一套渲染器、同一张图例与同一句准确性声明，且<b>不重新查询图谱</b>。
           </p>
+          <p class="small" style="margin-top:10px;color:var(--muted);max-width:68ch" data-testid="single-turn-note">
+            <b>第一版为单轮问答</b>：历史记录只用于回看与留痕，不会把上一条问答作为上下文带入新的提问；
+            每次提问都按当前问题独立检索与生成。
+          </p>
         </div>
         <div style="text-align:right">
           <span class="label">共 {{ total }} 条 · 第 {{ page }} / {{ totalPages }} 页</span>
@@ -295,7 +299,7 @@ onBeforeUnmount(() => {
         <p class="small" style="margin-top:8px">{{ error }}</p>
       </div>
       <p v-else-if="loading" class="small">正在读取历史记录…</p>
-      <div v-else-if="!items.length" class="graphOff">
+      <div v-else-if="!items.length" class="graphOff" data-testid="history-empty">
         <b>未检索到匹配记录</b>
         <p class="small" style="margin-top:8px">本会话暂无历史记录（这是正常空结果，不是错误）。去「提问台」提一个问题即可留痕。</p>
         <!-- 缺陷 4（可操作性）：会话隔离（FR-06）是设计行为，但新访客／答辩评委第一眼看到
@@ -309,7 +313,7 @@ onBeforeUnmount(() => {
         </p>
       </div>
 
-      <div v-else class="hrows">
+      <div v-else class="hrows" data-testid="history-list">
         <article v-for="(it, i) in items" :key="it.question_id" class="hrow" :data-session="it.question_id">
           <span class="hrow__no">{{ String((page - 1) * pageSize + i + 1).padStart(2, '0') }}</span>
           <div>

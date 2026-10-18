@@ -524,6 +524,7 @@ onBeforeUnmount(() => {
     </p>
     <label class="label" for="fbText">反馈内容</label>
     <textarea id="fbText" ref="fbTextarea" v-model="fbText" class="fb__text" rows="5"
+              aria-label="反馈内容（只保存在本机）"
               placeholder="例如：某条证据的标题看不全、某个数字不好核对……（内容只留在本机）"></textarea>
     <div class="fb__acts">
       <button class="btn btn--primary btn--sm" type="button" @click="saveFeedback">保存到本地</button>

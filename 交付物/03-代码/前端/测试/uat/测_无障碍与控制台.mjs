@@ -6,16 +6,35 @@
 import { chromium } from 'playwright';
 
 const BASE = process.argv[2] || 'http://127.0.0.1:5173';
+
+// 2026-10-18（第 8 轮无障碍复查）：
+//   ① `/answer` 不是真实路由（路由是 `/answer/:answerId`），旧脚本访问它会回落到提问页，
+//      再靠提问页 mockup 里的「【回答】」字样“通过”——测到的根本不是答案页。这里先按
+//      `/api/history` 取一条真实 answer_id（只读；取不到就跳过答案页，不伪造）。
+//   ② 历史页在「本会话为空」时渲染的是空态提示（正常业务状态），旧选择器只认 `.hrow`，
+//      会把正常空态误报成硬问题。改为列表与空态都算关键元素。
+async function resolveAnswerPath() {
+  try {
+    const resp = await fetch(`${BASE}/api/history?session_id=S-001&page=1&page_size=1`);
+    const payload = await resp.json();
+    const item = payload && payload.data && Array.isArray(payload.data.items) && payload.data.items[0];
+    if (item && item.answer_id != null) return `/answer/${item.answer_id}`;
+  } catch (e) { /* 后端不可达时下面给出可读结论 */ }
+  return '';
+}
+
+const answerPath = await resolveAnswerPath();
 const PAGES = [
   { path: '/ask', name: '提问台', sel: '#q' },
-  { path: '/answer', name: '答案与证据', sel: 'text=【回答】' },
+  ...(answerPath ? [{ path: answerPath, name: '答案与证据', sel: 'text=【回答】' }] : []),
   { path: '/graph', name: '知识图谱', sel: '.gnode' },
-  { path: '/history', name: '历史记录', sel: '.hrow, table tbody tr' },
+  { path: '/history', name: '历史记录', sel: '[data-testid="history-list"], [data-testid="history-empty"]' },
 ];
 
 const consoleErrors = [];
 const failedReqs = [];
 const issues = [];
+if (!answerPath) issues.push('答案与证据：未能从 /api/history?session_id=S-001 取到真实 answer_id，已跳过该页');
 
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ locale: 'zh-CN', viewport: { width: 1440, height: 900 } });

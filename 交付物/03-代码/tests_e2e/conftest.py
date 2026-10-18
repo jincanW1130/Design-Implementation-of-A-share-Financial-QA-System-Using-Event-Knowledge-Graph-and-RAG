@@ -31,6 +31,37 @@ pytest.importorskip("playwright", reason="UNRUN：未安装 playwright（pip ins
 
 BACKEND = os.environ.get("E2E_BACKEND", "http://127.0.0.1:8000")
 FRONTEND = os.environ.get("E2E_FRONTEND", "http://127.0.0.1:5173")
+@pytest.fixture(scope="session", autouse=True)
+def _rate_window_guard():
+    """**限流窗口守卫**（2026-10-18 第二轮第 8 轮补）。
+
+    2026-10-18 实测：把 `E2E_PACE_MS` 调到 500～1500 跑快档时，一个 60 秒窗口内
+    的请求数会超过后端默认的 60 次上限，`POST /api/qa/ask` 拿到 **429/1004**；
+    前端会按 `Retry-After` 自动重试并等待，于是 `test_e2e_01` 等到 120 秒超时——
+    **看起来像功能坏了，实际是限流**。
+
+    这里在整轮用例开始前探一次：若窗口已满（`/api/config/meta` 返回 429），
+    先睡过一个窗口再跑，并在终端说明原因。真正断言限流行为的用例仍由
+    `验收第9阶段.py`（C9）负责，本守卫不改变任何功能判据。
+    """
+    import time, urllib.error, urllib.request
+    backend = BACKEND
+    def _hit():
+        try:
+            with urllib.request.urlopen(backend + "/api/config/meta", timeout=10) as r:
+                return r.status
+        except urllib.error.HTTPError as e:
+            return e.code
+        except Exception:
+            return None
+    if _hit() == 429:
+        print("\n[E2E] 限流窗口已满（429），等待 61 秒后继续；如需跑快档请先放宽 "
+              "ASHARE_RATE_LIMIT_MAX 或提高 E2E_PACE_MS。", flush=True)
+        time.sleep(61)
+        if _hit() == 429:
+            pytest.skip("UNRUN：限流窗口持续满载，判定环境未就绪（非功能失败）")
+
+
 SKIP_CHAIN = os.environ.get("E2E_SKIP_CHAIN", "") not in ("", "0", "false", "False")
 """跳过真实链路用例：设环境变量 E2E_SKIP_CHAIN=1（不用命令行选项——pytest 只允许
 rootdir 的 conftest 定义选项，本目录在主套件下是子目录，命令行参数会破坏主套件收集）。"""

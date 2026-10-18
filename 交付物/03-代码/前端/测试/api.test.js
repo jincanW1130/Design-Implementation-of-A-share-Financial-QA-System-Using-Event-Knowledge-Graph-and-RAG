@@ -15,6 +15,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import {
   ApiError,
+  FRIENDLY_ERRORS,
+  friendlyMessageOf,
   getSessionId,
   request,
   requestMeta,
@@ -101,6 +103,49 @@ describe('ApiError', () => {
     const e = new ApiError(0, '无法连接后端服务', undefined)
     expect(e.code).toBe(0)
     expect(e.httpStatus).toBeUndefined()
+  })
+})
+
+// ==========================================================================
+// G1b 组 · 错误码 → 用户可读文案（2026-10-18 第 8 轮：拒答矩阵前端联动）
+// ==========================================================================
+describe('friendlyMessageOf / FRIENDLY_ERRORS', () => {
+  it('3004 给的是用户能看懂的话，不出现「装配账目守卫」等内部术语', () => {
+    const text = friendlyMessageOf(3004, '装配账目守卫未通过（上游一致性守卫，非图谱或模型故障）')
+    expect(text).toContain('可信性校验')
+    expect(text).toContain('拦截')
+    expect(text).not.toContain('装配账目守卫')
+    expect(text).not.toContain('上游一致性守卫')
+  })
+
+  it('3001／3002／3003／1004 均有独立文案且互不相同', () => {
+    const codes = [3001, 3002, 3003, 1004]
+    const texts = codes.map((c) => friendlyMessageOf(c))
+    texts.forEach((t) => expect(typeof t).toBe('string'))
+    expect(new Set(texts).size).toBe(codes.length)
+    expect(friendlyMessageOf(3001)).toContain('知识图谱')
+    expect(friendlyMessageOf(3002)).toContain('超时')
+    expect(friendlyMessageOf(3003)).toContain('检索')
+    expect(friendlyMessageOf(1004)).toContain('每分钟')
+  })
+
+  it('2002 是正常空结果、不是错误：不进入映射表，走调用方兜底文案', () => {
+    expect(FRIENDLY_ERRORS[2002]).toBeUndefined()
+    expect(friendlyMessageOf(2002, '未检索到可引用的证据，换一种问法试试。'))
+      .toBe('未检索到可引用的证据，换一种问法试试。')
+  })
+
+  it('未登记错误码与网络层 code=0 沿用可展示的兜底文本', () => {
+    expect(friendlyMessageOf(7777, '后端原文')).toBe('后端原文')
+    expect(friendlyMessageOf(0, '无法连接后端服务')).toBe('无法连接后端服务')
+    expect(friendlyMessageOf(undefined)).toContain('请稍后重试')
+  })
+
+  it('映射是只读表：展示层翻译不会改写后端码与原文', () => {
+    expect(Object.isFrozen(FRIENDLY_ERRORS)).toBe(true)
+    const raw = '装配账目守卫未通过（上游一致性守卫，非图谱或模型故障）'
+    friendlyMessageOf(3004, raw)
+    expect(raw).toBe('装配账目守卫未通过（上游一致性守卫，非图谱或模型故障）')
   })
 })
 

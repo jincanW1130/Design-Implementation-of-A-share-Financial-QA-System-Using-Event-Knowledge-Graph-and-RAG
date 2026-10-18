@@ -14,7 +14,7 @@
 
 import { computed, inject, nextTick, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { askQuestion } from '../api.js'
+import { askQuestion, friendlyMessageOf, listHistory } from '../api.js'
 
 const router = useRouter()
 const appMeta = inject('appMeta', null)
@@ -103,12 +103,42 @@ async function submit() {
       notice.value = `${e.message}。本次不再等待，但后端可能仍会完成生成并写入本会话历史；`
         + '稍后可在「历史记录」中查看是否已留痕。'
     } else {
-      error.value = { code: e.code, message: e.message }
+      // 第 8 轮：错误码→用户可读文案（后端 message 保留在「技术信息」里，供排查）
+      error.value = {
+        code: e.code,
+        message: e.message,
+        friendly: friendlyMessageOf(e.code, e.message),
+      }
     }
   } finally {
     stopTimer()
     loading.value = false
     askController = null
+  }
+}
+
+// --------------------------------------------------------------------------
+// 当前会话最近 N 条问答（2026-10-18 第 8 轮 · 会话侧提示）
+// --------------------------------------------------------------------------
+// 只做**只读展示**：第一版问答契约为单轮，模型不会继承上文；这份列表只帮助用户
+// 意识到「历史留痕 ≠ 多轮上下文」，不向生成链路注入任何内容，也不改 Prompt 口径。
+const RECENT_N = 3
+const recent = ref([])
+const recentLoading = ref(false)
+const recentError = ref('')
+
+async function loadRecent() {
+  recentLoading.value = true
+  recentError.value = ''
+  try {
+    const data = await listHistory(1, RECENT_N)
+    recent.value = (data && data.items) || []
+  } catch (e) {
+    // 读取失败不影响提问主流程：如实显示原因（限流文案已由 api.js 映射）
+    recent.value = []
+    recentError.value = friendlyMessageOf(e.code, e.message)
+  } finally {
+    recentLoading.value = false
   }
 }
 
@@ -188,7 +218,10 @@ const shownReports = computed(() => rtype.value === 'all' ? reports.value : repo
 function fmtTime(t) { return typeof t === 'string' ? t.replace('T', ' ').slice(0, 16) : '—' }
 function fmtDate(t) { return typeof t === 'string' ? t.slice(0, 10) : '—' }
 
-onMounted(() => { if (appMeta && !appMeta.health) { /* health 由 App.vue 拉取 */ } })
+onMounted(() => {
+  if (appMeta && !appMeta.health) { /* health 由 App.vue 拉取 */ }
+  loadRecent()   // 只读：当前会话最近 3 条（第一版单轮问答的会话侧提示）
+})
 </script>
 
 <template>
@@ -227,6 +260,7 @@ onMounted(() => { if (appMeta && !appMeta.health) { /* health 由 App.vue 拉取
             </div>
             <label for="q" class="label" style="position:absolute;left:-9999px">财经问题输入框</label>
             <textarea id="q" ref="qEl" v-model="question" rows="3" :disabled="loading"
+                      aria-label="财经问题输入框（1～500 字）"
                       placeholder="请输入你的财经问题，例如：平安银行与伊利股份共同参与的事件是什么？"
                       @keydown.ctrl.enter="submit" @keydown.meta.enter="submit"></textarea>
             <p class="small" style="margin:6px 0 0;text-align:right"
@@ -247,15 +281,45 @@ onMounted(() => { if (appMeta && !appMeta.health) { /* health 由 App.vue 拉取
             <p v-if="loading" class="small" style="margin-top:10px">
               正在生成答案，已等待 {{ elapsed }} 秒（通常 10～30 秒，最长约 5 分钟；可点「取消等待」）
             </p>
-            <p v-if="error" class="small" style="margin-top:10px;color:var(--accent-ink)">
-              <span v-if="error.code !== '' && error.code !== undefined && error.code !== null">[{{ error.code }}] </span>{{ error.message }}
-            </p>
+            <div v-if="error" class="small errbox" data-testid="ask-error">
+              <p style="margin:0;color:var(--accent-ink)">
+                <span v-if="error.code !== '' && error.code !== undefined && error.code !== null" class="mono">[错误码 {{ error.code }}] </span>{{ error.friendly || error.message }}
+              </p>
+              <details v-if="error.friendly && error.message && error.message !== error.friendly" class="errtech">
+                <summary>技术信息（供管理员排查，普通用户可忽略）</summary>
+                <p class="small" style="margin:6px 0 0">{{ error.message }}</p>
+              </details>
+            </div>
             <p v-if="notice" class="small" style="margin-top:10px;color:var(--ink-2)" data-testid="empty-notice">
               {{ notice }}
             </p>
           </div>
           <div class="chips reveal" style="--d:80ms">
             <button v-for="(t, i) in examples" :key="i" class="chip" :disabled="loading" @click="useExample(t)">{{ t }}</button>
+          </div>
+
+          <!-- 当前会话最近 N 条问答（2026-10-18 第 8 轮）：只读留痕，不进入生成链路。
+               第一版是单轮问答——这里明确写出来，避免用户以为模型记得上文。 -->
+          <div class="recent reveal" style="--d:120ms" data-testid="session-recent">
+            <div class="recent__head">
+              <span class="label">当前会话 · 最近 {{ RECENT_N }} 条问答（只读）</span>
+              <span class="tag tag--red">第一版为单轮问答</span>
+            </div>
+            <p class="small recent__note">
+              第一版为单轮问答：每次提问都是独立生成，<b>不会把上一条问答作为上下文带入模型</b>。
+              下面只列出本浏览器会话已留痕的记录，用于回看，不参与本次回答的生成。
+            </p>
+            <p v-if="recentLoading" class="small">正在读取本会话记录…</p>
+            <p v-else-if="recentError" class="small recent__err">{{ recentError }}</p>
+            <p v-else-if="!recent.length" class="small">本会话暂无问答记录；提问后会在这里留痕。</p>
+            <ol v-else class="recent__list">
+              <li v-for="it in recent" :key="it.question_id" class="recent__item">
+                <router-link class="recent__q" :to="{ name: 'answer', params: { answerId: String(it.answer_id) } }">
+                  {{ it.question_text }}
+                </router-link>
+                <span class="small recent__meta">{{ fmtTime(it.ask_time) }} · 证据 {{ it.evidence_count }} 条</span>
+              </li>
+            </ol>
           </div>
         </div>
 
@@ -588,3 +652,23 @@ onMounted(() => { if (appMeta && !appMeta.health) { /* health 由 App.vue 拉取
     </div>
   </section>
 </template>
+
+<style scoped>
+/* 第 8 轮：错误码友好文案的容器与技术信息折叠（配色只用既有令牌） */
+.errbox { margin-top: 10px; }
+.errtech { margin-top: 4px; color: var(--muted); }
+.errtech summary { cursor: pointer; font-size: 12px; }
+/* 当前会话最近 N 条问答：紧凑只读列表，不抢提问框的视觉重心 */
+.recent { margin-top: 18px; padding: 14px 16px; border: 1px solid var(--border-soft);
+          border-radius: var(--r-md, 10px); background: var(--surface); }
+.recent__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.recent__note { margin: 7px 0 9px; color: var(--muted); }
+.recent__err { color: var(--accent-ink); }
+.recent__list { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.recent__item { display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+                padding-top: 8px; border-top: 1px solid var(--border-soft); }
+.recent__item:first-child { border-top: 0; padding-top: 0; }
+.recent__q { color: var(--fg); text-decoration: none; font-size: 13px; line-height: 1.5; }
+.recent__q:hover { color: var(--accent-ink); text-decoration: underline; }
+.recent__meta { color: var(--faint); white-space: nowrap; }
+</style>
