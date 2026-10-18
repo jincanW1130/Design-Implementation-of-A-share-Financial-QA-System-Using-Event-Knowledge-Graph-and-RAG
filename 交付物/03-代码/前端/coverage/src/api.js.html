@@ -1,0 +1,2068 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for src/api.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">src</a> api.js</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">75% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>171/228</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">72.31% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>128/177</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">85.71% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>42/49</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">81.18% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>151/186</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line medium'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a>
+<a name='L339'></a><a href='#L339'>339</a>
+<a name='L340'></a><a href='#L340'>340</a>
+<a name='L341'></a><a href='#L341'>341</a>
+<a name='L342'></a><a href='#L342'>342</a>
+<a name='L343'></a><a href='#L343'>343</a>
+<a name='L344'></a><a href='#L344'>344</a>
+<a name='L345'></a><a href='#L345'>345</a>
+<a name='L346'></a><a href='#L346'>346</a>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a>
+<a name='L354'></a><a href='#L354'>354</a>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a>
+<a name='L357'></a><a href='#L357'>357</a>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a>
+<a name='L362'></a><a href='#L362'>362</a>
+<a name='L363'></a><a href='#L363'>363</a>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a>
+<a name='L377'></a><a href='#L377'>377</a>
+<a name='L378'></a><a href='#L378'>378</a>
+<a name='L379'></a><a href='#L379'>379</a>
+<a name='L380'></a><a href='#L380'>380</a>
+<a name='L381'></a><a href='#L381'>381</a>
+<a name='L382'></a><a href='#L382'>382</a>
+<a name='L383'></a><a href='#L383'>383</a>
+<a name='L384'></a><a href='#L384'>384</a>
+<a name='L385'></a><a href='#L385'>385</a>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a>
+<a name='L393'></a><a href='#L393'>393</a>
+<a name='L394'></a><a href='#L394'>394</a>
+<a name='L395'></a><a href='#L395'>395</a>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a>
+<a name='L406'></a><a href='#L406'>406</a>
+<a name='L407'></a><a href='#L407'>407</a>
+<a name='L408'></a><a href='#L408'>408</a>
+<a name='L409'></a><a href='#L409'>409</a>
+<a name='L410'></a><a href='#L410'>410</a>
+<a name='L411'></a><a href='#L411'>411</a>
+<a name='L412'></a><a href='#L412'>412</a>
+<a name='L413'></a><a href='#L413'>413</a>
+<a name='L414'></a><a href='#L414'>414</a>
+<a name='L415'></a><a href='#L415'>415</a>
+<a name='L416'></a><a href='#L416'>416</a>
+<a name='L417'></a><a href='#L417'>417</a>
+<a name='L418'></a><a href='#L418'>418</a>
+<a name='L419'></a><a href='#L419'>419</a>
+<a name='L420'></a><a href='#L420'>420</a>
+<a name='L421'></a><a href='#L421'>421</a>
+<a name='L422'></a><a href='#L422'>422</a>
+<a name='L423'></a><a href='#L423'>423</a>
+<a name='L424'></a><a href='#L424'>424</a>
+<a name='L425'></a><a href='#L425'>425</a>
+<a name='L426'></a><a href='#L426'>426</a>
+<a name='L427'></a><a href='#L427'>427</a>
+<a name='L428'></a><a href='#L428'>428</a>
+<a name='L429'></a><a href='#L429'>429</a>
+<a name='L430'></a><a href='#L430'>430</a>
+<a name='L431'></a><a href='#L431'>431</a>
+<a name='L432'></a><a href='#L432'>432</a>
+<a name='L433'></a><a href='#L433'>433</a>
+<a name='L434'></a><a href='#L434'>434</a>
+<a name='L435'></a><a href='#L435'>435</a>
+<a name='L436'></a><a href='#L436'>436</a>
+<a name='L437'></a><a href='#L437'>437</a>
+<a name='L438'></a><a href='#L438'>438</a>
+<a name='L439'></a><a href='#L439'>439</a>
+<a name='L440'></a><a href='#L440'>440</a>
+<a name='L441'></a><a href='#L441'>441</a>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a>
+<a name='L447'></a><a href='#L447'>447</a>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a>
+<a name='L450'></a><a href='#L450'>450</a>
+<a name='L451'></a><a href='#L451'>451</a>
+<a name='L452'></a><a href='#L452'>452</a>
+<a name='L453'></a><a href='#L453'>453</a>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a>
+<a name='L463'></a><a href='#L463'>463</a>
+<a name='L464'></a><a href='#L464'>464</a>
+<a name='L465'></a><a href='#L465'>465</a>
+<a name='L466'></a><a href='#L466'>466</a>
+<a name='L467'></a><a href='#L467'>467</a>
+<a name='L468'></a><a href='#L468'>468</a>
+<a name='L469'></a><a href='#L469'>469</a>
+<a name='L470'></a><a href='#L470'>470</a>
+<a name='L471'></a><a href='#L471'>471</a>
+<a name='L472'></a><a href='#L472'>472</a>
+<a name='L473'></a><a href='#L473'>473</a>
+<a name='L474'></a><a href='#L474'>474</a>
+<a name='L475'></a><a href='#L475'>475</a>
+<a name='L476'></a><a href='#L476'>476</a>
+<a name='L477'></a><a href='#L477'>477</a>
+<a name='L478'></a><a href='#L478'>478</a>
+<a name='L479'></a><a href='#L479'>479</a>
+<a name='L480'></a><a href='#L480'>480</a>
+<a name='L481'></a><a href='#L481'>481</a>
+<a name='L482'></a><a href='#L482'>482</a>
+<a name='L483'></a><a href='#L483'>483</a>
+<a name='L484'></a><a href='#L484'>484</a>
+<a name='L485'></a><a href='#L485'>485</a>
+<a name='L486'></a><a href='#L486'>486</a>
+<a name='L487'></a><a href='#L487'>487</a>
+<a name='L488'></a><a href='#L488'>488</a>
+<a name='L489'></a><a href='#L489'>489</a>
+<a name='L490'></a><a href='#L490'>490</a>
+<a name='L491'></a><a href='#L491'>491</a>
+<a name='L492'></a><a href='#L492'>492</a>
+<a name='L493'></a><a href='#L493'>493</a>
+<a name='L494'></a><a href='#L494'>494</a>
+<a name='L495'></a><a href='#L495'>495</a>
+<a name='L496'></a><a href='#L496'>496</a>
+<a name='L497'></a><a href='#L497'>497</a>
+<a name='L498'></a><a href='#L498'>498</a>
+<a name='L499'></a><a href='#L499'>499</a>
+<a name='L500'></a><a href='#L500'>500</a>
+<a name='L501'></a><a href='#L501'>501</a>
+<a name='L502'></a><a href='#L502'>502</a>
+<a name='L503'></a><a href='#L503'>503</a>
+<a name='L504'></a><a href='#L504'>504</a>
+<a name='L505'></a><a href='#L505'>505</a>
+<a name='L506'></a><a href='#L506'>506</a>
+<a name='L507'></a><a href='#L507'>507</a>
+<a name='L508'></a><a href='#L508'>508</a>
+<a name='L509'></a><a href='#L509'>509</a>
+<a name='L510'></a><a href='#L510'>510</a>
+<a name='L511'></a><a href='#L511'>511</a>
+<a name='L512'></a><a href='#L512'>512</a>
+<a name='L513'></a><a href='#L513'>513</a>
+<a name='L514'></a><a href='#L514'>514</a>
+<a name='L515'></a><a href='#L515'>515</a>
+<a name='L516'></a><a href='#L516'>516</a>
+<a name='L517'></a><a href='#L517'>517</a>
+<a name='L518'></a><a href='#L518'>518</a>
+<a name='L519'></a><a href='#L519'>519</a>
+<a name='L520'></a><a href='#L520'>520</a>
+<a name='L521'></a><a href='#L521'>521</a>
+<a name='L522'></a><a href='#L522'>522</a>
+<a name='L523'></a><a href='#L523'>523</a>
+<a name='L524'></a><a href='#L524'>524</a>
+<a name='L525'></a><a href='#L525'>525</a>
+<a name='L526'></a><a href='#L526'>526</a>
+<a name='L527'></a><a href='#L527'>527</a>
+<a name='L528'></a><a href='#L528'>528</a>
+<a name='L529'></a><a href='#L529'>529</a>
+<a name='L530'></a><a href='#L530'>530</a>
+<a name='L531'></a><a href='#L531'>531</a>
+<a name='L532'></a><a href='#L532'>532</a>
+<a name='L533'></a><a href='#L533'>533</a>
+<a name='L534'></a><a href='#L534'>534</a>
+<a name='L535'></a><a href='#L535'>535</a>
+<a name='L536'></a><a href='#L536'>536</a>
+<a name='L537'></a><a href='#L537'>537</a>
+<a name='L538'></a><a href='#L538'>538</a>
+<a name='L539'></a><a href='#L539'>539</a>
+<a name='L540'></a><a href='#L540'>540</a>
+<a name='L541'></a><a href='#L541'>541</a>
+<a name='L542'></a><a href='#L542'>542</a>
+<a name='L543'></a><a href='#L543'>543</a>
+<a name='L544'></a><a href='#L544'>544</a>
+<a name='L545'></a><a href='#L545'>545</a>
+<a name='L546'></a><a href='#L546'>546</a>
+<a name='L547'></a><a href='#L547'>547</a>
+<a name='L548'></a><a href='#L548'>548</a>
+<a name='L549'></a><a href='#L549'>549</a>
+<a name='L550'></a><a href='#L550'>550</a>
+<a name='L551'></a><a href='#L551'>551</a>
+<a name='L552'></a><a href='#L552'>552</a>
+<a name='L553'></a><a href='#L553'>553</a>
+<a name='L554'></a><a href='#L554'>554</a>
+<a name='L555'></a><a href='#L555'>555</a>
+<a name='L556'></a><a href='#L556'>556</a>
+<a name='L557'></a><a href='#L557'>557</a>
+<a name='L558'></a><a href='#L558'>558</a>
+<a name='L559'></a><a href='#L559'>559</a>
+<a name='L560'></a><a href='#L560'>560</a>
+<a name='L561'></a><a href='#L561'>561</a>
+<a name='L562'></a><a href='#L562'>562</a>
+<a name='L563'></a><a href='#L563'>563</a>
+<a name='L564'></a><a href='#L564'>564</a>
+<a name='L565'></a><a href='#L565'>565</a>
+<a name='L566'></a><a href='#L566'>566</a>
+<a name='L567'></a><a href='#L567'>567</a>
+<a name='L568'></a><a href='#L568'>568</a>
+<a name='L569'></a><a href='#L569'>569</a>
+<a name='L570'></a><a href='#L570'>570</a>
+<a name='L571'></a><a href='#L571'>571</a>
+<a name='L572'></a><a href='#L572'>572</a>
+<a name='L573'></a><a href='#L573'>573</a>
+<a name='L574'></a><a href='#L574'>574</a>
+<a name='L575'></a><a href='#L575'>575</a>
+<a name='L576'></a><a href='#L576'>576</a>
+<a name='L577'></a><a href='#L577'>577</a>
+<a name='L578'></a><a href='#L578'>578</a>
+<a name='L579'></a><a href='#L579'>579</a>
+<a name='L580'></a><a href='#L580'>580</a>
+<a name='L581'></a><a href='#L581'>581</a>
+<a name='L582'></a><a href='#L582'>582</a>
+<a name='L583'></a><a href='#L583'>583</a>
+<a name='L584'></a><a href='#L584'>584</a>
+<a name='L585'></a><a href='#L585'>585</a>
+<a name='L586'></a><a href='#L586'>586</a>
+<a name='L587'></a><a href='#L587'>587</a>
+<a name='L588'></a><a href='#L588'>588</a>
+<a name='L589'></a><a href='#L589'>589</a>
+<a name='L590'></a><a href='#L590'>590</a>
+<a name='L591'></a><a href='#L591'>591</a>
+<a name='L592'></a><a href='#L592'>592</a>
+<a name='L593'></a><a href='#L593'>593</a>
+<a name='L594'></a><a href='#L594'>594</a>
+<a name='L595'></a><a href='#L595'>595</a>
+<a name='L596'></a><a href='#L596'>596</a>
+<a name='L597'></a><a href='#L597'>597</a>
+<a name='L598'></a><a href='#L598'>598</a>
+<a name='L599'></a><a href='#L599'>599</a>
+<a name='L600'></a><a href='#L600'>600</a>
+<a name='L601'></a><a href='#L601'>601</a>
+<a name='L602'></a><a href='#L602'>602</a>
+<a name='L603'></a><a href='#L603'>603</a>
+<a name='L604'></a><a href='#L604'>604</a>
+<a name='L605'></a><a href='#L605'>605</a>
+<a name='L606'></a><a href='#L606'>606</a>
+<a name='L607'></a><a href='#L607'>607</a>
+<a name='L608'></a><a href='#L608'>608</a>
+<a name='L609'></a><a href='#L609'>609</a>
+<a name='L610'></a><a href='#L610'>610</a>
+<a name='L611'></a><a href='#L611'>611</a>
+<a name='L612'></a><a href='#L612'>612</a>
+<a name='L613'></a><a href='#L613'>613</a>
+<a name='L614'></a><a href='#L614'>614</a>
+<a name='L615'></a><a href='#L615'>615</a>
+<a name='L616'></a><a href='#L616'>616</a>
+<a name='L617'></a><a href='#L617'>617</a>
+<a name='L618'></a><a href='#L618'>618</a>
+<a name='L619'></a><a href='#L619'>619</a>
+<a name='L620'></a><a href='#L620'>620</a>
+<a name='L621'></a><a href='#L621'>621</a>
+<a name='L622'></a><a href='#L622'>622</a>
+<a name='L623'></a><a href='#L623'>623</a>
+<a name='L624'></a><a href='#L624'>624</a>
+<a name='L625'></a><a href='#L625'>625</a>
+<a name='L626'></a><a href='#L626'>626</a>
+<a name='L627'></a><a href='#L627'>627</a>
+<a name='L628'></a><a href='#L628'>628</a>
+<a name='L629'></a><a href='#L629'>629</a>
+<a name='L630'></a><a href='#L630'>630</a>
+<a name='L631'></a><a href='#L631'>631</a>
+<a name='L632'></a><a href='#L632'>632</a>
+<a name='L633'></a><a href='#L633'>633</a>
+<a name='L634'></a><a href='#L634'>634</a>
+<a name='L635'></a><a href='#L635'>635</a>
+<a name='L636'></a><a href='#L636'>636</a>
+<a name='L637'></a><a href='#L637'>637</a>
+<a name='L638'></a><a href='#L638'>638</a>
+<a name='L639'></a><a href='#L639'>639</a>
+<a name='L640'></a><a href='#L640'>640</a>
+<a name='L641'></a><a href='#L641'>641</a>
+<a name='L642'></a><a href='#L642'>642</a>
+<a name='L643'></a><a href='#L643'>643</a>
+<a name='L644'></a><a href='#L644'>644</a>
+<a name='L645'></a><a href='#L645'>645</a>
+<a name='L646'></a><a href='#L646'>646</a>
+<a name='L647'></a><a href='#L647'>647</a>
+<a name='L648'></a><a href='#L648'>648</a>
+<a name='L649'></a><a href='#L649'>649</a>
+<a name='L650'></a><a href='#L650'>650</a>
+<a name='L651'></a><a href='#L651'>651</a>
+<a name='L652'></a><a href='#L652'>652</a>
+<a name='L653'></a><a href='#L653'>653</a>
+<a name='L654'></a><a href='#L654'>654</a>
+<a name='L655'></a><a href='#L655'>655</a>
+<a name='L656'></a><a href='#L656'>656</a>
+<a name='L657'></a><a href='#L657'>657</a>
+<a name='L658'></a><a href='#L658'>658</a>
+<a name='L659'></a><a href='#L659'>659</a>
+<a name='L660'></a><a href='#L660'>660</a>
+<a name='L661'></a><a href='#L661'>661</a>
+<a name='L662'></a><a href='#L662'>662</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">31x</span>
+<span class="cline-any cline-yes">31x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">30x</span>
+<span class="cline-any cline-yes">187x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">39x</span>
+<span class="cline-any cline-yes">39x</span>
+<span class="cline-any cline-yes">39x</span>
+<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-yes">23x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">39x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">33x</span>
+<span class="cline-any cline-yes">33x</span>
+<span class="cline-any cline-yes">33x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">31x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">27x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// 交付物/03-代码\前端\src\api.js —— 前端与后端的**唯一**通信层（第 9 阶段 T9）
+//
+// 职责（《24》第4.3节 与 第4 条任务要求）：
+//   1. 拼 URL：所有请求一律以 `/api` 开头，由 Vite dev server 代理到后端 8000；
+//   2. 解析后端信封：成功取 `{data, meta}`，失败取 `{code, message}`；
+//   3. 把 `{code, message}` 变成**可展示的错误**（`ApiError`，带 code／message／httpStatus）；
+//   4. 会话：首次访问用 `crypto.randomUUID()` 生成 `session_id` 存 `localStorage`，
+//      此后所有需要会话的请求自动带上（格式决策 6；第一版不启用登录，无登录入口）。
+//   5. 只读端点做 60 秒短期缓存 ＋ 并发合并（第 4 节）：依据真实浏览器的请求账，
+//      省掉一次会话内对**同一份不可变数据**的重复请求——省的是限流额度，不改动任何数据与呈现。
+//
+// 三条纪律：
+//   * 本文件**不含任何密钥、模型端点、数据库连接串**（硬约束 2／14）——只出现相对路径 `/api/*`。
+//   * 后端错误响应的 `message` **可直接展示**（后端已保证响应体只有 code／message，无 detail）。
+//   * `2002` 的语义是 **HTTP 200 的空结果**，不是错误：`get()` 照常返回 data，
+//     由调用方按「空结果」（不是异常）分支处理。
+&nbsp;
+const API_PREFIX = '/api'          // 后端路由前缀（不写后端主机名，交由代理转发）
+const SESSION_KEY = 'qa-console-session-id'   // localStorage 键名（仅前端本地，不含任何库名／凭据）
+&nbsp;
+// --------------------------------------------------------------------------
+// 1. 可展示的错误类型
+// --------------------------------------------------------------------------
+export class ApiError extends Error {
+  /**
+   * @param {number} code   后端错误码（1001／1002／…／9999）；网络层失败时用 0
+   * @param {string} message 可直接展示给用户的文本（来自后端 message，或本层的兜底文案）
+   * @param {number} [httpStatus] HTTP 状态码；网络层失败时 undefined
+   */
+  constructor(code, message, httpStatus) {
+    super(message)
+    this.name = 'ApiError'
+    this.code = code
+    this.httpStatus = httpStatus
+  }
+}
+&nbsp;
+// --------------------------------------------------------------------------
+// 2. 会话标识（格式决策 6）
+// --------------------------------------------------------------------------
+/** 取得（必要时生成）会话标识。首次访问用 `crypto.randomUUID()` 生成并落 localStorage。 */
+export function getSessionId() {
+  let sid = null
+  try {
+    sid = window.localStorage.getItem(SESSION_KEY)
+  } catch (e) {
+    // localStorage 被禁用（隐私模式等）：退化为内存态会话，仍可完成单页会话内的问答
+    sid = null
+  }
+  if (!sid) {
+    // crypto.randomUUID 在安全上下文（http://127.0.0.1 属安全上下文）可用；
+    // 兜底：手工拼一个 UUID v4 形态的 36 字符串，满足 question.session_id 的 CHAR(36)
+    sid = (window.crypto &amp;&amp; typeof window.crypto.randomUUID === 'function')
+      ? window.crypto.randomUUID()
+      : fallbackUuid()
+    try {
+      window.localStorage.setItem(SESSION_KEY, sid)
+    } catch (e) {
+      /* 落不了盘就用内存里的这一份，不阻断功能 */
+    }
+  }
+  return sid
+}
+&nbsp;
+/** `crypto.randomUUID` 不可用时的兜底：拼一个 UUID v4 形态的字符串（36 字符）。 */
+function fallbackUuid() {
+  const hex = '0123456789abcdef'
+  let out = ''
+  for (let i = 0; i &lt; 36; i++) {
+    if (i === 8 || i === 13 || i === 18 || i === 23) { out += '-'; continue }
+    if (i === 14) { out += '4'; continue }
+    const r = Math.floor(Math.random() * 16)
+    out += (i === 19) ? hex[(r &amp; 0x3) | 0x8] : hex[r]
+  }
+  return out
+}
+&nbsp;
+// --------------------------------------------------------------------------
+// 3. 限流（429／1004）韧性：一次性退避重试 ＋ 受限态订阅
+// --------------------------------------------------------------------------
+// 为什么加这一层（依据实测事实，不是推测）：
+//   · 后端 `RateLimitMiddleware` 是**按来源 IP 的全局滑动窗口**（窗口 60 秒／上限 60 次，
+//     仅 `/api/health` 豁免）。该参数是第 9 阶段验收门禁锁定的登记值，前端不得改它；
+//   · 一次真实浏览器走查（首屏 → 提问页 → 图谱页 → 搜两次 → 历史页 → 看一条记录）实测发出
+//     **84 次** `/api/*` 请求，其中图谱页单独约占 38 次——所以正常使用约 40 秒后整站开始 429，
+//     后端日志里 `/api/config/meta`、`/api/history`、`/api/market/quote`、
+//     `/api/graph/entities/{id}/evidence` 等**全都**被 429 拒过；
+//   · 旧行为是调用点把 429 静默吞成「（无结果）／未检索到／未接入」，用户读到的是
+//     「没有这家公司／没有这段数据」——方向性误读。
+// 因此这里只做两件事，取值一律保守：① 幂等请求的**一次、且仅一次**退避重试；
+// ② 把「正在退避」这一事实以极小的订阅接口暴露给界面，使限流**可感知**。
+// 不引入任何新的网络依赖、不新增 npm 包（对应《02》「不引入任何被排除的技术」）。
+&nbsp;
+/** 退避等待上限（毫秒）：无论 `Retry-After` 给多大，都钳到 5 秒以内（保守值）。 */
+const RETRY_WAIT_CAP_MS = 5000
+/** `Retry-After` 缺失或不可解析（如 HTTP-date 形态）时的兜底等待（毫秒）。 */
+const RETRY_WAIT_FALLBACK_MS = 1500
+/** 受限态倒计时刷新间隔（毫秒）：够界面看到秒数在走，又不至于高频重渲染。 */
+const THROTTLE_TICK_MS = 250
+&nbsp;
+const throttleSubs = new Set()   // 订阅者（界面的限流横幅等）；订阅方的异常不影响请求主流程
+let throttleUntil = 0            // 受限态的「解除时刻」（Date.now() 毫秒）；0＝未受限
+let throttleEpisodeStart = 0     // 本轮受限态的起点：用于把整轮等待钳在 5 秒内（不叠加）
+let throttleTick = null          // 受限期间的单一定时器：并发退避共用同一个，不各起一个
+let throttleLastSec = 0          // 已广播过的整秒读数：只在读数变化时才广播，避免无谓重渲染
+let throttleWaiters = 0          // 正在退避等待的请求数：&gt;0 时不因「别的请求成功」而抹掉受限态
+&nbsp;
+/**
+ * 只读快照。**不含任何敏感信息**（无后端地址、无密钥、无库名／模型名），
+ * `message` 面向用户、可直接展示。
+ * @returns {{active:boolean, retryAfterSeconds:number, message:string}}
+ */
+export function throttleState() {
+  const left = throttleUntil - Date.now()
+  const active = left &gt; 0
+  return {
+    active,
+    // 受限期间恒 ≥1（向上取整，界面不会显示「还需 0 秒」）；未受限为 0
+    retryAfterSeconds: active ? <span class="branch-0 cbranch-no" title="branch not covered" >Math.max(1, Math.ceil(left / 1000)) </span>: 0,
+    message: active
+      ? <span class="branch-0 cbranch-no" title="branch not covered" >'每分钟请求数已达上限，正在自动重试；此期间的空白不代表数据不存在，不是数据缺失。'</span>
+      : '',
+  }
+}
+&nbsp;
+/**
+ * 订阅受限态变化：订阅时立即回放一次当前态，此后仅在「进入／离开受限态」或「整秒读数变化」
+ * 时回调。
+ * @param {(s:{active:boolean,retryAfterSeconds:number,message:string})=&gt;void} fn
+ * @returns {() =&gt; void} 取消订阅函数
+ */
+export function <span class="fstat-no" title="function not covered" >onThrottleChange(</span>fn) {
+<span class="cstat-no" title="statement not covered" >  if (typeof fn !== 'function') <span class="cstat-no" title="statement not covered" >return <span class="fstat-no" title="function not covered" >()</span> =&gt; {}</span></span>
+<span class="cstat-no" title="statement not covered" >  throttleSubs.add(fn)</span>
+<span class="cstat-no" title="statement not covered" >  try { <span class="cstat-no" title="statement not covered" >fn(throttleState()) </span>} catch (e) { /* 订阅方自己的异常不该拖垮请求 */ }</span>
+<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >()</span> =&gt; { <span class="cstat-no" title="statement not covered" >throttleSubs.delete(fn) </span>}</span>
+}
+&nbsp;
+/** 广播当前受限态；读数未变则不广播（受限期间读数每秒一定在变）。 */
+function broadcastThrottle() {
+  const snap = throttleState()
+  const sec = snap.active ? <span class="branch-0 cbranch-no" title="branch not covered" >snap.retryAfterSeconds </span>: 0
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (sec === throttleLastSec) return
+<span class="cstat-no" title="statement not covered" >  throttleLastSec = sec</span>
+<span class="cstat-no" title="statement not covered" >  for (const fn of Array.from(throttleSubs)) {</span>
+<span class="cstat-no" title="statement not covered" >    try { <span class="cstat-no" title="statement not covered" >fn(snap) </span>} catch (e) { /* 同上：订阅方异常只被吞掉，不影响通信层 */ }</span>
+  }
+}
+&nbsp;
+/**
+ * 进入受限态并等待相应时长。
+ * **不叠加**：并发退避只共享一个「解除时刻」与一个定时器，且整轮受限态被钳在
+ * `RETRY_WAIT_CAP_MS`（5 秒）以内——不会出现 429 一来就把等待一段段累加上去的情况。
+ * 等待期间若受限态被提前解除（例如到期由定时器收尾、或没有其它等待者时被一次成功请求清零），
+ * 循环会立刻放行。
+ */
+async function <span class="fstat-no" title="function not covered" >waitThrottleRelease(</span>waitMs) {
+  const now = <span class="cstat-no" title="statement not covered" >Date.now()</span>
+<span class="cstat-no" title="statement not covered" >  if (throttleUntil &lt;= now) <span class="cstat-no" title="statement not covered" >throttleEpisodeStart = now </span></span>  // 新一轮受限态
+  const target = <span class="cstat-no" title="statement not covered" >now + Math.max(0, waitMs)</span>
+<span class="cstat-no" title="statement not covered" >  if (target &gt; throttleUntil) <span class="cstat-no" title="statement not covered" >throttleUntil = target</span></span>
+  const episodeCap = <span class="cstat-no" title="statement not covered" >throttleEpisodeStart + RETRY_WAIT_CAP_MS</span>
+<span class="cstat-no" title="statement not covered" >  if (throttleUntil &gt; episodeCap) <span class="cstat-no" title="statement not covered" >throttleUntil = episodeCap</span></span>
+<span class="cstat-no" title="statement not covered" >  if (!throttleTick) {</span>
+<span class="cstat-no" title="statement not covered" >    throttleTick = setInterval(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      if (Date.now() &gt;= throttleUntil) <span class="cstat-no" title="statement not covered" >exitThrottle()</span></span>
+      else <span class="cstat-no" title="statement not covered" >broadcastThrottle()</span>
+    }, THROTTLE_TICK_MS)
+  }
+<span class="cstat-no" title="statement not covered" >  throttleWaiters += 1</span>
+<span class="cstat-no" title="statement not covered" >  broadcastThrottle()</span>
+<span class="cstat-no" title="statement not covered" >  while (Date.now() &lt; throttleUntil) {</span>
+    const left = <span class="cstat-no" title="statement not covered" >throttleUntil - Date.now()</span>
+<span class="cstat-no" title="statement not covered" >    await new Promise(<span class="fstat-no" title="function not covered" >(r</span>) =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(r, Math.min(left, THROTTLE_TICK_MS)))</span></span>
+  }
+<span class="cstat-no" title="statement not covered" >  throttleWaiters -= 1</span>
+  // 退避结束即离开受限态（无论随后的重试是否成功）
+<span class="cstat-no" title="statement not covered" >  if (throttleWaiters &lt;= 0) <span class="cstat-no" title="statement not covered" >exitThrottle()</span></span>
+}
+&nbsp;
+/** 离开受限态：清掉共享定时器并广播一次。 */
+function exitThrottle() {
+  throttleUntil = 0
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (throttleTick) { <span class="cstat-no" title="statement not covered" >clearInterval(throttleTick); <span class="cstat-no" title="statement not covered" ></span>throttleTick = null </span>}
+  broadcastThrottle()
+}
+&nbsp;
+/**
+ * 「有请求成功了」时调用。实测场景里图谱页会并发发出几十条请求：若一次限流退避期间
+ * 任何一条其它请求成功就立刻抹掉受限态，横幅会在被限流的一瞬间就被清掉、根本看不见——
+ * 所以只在**没有请求正在退避等待**时才离开受限态；有等待者的那一轮，由退避结束来收尾。
+ */
+function exitThrottleIfIdle() {
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (throttleWaiters &lt;= 0) exitThrottle()
+}
+&nbsp;
+/**
+ * 由响应头 `Retry-After` 计算退避时长：按秒解析 → 毫秒后**上限钳到 5 秒**；
+ * 缺失／不可解析（含 HTTP-date 形态）时用 1.5 秒兜底。
+ */
+function <span class="fstat-no" title="function not covered" >retryWaitMs(</span>rawRetryAfter) {
+  const sec = <span class="cstat-no" title="statement not covered" >Number(rawRetryAfter)</span>
+<span class="cstat-no" title="statement not covered" >  if (!Number.isFinite(sec) || sec &lt;= 0) <span class="cstat-no" title="statement not covered" >return RETRY_WAIT_FALLBACK_MS</span></span>
+<span class="cstat-no" title="statement not covered" >  return Math.min(sec * 1000, RETRY_WAIT_CAP_MS)</span>
+}
+&nbsp;
+/** 读响应头：测试替身与个别环境可能没有 `headers`，缺失一律回 null。 */
+function headerValue(resp, name) {
+  return (resp &amp;&amp; resp.headers &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >typeof resp.headers.get === 'function')</span>
+    ? <span class="branch-0 cbranch-no" title="branch not covered" >resp.headers.get(name) </span>: null
+}
+&nbsp;
+/**
+ * 可重试判据——**只对「重试不会产生副作用或额外成本」的请求重试**：
+ *   · `GET`（本文件绝大多数接口）；
+ *   · 任何带 `body.query` 的请求（本项目的「查询型 POST」都走这个字段）；
+ *   · **`POST /api/qa/ask`**（2026-10-17 用户测试后补）。
+ *
+ * 为什么把 `/qa/ask` 也算进来（有实测依据，不是想当然）：
+ *   429／1004 **是限流中间件在 `main.py:182-194` 直接拒掉的**，`return response` 发生在
+ *   `await call_next(request)` **之前**——也就是说被限流的这次请求**根本没有进入业务逻辑、
+ *   没有触发任何模型调用**（模型调用在 `services/qa_service.ask` 里）。所以对「被限流」的
+ *   `/qa/ask` 重试一次，既不会重复扣费，也不会重复落库。
+ *
+ * 反过来，**非限流**的失败（超时 3002／模型侧错误）**仍然绝不重试**：那种情况下模型可能已经
+ * 调用过、`qa_service` 也可能已经落库，重试会带来重复成本与重复记录。判据在 `sendRequest()`
+ * 里由「`resp.status === 429 || code === 1004`」把住，与这里的分档是两道独立闸门。
+ *
+ * 实测背景：最终一轮 UAT 里 `/qa/ask` 撞上限流后，旧行为是按钮卡在「生成中…」达 481.8 s
+ * （脚本 8 分钟兜底才结束），用户完全不知道要重试——这是把「可重试」判得过窄的直接后果。
+ */
+function isIdempotentRequest(method, body, path) {
+  const m = String(method).toUpperCase()
+  if (m === 'GET') return true
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (body &amp;&amp; typeof body === 'object' &amp;&amp; Object.prototype.hasOwnProperty.call(body, 'query')) <span class="cstat-no" title="statement not covered" >return true</span>
+  return m === 'POST' &amp;&amp; typeof path === 'string' &amp;&amp; /^\/qa\/ask\/?$/.test(path)
+}
+&nbsp;
+// --------------------------------------------------------------------------
+// 4. 不可变只读端点的短期缓存（TTL ＋ 容量上限 ＋ LRU ＋ 并发合并）
+// --------------------------------------------------------------------------
+// 为什么加这一层（依据实测事实，不是推测）：
+//   · 后端 `RateLimitMiddleware` 是**按来源 IP 的全局滑动窗口**（60 次／60 秒，仅
+//     `/api/health` 豁免），整站共用一份额度。`测试/uat/测请求预算.mjs` 在真实浏览器里
+//     量到一次完整走查共发出 **75 次** `/api/*`（①首屏 5 ②提问页 5 ③图谱页 16
+//     ④图谱页内搜一次实体 28 ⑤再搜一次 1 ⑥历史页 14 ⑦点开一条 6），超出窗口 15 次、
+//     实测 **19 条 429**；逐页明细见 `测试/uat/证据/优化前/请求预算.json`；
+//   · 其中大量是同一次会话里对**同一份不可变数据**的重复请求：
+//       - 第 ③ 步 16 次里，`GET /api/graph/events/EVT-0288…EVT-0842` 这 7 个事件详情各 1 次
+//         （`GraphView.vue` 的 `prefetchEvents` 为时间轴落点拉事件时间）；
+//       - 第 ④ 步 28 次里，`/api/graph/entities/600519`、`/api/graph/entities/600519/evidence`、
+//         `/api/graph/entities/600519/neighbors`、`/api/graph/paths` 与同一批 7 个 `EVT-*`
+//         **各自又被完整请求了一遍**（第 ③ 步刚刚请求过、载荷一模一样，间隔只有几秒）；
+//     这些端点返回的都是**落库的只读数据**（一次会话内不会变），故只给它们做「短期记忆」，
+//     其余端点一律不缓存（负向口径见 `CACHEABLE_READ_PATH_PATTERNS` 下方注释）。
+//
+// 四条保守取值（全部可核对）：
+//   · TTL ＝ 60 秒（与后端限流窗口同量级：覆盖一次走查里的重复请求，又不至于长期藏住更新）；
+//   · 容量上限 ＝ 200 条，超限按「最久未使用」（LRU）淘汰；
+//   · **失败绝不入缓存**：429／1004／500／非 JSON／网络层失败一律不写缓存，被缓存的只有
+//     成功信封里的 `data`——空结果（2002）与字段缺失照原始载荷原样返回，不改写、不补写；
+//   · 只对 `GET` 生效，且**任何带 `body` 的请求不进缓存**。
+// 与第 3 节的关系：缓存命中时根本不发请求（连退避都不会触发）；未命中时走的仍是同一条
+// `sendRequest` 主干（限流退避重试一次 ＋ 受限态订阅的语义原样保留，两件事互不冲突）。
+&nbsp;
+/** 缓存 TTL（毫秒）：60 秒，与后端限流窗口（60 次／60 秒）同量级。 */
+const CACHE_TTL_MS = 60 * 1000
+/** 缓存容量上限（条）：超出时淘汰「最久未使用」的一条。 */
+const CACHE_MAX_ENTRIES = 200
+&nbsp;
+/** 「未命中」哨兵：`data` 本身允许是 null，不能用 null 表示未命中。 */
+const CACHE_MISS = Symbol('cache-miss')
+&nbsp;
+/**
+ * 可缓存的**只读端点白名单**：逐条按 `path`（**不含 query string**）整串锚定匹配。
+ * 判据按 path、缓存键却用「完整 URL」——同一个 path 带上不同 query（例如
+ * `/graph/entities/{id}/evidence?depth=1` 与 `depth=2`）是**不同的**数据，必须分开缓存。
+ */
+const CACHEABLE_READ_PATH_PATTERNS = [
+  // 实体详情：严格三段 `/graph/entities/{id}`。实体搜索列表 `/graph/entities?keyword=…`
+  // 没有第四段、匹配不到它——搜索必须始终打真实接口（后端数据集更新要立刻看得见）。
+  /^\/graph\/entities\/[^/]+$/,
+  // 一跳邻居：实测第 ④ 步对该路径重复请求 2 次
+  /^\/graph\/entities\/[^/]+\/neighbors$/,
+  // 实体证据：实测第 ④ 步对该路径重复请求 2 次
+  /^\/graph\/entities\/[^/]+\/evidence$/,
+  // 事件详情：严格 `/graph/events/{id}`；事件列表 `/graph/events?event_type=…` 匹配不到它。
+  // 实测第 ③ 步 7 次、第 ④ 步同一批又是 14 次（7 个 id 各被再请求 2 次）。
+  /^\/graph\/events\/[^/]+$/,
+  // 多跳路径（实测第 ④ 步重复请求 2 次；参数不同＝不同缓存键）
+  /^\/graph\/paths$/,
+  // 正文块
+  /^\/documents\/[^/]+\/chunks\/[^/]+$/,
+  // 回答的图谱路径（新答案入库由 clearApiCache() 兜底失效，见其注释）
+  /^\/evidence\/[^/]+\/graph-path$/,
+]
+// 白名单之外的端点**一律不缓存**（负向口径逐条写明，避免将来「顺手加一条」）：
+//   · `/graph/entities`（实体搜索列表）：关键词检索必须始终打真实接口；
+//   · `/graph/events`（事件列表）：同上，列表查询要反映当前库状态；
+//   · `/qa/ask`（一次模型调用，有成本）、`/qa/answers/*`（本条改动未登记为白名单端点）；
+//   · `/history`、`/history/*`（按会话分页，会随新提问变化）；
+//   · `/market/*`（实时行情／公告／新闻：绝不能拿缓存假装实时）；
+//   · `/config/meta`（数据截至时间要如实反映当前库）、`/health`（后端状态）。
+&nbsp;
+/**
+ * 只读端点判据：`path` 命中白名单、方法是 `GET`、且**不带 `body`**。
+ * 三个条件缺一不可，判据只读入参、无副作用。
+ */
+function isCacheableReadRequest(path, method, body) {
+  if (body !== undefined) return false
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (String(method).toUpperCase() !== 'GET') <span class="cstat-no" title="statement not covered" >return false</span>
+  return CACHEABLE_READ_PATH_PATTERNS.some((re) =&gt; re.test(path))
+}
+&nbsp;
+// 缓存表（键＝完整请求 URL）与在途登记表（键＝完整请求 URL）。
+// Map 的插入序即「最近使用」序：取用时**先 delete 再 set** 把该条提到队尾，
+// 于是队首恒为「最久未使用」，超容量时淘汰队首即可（这就是 LRU 的实现，不引第三方库）。
+const readCache = new Map()     // url -&gt; { data, expiresAt }
+const readInflight = new Map()  // url -&gt; Promise（同一 URL 尚未返回的请求只有一个）
+// 缓存代际：clearApiCache() 自增。用于挡住「清空之前发起、清空之后才返回」的在途响应，
+// 避免它把失效前的旧数据又回填进清空后的缓存。
+let cacheGeneration = 0
+&nbsp;
+/**
+ * 取缓存：命中且未过期则返回 `data`（并把该条提到队尾实现 LRU 提位）；否则返回 `CACHE_MISS`。
+ * 过期条目在读取时惰性删除（不等定时器，也不起定时器）。
+ */
+function cacheTake(url) {
+  const hit = readCache.get(url)
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (!hit) return CACHE_MISS
+<span class="cstat-no" title="statement not covered" >  if (Date.now() &gt;= hit.expiresAt) { <span class="cstat-no" title="statement not covered" >readCache.delete(url); <span class="cstat-no" title="statement not covered" ></span>return CACHE_MISS </span>}</span>
+<span class="cstat-no" title="statement not covered" >  readCache.delete(url)</span>
+<span class="cstat-no" title="statement not covered" >  readCache.set(url, hit)</span>
+<span class="cstat-no" title="statement not covered" >  return hit.data</span>
+}
+&nbsp;
+/** 写缓存（**只在成功时调用**）：超容量时按 LRU 淘汰队首（最久未使用）的那一条。 */
+function cachePut(url, data) {
+  readCache.delete(url)
+  readCache.set(url, { data, expiresAt: Date.now() + CACHE_TTL_MS })
+  while (readCache.size &gt; CACHE_MAX_ENTRIES) {
+<span class="cstat-no" title="statement not covered" >    readCache.delete(readCache.keys().next().value)</span>
+  }
+}
+&nbsp;
+/**
+ * 清空整个只读端点缓存，返回被清掉的条目数。
+ *
+ * 用途：① 调试（控制台里直接调，看「现在到底存了什么、清掉多少条」）；
+ *       ② 将来给界面加「手动刷新」入口时，由该入口调用本函数做整表失效。
+ * 自动清空的时机只有一个：**一次成功的 `POST /api/qa/ask`**（新答案入库后
+ * `/evidence/{answer_id}/graph-path` 之类的只读数据可能变，见 `sendRequest` 里的调用点）。
+ * `GET /history*` 成功**不**清空——历史列表本身不在缓存白名单里，清不清看不到差别；
+ * 按「判断不了就不自动清」的保守口径，只认 `POST /api/qa/ask` 这一条。
+ *
+ * 实现口径：只清缓存表，**不**动在途登记表 `readInflight`——
+ *   · 在途响应由代际号（`cacheGeneration`）挡住，不会回填到清空后的缓存里；
+ *   · 若连在途登记一起清，同一路径的并发请求会立刻再发一次 fetch，与「并发合并」的初衷相反。
+ */
+export function clearApiCache() {
+  const cleared = readCache.size
+  readCache.clear()
+  cacheGeneration += 1
+  return cleared
+}
+&nbsp;
+/**
+ * 发起（或复用在途的）一次可缓存只读请求——第 4 节的核心：**并发合并**。
+ * 同一 URL 在首次请求尚未返回时又来了请求，直接复用同一个 Promise，**不再发一次 fetch**
+ * （实测第 ④ 步的重复请求就发生在第 ③ 步之后的几秒内，缓存与合并两者都要有才够用）。
+ * 失败（含 429／1004／500）由 `sendRequest` 原样抛出 → **不写缓存**，下一次请求重新打接口。
+ * 真正的网络请求在 `sendRequest`（第 5 节）：本函数只负责查在途表、回填缓存、撤登记。
+ */
+function startCacheableRead(url, method, init, idempotent) {
+  const pending = readInflight.get(url)
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (pending) <span class="cstat-no" title="statement not covered" >return pending</span>
+  const gen = cacheGeneration
+  const p = sendRequest(url, method, init, idempotent, false).then((data) =&gt; {
+    // 只有仍属同一代际的响应才回填：clearApiCache() 之后返回的在途响应不写回旧数据
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (gen === cacheGeneration) cachePut(url, data)
+    return data
+  })
+  const settle = () =&gt; { <span class="missing-if-branch" title="else path not taken" >E</span>if (readInflight.get(url) === p) readInflight.delete(url) }
+  p.then(settle, settle)   // 成功／失败都要撤登记，否则这条 URL 会被永久合并到一个已结束的 Promise
+  readInflight.set(url, p)
+  return p
+}
+&nbsp;
+/**
+ * 缓存命中／并发合并命中时返回**浅拷贝**，避免多个调用方共享同一个顶层对象引用。
+ * 依据：现有调用方（GraphView／AnswerView／HistoryView 等）实测都只读渲染，但「所有调用方
+ * 永远只读」这一点本文件无法逐一确认，故宁可多一次浅拷贝，也不让任何调用方把缓存载荷改脏。
+ * 边界（如实说明）：只做**顶层**浅拷贝（对象展开／数组 slice），嵌套对象仍是共享引用——
+ * 不深拷贝是为了避免大载荷上的无谓开销；调用方要就地改深层字段时应先自行深拷贝。
+ * null／数字／字符串等非对象原样返回（结构与「再打一次接口拿到的 data」等价）。
+ */
+function copyReadData(data) {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (Array.isArray(data)) <span class="cstat-no" title="statement not covered" >return data.slice()</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (data &amp;&amp; typeof data === 'object') <span class="cstat-no" title="statement not covered" >return { ...data }</span>
+  return data
+}
+&nbsp;
+// --------------------------------------------------------------------------
+// 5. 核心请求
+// --------------------------------------------------------------------------
+/** 把查询参数对象拼成 query string（跳过 undefined／null；空串保留，交由后端判非法）。 */
+function qs(params) {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!params) <span class="cstat-no" title="statement not covered" >return ''</span>
+  const parts = []
+  for (const [k, v] of Object.entries(params)) {
+    if (v === undefined || v === null) continue
+    parts.push(`${encodeURIComponent(k)}=${encodeURIComponent(String(v))}`)
+  }
+  return parts.length ? `?${parts.join('&amp;')}` : ''
+}
+&nbsp;
+/**
+ * 真正发一次请求：返回后端信封里的 `data`。
+ * 失败（HTTP 非 2xx／响应体含 code）时抛 `ApiError`，其 `message` 可直接展示。
+ * 限流（HTTP 429 或 `code === 1004`）且请求幂等时，先退避等待再**重试一次**（见第 3 节）。
+ * 本函数（含重试语义与全部错误文案）与加入第 4 节缓存层之前**逐字一致**：只搬不改，
+ * 缓存层只在它**外面**做「查表／合并并发」，不改动它内部的任何判据。
+ *
+ * @param {string} url 已拼好的相对 URL（形如 `/api/config/meta?…`）
+ * @param {string} method HTTP 方法（用于错误文案）
+ * @param {object} init fetch 的第二个参数（headers／body）
+ * @param {boolean} idempotent 是否允许「限流 → 退避 → 重试一次」（判据见 isIdempotentRequest）
+ * @param {boolean} clearsReadCacheOnSuccess 成功时是否清空只读缓存（只有 `POST /qa/ask` 为真）
+ */
+async function sendRequest(url, method, init, idempotent, clearsReadCacheOnSuccess) {
+  for (let attempt = 0; ; attempt++) {
+    let resp
+    try {
+      resp = await fetch(url, init)
+    } catch (e) {
+      // 网络层失败（后端未起／代理不通／断网）：给一个可展示的错误，code 用 0 标记「非后端错误码」
+      throw new ApiError(0, `无法连接后端服务（${method} ${url}）：${e.message || <span class="branch-1 cbranch-no" title="branch not covered" >e}</span>`, undefined)
+    }
+&nbsp;
+    // 响应体**只读一次**：下面的限流判据与错误 message 都复用这一份解析结果，
+    // 不再二次读 body（重试时二次 `resp.text()` 只会拿到空串，反而误判成「空结果」）。
+    let payload = null
+    const text = await resp.text()
+    if (text) {
+      try {
+        payload = JSON.parse(text)
+      } catch (e) {
+        // 后端异常时偶发的非 JSON 响应（如代理 502 页面）：原文摘要进错误消息
+        throw new ApiError(0, `后端返回了非 JSON 响应（HTTP ${resp.status}）：${text.slice(0, 300)}`,
+          resp.status)
+      }
+    }
+&nbsp;
+    // 错误响应：HTTP 非 2xx，或响应体带 `code` 字段（后端错误一律 {code, message}）
+    if (!resp.ok || (payload &amp;&amp; typeof payload.code === 'number')) {
+      const code = payload &amp;&amp; typeof payload.code === 'number' ? payload.code : resp.status
+      // 限流识别：HTTP 429，或后端错误码 1004（`RateLimitMiddleware` 的固定响应体）。
+      // 判据全部取自上面**已解析**的 status／payload，不碰响应体。
+      <span class="missing-if-branch" title="if path not taken" >I</span>if ((resp.status === 429 || code === 1004) &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >idempotent </span>&amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >attempt === 0)</span> {
+<span class="cstat-no" title="statement not covered" >        await waitThrottleRelease(retryWaitMs(headerValue(resp, 'Retry-After')))</span>
+<span class="cstat-no" title="statement not covered" >        continue </span>  // 一次、且仅一次：第二次的响应无论成败都按下文原样处理（抛错文案与现状一致）
+      }
+      let message = (payload &amp;&amp; payload.message) || `请求失败（HTTP ${resp.status}）`
+      // 2026-10-14：1004 限流时把 Retry-After 秒数带给用户（后端限流响应带该头），
+      // 避免「只说超限、不说要等多久」的体验空洞。
+      const retryAfter = Number(headerValue(resp, 'Retry-After'))
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (code === 1004 &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >Number.isFinite(retryAfter) </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >retryAfter &gt; 0)</span> {
+<span class="cstat-no" title="statement not covered" >        message += `，请约 ${Math.ceil(retryAfter)} 秒后重试`</span>
+      }
+      throw new ApiError(code, message, resp.status)
+    }
+&nbsp;
+    // 成功响应：取 data（后端成功信封为 {data, meta}）；并按订阅语义离开受限态
+    exitThrottleIfIdle()
+    // 新答案入库（`POST /api/qa/ask` 成功）：只读缓存里 `/evidence/*/graph-path`
+    // 之类的条目可能已过期，整表清空（保守做法：只认这一条，见 clearApiCache 注释）。
+    if (clearsReadCacheOnSuccess) clearApiCache()
+    return payload ? payload.data : null
+  }
+}
+&nbsp;
+/**
+ * 统一请求入口：返回后端信封里的 `data`（失败抛 `ApiError`，`message` 可直接展示）。
+ *
+ * 两条主干：
+ *   · **可缓存只读端点**（第 4 节白名单，且是 GET、不带 body）：先查 60 秒短期缓存；
+ *     未命中时若同一 URL 已有在途请求，就复用同一个 Promise（并发合并，不再发 fetch）；
+ *     返回前一律过一遍浅拷贝（见 `copyReadData` 的边界说明）。
+ *   · 其余端点：与改动前**完全一致**，直接走 `sendRequest`（含限流退避重试一次）。
+ *
+ * @param {string} path  形如 `/qa/ask`（相对 `/api`）
+ * @param {{method?:string, body?:object, params?:object, withSession?:boolean}} [opts]
+ */
+export async function request(path, opts = {}) {
+  const { method = 'GET', body, params, withSession = false } = opts
+  const query = { ...(params || {}) }
+  if (withSession) query.session_id = getSessionId()
+  const url = `${API_PREFIX}${path}${qs(query)}`
+&nbsp;
+  const init = { method, headers: {} }
+  if (body !== undefined) {
+    init.headers['Content-Type'] = 'application/json'
+    init.body = JSON.stringify(body)
+  }
+&nbsp;
+  // 可重试判据在循环外算一次：整条请求最多两次尝试，第二次只可能由「第一次被限流」触发。
+  // 2026-10-17：判据现在也接受 `POST /api/qa/ask`（限流是在中间件层拒的，没进业务逻辑、没调模型，
+  // 见 isIdempotentRequest 的注释）；因此必须把 path 传进去，否则这一档永远走不到。
+  const idempotent = isIdempotentRequest(method, body, path)
+  // 一次成功的 `POST /api/qa/ask` ＝ 新答案已入库：只读缓存可能已过期，整表清空
+  const clearsReadCacheOnSuccess = String(method).toUpperCase() === 'POST' &amp;&amp; path === '/qa/ask'
+&nbsp;
+  if (!isCacheableReadRequest(path, method, body)) {
+    // 不在白名单／带 body／非 GET：不缓存、不合并，行为与改动前一致
+    return sendRequest(url, method, init, idempotent, clearsReadCacheOnSuccess)
+  }
+&nbsp;
+  const cached = cacheTake(url)
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (cached !== CACHE_MISS) <span class="cstat-no" title="statement not covered" >return copyReadData(cached)</span>
+  return copyReadData(await startCacheableRead(url, method, init, idempotent))
+}
+&nbsp;
+/** 成功信封里的 `meta`（dataset_version／data_cutoff_time）；供顶栏显示数据截至。 */
+export async function requestMeta(path, opts = {}) {
+  const query = { ...((opts &amp;&amp; opts.params) || {}) }
+  if (opts &amp;&amp; opts.withSession) query.session_id = getSessionId()
+  const url = `${API_PREFIX}${path}${qs(query)}`
+  const resp = await fetch(url, { method: (opts &amp;&amp; opts.method) || 'GET' })
+  const text = await resp.text()
+  const payload = text ? JSON.parse(text) : <span class="branch-1 cbranch-no" title="branch not covered" >null</span>
+  if (!resp.ok || (payload &amp;&amp; typeof payload.code === 'number')) {
+    throw new ApiError(payload &amp;&amp; payload.code, (payload &amp;&amp; payload.message) || <span class="branch-2 cbranch-no" title="branch not covered" >`HTTP ${resp.status}`,</span>
+      resp.status)
+  }
+  return { data: payload ? payload.data : <span class="branch-1 cbranch-no" title="branch not covered" >null,</span> meta: payload ? payload.meta : <span class="branch-1 cbranch-no" title="branch not covered" >null </span>}
+}
+&nbsp;
+// --------------------------------------------------------------------------
+// 6. 接口清单（与后端表 4-13 的路径一一对应）
+// --------------------------------------------------------------------------
+&nbsp;
+// —— 问答与配置（api\qa.py）——
+/** POST /api/qa/ask —— 提问（固定 C 组）。体只允许 {question, session_id}（硬约束 9）。 */
+export function askQuestion(question) {
+  return request('/qa/ask', { method: 'POST', body: { question, session_id: getSessionId() } })
+}
+/** GET /api/qa/answers/{answer_id} —— 单条回答（含证据与图谱路径）。 */
+export function getAnswer(answerId) {
+  return request(`/qa/answers/${encodeURIComponent(answerId)}`)
+}
+/** GET /api/config/meta —— 只读元信息（含 data_cutoff_time）。 */
+export function getConfigMeta() {
+  return requestMeta('/config/meta')
+}
+&nbsp;
+// —— 证据与原文（api\evidence.py）——
+/** GET /api/evidence/{answer_id} —— 四类分组计数 ＋ 证据明细。 */
+export function getEvidence(answerId) {
+  return request(`/evidence/${encodeURIComponent(answerId)}`)
+}
+/** GET /api/evidence/{answer_id}/graph-path —— is_graph_extended／paths／display_mode。 */
+export function getGraphPath(answerId) {
+  return request(`/evidence/${encodeURIComponent(answerId)}/graph-path`)
+}
+/** GET /api/documents/{doc_id}/chunks/{chunk_id} —— 正文与相邻块。 */
+export function getChunk(docId, chunkId) {
+  return request(`/documents/${encodeURIComponent(docId)}/chunks/${encodeURIComponent(chunkId)}`)
+}
+&nbsp;
+// —— 历史记录（api\history.py）——
+/** GET /api/history —— 按会话分页列出（强制带 session_id）。 */
+export function listHistory(page = 1, pageSize = 20) {
+  return request('/history', { params: { page, page_size: pageSize }, withSession: true })
+}
+/** GET /api/history/{question_id} —— 回看一条（只还原三表内容，不重渲染图谱路径）。 */
+export function getHistoryDetail(questionId) {
+  return request(`/history/${encodeURIComponent(questionId)}`, { withSession: true })
+}
+&nbsp;
+// —— 图谱（api\graph.py）——
+/**
+ * GET /api/graph/entities —— 按 keyword／type 查实体（实体搜索列表，**不在缓存白名单**）。
+ *
+ * 参数名口径（2026-10-17 复核，结论：本函数**无需改动**）：后端只认 `page`／`page_size`，
+ * 未定义参数（如旧调用方传的 `limit: 8`）会被后端直接忽略、退化成默认页——实测
+ * `GET /api/graph/entities?keyword=宁德时代&amp;limit=8` 实返 `page_size: 20`。本函数对 `params`
+ * 是**原样透传**（既不白名单过滤、也不做 `limit→page_size` 的隐式改写：改写会凭空发明一个
+ * 调用方没写的语义，属越权），参数名正确与否由调用方负责；GraphView 已改用 `page/page_size`。
+ */
+export function listEntities(params = {}) {
+  return request('/graph/entities', { params })
+}
+/** GET /api/graph/entities/{node_id}/neighbors —— 一跳邻居。 */
+export function getNeighbors(nodeId, params = {}) {
+  return request(`/graph/entities/${encodeURIComponent(nodeId)}/neighbors`, { params })
+}
+/** GET /api/graph/paths —— 多跳路径（from_node ＋ to_node 或 relation、hop）。 */
+export function getPaths(params = {}) {
+  return request('/graph/paths', { params })
+}
+/** GET /api/graph/events —— 按事件类型／股票代码／时间窗查事件。 */
+export function listEvents(params = {}) {
+  return request('/graph/events', { params })
+}
+/** GET /api/graph/events/{event_id} —— 事件详情（参与者／发布机构／政策／多来源证据）。 */
+export function getEventDetail(eventId) {
+  return request(`/graph/events/${encodeURIComponent(eventId)}`)
+}
+/**
+ * GET /api/graph/entities/{node_id} —— 单个实体详情。
+ * 返回 `{node{node_id,label,name,stock_code}, properties, property_keys, property_notes,
+ * degree{out,in_,total}, counts{neighbors,relations,documents,chunks}, params, scope, source}`。
+ * 「实体档案」块直接渲染 properties（键序＝property_keys），**不派生、不推测**。
+ */
+export function getEntity(nodeId) {
+  return request(`/graph/entities/${encodeURIComponent(nodeId)}`)
+}
+/**
+ * GET /api/graph/entities/{node_id}/evidence —— 实体证据（depth=1 一跳 / 2 两跳）。
+ * 返回 `{node, counts{neighbors,relations,documents,chunks}, documents[]{doc_id,title,source,
+ * publish_time,url,category,support_relations,missing,chunks[]{chunk_id,chunk_index,
+ * relations[]{relation,neighbor,role,confidence}}}, documents_total, chunks_total,
+ * relations_without_evidence[]{relation,neighbor,note}, depth, params, scope}`。
+ */
+export function getEntityEvidence(nodeId, depth = 1, params = {}) {
+  return request(`/graph/entities/${encodeURIComponent(nodeId)}/evidence`,
+    { params: { depth, ...params } })
+}
+&nbsp;
+// —— 实时数据区（api\market.py · 四条只读接口 · scope=display_only）——
+// 三条纪律：只作展示、不进问答证据链；外部源不可达时 connected=false 仍返回 HTTP 200；
+// 页面按 connected／reason **如实显示「未接入」**，绝不编造价格／涨跌幅／新闻。
+/** GET /api/market/quote —— 实时行情（codes 缺省取后端默认股）。 */
+export function getMarketQuote(codes) {
+  return request('/market/quote', { params: codes ? { codes } : {} })
+}
+/** GET /api/market/announcements —— 个股公告（code 必填）。 */
+export function getMarketAnnouncements(code, params = {}) {
+  return request('/market/announcements', { params: { code, ...params } })
+}
+/** GET /api/market/news —— 个股新闻（keyword 必填）。 */
+export function getMarketNews(keyword, params = {}) {
+  return request('/market/news', { params: { keyword, ...params } })
+}
+/** GET /api/market/reports —— 语料内近一周文档（不依赖外部源，降级形态常驻）。 */
+export function getMarketReports(params = {}) {
+  return request('/market/reports', { params })
+}
+&nbsp;
+/**
+ * 健康检查（用于顶栏「后端状态」提示；非表 4-13 接口，见《24》格式决策 9）。
+ *
+ * 注意：`/api/health` 的响应体**不是** `{data, meta}` 信封，而是直接返回
+ * `{status, mysql, neo4j, vector_index, model_config}`（见 `交付物/03-代码\后端\main.py`），
+ * 故这里单独取原始对象，不走 `request()` 的取 `data` 逻辑。
+ */
+export async function getHealth() {
+  const resp = await fetch(`${API_PREFIX}/health`)
+  if (!resp.ok) throw new ApiError(resp.status, `健康检查失败（HTTP ${resp.status}）`, resp.status)
+  return resp.json()
+}
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2026-10-18T03:07:26.052Z
+            </div>
+        <script src="../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../sorter.js"></script>
+        <script src="../block-navigation.js"></script>
+    </body>
+</html>
+    

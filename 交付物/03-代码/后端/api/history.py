@@ -42,6 +42,15 @@ router = APIRouter(tags=["history"])
 PAGE_SIZE_MAX = 200
 """`page_size` 上限（防止一次拉全表；取值登记在《25-文档更新登记》）。"""
 
+PAGE_MAX = 100000
+"""`page` 上限（2026-10-18 全面审查 A3 新增）。
+
+审查实测：`page=999999999999999999999` 时 `(page-1)*page_size` 溢出成 10^21 量级，
+拼进 `LIMIT` 变成非法 SQL（`near '19999999999999999999960'`），pymysql 抛
+`ProgrammingError` → 未捕获 → **HTTP 500 ＋ 9999**。分页参数属「格式非法」，
+按 **1002** 拒绝；同时给上界，避免任何超大偏移打到数据库。
+"""
+
 
 def _parse_int(raw, name: str, default: int | None = None) -> int | None:
     """查询参数取整数；空串／缺失取默认值，非法值抛 `ApiError(1002)`。"""
@@ -77,6 +86,8 @@ async def list_history(session_id: str | None = None, page: str | None = None,
     page_no = _parse_int(page, "page", default=1)
     if page_no is None or page_no < 1:
         raise errors.ApiError(1002, detail="page 必须是不小于 1 的整数：%r" % page)
+    if page_no > PAGE_MAX:
+        raise errors.ApiError(1002, detail="page 超过上限 %d：%r" % (PAGE_MAX, page))
     size = _parse_int(page_size, "page_size", default=20)
     if size is None or size < 1 or size > PAGE_SIZE_MAX:
         raise errors.ApiError(1002, detail="page_size 必须是 1～%d 的整数：%r"

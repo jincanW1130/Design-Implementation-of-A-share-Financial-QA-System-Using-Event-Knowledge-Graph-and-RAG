@@ -1099,3 +1099,14 @@ def test_g8_no_detail_key_in_any_response(client, monkeypatch):
             assert set(r.json().keys()) == {"data", "meta"}
         else:
             assert set(r.json().keys()) == {"code", "message"}
+
+def test_g2_history_page_overflow_is_1002(client):
+    """2026-10-18 全面审查 A3：超大 page 必须按 1002 拒绝，不得 500。
+
+    审查实测：`page=999999999999999999999` 时 `(page-1)*page_size` 溢出，拼进
+    `LIMIT` 变成非法 SQL，pymysql 抛 ProgrammingError → HTTP 500 ＋ 9999。
+    """
+    for bad in ("999999999999999999999", "100001", "1e9"):
+        r = client.get("/api/history", params={"session_id": "S-001", "page": bad})
+        assert r.status_code == 400, (bad, r.status_code)
+        assert r.json()["code"] == 1002, (bad, r.json())

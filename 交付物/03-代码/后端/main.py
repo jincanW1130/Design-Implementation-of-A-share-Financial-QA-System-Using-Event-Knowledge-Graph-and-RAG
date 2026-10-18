@@ -419,6 +419,17 @@ def create_app() -> FastAPI:
                        allow_methods=["*"],
                        allow_headers=["*"])
 
+    # 2026-10-18 全面审查 B：基础安全响应头（纵深防御）。
+    # 后端只输出 JSON、不渲染 HTML，故 CSP 不在此设（应由静态服务器／反向代理统一设）；
+    # 这里补三个零风险的头：禁 MIME 嗅探、禁被 iframe 嵌套、不外泄 Referer。
+    @app.middleware("http")
+    async def _security_headers(request, call_next):
+        response = await call_next(request)
+        response.headers.setdefault("X-Content-Type-Options", "nosniff")
+        response.headers.setdefault("X-Frame-Options", "DENY")
+        response.headers.setdefault("Referrer-Policy", "no-referrer")
+        return response
+
     # 本批唯一注册的业务路由
     @app.get("/api/health", tags=["health"])
     def health():

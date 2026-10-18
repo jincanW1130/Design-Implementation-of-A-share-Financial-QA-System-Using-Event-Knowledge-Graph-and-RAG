@@ -54,9 +54,26 @@ const PROFILE_MAP = {
   webkit: ['desktop-1440x900', 'iphone13'],
 }
 
+// 答案页用哪条回答：**动态解析**，不写死。
+// 2026-10-18 全面审查（第二轮）修复：原先写死 `/answer/40`，而 40 号是当时临时跑出来的
+// 问答；数据库按交付基线清回 30 条后该页 404，跨引擎走查直接掉 22 个 major——是**夹具过期**，
+// 不是产品回归。现改为：先问 `/api/history?session_id=S-001` 取第一条真实回答，
+// 取不到再退回基线里的 16 号（`ask_time` 最新的一条导入记录）。
+async function resolveAnswerId() {
+  try {
+    const r = await fetch(`${BASE}/api/history?session_id=S-001&page=1&page_size=1`)
+    const j = await r.json()
+    const items = (j && j.data && j.data.items) || []
+    if (items.length && items[0].answer_id != null) return Number(items[0].answer_id)
+  } catch { /* 回落 */ }
+  return 16
+}
+const ANSWER_ID = await resolveAnswerId()
+console.log(`答案页夹具：/answer/${ANSWER_ID}（自 /api/history?session_id=S-001 解析）`)
+
 const PAGES = [
   { id: 'ask', url: '/ask', name: '提问台', expect: 'hasAskBox', label: '提问框 #q', settledSel: '#q', settledLabel: '提问框 #q' },
-  { id: 'answer', url: '/answer/40', name: '答案与证据', expect: 'hasAnswer', label: '答案段头【回答】', settledSel: 'text=【回答】', settledLabel: '答案段头【回答】' },
+  { id: 'answer', url: `/answer/${ANSWER_ID}`, name: '答案与证据', expect: 'hasAnswer', label: '答案段头【回答】', settledSel: 'text=【回答】', settledLabel: '答案段头【回答】' },
   { id: 'graph', url: '/graph', name: '知识图谱', expect: 'hasAnchor', label: '「当前锚点」或 ≥1 个 .gnode', settledSel: '.gnode', settledLabel: '图谱节点 .gnode' },
 ]
 

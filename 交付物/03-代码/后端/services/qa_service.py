@@ -129,6 +129,13 @@ EVIDENCE_TYPES = ("回答来源", "新闻来源", "公告来源", "相关事件"
 # 共享连接串行化（见模块 docstring「并发」一节）
 _DB_LOCK = threading.RLock()
 
+# 问答链路的**重资源串行锁**（2026-10-18 全面审查 A5 新增）。
+# 实测：3 条并发 `POST /api/qa/ask` 会把页面文件打满——每个子进程都要加载一次本地
+# BGE 模型（`AutoModel.from_pretrained`），第三个直接 `OSError: 页面文件太小（1455）`，
+# 三条请求全部 500。单机演示形态下按「同一时刻只跑一条链路」串行化，其余请求排队；
+# 每条链路各自仍有 `config.ANSWER["timeout_seconds"]` 的超时上限。
+_ASK_LOCK = threading.Lock()
+
 
 def _fresh_conn():
     """取共享连接，并**结束其隐式长事务**，让下一次读取到新鲜快照。
@@ -736,8 +743,10 @@ def ask(question: str, session_id: str, group: str | None = None) -> dict:
     `session_id` **按调用方传入值**使用（前端生成的 UUID），不使用脚本默认值 `S-001`。
     """
     group = group or DEFAULT_GROUP
-    ran = _run_chain(question, group, session_id, datetime.now().astimezone().isoformat(
-        timespec="seconds"))
+    # A5：串行化重资源链路（见 _ASK_LOCK 注释）；排队期间不计入本条链路的超时。
+    with _ASK_LOCK:
+        ran = _run_chain(question, group, session_id, datetime.now().astimezone().isoformat(
+            timespec="seconds"))
     # 2026-10-18 全面审查 F2：没有可引用证据时**不落库、不造答案**，按 2002 语义返回
     # 正常空结果（HTTP 200），由前端给友好提示。旧行为是 502＋3004「装配账目守卫未通过」。
     if ran.get("empty"):
