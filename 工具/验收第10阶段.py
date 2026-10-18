@@ -218,6 +218,8 @@ XDOC_BASELINE = [
 #   `946c8de588ab21f38b0a7bf246aa7bafa0742fb9257fbbc972bc248bb2803992`。**理由＝该文件按第 9 阶段
 #   自己的既定做法被重登记，不是被并行改动**：目录重组（《02》v3.16）使
 #   `交付物/05-系统实现/前后端系统集成/_工作底稿/决策者核验/输入指纹.py` 的上溯层数与 INPUTS 路径失效
+#   2026-10-18：按《26》v1.12 的判定，把 run_answer.py 与 input_manifest.json 两条期望值同步到磁盘真值
+#   （此前 G4 自 2026-10-11 的 S3 超时守卫、G5 自 2026-10-12 的重登记起就与本字典不一致，门禁因此常红）。
 #   （实测症状：`--check` 报「上游代码 0 个文件、删除 31」＝第 9 阶段门禁 I1 行红），修复后按 **《25》
 #   修订记录 v1.13 的既有做法**执行 `--write` 重登记（**11 项输入 ＋ 上游代码 31 个文件**，各输入的
 #   sha256 与旧基线逐项相同、只有 `path` 字段由旧目录名改为新目录名）；**旧期望值原样保留为时点留痕**
@@ -226,7 +228,7 @@ UPSTREAM_FP = {
     "交付物/03-代码/检索/config.py": "419c12c1eeaf99a4785ac3f5e85cd010adc5ffb4fea24ab287024925ca778ce4",
     "交付物/03-代码/检索/pipeline.py": "99fd5d4723ab8263905a879fda275ed737dfee823b8436de59599fa101e7c4ba",
     "交付物/03-代码/检索/graph_query.py": "e50c78fb7ae6e3caf9e24598c4e47f38ba7b3ed1ff2549600b999217ddf4a6e0",
-    "交付物/03-代码/问答/run_answer.py": "7a9f10a1c285e3ced516ea6245017990ea502f36c1949266ea5f73f5331d6dab",
+    "交付物/03-代码/问答/run_answer.py": "b5b6acc04e1d46f5673b4592b24c4d0bc0d9f1482d63187fc8e4365ad470c03e",
     "交付物/03-代码/问答/assemble.py": "508f6d8629b02d06dd4eb5f625ee93744d44e7e6a22f1ebeb98ffb9fc9b70bba",
     "交付物/03-代码/问答/prompt.py": "60b0e8b41ce147b5bbcf86f6dc11c1faed7ba5fd70a9e55d80d8aef1bcaf001b",
     "交付物/05-系统实现/RAG检索系统/预实验问题集/questions.jsonl":
@@ -250,7 +252,7 @@ UPSTREAM_FP_5_9 = {
     "交付物/05-系统实现/智能问答系统/问答产出/qa_records.jsonl":
         "a64d0f0bcf60a0449bc4dbe4d9866bdbbd51a1f1968c275f514d2984f092768d",
     "交付物/05-系统实现/前后端系统集成/集成产出/input_manifest.json":
-        "946c8de588ab21f38b0a7bf246aa7bafa0742fb9257fbbc972bc248bb2803992",
+        "eaefcc5f054e3598135509c07d28aa561f52e2d659400b7dfebf5c785ce7294f",
         # 时点留痕（2026-10-10 前的基线，仅作历史，不再用于判定）：
         # 6def927129908339b1fc5b3b0ee094308a359401d84c7edca2d15468d664763d
 }
