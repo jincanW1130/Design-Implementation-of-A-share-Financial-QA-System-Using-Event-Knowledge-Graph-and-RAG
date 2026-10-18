@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import os
 
+import cache
 import config
 import observability
 
@@ -112,4 +113,8 @@ def health_payload() -> dict:
         payload["metrics"] = observability.snapshot()
     except Exception as exc:                              # 观测失败不影响就绪判定
         payload["metrics"] = {"available": False, "info": type(exc).__name__}
+    try:
+        payload["cache"] = cache.snapshot()               # 第 6 轮：进程内缓存命中率
+    except Exception as exc:                              # 缓存统计失败同样不拖垮探针
+        payload["cache"] = {"available": False, "info": type(exc).__name__}
     return payload

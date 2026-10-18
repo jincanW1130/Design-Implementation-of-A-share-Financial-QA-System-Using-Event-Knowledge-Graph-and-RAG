@@ -30,6 +30,7 @@ import sys
 
 from fastapi import APIRouter, Body
 
+import cache
 import config
 import errors
 import params
@@ -141,5 +142,10 @@ async def get_answer(answer_id: int):
 
 @config_router.get("/meta")
 async def config_meta():
-    """当前生效的只读口径（数据集版本／截止时间／Prompt 版本／K／N／预算／模型名）。"""
-    return errors.ok(qa_service.config_meta())
+    """当前生效的只读口径（数据集版本／截止时间／Prompt 版本／K／N／预算／模型名）。
+
+    第 6 轮：结果按 `config.CACHE` 做进程内 TTL 缓存（可关闭）；只缓存 `data` 区块，
+    `errors.ok()` 每次重新生成 `meta` 信封，响应内容与未缓存时逐键一致。
+    """
+    data = cache.CONFIG_META_CACHE.get_or_load("meta", qa_service.config_meta)
+    return errors.ok(data)

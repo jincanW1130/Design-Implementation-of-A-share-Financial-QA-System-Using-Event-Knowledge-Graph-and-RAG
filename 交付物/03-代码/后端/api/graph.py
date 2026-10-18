@@ -42,6 +42,7 @@ from datetime import datetime
 
 from fastapi import APIRouter
 
+import cache
 import config
 import db
 import errors
@@ -310,6 +311,18 @@ def _norm_contains_expr(var: str) -> str:
     return gs._norm_expr(var)                                  # noqa: SLF001（同包内复用）
 
 
+# 第 6 轮：单节点／多节点的原始属性读取改为**标签限定 UNION**。不带标签的
+# `MATCH (n {node_id:…})` 只能 AllNodesScan（全图扫描），限定标签后走各标签的
+# `node_id` 唯一约束；结果与不带标签的写法逐行一致（见 graph_service._label_union）。
+_RAW_NODE_CYPHER = gs._label_union(                            # noqa: SLF001
+    "MATCH (n:{label} {node_id:$id}) "
+    "RETURN labels(n)[0] AS label, properties(n) AS p") + "RETURN label, p"
+_RAW_NODES_CYPHER = gs._label_union(                           # noqa: SLF001
+    "MATCH (n:{label}) WHERE n.node_id IN $ids "
+    "RETURN n.node_id AS node_id, labels(n)[0] AS label, "
+    "properties(n) AS p") + "RETURN node_id, label, p"
+
+
 class GraphReader:
     """按后端分派的三件补充查询；对端（G1／G3／G4／G5／G6／G7）直接调后端自身的方法。
 
@@ -343,8 +356,7 @@ class GraphReader:
         """
         nid = _s(node_id)
         if self.backend == "neo4j":
-            rows = self._run("MATCH (n {node_id:$id}) RETURN labels(n)[0] AS label, "
-                             "properties(n) AS p", id=nid)
+            rows = self._run(_RAW_NODE_CYPHER, id=nid)
             if not rows:
                 return None
             props = dict(rows[0]["p"] or {})
@@ -364,10 +376,7 @@ class GraphReader:
         if not ids:
             return {}
         if self.backend == "neo4j":
-            rows = self._run(
-                "MATCH (n) WHERE n.node_id IN $ids "
-                "RETURN n.node_id AS node_id, labels(n)[0] AS label, properties(n) AS p",
-                ids=ids)
+            rows = self._run(_RAW_NODES_CYPHER, ids=ids)
             out = {}
             for row in rows:
                 props = dict(row["p"] or {})
@@ -1036,6 +1045,49 @@ def _degree(rd: GraphReader, node_id: str) -> dict:
     return {"out": out, "in_": inn, "total": out + inn}
 
 
+def _entity_detail_payload(nid: str) -> dict:
+    """实体详情的取数与整形（第 6 轮：从路由拆出，整块结果可做进程内缓存）。
+
+    字段口径与错误码语义见 `entity_detail()` 的接口文档。只返回 `data` 区块；
+    节点不存在时抛 2001，异常不会被缓存。
+    """
+    with reader() as rd:
+        raw = rd._raw_node(nid)                               # noqa: SLF001（同包内复用）
+        if raw is None:
+            raise errors.ApiError(2001, detail="节点标识未匹配到任何实体：%s" % nid)
+        label = _s(raw.get("label"))
+        node = {"node_id": nid, "label": label,
+                "name": _s(raw.get("name")), "stock_code": _s(raw.get("stock_code"))}
+        props = _properties_ordered(raw)                      # 已按升序
+        keys = list(props)                                    # 有序键表（与 properties 同序）
+        notes = _property_notes(raw, props)
+        degree = _degree(rd, nid)
+        edges = _entity_edges(rd, nid, 1)                     # 复用：一跳边（同批口径）
+    documents, _without, chunk_total = _evidence_documents(edges)     # 复用：文档／块归并
+    neighbors = {_s(e.get("neighbor")) for e in edges}
+    return {
+        "node": node,
+        "properties": props,                                  # 已按 `property_keys` 同序排列
+        "property_keys": keys,
+        "property_notes": notes,
+        "degree": degree,
+        "counts": {"neighbors": len(neighbors), "relations": len(edges),
+                   "documents": len(documents), "chunks": chunk_total},
+        "params": {"node_id": nid},
+        "scope": "entity_detail",
+        "source": {
+            "graph": ["node", "properties", "property_keys", "property_notes", "degree",
+                      "counts.neighbors", "counts.relations",
+                      "counts.documents", "counts.chunks"],
+            "mysql": [],
+            "note": "本响应全部字段取自图谱后端（本地 Neo4j 实例；内存后端同形）的只读查询；"
+                    "counts 由 G1 一跳边（_entity_edges）＋ _evidence_documents 归并得到——"
+                    "后者会只读访问 document／document_chunk 两张表补文档元数据，"
+                    "但本接口只回文档／块**计数**，不回传其元数据字段。",
+        },
+    }
+
+
 @router.get("/entities/{node_id}")
 async def entity_detail(node_id: str):
     """**实体详情**（第 9 阶段新增，表 4-13 之外的新增接口）：返回单个实体在图谱里的真实属性。
@@ -1059,43 +1111,14 @@ async def entity_detail(node_id: str):
     * `params`／`scope`（`scope`＝`entity_detail`）。
 
     错误码：节点不存在 → **2001**（HTTP 404）；`node_id` 为空／超长 → **1002**；其余按既有约定。
+
+    第 6 轮：成功结果按 `config.CACHE` 做进程内 TTL 缓存（可关闭）；`errors.ok()` 每次
+    重新生成 `meta` 信封，命中缓存的响应与实时查询的响应逐键一致。
     """
     nid = _node_id_arg(node_id)
-    with reader() as rd:
-        raw = rd._raw_node(nid)                               # noqa: SLF001（同包内复用）
-        if raw is None:
-            raise errors.ApiError(2001, detail="节点标识未匹配到任何实体：%s" % nid)
-        label = _s(raw.get("label"))
-        node = {"node_id": nid, "label": label,
-                "name": _s(raw.get("name")), "stock_code": _s(raw.get("stock_code"))}
-        props = _properties_ordered(raw)                      # 已按升序
-        keys = list(props)                                    # 有序键表（与 properties 同序）
-        notes = _property_notes(raw, props)
-        degree = _degree(rd, nid)
-        edges = _entity_edges(rd, nid, 1)                     # 复用：一跳边（同批口径）
-    documents, _without, chunk_total = _evidence_documents(edges)     # 复用：文档／块归并
-    neighbors = {_s(e.get("neighbor")) for e in edges}
-    return errors.ok({
-        "node": node,
-        "properties": props,                                  # 已按 `property_keys` 同序排列
-        "property_keys": keys,
-        "property_notes": notes,
-        "degree": degree,
-        "counts": {"neighbors": len(neighbors), "relations": len(edges),
-                   "documents": len(documents), "chunks": chunk_total},
-        "params": {"node_id": nid},
-        "scope": "entity_detail",
-        "source": {
-            "graph": ["node", "properties", "property_keys", "property_notes", "degree",
-                      "counts.neighbors", "counts.relations",
-                      "counts.documents", "counts.chunks"],
-            "mysql": [],
-            "note": "本响应全部字段取自图谱后端（本地 Neo4j 实例；内存后端同形）的只读查询；"
-                    "counts 由 G1 一跳边（_entity_edges）＋ _evidence_documents 归并得到——"
-                    "后者会只读访问 document／document_chunk 两张表补文档元数据，"
-                    "但本接口只回文档／块**计数**，不回传其元数据字段。",
-        },
-    })
+    data = cache.ENTITY_DETAIL_CACHE.get_or_load(
+        nid, lambda: _entity_detail_payload(nid))
+    return errors.ok(data)
 
 
 # --------------------------------------------------------------------------

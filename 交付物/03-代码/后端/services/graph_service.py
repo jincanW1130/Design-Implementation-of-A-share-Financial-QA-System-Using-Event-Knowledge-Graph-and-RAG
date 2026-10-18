@@ -225,15 +225,37 @@ NEO4J_CYPHER = {
            "[r IN relationships(p) | " + _rel_map("r") + "] AS rels"),
 }
 
-_RESOLVE_BY_ID = "MATCH (n {node_id:$id}) RETURN n.node_id AS node_id"
+# 图谱里登记的节点标签全集（与导入脚本一致）。**顺序固定**：标签限定 UNION 的分支顺序
+# 只影响查询计划，不影响结果（node_id 在每个标签内唯一，UNION 去重）。
+GRAPH_LABELS = ("Company", "Document", "Event", "Industry", "Institution", "Person", "Policy")
+
+
+def _label_union(branch: str) -> str:
+    """把 `branch`（含 `{label}` 占位）展开成「每个标签一条」的 UNION 子查询。
+
+    第 6 轮：`MATCH (n {node_id:$id})` 不带标签时 Neo4j 只能 AllNodesScan（全图 3607 个
+    节点），用不上每个标签各自的 `node_id` 唯一约束；限定标签后每条分支都是
+    `NodeUniqueIndexSeek`。逐条 UNION 保持「同一个 node_id 无论属于哪个标签都能命中」
+    的原语义，结果与不带标签的写法逐行一致。
+    """
+    parts = [branch.replace("{label}", label) for label in GRAPH_LABELS]
+    return "CALL () {\n" + "\nUNION\n".join(parts) + "\n}\n"
+
+
+_RESOLVE_BY_ID = _label_union(
+    "MATCH (n:{label} {node_id:$id}) RETURN n.node_id AS node_id") + \
+    "RETURN node_id"
 _RESOLVE_BY_CODE = ("MATCH (n {stock_code:$code}) RETURN n.node_id AS node_id "
                     "ORDER BY n.node_id")
 _RESOLVE_BY_NAME = ("MATCH (n) WHERE %s = $key OR %s = $key "
                     "OR any(_a IN split(coalesce(n.aliases, ''), '|') WHERE %s = $key) "
                     "RETURN n.node_id AS node_id ORDER BY n.node_id"
                     % (_norm_expr("n.name"), _norm_expr("n.short_name"), _norm_expr("_a")))
-_LABELS_OF = "MATCH (n) WHERE n.node_id IN $ids RETURN n.node_id AS node_id, labels(n)[0] AS label"
-_LABEL_OF = "MATCH (n {node_id:$id}) RETURN labels(n)[0] AS label"
+_LABELS_OF = _label_union(
+    "MATCH (n:{label}) WHERE n.node_id IN $ids "
+    "RETURN n.node_id AS node_id, labels(n)[0] AS label") + "RETURN node_id, label"
+_LABEL_OF = _label_union(
+    "MATCH (n:{label} {node_id:$id}) RETURN labels(n)[0] AS label") + "RETURN label"
 # G6 的批量取证据块：一条 Cypher 取回所有事件的语义边 chunk_id（替代逐事件调 G5 的 N+1）
 _BATCH_EVENT_CHUNK_IDS = (
     "MATCH (e) WHERE e.node_id IN $ids "

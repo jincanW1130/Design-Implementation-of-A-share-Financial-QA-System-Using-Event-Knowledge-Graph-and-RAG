@@ -123,10 +123,15 @@ _ENV_OVERRIDES = {
     "ASHARE_ADMIN_TOKEN": "admin_token",
     "ASHARE_TRUST_PROXY_HEADERS": "trust_proxy_headers",
     "ASHARE_QA_RUNS_RETENTION_DAYS": "qa_runs_retention_days",
+    # 第 6 轮：只读热点接口的进程内缓存开关／参数（缺省开启、TTL 60 s、512 条）
+    "ASHARE_CACHE_ENABLED": "cache_enabled",
+    "ASHARE_CACHE_TTL_SECONDS": "cache_ttl_seconds",
+    "ASHARE_CACHE_MAX_ENTRIES": "cache_max_entries",
 }
 _INT_OVERRIDE_KEYS = frozenset({"mysql_port", "backend_port", "frontend_port",
-                                "qa_runs_retention_days"})
-_BOOL_OVERRIDE_KEYS = frozenset({"trust_proxy_headers"})
+                                "qa_runs_retention_days", "cache_ttl_seconds",
+                                "cache_max_entries"})
+_BOOL_OVERRIDE_KEYS = frozenset({"trust_proxy_headers", "cache_enabled"})
 
 # --------------------------------------------------------------------------
 # 2. 上游输入清单（**只读**；《24》第三节 八项）
@@ -538,6 +543,35 @@ RATE_LIMIT = {
 _rl_max_override = os.environ.get("ASHARE_RATE_LIMIT_MAX", "").strip()
 if _rl_max_override.isdigit() and int(_rl_max_override) > 0:
     RATE_LIMIT["max_requests"] = int(_rl_max_override)
+
+
+def _cache_int(raw, default: int, minimum: int) -> int:
+    """缓存参数取值：非整数／越界时回落到缺省值（参数本身不影响响应内容）。"""
+    try:
+        value = int(raw)
+    except (TypeError, ValueError):
+        return default
+    return value if value >= minimum else default
+
+
+def _cache_bool(raw, default: bool) -> bool:
+    if isinstance(raw, bool):
+        return raw
+    if raw is None or not str(raw).strip():
+        return default
+    return str(raw).strip().lower() in ("1", "true", "yes", "on")
+
+
+# --------------------------------------------------------------------------
+# 7.1 只读热点接口的进程内缓存（第 6 轮；无 Redis）
+# --------------------------------------------------------------------------
+# 缺省开启；`cache_enabled=false` 或 `ASHARE_CACHE_ENABLED=0` 即整体关闭，接口行为
+# 与未接缓存一致。TTL／容量只影响「多久重新查一次」，不影响响应内容。
+CACHE = {
+    "enabled": _cache_bool(_LOCAL.get("cache_enabled"), True),
+    "ttl_seconds": _cache_int(_LOCAL.get("cache_ttl_seconds"), 60, 1),
+    "max_entries": _cache_int(_LOCAL.get("cache_max_entries"), 512, 1),
+}
 LIMITS = {
     "max_body_bytes": 64 * 1024,  # 请求体上限（64 KiB）
     "question_min_chars": 1,      # question 最短长度（空串按 1001 拒）
