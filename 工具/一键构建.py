@@ -45,8 +45,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FRONTEND_DIR = os.path.join(ROOT, "交付物", "03-代码", "前端")
 BUILD_DIR = os.path.join(ROOT, "交付物", "10-部署", "构建产物")
 PAPER_OUT = os.path.join(BUILD_DIR, "论文_一键构建.docx")
-MIN_BACKEND_TESTS = 422
-MIN_FRONTEND_TESTS = 67
+MIN_BACKEND_TESTS = 530
+MIN_FRONTEND_TESTS = 75
 
 for _stream in (sys.stdout, sys.stderr):
     if hasattr(_stream, "reconfigure"):
@@ -196,7 +196,7 @@ def main(argv=None) -> int:
         if not args.skip_frontend:
             fe = {"CI": "1"}
             out = step("前端单元测试", [npm, "run", "test"], cwd=FRONTEND_DIR, env=fe)
-            # Vitest 会先打印 `Test Files  3 passed (3)`、再打印 `Tests  67 passed (67)`，
+            # Vitest 会先打印 `Test Files  4 passed (4)`、再打印 `Tests  75 passed (75)`，
             # 必须锚定 "Tests"，否则会把测试文件数误当成用例数。
             match = re.search(r"Tests\s+(\d+) passed", out)
             fe_passed = int(match.group(1)) if match else 0

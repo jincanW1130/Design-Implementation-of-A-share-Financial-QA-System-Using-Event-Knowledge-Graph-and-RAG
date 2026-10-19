@@ -11,10 +11,15 @@
 # 3. 后端配置仍只认 `交付物/03-代码/后端/config.local.json`：这里把本机已有的
 #    `config.docker.json` 只读挂进去，再用第 4 轮新增的 `ASHARE_*` 环境变量覆盖
 #    主机名／口令（容器网络里 MySQL＝mysql、Neo4j＝neo4j，不能用 127.0.0.1）。
+#    **首次使用需准备 config.docker.json**（不入库）：本机已有的可直接用；换机时从
+#    `../03-代码/后端/config.local.json.example` 复制一份，主机名／口令由下面的
+#    ASHARE_* 覆盖，容器内无需填本机口令。
 # 4. embedding 模型快照不打进镜像；用 `HF_CACHE_DIR` 把本机 HF 缓存只读挂到 /app/hf，
 #    否则向量检索不可用（后端以 3003 明确报错，不静默降级）。
 # 5. **不要求本机一定构建**：Windows 宿主没有 Docker CLI，Docker 在 WSL2 Engine 内；
-#    本文件已通过 YAML 解析与 `docker compose config` 语法校验（见方案文档）。
+#    本文件已通过 YAML 解析与 `工具/校验compose.py` 的 30 项结构校验（见方案文档）。
+#    **本机没有 compose 插件，未运行 `docker compose config`，也未实际 `up`**；
+#    换到标准 Docker Desktop／Compose 环境后按 README 的命令拉起。
 #    首次启动前需导入六张表的数据（schema 只建表）：
 #      docker compose exec -T backend python 交付物/03-代码/后端/tools/import_data.py
 #    或按部署 README 的本机形态导入。

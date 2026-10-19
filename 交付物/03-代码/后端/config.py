@@ -106,7 +106,8 @@ LOCAL_CONFIG_PATH = _resolve_config_path(
 LOCAL_CONFIG_EXAMPLE = os.path.join(BACKEND_DIR, "config.local.json.example")
 ENV_OVERLAY_PATH = os.path.join(BACKEND_DIR, "config.%s.local.json" % ENV_NAME)
 
-# 环境变量 → 配置键（**只允许这些键**；不在表内的键一律不认，避免拼写错误被静默忽略）
+# 环境变量 → 配置键（**只允许这些键**；不在表内的键一律不认，未知／拼错的键不会生效、
+# 也不会报错——新增覆盖项时必须同步扩表，部署时按白名单核对拼写）
 _ENV_OVERRIDES = {
     "ASHARE_MYSQL_HOST": "mysql_host",
     "ASHARE_MYSQL_PORT": "mysql_port",

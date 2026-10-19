@@ -66,6 +66,8 @@ curl -s http://127.0.0.1:8000/api/health
 ```bash
 cd 交付物/10-部署
 cp .env.example .env          # 填 MYSQL_ROOT_PASSWORD / NEO4J_PASSWORD / HF_CACHE_DIR
+# config.docker.json 不入库；首次使用从后端模板复制（容器主机名/口令随后由 ASHARE_* 覆盖）
+cp ../03-代码/后端/config.local.json.example config.docker.json
 docker compose up -d --build
 docker compose exec -T backend python 交付物/03-代码/后端/tools/import_data.py   # 首次导入数据
 curl -s http://127.0.0.1:8000/api/health
