@@ -1,6 +1,6 @@
 {
   "tool": "工具/数据质量校验.py",
-  "generated_at": "2026-10-18T21:17:45+08:00",
+  "generated_at": "2026-10-19T08:50:41+08:00",
   "mode": "dry-run/read-only",
   "violation_total": 0,
   "violations": [],
