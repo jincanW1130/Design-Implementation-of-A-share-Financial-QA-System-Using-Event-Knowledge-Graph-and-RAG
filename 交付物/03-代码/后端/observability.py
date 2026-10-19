@@ -28,11 +28,13 @@
 --------------------------------------
 * `requests`：全局总请求数、最近 60 s 的请求数／QPS／错误率（HTTP ≥ 400 计错误）；
 * `routes`：按「方法 + 路由模板」分组（模板不含具体 id，避免高基数），
-  `p50_ms`／`p95_ms`／`p99_ms` 取最近 300 s 样本，`qps` 与 `error_rate` 取最近 60 s；
+  `avg_ms`／`p50_ms`／`p95_ms`／`p99_ms` 取最近 300 s 样本，`qps` 与 `error_rate` 取最近 60 s；
 * `qa`：`/api/qa/ask` 的成功／失败计数（按 HTTP 状态；200＝成功，≥400＝失败）；
 * `retrieval`：问答链路的**检索侧计数**（第三轮 8.2）——实际跑链路的次数、图谱查询
-  次数、证据总数、空结果数、复用次数。由 `services/qa_service.py` 在链路返回后写入；
-  不记录问题原文，不增加路由，仍是进程内口径。
+  次数、证据总数、空结果数、复用次数，以及**知识库命中率**（有可引用证据的链路占比）。
+  由 `services/qa_service.py` 在链路返回后写入；不记录问题原文，不增加路由，仍是进程内口径。
+* `llm`：`answer_trace.jsonl` 的 **attempts** 聚合（第八轮 8.2）——调用次数、失败次数、
+  失败率、累计／平均秒数。失败定义为「尝试请求失败或返回空正文」；重试按实际尝试逐次计数。
 * `rate_limit`：限流中间件实际拒绝的次数（1004／429）。
 * 每个路由最多保留 2000 个样本、最多 128 个路由键；超出后旧样本自然淘汰或归入
   `__other__`，防止探测工具制造高基数把内存打满。
@@ -118,6 +120,10 @@ class MetricsRegistry:
             "empty_results": 0,
             "reused_answers": 0,
         }
+        # LLM 尝试聚合（第八轮 8.2）：按 answer_trace 的 attempts 逐次计数。
+        self._llm_calls = 0
+        self._llm_failures = 0
+        self._llm_seconds_total = 0.0
 
     # ---- 写入 ----
     def record_request(self, method: str, route: str, status: int,
@@ -172,6 +178,36 @@ class MetricsRegistry:
                 count = 0
             self._retrieval["evidence_total"] += max(count, 0)
 
+    def record_llm_attempts(self, attempts) -> None:
+        """记录一次问答链路里的 LLM 尝试（`answer_trace.jsonl` 的 `attempts`）。
+
+        * 每次尝试计一次 `calls`（重试不合并）；
+        * `ok=false`（请求失败）或 `empty_body=true`（请求成功但正文为空）计一次 failure；
+        * `seconds` 累加为总耗时；非法数值按 0 处理。
+
+        只保存整数／浮点计数，不保存 Prompt、问题或答案正文。
+        """
+        rows = attempts if isinstance(attempts, list) else []
+        calls = 0
+        failures = 0
+        seconds = 0.0
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            calls += 1
+            if not row.get("ok") or row.get("empty_body"):
+                failures += 1
+            try:
+                seconds += max(float(row.get("seconds") or 0.0), 0.0)
+            except (TypeError, ValueError):
+                pass
+        if not calls:
+            return
+        with self._lock:
+            self._llm_calls += calls
+            self._llm_failures += failures
+            self._llm_seconds_total += seconds
+
     # ---- 读取 ----
     def snapshot(self) -> dict:
         now = time.monotonic()
@@ -183,6 +219,9 @@ class MetricsRegistry:
             qa_failure = self._qa_failure
             hits = self._rate_limit_hits
             retrieval = dict(self._retrieval)
+            llm_calls = self._llm_calls
+            llm_failures = self._llm_failures
+            llm_seconds_total = self._llm_seconds_total
             uptime = now - self._started
 
         all_samples = []
@@ -200,6 +239,7 @@ class MetricsRegistry:
                 "qps": round(len(window) / WINDOW_SECONDS, 2),
                 "errors_window": len(errors),
                 "error_rate": round(len(errors) / len(window), 4) if window else 0.0,
+                "avg_ms": round(sum(durations) / len(durations), 1) if durations else None,
                 "p50_ms": _percentile(durations, 50),
                 "p95_ms": _percentile(durations, 95),
                 "p99_ms": _percentile(durations, 99),
@@ -231,6 +271,19 @@ class MetricsRegistry:
                 "evidence_avg": (round(retrieval["evidence_total"]
                                        / retrieval["vector_searches"], 2)
                                  if retrieval["vector_searches"] else 0.0),
+                "kb_hit_rate": (round((retrieval["vector_searches"]
+                                       - retrieval["empty_results"])
+                                      / retrieval["vector_searches"], 4)
+                                if retrieval["vector_searches"] else 0.0),
+            },
+            "llm": {
+                "calls": llm_calls,
+                "failures": llm_failures,
+                "failure_rate": (round(llm_failures / llm_calls, 4)
+                                 if llm_calls else 0.0),
+                "total_seconds": round(llm_seconds_total, 3),
+                "avg_seconds": (round(llm_seconds_total / llm_calls, 3)
+                                if llm_calls else 0.0),
             },
             "rate_limit": {"hits": hits},
         }
@@ -255,6 +308,10 @@ def record_rate_limit_hit() -> None:
 
 def record_qa_retrieval(**kwargs) -> None:
     METRICS.record_qa_retrieval(**kwargs)
+
+
+def record_llm_attempts(attempts) -> None:
+    METRICS.record_llm_attempts(attempts)
 
 
 def snapshot() -> dict:

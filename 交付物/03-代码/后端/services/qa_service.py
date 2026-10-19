@@ -866,6 +866,8 @@ def ask(question: str, session_id: str, group: str | None = None,
         evidence_count=_evidence_count,
         graph_used=_graph_used,
         empty=bool(ran.get("empty")))
+    # 第八轮 8.2：LLM 尝试聚合（失败／空正文／重试逐次计数；只读 answer_trace 的 attempts）。
+    observability.record_llm_attempts(_trace.get("attempts"))
     # 2026-10-18 全面审查 F2：没有可引用证据时**不落库、不造答案**，按 2002 语义返回
     # 正常空结果（HTTP 200），由前端给友好提示。旧行为是 502＋3004「装配账目守卫未通过」。
     if ran.get("empty"):
