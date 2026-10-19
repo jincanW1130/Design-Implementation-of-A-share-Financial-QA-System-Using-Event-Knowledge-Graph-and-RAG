@@ -1,6 +1,6 @@
 {
   "tool": "工具/安全最小权限检查.py",
-  "generated_at": "2026-10-19T08:57:35+08:00",
+  "generated_at": "2026-10-19T17:19:25+08:00",
   "mode": "read-only/audit",
   "config": {
     "config_local": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物\\03-代码\\后端\\config.local.json",
@@ -8,10 +8,10 @@
     "git_ignored": true,
     "git_tracked": false,
     "admin_token_configured": true,
-    "admin_token_length": 16,
+    "admin_token_length": 32,
     "mysql_password_configured": true,
     "neo4j_password_configured": true,
-    "acl_raw": "C:\\Users\\15129\\Desktop\\��ҵ���\\������\\03-����\\���\\config.local.json admin\\CodexSandboxUsers:(I)(RX)\n                                                           NT AUTHORITY\\SYSTEM:(I)(F)\n                                                           BUILTIN\\Administrators:(I)(F)\n                                                           ADMIN\\15129:(I)(F)\n\n�ѳɹ����� 1 ���ļ�; ���� 0 ���ļ�ʱʧ��",
+    "acl_raw": "C:\\Users\\15129\\Desktop\\��ҵ���\\������\\03-����\\���\\config.local.json admin\\CodexSandboxUsers:(I)(RX)\n                                                           NT AUTHORITY\\SYSTEM:(I)(F)\n                                                           BUILTIN\\Administrators:(I)(F)\n                                                           ADMIN\\15129:(I)(F)\n\nSuccessfully processed 1 files; Failed processing 0 files",
     "acl_broad_principals": [
       "C:\\Users\\15129\\Desktop\\��ҵ���\\������\\03-����\\���\\config.local.json admin\\CodexSandboxUsers:(I)(RX)"
     ],
@@ -26,14 +26,13 @@
   },
   "mysql": {
     "status": "checked",
-    "cu": "root@localhost",
+    "cu": "ashare_app@127.0.0.1",
     "version": "8.4.9",
     "bind_address": "*",
     "port": "3306",
     "grants": [
-      "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, SHUTDOWN, PROCESS, FILE, REFERENCES, INDEX, ALTER, SHOW DATABASES, SUPER, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, REPLICATION SLAVE, REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, TRIGGER, CREATE TABLESPACE, CREATE ROLE, DROP ROLE ON *.* TO `root`@`localhost` WITH GRANT OPTION",
-      "GRANT ALLOW_NONEXISTENT_DEFINER,APPLICATION_PASSWORD_ADMIN,AUDIT_ABORT_EXEMPT,AUDIT_ADMIN,AUTHENTICATION_POLICY_ADMIN,BACKUP_ADMIN,BINLOG_ADMIN,BINLOG_ENCRYPTION_ADMIN,CLONE_ADMIN,CONNECTION_ADMIN,ENCRYPTION_KEY_ADMIN,FIREWALL_EXEMPT,FLUSH_OPTIMIZER_COSTS,FLUSH_PRIVILEGES,FLUSH_STATUS,FLUSH_TABLES,FLUSH_USER_RESOURCES,GROUP_REPLICATION_ADMIN,GROUP_REPLICATION_STREAM,INNODB_REDO_LOG_ARCHIVE,INNODB_REDO_LOG_ENABLE,OPTIMIZE_LOCAL_TABLE,PASSWORDLESS_USER_ADMIN,PERSIST_RO_VARIABLES_ADMIN,REPLICATION_APPLIER,REPLICATION_SLAVE_ADMIN,RESOURCE_GROUP_ADMIN,RESOURCE_GROUP_USER,ROLE_ADMIN,SENSITIVE_VARIABLES_OBSERVER,SERVICE_CONNECTION_ADMIN,SESSION_VARIABLES_ADMIN,SET_ANY_DEFINER,SHOW_ROUTINE,SYSTEM_USER,SYSTEM_VARIABLES_ADMIN,TABLE_ENCRYPTION_ADMIN,TELEMETRY_LOG_ADMIN,TRANSACTION_GTID_TAG,XA_RECOVER_ADMIN ON *.* TO `root`@`localhost` WITH GRANT OPTION",
-      "GRANT PROXY ON ``@`` TO `root`@`localhost` WITH GRANT OPTION"
+      "GRANT USAGE ON *.* TO `ashare_app`@`127.0.0.1`",
+      "GRANT SELECT, INSERT, UPDATE, DELETE ON `ashare_qa`.* TO `ashare_app`@`127.0.0.1`"
     ]
   },
   "neo4j": {
@@ -112,41 +111,44 @@
         "metrics": {
           "window_seconds": 60,
           "history_seconds": 300,
-          "uptime_seconds": 487.5,
+          "uptime_seconds": 32.1,
           "requests": {
-            "total": 8,
-            "window": 2,
-            "qps": 0.03,
-            "errors_window": 0,
-            "error_rate": 0.0
+            "total": 5,
+            "window": 5,
+            "qps": 0.08,
+            "errors_window": 2,
+            "error_rate": 0.4
           },
           "routes": {
-            "GET /api/admin/consistency-check": {
-              "count_window": 0,
-              "qps": 0.0,
-              "errors_window": 0,
-              "error_rate": 0.0,
-              "p50_ms": 473.1,
-              "p95_ms": 473.1,
-              "p99_ms": 473.1
-            },
-            "GET /api/admin/extraction/disambiguation": {
-              "count_window": 0,
-              "qps": 0.0,
-              "errors_window": 0,
-              "error_rate": 0.0,
-              "p50_ms": 9.7,
-              "p95_ms": 9.7,
-              "p99_ms": 9.7
+            "GET /api/admin/documents": {
+              "count_window": 3,
+              "qps": 0.05,
+              "errors_window": 2,
+              "error_rate": 0.6667,
+              "avg_ms": 17.7,
+              "p50_ms": 16.1,
+              "p95_ms": 36.3,
+              "p99_ms": 36.3
             },
             "GET /api/health": {
-              "count_window": 2,
-              "qps": 0.03,
+              "count_window": 1,
+              "qps": 0.02,
               "errors_window": 0,
               "error_rate": 0.0,
-              "p50_ms": 67.8,
-              "p95_ms": 101.4,
-              "p99_ms": 101.4
+              "avg_ms": 520.5,
+              "p50_ms": 520.5,
+              "p95_ms": 520.5,
+              "p99_ms": 520.5
+            },
+            "GET /api/history": {
+              "count_window": 1,
+              "qps": 0.02,
+              "errors_window": 0,
+              "error_rate": 0.0,
+              "avg_ms": 2.5,
+              "p50_ms": 2.5,
+              "p95_ms": 2.5,
+              "p99_ms": 2.5
             }
           },
           "qa": {
@@ -160,7 +162,15 @@
             "evidence_total": 0,
             "empty_results": 0,
             "reused_answers": 0,
-            "evidence_avg": 0.0
+            "evidence_avg": 0.0,
+            "kb_hit_rate": 0.0
+          },
+          "llm": {
+            "calls": 0,
+            "failures": 0,
+            "failure_rate": 0.0,
+            "total_seconds": 0.0,
+            "avg_seconds": 0.0
           },
           "rate_limit": {
             "hits": 0
@@ -171,7 +181,7 @@
           "ttl_seconds": 60,
           "max_entries": 512,
           "hits": 0,
-          "misses": 1,
+          "misses": 0,
           "hit_rate": 0.0,
           "caches": {
             "config_meta": {
@@ -218,18 +228,18 @@
               "enabled": true,
               "ttl_seconds": 60.0,
               "max_entries": 512,
-              "size": 1,
+              "size": 0,
               "hits": 0,
-              "misses": 1,
+              "misses": 0,
               "hit_rate": 0.0,
-              "sets": 1,
+              "sets": 0,
               "evictions": 0,
               "expired": 0
             }
           }
         }
       },
-      "request_id": "44bbdcfd8c0348bc"
+      "request_id": "7557733039df46f7"
     },
     "admin_without_token": {
       "http": 401,
@@ -237,7 +247,7 @@
         "code": 4001,
         "message": "凭据无效"
       },
-      "request_id": "c97ce88c95ac4d02"
+      "request_id": "159227e3893a4a58"
     },
     "admin_with_frontend_origin": {
       "http": 403,
@@ -245,19 +255,18 @@
         "code": 4002,
         "message": "无操作权限"
       },
-      "request_id": "813f25d7ce084afc"
+      "request_id": "65403af414db4020"
     }
   },
   "secret_scan": {
     "status": "checked",
-    "scanned_files": 5071,
+    "scanned_files": 5073,
     "secret_kinds": [
       "admin_token",
+      "mysql_password",
       "neo4j_password"
     ],
-    "short_secrets_excluded": [
-      "mysql_password"
-    ],
+    "short_secrets_excluded": [],
     "hits": []
   },
   "findings": [
@@ -269,11 +278,11 @@
       "advice": "保持现状。"
     },
     {
-      "severity": "high",
+      "severity": "info",
       "area": "config",
-      "title": "admin_token 长度偏短",
-      "detail": "实测长度 16（不显示取值）。",
-      "advice": "至少 32 字符的密码学随机串；轮换后同步更新运维脚本的密钥来源。"
+      "title": "admin_token 已配置且长度达标",
+      "detail": "实测长度 32（不显示取值）。",
+      "advice": "定期轮换；不要写入文档、脚本或日志。"
     },
     {
       "severity": "medium",
@@ -299,30 +308,9 @@
     {
       "severity": "high",
       "area": "mysql",
-      "title": "应用使用 root 账号",
-      "detail": "CURRENT_USER()=root@localhost。应用拥有建库/授权/关闭服务等全部权限。",
-      "advice": "为运行期创建 DML-only 账号；root 仅用于一次性建表/导入/运维。"
-    },
-    {
-      "severity": "high",
-      "area": "mysql",
       "title": "MySQL 监听所有网卡",
       "detail": "@@bind_address='*'，端口 3306。",
       "advice": "仅在需要远程访问时开放；单机部署改为 127.0.0.1 并配置防火墙。"
-    },
-    {
-      "severity": "high",
-      "area": "mysql",
-      "title": "应用账号权限过大",
-      "detail": "授权含 ALL PRIVILEGES 或 GRANT OPTION（详见报告 grants 字段）。",
-      "advice": "运行期账号只保留 SELECT/INSERT/UPDATE/DELETE ON ashare_qa.*。"
-    },
-    {
-      "severity": "high",
-      "area": "mysql",
-      "title": "应用账号可管理账号/角色",
-      "detail": "授权含 CREATE USER／CREATE ROLE／DROP ROLE。",
-      "advice": "账号管理只留给独立 DBA 账号。"
     },
     {
       "severity": "medium",
@@ -374,26 +362,19 @@
       "advice": "保持。"
     },
     {
-      "severity": "medium",
-      "area": "secret_scan",
-      "title": "存在短口令，未纳入精确泄露扫描",
-      "detail": "长度 <8 的密钥：mysql_password（长度过短本身也是风险；不显示取值）。",
-      "advice": "改为至少 12 字符的随机口令；轮换后重新运行本脚本。"
-    },
-    {
       "severity": "info",
       "area": "secret_scan",
       "title": "已跟踪文本文件未发现真实密钥",
-      "detail": "扫描 5071 个文件，密钥种类：admin_token、neo4j_password",
+      "detail": "扫描 5073 个文件，密钥种类：admin_token、mysql_password、neo4j_password",
       "advice": "继续保持；注意报告/截图也可能泄露。"
     }
   ],
   "summary": {
     "critical": 0,
-    "high": 6,
-    "medium": 5,
+    "high": 2,
+    "medium": 4,
     "low": 0,
-    "info": 7
+    "info": 8
   },
   "note": "只读审计：未修改口令/账号/授权/配置/防火墙，未写数据库。所有 detail 均不含密钥取值。"
 }
