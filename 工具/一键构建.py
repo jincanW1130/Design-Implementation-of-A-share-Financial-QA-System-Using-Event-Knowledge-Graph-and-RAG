@@ -45,8 +45,72 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FRONTEND_DIR = os.path.join(ROOT, "交付物", "03-代码", "前端")
 BUILD_DIR = os.path.join(ROOT, "交付物", "10-部署", "构建产物")
 PAPER_OUT = os.path.join(BUILD_DIR, "论文_一键构建.docx")
-MIN_BACKEND_TESTS = 530
+MIN_BACKEND_TESTS = 536
 MIN_FRONTEND_TESTS = 75
+
+
+def parse_pytest_counts(output: str) -> dict:
+    """从 pytest -q 输出解析用例计数。
+
+    只认 `<数字> passed/skipped/failed/errors`，避免把 "1 warning" 之类误当用例。
+    独立审查（2026-10-19）：原门禁只读 `passed`，530 passed + 6 skipped 也能过门；
+    这与「真实服务测试连不上就跳过」叠加时会假绿，故把 skipped 计入门禁。
+    """
+    text = str(output or "")
+
+    def count(word: str) -> int:
+        match = re.search(r"(\d+)\s+" + word + r"\b", text)
+        return int(match.group(1)) if match else 0
+
+    return {
+        "passed": count("passed"),
+        "skipped": count("skipped"),
+        "failed": count("failed"),
+        "errors": count("errors"),
+    }
+
+
+def backend_gate_error(counts: dict) -> str | None:
+    """后端门禁判定；返回 None 表示通过。拆成函数便于负向标定测试。"""
+    if counts.get("skipped"):
+        return "后端单元测试存在 %d 个 skipped（门禁要求 0 skipped）" % counts["skipped"]
+    if counts.get("failed") or counts.get("errors"):
+        return "后端单元测试存在失败／错误（failed=%d, errors=%d）" % (
+            counts.get("failed", 0), counts.get("errors", 0))
+    if counts.get("passed", 0) < MIN_BACKEND_TESTS:
+        return "后端单元测试（期望 ≥%d passed，实际 %d）" % (
+            MIN_BACKEND_TESTS, counts.get("passed", 0))
+    return None
+
+
+def parse_vitest_counts(output: str) -> dict:
+    """从 Vitest 汇总行 `Tests  N passed | M skipped (T)` 解析计数。"""
+    text = str(output or "")
+    line = ""
+    match = re.search(r"^\s*Tests\s+(.+)$", text, re.M)
+    if match:
+        line = match.group(1)
+
+    def count(word: str) -> int:
+        found = re.search(r"(\d+)\s+" + word + r"\b", line)
+        return int(found.group(1)) if found else 0
+
+    return {
+        "passed": count("passed"),
+        "skipped": count("skipped"),
+        "failed": count("failed"),
+    }
+
+
+def frontend_gate_error(counts: dict) -> str | None:
+    if counts.get("skipped"):
+        return "前端单元测试存在 %d 个 skipped（门禁要求 0 skipped）" % counts["skipped"]
+    if counts.get("failed"):
+        return "前端单元测试存在 %d 个 failed" % counts["failed"]
+    if counts.get("passed", 0) < MIN_FRONTEND_TESTS:
+        return "前端单元测试（期望 ≥%d passed，实际 %d）" % (
+            MIN_FRONTEND_TESTS, counts.get("passed", 0))
+    return None
 
 for _stream in (sys.stdout, sys.stderr):
     if hasattr(_stream, "reconfigure"):
@@ -178,11 +242,10 @@ def main(argv=None) -> int:
         # ---------------------------------------------------------------- 3
         out = step("后端单元测试",
                    [sys.executable, "-m", "pytest", "交付物/03-代码/测试", "-q"])
-        match = re.search(r"(\d+) passed", out)
-        passed = int(match.group(1)) if match else 0
-        if passed < MIN_BACKEND_TESTS:
-            raise BuildFailure("后端单元测试（期望 ≥%d passed，实际 %d）"
-                               % (MIN_BACKEND_TESTS, passed), 1)
+        backend_counts = parse_pytest_counts(out)
+        problem = backend_gate_error(backend_counts)
+        if problem:
+            raise BuildFailure(problem, 1)
 
         # ---------------------------------------------------------------- 4
         step("跨文档核验", [sys.executable, os.path.join(ROOT, "工具", "跨文档核验.py"),
@@ -196,13 +259,12 @@ def main(argv=None) -> int:
         if not args.skip_frontend:
             fe = {"CI": "1"}
             out = step("前端单元测试", [npm, "run", "test"], cwd=FRONTEND_DIR, env=fe)
-            # Vitest 会先打印 `Test Files  4 passed (4)`、再打印 `Tests  75 passed (75)`，
+            # Vitest 会先打印 `Test Files  5 passed (5)`、再打印 `Tests  81 passed (81)`，
             # 必须锚定 "Tests"，否则会把测试文件数误当成用例数。
-            match = re.search(r"Tests\s+(\d+) passed", out)
-            fe_passed = int(match.group(1)) if match else 0
-            if fe_passed < MIN_FRONTEND_TESTS:
-                raise BuildFailure("前端单元测试（期望 ≥%d passed，实际 %d）"
-                                   % (MIN_FRONTEND_TESTS, fe_passed), 1)
+            fe_counts = parse_vitest_counts(out)
+            problem = frontend_gate_error(fe_counts)
+            if problem:
+                raise BuildFailure(problem, 1)
             step("前端构建", [npm, "run", "build"], cwd=FRONTEND_DIR, env=fe)
         else:
             print("\n[构建] --skip-frontend：跳过前端测试与构建")

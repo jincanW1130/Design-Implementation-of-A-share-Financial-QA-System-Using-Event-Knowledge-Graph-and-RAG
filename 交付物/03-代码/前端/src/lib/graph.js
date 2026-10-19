@@ -248,6 +248,29 @@ function pathsOf(ds) {
 //   nodes: {id,type,name,code,eid,sub,time}
 //   edges: {f,t,rel,role,conf,sdoc,schunk,noev,src}
 // ------------------------------------------------------------------
+// —— 输出编码（安全边界） ——
+// 图数据来自上游文档／接口：节点名、关系名、文档标题、URL、错误信息都可能含第三方原文。
+// 凡经 innerHTML 拼进 HTML/SVG 的动态值一律过 esc；href 只接受 http/https（挡 javascript:/data:）。
+// 独立审查（2026-10-19）：这两个函数原先藏在 mountGraph 内且只覆盖少数出口，
+// 现提升到模块级并导出，供全部 innerHTML 出口复用，也便于负向标定测试。
+export function esc(s) {
+  return String(s).replace(/[&<>"']/g, (ch) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]))
+}
+export function safeUrl(u) {
+  const t = String(u).trim()
+  return /^https?:\/\//i.test(t) ? t : null
+}
+// 上游 id（实体/文档/文本块编号）可能含引号、方括号等 CSS 选择器元字符。
+// 直接拼进 `[data-x="…"]` 会抛 SyntaxError，打断整个画布渲染；改为按属性值逐一比较。
+export function findByData(root, attr, value) {
+  if (!root) return null
+  const key = String(value)
+  const list = root.querySelectorAll('[' + attr + ']')
+  for (let i = 0; i < list.length; i++) if (list[i].getAttribute(attr) === key) return list[i]
+  return null
+}
+
 export function buildDataset(mode, nodeArr, edgeArr) {
   const nodes = nodeArr.map((n) => Object.assign({}, n))
   let edges = edgeArr.map((e) => Object.assign({}, e))
@@ -443,8 +466,8 @@ export function mountGraph(host, opt) {
   function paintModes() {
     if (!modesBox) return
     modesBox.innerHTML = MODES.map((m) => {
-      return '<button class="seg__b" type="button" data-mode="' + m.key + '" aria-pressed="' + (DS.mode === m.key ? 'true' : 'false') + '">' +
-        m.label + ' <em>' + m.ds.nodes.length + ' · ' + m.ds.edges.length + '</em></button>'
+      return '<button class="seg__b" type="button" data-mode="' + esc(m.key) + '" aria-pressed="' + (DS.mode === m.key ? 'true' : 'false') + '">' +
+        esc(m.label) + ' <em>' + m.ds.nodes.length + ' · ' + m.ds.edges.length + '</em></button>'
     }).join('')
     const mn = q('modenote')
     if (mn) { const cur = MODES.filter((m) => m.key === DS.mode)[0]; mn.textContent = cur ? cur.note : '' }
@@ -554,32 +577,32 @@ export function mountGraph(host, opt) {
       const dash = (e.conf === null || e.conf === undefined) ? ' stroke-dasharray="4 3"' : ''
       const confTxt = (e.conf === null || e.conf === undefined) ? EMPTY : e.conf
       out += '<g class="geline" data-edge="' + e.i + '" tabindex="0" role="button" aria-label="' +
-        a.label + ' 到 ' + b.label + '，关系' + RELNAME(e.rel) + '（' + e.rel + '）">' +
+        esc(a.label) + ' 到 ' + esc(b.label) + '，关系' + esc(RELNAME(e.rel)) + '（' + esc(e.rel) + '）">' +
         '<path class="gehit" d="' + g.d + '"/>' +
         '<path class="gedge" d="' + g.d + '" stroke="rgba(255,255,255,.55)" stroke-width="' + sw.toFixed(2) +
         '" stroke-opacity="' + op.toFixed(2) + '"' + dash + ' marker-end="url(#' + mk + 'a)"/>' +
         '<text class="gelabel" x="' + g.lx.toFixed(1) + '" y="' + g.ly.toFixed(1) + '" text-anchor="middle">' +
-        RELNAME(e.rel) + ' · ' + confTxt + '</text>' +
+        esc(RELNAME(e.rel)) + ' · ' + esc(confTxt) + '</text>' +
         '</g>'
     })
     DS.nodes.forEach((n) => {
       if (n.deg === 0) return  // 孤立节点只在下方列表渲染（避免「看得见点不到」的幽灵元素）
-      out += '<g class="gnode" data-node="' + n.id + '" tabindex="0" role="button" transform="translate(' +
+      out += '<g class="gnode" data-node="' + esc(n.id) + '" tabindex="0" role="button" transform="translate(' +
         n.x.toFixed(1) + ',' + n.y.toFixed(1) + ')" ' +
-        'aria-label="' + TYPE[n.type].n + '节点 ' + n.label + '，连接数 ' + n.deg + '">' +
-        '<title>' + n.label + ' · ' + TYPE[n.type].n + ' · 连接数 ' + n.deg + '</title>' +
+        'aria-label="' + TYPE[n.type].n + '节点 ' + esc(n.label) + '，连接数 ' + n.deg + '">' +
+        '<title>' + esc(n.label) + ' · ' + TYPE[n.type].n + ' · 连接数 ' + n.deg + '</title>' +
         '<circle class="ghit" r="' + (n.r + 12) + '"/>' +
         '<circle class="halo" r="' + (n.r + 7) + '"/>' + shapeSVG(n.type, n.r) +
-        '<text class="glabel" y="' + (n.r + 16) + '" data-lbl="' + n.id + '">' + n.lbl + '</text>' +
-        (n.sub ? '<text class="code" y="' + (n.r + 28) + '">' + n.sub + '</text>' : '') +
+        '<text class="glabel" y="' + (n.r + 16) + '" data-lbl="' + esc(n.id) + '">' + esc(n.lbl) + '</text>' +
+        (n.sub ? '<text class="code" y="' + (n.r + 28) + '">' + esc(n.sub) + '</text>' : '') +
         '</g>'
     })
     svg.innerHTML = out + '</g>'
     groot = svg.querySelector('.groot')
     DS.nodes.forEach((n) => {
       if (n.deg === 0) { n.el = null; n.lel = null; return }
-      n.el = svg.querySelector('[data-node="' + n.id + '"]')
-      n.lel = svg.querySelector('[data-lbl="' + n.id + '"]')
+      n.el = findByData(svg, 'data-node', n.id)
+      n.lel = findByData(svg, 'data-lbl', n.id)
     })
     DS.edges.forEach((e) => { e.el = svg.querySelector('[data-edge="' + e.i + '"]') })
     applyView()
@@ -655,13 +678,13 @@ export function mountGraph(host, opt) {
         'aria-pressed="' + (S.path === p ? 'true' : 'false') + '">' +
         '<span class="gpath__l">' + p.e.map((i, k) => {
           const e = DS.edges[i]
-          return (k === 0 ? '<i style="background:' + TYPE[DS.idx[e.f].type].c + '"></i>' + DS.idx[e.f].label : '') +
-            '<span class="gpath__rel">—[' + RELNAME(e.rel) + ']→</span>' +
-            '<i style="background:' + TYPE[DS.idx[e.t].type].c + '"></i>' + DS.idx[e.t].label
+          return (k === 0 ? '<i style="background:' + TYPE[DS.idx[e.f].type].c + '"></i>' + esc(DS.idx[e.f].label) : '') +
+            '<span class="gpath__rel">—[' + esc(RELNAME(e.rel)) + ']→</span>' +
+            '<i style="background:' + TYPE[DS.idx[e.t].type].c + '"></i>' + esc(DS.idx[e.t].label)
         }).join('') + '</span>' +
         '<span class="gpath__d">' + p.d + ' 跳</span>' +
-        '<span class="gpath__a">首条关系 ' + e0.rel + ' · role=' + (e0.role || NOEV) + ' · confidence=' + (e0.conf === null || e0.conf === undefined ? EMPTY : e0.conf) +
-        ' · source_doc_id=' + (e0.sdoc || NOEV) + ' · source_chunk_id=' + (e0.schunk || NOEV) + '</span></button>'
+        '<span class="gpath__a">首条关系 ' + esc(e0.rel) + ' · role=' + esc(e0.role || NOEV) + ' · confidence=' + esc(e0.conf === null || e0.conf === undefined ? EMPTY : e0.conf) +
+        ' · source_doc_id=' + esc(e0.sdoc || NOEV) + ' · source_chunk_id=' + esc(e0.schunk || NOEV) + '</span></button>'
     }).join('')
     if (shown.length - live.length) out += '<p class="gpath__flt">另有 ' + (shown.length - live.length) + ' 条路径因类型筛选、深度或时间区间被过滤，暂不显示（未被删除，重置后回来）。</p>'
     if (!live.length) out = '<p class="gpath__flt">当前筛选条件下没有可用路径。放宽类型、深度或时间区间即可恢复。</p>' + out
@@ -675,17 +698,17 @@ export function mountGraph(host, opt) {
     isoBox.innerHTML = iso.length ? iso.map((n) => {
       const sel = !!(S.sel && S.sel.id === n.id)
       return '<button class="giso__i' + (sel ? ' is-sel' : '') + '" type="button" ' +
-        'data-iso="' + n.id + '" aria-pressed="' + (sel ? 'true' : 'false') + '" ' +
-        'aria-label="孤立节点 ' + n.label + ' · ' + TYPE[n.type].n + '，点选查看属性">' +
+        'data-iso="' + esc(n.id) + '" aria-pressed="' + (sel ? 'true' : 'false') + '" ' +
+        'aria-label="孤立节点 ' + esc(n.label) + ' · ' + TYPE[n.type].n + '，点选查看属性">' +
         '<svg class="giso__g" viewBox="-11 -11 22 22" aria-hidden="true">' +
-          '<g class="gnode" data-node="' + n.id + '">' +
+          '<g class="gnode" data-node="' + esc(n.id) + '">' +
             '<circle class="ghit" r="10"/><circle class="halo" r="8.6"/>' + shapeSVG(n.type, 7, 0.3) +
           '</g>' +
         '</svg>' +
-        '<span><span class="giso__n">' + n.label + (n.sub ? ' · ' + n.sub : '') + ' · ' + TYPE[n.type].n + '</span>' +
-        '<span class="giso__d">该节点在本次返回的图谱路径中未出现邻接边。事件时间 ' + (n.time ? n.time : EMPTY) + '。</span></span></button>'
+        '<span><span class="giso__n">' + esc(n.label) + (n.sub ? ' · ' + esc(n.sub) : '') + ' · ' + TYPE[n.type].n + '</span>' +
+        '<span class="giso__d">该节点在本次返回的图谱路径中未出现邻接边。事件时间 ' + esc(n.time ? n.time : EMPTY) + '。</span></span></button>'
     }).join('') : '<div class="giso__d">本数据集里没有孤立节点。</div>'
-    iso.forEach((n) => { n.el = isoBox.querySelector('.gnode[data-node="' + n.id + '"]'); n.lel = null })
+    iso.forEach((n) => { n.el = findByData(isoBox, 'data-node', n.id); n.lel = null })
   }
 
   // —— 异步真实接口加载 ——
@@ -722,17 +745,9 @@ export function mountGraph(host, opt) {
     keys.forEach((k) => { if (!seen[k]) out.push([k, (e.properties || {})[k]]) })
     return out
   }
-  // M2（2026-10-11 复评）：innerHTML 注入面转义。图谱节点属性与文本块正文都可能含
-  // 第三方公告原文（存储型 XSS 载体），凡经 innerHTML 拼接的用户/上游数据一律过 esc；
-  // 链接地址走 safeUrl 白名单（仅 http/https），堵住 `url` 键曾绕过协议检查的口子。
-  function esc(s) {
-    return String(s).replace(/[&<>"']/g, (ch) => (
-      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]))
-  }
-  function safeUrl(u) {
-    const t = String(u).trim()
-    return /^https?:\/\//i.test(t) ? t : null
-  }
+  // M2（2026-10-11 复评）只处理了 propVal／loadCtx 两个出口；独立审查（2026-10-19）
+  // 发现画布 aria-label、路径列表、属性面板、证据表、时间轴等出口仍原样拼接上游文本，
+  // 已统一补上模块级 esc／safeUrl。此处保留函数名，避免调用点出现两套口径。
   function propVal(k, v) {
     if (v === null || v === undefined || v === '' || v === EMPTY)
       return '<span class="gvp gvp--empty">' + EMPTY + '</span>' +
@@ -748,7 +763,7 @@ export function mountGraph(host, opt) {
 
   function panelNode(n) {
     ptype.textContent = TYPE[n.type].n
-    const EID = n.eid || n.id
+    const EID = esc(n.eid || n.id)
     const nb = []
     let out = 0, inc = 0
     DS.edges.forEach((e) => {
@@ -771,10 +786,10 @@ export function mountGraph(host, opt) {
     } else if (e.__empty) {
       entBlock = '<p class="gvp--none">实体详情接口未返回内容（该实体在后端不存在或为空）。</p>'
     } else if (e.__error) {
-      entBlock = '<p class="gvp--none">实体详情接口请求失败：' + e.__error + '</p>'
+      entBlock = '<p class="gvp--none">实体详情接口请求失败：' + esc(e.__error) + '</p>'
     } else {
       entBlock = (rows.length
-        ? '<dl class="gkv">' + rows.map((r) => '<div class="kv"><dt>' + r[0] + (EAPI_LABEL[r[0]] ? '<span>' + EAPI_LABEL[r[0]] + '</span>' : '') + '</dt><dd>' + propVal(r[0], r[1]) + '</dd></div>').join('') + '</dl>'
+        ? '<dl class="gkv">' + rows.map((r) => '<div class="kv"><dt>' + esc(r[0]) + (EAPI_LABEL[r[0]] ? '<span>' + EAPI_LABEL[r[0]] + '</span>' : '') + '</dt><dd>' + propVal(r[0], r[1]) + '</dd></div>').join('') + '</dl>'
         : '<p class="gvp--none">' + TYPE[n.type].n + ' 类实体的属性键名以实体详情接口实返为准；本次接口未返回可显示的属性键，本原型不推测键名。下方「本视图关系」不受影响。</p>') +
         '<p class="gsrc" style="margin-top:10px">属性来源：实体详情接口 <b>GET /api/graph/entities/' + EID + '</b> 的实测返回。属性值原样取自图谱，未派生；键序＝该实体的 property_keys。</p>' +
         ((n.type === 'person' || n.type === 'org' || n.type === 'policy') && rows.length
@@ -789,7 +804,7 @@ export function mountGraph(host, opt) {
     }
     pbody.innerHTML =
       '<div class="gsel"><i style="background:' + TYPE[n.type].c + '"></i>' +
-        '<b>已选中 · ' + n.label + '</b><em>' + TYPE[n.type].n + ' · ' + EID + '</em>' +
+        '<b>已选中 · ' + esc(n.label) + '</b><em>' + TYPE[n.type].n + ' · ' + EID + '</em>' +
         '<button class="gchip" type="button" data-g="unselect" title="取消选中（也可以按 Esc，或点画布空白处）">取消选中</button>' +
       '</div>' +
       '<section class="gblk gblk--first">' +
@@ -805,7 +820,7 @@ export function mountGraph(host, opt) {
         '</dl>' +
         '<div class="gblkH" style="margin:13px 0 0"><span class="label">邻接关系 · ' + nb.length + ' 条</span></div>' +
         '<div class="grel">' + (nb.length ? nb.map((x) => '<div class="grel__i"><i style="background:' + TYPE[x.to.type].c + '"></i>' +
-          '<span class="gpath__rel">' + x.dir + ' · ' + RELNAME(x.rel) + '</span> ' + x.to.label + '<em>' + TYPE[x.to.type].n + '</em></div>').join('')
+          '<span class="gpath__rel">' + x.dir + ' · ' + esc(RELNAME(x.rel)) + '</span> ' + esc(x.to.label) + '<em>' + TYPE[x.to.type].n + '</em></div>').join('')
           : '<div class="grel--none">该节点在本次返回的图谱路径中未出现邻接边。</div>') + '</div>' +
       '</section>'
     ensureEntity(n)
@@ -815,25 +830,25 @@ export function mountGraph(host, opt) {
     ptype.textContent = '关系边'
     const noev = !!e.noev
     const val = (v) => (v === null || v === undefined || v === EMPTY)
-      ? '<span style="color:rgba(255,255,255,.62)">' + (noev ? NOEV : EMPTY) + '</span>' : v
+      ? '<span style="color:rgba(255,255,255,.62)">' + (noev ? NOEV : EMPTY) + '</span>' : esc(v)
     pbody.innerHTML =
       '<div class="gsel"><i style="background:' + TYPE[DS.idx[e.f].type].c + '"></i>' +
-        '<b>已选中 · ' + DS.idx[e.f].label + ' → ' + DS.idx[e.t].label + '</b><em>边 #' + e.i + '</em>' +
+        '<b>已选中 · ' + esc(DS.idx[e.f].label) + ' → ' + esc(DS.idx[e.t].label) + '</b><em>边 #' + e.i + '</em>' +
         '<button class="gchip" type="button" data-g="unselect" title="取消选中（也可以按 Esc，或点画布空白处）">取消选中</button>' +
       '</div>' +
-      '<div><span class="label">关系</span><div class="h4" style="margin-top:6px">' + e.rel + ' · ' + RELNAME(e.rel) + '</div>' +
-        '<span class="tag" style="margin-top:9px">' + (e.src || '') + '</span>' +
+      '<div><span class="label">关系</span><div class="h4" style="margin-top:6px">' + esc(e.rel) + ' · ' + esc(RELNAME(e.rel)) + '</div>' +
+        '<span class="tag" style="margin-top:9px">' + esc(e.src || '') + '</span>' +
         (e.clat ? '<span class="tag tag--muted" style="margin-top:9px;margin-left:6px">并行边 · 曲率分叉</span>' : '') + '</div>' +
       '<dl style="display:flex;flex-direction:column;gap:12px;margin:0">' +
-        '<div class="kv"><dt>起点</dt><dd>' + DS.idx[e.f].label + '</dd></div>' +
-        '<div class="kv"><dt>终点</dt><dd>' + DS.idx[e.t].label + '</dd></div>' +
+        '<div class="kv"><dt>起点</dt><dd>' + esc(DS.idx[e.f].label) + '</dd></div>' +
+        '<div class="kv"><dt>终点</dt><dd>' + esc(DS.idx[e.t].label) + '</dd></div>' +
         '<div class="kv"><dt>role</dt><dd class="mono">' + val(e.role) + '</dd></div>' +
         '<div class="kv"><dt>confidence</dt><dd class="mono">' + val(e.conf) + '</dd></div>' +
         '<div class="kv"><dt>source_doc_id</dt><dd class="mono">' + val(e.sdoc) + '</dd></div>' +
         '<div class="kv"><dt>source_chunk_id</dt><dd class="mono">' + val(e.schunk) + '</dd></div>' +
       '</dl>' +
       '<p class="gnote" style="font-size:11px">' + (noev
-        ? '该关系类型（<i>' + e.rel + '</i>）不带证据属性，四项证据字段按作者口径一律显示「' + NOEV + '」。'
+        ? '该关系类型（<i>' + esc(e.rel) + '</i>）不带证据属性，四项证据字段按作者口径一律显示「' + NOEV + '」。'
         : '线宽与不透明度由 confidence 编码：' + (e.conf === null || e.conf === undefined
           ? '本次为空 → 虚线、线宽 1.0、不透明度 .55。'
           : 'confidence ' + e.conf + ' → 线宽 ' + (1 + e.conf * 1.6).toFixed(2) + '、不透明度 ' + (0.55 + e.conf * 0.45).toFixed(2) + '。')) +
@@ -841,7 +856,7 @@ export function mountGraph(host, opt) {
       '<div style="margin-top:auto;padding-top:14px;border-top:1px solid var(--border)">' +
         '<button class="btn btn--quiet btn--sm" type="button" data-g="jump" ' + (e.schunk ? '' : 'disabled') + '>' +
           (e.schunk ? '跳到对应证据' : '该边不带 source_chunk_id') + '</button>' +
-        '<p class="gnote" style="font-size:10.5px;margin-top:9px">按 source_chunk_id ' + (e.schunk || '（无）') + ' 在证据清单里定位并高亮那一条。</p>' +
+        '<p class="gnote" style="font-size:10.5px;margin-top:9px">按 source_chunk_id ' + esc(e.schunk || '（无）') + ' 在证据清单里定位并高亮那一条。</p>' +
       '</div>'
   }
 
@@ -866,17 +881,18 @@ export function mountGraph(host, opt) {
   }
   function relRow(rel, peerLabel, docId, chunkId, conf, role, docUrl, docTitle) {
     const noev = rel === 'EVIDENCED_BY'
-    const td = (v) => noev ? '' : '<td class="mono">' + ((v === null || v === undefined || v === '') ? '<span class="gev__gap">' + EMPTY + '</span>' : v) + '</td>'
-    const link = docUrl
-      ? '<a class="ev__link ev__link--sm" href="' + docUrl + '" target="_blank" rel="noopener" aria-label="查看原文：' + (docTitle || '') + '（新窗口打开）">' + EXT + '查看原文 ↗</a>'
+    const td = (v) => noev ? '' : '<td class="mono">' + ((v === null || v === undefined || v === '') ? '<span class="gev__gap">' + EMPTY + '</span>' : esc(v)) + '</td>'
+    const href = safeUrl(docUrl)
+    const link = href
+      ? '<a class="ev__link ev__link--sm" href="' + esc(href) + '" target="_blank" rel="noopener" aria-label="查看原文：' + esc(docTitle || '') + '（新窗口打开）">' + EXT + '查看原文 ↗</a>'
       : '<span class="ev__nolink ev__nolink--sm">记录未给出</span>'
     return '<tr>' +
-      '<td class="k"><b>' + RELNAME(rel) + '</b><em>' + rel + '</em></td>' +
-      '<td><i class="gdot" style="background:' + '#8792A8' + '"></i>' + peerLabel + '</td>' +
+      '<td class="k"><b>' + esc(RELNAME(rel)) + '</b><em>' + esc(rel) + '</em></td>' +
+      '<td><i class="gdot" style="background:' + '#8792A8' + '"></i>' + esc(peerLabel) + '</td>' +
       (noev ? '<td colspan="4" class="gev__gap">' + NOEV + '</td>'
         : td(role) + td(conf) + td(docId) + td(chunkId)) +
       '<td class="gev__acts">' + (noev ? '<span class="gev__gap">—</span>'
-        : link + ' <button class="gchip" type="button" data-ctx="' + docId + ':' + chunkId + '" aria-expanded="false">查看上下文</button>') +
+        : link + ' <button class="gchip" type="button" data-ctx="' + esc(docId) + ':' + esc(chunkId) + '" aria-expanded="false">查看上下文</button>') +
       '</td></tr>'
   }
   function renderEvidence() {
@@ -887,15 +903,15 @@ export function mountGraph(host, opt) {
         '<p class="gnote">选中画布上任一节点，这里给出该实体的完整证据：① 计数概览 ② 关系证据表 ③ 文档聚合 ④ 事件实体额外四项。三块均取自真实接口 <i>GET /api/graph/entities/{id}/evidence</i>。</p>'
       return
     }
-    const n = S.sel, EID = n.eid || n.id
+    const n = S.sel, EID = n.eid || n.id, eidHTML = esc(EID)
     ensureEvidence(n)
     if (n.type === 'event') ensureEvent(n)
     const key = EID + '#' + S.depth, ev = CACHE.evi[key]
     const stat = (k, v) => '<div class="gstat"><span class="label">' + k + '</span><b>' +
-      (v === null || v === undefined ? '<em class="gev__gap">—</em>' : v) + '</b></div>'
+      (v === null || v === undefined ? '<em class="gev__gap">—</em>' : esc(v)) + '</b></div>'
     let h = '<div class="gev__head"><div><span class="label">实体证据 · Entity evidence</span>' +
-        '<h3 class="h3">' + n.label + ' <em class="gev__kind">' + TYPE[n.type].n + '</em></h3></div>' +
-        '<span class="label">深度 ' + S.depth + ' 跳 · GET /api/graph/entities/' + EID + '/evidence?depth=' + S.depth + '</span></div>' +
+        '<h3 class="h3">' + esc(n.label) + ' <em class="gev__kind">' + TYPE[n.type].n + '</em></h3></div>' +
+        '<span class="label">深度 ' + S.depth + ' 跳 · GET /api/graph/entities/' + eidHTML + '/evidence?depth=' + S.depth + '</span></div>' +
       '<div class="gev__grid">'
 
     const c = (ev && !ev.__empty && !ev.__error) ? ev.counts : null
@@ -927,7 +943,7 @@ export function mountGraph(host, opt) {
     h += '<section class="gev__blk gev__blk--wide"><div class="gev__blkH"><span class="label">② 关系证据表</span><span class="label">' + rcount + ' 条</span></div>' +
       '<div class="gev__tblWrap"><table class="gev__tbl"><thead><tr>' +
         '<th>中文关系名</th><th>对端实体</th><th>role</th><th>confidence</th><th>source_doc_id</th><th>source_chunk_id</th><th>操作</th></tr></thead><tbody>' +
-      (rows || '<tr><td colspan="7" class="gev__gap">' + (ev ? (ev.__error ? '实体证据接口请求失败：' + ev.__error : '该实体在本次返回里没有邻接关系。') : (provider.evidence ? '正在请求实体证据接口 …' : '回看还原模式不重新查询图谱：本载荷不含逐条实体证据。')) + '</td></tr>') +
+      (rows || '<tr><td colspan="7" class="gev__gap">' + (ev ? (ev.__error ? '实体证据接口请求失败：' + esc(ev.__error) : '该实体在本次返回里没有邻接关系。') : (provider.evidence ? '正在请求实体证据接口 …' : '回看还原模式不重新查询图谱：本载荷不含逐条实体证据。')) + '</td></tr>') +
       '</tbody></table></div>' +
       '<p class="gnote">「查看原文 ↗」按该文档接口返回的 url 直达外部原文（新窗口打开，记录未给出 url 时显示「记录未给出」，不猜链接）；「查看上下文」＝展开该块的正文片段（真实接口 <i>GET /api/documents/{doc_id}/chunks/{chunk_id}</i> 的 <i>chunk_content</i> 与 <i>neighbor_chunks</i>）。不带证据属性的关系类型（如 <i>EVIDENCED_BY</i>）整行显示「' + NOEV + '」。</p></section>'
 
@@ -936,10 +952,11 @@ export function mountGraph(host, opt) {
     h += '<section class="gev__blk gev__blk--wide"><div class="gev__blkH"><span class="label">③ 文档聚合 · 按文档看证据</span><span class="label">' + (ev && ev.documents_total != null ? ev.documents_total + ' 篇' : '—') + '</span></div>' +
       '<div class="gev__tblWrap"><table class="gev__tbl"><thead><tr><th>标题</th><th>来源站</th><th>发布日期</th><th>支撑的关系数</th><th>原文</th></tr></thead><tbody>' +
       (docs.length ? docs.map((d) => {
-        const url = d.url ? '<a class="ev__link ev__link--sm" href="' + d.url + '" target="_blank" rel="noopener" aria-label="查看原文：' + (d.title || '') + '（新窗口打开）">' + EXT + '查看原文 ↗</a>' : '<span class="ev__nolink ev__nolink--sm">记录未给出 url</span>'
-        return '<tr><td class="k"><b>' + (d.title || '—（本次记录未给出标题）') + '</b><em>doc_id ' + d.doc_id + '</em></td>' +
-          '<td>' + (d.source ? ('<b>' + d.source + '</b>' + (DOMAIN[d.source] ? '<em class="ev__dom">' + DOMAIN[d.source] + '</em>' : '')) : '<span class="gev__gap">—（未给出）</span>') + '</td>' +
-          '<td class="mono">' + (d.publish_time ? String(d.publish_time).slice(0, 10) : '<span class="gev__gap">—（未给出）</span>') + '</td>' +
+        const dHref = safeUrl(d.url)
+        const url = dHref ? '<a class="ev__link ev__link--sm" href="' + esc(dHref) + '" target="_blank" rel="noopener" aria-label="查看原文：' + esc(d.title || '') + '（新窗口打开）">' + EXT + '查看原文 ↗</a>' : '<span class="ev__nolink ev__nolink--sm">记录未给出 url</span>'
+        return '<tr><td class="k"><b>' + esc(d.title || '—（本次记录未给出标题）') + '</b><em>doc_id ' + esc(d.doc_id) + '</em></td>' +
+          '<td>' + (d.source ? ('<b>' + esc(d.source) + '</b>' + (DOMAIN[d.source] ? '<em class="ev__dom">' + DOMAIN[d.source] + '</em>' : '')) : '<span class="gev__gap">—（未给出）</span>') + '</td>' +
+          '<td class="mono">' + (d.publish_time ? esc(String(d.publish_time).slice(0, 10)) : '<span class="gev__gap">—（未给出）</span>') + '</td>' +
           '<td class="mono">' + (d.support_relations != null ? d.support_relations + ' 条' : '<span class="gev__gap">—</span>') + '</td>' +
           '<td>' + url + '</td></tr>'
       }).join('') : '<tr><td colspan="5" class="gev__gap">本次返回里没有与该实体关联的文档。</td></tr>') +
@@ -950,8 +967,8 @@ export function mountGraph(host, opt) {
     if (n.type === 'event') {
       const evd = CACHE.evt[EID]
       let body
-      if (!evd) body = '<p class="gnote">正在请求事件详情接口 <i>GET /api/graph/events/' + EID + '</i> …</p>'
-      else if (evd.__error) body = '<p class="gnote">事件详情接口请求失败：' + evd.__error + '</p>'
+      if (!evd) body = '<p class="gnote">正在请求事件详情接口 <i>GET /api/graph/events/' + eidHTML + '</i> …</p>'
+      else if (evd.__error) body = '<p class="gnote">事件详情接口请求失败：' + esc(evd.__error) + '</p>'
       else if (evd.__empty) body = '<p class="gnote">事件详情接口未返回内容。</p>'
       else {
         const parts = evd.participants || [], issuer = evd.issuer, policies = evd.policies || [], evs = evd.evidences || []
@@ -959,24 +976,25 @@ export function mountGraph(host, opt) {
         const seenDoc = {}, uniq = []
         sorted.forEach((s) => { if (!seenDoc[s.doc_id]) { seenDoc[s.doc_id] = 1; uniq.push(s) } })
         body = '<div class="gev__kv4">' +
-          '<div><span class="label">参与者（含 role）</span><p>' + (parts.length ? parts.map((p) => '<b>' + (p.name || p.node_id) + '</b><em class="gev__role">role=' + (p.role || EMPTY) + '</em>').join('、') : '—') + '</p></div>' +
-          '<div><span class="label">发布机构</span><p>' + (issuer ? '<b>' + (issuer.name || issuer.node_id) + '</b>' : '<span class="gev__gap">—（空）</span>') + '</p></div>' +
-          '<div><span class="label">相关政策</span><p>' + (policies.length ? policies.map((x) => '<b>' + (x.name || x.node_id) + '</b>').join('、') : '<span class="gev__gap">—（空）</span>') + '</p></div>' +
+          '<div><span class="label">参与者（含 role）</span><p>' + (parts.length ? parts.map((p) => '<b>' + esc(p.name || p.node_id) + '</b><em class="gev__role">role=' + esc(p.role || EMPTY) + '</em>').join('、') : '—') + '</p></div>' +
+          '<div><span class="label">发布机构</span><p>' + (issuer ? '<b>' + esc(issuer.name || issuer.node_id) + '</b>' : '<span class="gev__gap">—（空）</span>') + '</p></div>' +
+          '<div><span class="label">相关政策</span><p>' + (policies.length ? policies.map((x) => '<b>' + esc(x.name || x.node_id) + '</b>').join('、') : '<span class="gev__gap">—（空）</span>') + '</p></div>' +
           '<div><span class="label">多来源证据 · 按发布时间升序</span><p>原始 ' + evs.length + ' 条 · 去重后 ' + uniq.length + ' 个来源</p></div>' +
         '</div>' +
         '<div class="gev__tblWrap"><table class="gev__tbl"><thead><tr><th>来源</th><th>文档</th><th>文本块</th><th>来源站</th><th>发布日期</th><th>原文</th></tr></thead><tbody>' +
         uniq.map((s, i) => {
-          const url = s.url ? '<a class="ev__link ev__link--sm" href="' + s.url + '" target="_blank" rel="noopener">' + EXT + '查看原文 ↗</a>' : '<span class="ev__nolink ev__nolink--sm">记录未给出</span>'
+          const sHref = safeUrl(s.url)
+          const url = sHref ? '<a class="ev__link ev__link--sm" href="' + esc(sHref) + '" target="_blank" rel="noopener">' + EXT + '查看原文 ↗</a>' : '<span class="ev__nolink ev__nolink--sm">记录未给出</span>'
           return '<tr><td class="k">' + (i === 0 ? '<b class="gev__main">主要来源</b>' : '<em>同源（同文档，已去重）</em>') + '</td>' +
-            '<td class="k"><b>' + (s.title || '—（未给出标题）') + '</b><em>doc_id ' + s.doc_id + '</em></td>' +
-            '<td class="mono"><span class="gev__gap">' + s.chunk_id + '</span></td>' +
-            '<td>' + (s.source || '<span class="gev__gap">—（未给出）</span>') + '</td>' +
-            '<td class="mono">' + (s.publish_time ? String(s.publish_time).slice(0, 10) : '<span class="gev__gap">—（未给出）</span>') + '</td>' +
+            '<td class="k"><b>' + esc(s.title || '—（未给出标题）') + '</b><em>doc_id ' + esc(s.doc_id) + '</em></td>' +
+            '<td class="mono"><span class="gev__gap">' + esc(s.chunk_id) + '</span></td>' +
+            '<td>' + (s.source ? esc(s.source) : '<span class="gev__gap">—（未给出）</span>') + '</td>' +
+            '<td class="mono">' + (s.publish_time ? esc(String(s.publish_time).slice(0, 10)) : '<span class="gev__gap">—（未给出）</span>') + '</td>' +
             '<td>' + url + '</td></tr>'
         }).join('') + '</tbody></table></div>' +
         '<p class="gnote">多来源证据按发布日期升序排列，最早一份标为「主要来源」，合并为一行不重复计算。</p>'
       }
-      h += '<section class="gev__blk gev__blk--wide"><div class="gev__blkH"><span class="label">④ 事件实体额外四项</span><span class="label">GET /api/graph/events/' + EID + '</span></div>' + body + '</section>'
+      h += '<section class="gev__blk gev__blk--wide"><div class="gev__blkH"><span class="label">④ 事件实体额外四项</span><span class="label">GET /api/graph/events/' + eidHTML + '</span></div>' + body + '</section>'
     }
 
     h += '</div>' +
@@ -990,9 +1008,9 @@ export function mountGraph(host, opt) {
     const p1 = DS.paths.filter((p) => p.d === 1).length, p2 = DS.paths.filter((p) => p.d === 2).length
     if (accBox) accBox.innerHTML = '<div class="gacc">' +
       '<span class="label">准确性声明</span>' +
-      '<span class="small">' + (opt.modeName || '当前数据集') + '：<b>' + n + '</b> 节点 / <b>' + e + '</b> 边，全部来自真实返回</span>' +
+      '<span class="small">' + esc(opt.modeName || '当前数据集') + '：<b>' + n + '</b> 节点 / <b>' + e + '</b> 边，全部来自真实返回</span>' +
       '<span class="tag tag--red">图谱深度上限 ' + DS.hops + ' 跳</span>' +
-      '<span class="tag tag--muted">' + (opt.tag || '真实接口返回') + '</span>' +
+      '<span class="tag tag--muted">' + esc(opt.tag || '真实接口返回') + '</span>' +
     '</div>'
     if (noteBox) noteBox.innerHTML = '数据集由真实接口返回构造：画布绘制全部 <i>' + n + '</i> 个节点与 <i>' + e + '</i> 条边；' +
       '据此可枚举 1 跳路径 <i>' + p1 + '</i> 条、2 跳路径 <i>' + p2 + '</i> 条。跳数从各连通分量的中心实体（度最高者）起算。' +
@@ -1119,7 +1137,7 @@ export function mountGraph(host, opt) {
     const c = e.target.closest('[data-ctx]')
     if (c) {
       const keyv = c.getAttribute('data-ctx')
-      const row = host.querySelector('[data-ctxfor="' + keyv + '"]')
+      const row = findByData(host, 'data-ctxfor', keyv)
       const open2 = c.getAttribute('aria-expanded') === 'true'
       c.setAttribute('aria-expanded', open2 ? 'false' : 'true')
       if (row) row.hidden = open2
@@ -1133,7 +1151,7 @@ export function mountGraph(host, opt) {
     const wrap = document.createElement('tr')
     wrap.className = 'gev__ctxrowWrap'; wrap.setAttribute('data-ctxfor', keyv)
     wrap.innerHTML = '<td colspan="7"><div class="gev__ctx"><span class="label">查看上下文</span>' +
-      '<div class="gev__ctxrow"><span>接口</span><i>GET /api/documents/' + docId + '/chunks/' + chunkId + '</i></div>' +
+      '<div class="gev__ctxrow"><span>接口</span><i>GET /api/documents/' + esc(docId) + '/chunks/' + esc(chunkId) + '</i></div>' +
       '<p class="gev__gap" style="margin:8px 0 0">正在请求 …</p></div></td>'
     const tr = btn.closest('tr')
     if (tr && tr.parentNode) tr.parentNode.insertBefore(wrap, tr.nextSibling)
@@ -1148,7 +1166,7 @@ export function mountGraph(host, opt) {
         '<div class="gev__ctxrow"><span>neighbor_chunks</span><i>' + esc(nb.length ? nb.map((x) => 'chunk_id ' + x.chunk_id).join('、') : '本次返回里没有相邻块') + '</i></div>'
     }).catch((e) => {
       wrap.querySelector('div.gev__ctx').innerHTML =
-        '<span class="label">查看上下文</span><p class="gev__gap">正文接口请求失败：' + (e && e.message || e) + '</p>'
+        '<span class="label">查看上下文</span><p class="gev__gap">正文接口请求失败：' + esc(e && e.message || e) + '</p>'
     })
   }
   function setDataset(ds, pref) {

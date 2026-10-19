@@ -15,10 +15,14 @@
 import { computed, inject, nextTick, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { askQuestion, friendlyMessageOf, listHistory } from '../api.js'
+import { safeUrl } from '../lib/graph.js'
 
 const router = useRouter()
 const appMeta = inject('appMeta', null)
 const market = inject('market', null)
+
+// 新闻／报告条目的 url 来自外部源，属不可信文本：只放行 http(s)，其余不渲染为可点击链接。
+function hrefOf(u) { return safeUrl(u) || '' }
 
 // —— hero / meta ——
 const cutoff = computed(() => {
@@ -461,8 +465,8 @@ onMounted(() => {
                   <div v-for="(o, i) in newsItems" :key="i" class="rt__item">
                     <span class="rt__time">{{ o.time || o.date || '—' }}</span>
                     <span class="rt__ttl"><span class="tag" v-if="o.type" style="margin-right:7px">{{ o.type }}</span>{{ o.title }}
-                      <span class="rt__site">{{ o.media || o.source || '东方财富' }}{{ o.url ? '' : ' · 本次未取到原文 URL' }}</span></span>
-                    <a v-if="o.url" class="rt__go" :href="o.url" target="_blank" rel="noopener" :aria-label="'打开原文：' + o.title">原文 ↗</a>
+                      <span class="rt__site">{{ o.media || o.source || '东方财富' }}{{ hrefOf(o.url) ? '' : ' · 本次未取到原文 URL' }}</span></span>
+                    <a v-if="hrefOf(o.url)" class="rt__go" :href="hrefOf(o.url)" target="_blank" rel="noopener" :aria-label="'打开原文：' + o.title">原文 ↗</a>
                     <span v-else class="rt__go rt__go--off">未给出</span>
                   </div>
                 </template>
@@ -498,8 +502,8 @@ onMounted(() => {
                 <div v-for="(o, i) in shownReports" :key="i" class="rt__item">
                   <span class="rt__time">{{ fmtDate(o.publish_time) }}</span>
                   <span class="rt__ttl"><span class="tag" v-if="o.category" style="margin-right:7px">{{ o.category }}</span>{{ o.title }}
-                    <span class="rt__site">{{ o.source || '语料库' }}{{ o.url ? '' : ' · 本次未取到原文 URL' }}</span></span>
-                  <a v-if="o.url" class="rt__go" :href="o.url" target="_blank" rel="noopener" :aria-label="'打开原文：' + o.title">原文 ↗</a>
+                    <span class="rt__site">{{ o.source || '语料库' }}{{ hrefOf(o.url) ? '' : ' · 本次未取到原文 URL' }}</span></span>
+                  <a v-if="hrefOf(o.url)" class="rt__go" :href="hrefOf(o.url)" target="_blank" rel="noopener" :aria-label="'打开原文：' + o.title">原文 ↗</a>
                   <span v-else class="rt__go rt__go--off">未给出</span>
                 </div>
               </template>

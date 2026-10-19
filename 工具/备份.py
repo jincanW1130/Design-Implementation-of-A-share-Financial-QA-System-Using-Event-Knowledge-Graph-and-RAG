@@ -14,6 +14,15 @@
 dump 灌进去，逐表比对计数，再 `DROP DATABASE`。临时库一定在 finally 中删除；正式库
 `ashare_qa` 全程只读，不写入。这样「备份文件可恢复」有实测证据，不是只看看文件大小。
 
+运行期账号只有 DML 时（`ashare_app`），建／删临时库需要迁移账号权限（独立审查 2026-10-19）：
+
+* **推荐**：用迁移账号环境变量运行备份（只影响本进程，不改 config.local.json）：
+  `set ASHARE_MYSQL_USER=…` / `set ASHARE_MYSQL_PASSWORD=…`；
+* 若确实没有迁移账号，可显式 `--skip-verify`：仍生成 dump／Neo4j／向量备份，
+  但 **manifest 的 `verify.skipped=true` 如实标记「未做恢复回验」**；
+* 真实运行会在**写任何文件之前**先建／删一个探针库做权限预检；权限不足即退出 1，
+  不再留下「dump 已写、回验失败」的半成品目录（这是本次审查修掉的回归）。
+
 纪律
 ----
 * 口令只写进 `%TEMP%` 下的临时 option 文件（尽力设 0600），进程结束即删除；不打印、不入 manifest。
@@ -36,6 +45,7 @@ dump 灌进去，逐表比对计数，再 `DROP DATABASE`。临时库一定在 f
     python 工具\\备份.py                 # 完整备份 + 导入回验 + 保留最近 3 份
     python 工具\\备份.py --keep 7        # 保留最近 7 份
     python 工具\\备份.py --dry-run       # 只检查并打印计划（含保留期计划）
+    python 工具\\备份.py --skip-verify   # 没有迁移账号时：生成备份但不做恢复回验
     python 工具\\备份.py --out D:\\bak   # 指定输出根目录
 """
 
@@ -131,6 +141,49 @@ def _connect(config):
     params = config.db_params()
     return pymysql.connect(connect_timeout=5, read_timeout=60,
                            cursorclass=pymysql.cursors.DictCursor, **params), params
+
+
+def _preflight_verify_db(db_params: dict, verify_db: str) -> tuple:
+    """在写文件前证明当前账号能 CREATE/DROP 回验库。
+
+    返回 `(ok, detail)`。探针库名带 `_probe` 后缀，创建后立刻删除；即使 DROP 失败也只会
+    留下一个空的 `ashare_qa_bakverify_*_probe`（不会动正式库）。
+    """
+    import pymysql
+    probe = verify_db + "_probe"
+    admin = None
+    created = False
+    try:
+        admin = pymysql.connect(connect_timeout=5, read_timeout=30,
+                                cursorclass=pymysql.cursors.DictCursor, **db_params)
+        with admin.cursor() as cur:
+            cur.execute("CREATE DATABASE `%s` CHARACTER SET utf8mb4 "
+                        "COLLATE utf8mb4_0900_ai_ci" % probe)
+        admin.commit()
+        created = True
+        with admin.cursor() as cur:
+            cur.execute("DROP DATABASE `%s`" % probe)
+        admin.commit()
+        created = False
+        return True, ""
+    except pymysql.err.MySQLError as exc:
+        errno = exc.args[0] if getattr(exc, "args", None) else None
+        return False, "ERROR %s（CREATE/DROP DATABASE 被拒绝）" % errno
+    except Exception as exc:                                    # noqa: BLE001
+        return False, (str(exc).splitlines()[0] if str(exc) else type(exc).__name__)
+    finally:
+        if created and admin is not None:
+            try:
+                with admin.cursor() as cur:
+                    cur.execute("DROP DATABASE IF EXISTS `%s`" % probe)
+                admin.commit()
+            except Exception:
+                pass
+        if admin is not None:
+            try:
+                admin.close()
+            except Exception:
+                pass
 
 
 BACKUP_DIR_RE = re.compile(r"^\d{8}_\d{6}$")
@@ -231,6 +284,8 @@ def main(argv=None) -> int:
     ap.add_argument("--out", default=DEFAULT_OUT_ROOT, help="输出根目录（默认 交付物/10-部署/备份）")
     ap.add_argument("--keep", type=int, default=3,
                     help="只保留最近 N 份备份目录（默认 3；仅清理本脚本产物）")
+    ap.add_argument("--skip-verify", action="store_true",
+                    help="没有迁移账号时跳过临时库回验；manifest 会标记 verify.skipped=true")
     args = ap.parse_args(argv)
     if args.keep < 1:
         ap.error("--keep 必须 ≥ 1（至少保留本次备份）")
@@ -283,12 +338,30 @@ def main(argv=None) -> int:
     if free_bytes < 1024 * 1024 * 1024:
         print("[WARN] 可用磁盘不足 1 GB，备份可能失败。")
 
+    verify_db = "ashare_qa_bakverify_" + stamp
+    if args.skip_verify:
+        print("  导入回验       = 跳过（--skip-verify；manifest 将如实标记）")
+    elif args.dry_run:
+        print("  回验权限       = dry-run 不建探针库；真实运行会在写文件前预检 CREATE/DROP")
+    else:
+        ok, detail = _preflight_verify_db(db_params, verify_db)
+        if not ok:
+            print("[FAIL] 导入回验需要 CREATE/DROP DATABASE 权限，当前账号不具备：%s" % detail)
+            print("       运行期账号仅 DML。请改用迁移账号环境变量运行：")
+            print("         set ASHARE_MYSQL_USER=<迁移账号>")
+            print("         set ASHARE_MYSQL_PASSWORD=<迁移口令>")
+            print("       或显式加 --skip-verify 生成「未回验」备份（manifest 会如实标记）。")
+            print("       未创建任何备份目录／文件。")
+            return 1
+        print("  回验权限       = CREATE/DROP DATABASE 预检通过")
+
     if args.dry_run:
         print("\n[dry-run] 计划：")
         print("  1. mysqldump --single-transaction → %s/mysql/ashare_qa.sql" % target)
         print("  2. Neo4j 逻辑导出 → %s/neo4j/{nodes,relationships}.jsonl" % target)
         print("  3. 复制向量索引三件 → %s/vector/" % target)
-        print("  4. 建临时库回验 dump，逐表比对后 DROP DATABASE")
+        print("  4. 建临时库回验 dump，逐表比对后 DROP DATABASE%s"
+              % ("（已指定 --skip-verify，将跳过）" if args.skip_verify else "（写文件前先做权限预检）"))
         print("  5. 写 manifest.json（sha256／计数／版本，不含口令）")
         print("  6. 保留最近 %d 份备份（含本次待生成的一份），清理更旧的同格式目录：" % args.keep)
         existing = _list_backup_dirs(args.out)
@@ -306,7 +379,6 @@ def main(argv=None) -> int:
 
     option_path, cleanup_option = _option_file(
         db_params["password"], db_params["host"], db_params["port"], db_params["user"])
-    verify_db = "ashare_qa_bakverify_" + stamp
     verify_created = False
     manifest = {
         "schema": "stage11-backup-1.0",
@@ -315,7 +387,9 @@ def main(argv=None) -> int:
         "mysql": {"database": db_params.get("database"), "tables": counts_before},
         "neo4j": {"uri": config.neo4j_params()["uri"]},
         "files": [],
-        "verify": {"temp_database": verify_db, "imported": False, "counts_match": False},
+        "verify": {"temp_database": verify_db, "imported": False, "counts_match": False,
+                   "skipped": bool(args.skip_verify),
+                   "reason": "--skip-verify" if args.skip_verify else ""},
         "retention": {"keep": args.keep, "deleted": []},
     }
     started = time.perf_counter()
@@ -351,45 +425,48 @@ def main(argv=None) -> int:
             print("      %-18s %.2f MB" % (name, os.path.getsize(dst) / 1024.0 / 1024.0))
 
         # ---------------------------------------------------------- 导入回验
-        print("\n[4/4] 导入回验：建临时库 → 灌入 dump → 逐表比对 → 删库")
-        import pymysql
-        admin = pymysql.connect(connect_timeout=5, read_timeout=120,
-                                cursorclass=pymysql.cursors.DictCursor, **db_params)
-        try:
-            with admin.cursor() as cur:
-                cur.execute("CREATE DATABASE `%s` CHARACTER SET utf8mb4 "
-                            "COLLATE utf8mb4_0900_ai_ci" % verify_db)
-            admin.commit()
-            verify_created = True
-            import_cmd = [mysql_cli, "--defaults-extra-file=" + option_path,
-                          "--default-character-set=utf8mb4", verify_db]
-            with open(dump_path, "rb") as src:
-                proc = subprocess.run(import_cmd, stdin=src, stderr=subprocess.PIPE)
-            if proc.returncode != 0:
-                raise RuntimeError("mysql 导入临时库失败：%s"
-                                   % proc.stderr.decode("utf-8", "replace").strip().splitlines()[-1:])
-            with admin.cursor() as cur:
-                cur.execute("USE `%s`" % verify_db)
-                counts_after = _db_counts(cur)
-            manifest["verify"]["imported"] = True
-            manifest["verify"]["counts"] = counts_after
-            manifest["verify"]["counts_match"] = counts_after == counts_before
-            for table in VERIFY_TABLES:
-                same = counts_after.get(table) == counts_before.get(table)
-                print("      %-16s 源 %d／回验 %d  %s"
-                      % (table, counts_before.get(table, -1), counts_after.get(table, -1),
-                         "OK" if same else "FAIL"))
-            if not manifest["verify"]["counts_match"]:
-                raise RuntimeError("导入后计数与源库不一致")
-        finally:
+        if args.skip_verify:
+            print("\n[4/4] 导入回验：按 --skip-verify 跳过（manifest 已标记 verify.skipped=true）")
+        else:
+            print("\n[4/4] 导入回验：建临时库 → 灌入 dump → 逐表比对 → 删库")
+            import pymysql
+            admin = pymysql.connect(connect_timeout=5, read_timeout=120,
+                                    cursorclass=pymysql.cursors.DictCursor, **db_params)
             try:
-                if verify_created:
-                    with admin.cursor() as cur:
-                        cur.execute("DROP DATABASE `%s`" % verify_db)
-                    admin.commit()
-                    print("      临时库已删除：%s" % verify_db)
+                with admin.cursor() as cur:
+                    cur.execute("CREATE DATABASE `%s` CHARACTER SET utf8mb4 "
+                                "COLLATE utf8mb4_0900_ai_ci" % verify_db)
+                admin.commit()
+                verify_created = True
+                import_cmd = [mysql_cli, "--defaults-extra-file=" + option_path,
+                              "--default-character-set=utf8mb4", verify_db]
+                with open(dump_path, "rb") as src:
+                    proc = subprocess.run(import_cmd, stdin=src, stderr=subprocess.PIPE)
+                if proc.returncode != 0:
+                    raise RuntimeError("mysql 导入临时库失败：%s"
+                                       % (proc.stderr.decode("utf-8", "replace").strip().splitlines()[-1:]))
+                with admin.cursor() as cur:
+                    cur.execute("USE `%s`" % verify_db)
+                    counts_after = _db_counts(cur)
+                manifest["verify"]["imported"] = True
+                manifest["verify"]["counts"] = counts_after
+                manifest["verify"]["counts_match"] = counts_after == counts_before
+                for table in VERIFY_TABLES:
+                    same = counts_after.get(table) == counts_before.get(table)
+                    print("      %-16s 源 %d／回验 %d  %s"
+                          % (table, counts_before.get(table, -1), counts_after.get(table, -1),
+                             "OK" if same else "FAIL"))
+                if not manifest["verify"]["counts_match"]:
+                    raise RuntimeError("导入后计数与源库不一致")
             finally:
-                admin.close()
+                try:
+                    if verify_created:
+                        with admin.cursor() as cur:
+                            cur.execute("DROP DATABASE `%s`" % verify_db)
+                        admin.commit()
+                        print("      临时库已删除：%s" % verify_db)
+                finally:
+                    admin.close()
 
         # ---------------------------------------------------------- manifest
         for base, _, names in os.walk(target):
@@ -426,7 +503,10 @@ def main(argv=None) -> int:
         else:
             print("      没有需要清理的旧备份。")
 
-        print("结论：备份＋导入回验通过。退出码 0。")
+        if args.skip_verify:
+            print("结论：备份文件已生成，但**未做导入回验**（--skip-verify；manifest verify.skipped=true）。退出码 0。")
+        else:
+            print("结论：备份＋导入回验通过。退出码 0。")
         return 0
     except Exception as exc:                               # noqa: BLE001
         first = str(exc).splitlines()[0] if str(exc) else type(exc).__name__

@@ -459,7 +459,10 @@ def write_batch(b: Batch, reset: bool, verbose: bool = True) -> dict:
         print("[写库] 建库 %s：完成（IF NOT EXISTS，幂等）" % created)
     n_stmt = db.init_schema()
     if verbose:
-        print("[写库] 建表：执行 %d 条 DDL（schema\\六张表.sql，全部 IF NOT EXISTS）" % n_stmt)
+        if n_stmt:
+            print("[写库] 建表：执行 %d 条 DDL（schema\\六张表.sql，全部 IF NOT EXISTS）" % n_stmt)
+        else:
+            print("[写库] 建表：六张表已存在，跳过 DDL（DML-only 账号可继续写入）")
 
     conn = db.get_conn()
     conn.begin()

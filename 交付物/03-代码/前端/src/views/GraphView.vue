@@ -26,7 +26,7 @@ import { useRoute, useRouter } from 'vue-router'
 import {
   getChunk, getEntity, getEntityEvidence, getEventDetail, getNeighbors, getPaths, listEntities,
 } from '../api.js'
-import { buildDataset, mountGraph, typeOfLabel, TKEYS, TYPE } from '../lib/graph.js'
+import { buildDataset, esc, mountGraph, typeOfLabel, TKEYS, TYPE } from '../lib/graph.js'
 
 const appMeta = inject('appMeta', null)
 const route = useRoute()
@@ -274,14 +274,14 @@ function paintTimeline() {
     const major = months.value[i].slice(5) === '01'
     out += '<line class="tl__tick" x1="' + X(i).toFixed(1) + '" y1="' + (major ? 58 : 62) + '" x2="' + X(i).toFixed(1) + '" y2="72"/>'
     if (months.value.length <= 6 || i % 3 === 0 || major || i === months.value.length - 1) {
-      out += '<text class="tl__tlab" x="' + X(i).toFixed(1) + '" y="90" text-anchor="middle">' + months.value[i] + '</text>'
+      out += '<text class="tl__tlab" x="' + X(i).toFixed(1) + '" y="90" text-anchor="middle">' + esc(months.value[i]) + '</text>'
     }
   }
   DS.nodes.forEach((n) => {
     if (n.ti === null || n.ti === undefined) return
     const ly = 44 - (TKEYS.indexOf(n.type) % 6) * 7
     const inR = n.ti >= TL.i0 && n.ti <= TL.i1
-    out += '<circle class="tl__dot' + (inR ? '' : ' out') + '" data-dot="' + n.id + '" cx="' + X(n.ti).toFixed(1)
+    out += '<circle class="tl__dot' + (inR ? '' : ' out') + '" data-dot="' + esc(n.id) + '" cx="' + X(n.ti).toFixed(1)
       + '" cy="' + ly + '" r="3.6" fill="' + TYPE[n.type].c + '" fill-opacity=".85"/>'
   })
   const x0 = X(TL.i0), x1 = X(TL.i1)

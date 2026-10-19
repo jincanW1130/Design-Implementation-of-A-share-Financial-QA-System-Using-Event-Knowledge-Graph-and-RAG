@@ -10,7 +10,7 @@
 
 import { computed, reactive, ref } from 'vue'
 import { getChunk } from '../api.js'
-import { DOMAIN, EXT } from '../lib/graph.js'
+import { DOMAIN, EXT, safeUrl } from '../lib/graph.js'
 
 const props = defineProps({
   items: { type: Array, default: () => [] },
@@ -47,7 +47,8 @@ function countOf(t) {
 
 function evId(it) { return 'ev' + it.rank }
 function domainOf(it) { return DOMAIN[it.source] || '' }
-function urlOf(it) { return it.url || '' }
+// 接口返回的 url 属于上游不可信文本：只放行 http(s)，其余（javascript:、data: 等）一律不渲染成链接。
+function urlOf(it) { return safeUrl(it.url) || '' }
 function fmtDate(t) { return typeof t === 'string' ? t.replace('T', ' ').slice(0, 10) : '' }
 
 const openKey = ref('')                 // 当前展开上下文的那一条（同一时刻一条）

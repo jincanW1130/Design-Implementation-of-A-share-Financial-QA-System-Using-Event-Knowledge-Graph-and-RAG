@@ -18,7 +18,7 @@
 
 import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { listHistory, getHistoryDetail, getGraphPath, getSessionId, resetSessionId } from '../api.js'
-import { mountGraph, EXT, DOMAIN } from '../lib/graph.js'
+import { mountGraph, EXT, DOMAIN, safeUrl } from '../lib/graph.js'
 import { buildReplayDataset } from '../lib/replay.js'
 
 const appMeta = inject('appMeta', null)
@@ -159,6 +159,9 @@ const graphPathNote = computed(() => {
   if (gpError.value) return `路径载荷读取失败 —— 路径条数如实记「—」（未能取到「原始 JSON 文本」，故不写条数、不猜条数）：${gpError.value}`
   return '本次记录未存路径载荷（graph_path_available = false），表四只给固定文案，不补画节点或边'
 })
+
+// 回看数据里的 url 同样来自上游文档记录：只放行 http(s)，其余不渲染为可点击链接。
+function hrefOf(u) { return safeUrl(u) || '' }
 
 async function openRow(row) {
   current.value = row
@@ -410,7 +413,7 @@ onBeforeUnmount(() => {
                       <td class="mono">doc_id {{ ev.doc_id }}</td>
                       <td class="mono">chunk_id {{ ev.chunk_id }}</td>
                       <td>
-                        <a v-if="ev.url" class="ev__link ev__link--sm" :href="ev.url" target="_blank" rel="noopener"
+                        <a v-if="hrefOf(ev.url)" class="ev__link ev__link--sm" :href="hrefOf(ev.url)" target="_blank" rel="noopener"
                            :aria-label="'查看原文：' + (ev.title || '') + '（新窗口打开）'"><span v-html="EXT"></span>查看原文 ↗</a>
                         <span v-else class="ev__nolink ev__nolink--sm">记录未给出</span>
                       </td>

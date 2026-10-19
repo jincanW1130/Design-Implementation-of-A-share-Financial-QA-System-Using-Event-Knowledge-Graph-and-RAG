@@ -280,12 +280,36 @@ def scalar(sql: str, args=None, conn=None):
 # --------------------------------------------------------------------------
 # 4. 库与表（建库、建表、计数、元数据）
 # --------------------------------------------------------------------------
+def _ddl_privilege_error(exc: Exception, action: str) -> SystemExit:
+    """把 DDL 权限拒绝（1044/1142）翻译成可执行的处置提示。
+
+    运行期账号 `ashare_app` 只有 DML；建库／建表属于迁移期动作，应由迁移账号完成。
+    不打印账号名与原始错误串（原生消息含 `user 'x'@'y'`），避免把凭据碎片写进终端／日志。
+    """
+    errno = exc.args[0] if getattr(exc, "args", None) else None
+    if errno in (1044, 1142):
+        return SystemExit(
+            "MySQL 当前账号无权执行 %s（ERROR %s）。\n"
+            "运行期账号仅授予 DML；建库／建表请使用迁移账号（或用 DBA 预先执行 schema\\六张表.sql）：\n"
+            "    set ASHARE_MYSQL_USER=<迁移账号>\n"
+            "    set ASHARE_MYSQL_PASSWORD=<迁移口令>\n"
+            "库与六张表已存在时，本函数会自动跳过 DDL，不需要 DDL 权限。"
+            % (action, errno))
+    return SystemExit("MySQL 执行 %s 失败：%s"
+                      % (action, str(exc).splitlines()[0] if str(exc) else type(exc).__name__))
+
+
 def ensure_database() -> str:
     """建库 `ashare_qa`（字符集 utf8mb4、排序规则 utf8mb4_0900_ai_ci）；已存在则不动。
 
     库名与字符集一律取配置，**不在代码里写死**（硬约束 1）。
+    独立审查（2026-10-19）：运行期账号已切为仅 DML。库已存在时**直接返回、不执行 DDL**，
+    使 `tools/import_data.py` 在 DML-only 账号下也能完成写入；库不存在且账号无权 CREATE 时，
+    给出可执行的迁移账号提示，而不是抛裸 OperationalError。
     """
     name = config.db_database()
+    if database_exists():
+        return name
     charset = config.db_charset()
     conn = connect(with_database=False)
     try:
@@ -294,6 +318,10 @@ def ensure_database() -> str:
                 "CREATE DATABASE IF NOT EXISTS `%s` CHARACTER SET %s COLLATE %s_0900_ai_ci"
                 % (name, charset, charset))
         conn.commit()
+    except pymysql.err.MySQLError as exc:
+        with contextlib.suppress(Exception):
+            conn.rollback()
+        raise _ddl_privilege_error(exc, "CREATE DATABASE") from exc
     finally:
         with contextlib.suppress(Exception):
             conn.close()
@@ -325,18 +353,40 @@ def split_sql(text: str) -> list:
     return [stmt.strip() for stmt in "\n".join(kept).split(";") if stmt.strip()]
 
 
+def schema_ready() -> bool:
+    """六张表是否已全部存在（只读 information_schema，不触发任何 DDL）。"""
+    placeholders = ", ".join(["%s"] * len(config.TABLES))
+    rows = query(
+        "SELECT TABLE_NAME AS name FROM information_schema.TABLES "
+        "WHERE TABLE_SCHEMA=%s AND TABLE_NAME IN (" + placeholders + ")",
+        tuple([config.db_database()] + list(config.TABLES)))
+    found = {str(row.get("name", "")).lower() for row in rows}
+    return {str(t).lower() for t in config.TABLES} <= found
+
+
 def init_schema(path: str | None = None) -> int:
-    """执行 `schema\\六张表.sql`（全部 `CREATE TABLE IF NOT EXISTS`，可重复执行）。"""
+    """执行 `schema\\六张表.sql`（全部 `CREATE TABLE IF NOT EXISTS`，可重复执行）。
+
+    六张表已全部存在时直接返回 0、**不执行任何 DDL**：运行期 DML-only 账号也能安全调用
+    （`tools/import_data.py` 的默认路径）。缺表且账号无 CREATE 权限时给出迁移账号提示。
+    """
+    if schema_ready():
+        return 0
     sql_path = path or config.SCHEMA_SQL
     if not os.path.isfile(sql_path):
         raise SystemExit("DDL 文件不存在：%s" % sql_path)
     with open(sql_path, "r", encoding="utf-8") as f:
         statements = split_sql(f.read())
     conn = get_conn()
-    with cursor(conn=conn) as cur:
-        for stmt in statements:
-            cur.execute(stmt)
-    conn.commit()
+    try:
+        with cursor(conn=conn) as cur:
+            for stmt in statements:
+                cur.execute(stmt)
+        conn.commit()
+    except pymysql.err.MySQLError as exc:
+        with contextlib.suppress(Exception):
+            conn.rollback()
+        raise _ddl_privilege_error(exc, "CREATE TABLE") from exc
     return len(statements)
 
 
