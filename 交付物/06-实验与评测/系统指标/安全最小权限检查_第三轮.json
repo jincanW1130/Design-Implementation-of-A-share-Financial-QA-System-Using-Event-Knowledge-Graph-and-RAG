@@ -1,6 +1,6 @@
 {
   "tool": "工具/安全最小权限检查.py",
-  "generated_at": "2026-10-18T21:17:37+08:00",
+  "generated_at": "2026-10-19T08:57:35+08:00",
   "mode": "read-only/audit",
   "config": {
     "config_local": "C:\\Users\\15129\\Desktop\\毕业设计\\交付物\\03-代码\\后端\\config.local.json",
@@ -11,7 +11,7 @@
     "admin_token_length": 16,
     "mysql_password_configured": true,
     "neo4j_password_configured": true,
-    "acl_raw": "C:\\Users\\15129\\Desktop\\��ҵ���\\������\\03-����\\���\\config.local.json admin\\CodexSandboxUsers:(I)(RX)\n                                                           NT AUTHORITY\\SYSTEM:(I)(F)\n                                                           BUILTIN\\Administrators:(I)(F)\n                                                           ADMIN\\15129:(I)(F)\n\nSuccessfully processed 1 files; Failed processing 0 files",
+    "acl_raw": "C:\\Users\\15129\\Desktop\\��ҵ���\\������\\03-����\\���\\config.local.json admin\\CodexSandboxUsers:(I)(RX)\n                                                           NT AUTHORITY\\SYSTEM:(I)(F)\n                                                           BUILTIN\\Administrators:(I)(F)\n                                                           ADMIN\\15129:(I)(F)\n\n�ѳɹ����� 1 ���ļ�; ���� 0 ���ļ�ʱʧ��",
     "acl_broad_principals": [
       "C:\\Users\\15129\\Desktop\\��ҵ���\\������\\03-����\\���\\config.local.json admin\\CodexSandboxUsers:(I)(RX)"
     ],
@@ -75,23 +75,182 @@
       {
         "local": "127.0.0.1:7687",
         "port": 7687
+      },
+      {
+        "local": "127.0.0.1:8000",
+        "port": 8000
       }
     ]
   },
   "http": {
     "health": {
-      "error": "URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>"
+      "http": 200,
+      "body": {
+        "status": "ok",
+        "mysql": {
+          "ok": true,
+          "info": "8.4.9"
+        },
+        "neo4j": {
+          "ok": true,
+          "info": "bolt://127.0.0.1:7687 可连接"
+        },
+        "vector_index": {
+          "ok": true,
+          "info": "向量 5018 条，维度 512，IndexFlatIP／cosine"
+        },
+        "model_config": {
+          "ok": true,
+          "info": "模型 deepseek-flash／Prompt v1.0；K=10 N=20 预算=3600 g=2",
+          "model_name": "deepseek-flash",
+          "prompt_version": "v1.0",
+          "K": 10,
+          "N": 20,
+          "context_token_budget": 3600,
+          "graph_retention_share": 2
+        },
+        "metrics": {
+          "window_seconds": 60,
+          "history_seconds": 300,
+          "uptime_seconds": 487.5,
+          "requests": {
+            "total": 8,
+            "window": 2,
+            "qps": 0.03,
+            "errors_window": 0,
+            "error_rate": 0.0
+          },
+          "routes": {
+            "GET /api/admin/consistency-check": {
+              "count_window": 0,
+              "qps": 0.0,
+              "errors_window": 0,
+              "error_rate": 0.0,
+              "p50_ms": 473.1,
+              "p95_ms": 473.1,
+              "p99_ms": 473.1
+            },
+            "GET /api/admin/extraction/disambiguation": {
+              "count_window": 0,
+              "qps": 0.0,
+              "errors_window": 0,
+              "error_rate": 0.0,
+              "p50_ms": 9.7,
+              "p95_ms": 9.7,
+              "p99_ms": 9.7
+            },
+            "GET /api/health": {
+              "count_window": 2,
+              "qps": 0.03,
+              "errors_window": 0,
+              "error_rate": 0.0,
+              "p50_ms": 67.8,
+              "p95_ms": 101.4,
+              "p99_ms": 101.4
+            }
+          },
+          "qa": {
+            "success": 0,
+            "failure": 0,
+            "success_rate": 0.0
+          },
+          "retrieval": {
+            "vector_searches": 0,
+            "graph_queries": 0,
+            "evidence_total": 0,
+            "empty_results": 0,
+            "reused_answers": 0,
+            "evidence_avg": 0.0
+          },
+          "rate_limit": {
+            "hits": 0
+          }
+        },
+        "cache": {
+          "enabled": true,
+          "ttl_seconds": 60,
+          "max_entries": 512,
+          "hits": 0,
+          "misses": 1,
+          "hit_rate": 0.0,
+          "caches": {
+            "config_meta": {
+              "name": "config_meta",
+              "enabled": true,
+              "ttl_seconds": 60.0,
+              "max_entries": 512,
+              "size": 0,
+              "hits": 0,
+              "misses": 0,
+              "hit_rate": 0.0,
+              "sets": 0,
+              "evictions": 0,
+              "expired": 0
+            },
+            "entity_detail": {
+              "name": "entity_detail",
+              "enabled": true,
+              "ttl_seconds": 60.0,
+              "max_entries": 512,
+              "size": 0,
+              "hits": 0,
+              "misses": 0,
+              "hit_rate": 0.0,
+              "sets": 0,
+              "evictions": 0,
+              "expired": 0
+            },
+            "graph_events": {
+              "name": "graph_events",
+              "enabled": true,
+              "ttl_seconds": 60.0,
+              "max_entries": 512,
+              "size": 0,
+              "hits": 0,
+              "misses": 0,
+              "hit_rate": 0.0,
+              "sets": 0,
+              "evictions": 0,
+              "expired": 0
+            },
+            "evidence": {
+              "name": "evidence",
+              "enabled": true,
+              "ttl_seconds": 60.0,
+              "max_entries": 512,
+              "size": 1,
+              "hits": 0,
+              "misses": 1,
+              "hit_rate": 0.0,
+              "sets": 1,
+              "evictions": 0,
+              "expired": 0
+            }
+          }
+        }
+      },
+      "request_id": "44bbdcfd8c0348bc"
     },
     "admin_without_token": {
-      "error": "URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>"
+      "http": 401,
+      "body": {
+        "code": 4001,
+        "message": "凭据无效"
+      },
+      "request_id": "c97ce88c95ac4d02"
     },
     "admin_with_frontend_origin": {
-      "error": "URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>"
+      "http": 403,
+      "body": {
+        "code": 4002,
+        "message": "无操作权限"
+      },
+      "request_id": "813f25d7ce084afc"
     }
   },
   "secret_scan": {
     "status": "checked",
-    "scanned_files": 5046,
+    "scanned_files": 5071,
     "secret_kinds": [
       "admin_token",
       "neo4j_password"
@@ -194,25 +353,25 @@
       "advice": "不需要 X Protocol 时关闭；需要时限制来源。"
     },
     {
-      "severity": "high",
+      "severity": "info",
       "area": "http",
-      "title": "健康检查不可用",
-      "detail": "{\"error\": \"URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\"}",
-      "advice": "确认后端已启动。"
+      "title": "健康检查可用",
+      "detail": "status=ok",
+      "advice": "保持。"
     },
     {
-      "severity": "critical",
+      "severity": "info",
       "area": "http",
-      "title": "后台缺令牌未按 4001 拒绝",
-      "detail": "{\"error\": \"URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\"}",
-      "advice": "检查 require_admin 依赖与 admin_token 配置。"
+      "title": "后台缺令牌正确返回 4001",
+      "detail": "HTTP 401，响应体 {code, message}。",
+      "advice": "保持 fail closed。"
     },
     {
-      "severity": "high",
+      "severity": "info",
       "area": "http",
-      "title": "前端来源访问后台未按 4002 拒绝",
-      "detail": "{\"error\": \"URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\"}",
-      "advice": "检查普通用户通道判定。"
+      "title": "前端来源访问后台正确返回 4002",
+      "detail": "HTTP 403。",
+      "advice": "保持。"
     },
     {
       "severity": "medium",
@@ -225,16 +384,16 @@
       "severity": "info",
       "area": "secret_scan",
       "title": "已跟踪文本文件未发现真实密钥",
-      "detail": "扫描 5046 个文件，密钥种类：admin_token、neo4j_password",
+      "detail": "扫描 5071 个文件，密钥种类：admin_token、neo4j_password",
       "advice": "继续保持；注意报告/截图也可能泄露。"
     }
   ],
   "summary": {
-    "critical": 1,
-    "high": 8,
+    "critical": 0,
+    "high": 6,
     "medium": 5,
     "low": 0,
-    "info": 4
+    "info": 7
   },
   "note": "只读审计：未修改口令/账号/授权/配置/防火墙，未写数据库。所有 detail 均不含密钥取值。"
 }
