@@ -28,6 +28,25 @@ def test_pytest_counts_parsed_from_realistic_lines():
     assert counts["skipped"] == 6
 
 
+def test_pytest_counts_use_final_summary_not_first_match():
+    """P3 负向标定：测试自身打印的类汇总文本不得抢在真正汇总行之前被采用。"""
+    output = (
+        "captured stdout: 999 passed, 7 skipped\n"
+        "debug: 1 failed, 2 errors\n"
+        "536 passed, 2 warnings in 181.42s (0:03:01)\n"
+    )
+    counts = GATE.parse_pytest_counts(output)
+    assert counts == {"passed": 536, "skipped": 0, "failed": 0, "errors": 0}
+
+
+def test_pytest_counts_require_word_boundaries():
+    """数字必须独立成词：标识符里的数字（abc536）不得被当成计数。"""
+    assert GATE.parse_pytest_counts("abc536 passed in 9.00s\n")["passed"] == 0
+    assert GATE.parse_pytest_counts("v1.536 passed in 9.00s\n")["passed"] == 0
+    # pytest 单数形式 "1 error" 也要计入 errors。
+    assert GATE.parse_pytest_counts("1 error in 0.50s\n")["errors"] == 1
+
+
 def test_negative_calibration_530_passed_6_skipped_must_not_pass():
     """复现修复前的假绿：达到旧阈值 530 但存在 6 个 skip。"""
     counts = GATE.parse_pytest_counts("530 passed, 6 skipped in 9.00s\n")

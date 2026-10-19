@@ -9,10 +9,13 @@
    * `components.schemas` 的**字段级**签名：每个 schema 的属性集合、必填项、
      `additionalProperties` 与每个属性的类型／`$ref`／数组项／联合类型；
    * **主要错误响应样例**：每个操作 ≥400 状态码的响应 schema（字段级）与 `example`
-     （`{"code": …, "message": …}`）。
+     （`{"code": …, "message": …}`）；
+   * **操作级契约**（独立审查 2026-10-19 P2-8 扩面）：每个操作的参数（名称／in／
+     必填／默认值／类型）、请求体 schema（required＋media type＋字段级）、有效
+     `security` 声明、2xx 响应是否存在／状态码集合／content schema。
 2. 默认模式：重新生成当前契约并与快照逐项比对；任何差异（路径／方法／schema 名／
-   **schema 字段／必填／类型**／错误响应样例）都打印出来并以**退出码 1** 结束，
-   便于并入 `--gate`。
+   **schema 字段／必填／类型**／错误响应样例／**操作参数／请求体／鉴权／2xx 响应**）
+   都打印出来并以**退出码 1** 结束，便于并入 `--gate`。
 
 为什么要字段级
 --------------
@@ -110,6 +113,91 @@ def schema_signature(schema) -> dict:
     return out
 
 
+def content_signature(media) -> dict | None:
+    """响应／请求体 media type 的签名：对象走字段级，`$ref` 保留引用名，
+    其余（`anyOf`／标量）走类型归一。"""
+    if not isinstance(media, dict):
+        return None
+    schema = media.get("schema")
+    if not isinstance(schema, dict):
+        return None
+    sig = schema_signature(schema)
+    if sig.get("properties") or sig.get("ref"):
+        return sig
+    return describe_type(schema)
+
+
+def _parameters_contract(operation) -> list:
+    """操作级查询／路径／头参数：名称、位置、必填、默认值与类型签名。"""
+    params = []
+    for raw in operation.get("parameters") or []:
+        if not isinstance(raw, dict):
+            continue
+        schema = raw.get("schema") if isinstance(raw.get("schema"), dict) else {}
+        entry = {
+            "name": str(raw.get("name", "")),
+            "in": str(raw.get("in", "")),
+            "required": bool(raw.get("required", False)),
+            "schema": describe_type(schema),
+        }
+        if "default" in schema:                 # 默认值单独记录：新增/删除默认值也应被检出
+            entry["default"] = schema["default"]
+        params.append(entry)
+    params.sort(key=lambda item: (item["in"], item["name"]))
+    return params
+
+
+def _request_body_contract(operation) -> dict | None:
+    """请求体（若有）：required 与每个 media type 的 schema 签名（含字段级）。"""
+    body = operation.get("requestBody")
+    if not isinstance(body, dict):
+        return None
+    content = {}
+    for media_type, media in sorted((body.get("content") or {}).items()):
+        sig = content_signature(media)
+        if sig is not None:
+            content[str(media_type)] = sig
+    return {"required": bool(body.get("required", False)), "content": content}
+
+
+def _security_contract(operation, spec) -> list:
+    """操作的有效 security 声明（操作级优先，其次全局）；无声明记录为空列表。"""
+    raw = operation.get("security")
+    if raw is None:
+        raw = spec.get("security")
+    normalized = []
+    for requirement in raw or []:
+        if not isinstance(requirement, dict):
+            continue
+        normalized.append({
+            str(name): sorted(str(scope) for scope in (scopes or []))
+            for name, scopes in sorted(requirement.items())
+        })
+    normalized.sort(key=lambda item: json.dumps(item, ensure_ascii=False, sort_keys=True))
+    return normalized
+
+
+def _success_contract(operation) -> dict:
+    """2xx 响应是否存在、状态码集合与 content schema（有则记录）。"""
+    responses = {}
+    for status, response in sorted((operation.get("responses") or {}).items()):
+        text = str(status)
+        if not text.isdigit() or not (200 <= int(text) < 300):
+            continue
+        if not isinstance(response, dict):
+            continue
+        entry: dict = {"present": True}
+        content = {}
+        for media_type, media in sorted((response.get("content") or {}).items()):
+            sig = content_signature(media)
+            if sig is not None:
+                content[str(media_type)] = sig
+        if content:
+            entry["content"] = content
+        responses[text] = entry
+    return {"present": bool(responses), "statuses": sorted(responses), "responses": responses}
+
+
 # --------------------------------------------------------------------------
 # 2. 契约抽取
 # --------------------------------------------------------------------------
@@ -139,6 +227,7 @@ def current_contract() -> dict:
     schema_fields = {name: schema_signature(components[name]) for name in sorted(components)}
 
     error_responses: dict = {}
+    operation_contract: dict = {}
     for path, method, op in _iter_operations(spec):
         entries = {}
         for status, response in sorted((op.get("responses") or {}).items()):
@@ -155,9 +244,16 @@ def current_contract() -> dict:
         if entries:
             error_responses["%s %s" % (method, path)] = entries
 
+        operation_contract["%s %s" % (method, path)] = {
+            "parameters": _parameters_contract(op),
+            "request_body": _request_body_contract(op),
+            "security": _security_contract(op, spec),
+            "success_responses": _success_contract(op),
+        }
+
     return {
         "generated_by": "工具/契约快照.py",
-        "snapshot_level": "field",
+        "snapshot_level": "operation",
         "openapi_version": str(spec.get("openapi", "")),
         "path_count": len(paths),
         "operation_count": len(operations),
@@ -166,6 +262,7 @@ def current_contract() -> dict:
         "schemas": sorted(components),
         "schema_fields": schema_fields,
         "error_responses": error_responses,
+        "operation_contract": operation_contract,
     }
 
 
@@ -233,11 +330,11 @@ def diff_contract(old: dict, new: dict) -> list[str]:
         diffs.append("OpenAPI 版本变化：%s → %s"
                      % (old.get("openapi_version"), new.get("openapi_version")))
 
-    for key in ("schema_fields", "error_responses"):
+    for key in ("schema_fields", "error_responses", "operation_contract"):
         if key not in old:
-            diffs.append("快照缺少字段级区块：%s（请复核后 --write 升级）" % key)
-    if str(old.get("snapshot_level", "")) != "field":
-        diffs.append("快照级别不是 field（原 %r；请 --write 升级）"
+            diffs.append("快照缺少操作／字段级区块：%s（请复核后 --write 升级）" % key)
+    if str(old.get("snapshot_level", "")) != "operation":
+        diffs.append("快照级别不是 operation（原 %r；请 --write 升级）"
                      % old.get("snapshot_level"))
 
     old_fields = old.get("schema_fields") or {}
@@ -262,6 +359,16 @@ def diff_contract(old: dict, new: dict) -> list[str]:
         for status in sorted(old_status & new_status):
             _diff_value(old_err[op][status], new_err[op][status],
                         "error_responses.%s[%s]" % (op, status), diffs)
+
+    # 操作级：查询参数（名称/必填/默认/类型）、请求体 schema、security、2xx 响应。
+    old_ops = old.get("operation_contract") or {}
+    new_ops = new.get("operation_contract") or {}
+    for op in sorted(set(new_ops) - set(old_ops)):
+        diffs.append("新增操作契约：%s" % op)
+    for op in sorted(set(old_ops) - set(new_ops)):
+        diffs.append("删除操作契约：%s" % op)
+    for op in sorted(set(old_ops) & set(new_ops)):
+        _diff_value(old_ops[op], new_ops[op], "operation_contract.%s" % op, diffs)
     return diffs
 
 
@@ -274,18 +381,27 @@ def main(argv=None) -> int:
     prop_count = sum(len(entry.get("properties") or {})
                      for entry in contract["schema_fields"].values())
     error_entries = sum(len(v) for v in contract["error_responses"].values())
+    ops = contract["operation_contract"]
+    param_count = sum(len(op["parameters"]) for op in ops.values())
+    body_count = sum(1 for op in ops.values() if op["request_body"] is not None)
+    secured_count = sum(1 for op in ops.values() if op["security"])
+    success_count = sum(1 for op in ops.values()
+                        if op["success_responses"]["present"])
     print("=" * 78)
-    print("OpenAPI 契约快照（字段级；%s）" % SNAPSHOT)
+    print("OpenAPI 契约快照（字段＋操作级；%s）" % SNAPSHOT)
     print("实测：OpenAPI %s；%d 条路径／%d 个操作；schema %d 个（属性 %d 个）；"
           "错误响应样例 %d 条"
           % (contract["openapi_version"], contract["path_count"],
              contract["operation_count"], len(contract["schemas"]),
              prop_count, error_entries))
+    print("      操作级：参数 %d 个；请求体 %d 个操作；鉴权声明 %d 个操作；"
+          "2xx 响应 %d 个操作" % (param_count, body_count, secured_count, success_count))
     print("=" * 78)
 
     if args.write:
         write_snapshot(contract)
-        print("已写入字段级快照：%s" % SNAPSHOT)
+        print("已写入字段＋操作级快照：%s（%.1f KB）"
+              % (SNAPSHOT, os.path.getsize(SNAPSHOT) / 1024.0))
         for name, fields in contract["schema_fields"].items():
             print("  schema %-24s 必填 %s；属性 %s"
                   % (name, fields.get("required") or [],
@@ -305,10 +421,12 @@ def main(argv=None) -> int:
         print("\n若变更属预期，请复核后用 `--write` 重登记快照并随代码一起提交。")
         return 1
 
-    print("OK：契约与字段级快照一致（%d 条路径／%d 个操作／%d 个 schema／"
-          "%d 个属性／%d 条错误响应样例）。"
+    print("OK：契约与字段＋操作级快照一致（%d 条路径／%d 个操作／%d 个 schema／"
+          "%d 个属性／%d 条错误响应样例／%d 个参数／%d 个请求体操作／"
+          "%d 个鉴权操作／%d 个 2xx 操作）。"
           % (contract["path_count"], contract["operation_count"],
-             len(contract["schemas"]), prop_count, error_entries))
+             len(contract["schemas"]), prop_count, error_entries,
+             param_count, body_count, secured_count, success_count))
     return 0
 
 

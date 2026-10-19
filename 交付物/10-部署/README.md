@@ -95,12 +95,15 @@ Python 依赖的单一来源，与 `交付物/10-部署\Dockerfile` 同源——
 1. **未安装 Docker Desktop**：本机 Windows 账户**不是管理员**，Docker Desktop 需要提权安装，本阶段
    无法完成；Docker 只以 **WSL2 内的 Docker Engine**（apt 包 `docker.io`，实测 29.1.3）形态可用。
    因此「按《10》的部署形态完整落地」这一说法**不成立**，论文与《25》按此如实表述。
-2. **容器连不到宿主 MySQL**：Windows 上的 MySQL 8.4 只监听 `127.0.0.1`（`my.ini` 的 `bind-address`），
-   WSL 宿主命名空间与容器**都**连不到它的 3306（实测：WSL→`172.31.32.1:3306` FAIL、容器→网关 3306 FAIL、
-   `nameserver:3306` FAIL），而改 `my.ini` 需要管理员权限。**后果**：容器形态下 `/api/health` 的
-   `mysql` 探针为 false、依赖 MySQL 的接口不可用；依赖 Neo4j 的 `/api/graph/*` 与静态托管正常。
-   两条补救路径（本阶段未执行、留给后续）：① 以管理员身份把 MySQL 的 `bind-address` 改为 `0.0.0.0`
-   并重启服务；② 另起一个 `mysql:8.4` 容器并用 `交付物/03-代码\后端\tools\import_data.py` 导入同一份数据。
+2. **容器连不到宿主 MySQL**：2026-10-04 实测 WSL 宿主命名空间与容器**都**连不到宿主 3306
+   （WSL→`172.31.32.1:3306` FAIL、容器→网关 3306 FAIL、`nameserver:3306` FAIL）。
+   **2026-10-19 复核：MySQL 实际 `@@bind_address='*'`，3306／33060 监听 `0.0.0.0/::` 且未收口**——
+   此前「只监听 `127.0.0.1`」的表述不成立；具体阻断点（防火墙／网络路径）本会话无管理员权限，未继续复核。
+   **后果**：容器形态下 `/api/health` 的 `mysql` 探针为 false、依赖 MySQL 的接口不可用；
+   依赖 Neo4j 的 `/api/graph/*` 与静态托管正常。后续处理：① 安全侧必须由管理员按
+   《安全加固与最小权限清单》A 项把 `bind-address` 收回 `127.0.0.1`（这是安全基线，不等同于容器连通）；
+   ② 容器形态若需连库，推荐另起一个 `mysql:8.4` 容器并用
+   `交付物/03-代码\后端\tools\import_data.py` 导入同一份数据，或由管理员在防火墙／网络层评估最小放行。
    **完整可用的形态是本机形态（第一节）。**
 3. **Neo4j 未注册为 Windows 服务**：它跑在 WSL2 的容器里，**WSL2 发行版空闲会挂起**，挂起后
    bolt 7687 不可达（`/api/health` 会如实报 `neo4j: false`、状态 `degraded`）。**2026-10-04 实测把窗口
@@ -197,7 +200,7 @@ schtasks /Create /SC MINUTE /MO 5 /TN "AshareAlert" ^
 
 ```powershell
 python 工具\备份.py --dry-run          # 只检查并打印计划（含保留期计划）
-python 工具\备份.py --keep 3           # 备份＋导入回验，只保留最近 3 份
+python 工具\备份.py --keep 3           # 有 DDL 权限则回验；DML-only 自动跳过（exit 0），保留最近 3 份
 powershell -ExecutionPolicy Bypass -File 工具\备份.ps1 -Keep 7
 ```
 

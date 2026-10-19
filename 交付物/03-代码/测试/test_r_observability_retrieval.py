@@ -108,6 +108,39 @@ def test_route_metrics_include_average():
     assert item["p99_ms"] == 30.0
 
 
+def test_snapshot_after_idle_does_not_include_300_to_360s_samples(monkeypatch):
+    """P2 窗口回归：空闲后首次快照不得纳入 300 s 以前的样本。
+
+    旧实现按 now-360 过滤，写入后空闲 330 s 再快照，样本（1000.0）仍会被算进
+    avg/p50/p95/p99；修复后应以 now-300 为下界，直接剔除。
+    """
+    clock = {"now": 1000.0}
+    monkeypatch.setattr(obs.time, "monotonic", lambda: clock["now"])
+    reg = obs.MetricsRegistry()
+    reg.record_request("GET", "/api/x", 200, 12.0)
+    clock["now"] = 1330.0                     # 空闲 330 s：样本已超出 300 s 窗口
+
+    snap = reg.snapshot()
+    assert "GET /api/x" not in snap["routes"]
+    assert snap["requests"]["window"] == 0
+
+
+def test_snapshot_history_window_boundary_is_300s(monkeypatch):
+    """边界标定：now-300 的样本保留，now-300 之前 1 ms 的样本剔除。"""
+    clock = {"now": 999.0}
+    monkeypatch.setattr(obs.time, "monotonic", lambda: clock["now"])
+    reg = obs.MetricsRegistry()
+    reg.record_request("GET", "/api/x", 200, 9.0)      # 999.0：超出窗口
+    clock["now"] = 1000.0
+    reg.record_request("GET", "/api/x", 200, 20.0)     # 1000.0：恰在下界
+    clock["now"] = 1300.0
+
+    item = reg.snapshot()["routes"]["GET /api/x"]
+    assert item["avg_ms"] == 20.0
+    assert item["p50_ms"] == 20.0
+    assert item["p99_ms"] == 20.0
+
+
 def test_llm_attempt_metrics_count_failures_and_retries():
     """LLM 失败率：请求失败与空正文都计失败；重试按实际尝试逐次计数。"""
     reg = obs.MetricsRegistry()

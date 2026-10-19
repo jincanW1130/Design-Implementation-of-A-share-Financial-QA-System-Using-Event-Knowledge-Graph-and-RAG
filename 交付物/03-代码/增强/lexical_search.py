@@ -101,11 +101,16 @@ class LexicalIndex:
                 continue
             df = len(posting)
             idf = math.log(1.0 + (self.total_chunks - df + 0.5) / (df + 0.5))
+            if idf <= 0.0:                       # 理论保护：N≥df 时恒 >0，防御手工构造
+                continue
             for encoded in posting:
                 index = encoded >> _TF_BITS
                 tf = encoded & _TF_MAX
+                # 所有块内容为空时 avgdl=0（build 的正常产物此时也没有 posting）；
+                # 对直接构造的索引仍加兜底，避免 BM25 长度归一化除零。
+                avgdl = self.avgdl or 1.0
                 norm = self.k1 * (1.0 - self.b
-                                  + self.b * self.lengths[index] / self.avgdl)
+                                  + self.b * self.lengths[index] / avgdl)
                 scores[index] = scores.get(index, 0.0) + idf * tf * (self.k1 + 1.0) / (tf + norm)
         ranked = heapq.nlargest(
             n, scores.items(),

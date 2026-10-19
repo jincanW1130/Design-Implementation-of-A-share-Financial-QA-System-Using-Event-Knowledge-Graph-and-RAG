@@ -73,7 +73,11 @@ const tripleCount = computed(() => {
   return s.body.split('\n').filter((l) => /^\s*EVT-\S/.test(l)).length
 })
 
-// 正文转安全 HTML：先转义，再把 [证据N] 换成可点引用（data-ev=evN），保留换行
+// 正文转安全 HTML：先转义，再把 [证据N] 换成可点引用（data-ev=evN），保留换行。
+// 注意：这里的 esc() 只转义 & < >，刻意不转义引号。它的唯一出口是下面 refHTML()
+// 生成的 HTML，经 v-html 插入 <p> 的**文本节点**；引用正则只允许数字，且不会有
+// 任何不可信值进入属性上下文。若将来把这个结果移进属性或其它拼接上下文，
+// 必须换成同时转义 " 与 ' 的完整转义（或改用 DOM API）。
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }
 function refHTML(s) {
   return esc(s).replace(/\[证据(\d+)\]/g, '<a class="ref" href="#" data-ev="ev$1">[证据$1]</a>')

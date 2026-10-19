@@ -1,16 +1,16 @@
 {
   "_说明": "第 9 阶段（前后端系统集成）的**本机配置模板**。复制为同目录下的 `config.local.json` 后填入真实取值：该文件被 .gitignore 的 `config.local.*` 与 `*.local.json` 两条规则覆盖，**不入公开仓库**；后端只从它或环境变量读取凭据，不写死、不回显、不进日志、不进前端构建产物（《24-第9阶段任务书（前后端系统集成）》第五节 硬约束 2 与第八节 G1／F6）。",
-  "_用法": "cp config.local.json.example config.local.json  →  填 mysql_password → 运行 `python 代码\\后端\\run.py`",
+  "_用法": "cp config.local.json.example config.local.json  →  填运行期 DML 账号口令 → 运行 `python 代码\\后端\\run.py`",
   "_环境分层说明": "第 4 轮（7.1）：缺省 `ASHARE_ENV=dev`，读取顺序为「本文件 → config.<env>.local.json（存在才叠加）→ ASHARE_* 环境变量」。可覆盖的键（18 项）：mysql_host／mysql_port／mysql_user／mysql_password／mysql_database／mysql_charset／neo4j_uri／neo4j_user／neo4j_password／backend_port／frontend_port／log_path／admin_token／trust_proxy_headers／qa_runs_retention_days／cache_enabled／cache_ttl_seconds／cache_max_entries，环境变量名为 ASHARE_ + 键名大写。未知或拼错的键不会生效，也不会报错，请按此清单核对。`ASHARE_CONFIG_FILE` 可指定另一份基础 JSON（相对路径按后端目录解析）。不设任何 ASHARE_* 时，读到的值与分层前逐项一致。",
 
   "mysql_host": "127.0.0.1",
   "mysql_port": 3306,
-  "mysql_user": "root",
-  "mysql_password": "把本机 MySQL 的口令填在这里",
+  "mysql_user": "ashare_app",
+  "mysql_password": "把运行期 DML 账号的口令填在这里",
   "mysql_database": "ashare_qa",
   "mysql_charset": "utf8mb4",
 
-  "_mysql_权限说明": "该账号需要能 CREATE DATABASE（建库 `ashare_qa`）、CREATE／ALTER／DROP TABLE、INSERT／SELECT／DELETE（建六张表并导入数据）。若只给一个受限账号，请在 `交付物/05-系统实现/前后端系统集成\\_工作底稿\\` 里留一条说明，后端会按 `schema\\六张表.sql` 的建表结果判定是否可用。",
+  "_mysql_权限说明": "分两类账号（最小权限）：① **运行期 DML 账号**（默认 `ashare_app@127.0.0.1`）只需 SELECT／INSERT／UPDATE／DELETE ON `ashare_qa`.*，不应有 CREATE／ALTER／DROP 或 GRANT OPTION；② **迁移账号**（仅建库建表／导入／备份回验时临时启用，如 `ashare_migrator`）才需要 CREATE／ALTER／DROP TABLE 与建临时库的权限。库与六张表已存在时后端完全不发 DDL（DML-only 账号可直接运行）；缺失时按 `schema\\六张表.sql` 由迁移账号或 DBA 预执行。",
 
   "_neo4j_说明": "本机 Neo4j 以 ZIP 发行版运行（免管理员），默认 bolt 7687／HTTP 7474；口令由首次 `neo4j-admin dbms set-initial-password` 设定，如需非默认口令一并写在这里。",
   "neo4j_uri": "bolt://127.0.0.1:7687",
@@ -25,7 +25,7 @@
   "_日志_说明": "**可选**项（评审 P1-11）：填了就在 stderr 之外**再落一份轮转日志**（`logging.handlers.RotatingFileHandler`：单文件 10 MiB、保留 5 个历史文件、UTF-8），错误码的 `detail`（按硬约束「只进日志、不进响应体」）因此有了盘上依据；**留空或删掉这一行＝与改动前完全一致**（只出 stderr、不落文件）。目录不存在会自动创建；日志格式与日志内容**不含**任何口令取值（`mysql_password`／`neo4j_password`／`api_key` 一个都不写）。相对路径按进程工作目录解析，建议填绝对路径。",
   "log_path": "",
 
-  "_后台鉴权_说明": "**可选**项（2026-10-11 审查 S1 加固）：管理面共享密钥。填入非空取值后，运维／实验通道调用 `/api/admin/*` 必须带请求头 `X-Admin-Token: <此值>`（缺失或取值不符 → 401/4001）；前端普通用户通道不受影响（依旧 403/4002）。**留空或删掉这一行 = 后台接口一律 401（fail closed）**，这是刻意的安全缺省。取值只比对、不打印、不进日志。门禁脚本从环境变量 `ASHARE_ADMIN_TOKEN` 读同值。",
+  "_后台鉴权_说明": "**可选**项（2026-10-11 审查 S1 加固）：管理面共享密钥。填入非空取值后，运维／实验通道调用 `/api/admin/*` 必须带请求头 `X-Admin-Token: <此值>`（缺失或取值不符 → 401/4001）；前端普通用户通道不受影响（依旧 403/4002）。**留空或删掉这一行 = 后台接口一律 401（fail closed）**，这是刻意的安全缺省。取值只比对、不打印、不进日志；建议使用 ≥32 字符随机串并定期轮换（当前部署为 32 字符）。门禁脚本从环境变量 `ASHARE_ADMIN_TOKEN` 读同值。",
   "admin_token": "",
 
   "_反代信任_说明": "**可选**项（2026-10-11 审查 S2 加固）：是否信任 `X-Forwarded-For` 等反向代理头来判定限流的来源 IP。**默认 false（直连形态）**——信任伪造头会让攻击者绕过限流；只有确认部署在可信反向代理之后才改 true。",

@@ -224,10 +224,15 @@ class MetricsRegistry:
             llm_seconds_total = self._llm_seconds_total
             uptime = now - self._started
 
+        # P2（独立审查 2026-10-19）：历史窗口必须与 HISTORY_SECONDS 一致。旧实现按
+        # `window_cutoff - HISTORY_SECONDS`（即 now-360）过滤；record_request() 虽在写入时
+        # 裁剪 300 s，但空闲后的首次 snapshot 不会重新裁剪，于是 300～360 s 的样本被算进
+        # avg/p50/p95/p99。这里直接以 now-HISTORY_SECONDS 为下界，写入与读取同一口径。
+        history_cutoff = now - HISTORY_SECONDS
         all_samples = []
         route_items = {}
         for key in sorted(routes):
-            samples = [s for s in routes[key] if s[0] >= window_cutoff - HISTORY_SECONDS]
+            samples = [s for s in routes[key] if s[0] >= history_cutoff]
             if not samples:
                 continue
             all_samples.extend(samples)

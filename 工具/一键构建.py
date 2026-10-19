@@ -58,16 +58,30 @@ def parse_pytest_counts(output: str) -> dict:
     """
     text = str(output or "")
 
-    def count(word: str) -> int:
-        match = re.search(r"(\d+)\s+" + word + r"\b", text)
-        return int(match.group(1)) if match else 0
-
-    return {
-        "passed": count("passed"),
-        "skipped": count("skipped"),
-        "failed": count("failed"),
-        "errors": count("errors"),
+    # 每个计数都用「词边界 + 非标识符前缀」匹配，并从**最后一个**汇总行解析，
+    # 避免测试自身打印的 "… passed" 文本被当成汇总（首匹配风险，P3 2026-10-19）。
+    patterns = {
+        "passed": re.compile(r"(?<![\w.])(\d+)\s+passed\b"),
+        "skipped": re.compile(r"(?<![\w.])(\d+)\s+skipped\b"),
+        "failed": re.compile(r"(?<![\w.])(\d+)\s+failed\b"),
+        "errors": re.compile(r"(?<![\w.])(\d+)\s+errors?\b"),
     }
+    summary_time = re.compile(r"\bin\s+\d+(?:\.\d+)?s\b")
+    for line in reversed(text.splitlines()):
+        if not summary_time.search(line):        # 只认 pytest 的最终汇总行
+            continue
+        counts = {}
+        found = False
+        for word, pattern in patterns.items():
+            match = pattern.search(line)
+            if match:
+                counts[word] = int(match.group(1))
+                found = True
+            else:
+                counts[word] = 0
+        if found:
+            return counts
+    return {"passed": 0, "skipped": 0, "failed": 0, "errors": 0}
 
 
 def backend_gate_error(counts: dict) -> str | None:

@@ -6,8 +6,10 @@
 #   powershell -ExecutionPolicy Bypass -File 工具\备份.ps1 -Out D:\ashare-backup
 #   powershell -ExecutionPolicy Bypass -File 工具\备份.ps1 -Keep 7
 #
-# 产物默认落在 交付物\10-部署\备份\<时间戳>\（已 gitignore），并自动做一次
-# 「临时库导入回验」后删除临时库；正式库 ashare_qa 全程只读。
+# 产物默认落在 交付物\10-部署\备份\<时间戳>\（已 gitignore）。写文件前先探测
+# CREATE/DROP DATABASE 权限：有则做「临时库导入回验」后删除临时库；DML-only 时
+# 自动跳过回验（manifest verified=false）并仍以 exit 0 结束。正式库全程只读。
+# 严格校验请直接运行 备份.py --require-verify（无 DDL 权限时 exit 1）。
 # -Keep（默认 3）：只保留最近 N 份备份目录，更旧的由 备份.py 按安全边界清理。
 
 param(

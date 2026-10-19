@@ -14,14 +14,18 @@
 dump 灌进去，逐表比对计数，再 `DROP DATABASE`。临时库一定在 finally 中删除；正式库
 `ashare_qa` 全程只读，不写入。这样「备份文件可恢复」有实测证据，不是只看看文件大小。
 
-运行期账号只有 DML 时（`ashare_app`），建／删临时库需要迁移账号权限（独立审查 2026-10-19）：
+运行期账号只有 DML 时（`ashare_app`），建／删临时库需要迁移账号权限（独立审查 2026-10-19；
+P2 清理 2026-10-19 改为**自动降级**）：
 
-* **推荐**：用迁移账号环境变量运行备份（只影响本进程，不改 config.local.json）：
+* 真实运行会在**写任何文件之前**先建／删一个探针库探测 CREATE/DROP DATABASE 权限；
+* **有 DDL 权限**：照旧完成导入回验，manifest `verify.verified=true`、`counts_match=true`；
+* **无 DDL 权限（DML-only）**：自动跳过回验，manifest 写
+  `verify.verified=false`、`verify.skipped=true`、
+  `verify_skipped_reason="no DDL privilege"`，**退出码 0**（定时任务不再误报失败）；
+* 要求严格校验的场景用 `--require-verify`：无 DDL 权限时**退出 1**（不产生半成品目录）；
+* 仍可用迁移账号环境变量运行完整回验（只影响本进程，不改 config.local.json）：
   `set ASHARE_MYSQL_USER=…` / `set ASHARE_MYSQL_PASSWORD=…`；
-* 若确实没有迁移账号，可显式 `--skip-verify`：仍生成 dump／Neo4j／向量备份，
-  但 **manifest 的 `verify.skipped=true` 如实标记「未做恢复回验」**；
-* 真实运行会在**写任何文件之前**先建／删一个探针库做权限预检；权限不足即退出 1，
-  不再留下「dump 已写、回验失败」的半成品目录（这是本次审查修掉的回归）。
+* 也可显式 `--skip-verify`：跳过回验，manifest `verify_skipped_reason="--skip-verify"`。
 
 纪律
 ----
@@ -42,11 +46,12 @@ dump 灌进去，逐表比对计数，再 `DROP DATABASE`。临时库一定在 f
 
 用法
 ----
-    python 工具\\备份.py                 # 完整备份 + 导入回验 + 保留最近 3 份
-    python 工具\\备份.py --keep 7        # 保留最近 7 份
-    python 工具\\备份.py --dry-run       # 只检查并打印计划（含保留期计划）
-    python 工具\\备份.py --skip-verify   # 没有迁移账号时：生成备份但不做恢复回验
-    python 工具\\备份.py --out D:\\bak   # 指定输出根目录
+    python 工具\\备份.py                   # 有 DDL 权限时回验；DML-only 自动降级为未回验（exit 0）
+    python 工具\\备份.py --keep 7          # 保留最近 7 份
+    python 工具\\备份.py --dry-run         # 只检查并打印计划（含保留期计划）
+    python 工具\\备份.py --require-verify  # 严格模式：无 DDL 权限时 exit 1
+    python 工具\\备份.py --skip-verify     # 显式跳过回验（manifest 如实标记）
+    python 工具\\备份.py --out D:\\bak     # 指定输出根目录
 """
 
 from __future__ import annotations
@@ -284,8 +289,11 @@ def main(argv=None) -> int:
     ap.add_argument("--out", default=DEFAULT_OUT_ROOT, help="输出根目录（默认 交付物/10-部署/备份）")
     ap.add_argument("--keep", type=int, default=3,
                     help="只保留最近 N 份备份目录（默认 3；仅清理本脚本产物）")
-    ap.add_argument("--skip-verify", action="store_true",
-                    help="没有迁移账号时跳过临时库回验；manifest 会标记 verify.skipped=true")
+    verify_group = ap.add_mutually_exclusive_group()
+    verify_group.add_argument("--skip-verify", action="store_true",
+                              help="显式跳过临时库回验；manifest 标记 verify.skipped=true")
+    verify_group.add_argument("--require-verify", action="store_true",
+                              help="严格模式：没有 CREATE/DROP DATABASE 权限时退出 1")
     args = ap.parse_args(argv)
     if args.keep < 1:
         ap.error("--keep 必须 ≥ 1（至少保留本次备份）")
@@ -339,21 +347,32 @@ def main(argv=None) -> int:
         print("[WARN] 可用磁盘不足 1 GB，备份可能失败。")
 
     verify_db = "ashare_qa_bakverify_" + stamp
+    verify_enabled = not args.skip_verify
+    skip_reason = "--skip-verify" if args.skip_verify else ""
     if args.skip_verify:
-        print("  导入回验       = 跳过（--skip-verify；manifest 将如实标记）")
+        print("  导入回验       = 跳过（--skip-verify；manifest 将如实标记 verified=false）")
     elif args.dry_run:
-        print("  回验权限       = dry-run 不建探针库；真实运行会在写文件前预检 CREATE/DROP")
+        print("  回验权限       = dry-run 不建探针库；真实运行在写文件前预检 CREATE/DROP，"
+              "无权限时自动跳过")
     else:
         ok, detail = _preflight_verify_db(db_params, verify_db)
-        if not ok:
-            print("[FAIL] 导入回验需要 CREATE/DROP DATABASE 权限，当前账号不具备：%s" % detail)
+        if ok:
+            print("  回验权限       = CREATE/DROP DATABASE 预检通过；将做导入回验")
+        elif args.require_verify:
+            print("[FAIL] --require-verify：导入回验需要 CREATE/DROP DATABASE 权限，"
+                  "当前账号不具备：%s" % detail)
             print("       运行期账号仅 DML。请改用迁移账号环境变量运行：")
             print("         set ASHARE_MYSQL_USER=<迁移账号>")
             print("         set ASHARE_MYSQL_PASSWORD=<迁移口令>")
-            print("       或显式加 --skip-verify 生成「未回验」备份（manifest 会如实标记）。")
             print("       未创建任何备份目录／文件。")
             return 1
-        print("  回验权限       = CREATE/DROP DATABASE 预检通过")
+        else:
+            verify_enabled = False
+            skip_reason = "no DDL privilege"
+            print("  回验权限       = 当前账号无 CREATE/DROP DATABASE 权限（%s）" % detail)
+            print("[WARN] 按 DML-only 自动跳过导入回验：manifest 将写 verified=false、"
+                  "verify_skipped_reason=\"no DDL privilege\"；退出码 0。")
+            print("       要求严格校验时请改用迁移账号或加 --require-verify。")
 
     if args.dry_run:
         print("\n[dry-run] 计划：")
@@ -361,7 +380,8 @@ def main(argv=None) -> int:
         print("  2. Neo4j 逻辑导出 → %s/neo4j/{nodes,relationships}.jsonl" % target)
         print("  3. 复制向量索引三件 → %s/vector/" % target)
         print("  4. 建临时库回验 dump，逐表比对后 DROP DATABASE%s"
-              % ("（已指定 --skip-verify，将跳过）" if args.skip_verify else "（写文件前先做权限预检）"))
+              % ("（已指定 --skip-verify，将跳过）" if args.skip_verify else
+                 "（写文件前先做权限预检；无 DDL 权限且未给 --require-verify 时自动跳过）"))
         print("  5. 写 manifest.json（sha256／计数／版本，不含口令）")
         print("  6. 保留最近 %d 份备份（含本次待生成的一份），清理更旧的同格式目录：" % args.keep)
         existing = _list_backup_dirs(args.out)
@@ -388,8 +408,10 @@ def main(argv=None) -> int:
         "neo4j": {"uri": config.neo4j_params()["uri"]},
         "files": [],
         "verify": {"temp_database": verify_db, "imported": False, "counts_match": False,
-                   "skipped": bool(args.skip_verify),
-                   "reason": "--skip-verify" if args.skip_verify else ""},
+                   "verified": False,
+                   "skipped": not verify_enabled,
+                   "reason": skip_reason,
+                   "verify_skipped_reason": skip_reason},
         "retention": {"keep": args.keep, "deleted": []},
     }
     started = time.perf_counter()
@@ -425,8 +447,8 @@ def main(argv=None) -> int:
             print("      %-18s %.2f MB" % (name, os.path.getsize(dst) / 1024.0 / 1024.0))
 
         # ---------------------------------------------------------- 导入回验
-        if args.skip_verify:
-            print("\n[4/4] 导入回验：按 --skip-verify 跳过（manifest 已标记 verify.skipped=true）")
+        if not verify_enabled:
+            print("\n[4/4] 导入回验：跳过（%s；manifest 已标记 verified=false）" % skip_reason)
         else:
             print("\n[4/4] 导入回验：建临时库 → 灌入 dump → 逐表比对 → 删库")
             import pymysql
@@ -451,6 +473,7 @@ def main(argv=None) -> int:
                 manifest["verify"]["imported"] = True
                 manifest["verify"]["counts"] = counts_after
                 manifest["verify"]["counts_match"] = counts_after == counts_before
+                manifest["verify"]["verified"] = manifest["verify"]["counts_match"]
                 for table in VERIFY_TABLES:
                     same = counts_after.get(table) == counts_before.get(table)
                     print("      %-16s 源 %d／回验 %d  %s"
@@ -503,10 +526,14 @@ def main(argv=None) -> int:
         else:
             print("      没有需要清理的旧备份。")
 
-        if args.skip_verify:
-            print("结论：备份文件已生成，但**未做导入回验**（--skip-verify；manifest verify.skipped=true）。退出码 0。")
+        if verify_enabled:
+            print("结论：备份＋导入回验通过（manifest verify.verified=true）。退出码 0。")
+        elif skip_reason == "no DDL privilege":
+            print("结论：备份文件已生成，但**未做导入回验**——当前账号无 DDL 权限，已自动跳过；"
+                  "manifest verify.verified=false、verify_skipped_reason=\"no DDL privilege\"。退出码 0。")
         else:
-            print("结论：备份＋导入回验通过。退出码 0。")
+            print("结论：备份文件已生成，但**未做导入回验**（--skip-verify；"
+                  "manifest verify.verified=false）。退出码 0。")
         return 0
     except Exception as exc:                               # noqa: BLE001
         first = str(exc).splitlines()[0] if str(exc) else type(exc).__name__

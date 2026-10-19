@@ -3297,6 +3297,1861 @@
   },
   "generated_by": "工具/契约快照.py",
   "openapi_version": "3.1.0",
+  "operation_contract": {
+    "DELETE /api/admin/documents/{doc_id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "doc_id",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [
+        {
+          "AdminToken": []
+        }
+      ],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/admin/consistency-check": {
+      "parameters": [],
+      "request_body": null,
+      "security": [
+        {
+          "AdminToken": []
+        }
+      ],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/admin/documents": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "category",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "end_time",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page_size",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "source",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "start_time",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [
+        {
+          "AdminToken": []
+        }
+      ],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/admin/extraction/disambiguation": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "page",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page_size",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [
+        {
+          "AdminToken": []
+        }
+      ],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/admin/extraction/events": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "confidence_min",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "end_time",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "event_type",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page_size",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "start_time",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [
+        {
+          "AdminToken": []
+        }
+      ],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/admin/extraction/tasks/{task_id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "task_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [
+        {
+          "AdminToken": []
+        }
+      ],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/config/meta": {
+      "parameters": [],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/documents/{doc_id}/chunks/{chunk_id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "chunk_id",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "in": "path",
+          "name": "doc_id",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/evidence/{answer_id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "answer_id",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "in": "query",
+          "name": "evidence_type",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "group_by",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/evidence/{answer_id}/graph-path": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "answer_id",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/graph/entities": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "keyword",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page_size",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "type",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/graph/entities/{node_id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "node_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/graph/entities/{node_id}/evidence": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "node_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "query",
+          "name": "depth",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page_size",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "with_properties",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/graph/entities/{node_id}/neighbors": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "node_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "query",
+          "name": "direction",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "relation",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "with_evidence",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "with_properties",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/graph/events": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "end_time",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "event_type",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page_size",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "start_time",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "stock_code",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/graph/events/{event_id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "event_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/graph/paths": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "end_time",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "from_node",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "hop",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "relation",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "start_time",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "to_node",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "with_evidence",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/health": {
+      "parameters": [],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/history": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "X-Session-Id",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page_size",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "session_id",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/history/{question_id}": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "X-Session-Id",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "path",
+          "name": "question_id",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "in": "query",
+          "name": "session_id",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/market/announcements": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "code",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "days",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page_size",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/market/news": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "keyword",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page_size",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/market/quote": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "codes",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/market/reports": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "days",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        {
+          "in": "query",
+          "name": "page_size",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/qa/answers/{answer_id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "answer_id",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "GET /api/search/keywords": {
+      "parameters": [
+        {
+          "default": 5,
+          "in": "query",
+          "name": "k",
+          "required": false,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "in": "query",
+          "name": "q",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      ],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "HEAD /api/health": {
+      "parameters": [],
+      "request_body": null,
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "POST /api/admin/documents": {
+      "parameters": [],
+      "request_body": {
+        "content": {
+          "application/json": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": false
+      },
+      "security": [
+        {
+          "AdminToken": []
+        }
+      ],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "POST /api/admin/experiment/ask": {
+      "parameters": [],
+      "request_body": {
+        "content": {
+          "application/json": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": false
+      },
+      "security": [
+        {
+          "AdminToken": []
+        }
+      ],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "POST /api/admin/extraction/disambiguation/{item_id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "item_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "request_body": {
+        "content": {
+          "application/json": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": false
+      },
+      "security": [
+        {
+          "AdminToken": []
+        }
+      ],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "POST /api/admin/extraction/run": {
+      "parameters": [],
+      "request_body": {
+        "content": {
+          "application/json": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": false
+      },
+      "security": [
+        {
+          "AdminToken": []
+        }
+      ],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "POST /api/admin/reprocess": {
+      "parameters": [],
+      "request_body": {
+        "content": {
+          "application/json": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": false
+      },
+      "security": [
+        {
+          "AdminToken": []
+        }
+      ],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "POST /api/qa/ask": {
+      "parameters": [],
+      "request_body": {
+        "content": {
+          "application/json": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": false
+      },
+      "security": [],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    },
+    "PUT /api/admin/documents/{doc_id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "doc_id",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "request_body": {
+        "content": {
+          "application/json": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": false
+      },
+      "security": [
+        {
+          "AdminToken": []
+        }
+      ],
+      "success_responses": {
+        "present": true,
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "kind": "any"
+              }
+            },
+            "present": true
+          }
+        },
+        "statuses": [
+          "200"
+        ]
+      }
+    }
+  },
   "operation_count": 34,
   "operations": [
     "DELETE /api/admin/documents/{doc_id}",
@@ -3486,5 +5341,5 @@
     "HTTPValidationError",
     "ValidationError"
   ],
-  "snapshot_level": "field"
+  "snapshot_level": "operation"
 }

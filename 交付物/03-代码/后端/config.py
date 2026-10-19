@@ -430,7 +430,7 @@ def db_params(with_database: bool = True) -> dict:
         raise SystemExit(
             "MySQL 凭据不可用：代码\\后端\\config.local.json 的 mysql_password 为空或仍是模板占位串。\n"
             "请检查 代码\\后端\\config.local.json（参考同目录的 config.local.json.example）：\n"
-            "    mysql_password = 本机 MySQL 的 root 口令\n"
+            "    mysql_password = 运行期 MySQL 账号（默认 ashare_app，仅 DML）的口令\n"
             "本阶段**不提供默认口令、不提供兜底路径**；凭据由作者填入后重跑即可。\n"
             "（仅解析与统计的 --dry-run 不连库，不受此影响。）")
     params = {
