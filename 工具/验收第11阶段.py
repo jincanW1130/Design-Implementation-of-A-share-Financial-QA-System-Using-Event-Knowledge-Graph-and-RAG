@@ -1452,8 +1452,10 @@ def g2(ctx):
         rc2, _ = _run_assembler(ctx, o2)
         if rc1 != 0 or rc2 != 0:
             return "FAIL", "拼装脚本退出码 %s／%s（期望 0／0）" % (rc1, rc2)
-        b1 = open(o1, "rb").read()
-        b2 = open(o2, "rb").read()
+        with open(o1, "rb") as f1:
+            b1 = f1.read()
+        with open(o2, "rb") as f2:
+            b2 = f2.read()
         if b1 != b2:
             return "FAIL", "两次拼装产出不一致（%d vs %d 字节）" % (len(b1), len(b2))
         on_disk = ctx.raw(PAPER_REL)

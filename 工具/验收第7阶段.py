@@ -53,7 +53,6 @@ import ast
 import atexit
 import csv
 import hashlib
-import io
 import json
 import math
 import os

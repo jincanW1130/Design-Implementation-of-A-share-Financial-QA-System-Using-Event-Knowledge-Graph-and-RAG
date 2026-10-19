@@ -35,7 +35,6 @@ import argparse
 import ast
 import hashlib
 import os
-import shutil
 import subprocess
 import sys
 import time
@@ -149,7 +148,8 @@ def main(argv=None) -> int:
         if args.only and args.only != fn_name:
             continue
         path = target["file"]
-        original = open(path, "r", encoding="utf-8").read()
+        with open(path, "r", encoding="utf-8") as fh:
+            original = fh.read()
         sha_before = sha256_of(path)
         pts = mutation_points(original, fn_name, args.cap)
         print("\n目标 %s：%d 个变异点" % (target["label"], len(pts)))
@@ -162,11 +162,13 @@ def main(argv=None) -> int:
                 if not mut.done:
                     continue
                 mutated_src = ast.unparse(tree)
-                open(path, "w", encoding="utf-8", newline="").write(mutated_src)
+                with open(path, "w", encoding="utf-8", newline="") as fh:
+                    fh.write(mutated_src)
                 try:
                     rc = run_tests()
                 finally:
-                    open(path, "w", encoding="utf-8", newline="").write(original)
+                    with open(path, "w", encoding="utf-8", newline="") as fh:
+                        fh.write(original)
                 verdict = "killed" if rc != 0 else "survived"
                 if rc != 0:
                     killed += 1
@@ -177,7 +179,8 @@ def main(argv=None) -> int:
                                 "verdict": verdict})
         finally:
             # 三重保护之一：无条件还原（见模块 docstring）
-            open(path, "w", encoding="utf-8", newline="").write(original)
+            with open(path, "w", encoding="utf-8", newline="") as fh:
+                fh.write(original)
         sha_after = sha256_of(path)
         if sha_before != sha_after:
             print("  !! 严重：还原后 sha256 与变异前不一致——请立即从 git 恢复 %s" % path)

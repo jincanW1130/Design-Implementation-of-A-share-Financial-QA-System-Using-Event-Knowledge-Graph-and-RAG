@@ -220,6 +220,44 @@ def test_g1_uncaught_exception_becomes_9999(client_factory, monkeypatch):
     assert r.json() == {"code": 9999, "message": "服务内部错误"}
 
 
+def test_g1_uncaught_exception_carries_request_id(client_factory, monkeypatch):
+    """未捕获异常（HTTP 500）也必须带请求 ID：响应头可回查，日志行首是同一个 ID。
+
+    2026-10-19 第 2 轮复验修复：此前请求 ID 中间件在异常路径先 `reset()` 上下文，
+    且 500 响应由最外层 `ServerErrorMiddleware` 生成、绕过该中间件，结果是响应头缺失
+    `X-Request-Id`、异常日志行首为 `[-]`——违反作者二.4「异常带请求 ID」。
+    """
+    import logging
+
+    rid = "round2-uncaught-request-id"
+    captured = []
+
+    class Capture(logging.Handler):
+        def emit(self, record):
+            captured.append(record)
+
+    handler = Capture()
+    handler.addFilter(errors_mod.RequestIdFilter())
+
+    def _boom(answer_id):
+        raise RuntimeError("替身内部故障")
+
+    monkeypatch.setattr(qa_service, "get_answer", _boom)
+    errors_mod.logger.addHandler(handler)
+    try:
+        with client_factory(raise_server_exceptions=False) as c:
+            r = c.get("/api/qa/answers/40", headers={"X-Request-Id": rid})
+    finally:
+        errors_mod.logger.removeHandler(handler)
+
+    assert r.status_code == 500
+    assert r.headers.get("X-Request-Id") == rid
+    assert r.json() == {"code": 9999, "message": "服务内部错误"}
+    assert "Traceback" not in r.text, "原始堆栈不得进响应体"
+    assert any(getattr(rec, "request_id", None) == rid and "未捕获异常" in rec.getMessage()
+               for rec in captured), "未捕获异常日志行必须带同一请求 ID"
+
+
 @pytest.fixture()
 def client_factory():
     """按需构造 TestClient（用于需要非默认参数的个别用例）。"""

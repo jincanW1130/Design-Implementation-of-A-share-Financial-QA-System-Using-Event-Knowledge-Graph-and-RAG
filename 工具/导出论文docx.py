@@ -256,7 +256,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.image.image import Image as DocxImage
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
-from docx.shared import Cm, Emu, Pt, RGBColor
+from docx.shared import Cm, Emu, Pt
 
 # 切图用的图像库（第四批改动 1）：numpy 算逐行墨迹剖面、Pillow 读图与在内存里裁块。
 # 二者都是**硬依赖**：缺了就非零退出（`build()` 抛 RuntimeError，`main()` 转成退出码 2），

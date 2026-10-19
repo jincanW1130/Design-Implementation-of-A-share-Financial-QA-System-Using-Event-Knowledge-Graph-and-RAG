@@ -356,8 +356,14 @@ def install_exception_handlers(app: Any) -> None:
         # 堆栈只进日志，响应体只有 code／message（硬约束 7）
         logger.exception("未捕获异常 %s %s → code=%s",
                          request.method, request.url.path, UNCAUGHT_CODE)
-        return JSONResponse(status_code=http_status_of(UNCAUGHT_CODE),
-                            content=uncaught_payload())
+        response = JSONResponse(status_code=http_status_of(UNCAUGHT_CODE),
+                                content=uncaught_payload())
+        # 未捕获异常由最外层 ServerErrorMiddleware 生成响应，绕过了请求 ID 中间件的
+        # 「给正常响应加响应头」分支；这里补回同一个 ID，保证 500 也能凭响应头回查日志。
+        request_id = getattr(request.state, "request_id", None) or request_id_var.get()
+        if request_id and request_id != "-":
+            response.headers[REQUEST_ID_HEADER] = request_id
+        return response
 
 
 def register_request_id(app: Any) -> None:
@@ -380,7 +386,9 @@ def register_request_id(app: Any) -> None:
         try:
             response = await call_next(request)
         except Exception:
-            request_id_var.reset(token)          # 异常交给 errors 的处理器记录（已带 ID）
+            # 异常路径**不 reset**：未捕获异常交给最外层 ServerErrorMiddleware 的
+            # `_handle_uncaught` 记录，它需要同一个 request_id 写进日志行首与响应头。
+            # contextvars 按任务隔离，任务结束后随上下文销毁，不会串到下一个请求。
             raise
         response.headers[REQUEST_ID_HEADER] = request_id
         request_id_var.reset(token)

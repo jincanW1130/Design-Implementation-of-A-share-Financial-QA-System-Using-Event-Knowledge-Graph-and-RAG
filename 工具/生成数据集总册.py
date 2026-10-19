@@ -83,7 +83,8 @@ for role, stage, rel, note, is_truth in GROUPS:
 manifest = {"generated_at": datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
             "root": "交付物/", "entries": entries,
             "note": "只读盘点产物；本文件不移动任何数据。真值仍落在各自阶段目录（§「为什么不做物理搬迁」）。"}
-json.dump(manifest, open(OUT_JS, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+with open(OUT_JS, "w", encoding="utf-8") as fh:
+    json.dump(manifest, fh, ensure_ascii=False, indent=2)
 
 tot = sum(e.get("bytes", 0) for e in entries)
 truth = sum(e.get("bytes", 0) for e in entries if e.get("is_delivery_truth"))
@@ -134,7 +135,8 @@ lines.append("3. 论文、《25》《27》等文档有数十处按路径引用�
 lines.append("因此本项目的既有口径是：**数据留在产生它的阶段目录，用「本总册 ＋ 清单」做逻辑整合**（唯一入口、可校验、可复算）。\n")
 lines.append("> 若确实需要一份「拷贝式打包」（用于交付或归档），可另建 `交付物/04-数据与知识图谱/数据集打包/`，")
 lines.append("> 只拷贝交付级真值（约 %.0f MB）、保留原路径不动，并把两份的 SHA-256 一起登记。" % (truth / 1048576))
-open(OUT_MD, "w", encoding="utf-8").write("\n".join(lines) + "\n")
+with open(OUT_MD, "w", encoding="utf-8") as fh:
+    fh.write("\n".join(lines) + "\n")
 print("已生成：")
 print("  ", OUT_MD)
 print("  ", OUT_JS)

@@ -214,7 +214,8 @@ def main(argv=None):
     base = set()
     if os.path.isfile(base_path):
         import json
-        base = {(x["where"], x["fn"]) for x in json.load(open(base_path, encoding="utf-8"))["cc_over_limit"]}
+        with open(base_path, encoding="utf-8") as fh:
+            base = {(x["where"], x["fn"]) for x in json.load(fh)["cc_over_limit"]}
     new_over = [(c, r, f, l) for c, r, f, l in over if (r.replace("\\", "/"), f) not in base]
     report(not new_over, "圈复杂度：无新增超阈（阈值 CC ≤ %d；基线豁免 %d 个存量函数）"
            % (CC_LIMIT, len(over) - len(new_over)),

@@ -42,7 +42,6 @@ from urllib.parse import quote, urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
-from playwright.sync_api import Error as PWError
 from playwright.sync_api import sync_playwright
 
 try:
@@ -1122,8 +1121,11 @@ def build_report() -> str:
         raise RuntimeError("JSONL 条目数为 %d，期望 %d" % (len(records), EXPECTED_COUNT))
     item_by_id = {x["编号"]: x for x in items}
     rec_by_id = {x["编号"]: x for x in records}
-    snapshot = read_library_text() if not os.path.exists(SNAPSHOT_PATH) else open(
-        SNAPSHOT_PATH, "r", encoding="utf-8").read()
+    if os.path.exists(SNAPSHOT_PATH):
+        with open(SNAPSHOT_PATH, "r", encoding="utf-8") as fh:
+            snapshot = fh.read()
+    else:
+        snapshot = read_library_text()
     current = read_library_text()
     inv = library_invariants(snapshot, current)
 

@@ -34,7 +34,6 @@ HTTP 只保留状态码、request_id、answer_id／question_id、empty／reused 
 from __future__ import annotations
 
 import argparse
-import datetime as _dt
 import hashlib
 import json
 import os

@@ -41,7 +41,7 @@ class TTLCache:
     """线程安全的 TTL＋LRU 缓存；`clock` 可注入，便于单测直接拨表。"""
 
     def __init__(self, name: str, ttl_seconds: float, max_entries: int,
-                 enabled: bool = True, clock: Callable[[], float] = time.monotonic):
+                 enabled: bool = True, clock: Callable[[], float] = time.monotonic) -> None:
         if ttl_seconds <= 0:
             raise ValueError("ttl_seconds 必须为正数")
         if max_entries <= 0:
