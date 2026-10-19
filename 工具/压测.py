@@ -30,6 +30,7 @@ import threading
 import time
 import urllib.error
 import urllib.request
+from urllib.parse import quote
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
@@ -98,6 +99,9 @@ def main(argv=None) -> int:
               "请确认已按需放宽 ASHARE_RATE_LIMIT_MAX。", file=sys.stderr)
 
     url = args.base_url.rstrip("/") + "/" + args.endpoint.lstrip("/")
+    # `urllib` 只接受 ASCII URL；中文关键词（如 `?keyword=茅台`）先按 UTF-8 百分号编码，
+    # 否则 urlopen 会抛 UnicodeEncodeError（2026-10-19 第 9 轮复验发现）。ASCII URL 不变。
+    url = quote(url, safe=":/?&=%#[]@!$'()*+,;~")
     latencies, failures = [], []
     counter = {"index": 0, "lock": threading.Lock()}
     lock = threading.Lock()

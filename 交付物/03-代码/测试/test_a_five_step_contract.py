@@ -225,6 +225,41 @@ def test_run_question_end_to_end(synthetic_graph, fake_searcher):
     assert g == cfg.RETRIEVAL["graph_retention_share"]
 
 
+def test_run_question_empty_corpus_returns_empty_without_raising(synthetic_graph, fake_searcher):
+    """边界：空知识库（两路候选都为 0）仍走完五步并返回空证据，不抛异常、不落假数据。
+
+    作者原文九.3 点名「空知识库」。此前只有接口层"空结果 → 200＋empty"的语义测试
+    （`_run_chain` 被替身直接置空），没有一条用例让**检索流水线本身**在零候选下跑完。
+    本条用合成图（问题不命中任何实体）＋空向量替身覆盖该边界。
+    """
+    graph = synthetic_graph.graph
+    empty_question = dict(QUESTION)
+    empty_question["qid"] = "T-EMPTY"
+    empty_question["question"] = "量子计算会如何影响火星天气？"
+    empty_question["gold_evidence_chunk_ids"] = []
+    searcher = fake_searcher(n_rows=[], full_pool_rows=[])
+    switches = {"graph_depth": 2, "time_filter": True, "evidence_sort": False, "_group": "D"}
+
+    record = pipe.run_question(
+        empty_question, switches, graph, searcher, synthetic_graph.chunks,
+        synthetic_graph.documents,
+        n=int(cfg.require_fixed("N")), k=int(cfg.require_fixed("K")),
+        budget=int(cfg.require_fixed("context_token_budget")),
+        g=int(cfg.require_fixed("graph_retention_share")),
+        vector_cache={}, graph_cache={}, full_pool_cache={})
+
+    candidates = record["segments"]["① 两路取候选"]
+    assert candidates["vector"]["output_candidates"] == 0
+    assert candidates["graph"]["output_candidates"] == 0
+    assert candidates["graph"]["input_seeds"] == 0
+    assert searcher.calls, "空知识库也应真实走一次向量检索，而不是跳过检索"
+    assert record["evidence"] == []
+    assert record["graph_evidence_in_final"] == []
+    assert record["dual_hit_in_final"] == []
+    assert record["checks"] == {"evidence_unique": True, "candidates_unique": True,
+                                "within_budget": True, "kept_le_k": True}
+
+
 def test_run_question_D_and_E_share_the_same_evidence_set(synthetic_graph, fake_searcher):
     """《02》第12.6节 与《18》表 18-E 的硬断言：D 与 E 的最终证据集合必然相同。
 
