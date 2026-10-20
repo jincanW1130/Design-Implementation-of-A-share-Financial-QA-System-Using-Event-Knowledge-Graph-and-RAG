@@ -107,6 +107,10 @@ def parse_args(argv=None):
     parser.add_argument("--graph-share", type=int, default=None,
                         help="g：图谱侧保留份额（全局固化量，A～E 同值；"
                              "缺省经 config.require_fixed('graph_retention_share') 取）")
+    parser.add_argument("--retrieval", choices=pipeline.RETRIEVAL_MODES,
+                        default=pipeline.DEFAULT_RETRIEVAL_MODE,
+                        help="检索档位：vector＝冻结的默认链路（缺省，实验口径）；"
+                             "hybrid-zscore＝第①步改用 BM25+zscore(alpha=0.3) 融合候选")
     parser.add_argument("--out", default=None,
                         help="运行记录落点（默认 交付物/05-系统实现/RAG检索系统\\_工作底稿\\"
                              "run_query_<组>_<题号>.json）")
@@ -308,10 +312,11 @@ def default_out_path(group: str, qid: str) -> str:
     return os.path.join(config.DOCS_DIR, "run_query_%s_%s.json" % (group, safe))
 
 
-def _run_one(runner, question_row, group, params) -> dict:
+def _run_one(runner, question_row, group, params, retrieval=None) -> dict:
     switches = pipeline.normalize_switches(group)
     run = runner.run([question_row], switches, params["n"], params["k"],
-                     params["budget"], params["g"])
+                     params["budget"], params["g"],
+                     retrieval=(retrieval or pipeline.DEFAULT_RETRIEVAL_MODE))
     return run["records"][0]
 
 
@@ -365,7 +370,7 @@ def cmd_run(args) -> int:
     graph = graph_query.default_graph()
     searcher = VectorSearcher(verbose=not args.quiet)
     runner = pipeline.PipelineRunner(graph=graph, searcher=searcher, verbose=not args.quiet)
-    raw = _run_one(runner, question_row, args.group, params)
+    raw = _run_one(runner, question_row, args.group, params, retrieval=args.retrieval)
     record = build_run_record(raw, question_row, params, gold_source, args.questions)
 
     out_path = args.out or default_out_path(args.group, question_row["qid"])

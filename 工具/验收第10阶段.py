@@ -224,11 +224,22 @@ XDOC_BASELINE = [
 #   修订记录 v1.13 的既有做法**执行 `--write` 重登记（**11 项输入 ＋ 上游代码 31 个文件**，各输入的
 #   sha256 与旧基线逐项相同、只有 `path` 字段由旧目录名改为新目录名）；**旧期望值原样保留为时点留痕**
 #   （见上一行），**G5 的判据语义与强度一字未改**（仍逐件比对"第 5～9 阶段交付物只读"）。
+#   **2026-10-20 检索融合档落地重基线（作者解除冻结，允许改动 检索/pipeline.py 增加可选融合档）**：
+#   新增 `--retrieval {vector,hybrid-zscore}`（默认仍为 `vector`，A～E 实验口径不变），并同步
+#   `检索/run_query.py`、`问答/run_answer.py` 的档位透传；数据资产与冻结实验读数未改动。
+#   `input_manifest.json` 按 `输入指纹.py --write` 重登记（基线随更新）。**旧期望值原样保留为时点留痕**：
+#     pipeline.py       99fd5d4723ab8263905a879fda275ed737dfee823b8436de59599fa101e7c4ba
+#     run_answer.py     b5b6acc04e1d46f5673b4592b24c4d0bc0d9f1482d63187fc8e4365ad470c03e
+#     input_manifest    eaefcc5f054e3598135509c07d28aa561f52e2d659400b7dfebf5c785ce7294f
+#   同日真链路复跑又修复 `_load_hybrid_module()` 的动态加载登记（未登记 sys.modules 会使
+#   hybrid_retrieval 的 dataclass 初始化报错），pipeline.py 指纹随第二次修正再更新；上一版
+#   425899e4ebbe125e6d363bc4d8e5ee38b682767b870eab7e093264c4299d488e 保留为时点留痕。
+#   G4／G5 的判据语义与强度一字未改（仍逐件比对 SHA-256）。
 UPSTREAM_FP = {
     "交付物/03-代码/检索/config.py": "419c12c1eeaf99a4785ac3f5e85cd010adc5ffb4fea24ab287024925ca778ce4",
-    "交付物/03-代码/检索/pipeline.py": "99fd5d4723ab8263905a879fda275ed737dfee823b8436de59599fa101e7c4ba",
+    "交付物/03-代码/检索/pipeline.py": "20fa0bbf72d6c1610c68f78fd5130eeaa45380d71da403513a9166a69ea627c1",
     "交付物/03-代码/检索/graph_query.py": "e50c78fb7ae6e3caf9e24598c4e47f38ba7b3ed1ff2549600b999217ddf4a6e0",
-    "交付物/03-代码/问答/run_answer.py": "b5b6acc04e1d46f5673b4592b24c4d0bc0d9f1482d63187fc8e4365ad470c03e",
+    "交付物/03-代码/问答/run_answer.py": "e18c9ea85e1eae48d8bb06200600f68eda1bcddc3b813d822f360fd70dfe00b8",
     "交付物/03-代码/问答/assemble.py": "508f6d8629b02d06dd4eb5f625ee93744d44e7e6a22f1ebeb98ffb9fc9b70bba",
     "交付物/03-代码/问答/prompt.py": "60b0e8b41ce147b5bbcf86f6dc11c1faed7ba5fd70a9e55d80d8aef1bcaf001b",
     "交付物/05-系统实现/RAG检索系统/预实验问题集/questions.jsonl":
@@ -252,9 +263,13 @@ UPSTREAM_FP_5_9 = {
     "交付物/05-系统实现/智能问答系统/问答产出/qa_records.jsonl":
         "a64d0f0bcf60a0449bc4dbe4d9866bdbbd51a1f1968c275f514d2984f092768d",
     "交付物/05-系统实现/前后端系统集成/集成产出/input_manifest.json":
-        "eaefcc5f054e3598135509c07d28aa561f52e2d659400b7dfebf5c785ce7294f",
+        "953055eb851577359a2d241b5a22363ae556d6a2170a597353fce77c398df66e",
         # 时点留痕（2026-10-10 前的基线，仅作历史，不再用于判定）：
         # 6def927129908339b1fc5b3b0ee094308a359401d84c7edca2d15468d664763d
+        # 2026-10-20 重登记前的基线（检索融合档落地，仅作历史）：
+        # eaefcc5f054e3598135509c07d28aa561f52e2d659400b7dfebf5c785ce7294f
+        # 2026-10-20 同日第二次重登记（pipeline.py 动态加载修复后，仅作历史）：
+        # 103a3948206c8dbd98d568f52fcf20def82c89090f8816e2ce0c570184cbd539
 }
 # 已登记的并行修复豁免（不静默放过：G4 里逐条打印）
 G4_EXEMPT = ["交付物/03-代码/问答/config.py（qid 前缀白名单的修复由另一路任务并行实施，《27》已登记）"]

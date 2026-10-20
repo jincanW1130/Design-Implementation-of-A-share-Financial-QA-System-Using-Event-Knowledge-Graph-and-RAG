@@ -128,6 +128,9 @@ _ENV_OVERRIDES = {
     "ASHARE_CACHE_ENABLED": "cache_enabled",
     "ASHARE_CACHE_TTL_SECONDS": "cache_ttl_seconds",
     "ASHARE_CACHE_MAX_ENTRIES": "cache_max_entries",
+    # 2026-10-20：线上检索档位（vector／hybrid-zscore）。缺省 hybrid-zscore；
+    # 实验链路（A～E、30 题 trace）不受影响，仍由 pipeline／run_query 的默认 vector 固定。
+    "ASHARE_RETRIEVAL_MODE": "retrieval_mode",
 }
 _INT_OVERRIDE_KEYS = frozenset({"mysql_port", "backend_port", "frontend_port",
                                 "qa_runs_retention_days", "cache_ttl_seconds",
@@ -524,6 +527,30 @@ del _qa_runs_days_raw
 
 
 # --------------------------------------------------------------------------
+# 6.3 线上检索档位（2026-10-20：检索融合落地）
+# --------------------------------------------------------------------------
+# 口径（硬约束）：
+#   * 线上后端**缺省** `hybrid-zscore`（向量 + BM25 的 z-score 融合，alpha=0.3，不做查询扩展）；
+#   * `代码\检索\pipeline.py` 与 `run_query.py` 的**默认值仍是 `vector`**，A～E 实验可复现，
+#     30 题 C 组继续消费冻结 trace（本配置不影响它们）；
+#   * 覆盖方式只有两个：`config.local.json` 的 `retrieval_mode`，或环境变量
+#     `ASHARE_RETRIEVAL_MODE`（后者优先）。取值不合法即退出，不静默回落。
+# 证据：`交付物/05-系统实现/RAG检索系统/_工作底稿/检索融合配对显著性_20261020.json`
+#   （zscore-a0.3 相对 BM25：MRR +0.0324，95% CI [+0.0082, +0.0600]）。
+RETRIEVAL_MODES = ("vector", "hybrid-zscore")
+DEFAULT_RETRIEVAL_MODE = "hybrid-zscore"
+_retrieval_mode_raw = _LOCAL.get("retrieval_mode")
+RETRIEVAL_MODE = (str(_retrieval_mode_raw).strip().lower()
+                  if isinstance(_retrieval_mode_raw, str)
+                  and str(_retrieval_mode_raw).strip() else DEFAULT_RETRIEVAL_MODE)
+del _retrieval_mode_raw
+if RETRIEVAL_MODE not in RETRIEVAL_MODES:
+    raise SystemExit("检索档位 %r 不合法；只接受 %s（config.local.json 的 retrieval_mode "
+                     "或环境变量 ASHARE_RETRIEVAL_MODE）"
+                     % (RETRIEVAL_MODE, "／".join(RETRIEVAL_MODES)))
+
+
+# --------------------------------------------------------------------------
 # 7. 接口层门槛参数（输入校验与频率限制；《24》第八节 G2「在文档中登记限制参数」）
 # --------------------------------------------------------------------------
 RATE_LIMIT = {
@@ -808,6 +835,11 @@ def selftest() -> int:
     print("  backend_port        = %s" % BACKEND_PORT)
     print("  frontend_port       = %s" % FRONTEND_PORT)
     print("  CORS 允许来源       = %s" % "、".join(CORS_ORIGINS))
+    print()
+    print("--- 线上检索档位（2026-10-20）---")
+    print("  RETRIEVAL_MODE      = %s（缺省 %s；实验链路默认 vector）"
+          % (RETRIEVAL_MODE, DEFAULT_RETRIEVAL_MODE))
+    print("  覆盖方式            = config.local.json 的 retrieval_mode／环境变量 ASHARE_RETRIEVAL_MODE")
     print()
     print("--- 日志落盘（评审 P1-11；本项只报路径与是否配置，不回显任何凭据）---")
     print("  log_path 是否配置   = %s" % ("已配置" if log_file_configured() else "未配置（只出 stderr、不落文件）"))

@@ -59,6 +59,12 @@ import rules                  # noqa: E402
 SCHEMA = "stage8-answer-trace-1.0"
 MANIFEST_SCHEMA = "stage8-run-manifest-1.0"
 
+# 检索档位（2026-10-20）：本文件只做**透传**，真正的实现与默认口径在 `代码\检索\pipeline.py`。
+# 默认仍是 `vector`：30 题 C 组直接消费冻结 trace，A～E 实验经桥接时也必须保持原口径；
+# 线上由后端显式传 `hybrid-zscore`（`ASHARE_RETRIEVAL_MODE`）。
+RETRIEVAL_MODES = ("vector", "hybrid-zscore")
+DEFAULT_RETRIEVAL_MODE = "vector"
+
 # --------------------------------------------------------------------------
 # 失败契约（评审 P1-9：让**调用方**不再靠日志里的中文措辞猜错误码）
 # --------------------------------------------------------------------------
@@ -156,6 +162,9 @@ def parse_args(argv=None):
     ap.add_argument("--k", type=int, default=None, help="最终证据上限 K（只接受冻结值）")
     ap.add_argument("--n", type=int, default=None, help="向量候选数 N（只接受冻结值）")
     ap.add_argument("--budget", type=int, default=None, help="Context Token Budget（只接受冻结值）")
+    ap.add_argument("--retrieval", choices=RETRIEVAL_MODES, default=DEFAULT_RETRIEVAL_MODE,
+                    help="检索档位：vector（默认，实验口径）／hybrid-zscore（线上融合档）；"
+                         "仅影响经第 7 阶段链路取题的桥接路径，30 题 C 组仍消费冻结 trace")
     ap.add_argument("--dry-run", action="store_true", help="0 次调用：只装配并打印，不写产出")
     ap.add_argument("--now", default=None, help="注入记录层时间字段（ISO8601；缺省取运行时刻）")
     ap.add_argument("--session-id", default=None, help="会话标识（缺省取 config.DEFAULT_SESSION_ID）")
@@ -345,6 +354,8 @@ def load_case_via_retrieval(args, params: dict) -> dict:
     os.makedirs(os.path.dirname(out), exist_ok=True)
     cmd = [sys.executable, script, "--group", group, "--out", out]
     cmd += ["--qid", args.qid] if args.qid else ["--question", args.question]
+    # 档位照实透传（默认 vector；线上由后端显式传 hybrid-zscore）。30 题 C 组不走本函数。
+    cmd += ["--retrieval", getattr(args, "retrieval", DEFAULT_RETRIEVAL_MODE)]
     for key, value in (("--k", args.k), ("--n", args.n), ("--budget", args.budget)):
         if value is not None:
             cmd += [key, str(value)]

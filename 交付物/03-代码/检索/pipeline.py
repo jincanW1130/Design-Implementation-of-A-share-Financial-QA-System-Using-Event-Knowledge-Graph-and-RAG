@@ -82,6 +82,7 @@ from __future__ import annotations
 
 import argparse
 import functools
+import importlib.util
 import json
 import os
 import re
@@ -112,6 +113,23 @@ if os.path.dirname(os.path.abspath(config.__file__)) != _HERE:
 # 0. 固定口径（不是可调参数；可调参数一律来自 config）
 # ---------------------------------------------------------------------------
 SCHEMA = "stage7-pipeline-trace-1.0"
+
+# 检索档位（2026-10-20 作者解冻后新增的**可选档**）：
+#   * `vector`＝第 7 阶段冻结的默认链路，**不传该参数时逐字节不变**（A～E 实验口径）；
+#   * `hybrid-zscore`＝在第①步的向量候选处改用 `增强/hybrid_retrieval.py` 的
+#     zscore(alpha=0.3, 无查询扩展) 融合候选，其余五步一律不变。
+RETRIEVAL_MODE_VECTOR = "vector"
+RETRIEVAL_MODE_HYBRID_ZSCORE = "hybrid-zscore"
+RETRIEVAL_MODES = (RETRIEVAL_MODE_VECTOR, RETRIEVAL_MODE_HYBRID_ZSCORE)
+DEFAULT_RETRIEVAL_MODE = RETRIEVAL_MODE_VECTOR
+
+# 融合档的固定参数（2026-10-20 Lead 复核后的采用口径；**不是新的实验开关**）：
+# 同一 120 题选出的 zscore alpha=0.3、两路各取 N、关闭查询扩展，取融合后的前 N 条。
+HYBRID_FUSION_METHOD = "zscore"
+HYBRID_FUSION_ALPHA = 0.3
+HYBRID_FUSION_EXPAND = False
+
+_HYBRID_MODULE = None
 
 # 三个开关的字段名（顺序即 trace 里的记录顺序；硬约束 9：三个独立变量）
 SWITCH_NAMES = ("graph_depth", "time_filter", "evidence_sort")
@@ -392,6 +410,94 @@ def collect_vector_candidates(searcher: VectorSearcher, question: str, n: int) -
     """第①步·向量侧：N 条候选与向量检索的原始排名（复用 T2，不重写检索）。"""
     rows, timing = searcher.search(question, n)
     return {"rows": rows, "timing": timing, "n": int(n)}
+
+
+def check_retrieval_mode(retrieval) -> str:
+    """校验检索档位；只接受 `vector`／`hybrid-zscore`，缺省值由调用方显式给出。
+
+    **不提供隐式兜底**：写错档位一律抛错，避免把实验口径与线上口径悄悄混在一起。
+    """
+    mode = str(retrieval)
+    if mode not in RETRIEVAL_MODES:
+        raise ValueError("[pipeline] retrieval 只支持 %s，收到 %r"
+                         % ("／".join(RETRIEVAL_MODES), retrieval))
+    return mode
+
+
+def _load_hybrid_module():
+    """按**文件路径**懒加载 `增强/hybrid_retrieval.py`（默认档不会触发这次加载）。
+
+    不把 `增强/` 插进 `sys.path`：检索侧与增强层各有一份同名 `config.py`，按路径加载并
+    只在融合档才执行，可保证默认链路与实验口径不受影响。
+    """
+    global _HYBRID_MODULE
+    if _HYBRID_MODULE is None:
+        path = os.path.abspath(os.path.join(_HERE, "..", "增强", "hybrid_retrieval.py"))
+        if not os.path.isfile(path):
+            raise RuntimeError("[pipeline] 融合档需要 %s，但文件不存在" % path)
+        spec = importlib.util.spec_from_file_location("_pipeline_hybrid_retrieval", path)
+        if spec is None or spec.loader is None:
+            raise RuntimeError("[pipeline] 无法加载融合模块：%s" % path)
+        module = importlib.util.module_from_spec(spec)
+        # 必须在 exec 前登记到 sys.modules：hybrid_retrieval 里的 dataclass 在创建类时
+        # 会回查 `sys.modules[cls.__module__]`；只调 module_from_spec 不登记会得到
+        # `'NoneType' object has no attribute '__dict__'`（2026-10-20 真链路复跑时抓到）。
+        sys.modules[spec.name] = module
+        try:
+            spec.loader.exec_module(module)
+        except Exception:
+            sys.modules.pop(spec.name, None)
+            raise
+        _HYBRID_MODULE = module
+    return _HYBRID_MODULE
+
+
+def collect_hybrid_vector_candidates(searcher, question: str, n: int, chunks: dict,
+                                     hybrid_search_fn=None) -> dict:
+    """第①步·融合档：用 zscore(alpha=0.3) 融合候选**替换**向量侧候选。
+
+    * 两路各取 N 条（`retrieval_k=N`），融合后取前 N 条（`k=N`），因此向量侧候选数
+      **不超过原 N**，第②～⑤步看到的仍是同一条五步契约；
+    * `vector_rank` 改用融合排名（供分层保留顺序使用），`similarity` 优先保留该块在
+      向量通道的原始相似度（来自 BM25 的块没有该字段时回落到融合分）；
+    * 依赖可注入：`hybrid_search_fn` 只供测试替换，生产路径使用懒加载的真实实现。
+    """
+    if hybrid_search_fn is None:
+        hybrid_search_fn = _load_hybrid_module().hybrid_search
+    t0 = time.time()
+    fused = hybrid_search_fn(
+        str(question), k=int(n), retrieval_k=int(n),
+        method=HYBRID_FUSION_METHOD, alpha=HYBRID_FUSION_ALPHA,
+        expand=HYBRID_FUSION_EXPAND, vector_searcher=searcher)
+    rows = []
+    backward = getattr(searcher, "backward", None) or {}
+    for item in fused:
+        cid = int(item["chunk_id"])
+        chunk = chunks.get(cid)
+        if chunk is None:
+            raise RuntimeError("[pipeline] 融合候选 chunk_id=%d 不在 chunks.jsonl 里" % cid)
+        rank = item.get("fusion_rank")
+        rank = int(rank) if rank is not None else len(rows) + 1
+        similarity = item.get("vector_score")
+        if similarity is None:
+            similarity = item.get("fusion_score")
+        rows.append({
+            "chunk_id": cid,
+            "doc_id": int(chunk["doc_id"]),
+            "vector_id": int(backward.get(cid, -1)),
+            "similarity": float(similarity) if similarity is not None else 0.0,
+            "vector_rank": rank,
+        })
+    rows.sort(key=lambda row: (int(row["vector_rank"]), int(row["chunk_id"])))
+    return {"rows": rows, "timing": {"fusion_seconds": time.time() - t0}, "n": int(n),
+            "retrieval": RETRIEVAL_MODE_HYBRID_ZSCORE}
+
+
+def _vector_cache_key(qid: str, n: int, retrieval: str):
+    """向量候选的缓存键：默认档沿用历史的 `(qid, n)`，**不改变既有缓存行为**。"""
+    if retrieval == RETRIEVAL_MODE_VECTOR:
+        return (qid, int(n))
+    return (qid, int(n), retrieval)
 
 
 def full_pool_similarities(searcher: VectorSearcher, question: str, cache: dict) -> dict:
@@ -1215,20 +1321,31 @@ def build_answer_graph_payload(graph, records, path_records, depth: int) -> dict
 
 def run_question(question_row, switches, graph, searcher, chunks, documents,
                  n: int, k: int, budget: int, g: int, vector_cache: dict,
-                 graph_cache: dict | None = None, full_pool_cache: dict | None = None) -> dict:
-    """跑完五步契约的一题（返回一条 trace 记录；耗时只回传、不落盘）。"""
+                 graph_cache: dict | None = None, full_pool_cache: dict | None = None,
+                 retrieval: str = DEFAULT_RETRIEVAL_MODE) -> dict:
+    """跑完五步契约的一题（返回一条 trace 记录；耗时只回传、不落盘）。
+
+    `retrieval` 缺省为 `vector`：默认路径的取候选与缓存键与改动前完全一致。
+    `hybrid-zscore` 只在第①步替换向量候选，其余第②～⑤步不变。
+    """
     if graph_cache is None:
         graph_cache = {}
     if full_pool_cache is None:
         full_pool_cache = {}
+    retrieval = check_retrieval_mode(retrieval)
     g = int(g)
     timings = {}
     cid = question_row["qid"]
     # ---- ① 两路取候选
     t0 = time.time()
-    cache_key = (cid, int(n))
+    cache_key = _vector_cache_key(cid, int(n), retrieval)
     if cache_key not in vector_cache:
-        vector_cache[cache_key] = collect_vector_candidates(searcher, question_row["question"], n)
+        if retrieval == RETRIEVAL_MODE_VECTOR:
+            vector_cache[cache_key] = collect_vector_candidates(
+                searcher, question_row["question"], n)
+        else:
+            vector_cache[cache_key] = collect_hybrid_vector_candidates(
+                searcher, question_row["question"], n, chunks)
     vector_side = vector_cache[cache_key]
     timings["vector_seconds"] = time.time() - t0
 
@@ -1381,6 +1498,9 @@ def run_question(question_row, switches, graph, searcher, chunks, documents,
                    "kept_le_k": len(evidence) <= int(k)},
         "timings": timings,                       # 只回传；落盘前剔除（trace 不含耗时）
     }
+    # 只在非默认档写入检索档位，默认档的 trace 键序与内容保持改动前逐字节不变。
+    if retrieval != RETRIEVAL_MODE_VECTOR:
+        record["retrieval"] = retrieval
     if switches["graph_depth"] > 0 and not graph_in_final:
         record["structural_note"] = (
             "本题最终证据集合中没有『图谱侧新增块』：在 N ≥ K 且预算至少能容纳 K 个文本块时，"
@@ -1426,13 +1546,18 @@ class PipelineRunner:
             self.load_seconds["vector"] = time.time() - t0
         return self.searcher
 
-    def run(self, questions, switches, n: int, k: int, budget: int, g: int) -> dict:
+    def run(self, questions, switches, n: int, k: int, budget: int, g: int,
+            retrieval: str = DEFAULT_RETRIEVAL_MODE) -> dict:
         """**第 8 阶段直接调用的库入口**。g 一律按 `1 ≤ g ≤ K` 显式校验（B-16 整改）：
-        越界即抛 `ValueError`，在任何加载／检索动作之前发生，绝不静默夹取。"""
-        config.check_graph_share(g, k, "PipelineRunner.run")
-        return self._run(questions, switches, n, k, budget, g)
+        越界即抛 `ValueError`，在任何加载／检索动作之前发生，绝不静默夹取。
 
-    def run_legacy_g0(self, questions, switches, n: int, k: int, budget: int) -> dict:
+        `retrieval` 缺省 `vector`（A～E 实验口径）；线上由后端显式传 `hybrid-zscore`。
+        """
+        config.check_graph_share(g, k, "PipelineRunner.run")
+        return self._run(questions, switches, n, k, budget, g, retrieval)
+
+    def run_legacy_g0(self, questions, switches, n: int, k: int, budget: int,
+                      retrieval: str = DEFAULT_RETRIEVAL_MODE) -> dict:
         """**显式命名的 g = 0 退化回归通道**（原字面口径），仅供：
 
         * `--selftest` 的「g = 0 退化为原字面口径」自查与 `assert_g0_degenerates()`；
@@ -1440,9 +1565,11 @@ class PipelineRunner:
 
         它不是运行入口：第 8 阶段的正常调用一律走 `run()`（1 ≤ g ≤ K）。
         """
-        return self._run(questions, switches, n, k, budget, LEGACY_G0)
+        return self._run(questions, switches, n, k, budget, LEGACY_G0, retrieval)
 
-    def _run(self, questions, switches, n: int, k: int, budget: int, g: int) -> dict:
+    def _run(self, questions, switches, n: int, k: int, budget: int, g: int,
+             retrieval: str = DEFAULT_RETRIEVAL_MODE) -> dict:
+        retrieval = check_retrieval_mode(retrieval)
         self.ensure_searcher()
         switch_values = dict(switches["switches"])
         switch_values["_group"] = switches["group"]
@@ -1452,7 +1579,7 @@ class PipelineRunner:
             records.append(run_question(row, switch_values, self.graph, self.searcher,
                                         self.chunks, self.documents, n, k, budget, g,
                                         self.vector_cache, self.graph_cache,
-                                        self.full_pool_cache))
+                                        self.full_pool_cache, retrieval=retrieval))
         return {"records": records, "switches": switches, "n": int(n), "k": int(k),
                 "budget": int(budget), "g": int(g), "seconds": time.time() - t0}
 
@@ -1752,6 +1879,10 @@ def parse_args(argv=None):
                         help="时间过滤 on／off（独立开关 2／3；D／E 组为 on）")
     parser.add_argument("--evidence-sort", default=None,
                         help="证据排序 on／off（独立开关 3／3；E 组为 on）")
+    parser.add_argument("--retrieval", choices=RETRIEVAL_MODES, default=DEFAULT_RETRIEVAL_MODE,
+                        help="检索档位：vector＝冻结的默认链路（缺省，A～E 实验口径）；"
+                             "hybrid-zscore＝第①步改用 BM25+zscore(alpha=0.3) 融合候选，"
+                             "其余五步不变")
     parser.add_argument("--k", type=int, default=None,
                         help="最终证据集合的文本块上限；缺省取 config.require_fixed('K')")
     parser.add_argument("--n", type=int, default=None,
@@ -1834,7 +1965,8 @@ def cmd_run(args) -> int:
             questions = questions[:int(args.limit)]
     runner = PipelineRunner(verbose=not args.quiet)
     t0 = time.time()
-    run = runner.run(questions, switches, sizes["n"], sizes["k"], sizes["budget"], sizes["g"])
+    run = runner.run(questions, switches, sizes["n"], sizes["k"], sizes["budget"], sizes["g"],
+                     retrieval=args.retrieval)
     summary = summarize(run["records"])
     out_path = args.out or default_out_path()
     sha = write_trace(out_path, run["records"])
@@ -1845,6 +1977,9 @@ def cmd_run(args) -> int:
     print("K=%d  N=%d  Context Token Budget=%d  g=%d（全局固化量）  保留顺序口径：%s"
           % (sizes["k"], sizes["n"], sizes["budget"], sizes["g"],
              priority_rule_text(sizes["k"], sizes["g"])))
+    if args.retrieval != DEFAULT_RETRIEVAL_MODE:
+        print("检索档位：%s（向量候选由 BM25+zscore(alpha=%.1f) 融合，其余五步不变）"
+              % (args.retrieval, HYBRID_FUSION_ALPHA))
     print("=" * 78)
     for record in run["records"]:
         print("\n[%s] %s" % (record["qid"], record["question"]))

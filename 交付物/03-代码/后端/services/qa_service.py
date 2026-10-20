@@ -11,7 +11,7 @@
 入口脚本：
 
     python 代码\\问答\\run_answer.py --question "<原文>" --group <G> --now <ISO>
-           --session-id <SID> --out-dir <临时目录>
+           --session-id <SID> --out-dir <临时目录> --retrieval <vector|hybrid-zscore>
 
 （该脚本**只读**，本阶段不得修改。）链路把本次运行的全部产物写进 `--out-dir`：
 
@@ -503,7 +503,10 @@ def _run_chain(question: str, group: str, session_id: str, now_iso: str) -> dict
            "--group", str(group),
            "--now", now_iso,
            "--session-id", str(session_id),
-           "--out-dir", out_dir]
+           "--out-dir", out_dir,
+           # 2026-10-20：线上检索档位显式下发（缺省 hybrid-zscore）。
+           # 实验链路（A～E／30 题 trace）不经过本函数，仍由 pipeline 默认 vector 固定。
+           "--retrieval", config.RETRIEVAL_MODE]
     logger.info("调用第 8 阶段问答链路：group=%s session_id=%s out_dir=%s 超时=%ds",
                 group, session_id, out_dir, CHAIN_TIMEOUT_SECONDS)
     started = datetime.now()

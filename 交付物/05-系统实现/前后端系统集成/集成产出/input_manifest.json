@@ -102,16 +102,16 @@
       "sha256": "55f06abebd85093347259bc6a21438f7bed218f683b9441996edf8331f32ff05"
     },
     "交付物\\03-代码\\检索\\pipeline.py": {
-      "bytes": 125207,
-      "sha256": "99fd5d4723ab8263905a879fda275ed737dfee823b8436de59599fa101e7c4ba"
+      "bytes": 132182,
+      "sha256": "20fa0bbf72d6c1610c68f78fd5130eeaa45380d71da403513a9166a69ea627c1"
     },
     "交付物\\03-代码\\检索\\pre_experiment.py": {
       "bytes": 54822,
       "sha256": "75bb2269004351a4c8232d4f7eb27b8f052ff4ec4cc77373a7391089901150be"
     },
     "交付物\\03-代码\\检索\\run_query.py": {
-      "bytes": 42680,
-      "sha256": "e4bbaf5788642f0c5b240de3a4bc9e2eb6a5544321055e8a00b4d3a333bff735"
+      "bytes": 43146,
+      "sha256": "542470538986b38a42817b7abe3277842b95e97dd6625f281dd7c746863cadc9"
     },
     "交付物\\03-代码\\检索\\third_party_review.py": {
       "bytes": 42470,
@@ -154,8 +154,8 @@
       "sha256": "3f6770494ac8638ebb6a6b5fd9276592f65a6b0434055fce2d61640fab7f1ab3"
     },
     "交付物\\03-代码\\问答\\run_answer.py": {
-      "bytes": 50768,
-      "sha256": "b5b6acc04e1d46f5673b4592b24c4d0bc0d9f1482d63187fc8e4365ad470c03e"
+      "bytes": 51688,
+      "sha256": "e18c9ea85e1eae48d8bb06200600f68eda1bcddc3b813d822f360fd70dfe00b8"
     },
     "交付物\\03-代码\\数据准备\\check.py": {
       "bytes": 57740,
