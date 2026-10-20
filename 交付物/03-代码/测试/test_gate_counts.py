@@ -76,3 +76,29 @@ def test_vitest_counts_parsed_and_skip_is_rejected():
 
     below = GATE.parse_vitest_counts("      Tests  74 passed (74)\n")
     assert GATE.frontend_gate_error(below) is not None
+
+
+def test_ansi_colored_outputs_are_stripped_before_parsing():
+    """2026-10-20 真实复现：不同 Node 链路下 Vitest 汇总行带 ANSI 色码，
+    行首 `\\x1b[2m` 让 `^\\s*Tests` 失配、`\\x1b[32m84 passed` 让计数正则失配，
+    84 passed 曾被解析成 0 导致门禁假失败。剥离色码后必须正确解析。"""
+    colored = (
+        "\x1b[2m Test Files \x1b[22m \x1b[1m\x1b[32m6 passed\x1b[39m\x1b[22m\x1b[90m (6)\x1b[39m\n"
+        "\x1b[2m      Tests \x1b[22m \x1b[1m\x1b[32m84 passed\x1b[39m\x1b[22m\x1b[90m (84)\x1b[39m\n"
+    )
+    counts = GATE.parse_vitest_counts(colored)
+    assert counts == {"passed": 84, "skipped": 0, "failed": 0}
+    assert GATE.frontend_gate_error(counts) is None
+
+    # 带 skipped 与 failed 的着色变体同样要被检出。
+    colored_skip = GATE.parse_vitest_counts(
+        "\x1b[2m      Tests \x1b[22m \x1b[1m\x1b[32m83 passed\x1b[39m \x1b[33m| 1 skipped\x1b[39m (84)\n")
+    assert colored_skip["passed"] == 83
+    assert colored_skip["skipped"] == 1
+    assert GATE.frontend_gate_error(colored_skip) is not None
+
+    # pytest 汇总行带色码（如 --color=always）也要能解析。
+    counts = GATE.parse_pytest_counts(
+        "\x1b[32m567 passed\x1b[0m, \x1b[33m15 skipped\x1b[0m in 11.81s\n")
+    assert counts["passed"] == 567
+    assert counts["skipped"] == 15

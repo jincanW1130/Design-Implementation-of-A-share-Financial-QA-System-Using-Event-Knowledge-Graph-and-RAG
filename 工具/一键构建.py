@@ -49,6 +49,17 @@ MIN_BACKEND_TESTS = 536
 MIN_FRONTEND_TESTS = 75
 
 
+# ANSI 转义序列（颜色／样式）。Vitest 在部分环境（不同 Node 链路、CI 包装器）会照常上色，
+# 行首 `\x1b[2m` 会让 `^\s*Tests` 匹配失败、数字与词之间嵌色码会让计数正则失配，
+# 门禁解析前必须先剥离（2026-10-20，真实复现：84 passed 被解析成 0）。
+_ANSI_RE = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
+
+
+def _strip_ansi(text: str) -> str:
+    """剥离 ANSI 转义序列，保证计数解析只看纯文本。"""
+    return _ANSI_RE.sub("", str(text or ""))
+
+
 def parse_pytest_counts(output: str) -> dict:
     """从 pytest -q 输出解析用例计数。
 
@@ -56,7 +67,7 @@ def parse_pytest_counts(output: str) -> dict:
     独立审查（2026-10-19）：原门禁只读 `passed`，530 passed + 6 skipped 也能过门；
     这与「真实服务测试连不上就跳过」叠加时会假绿，故把 skipped 计入门禁。
     """
-    text = str(output or "")
+    text = _strip_ansi(output)
 
     # 每个计数都用「词边界 + 非标识符前缀」匹配，并从**最后一个**汇总行解析，
     # 避免测试自身打印的 "… passed" 文本被当成汇总（首匹配风险，P3 2026-10-19）。
@@ -98,8 +109,12 @@ def backend_gate_error(counts: dict) -> str | None:
 
 
 def parse_vitest_counts(output: str) -> dict:
-    """从 Vitest 汇总行 `Tests  N passed | M skipped (T)` 解析计数。"""
-    text = str(output or "")
+    """从 Vitest 汇总行 `Tests  N passed | M skipped (T)` 解析计数。
+
+    汇总行可能整行带 ANSI 色码（行首 `\x1b[2m`、数字嵌 `\x1b[32m`），
+    先剥离再匹配，否则带色输出会解析成全 0（2026-10-20）。
+    """
+    text = _strip_ansi(output)
     line = ""
     match = re.search(r"^\s*Tests\s+(.+)$", text, re.M)
     if match:
