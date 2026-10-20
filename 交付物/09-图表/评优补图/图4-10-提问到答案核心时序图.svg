@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1340" viewBox="0 0 1600 1340" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+<rect x="0" y="0" width="1600" height="1340" fill="#FFFFFF"/>
+<text x="800.0" y="70" text-anchor="middle" font-size="12" font-weight="normal" fill="#607D8B">实线＝请求／调用；虚线＝返回；竖向虚线为生命线。消息名取自代码调用链，不变式见图下</text>
+<rect x="5" y="110" width="190" height="58" rx="4" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<text x="100" y="134" text-anchor="middle" font-size="15" font-weight="bold" fill="#263238">前端</text>
+<text x="100" y="155" text-anchor="middle" font-size="10.5" font-weight="normal" fill="#607D8B">Web UI</text>
+<line x1="100" y1="168" x2="100" y2="1015" stroke="#B0BEC5" stroke-width="1.2" stroke-dasharray="6,6"/>
+<rect x="235" y="110" width="190" height="58" rx="4" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<text x="330" y="134" text-anchor="middle" font-size="15" font-weight="bold" fill="#263238">后端 API</text>
+<text x="330" y="155" text-anchor="middle" font-size="10.5" font-weight="normal" fill="#607D8B">api/qa.py</text>
+<line x1="330" y1="168" x2="330" y2="1015" stroke="#B0BEC5" stroke-width="1.2" stroke-dasharray="6,6"/>
+<rect x="465" y="110" width="190" height="58" rx="4" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<text x="560" y="134" text-anchor="middle" font-size="15" font-weight="bold" fill="#263238">问答编排</text>
+<text x="560" y="155" text-anchor="middle" font-size="10.5" font-weight="normal" fill="#607D8B">services/qa_service.py</text>
+<line x1="560" y1="168" x2="560" y2="1015" stroke="#B0BEC5" stroke-width="1.2" stroke-dasharray="6,6"/>
+<rect x="695" y="110" width="190" height="58" rx="4" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<text x="790" y="134" text-anchor="middle" font-size="15" font-weight="bold" fill="#263238">检索管线</text>
+<text x="790" y="155" text-anchor="middle" font-size="10.5" font-weight="normal" fill="#607D8B">run_query.py / pipeline.py</text>
+<line x1="790" y1="168" x2="790" y2="1015" stroke="#B0BEC5" stroke-width="1.2" stroke-dasharray="6,6"/>
+<rect x="925" y="110" width="190" height="58" rx="4" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<text x="1020" y="134" text-anchor="middle" font-size="15" font-weight="bold" fill="#263238">图谱查询</text>
+<text x="1020" y="155" text-anchor="middle" font-size="10.5" font-weight="normal" fill="#607D8B">graph_query.GraphQuery</text>
+<line x1="1020" y1="168" x2="1020" y2="1015" stroke="#B0BEC5" stroke-width="1.2" stroke-dasharray="6,6"/>
+<rect x="1155" y="110" width="190" height="58" rx="4" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<text x="1250" y="134" text-anchor="middle" font-size="15" font-weight="bold" fill="#263238">证据装配</text>
+<text x="1250" y="155" text-anchor="middle" font-size="10.5" font-weight="normal" fill="#607D8B">assemble.py / prompt.py</text>
+<line x1="1250" y1="168" x2="1250" y2="1015" stroke="#B0BEC5" stroke-width="1.2" stroke-dasharray="6,6"/>
+<rect x="1385" y="110" width="190" height="58" rx="4" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<text x="1480" y="134" text-anchor="middle" font-size="15" font-weight="bold" fill="#263238">大模型</text>
+<text x="1480" y="155" text-anchor="middle" font-size="10.5" font-weight="normal" fill="#607D8B">answer.call_model()</text>
+<line x1="1480" y1="168" x2="1480" y2="1015" stroke="#B0BEC5" stroke-width="1.2" stroke-dasharray="6,6"/>
+<line x1="100" y1="200" x2="330" y2="200" stroke="#546E7A" stroke-width="1.5"/>
+<polygon points="330,200 320.0,204.6 320.0,195.4" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="215.0" y="193" text-anchor="middle" font-size="12.2" font-weight="normal" fill="#37474F">POST /api/qa/ask（question、session_id）</text>
+<line x1="330" y1="245" x2="560" y2="245" stroke="#546E7A" stroke-width="1.5"/>
+<polygon points="560,245 550.0,249.6 550.0,240.4" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="445.0" y="238" text-anchor="middle" font-size="12.2" font-weight="normal" fill="#37474F">qa_service.ask(question, session_id, group, reuse=True)</text>
+<text x="445" y="268" text-anchor="middle" font-size="10.8" font-weight="normal" fill="#607D8B">（asyncio.to_thread；接口层只做校验与响应封装）</text>
+<polyline points="560,300 594,300 594,320 564,320" fill="none" stroke="#546E7A" stroke-width="1.4"/>
+<polygon points="564,320 573.0,315.86 573.0,324.14" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="602" y="306" text-anchor="start" font-size="11.4" font-weight="normal" fill="#37474F">_reuse_existing_answer()：命中则直接返回</text>
+<line x1="560" y1="365" x2="790" y2="365" stroke="#546E7A" stroke-width="1.5"/>
+<polygon points="790,365 780.0,369.6 780.0,360.4" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="675.0" y="358" text-anchor="middle" font-size="12.2" font-weight="normal" fill="#37474F">_run_chain() → run_answer.cmd_run()（子进程）</text>
+<text x="675" y="388" text-anchor="middle" font-size="10.8" font-weight="normal" fill="#607D8B">load_case_via_retrieval() → run_query.py（子进程）</text>
+<polyline points="790,425 824,425 824,445 794,445" fill="none" stroke="#546E7A" stroke-width="1.4"/>
+<polygon points="794,445 803.0,440.86 803.0,449.14" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="832" y="431" text-anchor="start" font-size="11.2" font-weight="normal" fill="#37474F">PipelineRunner.run() → run_question()</text>
+<polyline points="790,480 824,480 824,500 794,500" fill="none" stroke="#546E7A" stroke-width="1.4"/>
+<polygon points="794,500 803.0,495.86 803.0,504.14" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="832" y="486" text-anchor="start" font-size="10.9" font-weight="normal" fill="#37474F">collect_hybrid_vector_candidates() → hybrid_search()</text>
+<text x="832" y="502" text-anchor="start" font-size="10.9" font-weight="normal" fill="#37474F">vector_scores()＋lexical_scores()＋score_fusion()</text>
+<line x1="790" y1="545" x2="1020" y2="545" stroke="#546E7A" stroke-width="1.5"/>
+<polygon points="1020,545 1010.0,549.6 1010.0,540.4" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="905.0" y="538" text-anchor="middle" font-size="11.5" font-weight="normal" fill="#37474F">collect_graph_candidates() → g1_one_hop()／g2_two_hop()</text>
+<text x="905" y="568" text-anchor="middle" font-size="10.5" font-weight="normal" fill="#37474F">g3_events_by_type()／g4_company_events()／g5_event_evidence()</text>
+<line x1="1020" y1="610" x2="790" y2="610" stroke="#78909C" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="790,610 800.0,605.4 800.0,614.6" fill="#FFFFFF" stroke="#78909C" stroke-width="1.2"/>
+<text x="905.0" y="603" text-anchor="middle" font-size="11.5" font-weight="normal" fill="#37474F">路径、事件与 source_chunk_id</text>
+<polyline points="790,655 824,655 824,675 794,675" fill="none" stroke="#546E7A" stroke-width="1.4"/>
+<polygon points="794,675 803.0,670.86 803.0,679.14" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="832" y="661" text-anchor="start" font-size="10.6" font-weight="normal" fill="#37474F">apply_time_filter() → g6_time_filter()（仅 D/E 组）</text>
+<text x="832" y="677" text-anchor="start" font-size="10.6" font-weight="normal" fill="#37474F">A/B/C 组走 keep_all_graph_candidates()</text>
+<polyline points="790,710 824,710 824,730 794,730" fill="none" stroke="#546E7A" stroke-width="1.4"/>
+<polygon points="794,730 803.0,725.86 803.0,734.14" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="832" y="716" text-anchor="start" font-size="10.8" font-weight="normal" fill="#37474F">② merge_candidates() → ③ trim_to_budget()</text>
+<text x="832" y="732" text-anchor="start" font-size="10.8" font-weight="normal" fill="#37474F">④ keep_top_k() → ⑤ order_evidence()</text>
+<line x1="790" y1="775" x2="1250" y2="775" stroke="#546E7A" stroke-width="1.5"/>
+<polygon points="1250,775 1240.0,779.6 1240.0,770.4" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="1020.0" y="768" text-anchor="middle" font-size="11.4" font-weight="normal" fill="#37474F">assemble_case()：按 final_evidence_chunk_ids 冻结顺序装配</text>
+<polyline points="1250,815 1284,815 1284,835 1254,835" fill="none" stroke="#546E7A" stroke-width="1.4"/>
+<polygon points="1254,835 1263.0,830.86 1263.0,839.14" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="1292" y="821" text-anchor="start" font-size="11.0" font-weight="normal" fill="#37474F">build_messages()：七区块 Prompt（sha256 固定）</text>
+<line x1="1250" y1="870" x2="1480" y2="870" stroke="#546E7A" stroke-width="1.5"/>
+<polygon points="1480,870 1470.0,874.6 1470.0,865.4" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="1365.0" y="863" text-anchor="middle" font-size="11.6" font-weight="normal" fill="#37474F">answer_case() → call_model(prompt, temperature＝0)</text>
+<line x1="1480" y1="910" x2="1250" y2="910" stroke="#78909C" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="1250,910 1260.0,905.4 1260.0,914.6" fill="#FFFFFF" stroke="#78909C" stroke-width="1.2"/>
+<text x="1365.0" y="903" text-anchor="middle" font-size="11.5" font-weight="normal" fill="#37474F">body_text（模型原始输出，不改写）</text>
+<polyline points="1250,950 1284,950 1284,970 1254,970" fill="none" stroke="#546E7A" stroke-width="1.4"/>
+<polygon points="1254,970 1263.0,965.86 1263.0,974.14" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="1292" y="956" text-anchor="start" font-size="10.9" font-weight="normal" fill="#37474F">compose_answer()；gate()：四段合成＋答案侧门禁</text>
+<line x1="1250" y1="985" x2="560" y2="985" stroke="#78909C" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="560,985 570.0,980.4 570.0,989.6" fill="#FFFFFF" stroke="#78909C" stroke-width="1.2"/>
+<text x="905.0" y="978" text-anchor="middle" font-size="11.2" font-weight="normal" fill="#37474F">qa_records.jsonl／answer_trace.jsonl</text>
+<polyline points="560,1020 594,1020 594,1040 564,1040" fill="none" stroke="#546E7A" stroke-width="1.4"/>
+<polygon points="564,1040 573.0,1035.86 573.0,1044.14" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="602" y="1026" text-anchor="start" font-size="10.9" font-weight="normal" fill="#37474F">_next_ids() → _persist()：同一 _DB_LOCK 内</text>
+<line x1="560" y1="1055" x2="330" y2="1055" stroke="#78909C" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="330,1055 340.0,1050.4 340.0,1059.6" fill="#FFFFFF" stroke="#78909C" stroke-width="1.2"/>
+<text x="445.0" y="1048" text-anchor="middle" font-size="11.2" font-weight="normal" fill="#37474F">九项载荷（answer_id、evidence、graph_path…）</text>
+<line x1="330" y1="1090" x2="100" y2="1090" stroke="#78909C" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="100,1090 110.0,1085.4 110.0,1094.6" fill="#FFFFFF" stroke="#78909C" stroke-width="1.2"/>
+<text x="215.0" y="1083" text-anchor="middle" font-size="11.5" font-weight="normal" fill="#37474F">200 {data, meta}（errors.ok）</text>
+<rect x="60" y="1140" width="1480" height="120" rx="0" fill="#FFFDE7" stroke="#BCAAA4" stroke-width="1.3"/>
+<text x="78" y="1166" text-anchor="start" font-size="13" font-weight="bold" fill="#4E342E">关键不变式</text>
+<text x="90" y="1192" text-anchor="start" font-size="11.2" font-weight="bold" fill="#4E342E">① 五步契约不可重排：</text>
+<text x="235" y="1192" text-anchor="start" font-size="10.8" font-weight="normal" fill="#4E342E">① 两路取候选 → ② 合并去重 → ③ 预算裁剪 → ④ 保留 K → ⑤ 呈现顺序＋图谱载荷（pipeline.FIVE_STEPS；D/E 组的时间过滤在第①步内）。</text>
+<text x="90" y="1214" text-anchor="start" font-size="11.2" font-weight="bold" fill="#4E342E">② 证据集合冻结：</text>
+<text x="235" y="1214" text-anchor="start" font-size="10.8" font-weight="normal" fill="#4E342E">assemble_case() 断言证据 chunk_id 顺序与 trace 的 final_evidence_chunk_ids 一致；生成侧不得重排、不得截断。</text>
+<text x="90" y="1236" text-anchor="start" font-size="11.2" font-weight="bold" fill="#4E342E">③ 落库原子性：</text>
+<text x="235" y="1236" text-anchor="start" font-size="10.8" font-weight="normal" fill="#4E342E">_next_ids() 与 _persist() 在同一 _DB_LOCK 内；answer_evidence 按 answer_id 先删旧再插新（同一事务）。</text>
+<text x="800.0" y="1305" text-anchor="middle" font-size="20" font-weight="bold" fill="#263238">图 4-10　提问到答案的核心时序图</text>
+</svg>

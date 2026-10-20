@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="820" viewBox="0 0 1280 820" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+<rect x="0" y="0" width="1280" height="820" fill="#FFFFFF"/>
+<text x="640.0" y="78" text-anchor="middle" font-size="13" font-weight="normal" fill="#607D8B">核心 108 题；K＝10；分母为各组有效题数 102／106／105／105／105</text>
+<text x="95" y="112" text-anchor="start" font-size="11.5" font-weight="normal" fill="#607D8B">注：表 6-7 未给 Hit@1；本图第四项取表中的 Precision@K。四项指标均为 0～1 的无量纲比值。</text>
+<line x1="95" y1="650" x2="95" y2="170" stroke="#37474F" stroke-width="1.2"/>
+<line x1="95" y1="650" x2="760" y2="650" stroke="#37474F" stroke-width="1.2"/>
+<line x1="90" y1="650.0" x2="95" y2="650.0" stroke="#37474F" stroke-width="1.2"/>
+<text x="85" y="654.0" text-anchor="end" font-size="11.5" font-weight="normal" fill="#37474F">0.0</text>
+<line x1="90" y1="554.0" x2="95" y2="554.0" stroke="#37474F" stroke-width="1.2"/>
+<text x="85" y="558.0" text-anchor="end" font-size="11.5" font-weight="normal" fill="#37474F">0.2</text>
+<line x1="90" y1="458.0" x2="95" y2="458.0" stroke="#37474F" stroke-width="1.2"/>
+<text x="85" y="462.0" text-anchor="end" font-size="11.5" font-weight="normal" fill="#37474F">0.4</text>
+<line x1="90" y1="362.0" x2="95" y2="362.0" stroke="#37474F" stroke-width="1.2"/>
+<text x="85" y="366.0" text-anchor="end" font-size="11.5" font-weight="normal" fill="#37474F">0.6</text>
+<line x1="90" y1="266.0" x2="95" y2="266.0" stroke="#37474F" stroke-width="1.2"/>
+<text x="85" y="270.0" text-anchor="end" font-size="11.5" font-weight="normal" fill="#37474F">0.8</text>
+<line x1="90" y1="170.0" x2="95" y2="170.0" stroke="#37474F" stroke-width="1.2"/>
+<text x="85" y="174.0" text-anchor="end" font-size="11.5" font-weight="normal" fill="#37474F">1.0</text>
+<text x="38" y="410.0" text-anchor="middle" font-size="12" font-weight="normal" fill="#37474F" transform="rotate(-90 38 410.0)">指标取值（0～1）</text>
+<text x="95" y="136" text-anchor="start" font-size="14" font-weight="bold" fill="#37474F">(a) Recall@10、Complete@10 与 MRR</text>
+<rect x="430" y="147" width="13" height="13" rx="0" fill="#4E79A7" stroke="#4E79A7" stroke-width="0.8"/>
+<text x="448" y="158" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">Recall@10</text>
+<rect x="540" y="147" width="13" height="13" rx="0" fill="#76A7C8" stroke="#76A7C8" stroke-width="0.8"/>
+<text x="558" y="158" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">Complete@10</text>
+<rect x="650" y="147" width="13" height="13" rx="0" fill="#A9C6DB" stroke="#A9C6DB" stroke-width="0.8"/>
+<text x="668" y="158" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">MRR</text>
+<rect x="110.5" y="277.45088000000004" width="30" height="372.54911999999996" rx="0" fill="#4E79A7" stroke="#4E79A7" stroke-width="0.8"/>
+<text x="125.5" y="271.45088000000004" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 125.5 271.45088000000004)">0.776144</text>
+<rect x="146.5" y="306.47072" width="30" height="343.52928" rx="0" fill="#76A7C8" stroke="#76A7C8" stroke-width="0.8"/>
+<text x="161.5" y="300.47072" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 161.5 300.47072)">0.715686</text>
+<rect x="182.5" y="369.09248" width="30" height="280.90752" rx="0" fill="#A9C6DB" stroke="#A9C6DB" stroke-width="0.8"/>
+<text x="197.5" y="363.09248" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 197.5 363.09248)">0.585224</text>
+<text x="161.5" y="674" text-anchor="middle" font-size="14" font-weight="bold" fill="#37474F">A</text>
+<rect x="243.5" y="228.86816" width="30" height="421.13184" rx="0" fill="#4E79A7" stroke="#4E79A7" stroke-width="0.8"/>
+<text x="258.5" y="222.86816" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 258.5 222.86816)">0.877358</text>
+<rect x="279.5" y="256.0376" width="30" height="393.9624" rx="0" fill="#76A7C8" stroke="#76A7C8" stroke-width="0.8"/>
+<text x="294.5" y="250.0376" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 294.5 250.0376)">0.820755</text>
+<rect x="315.5" y="356.59855999999996" width="30" height="293.40144000000004" rx="0" fill="#A9C6DB" stroke="#A9C6DB" stroke-width="0.8"/>
+<text x="330.5" y="350.59855999999996" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 330.5 350.59855999999996)">0.611253</text>
+<text x="294.5" y="674" text-anchor="middle" font-size="14" font-weight="bold" fill="#37474F">B</text>
+<rect x="376.5" y="230.95232" width="30" height="419.04768" rx="0" fill="#4E79A7" stroke="#4E79A7" stroke-width="0.8"/>
+<text x="391.5" y="224.95232" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 391.5 224.95232)">0.873016</text>
+<rect x="412.5" y="261.42848" width="30" height="388.57152" rx="0" fill="#76A7C8" stroke="#76A7C8" stroke-width="0.8"/>
+<text x="427.5" y="255.42847999999998" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 427.5 255.42847999999998)">0.809524</text>
+<rect x="448.5" y="358.37552000000005" width="30" height="291.62447999999995" rx="0" fill="#A9C6DB" stroke="#A9C6DB" stroke-width="0.8"/>
+<text x="463.5" y="352.37552000000005" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 463.5 352.37552000000005)">0.607551</text>
+<text x="427.5" y="674" text-anchor="middle" font-size="14" font-weight="bold" fill="#37474F">C</text>
+<rect x="509.5" y="243.14288" width="30" height="406.85712" rx="0" fill="#4E79A7" stroke="#4E79A7" stroke-width="0.8"/>
+<text x="524.5" y="237.14288" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 524.5 237.14288)">0.847619</text>
+<rect x="545.5" y="270.57152" width="30" height="379.42848" rx="0" fill="#76A7C8" stroke="#76A7C8" stroke-width="0.8"/>
+<text x="560.5" y="264.57152" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 560.5 264.57152)">0.790476</text>
+<rect x="581.5" y="359.79776" width="30" height="290.20224" rx="0" fill="#A9C6DB" stroke="#A9C6DB" stroke-width="0.8"/>
+<text x="596.5" y="353.79776" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 596.5 353.79776)">0.604588</text>
+<text x="560.5" y="674" text-anchor="middle" font-size="14" font-weight="bold" fill="#37474F">D</text>
+<rect x="642.5" y="243.14288" width="30" height="406.85712" rx="0" fill="#4E79A7" stroke="#4E79A7" stroke-width="0.8"/>
+<text x="657.5" y="237.14288" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 657.5 237.14288)">0.847619</text>
+<rect x="678.5" y="270.57152" width="30" height="379.42848" rx="0" fill="#76A7C8" stroke="#76A7C8" stroke-width="0.8"/>
+<text x="693.5" y="264.57152" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 693.5 264.57152)">0.790476</text>
+<rect x="714.5" y="387.12656000000004" width="30" height="262.87343999999996" rx="0" fill="#A9C6DB" stroke="#A9C6DB" stroke-width="0.8"/>
+<text x="729.5" y="381.12656000000004" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 729.5 381.12656000000004)">0.547653</text>
+<text x="693.5" y="674" text-anchor="middle" font-size="14" font-weight="bold" fill="#37474F">E</text>
+<line x1="850" y1="650" x2="850" y2="170" stroke="#37474F" stroke-width="1.2"/>
+<line x1="850" y1="650" x2="1180" y2="650" stroke="#37474F" stroke-width="1.2"/>
+<line x1="845" y1="650.0" x2="850" y2="650.0" stroke="#37474F" stroke-width="1.2"/>
+<text x="840" y="654.0" text-anchor="end" font-size="11.5" font-weight="normal" fill="#37474F">0.00</text>
+<line x1="845" y1="490.0" x2="850" y2="490.0" stroke="#37474F" stroke-width="1.2"/>
+<text x="840" y="494.0" text-anchor="end" font-size="11.5" font-weight="normal" fill="#37474F">0.05</text>
+<line x1="845" y1="329.99999999999994" x2="850" y2="329.99999999999994" stroke="#37474F" stroke-width="1.2"/>
+<text x="840" y="333.99999999999994" text-anchor="end" font-size="11.5" font-weight="normal" fill="#37474F">0.10</text>
+<line x1="845" y1="169.9999999999999" x2="850" y2="169.9999999999999" stroke="#37474F" stroke-width="1.2"/>
+<text x="840" y="173.9999999999999" text-anchor="end" font-size="11.5" font-weight="normal" fill="#37474F">0.15</text>
+<text x="800" y="410.0" text-anchor="middle" font-size="12" font-weight="normal" fill="#37474F" transform="rotate(-90 800 410.0)">指标取值（0～1）</text>
+<text x="850" y="136" text-anchor="start" font-size="14" font-weight="bold" fill="#37474F">(b) Precision@10</text>
+<rect x="1010" y="147" width="13" height="13" rx="0" fill="#8D6E63" stroke="#8D6E63" stroke-width="0.8"/>
+<text x="1028" y="158" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">Precision@10</text>
+<rect x="866" y="308.03839999999997" width="34" height="341.96160000000003" rx="0" fill="#8D6E63" stroke="#8D6E63" stroke-width="0.8"/>
+<text x="883" y="302.03839999999997" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 883 302.03839999999997)">0.106863</text>
+<text x="883" y="674" text-anchor="middle" font-size="14" font-weight="bold" fill="#37474F">A</text>
+<rect x="932" y="260.5664" width="34" height="389.4336" rx="0" fill="#8D6E63" stroke="#8D6E63" stroke-width="0.8"/>
+<text x="949" y="254.5664" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 949 254.5664)">0.121698</text>
+<text x="949" y="674" text-anchor="middle" font-size="14" font-weight="bold" fill="#37474F">B</text>
+<rect x="998" y="266.0" width="34" height="384.0" rx="0" fill="#8D6E63" stroke="#8D6E63" stroke-width="0.8"/>
+<text x="1015" y="260.0" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 1015 260.0)">0.120000</text>
+<text x="1015" y="674" text-anchor="middle" font-size="14" font-weight="bold" fill="#37474F">C</text>
+<rect x="1064" y="272.09599999999995" width="34" height="377.90400000000005" rx="0" fill="#8D6E63" stroke="#8D6E63" stroke-width="0.8"/>
+<text x="1081" y="266.09599999999995" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 1081 266.09599999999995)">0.118095</text>
+<text x="1081" y="674" text-anchor="middle" font-size="14" font-weight="bold" fill="#37474F">D</text>
+<rect x="1130" y="272.09599999999995" width="34" height="377.90400000000005" rx="0" fill="#8D6E63" stroke="#8D6E63" stroke-width="0.8"/>
+<text x="1147" y="266.09599999999995" text-anchor="start" font-size="9.2" font-weight="normal" fill="#263238" transform="rotate(-90 1147 266.09599999999995)">0.118095</text>
+<text x="1147" y="674" text-anchor="middle" font-size="14" font-weight="bold" fill="#37474F">E</text>
+<text x="95" y="720" text-anchor="start" font-size="11.5" font-weight="normal" fill="#607D8B">数据来源：第六章表 6-7（核心 108 题的四项检索指标，主结果）。</text>
+<text x="95" y="740" text-anchor="start" font-size="11.5" font-weight="normal" fill="#607D8B">读法：Complete@10 即 Complete Evidence Recall@K；各组分母不同，跨组比较按表中有效题数读。</text>
+<text x="640.0" y="790" text-anchor="middle" font-size="20" font-weight="bold" fill="#263238">图 6-1　核心 108 题五组四项指标对比</text>
+</svg>

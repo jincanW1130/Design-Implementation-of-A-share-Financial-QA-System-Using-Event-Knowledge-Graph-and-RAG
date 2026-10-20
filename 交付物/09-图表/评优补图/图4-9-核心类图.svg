@@ -1,0 +1,201 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1560" height="1240" viewBox="0 0 1560 1240" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+<rect x="0" y="0" width="1560" height="1240" fill="#FFFFFF"/>
+<text x="780.0" y="70" text-anchor="middle" font-size="12" font-weight="normal" fill="#607D8B">只用真实存在的类／模块；«module» 表示 Python 模块级函数，不虚构类；方法名逐条取自代码</text>
+<rect x="35" y="95" width="740" height="950" rx="6" fill="none" stroke="#90A4AE" stroke-width="1.6"/>
+<rect x="35" y="95" width="420" height="32" rx="4" fill="#ECEFF1" stroke="#90A4AE" stroke-width="1.4"/>
+<text x="47" y="116" text-anchor="start" font-size="12.5" font-weight="bold" fill="#37474F">后端服务层（交付物/03-代码/后端）</text>
+<rect x="805" y="95" width="720" height="950" rx="6" fill="none" stroke="#90A4AE" stroke-width="1.6"/>
+<rect x="805" y="95" width="420" height="32" rx="4" fill="#ECEFF1" stroke="#90A4AE" stroke-width="1.4"/>
+<text x="817" y="116" text-anchor="start" font-size="12.5" font-weight="bold" fill="#37474F">检索与融合层（交付物/03-代码/检索、增强）</text>
+<rect x="60" y="150" width="300" height="133" rx="0" fill="#FAFBFC" stroke="#546E7A" stroke-width="1.5"/>
+<rect x="60" y="150" width="300" height="56" rx="0" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<line x1="60" y1="206" x2="360" y2="206" stroke="#546E7A" stroke-width="1.2"/>
+<text x="70" y="166" text-anchor="start" font-size="10.5" font-weight="normal" fill="#607D8B" font-style="italic">«module»</text>
+<text x="70" y="185" text-anchor="start" font-size="14" font-weight="bold" fill="#263238">api_qa</text>
+<text x="70" y="200" text-anchor="start" font-size="10" font-weight="normal" fill="#607D8B">api/qa.py</text>
+<text x="72" y="234" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">ask()</text>
+<text x="72" y="253" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">get_answer()</text>
+<text x="72" y="272" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">config_meta()</text>
+<rect x="430" y="150" width="310" height="190" rx="0" fill="#FAFBFC" stroke="#546E7A" stroke-width="1.5"/>
+<rect x="430" y="150" width="310" height="56" rx="0" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<line x1="430" y1="206" x2="740" y2="206" stroke="#546E7A" stroke-width="1.2"/>
+<text x="440" y="166" text-anchor="start" font-size="10.5" font-weight="normal" fill="#607D8B" font-style="italic">«module»</text>
+<text x="440" y="185" text-anchor="start" font-size="14" font-weight="bold" fill="#263238">qa_service</text>
+<text x="440" y="200" text-anchor="start" font-size="10" font-weight="normal" fill="#607D8B">services/qa_service.py</text>
+<text x="442" y="234" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">ask()</text>
+<text x="442" y="253" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">_run_chain()</text>
+<text x="442" y="272" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">_persist()</text>
+<text x="442" y="291" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">get_answer()</text>
+<text x="442" y="310" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">evidence_of_answer()</text>
+<text x="442" y="329" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">history_list()</text>
+<rect x="60" y="390" width="300" height="230" rx="0" fill="#FAFBFC" stroke="#546E7A" stroke-width="1.5"/>
+<rect x="60" y="390" width="300" height="56" rx="0" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<line x1="60" y1="446" x2="360" y2="446" stroke="#546E7A" stroke-width="1.2"/>
+<text x="70" y="425" text-anchor="start" font-size="14" font-weight="bold" fill="#263238">TTLCache</text>
+<text x="70" y="440" text-anchor="start" font-size="10" font-weight="normal" fill="#607D8B">cache.py</text>
+<text x="72" y="466" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">name</text>
+<text x="72" y="485" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">ttl_seconds</text>
+<text x="72" y="504" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">max_entries</text>
+<line x1="60" y1="513" x2="360" y2="513" stroke="#546E7A" stroke-width="1.0"/>
+<text x="72" y="533" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">get()</text>
+<text x="72" y="552" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">set()</text>
+<text x="72" y="571" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">get_or_load()</text>
+<text x="72" y="590" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">invalidate()</text>
+<text x="72" y="609" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">snapshot()</text>
+<rect x="430" y="390" width="310" height="173" rx="0" fill="#FAFBFC" stroke="#546E7A" stroke-width="1.5"/>
+<rect x="430" y="390" width="310" height="56" rx="0" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<line x1="430" y1="446" x2="740" y2="446" stroke="#546E7A" stroke-width="1.2"/>
+<text x="440" y="425" text-anchor="start" font-size="14" font-weight="bold" fill="#263238">ApiError</text>
+<text x="440" y="440" text-anchor="start" font-size="10" font-weight="normal" fill="#607D8B">errors.py</text>
+<text x="442" y="466" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">code</text>
+<text x="442" y="485" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">message</text>
+<text x="442" y="504" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">http_status</text>
+<text x="442" y="523" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">detail</text>
+<line x1="430" y1="532" x2="740" y2="532" stroke="#546E7A" stroke-width="1.0"/>
+<text x="442" y="552" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">payload()</text>
+<rect x="60" y="660" width="300" height="152" rx="0" fill="#FAFBFC" stroke="#546E7A" stroke-width="1.5"/>
+<rect x="60" y="660" width="300" height="56" rx="0" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<line x1="60" y1="716" x2="360" y2="716" stroke="#546E7A" stroke-width="1.2"/>
+<text x="70" y="695" text-anchor="start" font-size="14" font-weight="bold" fill="#263238">MetricsRegistry</text>
+<text x="70" y="710" text-anchor="start" font-size="10" font-weight="normal" fill="#607D8B">observability.py</text>
+<text x="72" y="744" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">record_request()</text>
+<text x="72" y="763" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">record_qa_retrieval()</text>
+<text x="72" y="782" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">record_llm_attempts()</text>
+<text x="72" y="801" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">snapshot()</text>
+<line x1="360" y1="205" x2="430" y2="205" stroke="#546E7A" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="430,205 420.0,209.6 420.0,200.4" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="395" y="197" text-anchor="middle" font-size="10.5" font-weight="normal" fill="#37474F">«use»</text>
+<line x1="150" y1="281" x2="150" y2="390" stroke="#546E7A" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="150,390 145.4,380.0 154.6,380.0" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="195" y="340" text-anchor="middle" font-size="10.5" font-weight="normal" fill="#37474F">«use»</text>
+<line x1="300" y1="281" x2="480" y2="390" stroke="#546E7A" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="480,390 469.06337304406725,388.75493340468654 473.82884167681664,380.88535217629317" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="365" y="345" text-anchor="middle" font-size="10.5" font-weight="normal" fill="#37474F">«raise»</text>
+<line x1="520" y1="338" x2="520" y2="390" stroke="#546E7A" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="520,390 515.4,380.0 524.6,380.0" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="565" y="368" text-anchor="middle" font-size="10.5" font-weight="normal" fill="#37474F">«raise»</text>
+<polyline points="470,338 390,338 390,735 360,735" fill="none" stroke="#546E7A" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="360,735 370.0,730.4 370.0,739.6" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="402" y="612" text-anchor="start" font-size="10.5" font-weight="normal" fill="#37474F">«record»</text>
+<rect x="60" y="850" width="680" height="165" rx="0" fill="#FFFDE7" stroke="#BCAAA4" stroke-width="1.3"/>
+<text x="75" y="875" text-anchor="start" font-size="12.5" font-weight="bold" fill="#4E342E">跨层调用（真实调用链，与图 4-10 一致）</text>
+<text x="75" y="900" text-anchor="start" font-size="10.8" font-weight="normal" fill="#4E342E">· api/qa.ask() → qa_service.ask() → _run_chain()</text>
+<text x="75" y="921" text-anchor="start" font-size="10.8" font-weight="normal" fill="#4E342E">· _run_chain() → run_answer.py cmd_run()（子进程）</text>
+<text x="75" y="942" text-anchor="start" font-size="10.8" font-weight="normal" fill="#4E342E">· cmd_run() → load_case_via_retrieval() → run_query.py（子进程）</text>
+<text x="75" y="963" text-anchor="start" font-size="10.8" font-weight="normal" fill="#4E342E">· run_query.py → PipelineRunner.run() → pipeline.run_question()</text>
+<text x="75" y="984" text-anchor="start" font-size="10.8" font-weight="normal" fill="#4E342E">· 证据装配与生成在 run_answer.py（assemble.py／answer.py），见图 4-10</text>
+<rect x="830" y="150" width="300" height="228" rx="0" fill="#FAFBFC" stroke="#546E7A" stroke-width="1.5"/>
+<rect x="830" y="150" width="300" height="56" rx="0" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<line x1="830" y1="206" x2="1130" y2="206" stroke="#546E7A" stroke-width="1.2"/>
+<text x="840" y="166" text-anchor="start" font-size="10.5" font-weight="normal" fill="#607D8B" font-style="italic">«module»</text>
+<text x="840" y="185" text-anchor="start" font-size="14" font-weight="bold" fill="#263238">pipeline</text>
+<text x="840" y="200" text-anchor="start" font-size="10" font-weight="normal" fill="#607D8B">检索/pipeline.py</text>
+<text x="842" y="234" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">run_question()</text>
+<text x="842" y="253" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">collect_vector_candidates()</text>
+<text x="842" y="272" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">collect_hybrid_vector_candidates()</text>
+<text x="842" y="291" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">collect_graph_candidates()</text>
+<text x="842" y="310" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">merge_candidates()</text>
+<text x="842" y="329" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">trim_to_budget()</text>
+<text x="842" y="348" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">keep_top_k()</text>
+<text x="842" y="367" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">order_evidence()</text>
+<rect x="1170" y="150" width="300" height="95" rx="0" fill="#FAFBFC" stroke="#546E7A" stroke-width="1.5"/>
+<rect x="1170" y="150" width="300" height="56" rx="0" fill="#F3E5F5" stroke="#546E7A" stroke-width="1.5"/>
+<line x1="1170" y1="206" x2="1470" y2="206" stroke="#546E7A" stroke-width="1.2"/>
+<text x="1180" y="166" text-anchor="start" font-size="10.5" font-weight="normal" fill="#607D8B" font-style="italic">«interface»</text>
+<text x="1180" y="185" text-anchor="start" font-size="14" font-weight="bold" fill="#263238">VectorSearcherLike</text>
+<text x="1180" y="200" text-anchor="start" font-size="10" font-weight="normal" fill="#607D8B">hybrid_retrieval.py</text>
+<text x="1182" y="234" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">search(question, n)</text>
+<rect x="1170" y="290" width="300" height="154" rx="0" fill="#FAFBFC" stroke="#546E7A" stroke-width="1.5"/>
+<rect x="1170" y="290" width="300" height="56" rx="0" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<line x1="1170" y1="346" x2="1470" y2="346" stroke="#546E7A" stroke-width="1.2"/>
+<text x="1180" y="325" text-anchor="start" font-size="14" font-weight="bold" fill="#263238">VectorSearcher</text>
+<text x="1180" y="340" text-anchor="start" font-size="10" font-weight="normal" fill="#607D8B">检索/vector_search.py</text>
+<text x="1182" y="366" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">index</text>
+<text x="1182" y="385" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">forward</text>
+<text x="1182" y="404" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">backward</text>
+<line x1="1170" y1="413" x2="1470" y2="413" stroke="#546E7A" stroke-width="1.0"/>
+<text x="1182" y="433" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">search(question, n)</text>
+<rect x="830" y="500" width="300" height="95" rx="0" fill="#FAFBFC" stroke="#546E7A" stroke-width="1.5"/>
+<rect x="830" y="500" width="300" height="56" rx="0" fill="#F3E5F5" stroke="#546E7A" stroke-width="1.5"/>
+<line x1="830" y1="556" x2="1130" y2="556" stroke="#546E7A" stroke-width="1.2"/>
+<text x="840" y="516" text-anchor="start" font-size="10.5" font-weight="normal" fill="#607D8B" font-style="italic">«interface»</text>
+<text x="840" y="535" text-anchor="start" font-size="14" font-weight="bold" fill="#263238">LexicalIndexLike</text>
+<text x="840" y="550" text-anchor="start" font-size="10" font-weight="normal" fill="#607D8B">hybrid_retrieval.py</text>
+<text x="842" y="584" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">search(question, n)</text>
+<rect x="830" y="650" width="300" height="192" rx="0" fill="#FAFBFC" stroke="#546E7A" stroke-width="1.5"/>
+<rect x="830" y="650" width="300" height="56" rx="0" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<line x1="830" y1="706" x2="1130" y2="706" stroke="#546E7A" stroke-width="1.2"/>
+<text x="840" y="685" text-anchor="start" font-size="14" font-weight="bold" fill="#263238">LexicalIndex</text>
+<text x="840" y="700" text-anchor="start" font-size="10" font-weight="normal" fill="#607D8B">增强/lexical_search.py</text>
+<text x="842" y="726" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">postings</text>
+<text x="842" y="745" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">chunk_ids</text>
+<text x="842" y="764" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">doc_ids</text>
+<text x="842" y="783" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">lengths</text>
+<line x1="830" y1="792" x2="1130" y2="792" stroke="#546E7A" stroke-width="1.0"/>
+<text x="842" y="812" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">build(chunks)</text>
+<text x="842" y="831" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">search(question, n)</text>
+<rect x="1170" y="480" width="320" height="152" rx="0" fill="#FAFBFC" stroke="#546E7A" stroke-width="1.5"/>
+<rect x="1170" y="480" width="320" height="56" rx="0" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<line x1="1170" y1="536" x2="1490" y2="536" stroke="#546E7A" stroke-width="1.2"/>
+<text x="1180" y="496" text-anchor="start" font-size="10.5" font-weight="normal" fill="#607D8B" font-style="italic">«module»</text>
+<text x="1180" y="515" text-anchor="start" font-size="14" font-weight="bold" fill="#263238">hybrid_retrieval</text>
+<text x="1180" y="530" text-anchor="start" font-size="10" font-weight="normal" fill="#607D8B">增强/hybrid_retrieval.py</text>
+<text x="1182" y="564" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">vector_scores()</text>
+<text x="1182" y="583" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">lexical_scores()</text>
+<text x="1182" y="602" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">score_fusion()</text>
+<text x="1182" y="621" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">hybrid_search()</text>
+<rect x="1170" y="700" width="300" height="95" rx="0" fill="#FAFBFC" stroke="#546E7A" stroke-width="1.5"/>
+<rect x="1170" y="700" width="300" height="56" rx="0" fill="#F3E5F5" stroke="#546E7A" stroke-width="1.5"/>
+<line x1="1170" y1="756" x2="1470" y2="756" stroke="#546E7A" stroke-width="1.2"/>
+<text x="1180" y="716" text-anchor="start" font-size="10.5" font-weight="normal" fill="#607D8B" font-style="italic">«interface»</text>
+<text x="1180" y="735" text-anchor="start" font-size="14" font-weight="bold" fill="#263238">Reranker</text>
+<text x="1180" y="750" text-anchor="start" font-size="10" font-weight="normal" fill="#607D8B">增强/reranker.py</text>
+<text x="1182" y="784" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">rerank(question, records)</text>
+<rect x="1150" y="850" width="340" height="135" rx="0" fill="#FAFBFC" stroke="#546E7A" stroke-width="1.5"/>
+<rect x="1150" y="850" width="340" height="56" rx="0" fill="#ECEFF1" stroke="#546E7A" stroke-width="1.5"/>
+<line x1="1150" y1="906" x2="1490" y2="906" stroke="#546E7A" stroke-width="1.2"/>
+<text x="1160" y="885" text-anchor="start" font-size="14" font-weight="bold" fill="#263238">RerankedRunner</text>
+<text x="1160" y="900" text-anchor="start" font-size="10" font-weight="normal" fill="#607D8B">增强/reranker.py</text>
+<text x="1162" y="926" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">runner</text>
+<text x="1162" y="945" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">reranker</text>
+<line x1="1150" y1="954" x2="1490" y2="954" stroke="#546E7A" stroke-width="1.0"/>
+<text x="1162" y="974" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">run(questions, switches, n, k, budget, g)</text>
+<line x1="1320" y1="290" x2="1320" y2="243" stroke="#546E7A" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="1320,243 1325.98,256.0 1314.02,256.0" fill="#FFFFFF" stroke="#546E7A" stroke-width="1.3"/>
+<text x="1330" y="270" text-anchor="start" font-size="10.5" font-weight="normal" fill="#607D8B">实现</text>
+<line x1="980" y1="650" x2="980" y2="593" stroke="#546E7A" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="980,593 985.98,606.0 974.02,606.0" fill="#FFFFFF" stroke="#546E7A" stroke-width="1.3"/>
+<text x="990" y="625" text-anchor="start" font-size="10.5" font-weight="normal" fill="#607D8B">实现</text>
+<line x1="1130" y1="240" x2="1170" y2="360" stroke="#546E7A" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="1170,360 1162.4737791687992,351.9678147431723 1171.201665510864,349.0585192958174" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="1145" y="235" text-anchor="middle" font-size="10.2" font-weight="normal" fill="#37474F" transform="rotate(-90 1145 235)">collect_vector_candidates()</text>
+<polyline points="1130,330 1150,330 1150,540 1170,540" fill="none" stroke="#546E7A" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="1170,540 1160.0,544.6 1160.0,535.4" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="1160" y="465" text-anchor="middle" font-size="10.2" font-weight="normal" fill="#37474F" transform="rotate(-90 1160 465)">collect_hybrid_vector_candidates()</text>
+<polyline points="1490,480 1490,210 1470,210" fill="none" stroke="#546E7A" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="1470,210 1480.0,205.4 1480.0,214.6" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="1502" y="345" text-anchor="middle" font-size="10.2" font-weight="normal" fill="#37474F" transform="rotate(-90 1502 345)">vector_scores()</text>
+<line x1="1170" y1="570" x2="1130" y2="570" stroke="#546E7A" stroke-width="1.4" stroke-dasharray="7,5"/>
+<polygon points="1130,570 1140.0,565.4 1140.0,574.6" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="1150" y="590" text-anchor="middle" font-size="10.2" font-weight="normal" fill="#37474F">search()</text>
+<line x1="1320" y1="850" x2="1320" y2="793" stroke="#546E7A" stroke-width="1.5"/>
+<polygon points="1320,850 1312,840 1320,830 1328,840" fill="#FFFFFF" stroke="#546E7A" stroke-width="1.3"/>
+<text x="1332" y="825" text-anchor="start" font-size="10.5" font-weight="normal" fill="#607D8B">聚合（注入）</text>
+<rect x="830" y="860" width="300" height="155" rx="0" fill="#FFFDE7" stroke="#BCAAA4" stroke-width="1.3"/>
+<text x="845" y="885" text-anchor="start" font-size="12.5" font-weight="bold" fill="#4E342E">重排接口（默认关闭）</text>
+<text x="845" y="910" text-anchor="start" font-size="10.8" font-weight="normal" fill="#4E342E">RerankedRunner 是 PipelineRunner 的透明包装；</text>
+<text x="845" y="931" text-anchor="start" font-size="10.8" font-weight="normal" fill="#4E342E">reranker=None 时原样返回同一对象。</text>
+<text x="845" y="952" text-anchor="start" font-size="10.8" font-weight="normal" fill="#4E342E">启用时只改变证据顺序与呈现顺序，</text>
+<text x="845" y="973" text-anchor="start" font-size="10.8" font-weight="normal" fill="#4E342E">集合、计数与其他字段不变。</text>
+<text x="60" y="1090" text-anchor="start" font-size="12" font-weight="bold" fill="#37474F">图例：</text>
+<line x1="115" y1="1086" x2="180" y2="1086" stroke="#546E7A" stroke-width="1.3" stroke-dasharray="7,5"/>
+<polygon points="180,1086 171.0,1090.14 171.0,1081.86" fill="#546E7A" stroke="#546E7A" stroke-width="1.2"/>
+<text x="190" y="1090" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">依赖</text>
+<line x1="270" y1="1086" x2="335" y2="1086" stroke="#546E7A" stroke-width="1.3" stroke-dasharray="7,5"/>
+<polygon points="335,1086 323.0,1091.52 323.0,1080.48" fill="#FFFFFF" stroke="#546E7A" stroke-width="1.3"/>
+<text x="345" y="1090" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">实现</text>
+<line x1="425" y1="1086" x2="490" y2="1086" stroke="#546E7A" stroke-width="1.4"/>
+<polygon points="425,1086 432,1081 439,1086 432,1091" fill="#FFFFFF" stroke="#546E7A" stroke-width="1.2"/>
+<text x="500" y="1090" text-anchor="start" font-size="11.5" font-weight="normal" fill="#37474F">聚合（空心菱形在整体端）</text>
+<text x="780.0" y="1210" text-anchor="middle" font-size="20" font-weight="bold" fill="#263238">图 4-9　核心类图（后端服务与检索组件）</text>
+</svg>

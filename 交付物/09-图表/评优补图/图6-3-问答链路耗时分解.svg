@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="690" viewBox="0 0 1280 690" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+<rect x="0" y="0" width="1280" height="690" fill="#FFFFFF"/>
+<text x="640.0" y="78" text-anchor="middle" font-size="13" font-weight="normal" fill="#607D8B">单位：秒；P95 采用最近秩法，样本量 30 时 P95 接近最大值</text>
+<line x1="430" y1="510" x2="1180" y2="510" stroke="#37474F" stroke-width="1.2"/>
+<line x1="430.0" y1="510" x2="430.0" y2="515" stroke="#37474F" stroke-width="1.2"/>
+<text x="430.0" y="532" text-anchor="middle" font-size="12" font-weight="normal" fill="#37474F">0</text>
+<line x1="617.5" y1="510" x2="617.5" y2="515" stroke="#37474F" stroke-width="1.2"/>
+<text x="617.5" y="532" text-anchor="middle" font-size="12" font-weight="normal" fill="#37474F">10</text>
+<line x1="805.0" y1="510" x2="805.0" y2="515" stroke="#37474F" stroke-width="1.2"/>
+<text x="805.0" y="532" text-anchor="middle" font-size="12" font-weight="normal" fill="#37474F">20</text>
+<line x1="992.5" y1="510" x2="992.5" y2="515" stroke="#37474F" stroke-width="1.2"/>
+<text x="992.5" y="532" text-anchor="middle" font-size="12" font-weight="normal" fill="#37474F">30</text>
+<line x1="1180.0" y1="510" x2="1180.0" y2="515" stroke="#37474F" stroke-width="1.2"/>
+<text x="1180.0" y="532" text-anchor="middle" font-size="12" font-weight="normal" fill="#37474F">40</text>
+<text x="805.0" y="556" text-anchor="middle" font-size="12.5" font-weight="normal" fill="#37474F">耗时（秒）</text>
+<rect x="900" y="112" width="14" height="14" rx="0" fill="#4E79A7" stroke="#4E79A7" stroke-width="0.8"/>
+<text x="920" y="124" text-anchor="start" font-size="12.5" font-weight="normal" fill="#37474F">平均</text>
+<rect x="990" y="112" width="14" height="14" rx="0" fill="#A9C6DB" stroke="#A9C6DB" stroke-width="0.8"/>
+<text x="1010" y="124" text-anchor="start" font-size="12.5" font-weight="normal" fill="#37474F">P95</text>
+<text x="415" y="201" text-anchor="end" font-size="13" font-weight="normal" fill="#263238">端到端</text>
+<text x="415" y="220" text-anchor="end" font-size="12" font-weight="normal" fill="#607D8B">（客户端墙钟）</text>
+<rect x="430" y="170" width="281.13750000000005" height="30" rx="0" fill="#4E79A7" stroke="#4E79A7" stroke-width="0.8"/>
+<text x="719.1375" y="190" text-anchor="start" font-size="12.5" font-weight="normal" fill="#263238">14.994</text>
+<rect x="430" y="210" width="694.6500000000001" height="30" rx="0" fill="#A9C6DB" stroke="#A9C6DB" stroke-width="0.8"/>
+<text x="1132.65" y="230" text-anchor="start" font-size="12.5" font-weight="normal" fill="#263238">37.048</text>
+<text x="415" y="331" text-anchor="end" font-size="13" font-weight="normal" fill="#263238">大模型生成</text>
+<text x="415" y="350" text-anchor="end" font-size="12" font-weight="normal" fill="#607D8B">（与运行留痕同源）</text>
+<rect x="430" y="300" width="137.10000000000002" height="30" rx="0" fill="#4E79A7" stroke="#4E79A7" stroke-width="0.8"/>
+<text x="575.1" y="320" text-anchor="start" font-size="12.5" font-weight="normal" fill="#263238">7.312</text>
+<rect x="430" y="340" width="549.4875000000001" height="30" rx="0" fill="#A9C6DB" stroke="#A9C6DB" stroke-width="0.8"/>
+<text x="987.4875000000001" y="360" text-anchor="start" font-size="12.5" font-weight="normal" fill="#263238">29.306</text>
+<text x="415" y="461" text-anchor="end" font-size="13" font-weight="normal" fill="#263238">其余部分</text>
+<text x="415" y="480" text-anchor="end" font-size="12" font-weight="normal" fill="#607D8B">（派生量）</text>
+<rect x="430" y="430" width="144.05624999999998" height="30" rx="0" fill="#4E79A7" stroke="#4E79A7" stroke-width="0.8"/>
+<text x="582.05625" y="450" text-anchor="start" font-size="12.5" font-weight="normal" fill="#263238">7.683</text>
+<rect x="430" y="470" width="151.70624999999995" height="30" rx="0" fill="#A9C6DB" stroke="#A9C6DB" stroke-width="0.8"/>
+<text x="589.70625" y="490" text-anchor="start" font-size="12.5" font-weight="normal" fill="#263238">8.091</text>
+<text x="60" y="585" text-anchor="start" font-size="11.5" font-weight="normal" fill="#607D8B">注：其余部分＝端到端−大模型生成，是派生量，不是纯检索耗时。表 6-4 未给出向量检索、</text>
+<text x="60" y="605" text-anchor="start" font-size="11.5" font-weight="normal" fill="#607D8B">图谱查询、预算裁剪与呈现的精确分段，本图不绘制这些分段；最大值读数见原表。</text>
+<text x="60" y="630" text-anchor="start" font-size="11.5" font-weight="normal" fill="#607D8B">数据来源：第六章表 6-4（问答响应时间分段，n＝30）。</text>
+<text x="640.0" y="672" text-anchor="middle" font-size="20" font-weight="bold" fill="#263238">图 6-3　问答链路耗时分解（n＝30，平均与 P95）</text>
+</svg>

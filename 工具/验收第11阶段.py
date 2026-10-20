@@ -286,7 +286,7 @@ ROWS = [
     ("D3", "正文引用编号 ⊆ [1]～[22]，且 22 条编号全部被引用"),
     ("E1", "图 4-1～图 4-8 全部被引用"),
     ("E2", "表 4-1～表 4-13 全部被引用"),
-    ("E3", "9 条图注 PNG 相对路径与 9 条正文图片链接均真实存在"),
+    ("E3", "14 条图注 PNG 相对路径与 14 条正文图片链接均真实存在"),
     ("F1", "抽取 F1 读数可在《抽取评测指标.json》中逐项找到"),
     ("F2", "NFR 读数可在《NFR_readings.json》中逐项找到"),
     ("F3", "规模读数可在声明的源文件中逐个找到"),
@@ -695,8 +695,8 @@ def e3(ctx):
         return "FAIL", "《29》不存在"
     # ① 图注：反引号包裹的 `交付物/09-图表/…png`（仓库根相对）去重后恰 9 条，逐条存在
     paths = sorted(set(re.findall(r"`(交付物/09-图表/[^`\n]+\.png)`", t)))
-    if len(paths) != 9:
-        return "FAIL", "图注中声明的 PNG 路径为 %d 条（期望 9）" % len(paths)
+    if len(paths) != 14:
+        return "FAIL", "图注中声明的 PNG 路径为 %d 条（期望 14）" % len(paths)
     missing = [p for p in paths if not os.path.isfile(ctx.p(p))]
     if missing:
         return "FAIL", "下列 PNG 路径在磁盘上不存在：%s" % "、".join(missing)
@@ -707,8 +707,8 @@ def e3(ctx):
     base = os.path.dirname(ctx.p(PAPER_REL))
     refs = [m.group(1).strip() for m in IMG_LINK_RE.finditer(t)]
     refs = [r for r in refs if _is_repo_rel_link(r)]
-    if len(refs) != 9:
-        return "FAIL", ("正文图片链接（![](...)）的仓库内相对目标为 %d 条（期望 9 条）"
+    if len(refs) != 14:
+        return "FAIL", ("正文图片链接（![](...)）的仓库内相对目标为 %d 条（期望 14 条）"
                         % len(refs))
     bad, resolved = [], set()
     for r in refs:
@@ -721,11 +721,11 @@ def e3(ctx):
         return "FAIL", ("下列正文图片链接按《29》所在目录解析不到真实文件：%s"
                         % "、".join(bad))
     if resolved != set(paths):
-        return "FAIL", ("正文图片链接解析出的 PNG 与图注声明的 9 条不是同一组；"
+        return "FAIL", ("正文图片链接解析出的 PNG 与图注声明的 14 条不是同一组；"
                         "只在链接侧：%s；只在图注侧：%s"
                         % (sorted(resolved - set(paths))[:4],
                            sorted(set(paths) - resolved)[:4]))
-    return "OK", "9 条图注 PNG 路径与 9 条正文图片链接全部真实存在（两侧为同一组 9 张图）"
+    return "OK", "14 条图注 PNG 路径与 14 条正文图片链接全部真实存在（两侧为同一组 14 张图）"
 
 
 # --------------------------------------------------------------------------

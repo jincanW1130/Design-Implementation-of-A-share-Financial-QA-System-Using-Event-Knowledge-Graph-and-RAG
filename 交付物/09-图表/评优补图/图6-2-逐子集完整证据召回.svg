@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="770" viewBox="0 0 1280 770" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+<rect x="0" y="0" width="1280" height="770" fill="#FFFFFF"/>
+<text x="640.0" y="78" text-anchor="middle" font-size="13.5" font-weight="normal" fill="#607D8B">Complete Evidence Recall@10（K＝10）；子集在核心 108 题内统计且允许重叠</text>
+<line x1="100" y1="620" x2="100" y2="170" stroke="#37474F" stroke-width="1.2"/>
+<line x1="100" y1="620" x2="1200" y2="620" stroke="#37474F" stroke-width="1.2"/>
+<line x1="95" y1="620.0" x2="100" y2="620.0" stroke="#37474F" stroke-width="1.2"/>
+<text x="90" y="624.0" text-anchor="end" font-size="12" font-weight="normal" fill="#37474F">0.0</text>
+<line x1="95" y1="530.0" x2="100" y2="530.0" stroke="#37474F" stroke-width="1.2"/>
+<text x="90" y="534.0" text-anchor="end" font-size="12" font-weight="normal" fill="#37474F">0.2</text>
+<line x1="95" y1="440.0" x2="100" y2="440.0" stroke="#37474F" stroke-width="1.2"/>
+<text x="90" y="444.0" text-anchor="end" font-size="12" font-weight="normal" fill="#37474F">0.4</text>
+<line x1="95" y1="350.0" x2="100" y2="350.0" stroke="#37474F" stroke-width="1.2"/>
+<text x="90" y="354.0" text-anchor="end" font-size="12" font-weight="normal" fill="#37474F">0.6</text>
+<line x1="95" y1="260.0" x2="100" y2="260.0" stroke="#37474F" stroke-width="1.2"/>
+<text x="90" y="264.0" text-anchor="end" font-size="12" font-weight="normal" fill="#37474F">0.8</text>
+<line x1="95" y1="170.0" x2="100" y2="170.0" stroke="#37474F" stroke-width="1.2"/>
+<text x="90" y="174.0" text-anchor="end" font-size="12" font-weight="normal" fill="#37474F">1.0</text>
+<text x="38" y="395.0" text-anchor="middle" font-size="12" font-weight="normal" fill="#37474F" transform="rotate(-90 38 395.0)">指标取值（0～1）</text>
+<rect x="850" y="112" width="14" height="14" rx="0" fill="#4E79A7" stroke="#4E79A7" stroke-width="0.8"/>
+<text x="870" y="124" text-anchor="start" font-size="12.5" font-weight="normal" fill="#37474F">A 组</text>
+<rect x="955" y="112" width="14" height="14" rx="0" fill="#76A7C8" stroke="#76A7C8" stroke-width="0.8"/>
+<text x="975" y="124" text-anchor="start" font-size="12.5" font-weight="normal" fill="#37474F">B 组</text>
+<rect x="1060" y="112" width="14" height="14" rx="0" fill="#8D6E63" stroke="#8D6E63" stroke-width="0.8"/>
+<text x="1080" y="124" text-anchor="start" font-size="12.5" font-weight="normal" fill="#37474F">C 组</text>
+<rect x="143" y="332.49994999999996" width="80" height="287.50005000000004" rx="0" fill="#4E79A7" stroke="#4E79A7" stroke-width="0.8"/>
+<text x="183" y="324.49994999999996" text-anchor="middle" font-size="12" font-weight="normal" fill="#263238">0.638889</text>
+<rect x="243" y="272.85695" width="80" height="347.14305" rx="0" fill="#76A7C8" stroke="#76A7C8" stroke-width="0.8"/>
+<text x="283" y="264.85695" text-anchor="middle" font-size="12" font-weight="normal" fill="#263238">0.771429</text>
+<rect x="343" y="285.71435" width="80" height="334.28565" rx="0" fill="#8D6E63" stroke="#8D6E63" stroke-width="0.8"/>
+<text x="383" y="277.71435" text-anchor="middle" font-size="12" font-weight="normal" fill="#263238">0.742857</text>
+<text x="283" y="655" text-anchor="middle" font-size="15" font-weight="bold" fill="#263238">关系型</text>
+<text x="283" y="679" text-anchor="middle" font-size="12" font-weight="normal" fill="#607D8B">n＝36／35／35</text>
+<rect x="510" y="331.19405" width="80" height="288.80595" rx="0" fill="#4E79A7" stroke="#4E79A7" stroke-width="0.8"/>
+<text x="550" y="323.19405" text-anchor="middle" font-size="12" font-weight="normal" fill="#263238">0.641791</text>
+<rect x="610" y="271.4084" width="80" height="348.5916" rx="0" fill="#76A7C8" stroke="#76A7C8" stroke-width="0.8"/>
+<text x="650" y="263.4084" text-anchor="middle" font-size="12" font-weight="normal" fill="#263238">0.774648</text>
+<rect x="710" y="279.28565" width="80" height="340.71435" rx="0" fill="#8D6E63" stroke="#8D6E63" stroke-width="0.8"/>
+<text x="750" y="271.28565" text-anchor="middle" font-size="12" font-weight="normal" fill="#263238">0.757143</text>
+<text x="650" y="655" text-anchor="middle" font-size="15" font-weight="bold" fill="#263238">多跳型</text>
+<text x="650" y="679" text-anchor="middle" font-size="12" font-weight="normal" fill="#607D8B">n＝67／71／70</text>
+<rect x="877" y="326.12255" width="80" height="293.87745" rx="0" fill="#4E79A7" stroke="#4E79A7" stroke-width="0.8"/>
+<text x="917" y="318.12255" text-anchor="middle" font-size="12" font-weight="normal" fill="#263238">0.653061</text>
+<rect x="977" y="247.88465000000002" width="80" height="372.11535" rx="0" fill="#76A7C8" stroke="#76A7C8" stroke-width="0.8"/>
+<text x="1017" y="239.88465000000002" text-anchor="middle" font-size="12" font-weight="normal" fill="#263238">0.826923</text>
+<rect x="1077" y="249.41195000000005" width="80" height="370.58804999999995" rx="0" fill="#8D6E63" stroke="#8D6E63" stroke-width="0.8"/>
+<text x="1117" y="241.41195000000005" text-anchor="middle" font-size="12" font-weight="normal" fill="#263238">0.823529</text>
+<text x="1017" y="655" text-anchor="middle" font-size="15" font-weight="bold" fill="#263238">时序型</text>
+<text x="1017" y="679" text-anchor="middle" font-size="12" font-weight="normal" fill="#607D8B">n＝49／52／51</text>
+<text x="100" y="720" text-anchor="start" font-size="11.5" font-weight="normal" fill="#607D8B">数据来源：第六章表 6-11／6-12／6-13 的 Complete Evidence Recall@K 行；分母为该子集内 A/B/C 的有效题数。</text>
+<text x="640.0" y="752" text-anchor="middle" font-size="20" font-weight="bold" fill="#263238">图 6-2　逐子集完整证据召回（A/B/C × 关系型／多跳型／时序型）</text>
+</svg>
