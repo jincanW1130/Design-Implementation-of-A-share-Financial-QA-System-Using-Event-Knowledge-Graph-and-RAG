@@ -94,6 +94,12 @@ CALIBER_MODEL_REF = "模型参照集口径"
 # 2026-10-11 口径升级（三模型综合＝金标准）：新口径限定语与 C1/C2/F4 判据兼容——
 # 出现「金标准（三模型综合）口径」限定语的小节与出现旧限定语的小节同等合规。
 CALIBER_GOLD = "金标准（三模型综合）口径"
+# 2026-10-20 英文摘要去中文（规范性整改）：英文摘要小节只保留英文口径名，C1 若只认中文
+# 限定语，就会对**正确产物**报红（判据随产物的语言版本失效，属假阳性，与《28》v1.4
+# 「E3 恰为 8 条」同一种失效方式）。故 C1 另认下列英文限定语，且**两者须同时出现**
+# ——「主口径 ＋ 对照口径」都要写明，不比中文口径松；这是补识别，不是放宽判据。
+EN_CALIBER_PHRASES = ("three-model consensus gold criterion",
+                      "single-model reference-set criterion")
 HUMAN_POSITIVE_TOKENS = ["人工金标准", "作者评分", "人工评分",
                          "评分者一致性", "评分信度", "评分稳定性",
                          # 以下两串是"把模型口径误写成人工口径"时的典型产物（例如把
@@ -520,13 +526,16 @@ def c1(ctx):
             continue
         # 2026-10-11 口径升级：主口径限定语＝「金标准（三模型综合）口径」，
         # 与旧「模型参照集口径」（现为对照口径）同等合规。
-        if CALIBER_MODEL_REF not in body and CALIBER_GOLD not in body:
+        # 2026-10-20：英文摘要小节不再含中文口径名，改认英文限定语（见 EN_CALIBER_PHRASES），
+        # 须「主口径 ＋ 对照口径」同时出现。
+        en_ok = all(p in body for p in EN_CALIBER_PHRASES)
+        if CALIBER_MODEL_REF not in body and CALIBER_GOLD not in body and not en_ok:
             bad.append(title)
     if bad:
-        return "FAIL", "出现抽取读数但小节内无口径限定语（%s／%s）：%s" % (
-            CALIBER_GOLD, CALIBER_MODEL_REF, "、".join(bad))
-    return "OK", "出现抽取头条读数的小节全部带口径限定语（%s／%s；命中读数 %d 个）" % (
-        CALIBER_GOLD, CALIBER_MODEL_REF, len(hits))
+        return "FAIL", "出现抽取读数但小节内无口径限定语（%s／%s／英文 %s）：%s" % (
+            CALIBER_GOLD, CALIBER_MODEL_REF, "＋".join(EN_CALIBER_PHRASES), "、".join(bad))
+    return "OK", "出现抽取头条读数的小节全部带口径限定语（%s／%s／英文 %s；命中读数 %d 个）" % (
+        CALIBER_GOLD, CALIBER_MODEL_REF, "＋".join(EN_CALIBER_PHRASES), len(hits))
 
 
 def c2(ctx):
@@ -1641,6 +1650,12 @@ MIRROR_FILES = [
     # F4 第二段重基线（2026-10-09，正式集问答质量评分已完成）新增：6.8.1 的
     # 五组三维度均值与 12.8 判定表的溯源来源与机读汇总，缺它 F4 的新断言无法判定。
     QA_SCORE_FORMAL_REL, QA_SCORE_SUMMARY_REL,
+    # 2026-10-20 补：F4 的**注册溯源白名单**（SRC_WHITELIST）里这 7 份自 2026-10-11 A-2／A-6／
+    # 三模型综合口径起就参与判定，但一直没进镜像。镜像内缺它们时，节内那几个 p 值与 Δ
+    # （0.0017／0.0023／0.003175／0.005281）既不能由留痕复算、也无法在来源文件中命中 ⇒
+    # F4 在原样对照里对**正确产物**报红。修的是镜像，不是判据；判据仍要求逐字命中。
+    A2_REPORT_REL, A2_JSON_REL, A6_REPORT_REL, A6_JSON_REL,
+    QA_SYN_SUMMARY_REL, QA_SYN_PR_SUMMARY_REL, QA_SYN_ROWS_REL,
     # G3 重基线（2026-10-10，允许并断言"提交件"目录）新增：G3 现在断言
     # `交付物/01-论文/提交件/` 恰有 1 份非空 `.docx`，**自检镜像必须一并复制它**，
     # 否则镜像里 G3 会因"提交件缺失"报红、原样对照就不是 0 内容失败（与上文 F4／G1 同一种坑）。
@@ -1658,6 +1673,14 @@ MIRROR_PNGS = [
     # E3 重基线（2026-10-10，8 条 → 9 条）新增：第三章 3.3 的图 3-1（正式 UML 用例图）；
     # 缺它镜像里 E3 会因"路径少一条"报红，原样对照的失败集就不再为空。
     "交付物/09-图表/第3阶段图/图3-1-系统用例图.png",
+    # 2026-10-20 补：评优补图 5 张（P1 加图 9 → 14 时漏补镜像，`--selftest` 自此变红）。
+    # 缺它们镜像内拼装的「链接自检」会先失败（`_regen` 抛 SystemExit），
+    # 连带 E3／F4／G3 三项在原样对照里报红——修的是镜像，不是判据。
+    "交付物/09-图表/评优补图/图4-9-核心类图.png",
+    "交付物/09-图表/评优补图/图4-10-提问到答案核心时序图.png",
+    "交付物/09-图表/评优补图/图6-1-核心108题五组四项指标对比.png",
+    "交付物/09-图表/评优补图/图6-2-逐子集完整证据召回.png",
+    "交付物/09-图表/评优补图/图6-3-问答链路耗时分解.png",
 ]
 
 
@@ -1681,6 +1704,14 @@ def build_mirror(dst):
         os.makedirs(os.path.dirname(d), exist_ok=True)
         with open(d, "wb") as fh:                 # 占位：判据只查存在性
             fh.write(b"PNGPLACEHOLDER")
+    # 2026-10-20 补：G3 的允许集合自 2026-10-18 起含 `_模板`（学校模板移入本目录），镜像若不建
+    # 这一条目，G3 会恒报"阶段十一目录缺条目：['_模板']"。这里只建目录＋占位文件：
+    # ① G3 只断言该条目存在、不读内容；② 不复制 5 MB 真模板，也避开 copy2 会保留的只读属性
+    # （只读文件在 `_write` 还原阶段会 PermissionError，2026-10-20 实测）。
+    tpl_dir = os.path.join(dst, "交付物", "01-论文", "_模板")
+    os.makedirs(tpl_dir, exist_ok=True)
+    with open(os.path.join(tpl_dir, "论文模板.docx"), "wb") as fh:
+        fh.write(b"DOCXPLACEHOLDER")
     os.makedirs(os.path.join(dst, "工具"), exist_ok=True)
     if not os.path.isfile(os.path.join(dst, "工具", "验收第11阶段.py")):
         shutil.copy2(os.path.abspath(__file__),
@@ -1755,6 +1786,27 @@ def _tamper_replace_all_src(old, new):
                 _write(mirror, rel, t.replace(old, new))
         if not hit:
             raise SystemExit("篡改目标不存在于任何分章源文件：%s" % old)
+        _regen(mirror)
+    return fn
+
+
+def _tamper_strip_calibers_06():
+    """把**第六章**的两个中文口径限定语一并改写（口径名仍在，但不再是判据认的限定语）。
+
+    这是 C1 的专属反例（2026-10-20 起）：英文摘要改成纯英文后，用例 ④ 的唯一 C1 命中面
+    消失，C1 需要一个不依赖"英文摘要里有没有中文"的反例。只改第六章、不改其它源文件，
+    是为了让 `模型参照集口径` 在全文其它处仍存在（C2 的全局断言照旧满足），
+    从而使这次篡改的命中面尽可能收窄到 C1——命中面越窄，反例越能证明是这一条判据在起作用。
+    """
+    def fn(mirror):
+        rel = "%s/06-第六章-系统测试与实验分析.md" % SRC_REL
+        t = _read(mirror, rel).decode("utf-8")
+        for old, new in (("金标准（三模型综合）口径", "金标准（三模型综合）标准"),
+                         ("模型参照集口径", "模型参照集标准")):
+            if old not in t:
+                raise SystemExit("篡改目标不存在：%s ← %s" % (rel, old))
+            t = t.replace(old, new)
+        _write(mirror, rel, t)
         _regen(mirror)
     return fn
 
@@ -1903,7 +1955,12 @@ CASES = [
     # 虚设；故改为**全源文件**替换（这也是用例 ⑨ 的既有做法）。
     ("④ 把全部源文件里的「模型参照集口径下的抽取表现」改成「人工金标准下的抽取准确率」",
      _tamper_replace_all_src("模型参照集口径下的抽取表现", "人工金标准下的抽取准确率"),
-     {"C1", "C2", "C3"}),
+     # 2026-10-20 期望集收窄（**不是判据放宽，是命中面随英文摘要去中文而真实变化**）：
+     # 该篡改原先唯一能命中的 C1 小节是**英文摘要**——它当时用中文括注「模型参照集口径」
+     # 充当限定语；英文摘要改为纯英文后，那一节由英文限定语（EN_CALIBER_PHRASES）满足 C1，
+     # 其余中文小节都还有「金标准（三模型综合）口径」在，故 C1 正确地不再报红。
+     # C1 的专属反例改由 ㉑ 承担（直接剥掉第六章两个中文限定语），覆盖只增不减。
+     {"C2", "C3"}),
     # 用例 ⑤ 的命中面按现行正文如实收窄为 C3：正文里凡出现「准确率」的行本就带否定／
     # 待补标记（"不得读作""不能当准确率读""不存在这一步"），故把它改成「人工评分口径」
     # 之后 C2 不再变红；这是判据的正确行为，不是放行。**C2 的专属反例是用例 ③**——
@@ -2000,6 +2057,13 @@ CASES = [
                      "](../09-图表/第4阶段图/图4-5-已破坏的链接.png)",
                      src=False),
      {"E3"}),
+    # ㉑ 锁 C1 的**小节级**限定语判定（2026-10-20 新增，见用例 ④ 期望集收窄的说明）：
+    #    第六章 6.2～6.3 同时含抽取头条读数与两个中文口径限定语；把两个限定语改名后，
+    #    "出现抽取读数的小节必须带口径限定语"这条判据应当报红。只改第六章，
+    #    `模型参照集口径` 在摘要／第七章仍在，故 C2 的全文断言不被这次篡改牵动。
+    ("㉑ 把第六章的两个中文口径限定语改名（金标准（三模型综合）口径／模型参照集口径 → …标准）",
+     _tamper_strip_calibers_06(),
+     {"C1"}),
 ]
 
 
