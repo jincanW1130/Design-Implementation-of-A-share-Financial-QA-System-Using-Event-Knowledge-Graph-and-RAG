@@ -282,8 +282,8 @@ ROWS = [
     ("C2", "出现「准确率」处必带「模型评分口径／模型参照集口径」或为否定／待补语境"),
     ("C3", "无正向人工口径表述（相关表述只允许出现在否定或限定语境）"),
     ("D1", "被禁的四字连写术语 0 命中"),
-    ("D2", "参考文献 22 篇且与《04》第十一节 逐条一致"),
-    ("D3", "正文引用编号 ⊆ [1]～[22]，且 22 条编号全部被引用"),
+    ("D2", "参考文献 29 篇：核心 22 篇与《04》第十一节逐条一致，另 7 篇为补充文献"),
+    ("D3", "正文引用编号 ⊆ [1]～[29]，且 29 条编号全部被引用"),
     ("E1", "图 4-1～图 4-8 全部被引用"),
     ("E2", "表 4-1～表 4-13 全部被引用"),
     ("E3", "14 条图注 PNG 相对路径与 14 条正文图片链接均真实存在"),
@@ -609,16 +609,17 @@ def d2(ctx):
     want = [re.sub(r"\s+", " ", x).strip() for x in want]
     got_all = _refs_from(t, r"^\[\d+\]\s*.*$")
     got = [re.sub(r"\s+", " ", x).strip() for x in got_all]
+    # 2026-10-20：论文参考文献扩为 29 条（22 条冻结核心 + 7 条补充）。判据分两层：
+    #   ① 核心 22 条：与《04》第十一节逐条逐字一致（原判据原样保留，不放宽）；
+    #   ② 总条数严格为 29，且 [23]～[29] 必须在正文被引用（引用集合完整性由 D3 复核）。
     if len(want) != 22:
         return "FAIL", "《04》第十一节 解析出 %d 条（期望 22）" % len(want)
-    if got == want:
-        return "OK", "参考文献 22 条与《04》第十一节 逐条逐字一致"
-    if len(got) != len(want):
-        return "FAIL", "条数不一致：《29》%d 条 / 《04》%d 条" % (len(got), len(want))
+    if len(got) != 29:
+        return "FAIL", "《29》参考文献应为 29 条，实测 %d 条" % len(got)
     for i, (a, b) in enumerate(zip(want, got)):
         if a != b:
             return "FAIL", "第 %d 条不一致：《04》=%s ／《29》=%s" % (i + 1, a[:60], b[:60])
-    return "FAIL", "参考文献表不一致"
+    return "OK", "参考文献 29 条：核心 22 条与《04》第十一节逐条一致，另含 7 条补充文献"
 
 
 def d3(ctx):
@@ -628,13 +629,13 @@ def d3(ctx):
     nums = sorted({int(x) for x in re.findall(r"\[(\d{1,2})\]", t)})
     if not nums:
         return "FAIL", "正文未出现任何形如 [n] 的引用编号"
-    bad = [n for n in nums if n < 1 or n > 22]
+    bad = [n for n in nums if n < 1 or n > 29]
     if bad:
         return "FAIL", "越界引用编号：%s" % bad
-    miss = [n for n in range(1, 23) if n not in nums]
+    miss = [n for n in range(1, 30) if n not in nums]
     if miss:
-        return "FAIL", "22 条文献中有 %d 条未被正文引用：%s" % (len(miss), miss)
-    return "OK", "正文引用编号集合恰为 [1]～[22]（22 条全部被引用）"
+        return "FAIL", "29 条文献中有 %d 条未被正文引用：%s" % (len(miss), miss)
+    return "OK", "正文引用编号集合恰为 [1]～[29]（29 条全部被引用）"
 
 
 # --------------------------------------------------------------------------
