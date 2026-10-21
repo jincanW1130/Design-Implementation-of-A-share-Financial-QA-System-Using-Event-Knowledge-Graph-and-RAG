@@ -1,12 +1,18 @@
 # Neo4j 迁出 WSL（Windows 服务化）方案
 
-> 性质：**方案文档，未执行**。执行需要：① 管理员 PowerShell（安装 Windows 服务）；
-> ② 维护窗口约 15～30 分钟（图谱服务中断，问答链路期间不可用）；③ 下载约 150 MB 的安装包。
+> 性质：**数据迁移已完成并验证（2026-10-21）**；「开机自启常驻」部分因 UAC 无人批准
+> 暂缓，待执行命令见第五节。执行需要：① 管理员 PowerShell（安装常驻）；② 维护窗口约 15～30 分钟
+> （图谱服务中断，问答链路期间不可用）。
 > 背景：WSL2 会因主机内存压力被系统反复强制关机（`.wslconfig` 自述机制），容器 `ashare-neo4j`
 > 随之停止，且 VM 重启后 localhost 转发可能失效——2026-10-20 实际发生多次（登记于
 > `过程记录/01-评审与审查/优化执行进展.md`）。`工具/图谱服务自愈.py` 是短期缓解；
-> 本方案是长期解：Neo4j 以 Windows 服务常驻宿主机，不再依赖 WSL 生存期。
+> 本方案是长期解：Neo4j 以 Windows 本机进程常驻宿主机，不再依赖 WSL 生存期。
 > 冻结边界：不迁移数据资产本身（dump→load 保持同一份数据）；不改后端/前端任何配置（端口与口令不变）。
+>
+> **已落地事实（2026-10-21 上午）**：数据迁移完成——`C:\neo4j\neo4j-community-5.26.31`
+> 装入 51 个文件／261.9 MiB，bolt 认证通过，`--check` 读数 **3607 节点／3614 关系与冻结基线一致**，
+> `一键构建.py --gate --skip-deps` **七步全绿（44.2 s，后端 583 passed／0 skipped）**；
+> WSL 容器保持 `stopped + restart=no` 作回滚底牌。仅剩「开机自启常驻」未装（第五节）。
 
 ---
 
@@ -74,7 +80,18 @@ dbms.security.auth_enabled=true
 5. 设置环境变量（系统级）：`NEO4J_HOME=C:\neo4j\neo4j-community-5.26.31`；
    若 `java -version` 不在系统 PATH，另设 `JAVA_HOME` 指向 Temurin 21 安装目录。
 
-### T3 安装并启动 Windows 服务（**需管理员 PowerShell**，约 2 分钟）
+> **执行实录（2026-10-21，对 T1/T2 的修正与补充）**：
+> - 下载源：官方 `dist.neo4j.org` 对国内出口 **CloudFront 403**；最终用 S3 区域端点
+>   `https://s3.eu-west-1.amazonaws.com/dist.neo4j.org/neo4j-community-5.26.31-windows.zip`
+>   12 段并行 Range 下载成功（165,689,536 字节，`unzip -t` CRC 全过）。
+> - dump 权限坑：neo4j 镜像 entrypoint 对 root 启动会降权到 neo4j uid（74747），
+>   named volume 的 root:root 目录写不进去——改为 WSL 本地 `chmod 777` 目录 bind mount 后成功。
+> - `neo4j-admin.bat` 在 PowerShell 5.1 报「已添加了具有相同键的项」——git 环境注入的
+>   `http_proxy`/`HTTP_PROXY` 大小写重复触发 Dictionary 键冲突；执行前移除小写副本即可。
+> - load 前必须先 `bin\neo4j-admin.bat dbms set-initial-password <口令>`——dump 只含 neo4j 库，
+>   system 库（用户表）是全新初始化的；口令取自 `config.local.json` 的 `neo4j_password`。
+
+### T3 安装并启动常驻（**需管理员 PowerShell**，约 2 分钟）
 
 ```powershell
 cd C:\neo4j\neo4j-community-5.26.31
@@ -82,6 +99,12 @@ bin\neo4j.bat windows-service install
 bin\neo4j.bat windows-service start
 # 服务名 neo4j，启动类型自动——开机自启，不再依赖 WSL 生存期
 ```
+
+> **执行实录（2026-10-21）**：本机执行时 `install` 成功注册服务，但 prunsrv 的 `Parameters`
+> 注册表键为空（JVM/主类参数未写入），`windows-service start/delete` 三次 UAC 均无人批准
+> （无人值守会话无法确认弹窗）。**该步按纪律停止重试，转第五节备选常驻方案，由作者择机执行。**
+> 半残服务 `neo4j`（Stopped）不占资源，删除命令：
+> `& C:\neo4j\neo4j-community-5.26.31\bin\neo4j.bat windows-service delete`（管理员）。
 
 ### T4 验证（约 5 分钟，窗口收口判据）
 
@@ -95,12 +118,48 @@ python 工具\一键构建.py --gate --skip-deps   # 期望：七步全绿（0 s
 
 另用浏览器开 `http://127.0.0.1:7474`（neo4j／原口令）登录一次，确认认证与数据可见。
 
-## 三、回滚（任一步失败即回滚，全程约 5 分钟）
+## 五、常驻安装（待管理员执行，二选一）
+
+### 方案 A：任务计划程序（推荐，绕开 prunsrv Parameters 空键问题）
+
+管理员 PowerShell 执行：
 
 ```powershell
-# Windows 侧：卸服务
+$action  = New-ScheduledTaskAction -Execute "C:\neo4j\neo4j-community-5.26.31\bin\neo4j.bat" -Argument "console"
+$trigger = New-ScheduledTaskTrigger -AtStartup
+$settings = New-ScheduledTaskSettingsSet -RestartCount 3 -RestartInterval (New-TimeSpan -Minutes 1) -ExecutionTimeLimit ([TimeSpan]::Zero) -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+Register-ScheduledTask -TaskName "neo4j-ashare" -Action $action -Trigger $trigger -Settings $settings -RunLevel Highest -User "SYSTEM" -Force
+```
+
+启动验证：`schtasks /Run /TN neo4j-ashare` → 30 秒后 `python 工具\图谱服务自愈.py --check`。
+
+### 方案 B：修复 prunsrv 服务
+
+```powershell
+# 管理员：先删半残服务再重装（--force）
+& C:\neo4j\neo4j-community-5.26.31\bin\neo4j.bat windows-service delete
+& C:\neo4j\neo4j-community-5.26.31\bin\neo4j.bat windows-service install --force
+& C:\neo4j\neo4j-community-5.26.31\bin\neo4j.bat windows-service start
+```
+
+若重装后 `Parameters` 仍为空，用 procrun 的试运行模式看实时报错：
+`C:\neo4j\neo4j-community-5.26.31\bin\tools\prunsrv-amd64.exe //TS//neo4j`。
+
+### 当前使用方式（常驻未装前）
+
+```powershell
+# 前台跑（关窗口即停）；或后台运行后最小化窗口
+C:\neo4j\neo4j-community-5.26.31\bin\neo4j.bat console
+```
+
+## 六、回滚（任一步失败即回滚，全程约 5 分钟）
+
+```powershell
+# Windows 侧：如已装服务/任务，先卸掉（管理员）
 cd C:\neo4j\neo4j-community-5.26.31
-bin\neo4j.bat windows-service remove
+bin\neo4j.bat windows-service delete
+# 若走的是方案 A 任务计划程序：
+Unregister-ScheduledTask -TaskName "neo4j-ashare" -Confirm:$false
 ```
 
 ```bash
@@ -114,20 +173,24 @@ python 工具/图谱服务自愈.py --check       # 期望 exit 0（计数与迁
 
 ## 四、迁移后的行为变化与维护差异
 
-| 维度 | 容器（现状） | Windows 服务（目标） |
+| 维度 | 容器（迁移前） | Windows 本机（迁移后） |
 | --- | --- | --- |
-| 存活 | 随 WSL2 VM 生存，内存压力下被反复关机 | 独立 Windows 服务，开机自启、不随 WSL 关停 |
-| 监听 | 0.0.0.0（P2-7 未收口项） | **127.0.0.1**（方案内置收口） |
-| 备份 | `工具/备份.py` 走容器内逻辑导出 | 需改走 `neo4j-admin database dump`（改 `备份.py` 前先登记；迁移当轮可先手工 dump 一次留底） |
-| 升级 | 换镜像 tag | 下载新 zip 重装服务（版本锁 5.26.31 不受影响） |
-| `图谱服务自愈.py` | 按需恢复主力 | 退化为只读探针（`--check`）；修复分支自然不再触发（脚本无需改，wsl 检测不到容器即报 FAIL——迁移后建议加一行「Windows 服务形态」说明，另行小改） |
+| 存活 | 随 WSL2 VM 生存，内存压力下被反复关机 | 常驻宿主机（console 或计划任务），不随 WSL 关停 |
+| 监听 | 0.0.0.0（P2-7 未收口项） | **127.0.0.1**（方案内置收口，已生效） |
+| 备份 | `工具/备份.py` bolt 逻辑导出 | **不变**（bolt 导出，已核实零影响） |
+| 升级 | 换镜像 tag | 下载新 zip 重装（版本锁 5.26.31 不受影响） |
+| `图谱服务自愈.py` | 按需恢复主力（冷重启 WSL/起容器） | 退化为只读探针（bolt 可达即可用；脚本未改，Windows 形态天然适用） |
 | 配置 | `config.local.json` 不变 | **不变**（端口、口令、URI 全部一致） |
 
-## 五、风险与未决项（如实登记）
+## 七、风险与未决项（如实登记）
 
-1. **`备份.py` 兼容**：现脚本按容器内 `neo4j-admin` 路径实现，迁移后需小改（改前在《优化执行进展》登记；这是迁移完成后唯一一处代码改动）。
-2. **内存账**：Windows 服务常驻后，Neo4j 的 1G heap 从「WSL VM 限额内」变为直接占宿主内存——本机正是因内存压力反复杀 WSL 才要做本迁移，迁移后净收益为正（少了 WSL VM + Docker daemon 两层开销），但需观察一周内是否有新的内存压力迹象。
+1. **`备份.py` 兼容——已核实为零影响**：`工具/备份.py` 的 Neo4j 部分走 bolt 逻辑导出
+   （`_export_neo4j` 用 `GraphDatabase.driver` 连 `config.neo4j_params()`，不依赖 Docker/WSL），
+   迁移后无需任何改动；同理 `工具/图谱服务自愈.py` 也只依赖 bolt 可达性，Windows 形态天然适用。
+2. **内存账**：Neo4j 常驻后，1G heap 从「WSL VM 限额内」变为直接占宿主内存——本机正是因内存压力反复杀 WSL 才要做本迁移，迁移后净收益为正（少了 WSL VM + Docker daemon 两层开销），但需观察一周内是否有新的内存压力迹象。
 3. **同版本约束**：`neo4j-admin database load` 在 5.26.31 → 5.26.31 零风险；**不要**顺手升级版本（升级属于另一次变更，另行登记）。
 4. **dump 一致性**：community 版 dump 要求库停止——按 T1 先停容器再 dump，不做在线 dump。
-5. **管理员权限**：T3 必须管理员 PowerShell；其余步骤普通权限即可。
-6. 本文档**只备方案**：执行须作者明确确认维护窗口；执行过程与读数按项目纪律回填《优化执行进展.md》。
+5. **管理员权限**：第五节常驻安装必须管理员 PowerShell；其余步骤普通权限即可。
+6. **本文档执行状态**：T1/T2/T4 已于 2026-10-21 执行并验证（七步全绿、3607/3614 基线一致）；
+   第五节待作者择机执行；执行过程与读数按项目纪律回填《优化执行进展.md》。
+7. **半残服务**：`neo4j`（Stopped，prunsrv Parameters 空）留在系统里不占资源，按方案 A 安装前建议先 delete 清理。
